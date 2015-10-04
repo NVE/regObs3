@@ -4,5 +4,11 @@
   "gulpStartupTasks": [
     "default",
     "watch"
-  ]
+  ],
+  "proxies": [
+      {
+        "path": "/api",
+        "proxyUrl": "https://api.nve.no/hydrology/regobs/webapi"
+      }
+    ]
 }

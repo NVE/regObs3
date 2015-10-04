@@ -1,11 +1,35 @@
 "use strict";
 
-angular.module('RegObs', ['ionic','ngResource'])
+angular.module('RegObs', ['ionic'])
 
-    .controller('AppCtrl', function($scope, $ionicModal, Localization){
+    .controller('AppCtrl', function($scope, $ionicModal, $http, Localization, AppSettings){
         var appVm = this;
 
         $scope.$on('$ionicView.loaded', function() {
+
+            appVm.logIn = function () {
+
+                var config = {
+                    headers: {
+                        'Authorization': 'Basic ' + btoa(appVm.username + ':' + appVm.password)
+                    }
+                };
+                $http.get(AppSettings.endPoints.getObserver, config).then(function(response) {
+                    alert('Successfully logged in!');
+                    appVm.user = JSON.parse(response.data.Data);
+                    appVm.user.email = appVm.username;
+
+                }, function (response) {
+                    alert('Failed logging in!');
+                });
+            };
+
+            appVm.logOut = function () {
+                appVm.username = '';
+                appVm.password = '';
+                appVm.user = undefined;
+            };
+
             $ionicModal.fromTemplateUrl('app/settings/settings.html', {
                 scope: $scope,
                 animation: 'slide-in-up'

@@ -1,9 +1,41 @@
 <ion-modal-view>
     <ion-header-bar>
-        <h1 class="title">Advanced search</h1>
-        <button class="button" ng-click="appVm.closeModal()">cancel</button>
+        <h1 class="title">Settings</h1>
+        <button class="button button-clear button-positive" ng-click="appVm.closeModal()">cancel</button>
     </ion-header-bar>
     <ion-content>
-        Hei
+        <form ng-submit="appVm.logIn()" ng-if="!appVm.user">
+            <div class="list">
+                <label class="item item-input">
+                    <input type="text" placeholder="Brukernavn" ng-model="appVm.username"/>
+                </label>
+                <label class="item item-input">
+                    <input type="password" placeholder="Passord" ng-model="appVm.password"/>
+                </label>
+            </div>
+            <div class="padding">
+                <button type="submit" class="button button-block button-positive">
+                    Logg inn
+                </button>
+            </div>
+        </form>
+        <form ng-submit="appVm.logOut()" ng-if="appVm.user">
+            <div class="list">
+                <div class="item">
+                    Logged in as {{appVm.user.email}}
+                </div>
+            </div>
+            <div class="padding">
+                <button type="submit" class="button button-block button-positive">
+                    Logg Ut
+                </button>
+            </div>
+        </form>
+
+        <!--<div class="padding">
+            <button class="button button-block button-positive" ng-click="appVm.logIn()">
+                Logg inn
+            </button>
+        </div>-->
     </ion-content>
 </ion-modal-view>
