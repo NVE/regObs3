@@ -19,62 +19,6 @@ angular
 
         var env = 'proxy';
 
-        settings.hazardRatingStyles = {
-            '0': {
-                weight: 3,
-                color: '#C8C8C8',
-                dashArray: '',
-                fillOpacity: 0.5,
-                opacity: 0.4,
-                className: 'stable'
-            },
-            '1': {
-                weight: 3,
-                color: '#75B100',
-                dashArray: '',
-                fillOpacity: 0.5,
-                opacity: 0.4,
-                className: 'calm'
-            },
-            '2': {
-                weight: 3,
-                color: '#FFCC33',
-                dashArray: '',
-                fillOpacity: 0.5,
-                opacity: 0.4,
-                className: 'balanced'
-            },
-            '3': {
-                weight: 3,
-                color: '#E46900',
-                dashArray: '',
-                fillOpacity: 0.5,
-                opacity: 0.4,
-                className: 'energized'
-            },
-            '4': {
-                weight: 3,
-                color: '#D21523',
-                dashArray: '',
-                fillOpacity: 0.5,
-                opacity: 0.4,
-                className: 'assertive'
-            },
-            '5': {
-                weight: 3,
-                color: '#3E060B',
-                dashArray: '',
-                fillOpacity: 0.5,
-                opacity: 0.4,
-                className: 'royal'
-            },
-            clicked: {
-
-                fillOpacity: 0.8,
-                opacity: 0.9
-            }
-        };
-
         settings.endPoints = {
             getObserver: baseUrls[env] + '/Account/GetObserver', //Header Authorization: Basic btoa('user':'pass')
             getObserverGroups: baseUrls[env] + '/Account/GetObserverGroups', //?guid=xxxxxxxx-xxxx-4xxx-xxxxx-xxxxxxxxxxxx,

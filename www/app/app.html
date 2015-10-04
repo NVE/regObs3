@@ -9,6 +9,10 @@
 <ion-nav-bar class="bar-positive">
     <ion-nav-back-button>
     </ion-nav-back-button>
+    <ion-nav-buttons side="left">
+        <button class="button button-clear" ng-class="{'ion-locked': appVm.user}" ng-click="appVm.openModal()">{{appVm.user ? '' : 'Logg inn'}}
+        </button>
+    </ion-nav-buttons>
     <ion-nav-buttons side="right">
         <button class="button button-icon button-clear ion-gear-a" ng-click="appVm.openModal()">
         </button>
