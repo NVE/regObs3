@@ -2,46 +2,34 @@
 
 angular.module('RegObs', ['ionic'])
 
-    .controller('AppCtrl', function($scope, $ionicModal, $http, Localization, AppSettings){
+    .controller('AppCtrl', function($scope, $ionicModal, Localization, AppSettings, User){
         var appVm = this;
 
         $scope.$on('$ionicView.loaded', function() {
+            appVm.user = User.getUser();
+            appVm.settings = AppSettings;
 
             appVm.logIn = function () {
-
-                var config = {
-                    headers: {
-                        'Authorization': 'Basic ' + btoa(appVm.username + ':' + appVm.password)
-                    }
-                };
-                $http.get(AppSettings.endPoints.getObserver, config).then(function(response) {
-                    alert('Successfully logged in!');
-                    appVm.user = JSON.parse(response.data.Data);
-                    appVm.user.email = appVm.username;
-
-                }, function (response) {
-                    alert('Failed logging in!');
+                User.logIn(appVm.username, appVm.password).then(function() {
+                    appVm.user = User.getUser();
                 });
             };
 
             appVm.logOut = function () {
                 appVm.username = '';
                 appVm.password = '';
-                appVm.user = undefined;
+                User.logOut();
+                appVm.user = User.getUser();
             };
 
             $ionicModal.fromTemplateUrl('app/settings/settings.html', {
                 scope: $scope,
-                animation: 'slide-in-up'
+                animation: 'slide-in-up',
+                focusFirstInput: true
             }).then(function(modal) {
                 appVm.modal = modal;
             });
-            appVm.openModal = function() {
-                appVm.modal.show();
-            };
-            appVm.closeModal = function() {
-                appVm.modal.hide();
-            };
+
             //Cleanup the modal when we're done with it!
             $scope.$on('$destroy', function() {
                 appVm.modal.remove();
@@ -84,6 +72,46 @@ angular.module('RegObs', ['ionic'])
                     'snow-tab': {
                         templateUrl: 'app/snow/snow.html',
                         controller: 'SnowCtrl as vm'
+                    }
+                }
+
+            })
+            .state('app.ice', {
+                url: '/ice',
+                views: {
+                    'ice-tab': {
+                        templateUrl: 'app/ice/ice.html',
+                        controller: 'IceCtrl as vm'
+                    }
+                }
+            })
+            .state('app.iceregistration', {
+                url: '/iceregistration',
+                views: {
+                    'ice-tab': {
+                        templateUrl: 'app/ice/iceregistration/iceregistration.html',
+                        controller: 'IceRegistrationCtrl as vm'
+                    }
+                }
+            })
+            .state('app.water', {
+                url: '/water',
+                views: {
+
+                    'water-tab': {
+                        templateUrl: 'app/water/water.html',
+                        controller: 'WaterCtrl as vm'
+                    }
+                }
+
+            })
+            .state('app.dirt', {
+                url: '/dirt',
+                views: {
+
+                    'dirt-tab': {
+                        templateUrl: 'app/dirt/dirt.html',
+                        controller: 'DirtCtrl as vm'
                     }
                 }
 

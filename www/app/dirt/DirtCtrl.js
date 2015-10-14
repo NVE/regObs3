@@ -3,7 +3,7 @@
  */
 angular
     .module('RegObs')
-    .controller('SnowCtrl', function SnowCtrl($scope, Localization, AppSettings, Registration) {
+    .controller('DirtCtrl', function DirtCtrl($scope, Localization, AppSettings, Registration) {
         var vm = this;
 
         $scope.$on('$ionicView.loaded', function() {

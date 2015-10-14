@@ -4,7 +4,7 @@
 angular
     .module('RegObs')
     .factory('Localization', function Localization(AppSettings) {
-        var service = {};
+        var service = this;
 
         var translations = {
             nb: {

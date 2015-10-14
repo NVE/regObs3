@@ -1,6 +1,6 @@
 {
   "name": "RegObs",
-  "app_id": "f11eace1",
+  "app_id": "",
   "gulpStartupTasks": [
     "default",
     "watch"
