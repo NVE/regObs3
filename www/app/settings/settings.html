@@ -7,16 +7,18 @@
 
         <form ng-submit="appVm.logIn()" ng-if="appVm.user.anonymous">
             <div class="list">
-                <label class="item item-input">
-                    <input type="text" placeholder="Brukernavn" ng-model="appVm.username"/>
+                <label class="item item-input" >
+                    <i class="icon ion-email placeholder-icon"></i>
+                    <input type="text" placeholder="E-post" ng-model="appVm.username" ng-disabled="appVm.loggingIn" />
                 </label>
                 <label class="item item-input">
-                    <input type="password" placeholder="Passord" ng-model="appVm.password"/>
+                    <i class="icon ion-key placeholder-icon"></i>
+                    <input type="password" placeholder="Passord" ng-model="appVm.password" ng-disabled="appVm.loggingIn" />
                 </label>
             </div>
             <div class="padding">
-                <button type="submit" class="button button-block button-positive">
-                    Logg inn
+                <button type="submit" class="button button-block button-calm" style="height: 47px">
+                    <ion-spinner class="spinner-light" ng-show="appVm.loggingIn"></ion-spinner> <span ng-hide="appVm.loggingIn">Logg inn</span>
                 </button>
             </div>
         </form>
@@ -27,7 +29,7 @@
                 </div>
             </div>
             <div class="padding">
-                <button type="submit" class="button button-block button-positive">
+                <button type="submit" class="button button-block button-calm">
                     Logg Ut
                 </button>
             </div>

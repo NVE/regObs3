@@ -2,7 +2,7 @@
 
 angular.module('RegObs', ['ionic'])
 
-    .controller('AppCtrl', function($scope, $ionicModal, Localization, AppSettings, User){
+    .controller('AppCtrl', function($scope, $ionicModal, $ionicHistory, $ionicLoading, Localization, AppSettings, User){
         var appVm = this;
 
         $scope.$on('$ionicView.loaded', function() {
@@ -10,8 +10,11 @@ angular.module('RegObs', ['ionic'])
             appVm.settings = AppSettings;
 
             appVm.logIn = function () {
+                appVm.loggingIn = true;
                 User.logIn(appVm.username, appVm.password).then(function() {
                     appVm.user = User.getUser();
+                    appVm.loggingIn = false;
+
                 });
             };
 
@@ -20,6 +23,10 @@ angular.module('RegObs', ['ionic'])
                 appVm.password = '';
                 User.logOut();
                 appVm.user = User.getUser();
+            };
+
+            appVm.back = function () {
+                $ionicHistory.goBack();
             };
 
             $ionicModal.fromTemplateUrl('app/settings/settings.html', {
@@ -42,7 +49,14 @@ angular.module('RegObs', ['ionic'])
             $scope.$on('modal.removed', function() {
                 // Execute action
             });
+
+            $scope.$on('$ionicView.beforeLeave', function () {
+                appVm.modal.hide();
+            });
+
+
         });
+
 
     })
 
@@ -68,7 +82,6 @@ angular.module('RegObs', ['ionic'])
             .state('app.snow', {
                 url: '/snow',
                 views: {
-
                     'snow-tab': {
                         templateUrl: 'app/snow/snow.html',
                         controller: 'SnowCtrl as vm'
@@ -91,6 +104,42 @@ angular.module('RegObs', ['ionic'])
                     'ice-tab': {
                         templateUrl: 'app/ice/iceregistration/iceregistration.html',
                         controller: 'IceRegistrationCtrl as vm'
+                    }
+                },
+                data: {
+                    defaultBack: {
+                        state: 'app.ice',
+                        title: 'Is'
+                    }
+                }
+            })
+            .state('app.icedangerobs', {
+                url: '/icedangerobs',
+                views: {
+                    'ice-tab': {
+                        templateUrl: 'app/ice/iceregistration/icedangerobs/icedangerobs.html',
+                        controller: 'IceDangerObsCtrl as vm'
+                    }
+                },
+                data: {
+                    defaultBack: {
+                        state: 'app.iceregistration',
+                        title: 'Isobservasjon'
+                    }
+                }
+            })
+            .state('app.icecoverobs', {
+                url: '/icecoverobs',
+                views: {
+                    'ice-tab': {
+                        templateUrl: 'app/ice/iceregistration/icecoverobs/icecoverobs.html',
+                        controller: 'IceCoverObsCtrl as vm'
+                    }
+                },
+                data: {
+                    defaultBack: {
+                        state: 'app.iceregistration',
+                        title: 'Isobservasjon'
                     }
                 }
             })

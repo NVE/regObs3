@@ -1,6 +1,6 @@
 angular
     .module('RegObs')
-    .factory('Registration', function Registration(Utility, User, AppSettings) {
+    .factory('Registration', function Registration($http, Utility, User, AppSettings) {
         var service = this;
 
         var ELEMENTS = [
@@ -136,16 +136,65 @@ angular
             "Lng": "10,7080138"
         };
 
+        service.getKdvElements = function () {
+            return $http.get('app/json/kdvElements.json');
+        };
+
+        service.getKdvRepositories = function () {
+            return service
+                .getKdvElements()
+                .then(function(response){
+                    return response.data.KdvRepositories;
+                });
+        };
+
+        service.loadKdvArray = function (key) {
+            return service
+                .getKdvRepositories()
+                .then(function (KdvRepositories) {
+                    console.log(KdvRepositories[key]);
+                    return KdvRepositories[key];
+                });
+        };
+
         service.createRegistration = function(type) {
-            var user = User.getUser();
+
             return {
                 "Id": Utility.createGuid(),
                 "GeoHazardTID": geoHazardTid[type],
+                //Dette må genereres
+                "DtObsTime": "2015-10-06T11:22:05.832Z",
+                "ObsLocation": {
+                    "Latitude": 59.9293264,
+                    "Longitude": 10.7083928,
+                    "Uncertainty": null,
+                    "UTMSourceTID": "35"
+                }
+            };
+        };
+
+        service.sendRegistration= function (registration) {
+            var user = User.getUser();
+            angular.extend(registration, {
                 "ObserverGuid": user.Guid,
                 "ObserverGroupID": user.ObserverGroupID,
-                "Email": !!AppSettings.emailReceipt,
-                "DtObsTime": "2015-10-06T11:22:05.832Z"
-            };
+                "Email": !!AppSettings.emailReceipt
+            });
+            console.log('Sending', registration);
+        };
+
+        service.getPropertyAsArray = function(registration, key){
+            if (!(registration[key] && registration[key].length)) {
+                registration[key] = [];
+            }
+            return registration[key];
+        };
+
+        service.getPropertyAsObject = function(registration, key){
+            if (!(registration[key] && Object.keys(registration[key]).length)) {
+                registration[key] = {};
+            }
+            return registration[key];
         };
 
         return service;

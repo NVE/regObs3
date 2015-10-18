@@ -1,0 +1,22 @@
+@media (min-width: 680px) {
+    .modal {
+        top: 0 !important;
+        bottom: 0 !important;
+        left: 0 !important;
+        right: 0 !important;
+        width: 100% !important;
+    }
+    .platform-ios.platform-cordova .modal-wrapper .modal .bar-header:not(.bar-subheader) > * {
+        margin-top: 20px;
+    }
+    .platform-ios.platform-cordova .modal-wrapper .modal .bar-header:not(.bar-subheader) {
+        height: 64px;
+    }
+    .platform-ios.platform-cordova .modal-wrapper .modal .has-header,
+    .platform-ios.platform-cordova .modal-wrapper .modal .bar-subheader {
+        top: 64px;
+    }
+}
+.button svg {
+    height: 100% !important;
+}

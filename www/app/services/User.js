@@ -3,12 +3,7 @@ angular
     .factory('User', function User($http, LocalStorage, AppSettings) {
         var service = this;
         var storageKey = 'regObsUser';
-        var fromStorage = LocalStorage.getObject(storageKey);
-        var user;
-
-        if(fromStorage && fromStorage.Guid){
-            user = fromStorage;
-        }
+        var user = LocalStorage.getAndSetObject(storageKey, 'Guid');
 
         service.logIn = function (username, password) {
             var endpoints = AppSettings.getEndPoints();
@@ -20,7 +15,6 @@ angular
                 cache: true
             };
             return $http.get(endpoints.getObserver, config).then(function(response) {
-                alert('Successfully logged in!');
                 user = JSON.parse(response.data.Data);
                 user.email = username;
                 LocalStorage.setObject(storageKey, user);

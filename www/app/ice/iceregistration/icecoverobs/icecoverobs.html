@@ -1,0 +1,57 @@
+<ion-view view-title="Isdekningsgrad">
+    <ion-content>
+        <ion-list>
+            <label class="item item-input item-select">
+                <div class="input-label">
+                    Isdekning
+                </div>
+                <select ng-model="vm.iceCoverObs.IceCoverTID"
+                        ng-options="kdv.Id as kdv.Name for kdv in vm.kdvArrays.iceCover">
+                </select>
+            </label>
+
+            <label class="item item-input item-select">
+                <div class="input-label">
+                    Isdekning før observasjon
+                </div>
+                <select ng-model="vm.iceCoverObs.IceCoverBeforeTID"
+                        ng-options="kdv.Id as kdv.Name for kdv in vm.kdvArrays.iceCoverBefore">
+                </select>
+            </label>
+
+            <label class="item item-input item-select">
+                <div class="input-label">
+                    Bæreevne
+                </div>
+                <select ng-model="vm.iceCoverObs.IceCapacityTID"
+                        ng-options="kdv.Id as kdv.Name for kdv in vm.kdvArrays.iceCoverCapacity">
+                </select>
+            </label>
+
+            <label class="item item-input item-select">
+                <div class="input-label">
+                    Skøytbarhet
+                </div>
+                <select ng-model="vm.iceCoverObs.IceSkateabilityTID"
+                        ng-options="kdv.Id as kdv.Name for kdv in vm.kdvArrays.iceCoverSkateability">
+                </select>
+            </label>
+
+            <label class="item item-input item-input-inset">
+                <textarea placeholder="Kommentar"
+                          name="comment"
+                          cols="30" rows="10"
+                          ng-model="vm.iceCoverObs.Comment"></textarea>
+            </label>
+        </ion-list>
+        <div class="padding">
+            <button class="button button-block button-calm"
+                    ng-click="appVm.back()">Lagre</button>
+        </div>
+
+    </ion-content>
+<!--    <ion-footer-bar class="bar-calm row-no-padding">
+        <button class="button button-block button-calm row-no-padding"  style="margin: 0px"
+                ng-click="vm.addIceCoverObs()">Legg til</button>
+    </ion-footer-bar>-->
+</ion-view>

@@ -1,14 +1,14 @@
 {
   "name": "RegObs",
-  "app_id": "",
+  "app_id": "81fedcee",
   "gulpStartupTasks": [
     "default",
     "watch"
   ],
   "proxies": [
-      {
-        "path": "/api",
-        "proxyUrl": "https://api.nve.no/hydrology/regobs/webapi"
-      }
-    ]
+    {
+      "path": "/api",
+      "proxyUrl": "https://api.nve.no/hydrology/regobs/webapi"
+    }
+  ]
 }

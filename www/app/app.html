@@ -7,7 +7,7 @@
     </ion-tab>
 </ion-tabs>-->
 <ion-nav-bar class="bar-dark">
-    <ion-nav-back-button>
+    <ion-nav-back-button default-nav-back-button ng-click="goBack()">{{backTitle()}}
     </ion-nav-back-button>
     <ion-nav-buttons side="left">
 
@@ -20,7 +20,7 @@
         </button>
     </ion-nav-buttons>
 </ion-nav-bar>
-<ion-tabs class="tabs-positive">
+<ion-tabs class="tabs-dark">
     <ion-tab title="Snø" icon="" href="#/app/snow">
         <ion-nav-view name="snow-tab"></ion-nav-view>
     </ion-tab>

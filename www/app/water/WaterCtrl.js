@@ -3,14 +3,12 @@
  */
 angular
     .module('RegObs')
-    .controller('WaterCtrl', function WaterCtrl($scope, Localization, AppSettings, Registration) {
-        var vm = this;
+    .controller('WaterCtrl', function WaterCtrl($scope) {
 
-        $scope.$on('$ionicView.loaded', function() {
+        function init() {
+            var vm = this;
+        }
 
-            vm.hazardRatingStyles = AppSettings.hazardRatingStyles;
-            console.log(Registration);
-
-        });
+        $scope.$on( '$ionicView.loaded', init.bind(this) );
 
     });
