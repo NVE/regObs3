@@ -21,6 +21,8 @@ angular
                     })
             };
 
+            vm.save = IceRegistration.save;
+
             vm.iceCoverObs = Registration.getPropertyAsObject(IceRegistration.registration, 'IceCoverObs');
             loadKdvArrays();
 

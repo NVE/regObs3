@@ -41,17 +41,23 @@
                 Innstillinger
             </ion-item>
 
-            <ion-toggle ng-model="appVm.settings.emailReceipt" toggle-class="toggle-calm">Send kvittering på epost?</ion-toggle>
+            <ion-toggle ng-model="appVm.settings.emailReceipt" ng-change="appVm.settings.changedSetting()" toggle-class="toggle-calm">Send kvittering på epost?</ion-toggle>
 
             <label class="item item-input item-select">
                 <div class="input-label">
                     Appmodus
                 </div>
-                <select ng-model="appVm.settings.env" ng-options="env for env in appVm.settings.getEnvironments()">
+                <select ng-model="appVm.settings.env" ng-change="appVm.settings.changedSetting()" ng-options="env for env in appVm.settings.getEnvironments()">
                 </select>
             </label>
 
         </ion-list>
+
+        <div class="padding">
+            <button ng-click="appVm.clearAppStorage()" class="button button-block">
+                Nullstill app
+            </button>
+        </div>
 
     </ion-content>
 </ion-modal-view>

@@ -3,7 +3,7 @@ angular
     .factory('User', function User($http, LocalStorage, AppSettings) {
         var service = this;
         var storageKey = 'regObsUser';
-        var user = LocalStorage.getAndSetObject(storageKey, 'Guid');
+        var user = LocalStorage.getAndSetObject(storageKey, 'Guid', makeAnonymousUser());
 
         service.logIn = function (username, password) {
             var endpoints = AppSettings.getEndPoints();
@@ -31,9 +31,6 @@ angular
         };
 
         service.getUser = function () {
-            if(!user)
-                user = makeAnonymousUser();
-
             return user;
         };
 

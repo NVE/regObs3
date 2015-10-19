@@ -1,9 +1,10 @@
 angular
     .module('RegObs')
-    .factory('IceRegistration', function IceRegistration(Registration, Utility) {
+    .factory('IceRegistration', function IceRegistration($ionicHistory, LocalStorage, Registration, Utility) {
 
         var service = this;
-        service.registration = Registration.createRegistration('ice');
+        var storageKey = 'IceRegistration';
+        service.registration = LocalStorage.getAndSetObject(storageKey, 'GeoHazardTID', Registration.createRegistration('ice'));
 
         console.log(service.registration);
 
@@ -29,8 +30,15 @@ angular
             service.deleteRegistration();
         };
 
+        service.save = function (shouldGoBack) {
+            LocalStorage.setObject(storageKey, service.registration);
+            if(shouldGoBack)
+                $ionicHistory.goBack();
+        };
+
         service.deleteRegistration = function () {
             service.registration = Registration.createRegistration('ice');
+            service.save();
         };
 
 

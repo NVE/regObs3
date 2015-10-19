@@ -87,6 +87,8 @@ angular
                 }
             };
 
+            vm.save = IceRegistration.save;
+
             vm.dangerObsArray = Registration.getPropertyAsArray(IceRegistration.registration, 'DangerObs');
             loadModal();
             loadDangerSignKdvArray();

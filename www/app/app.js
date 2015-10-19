@@ -2,12 +2,13 @@
 
 angular.module('RegObs', ['ionic'])
 
-    .controller('AppCtrl', function($scope, $ionicModal, $ionicHistory, $ionicLoading, Localization, AppSettings, User){
+    .controller('AppCtrl', function($scope, $ionicModal, $ionicHistory, $ionicLoading, LocalStorage, AppSettings, User){
         var appVm = this;
 
         $scope.$on('$ionicView.loaded', function() {
             appVm.user = User.getUser();
             appVm.settings = AppSettings;
+            console.log(appVm.settings.env);
 
             appVm.logIn = function () {
                 appVm.loggingIn = true;
@@ -25,8 +26,8 @@ angular.module('RegObs', ['ionic'])
                 appVm.user = User.getUser();
             };
 
-            appVm.back = function () {
-                $ionicHistory.goBack();
+            appVm.clearAppStorage = function () {
+                LocalStorage.clear();
             };
 
             $ionicModal.fromTemplateUrl('app/settings/settings.html', {

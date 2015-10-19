@@ -163,10 +163,10 @@ angular
                 "Id": Utility.createGuid(),
                 "GeoHazardTID": geoHazardTid[type],
                 //Dette må genereres
-                "DtObsTime": "2015-10-06T11:22:05.832Z",
+                "DtObsTime": new Date().toISOString(),
                 "ObsLocation": {
-                    "Latitude": 59.9293264,
-                    "Longitude": 10.7083928,
+                    "Latitude": '59.9293264',
+                    "Longitude": '10.7083928',
                     "Uncertainty": null,
                     "UTMSourceTID": "35"
                 }
@@ -175,10 +175,17 @@ angular
 
         service.sendRegistration= function (registration) {
             var user = User.getUser();
+            console.log('User', user);
             angular.extend(registration, {
                 "ObserverGuid": user.Guid,
-                "ObserverGroupID": user.ObserverGroupID,
+                "ObserverGroupID": user.ObserverGroup,
                 "Email": !!AppSettings.emailReceipt
+            });
+            $http.post(AppSettings.getEndPoints().postRegistration, {Registrations: [registration]}, {
+                headers: {
+                    regObs_apptoken: AppSettings.appId,
+                    ApiJsonVersion: '0.9.0.20140408'
+                }
             });
             console.log('Sending', registration);
         };

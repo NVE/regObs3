@@ -17,12 +17,15 @@ angular
                 return fetched && fetched[idToCheck] ? fetched : defaultValue;
             },
             setObject: function (key, value) {
-                $window.localStorage.setItem(key, JSON.stringify(value));
+                $window.localStorage.setItem(key, angular.toJson(value));
             },
             getObject: function (key, defaultValue) {
                 console.log('Fetching from local storage');
                 var fetched = $window.localStorage.getItem(key);
-                return fetched? JSON.parse(fetched) : defaultValue;
+                return fetched? angular.fromJson(fetched) : defaultValue;
+            },
+            clear: function(){
+                $window.localStorage.clear();
             }
         }
     });
