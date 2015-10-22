@@ -1,0 +1,30 @@
+<ion-view view-title="Istykkelse">
+    <ion-content>
+        <ion-list>
+            <label class="item item-input" >
+                <input type="number" placeholder="Tørr snø før boring (i cm)"
+                       ng-model="vm.iceThickness.SnowDepth" />
+            </label>
+
+            <label class="item item-input" >
+                <input type="number" placeholder="Sørpe før boring (i cm)"
+                       ng-model="vm.iceThickness.SlushSnow" />
+            </label>
+
+            <label class="item item-input" >
+                <input type="number" placeholder="Total istykkelse (i cm)"
+                       ng-model="vm.iceThickness.IceThicknessSum" />
+            </label>
+            <label class="item item-input item-input-inset">
+                <textarea placeholder="Kommentar"
+                          name="comment"
+                          cols="30" rows="3"
+                          ng-model="vm.iceThickness.Comment"></textarea>
+            </label>
+        </ion-list>
+        <div class="padding">
+            <button class="button button-block button-calm"
+                    ng-click="vm.save(true)">Lagre</button>
+        </div>
+    </ion-content>
+</ion-view>

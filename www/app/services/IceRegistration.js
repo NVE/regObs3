@@ -2,7 +2,8 @@ angular
     .module('RegObs')
     .factory('IceRegistration', function IceRegistration($ionicHistory, LocalStorage, Registration, Utility) {
 
-        var service = this;
+        return {};
+       /* var service = this;
         var storageKey = 'IceRegistration';
         service.registration = LocalStorage.getAndSetObject(storageKey, 'GeoHazardTID', Registration.createRegistration('ice'));
 
@@ -81,5 +82,5 @@ angular
                     "Comment": "Kommentar"
                 }
             }]
-        };
+        };*/
     });

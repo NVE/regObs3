@@ -2,7 +2,7 @@ angular
     .module('RegObs')
     .factory('User', function User($http, LocalStorage, AppSettings) {
         var service = this;
-        var storageKey = 'regObsUser';
+        var storageKey = 'regobsUser';
         var user = LocalStorage.getAndSetObject(storageKey, 'Guid', makeAnonymousUser());
 
         service.logIn = function (username, password) {

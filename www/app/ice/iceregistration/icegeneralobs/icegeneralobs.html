@@ -1,0 +1,17 @@
+<ion-view view-title="Fritekst">
+    <ion-content>
+        <ion-list>
+
+            <label class="item item-input item-input-inset">
+                <textarea placeholder="Får du ikke formidlet det du vil med de andre skjemaene? bruk dette og skriv i vei!"
+                          name="comment"
+                          cols="30" rows="3"
+                          ng-model="vm.generalObservation.ObsHeader"></textarea>
+            </label>
+        </ion-list>
+        <div class="padding">
+            <button class="button button-block button-calm"
+                    ng-click="vm.save(true)">Lagre</button>
+        </div>
+    </ion-content>
+</ion-view>

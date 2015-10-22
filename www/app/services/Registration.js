@@ -1,7 +1,9 @@
 angular
     .module('RegObs')
-    .factory('Registration', function Registration($http, Utility, User, AppSettings) {
+    .factory('Registration', function Registration($http, $ionicHistory, LocalStorage, Utility, User, AppSettings) {
         var service = this;
+
+        var storageKey = 'regobsRegistrations';
 
         var ELEMENTS = [
             {GeoHazardTID: 10, name: "snow", value: "SNOW_GEO_HAZARD"},
@@ -136,29 +138,11 @@ angular
             "Lng": "10,7080138"
         };
 
-        service.getKdvElements = function () {
-            return $http.get('app/json/kdvElements.json');
-        };
 
-        service.getKdvRepositories = function () {
-            return service
-                .getKdvElements()
-                .then(function(response){
-                    return response.data.KdvRepositories;
-                });
-        };
 
-        service.loadKdvArray = function (key) {
-            return service
-                .getKdvRepositories()
-                .then(function (KdvRepositories) {
-                    console.log(KdvRepositories[key]);
-                    return KdvRepositories[key];
-                });
-        };
 
-        service.createRegistration = function(type) {
 
+        service.createRegistration = function (type) {
             return {
                 "Id": Utility.createGuid(),
                 "GeoHazardTID": geoHazardTid[type],
@@ -173,35 +157,83 @@ angular
             };
         };
 
-        service.sendRegistration= function (registration) {
+        service.registrations = LocalStorage.getAndSetObject(
+            storageKey,
+            'ice',
+            {
+                ice: service.createRegistration('ice')
+            }
+        );
+
+        service.save = function (shouldGoBack) {
+
+            if (shouldGoBack)
+                $ionicHistory.goBack();
+            else
+                LocalStorage.setObject(storageKey, service.registrations);
+        };
+
+        service.deleteRegistration = function (type) {
+            service.registrations[type] = service.createRegistration(type);
+            service.save();
+            return service.registrations[type];
+        };
+
+        service.sendRegistration = function (type) {
+            var postUrl = AppSettings.getEndPoints().postRegistration;
             var user = User.getUser();
-            console.log('User', user);
+            var registration = service.registrations[type];
+            var httpConfig = {
+                headers: {
+                    regObs_apptoken: AppSettings.appId,
+                    ApiJsonVersion: '0.9.0.20140408'
+                }
+            };
+
+            //Cleanup DangerObs
+            if(angular.isArray(registration.DangerObs)){
+                registration.DangerObs.forEach(function(dangerObs){
+                    delete dangerObs.tempArea;
+                    delete dangerObs.tempComment;
+                });
+            }
+
             angular.extend(registration, {
                 "ObserverGuid": user.Guid,
                 "ObserverGroupID": user.ObserverGroup,
                 "Email": !!AppSettings.emailReceipt
             });
-            $http.post(AppSettings.getEndPoints().postRegistration, {Registrations: [registration]}, {
-                headers: {
-                    regObs_apptoken: AppSettings.appId,
-                    ApiJsonVersion: '0.9.0.20140408'
-                }
-            });
+
+            var dataToSend = {
+                Registrations: [registration]
+            };
+
+            console.log('User', user);
             console.log('Sending', registration);
+
+            return $http.post(postUrl, dataToSend, httpConfig)
+                .then(function () {
+                    return service.deleteRegistration(type);
+                })
+                .catch(function (error) {
+                    alert('Failed to send registration ' + error.reason);
+                    console.error('Failed to send registration', error)
+                });
+
         };
 
-        service.getPropertyAsArray = function(registration, key){
-            if (!(registration[key] && registration[key].length)) {
-                registration[key] = [];
+        service.getPropertyAsArray = function (type, key) {
+            if (!(service.registrations[type][key] && service.registrations[type][key].length)) {
+                service.registrations[type][key] = [];
             }
-            return registration[key];
+            return service.registrations[type][key];
         };
 
-        service.getPropertyAsObject = function(registration, key){
-            if (!(registration[key] && Object.keys(registration[key]).length)) {
-                registration[key] = {};
+        service.getPropertyAsObject = function (type, key) {
+            if (!(service.registrations[type][key] && Object.keys(service.registrations[type][key]).length)) {
+                service.registrations[type][key] = {};
             }
-            return registration[key];
+            return service.registrations[type][key];
         };
 
         return service;

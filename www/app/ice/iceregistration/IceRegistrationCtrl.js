@@ -1,62 +1,62 @@
 angular
     .module('RegObs')
-    .controller('IceRegistrationCtrl', function IceRegistrationCtrl($scope, $ionicHistory, $ionicPopup, IceRegistration) {
+    .controller('IceRegistrationCtrl', function IceRegistrationCtrl($scope, $ionicHistory, $ionicPopup, Registration, IceRegistration) {
 
         function init() {
 
             var vm = this;
+            var type = 'ice';
 
-            vm.registration = IceRegistration.registration;
+            vm.registration = Registration.registrations[type];
 
-            var showConfirm = function() {
+            var showConfirm = function () {
                 return $ionicPopup.confirm({
                     title: 'Slett observasjoner',
                     template: 'Er du sikker på at du vil slette lokalt lagrede isobservasjoner?',
                     buttons: [
-                        { text: 'Avbryt' },
+                        {text: 'Avbryt'},
                         {
                             text: 'Slett',
                             type: 'button-assertive',
-                            onTap: function(e) {
+                            onTap: function (e) {
                                 // Returning a value will cause the promise to resolve with the given value.
                                 return true;
                             }
                         }
                     ]
-                }).then(function(res) {
-                    return res;
                 });
             };
 
             vm.sendRegistration = function () {
-                IceRegistration.sendRegistration();
-                vm.registration = IceRegistration.registration;
+                Registration.sendRegistration(type)
+                    .then(function (newRegistration) {
+                        vm.registration = newRegistration;
+                    });
             };
 
             vm.deleteRegistration = function () {
                 showConfirm()
-                    .then(function(response){
-                        if(response){
-                            IceRegistration.deleteRegistration();
-                            vm.registration = IceRegistration.registration;
+                    .then(function (response) {
+                        if (response) {
+                            vm.registration = Registration.deleteRegistration(type);
                             console.log(vm.registration);
                         }
                     });
             };
 
-            vm.iceCoverExists = function () {
-                return vm.registration.IceCoverObs && Object.keys(vm.registration.IceCoverObs).length
+            vm.iceObjectExists = function (key) {
+                return vm.registration[key] && Object.keys(vm.registration[key]).length
             };
 
             /*vm.dangerObsClicked = function () {
-               if (!angular.isArray(IceRegistration.registration.DangerObs) || !IceRegistration.registration.DangerObs.length) {
-                    $ionicHistory.nextViewOptions({
-                        disableAnimate: true
-                    });
-                }
-            };*/
+             if (!angular.isArray(IceRegistration.registration.DangerObs) || !IceRegistration.registration.DangerObs.length) {
+             $ionicHistory.nextViewOptions({
+             disableAnimate: true
+             });
+             }
+             };*/
         }
 
-        $scope.$on( '$ionicView.loaded', init.bind(this) );
+        $scope.$on('$ionicView.loaded', init.bind(this));
 
     });

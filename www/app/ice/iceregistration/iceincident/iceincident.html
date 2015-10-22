@@ -1,0 +1,28 @@
+<ion-view view-title="Ulykke/hendelse">
+    <ion-content>
+        <ion-list>
+            <label class="item item-input item-input-inset">
+                <textarea placeholder="Hvorfor skjedde det? Hvorfor gikk det forhåpentligvis bra? Kunne situasjonen vært unngått?"
+                          name="comment"
+                          cols="30" rows="3"
+                          ng-model="vm.incident.IncidentText"></textarea>
+            </label>
+
+            <kdv-dropdown
+                    title="Hva ble påvirket?*"
+                    model="vm.incident.ActivityInfluencedTID"
+                    kdv-key="Ice_ActivityInfluencedKDV">
+            </kdv-dropdown>
+            <kdv-dropdown
+                    title="Skadeomfang*"
+                    model="vm.incident.DamageExtentTID"
+                    kdv-key="DamageExtentKDV">
+            </kdv-dropdown>
+
+        </ion-list>
+        <div class="padding">
+            <button class="button button-block button-calm"
+                    ng-click="vm.save(true)">Lagre</button>
+        </div>
+    </ion-content>
+</ion-view>

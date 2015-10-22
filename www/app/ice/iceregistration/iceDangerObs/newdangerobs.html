@@ -18,6 +18,7 @@
                         ng-change="vm.dangerSignChanged()">
                 </select>
             </label>
+
             <!--<ion-radio name="dangersign"
                        ng-repeat="sign in vm.dangerSignKdvArray"
                        ng-model="vm.dangerObs.DangerSignTID"
@@ -44,7 +45,7 @@
             <label class="item item-input item-input-inset">
                 <textarea placeholder="Kommentar"
                           name="comment"
-                          cols="30" rows="10"
+                          cols="30" rows="3"
                           ng-model="vm.dangerObs.tempComment"
                           ng-change="vm.commentChanged()"></textarea>
             </label>
@@ -57,6 +58,9 @@
             <button class="button button-block button-calm"
                     ng-click="vm.modal.hide()"
                     ng-show="vm.editing">Lagre</button>
+            <button class="button button-block button-assertive button-clear"
+                    ng-click="vm.deleteDangerObs()"
+                    ng-show="vm.editing">Slett</button>
         </div>
     </ion-content>
 </ion-modal-view>

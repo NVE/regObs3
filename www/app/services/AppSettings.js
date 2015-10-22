@@ -6,7 +6,7 @@ angular
         var storageKey = 'regobsAppSettings';
 
         var settings = {
-            env: 'proxy',
+            env: 'demo',
             emailReceipt: false,
             appId: '***REMOVED***'
         };

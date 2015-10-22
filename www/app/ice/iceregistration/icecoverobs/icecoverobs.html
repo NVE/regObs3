@@ -1,46 +1,35 @@
 <ion-view view-title="Isdekningsgrad">
     <ion-content>
         <ion-list>
-            <label class="item item-input item-select">
-                <div class="input-label">
-                    Isdekning
-                </div>
-                <select ng-model="vm.iceCoverObs.IceCoverTID"
-                        ng-options="kdv.Id as kdv.Name for kdv in vm.kdvArrays.iceCover">
-                </select>
-            </label>
 
-            <label class="item item-input item-select">
-                <div class="input-label">
-                    Isdekning før observasjon
-                </div>
-                <select ng-model="vm.iceCoverObs.IceCoverBeforeTID"
-                        ng-options="kdv.Id as kdv.Name for kdv in vm.kdvArrays.iceCoverBefore">
-                </select>
-            </label>
+            <kdv-dropdown
+                    title="Isdekning*"
+                    model="vm.iceCoverObs.IceCoverTID"
+                    kdv-key="Ice_IceCoverKDV">
+            </kdv-dropdown>
 
-            <label class="item item-input item-select">
-                <div class="input-label">
-                    Bæreevne
-                </div>
-                <select ng-model="vm.iceCoverObs.IceCapacityTID"
-                        ng-options="kdv.Id as kdv.Name for kdv in vm.kdvArrays.iceCoverCapacity">
-                </select>
-            </label>
+            <kdv-dropdown
+                    title="Isdekning før observasjon"
+                    model="vm.iceCoverObs.IceCoverBeforeTID"
+                    kdv-key="Ice_IceCoverBeforeKDV">
+            </kdv-dropdown>
 
-            <label class="item item-input item-select">
-                <div class="input-label">
-                    Skøytbarhet
-                </div>
-                <select ng-model="vm.iceCoverObs.IceSkateabilityTID"
-                        ng-options="kdv.Id as kdv.Name for kdv in vm.kdvArrays.iceCoverSkateability">
-                </select>
-            </label>
+            <kdv-dropdown
+                    title="Bæreevne"
+                    model="vm.iceCoverObs.IceCapacityTID"
+                    kdv-key="Ice_IceCapacityKDV">
+            </kdv-dropdown>
+
+            <kdv-dropdown
+                    title="Skøytbarhet"
+                    model="vm.iceCoverObs.IceSkateabilityTID"
+                    kdv-key="Ice_IceSkateabilityKDV">
+            </kdv-dropdown>
 
             <label class="item item-input item-input-inset">
                 <textarea placeholder="Kommentar"
                           name="comment"
-                          cols="30" rows="10"
+                          cols="30" rows="3"
                           ng-model="vm.iceCoverObs.Comment"></textarea>
             </label>
         </ion-list>

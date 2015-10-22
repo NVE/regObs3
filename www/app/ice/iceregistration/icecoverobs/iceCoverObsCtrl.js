@@ -1,30 +1,12 @@
 angular
     .module('RegObs')
-    .controller('IceCoverObsCtrl', function ($scope, Registration, IceRegistration) {
+    .controller('IceCoverObsCtrl', function ($scope, Utility, Registration) {
         function init(){
             var vm = this;
 
-            var loadKdvArrays = function () {
-                return Registration
-                    .getKdvRepositories()
-                    .then(function (KdvRepos) {
-                        vm.kdvArrays = {
-                            iceCover: KdvRepos.Ice_IceCoverKDV,
-                            iceCoverBefore: KdvRepos.Ice_IceCoverBeforeKDV,
-                            iceCoverCapacity: KdvRepos.Ice_IceCapacityKDV,
-                            iceCoverSkateability: KdvRepos.Ice_IceSkateabilityKDV
-                        };
-                        vm.iceCoverObs.IceCoverTID = vm.iceCoverObs.IceCoverTID || vm.kdvArrays.iceCover[0].Id;
-                        vm.iceCoverObs.IceCoverBeforeTID = vm.iceCoverObs.IceCoverBeforeTID || vm.kdvArrays.iceCoverBefore[0].Id;
-                        vm.iceCoverObs.IceCapacityTID = vm.iceCoverObs.IceCapacityTID || vm.kdvArrays.iceCoverCapacity[0].Id;
-                        vm.iceCoverObs.IceSkateabilityTID = vm.iceCoverObs.IceSkateabilityTID || vm.kdvArrays.iceCoverSkateability[0].Id;
-                    })
-            };
+            vm.save = Registration.save;
 
-            vm.save = IceRegistration.save;
-
-            vm.iceCoverObs = Registration.getPropertyAsObject(IceRegistration.registration, 'IceCoverObs');
-            loadKdvArrays();
+            vm.iceCoverObs = Registration.getPropertyAsObject('ice', 'IceCoverObs');
 
         }
 
