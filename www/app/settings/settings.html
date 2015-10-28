@@ -5,7 +5,7 @@
     </ion-header-bar>
     <ion-content>
 
-        <form ng-submit="appVm.logIn()" ng-if="appVm.user.anonymous">
+        <form ng-submit="appVm.logIn()" ng-if="appVm.userService.getUser().anonymous">
             <div class="list">
                 <label class="item item-input" >
                     <i class="icon ion-email placeholder-icon"></i>
@@ -22,10 +22,10 @@
                 </button>
             </div>
         </form>
-        <form ng-submit="appVm.logOut()" ng-if="!appVm.user.anonymous">
+        <form ng-submit="appVm.logOut()" ng-if="!appVm.userService.getUser().anonymous">
             <div class="list">
                 <div class="item">
-                    Logged in as {{appVm.user.email}}
+                    Logged in as {{appVm.userService.getUser().email}}
                 </div>
             </div>
             <div class="padding">
@@ -41,13 +41,23 @@
                 Innstillinger
             </ion-item>
 
-            <ion-toggle ng-model="appVm.settings.emailReceipt" ng-change="appVm.settings.changedSetting()" toggle-class="toggle-calm">Send kvittering på epost?</ion-toggle>
+            <ion-toggle ng-model="appVm.settings.emailReceipt" ng-change="appVm.settings.save()" toggle-class="toggle-calm">Send kvittering på epost?</ion-toggle>
 
             <label class="item item-input item-select">
                 <div class="input-label">
                     Appmodus
                 </div>
-                <select ng-model="appVm.settings.env" ng-change="appVm.settings.changedSetting()" ng-options="env for env in appVm.settings.getEnvironments()">
+                <select ng-model="appVm.settings.env" ng-change="appVm.settings.save()" ng-options="env for env in appVm.settings.getEnvironments()">
+                </select>
+            </label>
+
+            <label class="item item-input item-select">
+                <div class="input-label">
+                    Gruppe
+                </div>
+                <select ng-model="appVm.userService.getUser().chosenObserverGroup" ng-change="appVm.userService.save()"
+                        ng-options="key as value for (key , value) in appVm.userService.getUser().ObserverGroup">
+                    <option value="">Velg gruppe...</option>
                 </select>
             </label>
 

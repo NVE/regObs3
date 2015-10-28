@@ -3,9 +3,9 @@
         <ion-list>
             <regobs-menu-item
                     title="Faretegn"
-                    condition="vm.registration.DangerObs.length"
+                    condition="vm.dangerObsExists()"
                     state="app.icedangerobs"
-                    badge-text="vm.registration.DangerObs.length">
+                    badge-text="vm.dangerObsExists()">
             </regobs-menu-item>
 
             <regobs-menu-item

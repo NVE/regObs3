@@ -34,7 +34,7 @@ angular
             settings = LocalStorage.getAndSetObject(storageKey,'appId',settings);
             console.log('Fetched settings', settings);
 
-            settings.changedSetting = function () {
+            settings.save = function () {
                 console.log('Changedsetting', settings);
                 LocalStorage.setObject(storageKey, settings);
             };

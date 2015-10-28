@@ -6,14 +6,14 @@ angular.module('RegObs', ['ionic'])
         var appVm = this;
 
         $scope.$on('$ionicView.loaded', function() {
-            appVm.user = User.getUser();
+            appVm.userService = User;
             appVm.settings = AppSettings;
             console.log(appVm.settings.env);
 
             appVm.logIn = function () {
                 appVm.loggingIn = true;
                 User.logIn(appVm.username, appVm.password).then(function() {
-                    appVm.user = User.getUser();
+                    //appVm.user = User.getUser();
                     appVm.loggingIn = false;
 
                 });
@@ -23,11 +23,12 @@ angular.module('RegObs', ['ionic'])
                 appVm.username = '';
                 appVm.password = '';
                 User.logOut();
-                appVm.user = User.getUser();
+                //appVm.user = User.getUser();
             };
 
             appVm.clearAppStorage = function () {
                 LocalStorage.clear();
+                Registration.load();
             };
 
             $ionicModal.fromTemplateUrl('app/settings/settings.html', {
@@ -91,6 +92,112 @@ angular.module('RegObs', ['ionic'])
                 }
 
             })
+            .state('app.snowregistration', {
+                url: '/snowregistration',
+                views: {
+                    'snow-tab': {
+                        templateUrl: 'app/snow/snowregistration/snowregistration.html',
+                        controller: 'SnowRegistrationCtrl as vm'
+                    }
+                },
+                data: {
+                    defaultBack: {
+                        state: 'app.snow',
+                        title: 'Snø'
+                    }
+                }
+            })
+            .state('app.snowdangerobs', {
+                url: '/snowdangerobs',
+                views: {
+                    'snow-tab': {
+                        templateUrl: 'app/snow/snowregistration/snowdangerobs/snowdangerobs.html',
+                        controller: 'SnowDangerObsCtrl as vm'
+                    }
+                },
+                data: {
+                    defaultBack: {
+                        state: 'app.snowregistration',
+                        title: 'Snøobservasjon'
+                    }
+                }
+            })
+            .state('app.snowgeneralobs', {
+                url: '/snowgeneralobs',
+                views: {
+                    'snow-tab': {
+                        templateUrl: 'app/snow/snowregistration/snowgeneralobs/snowgeneralobs.html',
+                        controller: 'SnowGeneralObsCtrl as vm'
+                    }
+                },
+                data: {
+                    defaultBack: {
+                        state: 'app.snowregistration',
+                        title: 'Snøobservasjon'
+                    }
+                }
+            })
+            .state('app.snowweatherobservation', {
+                url: '/snowweatherobservation',
+                views: {
+                    'snow-tab': {
+                        templateUrl: 'app/snow/snowregistration/snowweatherobservation/snowweatherobservation.html',
+                        controller: 'SnowWeatherObservationCtrl as vm'
+                    }
+                },
+                data: {
+                    defaultBack: {
+                        state: 'app.snowregistration',
+                        title: 'Snøobservasjon'
+                    }
+                }
+            })
+
+            .state('app.snowsurfaceobservation', {
+                url: '/snowsurfaceobservation',
+                views: {
+                    'snow-tab': {
+                        templateUrl: 'app/snow/snowregistration/snowsurfaceobservation/snowsurfaceobservation.html',
+                        controller: 'SnowSurfaceObservationCtrl as vm'
+                    }
+                },
+                data: {
+                    defaultBack: {
+                        state: 'app.snowregistration',
+                        title: 'Snøobservasjon'
+                    }
+                }
+            })
+            .state('app.avalancheevaluation', {
+                url: '/avalancheevaluation',
+                views: {
+                    'snow-tab': {
+                        templateUrl: 'app/snow/snowregistration/avalancheevaluation/avalancheevaluation.html',
+                        controller: 'AvalancheEvaluationCtrl as vm'
+                    }
+                },
+                data: {
+                    defaultBack: {
+                        state: 'app.snowregistration',
+                        title: 'Snøobservasjon'
+                    }
+                }
+            })
+            .state('app.avalancheobs', {
+                url: '/avalancheobs',
+                views: {
+                    'snow-tab': {
+                        templateUrl: 'app/snow/snowregistration/avalancheobs/avalancheobs.html',
+                        controller: 'AvalancheObsCtrl as vm'
+                    }
+                },
+                data: {
+                    defaultBack: {
+                        state: 'app.snowregistration',
+                        title: 'Snøobservasjon'
+                    }
+                }
+            })
             .state('app.ice', {
                 url: '/ice',
                 views: {
@@ -130,6 +237,7 @@ angular.module('RegObs', ['ionic'])
                     }
                 }
             })
+
             .state('app.icecoverobs', {
                 url: '/icecoverobs',
                 views: {

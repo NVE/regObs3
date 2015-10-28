@@ -1,0 +1,20 @@
+<ion-list can-swipe="true">
+    <ion-item class="item-icon-right"
+              ng-repeat="obs in dangerObsArray track by $index"
+              ng-click="editDangerObs(obs, $index)">
+        <ion-option-button class="button-assertive"
+                           ng-click="dangerObsArray.splice($index, 1)">
+            Slett
+        </ion-option-button>
+        {{getDangerSignName(obs.DangerSignTID)}} - {{obs.Comment}}
+
+    </ion-item>
+</ion-list>
+<div class="padding">
+    <button class="button button-block button-balanced icon-left ion-plus"
+            ng-click="newDangerObs()">Legg til nytt faretegn</button>
+
+    <button class="button button-block button-calm button-clear"
+            ng-click="save(true)">Ferdig</button>
+
+</div>

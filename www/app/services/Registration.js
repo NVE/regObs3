@@ -1,16 +1,9 @@
 angular
     .module('RegObs')
-    .factory('Registration', function Registration($http, $ionicHistory, LocalStorage, Utility, User, AppSettings) {
+    .factory('Registration', function Registration($ionicPopup, $http, $ionicHistory, LocalStorage, Utility, User, AppSettings) {
         var service = this;
 
         var storageKey = 'regobsRegistrations';
-
-        var ELEMENTS = [
-            {GeoHazardTID: 10, name: "snow", value: "SNOW_GEO_HAZARD"},
-            {GeoHazardTID: 20, name: "dirt", value: "DIRT_GEO_HAZARD"},
-            {GeoHazardTID: 60, name: "water", value: "WATER_GEO_HAZARD"},
-            {GeoHazardTID: 70, name: "ice", value: "ICE_GEO_HAZARD"}
-        ];
 
         var geoHazardTid = {
             snow: 10,
@@ -138,9 +131,29 @@ angular
             "Lng": "10,7080138"
         };
 
+        var showConfirm = function () {
+            return $ionicPopup.confirm({
+                title: 'Slett observasjoner',
+                template: 'Er du sikker på at du vil slette lokalt lagrede snøobservasjoner?',
+                buttons: [
+                    {text: 'Avbryt'},
+                    {
+                        text: 'Slett',
+                        type: 'button-assertive',
+                        onTap: function (e) {
+                            // Returning a value will cause the promise to resolve with the given value.
+                            return true;
+                        }
+                    }
+                ]
+            });
+        };
 
-
-
+        var resetRegistration = function (type) {
+            service.registrations[type] = service.createRegistration(type);
+            service.save();
+            return service.registrations[type];
+        };
 
         service.createRegistration = function (type) {
             return {
@@ -157,13 +170,18 @@ angular
             };
         };
 
-        service.registrations = LocalStorage.getAndSetObject(
-            storageKey,
-            'ice',
-            {
-                ice: service.createRegistration('ice')
-            }
-        );
+        service.load = function () {
+            service.registrations = LocalStorage.getAndSetObject(
+                storageKey,
+                'snow',
+                {
+                    ice: service.createRegistration('ice'),
+                    snow: service.createRegistration('snow'),
+                    dirt: service.createRegistration('dirt'),
+                    water: service.createRegistration('water')
+                }
+            );
+        };
 
         service.save = function (shouldGoBack) {
 
@@ -174,9 +192,12 @@ angular
         };
 
         service.deleteRegistration = function (type) {
-            service.registrations[type] = service.createRegistration(type);
-            service.save();
-            return service.registrations[type];
+            showConfirm()
+                .then(function (response) {
+                    if (response) {
+                        return resetRegistration(type);
+                    }
+                });
         };
 
         service.sendRegistration = function (type) {
@@ -200,7 +221,7 @@ angular
 
             angular.extend(registration, {
                 "ObserverGuid": user.Guid,
-                "ObserverGroupID": user.ObserverGroup,
+                "ObserverGroupID": user.chosenObserverGroup,
                 "Email": !!AppSettings.emailReceipt
             });
 
@@ -213,7 +234,7 @@ angular
 
             return $http.post(postUrl, dataToSend, httpConfig)
                 .then(function () {
-                    return service.deleteRegistration(type);
+                    return resetRegistration(type);
                 })
                 .catch(function (error) {
                     alert('Failed to send registration ' + error.reason);
@@ -235,6 +256,8 @@ angular
             }
             return service.registrations[type][key];
         };
+
+        service.load();
 
         return service;
     });

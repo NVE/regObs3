@@ -1,9 +1,9 @@
 angular
     .module('RegObs')
-    .controller('IceGeneralObsCtrl', function ($scope, Utility, Registration) {
+    .controller('SnowGeneralObsCtrl', function ($scope, Utility, Registration) {
         function init() {
             var vm = this;
-            vm.generalObservation = Registration.getPropertyAsObject('ice', 'GeneralObservation');
+            vm.generalObservation = Registration.getPropertyAsObject('snow', 'GeneralObservation');
             vm.save = Registration.save;
         }
 

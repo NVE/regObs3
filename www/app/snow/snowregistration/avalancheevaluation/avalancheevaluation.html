@@ -1,0 +1,42 @@
+<ion-view view-title="Skredfarevurdering">
+    <ion-content>
+        <ion-list>
+            <label class="item item-input item-input-inset">
+                <textarea placeholder="Vurdering av skredfare*"
+                          name="vurdering"
+                          cols="30" rows="3"
+                          ng-model="vm.obs.AvalancheEvaluation"></textarea>
+            </label>
+
+            <label class="item item-input item-input-inset">
+                <textarea placeholder="Utvikling av skredfare"
+                          name="utvikling"
+                          cols="30" rows="3"
+                          ng-model="vm.obs.AvalancheDevelopment"></textarea>
+            </label>
+
+            <kdv-dropdown
+                    title="Faregrad"
+                    model="vm.obs.AvalancheDangerTID"
+                    kdv-key="Snow_AvalancheDangerKDV">
+            </kdv-dropdown>
+
+            <kdv-dropdown
+                    title="Vurdering av varslet faregrad"
+                    model="vm.obs.ForeCastCorrectTID"
+                    kdv-key="Snow_ForecastCorrectKDV">
+            </kdv-dropdown>
+
+            <label class="item item-input item-input-inset">
+                <textarea placeholder="Kommentarer - Hvordan er dagens lokale varsel i forhold til dine lokale vurderinger?"
+                          name="comment"
+                          cols="30" rows="3"
+                          ng-model="vm.obs.ForecastComment"></textarea>
+            </label>
+        </ion-list>
+        <div class="padding">
+            <button class="button button-block button-calm"
+                    ng-click="vm.save(true)">Lagre</button>
+        </div>
+    </ion-content>
+</ion-view>

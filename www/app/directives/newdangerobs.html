@@ -1,0 +1,66 @@
+<ion-modal-view>
+    <ion-header-bar>
+        <h1 class="title" ng-hide="editing">Nytt faretegn</h1>
+        <h1 class="title" ng-show="editing">Rediger faretegn</h1>
+        <button class="button button-clear button-positive" ng-click="modal.hide()">Avbryt</button>
+    </ion-header-bar>
+    <ion-content>
+        <ion-list>
+            <ion-checkbox ng-model="noDangerSign.val" ng-change="toggleNoDangerSign()">Ingen faretegn observert</ion-checkbox>
+
+            <!--<ion-item class="item-divider" ng-hide="noDangerSign">Faretegn</ion-item>-->
+            <label class="item item-input item-select" ng-hide="noDangerSign.val">
+                <div class="input-label">
+                    Faretegn
+                </div>
+                <select ng-model="dangerObs.DangerSignTID"
+                        ng-options="sign.Id as sign.Name for sign in dangerSignKdvArray"
+                        ng-change="dangerSignChanged()">
+                </select>
+            </label>
+
+            <!--<ion-radio name="dangersign"
+                       ng-repeat="sign in vm.dangerSignKdvArray"
+                       ng-model="vm.dangerObs.DangerSignTID"
+                       ng-value="sign.Id"
+                       ng-change="vm.dangerSignChanged()"
+                    ng-hide="vm.noDangerSign">{{sign.Name}}</ion-radio>-->
+
+            <!--<ion-item class="item-divider">Område</ion-item>-->
+            <label class="item item-input item-select">
+                <div class="input-label">
+                    Område
+                </div>
+                <select ng-model="dangerObs.tempArea"
+                        ng-options="area for area in areaArray"
+                        ng-change="commentChanged()">
+                </select>
+            </label>
+            <!--<ion-radio name="staticcomment"
+                       ng-repeat="val in areaArray"
+                       ng-model="dangerObs.tempArea"
+                       ng-value="val"
+                       ng-change="commentChanged()">{{val}}</ion-radio>-->
+
+            <label class="item item-input item-input-inset">
+                <textarea placeholder="Kommentar"
+                          name="comment"
+                          cols="30" rows="3"
+                          ng-model="dangerObs.tempComment"
+                          ng-change="commentChanged()"></textarea>
+            </label>
+
+        </ion-list>
+        <div class="padding">
+            <button class="button button-block button-calm"
+                    ng-click="addDangerObs()"
+                    ng-hide="editing">Lagre</button>
+            <button class="button button-block button-calm"
+                    ng-click="modal.hide()"
+                    ng-show="editing">Lagre</button>
+            <button class="button button-block button-assertive button-clear"
+                    ng-click="deleteDangerObs()"
+                    ng-show="editing">Slett</button>
+        </div>
+    </ion-content>
+</ion-modal-view>

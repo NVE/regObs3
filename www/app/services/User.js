@@ -17,7 +17,8 @@ angular
             return $http.get(endpoints.getObserver, config).then(function(response) {
                 user = JSON.parse(response.data.Data);
                 user.email = username;
-                LocalStorage.setObject(storageKey, user);
+                user.chosenObserverGroup = null;
+                service.save();
                 console.log("Logged in user",user);
 
             }, function (response) {
@@ -27,11 +28,20 @@ angular
 
         service.logOut = function () {
             user = makeAnonymousUser();
-            LocalStorage.setObject(storageKey, user);
+            service.save();
         };
 
         service.getUser = function () {
             return user;
+        };
+
+        service.setChosenObserverGroup = function (id) {
+            user.chosenObserverGroup = id;
+            service.save();
+        };
+
+        service.save = function () {
+            LocalStorage.setObject(storageKey, user);
         };
 
         return service;

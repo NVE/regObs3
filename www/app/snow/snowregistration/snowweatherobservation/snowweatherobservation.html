@@ -1,0 +1,45 @@
+<ion-view view-title="Vær">
+    <ion-content>
+        <ion-list>
+            <kdv-dropdown
+                    title="Nedbørstype"
+                    model="vm.obs.PrecipitationTID"
+                    kdv-key="Snow_PrecipitationKDV">
+            </kdv-dropdown>
+
+            <label class="item item-input" >
+                <input type="number" placeholder="Lufttemperatur (C)"
+                       ng-model="vm.obs.AirTemperature" />
+            </label>
+            <label class="item item-input" >
+                <input type="number" placeholder="Vindhastighet (m/s)"
+                       ng-model="vm.obs.WindSpeed" />
+            </label>
+
+            <label class="item item-input" >
+                <input type="tel" placeholder="Skydekke (%)"
+                       ng-model="vm.obs.CloudCover" />
+            </label>
+
+            <label class="item item-input item-select">
+                <div class="input-label">
+                    Vindretning
+                </div>
+                <select ng-model="vm.obs.WindDirection"
+                        ng-options="dir.val as dir.name for dir in vm.windDirectionArray">
+                </select>
+            </label>
+
+            <label class="item item-input item-input-inset">
+                <textarea placeholder="Hvordan har været vært i området siste døgn? Eks: Har det vært byger? Har det vært tempraturendringer? Hvor går nullisotermen?"
+                          name="comment"
+                          cols="30" rows="3"
+                          ng-model="vm.obs.Comment"></textarea>
+            </label>
+        </ion-list>
+        <div class="padding">
+            <button class="button button-block button-calm"
+                    ng-click="vm.save(true)">Lagre</button>
+        </div>
+    </ion-content>
+</ion-view>

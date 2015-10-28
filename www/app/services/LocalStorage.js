@@ -22,7 +22,7 @@ angular
             getObject: function (key, defaultValue) {
                 console.log('Fetching from local storage');
                 var fetched = $window.localStorage.getItem(key);
-                return fetched? angular.fromJson(fetched) : defaultValue;
+                return fetched && fetched !== 'undefined'? angular.fromJson(fetched) : defaultValue;
             },
             clear: function(){
                 $window.localStorage.clear();

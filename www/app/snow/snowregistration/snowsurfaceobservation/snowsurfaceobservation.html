@@ -1,0 +1,59 @@
+<ion-view view-title="Snødekke">
+    <ion-content>
+        <ion-list>
+            <label class="item item-input" >
+                <input type="tel" placeholder="Snødybde (cm)"
+                       ng-model="vm.obs.SnowDepth" />
+            </label>
+
+            <label class="item item-input" >
+                <input type="tel" placeholder="Nysnødybde (cm)"
+                       ng-model="vm.obs.NewSnowDepth24" />
+            </label>
+
+            <label class="item item-input" >
+                <input type="tel" placeholder="Nysnøgrense (moh)"
+                       ng-model="vm.obs.NewSnowLine" />
+            </label>
+
+            <label class="item item-input" >
+                <input type="tel" placeholder="Snøgrense (moh)"
+                       ng-model="vm.obs.SnowLine" />
+            </label>
+
+            <label class="item item-input" >
+                <input type="tel" placeholder="Grense lagdelt snø (moh)"
+                       ng-model="vm.obs.HeightLimitLayeredSnow" />
+            </label>
+
+            <kdv-dropdown
+                    title="Snøfokk"
+                    model="vm.obs.SnowDriftTID"
+                    kdv-key="Snow_SnowDriftKDV">
+            </kdv-dropdown>
+
+            <label class="item item-input item-input-inset">
+                <textarea placeholder="Hvordan er snøfordelingen generelt ifht. høyde og eksposisjon. Er det forskjell i regionen?"
+                          name="comment"
+                          cols="30" rows="3"
+                          ng-model="vm.obs.Comment"></textarea>
+            </label>
+        </ion-list>
+
+        <div class="padding">
+            <button class="button button-block button-calm"
+                    ng-click="vm.save(true)">Lagre</button>
+        </div>
+    </ion-content>
+</ion-view>
+
+<!--
+/*"SnowSurfaceObservation": {
+"SnowDepth": "0.0100",
+"NewSnowDepth24": "0.0200",
+"NewSnowLine": "3",
+"SnowLine": "4",
+"HeightLimitLayeredSnow": "5",
+"SnowDriftTID": "2",
+"Comment": "Kommentar "
+}*/-->
