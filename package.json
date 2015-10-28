@@ -1,7 +1,7 @@
 {
-  "name": "varsom",
+  "name": "regObs",
   "version": "1.0.0",
-  "description": "Varsom: An Ionic project",
+  "description": "regObs: An Ionic project",
   "scripts": {
     "postinstall": "ionic state reset && bower install && gulp"
   },
@@ -26,7 +26,8 @@
     "cordova-plugin-splashscreen",
     "com.ionic.keyboard",
     "cordova-plugin-statusbar",
-    "ionic-plugin-deploy"
+    "ionic-plugin-deploy",
+    "cordova-plugin-camera"
   ],
   "cordovaPlatforms": [
     "android"

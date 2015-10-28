@@ -1,6 +1,6 @@
 "use strict";
 
-angular.module('RegObs', ['ionic'])
+angular.module('RegObs', ['ionic', 'ngCordova'])
 
     .controller('AppCtrl', function($scope, $ionicModal, $ionicHistory, $ionicLoading, LocalStorage, Registration, AppSettings, User){
         var appVm = this;
@@ -332,6 +332,7 @@ angular.module('RegObs', ['ionic'])
             if(window.cordova && window.cordova.plugins.Keyboard) {
                 cordova.plugins.Keyboard.hideKeyboardAccessoryBar(true);
             }
+
             if(window.StatusBar) {
                 StatusBar.styleDefault();
             }
