@@ -3,7 +3,7 @@ angular
     .controller('SnowGeneralObsCtrl', function ($scope, Utility, Registration) {
         function init() {
             var vm = this;
-            vm.generalObservation = Registration.getPropertyAsObject('snow', 'GeneralObservation');
+            vm.generalObservation = Registration.getPropertyAsObject('GeneralObservation');
             vm.save = Registration.save;
         }
 

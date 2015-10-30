@@ -5,22 +5,21 @@ angular
         function init() {
 
             var vm = this;
-            var type = 'ice';
 
             vm.sendRegistration = function () {
-                Registration.sendRegistration(type);
+                Registration.sendRegistration();
             };
 
             vm.deleteRegistration = function () {
-                Registration.deleteRegistration(type);
+                Registration.deleteRegistration();
             };
 
             vm.iceObjectExists = function (key) {
-                return Registration.registrations[type][key] && Object.keys(Registration.registrations[type][key]).length
+                return Registration.registration[key] && Object.keys(Registration.registration[key]).length
             };
 
             vm.dangerObsExists = function () {
-                return Registration.registrations[type].DangerObs && Registration.registrations[type].DangerObs.length;
+                return Registration.registration.DangerObs && Registration.registration.DangerObs.length;
             };
         }
 

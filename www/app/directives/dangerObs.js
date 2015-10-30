@@ -5,7 +5,6 @@ angular
             link: link,
             templateUrl: 'app/directives/dangerObs.html',
             scope: {
-                dangerObsArray: '=',
                 areaArray: '=',
                 dangerSignKdv: '@'
             },
@@ -32,10 +31,9 @@ angular
                 });
             };
 
+            $scope.dangerObsArray = Registration.getPropertyAsArray('DangerObs');
+
             $scope.noDangerSign = {};
-
-
-
 
             $scope.save = Registration.save;
 

@@ -1,38 +1,32 @@
-<!--<ion-tabs>
-    <ion-tab title="Skred" icon="" href="">
-        <ion-nav-view name="landslide-tab"></ion-nav-view>
-    </ion-tab>
-    <ion-tab title="Snøskred" icon="" href="">
-        <ion-nav-view name="avalanche-tab"></ion-nav-view>
-    </ion-tab>
-</ion-tabs>-->
-<ion-nav-bar nav-bar-class>
-    <ion-nav-back-button default-nav-back-button ng-click="goBack()">{{backTitle()}}
-    </ion-nav-back-button>
-    <ion-nav-buttons side="left" >
+<ion-view view-title="regObs">
+    <ion-content>
+        <ion-list>
+            <ion-item class="item-icon-right"
+                      ui-sref="snow">
+                Snø
+                <span class="badge badge-balanced" ng-if="appVm.registrationIsType('snow')">1</span>
+                <i class="icon icon-accessory ion-chevron-right"></i>
+            </ion-item>
 
-    </ion-nav-buttons>
-    <ion-nav-buttons side="right">
-        <button class="button button-clear" ng-class="{'ion-locked': !appVm.user.anonymous}" ng-click="appVm.modal.show()">
-            {{!appVm.user.anonymous ? '' : 'Logg inn'}}
-        </button>
-        <button class="button button-icon button-clear ion-gear-a" ng-click="appVm.modal.show()">
-        </button>
-    </ion-nav-buttons>
-</ion-nav-bar>
-<ion-tabs class="tabs-dark">
-    <ion-tab title="Snø" icon="" href="#/app/snow">
-        <ion-nav-view name="snow-tab" ></ion-nav-view>
-    </ion-tab>
-    <ion-tab title="Is" icon="" href="#/app/ice" >
-        <ion-nav-view name="ice-tab"></ion-nav-view>
-    </ion-tab>
-    <ion-tab title="Vann" icon="" href="#/app/water">
-        <ion-nav-view name="water-tab"></ion-nav-view>
-    </ion-tab>
-    <ion-tab title="Jord" icon="" href="#/app/dirt">
-        <ion-nav-view name="dirt-tab"></ion-nav-view>
-    </ion-tab>
-</ion-tabs>
+            <ion-item class="item-icon-right"
+                      ui-sref="ice">
+                Is
+                <span class="badge badge-balanced" ng-if="appVm.registrationIsType('ice')">1</span>
+                <i class="icon icon-accessory ion-chevron-right"></i>
+            </ion-item>
 
+            <ion-item class="item-icon-right"
+                      ui-sref="water">
+                Vann
+                <i class="icon icon-accessory ion-chevron-right"></i>
+            </ion-item>
 
+            <ion-item class="item-icon-right"
+                      ui-sref="dirt">
+                Jord
+                <i class="icon icon-accessory ion-chevron-right"></i>
+            </ion-item>
+
+        </ion-list>
+    </ion-content>
+</ion-view>

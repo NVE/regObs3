@@ -8,6 +8,7 @@ var ngAnnotate = require('gulp-ng-annotate');
 var minifyCss = require('gulp-minify-css');
 var rename = require('gulp-rename');
 var sh = require('shelljs');
+var preen = require('preen');
 
 var paths = {
     sass: ['./scss/ionic.app.scss', './www/app/**/*.scss'],
@@ -15,7 +16,11 @@ var paths = {
     dist: './www/dist/'
 };
 
-gulp.task('default', ['sass', 'scripts']);
+gulp.task('default', ['preen','sass', 'scripts']);
+
+gulp.task('preen', function (cb) {
+    preen.preen({}, cb);
+});
 
 gulp.task('sass', function(done) {
     gulp.src(paths.sass)

@@ -4,32 +4,32 @@
             <regobs-menu-item
                     title="Faretegn"
                     condition="vm.dangerObsExists()"
-                    state="app.icedangerobs"
+                    state="icedangerobs"
                     badge-text="vm.dangerObsExists()">
             </regobs-menu-item>
 
             <regobs-menu-item
                     title="Isdekningsgrad"
                     condition="vm.iceObjectExists('IceCoverObs')"
-                    state="app.icecoverobs">
+                    state="icecoverobs">
             </regobs-menu-item>
 
             <regobs-menu-item
                     title="Istykkelse"
                     condition="vm.iceObjectExists('IceThickness')"
-                    state="app.icethickness">
+                    state="icethickness">
             </regobs-menu-item>
 
             <regobs-menu-item
                     title="Ulykke/hendelse"
                     condition="vm.iceObjectExists('Incident')"
-                    state="app.iceincident">
+                    state="iceincident">
             </regobs-menu-item>
 
             <regobs-menu-item
                     title="Fritekst"
                     condition="vm.iceObjectExists('GeneralObservation')"
-                    state="app.icegeneralobs">
+                    state="icegeneralobs">
             </regobs-menu-item>
 
         </ion-list>

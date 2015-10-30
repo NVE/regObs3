@@ -13,7 +13,7 @@ angular
                 "Mange vann i nærheten"
             ];
 
-            vm.dangerObsArray = Registration.getPropertyAsArray('ice', 'DangerObs');
+
 
         }
 

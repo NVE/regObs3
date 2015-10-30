@@ -2,20 +2,43 @@
   "name": "HelloIonic",
   "private": "true",
   "devDependencies": {
-    "ionic": "driftyco/ionic-bower#1.1.0"
+    "ionic": "driftyco/ionic-bower#1.1.0",
+    "angular": "1.4.7",
+    "angular-animate": "1.4.7",
+    "angular-resource": "~1.4.7",
+    "angular-sanitize": "1.4.7",
+    "angular-ui-router": "0.2.15",
+    "ngCordova": "~0.1.20-alpha"
   },
   "resolutions": {
     "ionic": "~1.1.0",
-    "angular": ">= 1.0.8",
-    "angular-animate": "1.4.6",
-    "angular-sanitize": "1.4.6"
+    "angular": "1.4.7",
+    "angular-animate": "1.4.7",
+    "angular-sanitize": "1.4.7",
+    "angular-ui-router": "0.2.15"
   },
-  "dependencies": {
-    "angular": "1.4.6",
-    "angular-animate": "1.4.6",
-    "angular-resource": "~1.4.6",
-    "angular-sanitize": "1.4.6",
-    "angular-ui-router": "0.2.15",
-    "ngCordova": "~0.1.20-alpha"
+  "preen": {
+    "ionic": [
+      "css/ionic.min.css",
+      "fonts/*.*",
+      "js/ionic.min.js",
+      "js/ionic-angular.min.js"
+    ],
+    "angular": [
+      "angular.min.js",
+      "*.css"
+    ],
+    "angular-animate": [
+      "angular-animate.min.js"
+    ],
+    "angular-sanitize": [
+      "angular-sanitize.min.js"
+    ],
+    "angular-ui-router": [
+      "release/angular-ui-router.min.js"
+    ],
+    "ngCordova": [
+      "dist/ng-cordova.min.js"
+    ]
   }
 }

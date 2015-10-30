@@ -4,38 +4,38 @@
             <regobs-menu-item
                     title="Faretegn"
                     condition="vm.dangerObsExists()"
-                    state="app.snowdangerobs"
+                    state="snowdangerobs"
                     badge-text="vm.dangerObsExists()">
             </regobs-menu-item>
 
             <regobs-menu-item
                     title="Skred"
                     condition="vm.avalancheObsExists()"
-                    state="app.avalancheobs"                   >
+                    state="avalancheobs"                   >
             </regobs-menu-item>
 
             <regobs-menu-item
                     title="Vær"
                     condition="vm.snowObjectExists('WeatherObservation')"
-                    state="app.snowweatherobservation">
+                    state="snowweatherobservation">
             </regobs-menu-item>
 
             <regobs-menu-item
                     title="Snødekke"
                     condition="vm.snowObjectExists('SnowSurfaceObservation')"
-                    state="app.snowsurfaceobservation">
+                    state="snowsurfaceobservation">
             </regobs-menu-item>
 
             <regobs-menu-item
                     title="Skredfarevurdering"
                     condition="vm.snowObjectExists('AvalancheEvaluation3')"
-                    state="app.avalancheevaluation">
+                    state="avalancheevaluation">
             </regobs-menu-item>
 
             <regobs-menu-item
                     title="Fritekst"
                     condition="vm.snowObjectExists('GeneralObservation')"
-                    state="app.snowgeneralobs">
+                    state="snowgeneralobs">
             </regobs-menu-item>
 
         </ion-list>
@@ -43,6 +43,6 @@
             <button class="button button-block button-calm" ng-click="vm.sendRegistration()">Send</button>
             <button class="button button-block button-assertive button-clear" ng-click="vm.deleteRegistration()">Slett observasjoner i minnet</button>
         </div>
-        <regobs-camera></regobs-camera>
+
     </ion-content>
 </ion-view>

@@ -6,7 +6,7 @@ angular
 
             vm.save = Registration.save;
 
-            vm.obs = Registration.getPropertyAsObject('snow', 'WeatherObservation');
+            vm.obs = Registration.getPropertyAsObject('WeatherObservation');
             vm.windDirectionArray = [
                 {"val" : -1, "name" : "Ikke gitt" },
                 {"val" : 0, "name" : "N - nordlig" },

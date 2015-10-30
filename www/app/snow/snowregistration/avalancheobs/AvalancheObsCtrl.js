@@ -6,7 +6,7 @@ angular
 
             vm.save = Registration.save;
 
-            vm.obs = Registration.getPropertyAsObject('snow', 'IceCoverObs');
+            vm.obs = Registration.getPropertyAsObject('IceCoverObs');
 
         }
 

@@ -5,30 +5,29 @@ angular
         function init() {
 
             var vm = this;
-            var type = 'snow';
 
             vm.sendRegistration = function () {
-                Registration.sendRegistration(type);
+                Registration.sendRegistration();
             };
 
             vm.deleteRegistration = function () {
-                Registration.deleteRegistration(type);
+                Registration.deleteRegistration();
             };
 
             vm.snowObjectExists = function (key) {
-                return Registration.registrations[type][key] && Object.keys(Registration.registrations[type][key]).length
+                return Registration.registration[key] && Object.keys(Registration.registration[key]).length
             };
 
             vm.avalancheObsExists = function () {
 
-                var avalancheObs = Registration.registrations[type].AvalancheObs;
-                var avalancheAct = Registration.registrations[type].AvalancheActivityObs;
+                var avalancheObs = Registration.registration.AvalancheObs;
+                var avalancheAct = Registration.registration.AvalancheActivityObs;
 
                 return (avalancheAct && avalancheAct.length) || !!(avalancheObs && avalancheObs.DtAvalancheTime);
             };
 
             vm.dangerObsExists = function () {
-                return Registration.registrations[type].DangerObs && Registration.registrations[type].DangerObs.length;
+                return Registration.registration.DangerObs && Registration.registration.DangerObs.length;
             };
 
             /*vm.dangerObsClicked = function () {

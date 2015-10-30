@@ -15,8 +15,6 @@ angular
                 "Fylket/varslingsregion"
             ];
 
-            vm.dangerObsArray = Registration.getPropertyAsArray('snow', 'DangerObs');
-
         }
 
         $scope.$on( '$ionicView.loaded', init.bind(this) );

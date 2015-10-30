@@ -6,7 +6,7 @@ angular
 
             vm.save = Registration.save;
 
-            vm.incident = Registration.getPropertyAsObject('ice', 'Incident');
+            vm.incident = Registration.getPropertyAsObject('Incident');
 
         }
 

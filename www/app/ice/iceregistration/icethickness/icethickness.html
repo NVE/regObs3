@@ -3,17 +3,17 @@
         <ion-list>
             <label class="item item-input" >
                 <input type="number" placeholder="Tørr snø før boring (i cm)"
-                       ng-model="vm.iceThickness.SnowDepth" />
+                       ng-model="vm.SnowDepth" ng-change="vm.propChanged('SnowDepth')" />
             </label>
 
             <label class="item item-input" >
                 <input type="number" placeholder="Sørpe før boring (i cm)"
-                       ng-model="vm.iceThickness.SlushSnow" />
+                       ng-model="vm.SlushSnow" ng-change="vm.propChanged('SlushSnow')" />
             </label>
 
             <label class="item item-input" >
                 <input type="number" placeholder="Total istykkelse (i cm)"
-                       ng-model="vm.iceThickness.IceThicknessSum" />
+                       ng-model="vm.IceThicknessSum" ng-change="vm.propChanged('IceThicknessSum')" />
             </label>
             <label class="item item-input item-input-inset">
                 <textarea placeholder="Kommentar"

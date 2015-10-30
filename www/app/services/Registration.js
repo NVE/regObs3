@@ -1,6 +1,6 @@
 angular
     .module('RegObs')
-    .factory('Registration', function Registration($ionicPopup, $http, $ionicHistory, LocalStorage, Utility, User, AppSettings) {
+    .factory('Registration', function Registration($rootScope, $state, $ionicPopup, $http, $ionicHistory, LocalStorage, Utility, User, AppSettings) {
         var service = this;
 
         var storageKey = 'regobsRegistrations';
@@ -11,6 +11,13 @@ angular
             water: 60,
             ice: 70
         };
+        var geoHazardNames = {};
+        geoHazardNames[geoHazardTid.snow] = 'snø';
+        geoHazardNames[geoHazardTid.dirt] = 'jord';
+        geoHazardNames[geoHazardTid.ice] = 'is';
+        geoHazardNames[geoHazardTid.water] = 'vann';
+
+
 
         //Brukt der det er bilder (RegistrationTID)
         var OBSERVATIONS = [
@@ -131,10 +138,10 @@ angular
             "Lng": "10,7080138"
         };
 
-        var showConfirm = function () {
+        var showConfirm = function (text, confirmText, confirmClass) {
             return $ionicPopup.confirm({
                 title: 'Slett observasjoner',
-                template: 'Er du sikker på at du vil slette lokalt lagrede snøobservasjoner?',
+                template: text,
                 buttons: [
                     {text: 'Avbryt'},
                     {
@@ -149,16 +156,10 @@ angular
             });
         };
 
-        var resetRegistration = function (type) {
-            service.registrations[type] = service.createRegistration(type);
-            service.save();
-            return service.registrations[type];
-        };
-
-        service.createRegistration = function (type) {
+        var createRegistration = function (type) {
             return {
                 "Id": Utility.createGuid(),
-                "GeoHazardTID": geoHazardTid[type],
+                "GeoHazardTID": (isNaN(type) ? geoHazardTid[type] : type),
                 //Dette må genereres
                 "DtObsTime": new Date().toISOString(),
                 "ObsLocation": {
@@ -170,16 +171,21 @@ angular
             };
         };
 
+        var setRegistration = function (type) {
+            service.registration =createRegistration(type);
+            service.save();
+            return service.registration;
+        };
+
+        var resetRegistration = function () {
+            return setRegistration(service.registration.GeoHazardTID);
+        };
+
         service.load = function () {
-            service.registrations = LocalStorage.getAndSetObject(
+            service.registration = LocalStorage.getAndSetObject(
                 storageKey,
-                'snow',
-                {
-                    ice: service.createRegistration('ice'),
-                    snow: service.createRegistration('snow'),
-                    dirt: service.createRegistration('dirt'),
-                    water: service.createRegistration('water')
-                }
+                'DtObsTime',
+                createRegistration('snow')
             );
         };
 
@@ -188,22 +194,59 @@ angular
             if (shouldGoBack)
                 $ionicHistory.goBack();
             else
-                LocalStorage.setObject(storageKey, service.registrations);
+                LocalStorage.setObject(storageKey, service.registration);
         };
 
-        service.deleteRegistration = function (type) {
-            showConfirm()
+        service.createNewRegistration = function (type) {
+            setRegistration(type);
+        };
+
+        $rootScope.$on('$stateChangeStart', function (event, toState, toParams, fromState, fromParams) {
+            var index = toState.name.indexOf('registration');
+            if(index > 0){
+                var type = toState.name.substr(0,index);
+                if(!service.isOfType(type) && !service.isEmpty()){
+                    event.preventDefault();
+                    showConfirm('Du har en usendt registrering av type "'+geoHazardNames[service.registration.GeoHazardTID]+'", dersom du går videre blir denne slettet. Vil du slette for å gå videre?')
+                        .then(function (response) {
+                            if (response) {
+                                setRegistration(type);
+                                $state.go(toState.name);
+                            }
+                        });
+
+                } else if (service.isEmpty()){
+                    setRegistration(type);
+                }
+
+            }
+        });
+
+        service.deleteRegistration = function () {
+            showConfirm('Er du sikker på at du vil slette lokalt lagret registrering?')
                 .then(function (response) {
                     if (response) {
-                        return resetRegistration(type);
+                        return resetRegistration();
                     }
                 });
         };
 
-        service.sendRegistration = function (type) {
+        service.isOfType = function(type) {
+            return service.registration.GeoHazardTID === geoHazardTid[type];
+        };
+
+        service.isEmpty = function () {
+            return Object.keys(service.registration).length === baseLength;
+        };
+
+        service.doesExist = function (type) {
+            return service.isOfType(type) && !service.isEmpty();
+        };
+
+        service.sendRegistration = function () {
             var postUrl = AppSettings.getEndPoints().postRegistration;
             var user = User.getUser();
-            var registration = service.registrations[type];
+            var registration = service.registration;
             var httpConfig = {
                 headers: {
                     regObs_apptoken: AppSettings.appId,
@@ -234,7 +277,7 @@ angular
 
             return $http.post(postUrl, dataToSend, httpConfig)
                 .then(function () {
-                    return resetRegistration(type);
+                    return resetRegistration();
                 })
                 .catch(function (error) {
                     alert('Failed to send registration ' + error.reason);
@@ -243,21 +286,25 @@ angular
 
         };
 
-        service.getPropertyAsArray = function (type, key) {
-            if (!(service.registrations[type][key] && service.registrations[type][key].length)) {
-                service.registrations[type][key] = [];
+        service.getPropertyAsArray = function (prop) {
+            if (!(service.registration[prop] && service.registration[prop].length)) {
+                service.registration[prop] = [];
             }
-            return service.registrations[type][key];
+            return service.registration[prop];
         };
 
-        service.getPropertyAsObject = function (type, key) {
-            if (!(service.registrations[type][key] && Object.keys(service.registrations[type][key]).length)) {
-                service.registrations[type][key] = {};
+        service.getPropertyAsObject = function (prop) {
+            if (!(service.registration[prop] && Object.keys(service.registration[prop]).length)) {
+                service.registration[prop] = {};
             }
-            return service.registrations[type][key];
+            return service.registration[prop];
         };
+
+        var baseLength = Object.keys(createRegistration('snow')).length;
 
         service.load();
+
+
 
         return service;
     });

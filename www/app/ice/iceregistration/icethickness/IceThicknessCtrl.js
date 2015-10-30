@@ -12,10 +12,24 @@ angular
                     })
             };
 
+            vm.propChanged = function (prop){
+
+                var numText = vm[prop];
+                var num = parseFloat(numText);
+                console.log(num);
+                if(num){
+                    vm.iceThickness[prop] = (num/100);
+                }
+            };
+
             vm.save = Registration.save;
 
-            vm.iceThickness = Registration.getPropertyAsObject('ice', 'IceThickness');
+            vm.iceThickness = Registration.getPropertyAsObject('IceThickness');
+            vm.SnowDepth = vm.iceThickness.SnowDepth ? parseInt(vm.iceThickness.SnowDepth*10000)/100 : undefined;
+            vm.SlushSnow = vm.iceThickness.SlushSnow ? parseInt(vm.iceThickness.SlushSnow*10000)/100 : undefined;
+            vm.IceThicknessSum = vm.iceThickness.IceThicknessSum ? parseInt(vm.iceThickness.IceThicknessSum*10000)/100 : undefined;
             loadKdvArray();
+
 
         }
 
@@ -43,7 +57,7 @@ var t = {
                     "IceLayerThickness": "0.0200"
                 }
             ],
-            "IceThicknessSum": "0.0300", //total istykkelse
+            "IceThicknessSum": "0.0300", //total istykkelse CM
             "SnowDepth": "0.2300", //tørr snø
             "SlushSnow": "0.4500", //sørpe
             "Comment": "Kommentar"
