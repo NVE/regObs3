@@ -1,28 +1,33 @@
 <ion-view view-title="Snødekke">
     <ion-content>
         <ion-list>
-            <label class="item item-input" >
-                <input type="tel" placeholder="Snødybde (cm)"
+            <label class="item item-input item-stacked-label">
+                <span class="input-label">Snødybde (cm)</span>
+                <input type="tel" placeholder="I hele centimeter"
                        ng-model="vm.obs.SnowDepth" />
             </label>
 
-            <label class="item item-input" >
-                <input type="tel" placeholder="Nysnødybde (cm)"
+            <label class="item item-input item-stacked-label">
+                <span class="input-label">Nysnødybde (cm)</span>
+                <input type="tel" placeholder="I hele centimeter"
                        ng-model="vm.obs.NewSnowDepth24" />
             </label>
 
-            <label class="item item-input" >
-                <input type="tel" placeholder="Nysnøgrense (moh)"
+            <label class="item item-input item-stacked-label">
+                <span class="input-label">Nysnøgrense (moh)</span>
+                <input type="tel" placeholder="I meter over havet"
                        ng-model="vm.obs.NewSnowLine" />
             </label>
 
-            <label class="item item-input" >
-                <input type="tel" placeholder="Snøgrense (moh)"
+            <label class="item item-input item-stacked-label">
+                <span class="input-label">Snøgrense (moh)</span>
+                <input type="tel" placeholder="I meter over havet"
                        ng-model="vm.obs.SnowLine" />
             </label>
 
-            <label class="item item-input" >
-                <input type="tel" placeholder="Grense lagdelt snø (moh)"
+            <label class="item item-input item-stacked-label">
+                <span class="input-label">Grense lagdelt snø (moh)</span>
+                <input type="tel" placeholder="Øvre høydegrense for snø uten farlig lagdeling (også kalt førefall, vårskisnø, omdannet snø)"
                        ng-model="vm.obs.HeightLimitLayeredSnow" />
             </label>
 
@@ -32,7 +37,8 @@
                     kdv-key="Snow_SnowDriftKDV">
             </kdv-dropdown>
 
-            <label class="item item-input item-input-inset">
+            <label class="item item-input item-stacked-label">
+                <span class="input-label">Kommentar</span>
                 <textarea placeholder="Hvordan er snøfordelingen generelt ifht. høyde og eksposisjon. Er det forskjell i regionen?"
                           name="comment"
                           cols="30" rows="3"
@@ -40,10 +46,7 @@
             </label>
         </ion-list>
 
-        <div class="padding">
-            <button class="button button-block button-calm"
-                    ng-click="vm.save(true)">Lagre</button>
-        </div>
+        <regobs-form-footer registration-prop="vm.registrationProp"></regobs-form-footer>
     </ion-content>
 </ion-view>
 

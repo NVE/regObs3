@@ -1,6 +1,6 @@
 angular
     .module('RegObs')
-    .controller('IceRegistrationCtrl', function IceRegistrationCtrl($scope, Registration) {
+    .controller('DirtRegistrationCtrl', function DirtRegistrationCtrl($scope, Registration) {
 
         function init() {
 

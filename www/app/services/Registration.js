@@ -17,26 +17,69 @@ angular
         geoHazardNames[geoHazardTid.ice] = 'is';
         geoHazardNames[geoHazardTid.water] = 'vann';
 
-
-
         //Brukt der det er bilder (RegistrationTID)
-        var OBSERVATIONS = [
-            {name: "Ulykke/Hendelse", key: "Incident", RegistrationTID: "11"},
-            {name: "Faretegn", key: "DangerObs", RegistrationTID: "13"},
-            {name: "Snødekke", key: "SnowSurfaceObservation", RegistrationTID: "23"},
-            {name: "Skredaktivitet", key: "AvalancheActivityObs", RegistrationTID: "27"},
-            {name: "Snøskred", key: "AvalancheObs", RegistrationTID: "26"},
-            {name: "Vær", key: "WeatherObs", RegistrationTID: "21"},
-            {name: "Snøprofil", key: "SnowProfile", RegistrationTID: "23"},
-            {name: "Skredproblem", key: "AvalancheEvalProblem2", RegistrationTID: "32"},
-            {name: "Skredfarevurdering", key: "AvalancheEvaluation3", RegistrationTID: "31"},
-            {name: "Bilde", key: "Picture", RegistrationTID: "12"},
-            {name: "Isdekningsgrad", key: "IceCoverObs", RegistrationTID: "51"},
-            {name: "Snø og istykkelse", key: "IceThickness", RegistrationTID: "50"},
-            {name: "Vannstand", key: "WaterLevel", RegistrationTID: "61"},
-            {name: "Skredhendelse", key: "LandSlideObs", RegistrationTID: "71"},
-            {name: "Fritekst", key: "GeneralObservation", RegistrationTID: "10"}
-        ];
+        var OBSERVATIONS = {
+            Incident: {
+                name: "Ulykke/Hendelse",
+                RegistrationTID: "11"
+            },
+            DangerObs: {
+                name: "Faretegn",
+                RegistrationTID: "13"
+            },
+            SnowSurfaceObservation: {
+                name: "Snødekke",
+                RegistrationTID: "23"
+            },
+            AvalancheActivityObs: {
+                name: "Skredaktivitet",
+                RegistrationTID: "27"
+            },
+            AvalancheObs: {
+                name: "Snøskred",
+                RegistrationTID: "26"
+            },
+            WeatherObs: {
+                name: "Vær",
+                RegistrationTID: "21"
+            },
+            SnowProfile: {
+                name: "Snøprofil",
+                RegistrationTID: "23"
+            },
+            AvalancheEvalProblem2: {
+                name: "Skredproblem",
+                RegistrationTID: "32"
+            },
+            AvalancheEvaluation3: {
+                name: "Skredfarevurdering",
+                RegistrationTID: "31"
+            },
+            Picture: {
+                name: "Bilde",
+                RegistrationTID: "12"
+            },
+            IceCoverObs: {
+                name: "Isdekningsgrad",
+                RegistrationTID: "51"
+            },
+            IceThickness: {
+                name: "Snø og istykkelse",
+                RegistrationTID: "50"
+            },
+            WaterLevel: {
+                name: "Vannstand",
+                RegistrationTID: "61"
+            },
+            LandSlideObs: {
+                name: "Skredhendelse",
+                RegistrationTID: "71"
+            },
+            GeneralObservation: {
+                name: "Fritekst",
+                RegistrationTID: "10"
+            }
+        };
 
         var fareTegn = {
             "Id": "abad1468-63eb-4369-da5f-ddd61207e60a",
@@ -172,7 +215,7 @@ angular
         };
 
         var setRegistration = function (type) {
-            service.registration =createRegistration(type);
+            service.registration = createRegistration(type);
             service.save();
             return service.registration;
         };
@@ -202,12 +245,12 @@ angular
         };
 
         $rootScope.$on('$stateChangeStart', function (event, toState, toParams, fromState, fromParams) {
-            var index = toState.name.indexOf('registration');
-            if(index > 0){
-                var type = toState.name.substr(0,index);
-                if(!service.isOfType(type) && !service.isEmpty()){
+            var index = toState.name.indexOf('registrationNew');
+            if (index > 0) {
+                var type = toState.name.substr(0, index);
+                if (!service.isOfType(type) && !service.isEmpty()) {
                     event.preventDefault();
-                    showConfirm('Du har en usendt registrering av type "'+geoHazardNames[service.registration.GeoHazardTID]+'", dersom du går videre blir denne slettet. Vil du slette for å gå videre?')
+                    showConfirm('Du har en påbegynt ' + geoHazardNames[service.registration.GeoHazardTID] + '-registrering, dersom du går videre blir denne slettet. Vil du slette for å gå videre?')
                         .then(function (response) {
                             if (response) {
                                 setRegistration(type);
@@ -215,7 +258,7 @@ angular
                             }
                         });
 
-                } else if (service.isEmpty()){
+                } else if (service.isEmpty()) {
                     setRegistration(type);
                 }
 
@@ -231,7 +274,7 @@ angular
                 });
         };
 
-        service.isOfType = function(type) {
+        service.isOfType = function (type) {
             return service.registration.GeoHazardTID === geoHazardTid[type];
         };
 
@@ -239,7 +282,7 @@ angular
             return Object.keys(service.registration).length === baseLength;
         };
 
-        service.doesExist = function (type) {
+        service.doesExistUnsent = function (type) {
             return service.isOfType(type) && !service.isEmpty();
         };
 
@@ -255,8 +298,8 @@ angular
             };
 
             //Cleanup DangerObs
-            if(angular.isArray(registration.DangerObs)){
-                registration.DangerObs.forEach(function(dangerObs){
+            if (angular.isArray(registration.DangerObs)) {
+                registration.DangerObs.forEach(function (dangerObs) {
                     delete dangerObs.tempArea;
                     delete dangerObs.tempComment;
                 });
@@ -286,25 +329,58 @@ angular
 
         };
 
+        service.addPicture = function(propertyKey, data) {
+            var picArray = service.getPropertyAsArray('Picture');
+            picArray.push({
+                RegistrationTID: service.getRegistrationTID(propertyKey),
+                PictureImageBase64: data,
+                PictureComment: ''
+            });
+        };
+
+        service.getRegistrationTID = function (prop) {
+            return OBSERVATIONS[prop].RegistrationTID;
+        };
+
         service.getPropertyAsArray = function (prop) {
-            if (!(service.registration[prop] && service.registration[prop].length)) {
+            if (!service.propertyArrayExists(prop)) {
                 service.registration[prop] = [];
             }
             return service.registration[prop];
         };
 
         service.getPropertyAsObject = function (prop) {
-            if (!(service.registration[prop] && Object.keys(service.registration[prop]).length)) {
+            if (!service.propertyObjectExists(prop)) {
                 service.registration[prop] = {};
             }
             return service.registration[prop];
         };
 
+        service.propertyObjectExists = function (prop) {
+            return service.registration[prop] && Object.keys(service.registration[prop]).length;
+        };
+
+        service.propertyArrayExists = function (prop) {
+            return service.registration[prop] && service.registration[prop].length;
+        };
+
+        service.getExpositionArray = function () {
+            return [
+                {"val": -1, "name": "Ikke gitt"},
+                {"val": 0, "name": "N - nordlig"},
+                {"val": 45, "name": "NØ - nordøstlig"},
+                {"val": 90, "name": "Ø - østlig"},
+                {"val": 135, "name": "SØ - sørøstlig"},
+                {"val": 180, "name": "S - sørlig"},
+                {"val": 225, "name": "SV - sørvestlig"},
+                {"val": 270, "name": "V - vestlig"},
+                {"val": 315, "name": "NV - nordvestlig"}
+            ];
+        };
+
         var baseLength = Object.keys(createRegistration('snow')).length;
 
         service.load();
-
-
 
         return service;
     });

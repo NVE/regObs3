@@ -1,5 +1,13 @@
 <ion-view view-title="Jord">
     <ion-content>
-        <h1>Jordobservasjon kommer her</h1>
+        <ion-list>
+            <ion-item class="item-icon-right" ui-sref="dirtregistrationNew">
+                Ny observasjon
+                <span class="badge badge-balanced" ng-if="appVm.registrationIsType('dirt')">1</span>
+                <i class="icon icon-accessory ion-chevron-right"></i>
+            </ion-item>
+            <ion-item>Se observasjoner</ion-item>
+            <ion-item>Se varsel</ion-item>
+        </ion-list>
     </ion-content>
 </ion-view>

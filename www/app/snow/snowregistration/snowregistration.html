@@ -3,39 +3,51 @@
         <ion-list>
             <regobs-menu-item
                     title="Faretegn"
-                    condition="vm.dangerObsExists()"
+                    condition="vm.obsArrayExists('DangerObs')"
                     state="snowdangerobs"
-                    badge-text="vm.dangerObsExists()">
+                    badge-text="vm.obsArrayExists('DangerObs')">
             </regobs-menu-item>
 
             <regobs-menu-item
-                    title="Skred"
+                    title="Skred (ikke komplett)"
                     condition="vm.avalancheObsExists()"
                     state="avalancheobs"                   >
             </regobs-menu-item>
 
             <regobs-menu-item
                     title="Vær"
-                    condition="vm.snowObjectExists('WeatherObservation')"
+                    condition="vm.obsObjectExists('WeatherObservation')"
                     state="snowweatherobservation">
             </regobs-menu-item>
 
             <regobs-menu-item
-                    title="Snødekke"
-                    condition="vm.snowObjectExists('SnowSurfaceObservation')"
+                    title="Snødekke (må gjøres om til meter)"
+                    condition="vm.obsObjectExists('SnowSurfaceObservation')"
                     state="snowsurfaceobservation">
             </regobs-menu-item>
 
             <regobs-menu-item
+                    title="Snøprofil"
+                    condition="vm.obsObjectExists('SnowProfile')"
+                    state="snowprofile">
+            </regobs-menu-item>
+
+            <regobs-menu-item
+                    title="Skredproblem (ikke komplett)"
+                    condition="vm.obsObjectExists('AvalancheEvalProblem2')"
+                    state="avalancheevalproblem">
+            </regobs-menu-item>
+
+            <regobs-menu-item
                     title="Skredfarevurdering"
-                    condition="vm.snowObjectExists('AvalancheEvaluation3')"
+                    condition="vm.obsObjectExists('AvalancheEvaluation3')"
                     state="avalancheevaluation">
             </regobs-menu-item>
 
             <regobs-menu-item
                     title="Fritekst"
-                    condition="vm.snowObjectExists('GeneralObservation')"
-                    state="snowgeneralobs">
+                    condition="vm.obsObjectExists('GeneralObservation')"
+                    state="generalobs">
             </regobs-menu-item>
 
         </ion-list>

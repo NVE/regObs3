@@ -26,17 +26,15 @@
                     kdv-key="Ice_IceSkateabilityKDV">
             </kdv-dropdown>
 
-            <label class="item item-input item-input-inset">
-                <textarea placeholder="Kommentar"
+            <label class="item item-input item-stacked-label">
+                <span class="input-label">Kommentar</span>
+                <textarea placeholder="Ytterligere beskrivelse"
                           name="comment"
                           cols="30" rows="3"
                           ng-model="vm.iceCoverObs.Comment"></textarea>
             </label>
         </ion-list>
-        <div class="padding">
-            <button class="button button-block button-calm"
-                    ng-click="vm.save(true)">Lagre</button>
-        </div>
+        <regobs-form-footer registration-prop="vm.registrationProp"></regobs-form-footer>
 
     </ion-content>
 <!--    <ion-footer-bar class="bar-calm row-no-padding">

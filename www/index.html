@@ -5,7 +5,6 @@
     <meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no, width=device-width">
     <title>regObs</title>
 
-    <link href="lib/ionic/css/ionic.min.css" rel="stylesheet">
     <link href="dist/app.css" rel="stylesheet">
 
     <!-- IF using Sass (run gulp sass first), then uncomment below and remove the CSS includes above
@@ -32,10 +31,9 @@
 </head>
 <body ng-app="RegObs" ng-controller="AppCtrl as appVm">
 
-<ion-nav-bar nav-bar-class="">
-    <ion-nav-back-button default-nav-back-button="" ng-click="goBack()">
-    </ion-nav-back-button>
-    <ion-nav-buttons side="right" ng-cloak="">
+<ion-nav-bar nav-bar-class="" ng-cloak="">
+    <ion-nav-back-button default-nav-back-button="" ng-click="goBack()">{{backTitle()}}</ion-nav-back-button>
+    <ion-nav-buttons side="right">
         <button class="button button-clear" ng-class="{&apos;ion-locked&apos;: !appVm.userService.getUser().anonymous}" ng-click="appVm.modal.show()">
             {{!appVm.userService.getUser().anonymous ? &apos;&apos; : &apos;Logg inn&apos;}}
         </button>

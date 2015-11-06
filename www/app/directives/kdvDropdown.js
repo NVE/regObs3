@@ -7,7 +7,7 @@ angular
                 .getKdvRepositories()
                 .then(function (KdvRepos) {
                     scope.kdvArray  = KdvRepos[scope.kdvKey];
-                    scope.model = scope.model || scope.kdvArray[0].Id;
+                    //scope.model = scope.model || scope.kdvArray[0].Id;
                     //vm.iceCoverObs.IceCoverTID = vm.iceCoverObs.IceCoverTID || vm.kdvArrays.iceCover[0].Id;
                 });
         };
@@ -19,7 +19,8 @@ angular
                 kdvKey: '@'
             },
             link: link,
-            templateUrl: 'app/directives/kdvDropdown.html'
+            templateUrl: 'app/directives/kdvDropdown.html',
+            replace: true
         }
 
     });

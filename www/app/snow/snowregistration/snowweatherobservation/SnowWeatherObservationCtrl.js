@@ -4,21 +4,10 @@ angular
         function init(){
             var vm = this;
 
-            vm.save = Registration.save;
-
-            vm.obs = Registration.getPropertyAsObject('WeatherObservation');
-            vm.windDirectionArray = [
-                {"val" : -1, "name" : "Ikke gitt" },
-                {"val" : 0, "name" : "N - nordlig" },
-                {"val": 45, "name": "NØ - nordøstlig"},
-                {"val": 90, "name": "Ø - østlig"},
-                {"val": 135, "name": "SØ - sørøstlig"},
-                {"val": 180, "name": "S - sørlig"},
-                {"val": 225, "name": "SV - sørvestlig"},
-                {"val": 270, "name": "V - vestlig"},
-                {"val": 315, "name": "NV - nordvestlig"}
-            ];
-            vm.obs.WindDirection = vm.windDirectionArray[0].val;
+            vm.registrationProp = 'WeatherObservation';
+            vm.obs = Registration.getPropertyAsObject(vm.registrationProp);
+            vm.windDirectionArray = Registration.getExpositionArray();
+            //vm.obs.WindDirection = vm.windDirectionArray[0].val;
 
         }
 

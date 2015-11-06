@@ -7,39 +7,41 @@
                     kdv-key="Snow_PrecipitationKDV">
             </kdv-dropdown>
 
-            <label class="item item-input" >
-                <input type="number" placeholder="Lufttemperatur (C)"
+            <label class="item item-input item-stacked-label" >
+                <span class="input-label">Lufttemperatur (C)</span>
+                <input type="number" placeholder="Kan gis med 1 desimal"
                        ng-model="vm.obs.AirTemperature" />
             </label>
-            <label class="item item-input" >
-                <input type="number" placeholder="Vindhastighet (m/s)"
+            <label class="item item-input item-stacked-label" >
+                <span class="input-label">Vindhastighet (m/s)</span>
+                <input type="number" placeholder="Kan gis med 1 desimal"
                        ng-model="vm.obs.WindSpeed" />
             </label>
 
-            <label class="item item-input" >
-                <input type="tel" placeholder="Skydekke (%)"
+            <label class="item item-input item-stacked-label">
+                <span class="input-label">Skydekke (%)</span>
+                <input type="tel" placeholder="Kun hele prosent"
                        ng-model="vm.obs.CloudCover" />
             </label>
 
-            <label class="item item-input item-select">
-                <div class="input-label">
+            <label class="item item-input item-stacked-label item-select">
+                <span class="input-label">
                     Vindretning
-                </div>
+                </span>
                 <select ng-model="vm.obs.WindDirection"
                         ng-options="dir.val as dir.name for dir in vm.windDirectionArray">
+                    <option value="">Velg...</option>
                 </select>
             </label>
 
-            <label class="item item-input item-input-inset">
+            <label class="item item-input item-stacked-label">
+                <span class="input-label">Kommentar</span>
                 <textarea placeholder="Hvordan har været vært i området siste døgn? Eks: Har det vært byger? Har det vært tempraturendringer? Hvor går nullisotermen?"
                           name="comment"
                           cols="30" rows="3"
                           ng-model="vm.obs.Comment"></textarea>
             </label>
         </ion-list>
-        <div class="padding">
-            <button class="button button-block button-calm"
-                    ng-click="vm.save(true)">Lagre</button>
-        </div>
+        <regobs-form-footer registration-prop="vm.registrationProp"></regobs-form-footer>
     </ion-content>
 </ion-view>

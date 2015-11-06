@@ -4,9 +4,19 @@ angular
         function init(){
             var vm = this;
 
-            vm.save = Registration.save;
+            vm.expositionArray = Registration.getExpositionArray();
 
-            vm.obs = Registration.getPropertyAsObject('IceCoverObs');
+            vm.activityObject = {};
+
+            vm.dateChange = function () {
+                console.log(vm.activityObject.DtAvalancheTime);
+            };
+
+            vm.activityProp = 'AvalancheActivityObs';
+            vm.registrationProp = '';
+
+            vm.obs = Registration.getPropertyAsObject('AvalancheObs');
+            vm.activityObsArray = Registration.getPropertyAsArray(vm.activityProp);
 
         }
 

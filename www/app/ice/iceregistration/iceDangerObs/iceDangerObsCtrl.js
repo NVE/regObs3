@@ -12,8 +12,7 @@ angular
                 "På dette vannet",
                 "Mange vann i nærheten"
             ];
-
-
+            vm.registrationProp = 'DangerObs';
 
         }
 

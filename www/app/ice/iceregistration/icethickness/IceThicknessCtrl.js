@@ -22,9 +22,9 @@ angular
                 }
             };
 
-            vm.save = Registration.save;
+            vm.registrationProp = 'IceThickness';
 
-            vm.iceThickness = Registration.getPropertyAsObject('IceThickness');
+            vm.iceThickness = Registration.getPropertyAsObject(vm.registrationProp);
             vm.SnowDepth = vm.iceThickness.SnowDepth ? parseInt(vm.iceThickness.SnowDepth*10000)/100 : undefined;
             vm.SlushSnow = vm.iceThickness.SlushSnow ? parseInt(vm.iceThickness.SlushSnow*10000)/100 : undefined;
             vm.IceThicknessSum = vm.iceThickness.IceThicknessSum ? parseInt(vm.iceThickness.IceThicknessSum*10000)/100 : undefined;

@@ -1,5 +1,63 @@
 <ion-view view-title="Skred">
     <ion-content>
-        <regobs-camera></regobs-camera>
+        <ion-list>
+            <ion-radio-fix ng-model="vm.choice" ng-value="0">Ingen skred</ion-radio-fix>
+            <ion-radio-fix ng-model="vm.choice" ng-value="1">Et skred</ion-radio-fix>
+            <ion-radio-fix ng-model="vm.choice" ng-value="2">Flere skred</ion-radio-fix>
+        </ion-list>
+        <div ng-show="vm.choice === 2">
+            <ion-list>
+                <ion-item class="item item-divider">Flere skred</ion-item>
+
+                <label class="item item-input item-stacked-label">
+                    <span class="input-label">Tidspunkt for skredaktivitet</span>
+                    <input type="datetime-local" ng-change="vm.dateChange()" ng-model="vm.activityObject.DtAvalancheTime"
+                           placeholder="Tidspunkt for skredaktivitet">
+                </label>
+
+                <kdv-dropdown
+                        title="Antall"
+                        model="vm.activityObject.EstimatedNumTID"
+                        kdv-key="Snow_EstimatedNumKDV">
+                </kdv-dropdown>
+
+                <kdv-dropdown
+                        title="Størrelse"
+                        model="vm.activityObject.DestructiveSizeTID"
+                        kdv-key="Snow_DestructiveSizeKDV">
+                </kdv-dropdown>
+
+                <kdv-dropdown
+                        title="Type"
+                        model="vm.activityObject.AvalancheTID"
+                        kdv-key="Snow_AvalancheKDV">
+                </kdv-dropdown>
+
+                <label class="item item-input item-input-inset">
+                    <textarea placeholder="Kommentar"
+                              name="comment"
+                              cols="30" rows="3"
+                              ng-model="vm.activityObject.Comment"></textarea>
+                </label>
+
+            </ion-list>
+            <regobs-form-footer registration-prop="vm.activityProp"></regobs-form-footer>
+        </div>
+
+
     </ion-content>
 </ion-view>
+
+<!--
+//Flere skkred
+var shiz = {
+"AvalancheActivityObs": [{
+"HeigthStartZone": "300",
+"DtAvalancheTime": "2015-10-26T11:42:00.287Z",
+"EstimatedNumTID": "3",
+"DestructiveSizeTID": "4",
+"AvalancheTID": "21",
+"Comment": "Kommentqr"
+}]
+}]
+};-->

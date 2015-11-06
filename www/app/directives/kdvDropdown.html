@@ -1,7 +1,8 @@
-<label class="item item-input item-select">
-    <div class="input-label" ng-bind="title">
-    </div>
+<label class="item item-input item-select item-stacked-label">
+    <span class="input-label" ng-bind="title">
+    </span>
     <select ng-model="model"
             ng-options="kdv.Id as kdv.Name for kdv in kdvArray">
+        <option value="">Velg...</option>
     </select>
 </label>

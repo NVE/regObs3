@@ -1,6 +1,6 @@
 angular
     .module('RegObs')
-    .directive('dangerObs', function dangerObs($ionicModal, Registration, $ionicPopup, Utility) {
+    .directive('regobsDangerObs', function dangerObs($ionicModal, Registration, $ionicPopup, Utility) {
         return {
             link: link,
             templateUrl: 'app/directives/dangerObs.html',
@@ -55,12 +55,8 @@ angular
 
             $scope.newDangerObs = function () {
                 $scope.editing = false;
-                $scope.dangerObs = {
-                    DangerSignTID: $scope.dangerSignKdvArray[0].Id,
-                    tempArea: $scope.areaArray[0]
-                };
+                $scope.dangerObs = {};
                 $scope.dangerSignChanged();
-                $scope.dangerObs.DangerSignTID = $scope.dangerSignKdvArray[0].Id;
                 $scope.modal.show();
             };
 

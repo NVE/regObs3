@@ -3,10 +3,8 @@ angular
     .controller('IceIncidentCtrl', function ($scope, Utility, Registration) {
         function init() {
             var vm = this;
-
-            vm.save = Registration.save;
-
-            vm.incident = Registration.getPropertyAsObject('Incident');
+            vm.registrationProp = 'Incident';
+            vm.incident = Registration.getPropertyAsObject(vm.registrationProp);
 
         }
 

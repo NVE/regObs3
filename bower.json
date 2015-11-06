@@ -5,7 +5,6 @@
     "ionic": "driftyco/ionic-bower#1.1.0",
     "angular": "1.4.7",
     "angular-animate": "1.4.7",
-    "angular-resource": "~1.4.7",
     "angular-sanitize": "1.4.7",
     "angular-ui-router": "0.2.15",
     "ngCordova": "~0.1.20-alpha"
@@ -19,7 +18,7 @@
   },
   "preen": {
     "ionic": [
-      "css/ionic.min.css",
+      "scss/**/*.scss",
       "fonts/*.*",
       "js/ionic.min.js",
       "js/ionic-angular.min.js"

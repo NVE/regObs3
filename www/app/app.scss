@@ -20,3 +20,62 @@
 .button svg {
     height: 100% !important;
 }
+
+/**
+ * This CSS uses adjacent selectors instead of general sibling (~) selectors
+ * for ion radio that are broken in iOS 9 UIWebView.
+ *
+ * To apply the patch, include this CSS after your ionic.css include.
+ */
+.item-radio input:checked + .radio-content .item-content {
+    /* style the item content when its checked */
+    background: #f7f7f7;
+
+}
+
+.item-radio input:checked + .radio-content .radio-icon {
+    /* show the checkmark icon when its checked */
+    visibility: visible;
+
+}
+
+.item-stacked-label {
+    .input-label {
+        font-size: 0.8em;
+        color: $positive;
+        text-transform: uppercase;
+    }
+    textarea {
+        padding-bottom: 8px;
+    }
+    select {
+        max-width: 100%;
+        display: block;
+        white-space: pre-wrap;
+        word-wrap: break-word;
+        position: static;
+        padding: 3px 0 8px 0;
+        direction: ltr;
+        text-align: left;
+    }
+
+
+}
+.platform-android {
+    .item-stacked-label {
+        select {
+            margin-left: -4px;
+        }
+    }
+}
+.platform-ios {
+    .item-stacked-label {
+        textarea {
+            text-indent:-3px;
+        }
+    }
+}
+
+.item-complex .item-content, .item{
+    background-color: rgba(0,0,0,0);
+}

@@ -6,17 +6,10 @@ angular
 
             var vm = this;
 
-            vm.sendRegistration = function () {
-                Registration.sendRegistration();
-            };
-
-            vm.deleteRegistration = function () {
-                Registration.deleteRegistration();
-            };
-
-            vm.snowObjectExists = function (key) {
-                return Registration.registration[key] && Object.keys(Registration.registration[key]).length
-            };
+            vm.sendRegistration = Registration.sendRegistration;
+            vm.deleteRegistration = Registration.deleteRegistration;
+            vm.obsObjectExists = Registration.propertyObjectExists;
+            vm.obsArrayExists = Registration.propertyArrayExists;
 
             vm.avalancheObsExists = function () {
 
@@ -26,9 +19,6 @@ angular
                 return (avalancheAct && avalancheAct.length) || !!(avalancheObs && avalancheObs.DtAvalancheTime);
             };
 
-            vm.dangerObsExists = function () {
-                return Registration.registration.DangerObs && Registration.registration.DangerObs.length;
-            };
 
             /*vm.dangerObsClicked = function () {
              if (!angular.isArray(IceRegistration.registration.DangerObs) || !IceRegistration.registration.DangerObs.length) {

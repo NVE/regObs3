@@ -5,9 +5,9 @@ angular
         return {
             link: link,
             scope: {
-                registrationType: '@'
+                registrationProp: '='
             },
-            template: '<button ng-click="click()">Kamera test</button><img id="myImage">'
+            template: '<button class="button button-positive button-large button-clear" ng-click="click()"><i class="icon ion-camera"></i></button>'
         };
 
         function link(scope){
@@ -15,21 +15,21 @@ angular
             scope.click = window.Camera && function () {
                 $ionicPlatform.ready(function() {
                     var options = {
-                        quality: 50,
+                        quality: 40,
                         destinationType: Camera.DestinationType.DATA_URL,
                         sourceType: Camera.PictureSourceType.CAMERA,
-                        allowEdit: true,
+                        allowEdit: false,
                         encodingType: Camera.EncodingType.JPEG,
-                        targetWidth: 100,
-                        targetHeight: 100,
+                        targetWidth: 1200,
+                        targetHeight: 1200,
                         popoverOptions: CameraPopoverOptions,
-                        saveToPhotoAlbum: false,
+                        saveToPhotoAlbum: true,
                         correctOrientation:true
                     };
 
                     $cordovaCamera.getPicture(options).then(function(imageData) {
-                        var image = document.getElementById('myImage');
-                        image.src = "data:image/jpeg;base64," + imageData;
+                        Registration.addPicture(scope.registrationProp, 'data:image/jpeg;base64,' + imageData);
+                        //image.src = "data:image/jpeg;base64," + imageData;
                     }, function(err) {
                         // error
                     });

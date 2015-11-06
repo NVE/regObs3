@@ -4,9 +4,8 @@ angular
         function init(){
             var vm = this;
 
-            vm.save = Registration.save;
-
-            vm.obs = Registration.getPropertyAsObject('SnowSurfaceObservation');
+            vm.registrationProp = 'SnowSurfaceObservation';
+            vm.obs = Registration.getPropertyAsObject(vm.registrationProp);
 
         }
 

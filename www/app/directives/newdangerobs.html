@@ -8,42 +8,31 @@
         <ion-list>
             <ion-checkbox ng-model="noDangerSign.val" ng-change="toggleNoDangerSign()">Ingen faretegn observert</ion-checkbox>
 
-            <!--<ion-item class="item-divider" ng-hide="noDangerSign">Faretegn</ion-item>-->
-            <label class="item item-input item-select" ng-hide="noDangerSign.val">
-                <div class="input-label">
-                    Faretegn
-                </div>
+            <label class="item item-input item-stacked-label item-select" ng-hide="noDangerSign.val">
+                <span class="input-label">
+                    Faretegn*
+                </span>
                 <select ng-model="dangerObs.DangerSignTID"
                         ng-options="sign.Id as sign.Name for sign in dangerSignKdvArray"
                         ng-change="dangerSignChanged()">
+                    <option value="">Velg...</option>
                 </select>
             </label>
 
-            <!--<ion-radio name="dangersign"
-                       ng-repeat="sign in vm.dangerSignKdvArray"
-                       ng-model="vm.dangerObs.DangerSignTID"
-                       ng-value="sign.Id"
-                       ng-change="vm.dangerSignChanged()"
-                    ng-hide="vm.noDangerSign">{{sign.Name}}</ion-radio>-->
-
-            <!--<ion-item class="item-divider">Område</ion-item>-->
-            <label class="item item-input item-select">
-                <div class="input-label">
+            <label class="item item-input item-stacked-label item-select">
+                <span class="input-label">
                     Område
-                </div>
+                </span>
                 <select ng-model="dangerObs.tempArea"
                         ng-options="area for area in areaArray"
                         ng-change="commentChanged()">
+                    <option value="">Velg...</option>
                 </select>
             </label>
-            <!--<ion-radio name="staticcomment"
-                       ng-repeat="val in areaArray"
-                       ng-model="dangerObs.tempArea"
-                       ng-value="val"
-                       ng-change="commentChanged()">{{val}}</ion-radio>-->
 
-            <label class="item item-input item-input-inset">
-                <textarea placeholder="Kommentar"
+            <label class="item item-input item-stacked-label">
+                <span class="input-label">Kommentar</span>
+                <textarea placeholder="Her kan du gi ytterligere beskrivelse av faretegnet"
                           name="comment"
                           cols="30" rows="3"
                           ng-model="dangerObs.tempComment"

@@ -4,9 +4,8 @@ angular
         function init(){
             var vm = this;
 
-            vm.save = Registration.save;
-
-            vm.obs = Registration.getPropertyAsObject('AvalancheEvaluation3');
+            vm.registrationProp = 'AvalancheEvaluation3';
+            vm.obs = Registration.getPropertyAsObject(vm.registrationProp);
 
         }
 

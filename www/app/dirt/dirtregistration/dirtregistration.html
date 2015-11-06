@@ -1,29 +1,17 @@
-<ion-view view-title="Isobservasjon">
+<ion-view view-title="Jordobservasjon">
     <ion-content>
         <ion-list>
             <regobs-menu-item
                     title="Faretegn"
                     condition="vm.obsArrayExists('DangerObs')"
-                    state="icedangerobs"
+                    state="dirtdangerobs"
                     badge-text="vm.obsArrayExists('DangerObs')">
             </regobs-menu-item>
 
             <regobs-menu-item
-                    title="Isdekningsgrad"
-                    condition="vm.obsObjectExists('IceCoverObs')"
-                    state="icecoverobs">
-            </regobs-menu-item>
-
-            <regobs-menu-item
-                    title="Istykkelse (mangler islag)"
-                    condition="vm.obsObjectExists('IceThickness')"
-                    state="icethickness">
-            </regobs-menu-item>
-
-            <regobs-menu-item
-                    title="Ulykke/hendelse"
-                    condition="vm.obsObjectExists('Incident')"
-                    state="iceincident">
+                    title="Skredhendelse (Ikke komplett)"
+                    condition="vm.obsObjectExists('LandSlideObs')"
+                    state="landslideobs">
             </regobs-menu-item>
 
             <regobs-menu-item

@@ -4,9 +4,8 @@ angular
         function init(){
             var vm = this;
 
-            vm.save = Registration.save;
-
-            vm.iceCoverObs = Registration.getPropertyAsObject('IceCoverObs');
+            vm.registrationProp = 'IceCoverObs';
+            vm.iceCoverObs = Registration.getPropertyAsObject(vm.registrationProp);
 
         }
 

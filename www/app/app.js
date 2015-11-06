@@ -19,7 +19,7 @@ angular.module('RegObs', ['ionic', 'ngCordova'])
                 });
             };
 
-            appVm.registrationIsType = Registration.doesExist;
+            appVm.registrationIsType = Registration.doesExistUnsent;
 
             appVm.logOut = function () {
                 appVm.username = '';
@@ -54,7 +54,7 @@ angular.module('RegObs', ['ionic', 'ngCordova'])
                 // Execute action
             });
 
-            $scope.$on('$ionicView.beforeLeave', function () {
+            $scope.$on('$ionicView.afterLeave', function () {
                 appVm.modal.hide();
                 Registration.save();
             });
@@ -63,14 +63,27 @@ angular.module('RegObs', ['ionic', 'ngCordova'])
 
     })
 
-/**
- * State configuration
- */
+    /**
+     * State configuration
+     */
     .config(function ($stateProvider, $urlRouterProvider, $ionicConfigProvider) {
 
         if (ionic.Platform.isAndroid()) {
             $ionicConfigProvider.scrolling.jsScrolling(false);
         }
+
+        var defaultBackIceRegistration = {
+            state: 'iceregistrationNew',
+            title: 'Isobservasjon'
+        };
+        var defaultBackSnowRegistration = {
+            state: 'snowregistrationNew',
+            title: 'Snøobservasjon'
+        };
+        var defaultBackDirtRegistration = {
+            state: 'dirtregistrationNew',
+            title: 'Jordobservasjon'
+        };
 
         $urlRouterProvider.otherwise('/start');
         $stateProvider
@@ -78,23 +91,21 @@ angular.module('RegObs', ['ionic', 'ngCordova'])
                 url: '/start',
                 templateUrl: 'app/app.html'
             })
+
+            //SNØ
             .state('snow', {
                 url: '/snow',
-
                 templateUrl: 'app/snow/snow.html',
                 controller: 'SnowCtrl as vm',
-
                 data: {
                     defaultBack: {
                         state: 'start',
                         title: 'regObs'
                     }
                 }
-
             })
-            .state('snowregistration', {
+            .state('snowregistrationNew', {
                 url: '/snowregistration',
-
                 templateUrl: 'app/snow/snowregistration/snowregistration.html',
                 controller: 'SnowRegistrationCtrl as vm',
                 data: {
@@ -105,81 +116,72 @@ angular.module('RegObs', ['ionic', 'ngCordova'])
                 }
             })
             .state('snowdangerobs', {
+                //Faretegn
                 url: '/snowdangerobs',
-
                 templateUrl: 'app/snow/snowregistration/snowdangerobs/snowdangerobs.html',
                 controller: 'SnowDangerObsCtrl as vm',
                 data: {
-                    defaultBack: {
-                        state: 'snowregistration',
-                        title: 'Snøobservasjon'
-                    }
-                }
-            })
-            .state('snowgeneralobs', {
-                url: '/snowgeneralobs',
-
-                templateUrl: 'app/snow/snowregistration/snowgeneralobs/snowgeneralobs.html',
-                controller: 'SnowGeneralObsCtrl as vm',
-                data: {
-                    defaultBack: {
-                        state: 'snowregistration',
-                        title: 'Snøobservasjon'
-                    }
-                }
-            })
-            .state('snowweatherobservation', {
-                url: '/snowweatherobservation',
-
-                templateUrl: 'app/snow/snowregistration/snowweatherobservation/snowweatherobservation.html',
-                controller: 'SnowWeatherObservationCtrl as vm',
-                data: {
-                    defaultBack: {
-                        state: 'snowregistration',
-                        title: 'Snøobservasjon'
-                    }
-                }
-            })
-
-            .state('snowsurfaceobservation', {
-                url: '/snowsurfaceobservation',
-
-                templateUrl: 'app/snow/snowregistration/snowsurfaceobservation/snowsurfaceobservation.html',
-                controller: 'SnowSurfaceObservationCtrl as vm',
-                data: {
-                    defaultBack: {
-                        state: 'snowregistration',
-                        title: 'Snøobservasjon'
-                    }
-                }
-            })
-            .state('avalancheevaluation', {
-                url: '/avalancheevaluation',
-
-                templateUrl: 'app/snow/snowregistration/avalancheevaluation/avalancheevaluation.html',
-                controller: 'AvalancheEvaluationCtrl as vm',
-                data: {
-                    defaultBack: {
-                        state: 'snowregistration',
-                        title: 'Snøobservasjon'
-                    }
+                    defaultBack: defaultBackSnowRegistration
                 }
             })
             .state('avalancheobs', {
+                //Skred
                 url: '/avalancheobs',
-
                 templateUrl: 'app/snow/snowregistration/avalancheobs/avalancheobs.html',
                 controller: 'AvalancheObsCtrl as vm',
                 data: {
-                    defaultBack: {
-                        state: 'snowregistration',
-                        title: 'Snøobservasjon'
-                    }
+                    defaultBack: defaultBackSnowRegistration
                 }
             })
+            .state('snowweatherobservation', {
+                //Vær
+                url: '/snowweatherobservation',
+                templateUrl: 'app/snow/snowregistration/snowweatherobservation/snowweatherobservation.html',
+                controller: 'SnowWeatherObservationCtrl as vm',
+                data: {
+                    defaultBack: defaultBackSnowRegistration
+                }
+            })
+            .state('snowsurfaceobservation', {
+                //Snødekke
+                url: '/snowsurfaceobservation',
+                templateUrl: 'app/snow/snowregistration/snowsurfaceobservation/snowsurfaceobservation.html',
+                controller: 'SnowSurfaceObservationCtrl as vm',
+                data: {
+                    defaultBack: defaultBackSnowRegistration
+                }
+            })
+            .state('snowprofile', {
+                //Snøprofil
+                url: '/snowprofile',
+                templateUrl: 'app/snow/snowregistration/snowprofile/snowprofile.html',
+                controller: 'SnowProfileCtrl as vm',
+                data: {
+                    defaultBack: defaultBackSnowRegistration
+                }
+            })
+            .state('avalancheevalproblem', {
+                //Skredproblem
+                url: '/avalancheevalproblem',
+                templateUrl: 'app/snow/snowregistration/avalancheevalproblem/avalancheevalproblem.html',
+                controller: 'AvalancheEvalProblemCtrl as vm',
+                data: {
+                    defaultBack: defaultBackSnowRegistration
+                }
+            })
+            .state('avalancheevaluation', {
+                //Skredfarevurdering
+                url: '/avalancheevaluation',
+                templateUrl: 'app/snow/snowregistration/avalancheevaluation/avalancheevaluation.html',
+                controller: 'AvalancheEvaluationCtrl as vm',
+                data: {
+                    defaultBack: defaultBackSnowRegistration
+                }
+            })
+
+            //IS
             .state('ice', {
                 url: '/ice',
-
                 templateUrl: 'app/ice/ice.html',
                 controller: 'IceCtrl as vm',
                 data: {
@@ -189,9 +191,8 @@ angular.module('RegObs', ['ionic', 'ngCordova'])
                     }
                 }
             })
-            .state('iceregistration', {
+            .state('iceregistrationNew', {
                 url: '/iceregistration',
-
                 templateUrl: 'app/ice/iceregistration/iceregistration.html',
                 controller: 'IceRegistrationCtrl as vm',
                 data: {
@@ -202,69 +203,45 @@ angular.module('RegObs', ['ionic', 'ngCordova'])
                 }
             })
             .state('icedangerobs', {
+                //Faretegn
                 url: '/icedangerobs',
-
                 templateUrl: 'app/ice/iceregistration/icedangerobs/icedangerobs.html',
                 controller: 'IceDangerObsCtrl as vm',
                 data: {
-                    defaultBack: {
-                        state: 'iceregistration',
-                        title: 'Isobservasjon'
-                    }
+                    defaultBack: defaultBackIceRegistration
                 }
             })
-
             .state('icecoverobs', {
+                //Isdekningsgrad
                 url: '/icecoverobs',
-
                 templateUrl: 'app/ice/iceregistration/icecoverobs/icecoverobs.html',
                 controller: 'IceCoverObsCtrl as vm',
                 data: {
-                    defaultBack: {
-                        state: 'iceregistration',
-                        title: 'Isobservasjon'
-                    }
-                }
-            })
-            .state('icegeneralobs', {
-                url: '/icegeneralobs',
-
-                templateUrl: 'app/ice/iceregistration/icegeneralobs/icegeneralobs.html',
-                controller: 'IceGeneralObsCtrl as vm',
-                data: {
-                    defaultBack: {
-                        state: 'iceregistration',
-                        title: 'Isobservasjon'
-                    }
-                }
-            })
-            .state('iceincident', {
-                url: '/iceincident',
-
-                templateUrl: 'app/ice/iceregistration/iceincident/iceincident.html',
-                controller: 'IceIncidentCtrl as vm',
-                data: {
-                    defaultBack: {
-                        state: 'iceregistration',
-                        title: 'Isobservasjon'
-                    }
+                    defaultBack: defaultBackIceRegistration
                 }
             })
             .state('icethickness', {
+                //Istykkelse
                 url: '/icethickness',
-
                 templateUrl: 'app/ice/iceregistration/icethickness/icethickness.html',
                 controller: 'IceThicknessCtrl as vm',
                 data: {
-                    defaultBack: {
-                        state: 'iceregistration',
-                        title: 'Isobservasjon'
-                    }
+                    defaultBack: defaultBackIceRegistration
                 }
             })
+            .state('iceincident', {
+                //Ulykke/hendelse
+                url: '/iceincident',
+                templateUrl: 'app/ice/iceregistration/iceincident/iceincident.html',
+                controller: 'IceIncidentCtrl as vm',
+                data: {
+                    defaultBack: defaultBackIceRegistration
+                }
+            })
+
+            //VANN
             .state('water', {
                 url: '/water',
-
                 templateUrl: 'app/water/water.html',
                 controller: 'WaterCtrl as vm',
                 data: {
@@ -275,9 +252,10 @@ angular.module('RegObs', ['ionic', 'ngCordova'])
                 }
 
             })
+
+            //JORD
             .state('dirt', {
                 url: '/dirt',
-
                 templateUrl: 'app/dirt/dirt.html',
                 controller: 'DirtCtrl as vm',
                 data: {
@@ -286,7 +264,49 @@ angular.module('RegObs', ['ionic', 'ngCordova'])
                         title: 'regObs'
                     }
                 }
+            })
+            .state('dirtregistrationNew', {
+                url: '/dirtregistration',
+                templateUrl: 'app/dirt/dirtregistration/dirtregistration.html',
+                controller: 'DirtRegistrationCtrl as vm',
+                data: {
+                    defaultBack: {
+                        state: 'dirt',
+                        title: 'Jord'
+                    }
+                }
+            })
+            .state('dirtdangerobs', {
+                //Faretegn
+                url: '/dirtdangerobs',
+                templateUrl: 'app/dirt/dirtregistration/dirtdangerobs/dirtdangerobs.html',
+                controller: 'DirtDangerObsCtrl as vm',
+                data: {
+                    defaultBack: defaultBackDirtRegistration
+                }
+            })
+            .state('landslideobs', {
+                //Skredhendelse
+                url: '/landslideobs',
+                templateUrl: 'app/dirt/dirtregistration/landslideobs/landslideobs.html',
+                controller: 'LandSlideObsCtrl as vm',
+                data: {
+                    defaultBack: defaultBackDirtRegistration
+                }
+            })
 
+            //Felles
+            .state('generalobs', {
+                //Fritekst
+                url: '/generalobs',
+                templateUrl: 'app/generalobs/generalobs.html',
+                controller: 'GeneralObsCtrl as vm',
+                data: {
+                    defaultBack: {
+                        state: 'start',
+                        title: 'regObs'
+                    }
+                }
             });
 
     })
@@ -297,7 +317,7 @@ angular.module('RegObs', ['ionic', 'ngCordova'])
             // Hide the accessory bar by default (remove this to show the accessory bar above the keyboard
             // for form inputs)*/
             if (window.cordova && window.cordova.plugins.Keyboard) {
-                cordova.plugins.Keyboard.hideKeyboardAccessoryBar(true);
+                //cordova.plugins.Keyboard.hideKeyboardAccessoryBar(true);
             }
 
             if (window.StatusBar) {
