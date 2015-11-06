@@ -1,0 +1,19 @@
+<ion-list>
+    <label class="item item-input item-stacked-label">
+        <span class="input-label">Beskrivelse</span>
+                <textarea placeholder="Hvorfor skjedde det? Hvorfor gikk det forhåpentligvis bra? Kunne situasjonen vært unngått?"
+                          name="comment"
+                          cols="30" rows="3"
+                          ng-model="incident.IncidentText"></textarea>
+    </label>
+    <kdv-dropdown
+            title="Hva ble påvirket?*"
+            model="incident.ActivityInfluencedTID"
+            kdv-key="{{activityInfluencedKdv}}">
+    </kdv-dropdown>
+    <kdv-dropdown
+            title="Skadeomfang*"
+            model="incident.DamageExtentTID"
+            kdv-key="DamageExtentKDV">
+    </kdv-dropdown>
+</ion-list>

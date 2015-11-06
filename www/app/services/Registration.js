@@ -81,6 +81,7 @@ angular
             }
         };
 
+
         var fareTegn = {
             "Id": "abad1468-63eb-4369-da5f-ddd61207e60a",
             "GeoHazardTID": 10,
@@ -329,7 +330,7 @@ angular
 
         };
 
-        service.addPicture = function(propertyKey, data) {
+        service.addPicture = function (propertyKey, data) {
             var picArray = service.getPropertyAsArray('Picture');
             picArray.push({
                 RegistrationTID: service.getRegistrationTID(propertyKey),

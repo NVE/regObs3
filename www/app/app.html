@@ -18,12 +18,14 @@
             <ion-item class="item-icon-right"
                       ui-sref="water">
                 Vann
+                <span class="badge badge-balanced" ng-if="appVm.registrationIsType('water')">1</span>
                 <i class="icon icon-accessory ion-chevron-right"></i>
             </ion-item>
 
             <ion-item class="item-icon-right"
                       ui-sref="dirt">
                 Jord
+                <span class="badge badge-balanced" ng-if="appVm.registrationIsType('dirt')">1</span>
                 <i class="icon icon-accessory ion-chevron-right"></i>
             </ion-item>
         </div>

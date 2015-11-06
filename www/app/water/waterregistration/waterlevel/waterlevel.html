@@ -1,0 +1,68 @@
+<ion-view view-title="Vannstand">
+    <ion-content>
+        <ion-list>
+
+            <ion-radio-fix ng-model="vm.choice"
+                           ng-value="1"
+                           ng-change="vm.resetModel()">Elv</ion-radio-fix>
+            <ion-radio-fix ng-model="vm.choice"
+                           ng-value="2"
+                           ng-change="vm.resetModel()">Innsjø/magasin</ion-radio-fix>
+
+            <div ng-show="vm.choice">
+            <label class="item item-input item-stacked-label">
+                <span class="input-label">Vannstand</span>
+                <input type="number" placeholder="I meter"
+                       ng-model="vm.obs.WaterLevelValue" />
+            </label>
+
+            <kdv-dropdown ng-show="vm.choice === 1"
+                          title="Referansenivå"
+                          model="vm.obs.WaterLevelRefTID"
+                          kdv-key="Water_WaterLevelRefKDV"
+                          before="200">
+            </kdv-dropdown>
+
+            <kdv-dropdown ng-show="vm.choice === 2"
+                    title="Referansenivå"
+                    model="vm.obs.WaterLevelRefTID"
+                    kdv-key="Water_WaterLevelRefKDV"
+                    after="200">
+            </kdv-dropdown>
+
+            <label ng-show="vm.choice === 1" class="item item-input item-stacked-label">
+                <span class="input-label">Faktisk vannføring</span>
+                <input type="number" placeholder="Gis som tall i m3/s"
+                       ng-model="vm.obs.MeasuredDischarge" />
+            </label>
+
+            <label class="item item-input item-stacked-label">
+                <span class="input-label">Kommentar</span>
+                <textarea placeholder="Ytterligere beskrivelse"
+                          name="comment"
+                          cols="30" rows="3"
+                          ng-model="vm.obs.Comment"></textarea>
+            </label>
+            </div>
+
+        </ion-list>
+
+        <regobs-form-footer registration-prop="vm.registrationProp"></regobs-form-footer>
+    </ion-content>
+</ion-view>
+<!--
+var elv = {
+WaterLevel: {
+WaterLevelRefTID: "120",
+WaterLevelValue: "3838",
+MeasuredDischarge: "12",
+Comment: "Vannstand elv"
+}
+};
+var magasin = {
+WaterLevel: {
+WaterLevelRefTID: "220",
+WaterLevelValue: "12",
+Comment: "Cannstand magasin"
+}
+};-->

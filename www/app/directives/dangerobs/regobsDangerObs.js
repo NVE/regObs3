@@ -3,7 +3,7 @@ angular
     .directive('regobsDangerObs', function dangerObs($ionicModal, Registration, $ionicPopup, Utility) {
         return {
             link: link,
-            templateUrl: 'app/directives/dangerObs.html',
+            templateUrl: 'app/directives/dangerobs/regobsDangerObs.html',
             scope: {
                 areaArray: '=',
                 dangerSignKdv: '@'
@@ -101,7 +101,7 @@ angular
             };
 
             var loadModal = function () {
-                var url = 'app/directives/newdangerobs.html';
+                var url = 'app/directives/dangerobs/newdangerobs.html';
                 return $ionicModal
                     .fromTemplateUrl(url, {
                         scope: $scope,

@@ -1,6 +1,6 @@
 angular
     .module('RegObs')
-    .controller('DirtDangerObsCtrl', function DirtDangerObsCtrl($scope, $ionicModal, $ionicPopup, Utility, Registration) {
+    .controller('WaterDangerObsCtrl', function WaterangerObsCtrl($scope, Registration) {
 
         function init() {
             var vm = this;
@@ -14,7 +14,6 @@ angular
                 "For kommunen",
                 "Fylket/varslingsregion"
             ];
-            vm.registrationProp = 'DangerObs';
 
         }
 

@@ -84,6 +84,10 @@ angular.module('RegObs', ['ionic', 'ngCordova'])
             state: 'dirtregistrationNew',
             title: 'Jordobservasjon'
         };
+        var defaultBackWaterRegistration = {
+            state: 'waterregistrationNew',
+            title: 'Vannobservasjon'
+        };
 
         $urlRouterProvider.otherwise('/start');
         $stateProvider
@@ -251,6 +255,44 @@ angular.module('RegObs', ['ionic', 'ngCordova'])
                     }
                 }
 
+            })
+            .state('waterregistrationNew', {
+                url: '/waterregistration',
+                templateUrl: 'app/water/waterregistration/waterregistration.html',
+                controller: 'WaterRegistrationCtrl as vm',
+                data: {
+                    defaultBack: {
+                        state: 'water',
+                        title: 'Vann'
+                    }
+                }
+            })
+            .state('waterdangerobs', {
+                //Faretegn
+                url: '/waterdangerobs',
+                templateUrl: 'app/water/waterregistration/waterdangerobs/waterdangerobs.html',
+                controller: 'WaterDangerObsCtrl as vm',
+                data: {
+                    defaultBack: defaultBackWaterRegistration
+                }
+            })
+            .state('waterlevel', {
+                //Faretegn
+                url: '/waterlevel',
+                templateUrl: 'app/water/waterregistration/waterlevel/waterlevel.html',
+                controller: 'WaterLevelCtrl as vm',
+                data: {
+                    defaultBack: defaultBackWaterRegistration
+                }
+            })
+            .state('waterincident', {
+                //Faretegn
+                url: '/waterincident',
+                templateUrl: 'app/water/waterregistration/waterincident/waterincident.html',
+                controller: 'WaterIncidentCtrl as vm',
+                data: {
+                    defaultBack: defaultBackWaterRegistration
+                }
             })
 
             //JORD

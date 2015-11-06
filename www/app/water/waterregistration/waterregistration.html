@@ -1,0 +1,36 @@
+<ion-view view-title="Vannobservasjon">
+    <ion-content>
+        <ion-list>
+            <regobs-menu-item
+                    title="Faretegn"
+                    condition="vm.obsArrayExists('DangerObs')"
+                    state="waterdangerobs"
+                    badge-text="vm.obsArrayExists('DangerObs')">
+            </regobs-menu-item>
+
+            <regobs-menu-item
+                    title="Vannstand"
+                    condition="vm.obsObjectExists('WaterLevel')"
+                    state="waterlevel">
+            </regobs-menu-item>
+
+            <regobs-menu-item
+                    title="Ulykke/Hendelse"
+                    condition="vm.obsObjectExists('Incident')"
+                    state="waterincident">
+            </regobs-menu-item>
+
+            <regobs-menu-item
+                    title="Fritekst"
+                    condition="vm.obsObjectExists('GeneralObservation')"
+                    state="generalobs">
+            </regobs-menu-item>
+
+        </ion-list>
+        <div class="padding">
+            <button class="button button-block button-calm" ng-click="vm.sendRegistration()">Send</button>
+            <button class="button button-block button-assertive button-clear" ng-click="vm.deleteRegistration()">Slett observasjoner i minnet</button>
+        </div>
+
+    </ion-content>
+</ion-view>
