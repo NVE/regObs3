@@ -13,6 +13,8 @@
                        ng-model="vm.SlushSnow" ng-change="vm.propChanged('SlushSnow')" />
             </label>
 
+            <regobs-ice-layer obs-object="vm.iceThickness"></regobs-ice-layer>
+
             <label class="item item-input item-stacked-label" >
                 <span class="input-label">Total istykkelse (cm)*</span>
                 <input type="number" placeholder="I centimeter"
@@ -26,6 +28,6 @@
                           ng-model="vm.iceThickness.Comment"></textarea>
             </label>
         </ion-list>
-        <regobs-form-footer registration-prop="vm.registrationProp"></regobs-form-footer>
+        <regobs-image-list></regobs-image-list>
     </ion-content>
 </ion-view>

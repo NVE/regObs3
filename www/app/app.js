@@ -1,68 +1,6 @@
 "use strict";
 
 angular.module('RegObs', ['ionic', 'ngCordova'])
-
-    .controller('AppCtrl', function ($scope, $ionicModal, $ionicHistory, $ionicLoading, LocalStorage, Registration, AppSettings, User) {
-        var appVm = this;
-
-        $scope.$on('$ionicView.loaded', function () {
-            appVm.userService = User;
-            appVm.settings = AppSettings;
-            console.log(appVm.settings.env);
-
-            appVm.logIn = function () {
-                appVm.loggingIn = true;
-                User.logIn(appVm.username, appVm.password).then(function () {
-                    //appVm.user = User.getUser();
-                    appVm.loggingIn = false;
-
-                });
-            };
-
-            appVm.registrationIsType = Registration.doesExistUnsent;
-
-            appVm.logOut = function () {
-                appVm.username = '';
-                appVm.password = '';
-                User.logOut();
-                //appVm.user = User.getUser();
-            };
-
-            appVm.clearAppStorage = function () {
-                LocalStorage.clear();
-                Registration.load();
-            };
-
-            $ionicModal.fromTemplateUrl('app/settings/settings.html', {
-                scope: $scope,
-                animation: 'slide-in-up',
-                focusFirstInput: true
-            }).then(function (modal) {
-                appVm.modal = modal;
-            });
-
-            //Cleanup the modal when we're done with it!
-            $scope.$on('$destroy', function () {
-                appVm.modal.remove();
-            });
-            // Execute action on hide modal
-            $scope.$on('modal.hidden', function () {
-                // Execute action
-            });
-            // Execute action on remove modal
-            $scope.$on('modal.removed', function () {
-                // Execute action
-            });
-
-            $scope.$on('$ionicView.afterLeave', function () {
-                appVm.modal.hide();
-                Registration.save();
-            });
-
-        });
-
-    })
-
     /**
      * State configuration
      */
@@ -116,7 +54,8 @@ angular.module('RegObs', ['ionic', 'ngCordova'])
                     defaultBack: {
                         state: 'snow',
                         title: 'Snø'
-                    }
+                    },
+                    showRegistrationFooter: true
                 }
             })
             .state('snowdangerobs', {
@@ -125,7 +64,9 @@ angular.module('RegObs', ['ionic', 'ngCordova'])
                 templateUrl: 'app/snow/snowregistration/snowdangerobs/snowdangerobs.html',
                 controller: 'SnowDangerObsCtrl as vm',
                 data: {
-                    defaultBack: defaultBackSnowRegistration
+                    defaultBack: defaultBackSnowRegistration,
+                    showFormFooter: true,
+                    registrationType: 'DangerObs'
                 }
             })
             .state('avalancheobs', {
@@ -134,7 +75,9 @@ angular.module('RegObs', ['ionic', 'ngCordova'])
                 templateUrl: 'app/snow/snowregistration/avalancheobs/avalancheobs.html',
                 controller: 'AvalancheObsCtrl as vm',
                 data: {
-                    defaultBack: defaultBackSnowRegistration
+                    defaultBack: defaultBackSnowRegistration,
+                    showFormFooter: true,
+                    registrationType: 'AvalancheObs'
                 }
             })
             .state('snowweatherobservation', {
@@ -143,7 +86,9 @@ angular.module('RegObs', ['ionic', 'ngCordova'])
                 templateUrl: 'app/snow/snowregistration/snowweatherobservation/snowweatherobservation.html',
                 controller: 'SnowWeatherObservationCtrl as vm',
                 data: {
-                    defaultBack: defaultBackSnowRegistration
+                    defaultBack: defaultBackSnowRegistration,
+                    showFormFooter: true,
+                    registrationType: 'WeatherObservation'
                 }
             })
             .state('snowsurfaceobservation', {
@@ -152,7 +97,9 @@ angular.module('RegObs', ['ionic', 'ngCordova'])
                 templateUrl: 'app/snow/snowregistration/snowsurfaceobservation/snowsurfaceobservation.html',
                 controller: 'SnowSurfaceObservationCtrl as vm',
                 data: {
-                    defaultBack: defaultBackSnowRegistration
+                    defaultBack: defaultBackSnowRegistration,
+                    showFormFooter: true,
+                    registrationType: 'SnowSurfaceObservation'
                 }
             })
             .state('snowprofile', {
@@ -161,7 +108,9 @@ angular.module('RegObs', ['ionic', 'ngCordova'])
                 templateUrl: 'app/snow/snowregistration/snowprofile/snowprofile.html',
                 controller: 'SnowProfileCtrl as vm',
                 data: {
-                    defaultBack: defaultBackSnowRegistration
+                    defaultBack: defaultBackSnowRegistration,
+                    showFormFooter: true,
+                    registrationType: 'SnowProfile'
                 }
             })
             .state('avalancheevalproblem', {
@@ -170,7 +119,9 @@ angular.module('RegObs', ['ionic', 'ngCordova'])
                 templateUrl: 'app/snow/snowregistration/avalancheevalproblem/avalancheevalproblem.html',
                 controller: 'AvalancheEvalProblemCtrl as vm',
                 data: {
-                    defaultBack: defaultBackSnowRegistration
+                    defaultBack: defaultBackSnowRegistration,
+                    showFormFooter: true,
+                    registrationType: 'AvalancheEvalProblem2'
                 }
             })
             .state('avalancheevaluation', {
@@ -179,7 +130,9 @@ angular.module('RegObs', ['ionic', 'ngCordova'])
                 templateUrl: 'app/snow/snowregistration/avalancheevaluation/avalancheevaluation.html',
                 controller: 'AvalancheEvaluationCtrl as vm',
                 data: {
-                    defaultBack: defaultBackSnowRegistration
+                    defaultBack: defaultBackSnowRegistration,
+                    showFormFooter: true,
+                    registrationType: 'AvalancheEvaluation3'
                 }
             })
 
@@ -203,7 +156,8 @@ angular.module('RegObs', ['ionic', 'ngCordova'])
                     defaultBack: {
                         state: 'ice',
                         title: 'Is'
-                    }
+                    },
+                    showRegistrationFooter: true
                 }
             })
             .state('icedangerobs', {
@@ -212,7 +166,9 @@ angular.module('RegObs', ['ionic', 'ngCordova'])
                 templateUrl: 'app/ice/iceregistration/icedangerobs/icedangerobs.html',
                 controller: 'IceDangerObsCtrl as vm',
                 data: {
-                    defaultBack: defaultBackIceRegistration
+                    defaultBack: defaultBackIceRegistration,
+                    showFormFooter: true,
+                    registrationType: 'DangerObs'
                 }
             })
             .state('icecoverobs', {
@@ -221,7 +177,9 @@ angular.module('RegObs', ['ionic', 'ngCordova'])
                 templateUrl: 'app/ice/iceregistration/icecoverobs/icecoverobs.html',
                 controller: 'IceCoverObsCtrl as vm',
                 data: {
-                    defaultBack: defaultBackIceRegistration
+                    defaultBack: defaultBackIceRegistration,
+                    showFormFooter: true,
+                    registrationType: 'IceCoverObs'
                 }
             })
             .state('icethickness', {
@@ -230,7 +188,9 @@ angular.module('RegObs', ['ionic', 'ngCordova'])
                 templateUrl: 'app/ice/iceregistration/icethickness/icethickness.html',
                 controller: 'IceThicknessCtrl as vm',
                 data: {
-                    defaultBack: defaultBackIceRegistration
+                    defaultBack: defaultBackIceRegistration,
+                    showFormFooter: true,
+                    registrationType: 'IceThickness'
                 }
             })
             .state('iceincident', {
@@ -239,7 +199,9 @@ angular.module('RegObs', ['ionic', 'ngCordova'])
                 templateUrl: 'app/ice/iceregistration/iceincident/iceincident.html',
                 controller: 'IceIncidentCtrl as vm',
                 data: {
-                    defaultBack: defaultBackIceRegistration
+                    defaultBack: defaultBackIceRegistration,
+                    showFormFooter: true,
+                    registrationType: 'Incident'
                 }
             })
 
@@ -264,7 +226,8 @@ angular.module('RegObs', ['ionic', 'ngCordova'])
                     defaultBack: {
                         state: 'water',
                         title: 'Vann'
-                    }
+                    },
+                    showRegistrationFooter: true
                 }
             })
             .state('waterdangerobs', {
@@ -273,7 +236,9 @@ angular.module('RegObs', ['ionic', 'ngCordova'])
                 templateUrl: 'app/water/waterregistration/waterdangerobs/waterdangerobs.html',
                 controller: 'WaterDangerObsCtrl as vm',
                 data: {
-                    defaultBack: defaultBackWaterRegistration
+                    defaultBack: defaultBackWaterRegistration,
+                    showFormFooter: true,
+                    registrationType: 'DangerObs'
                 }
             })
             .state('waterlevel', {
@@ -282,7 +247,9 @@ angular.module('RegObs', ['ionic', 'ngCordova'])
                 templateUrl: 'app/water/waterregistration/waterlevel/waterlevel.html',
                 controller: 'WaterLevelCtrl as vm',
                 data: {
-                    defaultBack: defaultBackWaterRegistration
+                    defaultBack: defaultBackWaterRegistration,
+                    showFormFooter: true,
+                    registrationType: 'WaterLevel'
                 }
             })
             .state('waterincident', {
@@ -291,7 +258,9 @@ angular.module('RegObs', ['ionic', 'ngCordova'])
                 templateUrl: 'app/water/waterregistration/waterincident/waterincident.html',
                 controller: 'WaterIncidentCtrl as vm',
                 data: {
-                    defaultBack: defaultBackWaterRegistration
+                    defaultBack: defaultBackWaterRegistration,
+                    showFormFooter: true,
+                    registrationType: 'Incident'
                 }
             })
 
@@ -315,7 +284,8 @@ angular.module('RegObs', ['ionic', 'ngCordova'])
                     defaultBack: {
                         state: 'dirt',
                         title: 'Jord'
-                    }
+                    },
+                    showRegistrationFooter: true
                 }
             })
             .state('dirtdangerobs', {
@@ -324,7 +294,9 @@ angular.module('RegObs', ['ionic', 'ngCordova'])
                 templateUrl: 'app/dirt/dirtregistration/dirtdangerobs/dirtdangerobs.html',
                 controller: 'DirtDangerObsCtrl as vm',
                 data: {
-                    defaultBack: defaultBackDirtRegistration
+                    defaultBack: defaultBackDirtRegistration,
+                    showFormFooter: true,
+                    registrationType: 'DangerObs'
                 }
             })
             .state('landslideobs', {
@@ -333,7 +305,9 @@ angular.module('RegObs', ['ionic', 'ngCordova'])
                 templateUrl: 'app/dirt/dirtregistration/landslideobs/landslideobs.html',
                 controller: 'LandSlideObsCtrl as vm',
                 data: {
-                    defaultBack: defaultBackDirtRegistration
+                    defaultBack: defaultBackDirtRegistration,
+                    showFormFooter: true,
+                    registrationType: 'LandSlideObs'
                 }
             })
 
@@ -347,7 +321,9 @@ angular.module('RegObs', ['ionic', 'ngCordova'])
                     defaultBack: {
                         state: 'start',
                         title: 'regObs'
-                    }
+                    },
+                    showFormFooter: true,
+                    registrationType: 'GeneralObservation'
                 }
             });
 

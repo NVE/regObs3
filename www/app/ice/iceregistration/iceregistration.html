@@ -15,7 +15,7 @@
             </regobs-menu-item>
 
             <regobs-menu-item
-                    title="Istykkelse (mangler islag)"
+                    title="Istykkelse"
                     condition="vm.obsObjectExists('IceThickness')"
                     state="icethickness">
             </regobs-menu-item>
@@ -36,6 +36,7 @@
         <div class="padding">
             <button class="button button-block button-calm" ng-click="vm.sendRegistration()">Send</button>
             <button class="button button-block button-assertive button-clear" ng-click="vm.deleteRegistration()">Slett observasjoner i minnet</button>
+            Lokasjon: [{{appVm.getLocation().Latitude}}, {{appVm.getLocation().Longitude}}]
         </div>
     </ion-content>
 </ion-view>

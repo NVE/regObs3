@@ -1,11 +1,11 @@
 angular
     .module('RegObs')
-    .controller('SnowWeatherObservationCtrl', function ($scope, Registration) {
+    .controller('SnowWeatherObservationCtrl', function ($scope, $state, Registration) {
         function init(){
             var vm = this;
 
             vm.registrationProp = 'WeatherObservation';
-            vm.obs = Registration.getPropertyAsObject(vm.registrationProp);
+            vm.obs = Registration.getPropertyAsObject($state.current.data.registrationType);
             vm.windDirectionArray = Registration.getExpositionArray();
             //vm.obs.WindDirection = vm.windDirectionArray[0].val;
 

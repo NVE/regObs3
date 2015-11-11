@@ -1,11 +1,8 @@
 angular
     .module('RegObs')
-    .controller('AvalancheEvalProblemCtrl', function ($scope, Registration) {
+    .controller('AvalancheEvalProblemCtrl', function ($scope) {
         function init(){
             var vm = this;
-
-            vm.registrationProp = 'AvalancheEvalProblem2';
-            vm.obs = Registration.getPropertyAsObject(vm.registrationProp);
 
         }
 

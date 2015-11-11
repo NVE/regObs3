@@ -1,0 +1,38 @@
+<ion-modal-view>
+    <ion-header-bar>
+        <h1 class="title" ng-hide="editing">Nytt islag</h1>
+        <h1 class="title" ng-show="editing">Rediger islag</h1>
+        <button class="button button-clear button-positive" ng-click="modal.hide()">Avbryt</button>
+    </ion-header-bar>
+    <ion-content>
+        <ion-list>
+
+            <label class="item item-input item-stacked-label" >
+                <span class="input-label">Islag registreres ovenfra og ned</span>
+                <input type="number" placeholder="I centimeter"
+                       ng-model="data.thickness" ng-change="thicknessChanged()" />
+            </label>
+
+            <label class="item item-input item-stacked-label item-select">
+                <span class="input-label">
+                    Type is
+                </span>
+                <select ng-model="iceLayer.IceLayerTID"
+                        ng-options="kdv.Id as kdv.Name for kdv in iceLayerKdvArray">
+                </select>
+            </label>
+
+        </ion-list>
+        <div class="padding">
+            <button class="button button-block button-calm"
+                    ng-click="add()"
+                    ng-hide="editing">Lagre</button>
+            <button class="button button-block button-calm"
+                    ng-click="modal.hide()"
+                    ng-show="editing">Lagre</button>
+            <button class="button button-block button-assertive button-clear"
+                    ng-click="delete()"
+                    ng-show="editing">Slett</button>
+        </div>
+    </ion-content>
+</ion-modal-view>

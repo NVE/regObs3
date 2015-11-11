@@ -1,11 +1,10 @@
 angular
     .module('RegObs')
-    .controller('AvalancheEvaluationCtrl', function ($scope, Registration) {
+    .controller('AvalancheEvaluationCtrl', function ($scope, $state, Registration) {
         function init(){
             var vm = this;
 
-            vm.registrationProp = 'AvalancheEvaluation3';
-            vm.obs = Registration.getPropertyAsObject(vm.registrationProp);
+            vm.obs = Registration.getPropertyAsObject($state.current.data.registrationType);
 
         }
 

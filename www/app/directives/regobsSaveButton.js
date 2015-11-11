@@ -1,17 +1,17 @@
 angular
     .module('RegObs')
-    .directive('regobsSaveButton', function (Registration) {
+    .directive('regobsSaveButton', function ($ionicHistory) {
         return {
             link: link,
             scope: {},
-            template: '<div class="padding">\
-            <button class="button button-block button-calm"\
-        ng-click="save(true)">Lagre</button>\
-            </div>'
+            template: '<button class="button button-block button-calm" ng-click="save()">Lagre</button>',
+            replace: true
         };
 
         function link(scope){
-            scope.save = Registration.save;
+            scope.save = function(){
+                $ionicHistory.goBack();
+            }
         }
 
     });

@@ -2,12 +2,12 @@
     <ion-content>
         <ion-list>
 
-            <ion-radio-fix ng-model="vm.choice"
-                           ng-value="1"
-                           ng-change="vm.resetModel()">Elv</ion-radio-fix>
-            <ion-radio-fix ng-model="vm.choice"
-                           ng-value="2"
-                           ng-change="vm.resetModel()">Innsjø/magasin</ion-radio-fix>
+            <ion-checkbox ng-model="vm.choice"
+                           ng-true-value="1"
+                           ng-change="vm.resetModel()">Elv</ion-checkbox>
+            <ion-checkbox ng-model="vm.choice"
+                           ng-true-value="2"
+                           ng-change="vm.resetModel()">Innsjø/magasin</ion-checkbox>
 
             <div ng-show="vm.choice">
             <label class="item item-input item-stacked-label">
@@ -46,8 +46,8 @@
             </div>
 
         </ion-list>
+        <regobs-image-list></regobs-image-list>
 
-        <regobs-form-footer registration-prop="vm.registrationProp"></regobs-form-footer>
     </ion-content>
 </ion-view>
 <!--

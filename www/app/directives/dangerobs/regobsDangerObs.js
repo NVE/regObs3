@@ -42,9 +42,7 @@ angular
             };
 
             $scope.dangerSignChanged = function () {
-                console.log('changed!', $scope.dangerObs.DangerSignTID, $scope.dangerSignKdvArray);
                 $scope.noDangerSign.val = $scope.dangerObs.DangerSignTID === $scope.dangerSignKdvArray[1].Id;
-                console.log($scope.noDangerSign);
             };
 
             $scope.addDangerObs = function () {
@@ -55,7 +53,10 @@ angular
 
             $scope.newDangerObs = function () {
                 $scope.editing = false;
-                $scope.dangerObs = {};
+                $scope.dangerObs = {
+                    DangerSignTID: $scope.dangerSignKdvArray[0].Id,
+                    tempArea: $scope.areaArray[0]
+                };
                 $scope.dangerSignChanged();
                 $scope.modal.show();
             };

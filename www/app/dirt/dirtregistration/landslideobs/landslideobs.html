@@ -1,14 +1,68 @@
 <ion-view view-title="Skredhendelse">
     <ion-content>
         <ion-list>
+
             <label class="item item-input item-stacked-label">
-                <span class="input-label">Skriv i vei!*</span>
-                <textarea placeholder="Får du ikke formidlet det du vil med de andre skjemaene? bruk dette og skriv i vei!"
+                <span class="input-label">Tid da skredet gikk</span>
+                <input type="datetime-local" ng-change="vm.dateChanged()" ng-model="vm.date"
+                       placeholder="Tidspunkt for skredaktivitet">
+            </label>
+            <label class="item item-input item-select item-stacked-label">
+                <span class="input-label">
+                    Hvor sikkert er tiden gitt?
+                </span>
+                <select ng-model="vm.dateAccuracy"
+                        ng-options="kdv.Val as kdv.Name for kdv in vm.dateArray" ng-change="vm.dateChanged()">
+                    <option value="">Velg...</option>
+                </select>
+            </label>
+            <kdv-dropdown
+                    title="Type skred"
+                    model="vm.obs.LandSlideTID"
+                    kdv-key="Dirt_LandSlideKDV">
+            </kdv-dropdown>
+            <kdv-dropdown
+                    title="Størrelse"
+                    model="vm.obs.LandSlideSizeTID"
+                    kdv-key="Dirt_LandSlideSizeKDV">
+            </kdv-dropdown>
+            <kdv-dropdown
+                    title="Skredutløser"
+                    model="vm.obs.LandSlideTriggerTID"
+                    kdv-key="Dirt_LandSlideTriggerKDV">
+            </kdv-dropdown>
+            <kdv-dropdown
+                    title="Skadeomfang"
+                    model="vm.obs.DamageExtentTID"
+                    kdv-key="DamageExtentKDV">
+            </kdv-dropdown>
+
+
+<!--            <kdv-dropdown
+                    title="dropdown1"
+                    model="vm.obs.ActivityInfluencedTID"
+                    kdv-key="Dirt_ActivityInfluencedKDV">
+            </kdv-dropdown>-->
+
+            <label class="item item-input item-stacked-label">
+                <span class="input-label">Kommentar</span>
+                <textarea placeholder="Ytterligere kommentarer"
                           name="comment"
                           cols="30" rows="3"
-                          ng-model="vm.generalObservation.ObsHeader"></textarea>
+                          ng-model="vm.obs.Comment"></textarea>
             </label>
         </ion-list>
-        <regobs-form-footer registration-prop="vm.registrationProp"></regobs-form-footer>
+        <regobs-image-list></regobs-image-list>
     </ion-content>
 </ion-view>
+
+<!--
+LandSlideObs
+ActivityInfluencedTID: ""
+Comment: "Kommentar"
+DamageExtentTID: "25"
+DtLandSlideTime: "2015-11-09T23:37:00.000Z"
+DtLandSlideTimeEnd: "2015-11-10T23:37:00.000Z"
+LandSlideSizeTID: "3"
+LandSlideTID: "6"
+LandSlideTriggerTID: "3"-->

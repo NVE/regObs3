@@ -1,37 +1,24 @@
 <ion-view view-title="Skredproblem">
     <ion-content>
-        <ion-list>
-            <label class="item item-input item-stacked-label">
-                <span class="input-label">Vurdering*</span>
-                <textarea placeholder="Vurdering av skredfare"
-                          name="vurdering"
-                          cols="30" rows="3"
-                          ng-model="vm.obs.AvalancheEvaluation"></textarea>
-            </label>
-
-            <label class="item item-input item-stacked-label">
-                <span class="input-label">Utvikling</span>
-                <textarea placeholder="Utvikling av skredfare"
-                          name="utvikling"
-                          cols="30" rows="3"
-                          ng-model="vm.obs.AvalancheDevelopment"></textarea>
-            </label>
-
-            <kdv-dropdown
-                    title="Faregrad"
-                    model="vm.obs.AvalancheDangerTID"
-                    kdv-key="Snow_AvalancheDangerKDV">
-            </kdv-dropdown>
-
-
-            <label class="item item-input item-stacked-label">
-                <span class="input-label">Kommentarer</span>
-                <textarea placeholder="Hvordan er dagens lokale varsel i forhold til dine lokale vurderinger?"
-                          name="comment"
-                          cols="30" rows="3"
-                          ng-model="vm.obs.ForecastComment"></textarea>
-            </label>
-        </ion-list>
-        <regobs-form-footer registration-prop="vm.registrationProp"></regobs-form-footer>
+        <regobs-avalanche-eval-problem></regobs-avalanche-eval-problem>
+        <regobs-image-list></regobs-image-list>
     </ion-content>
 </ion-view>
+
+
+<!--
+[{
+"AvalCauseTID":"12",
+"AvalCauseDepthTID":"2",
+"AvalCauseAttributes":5,
+"AvalancheExtTID":"20",
+"AvalTriggerSimpleTID":"21",
+"AvalProbabilityTID":"5",
+"DestructiveSizeTID":"4",
+"AvalPropagationTID":"0",
+"ExposedHeightComboTID":4,
+"ExposedHeight1":2100,
+"ExposedHeight2":1500,
+"ValidExposition":"11100001",
+"Comment":"Kommentar"
+}]-->

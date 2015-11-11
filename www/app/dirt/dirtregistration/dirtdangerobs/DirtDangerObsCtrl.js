@@ -14,7 +14,7 @@ angular
                 "For kommunen",
                 "Fylket/varslingsregion"
             ];
-            vm.registrationProp = 'DangerObs';
+
 
         }
 

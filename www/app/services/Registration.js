@@ -1,9 +1,10 @@
 angular
     .module('RegObs')
-    .factory('Registration', function Registration($rootScope, $state, $ionicPopup, $http, $ionicHistory, LocalStorage, Utility, User, AppSettings) {
+    .factory('Registration', function Registration($rootScope, $state, $ionicPopup, $http, $ionicHistory, LocalStorage, Utility, User, ObsLocation, AppSettings) {
         var service = this;
 
         var storageKey = 'regobsRegistrations';
+        var unsentStorageKey = 'regobsUnsentRegistrations';
 
         var geoHazardTid = {
             snow: 10,
@@ -39,7 +40,7 @@ angular
                 name: "Snøskred",
                 RegistrationTID: "26"
             },
-            WeatherObs: {
+            WeatherObservation: {
                 name: "Vær",
                 RegistrationTID: "21"
             },
@@ -200,20 +201,23 @@ angular
             });
         };
 
+        var showAlert = function(title, text) {
+            return $ionicPopup.alert({
+                title: title,
+                template: text
+            });
+        };
+
         var createRegistration = function (type) {
             return {
                 "Id": Utility.createGuid(),
                 "GeoHazardTID": (isNaN(type) ? geoHazardTid[type] : type),
                 //Dette må genereres
-                "DtObsTime": new Date().toISOString(),
-                "ObsLocation": {
-                    "Latitude": '59.9293264',
-                    "Longitude": '10.7083928',
-                    "Uncertainty": null,
-                    "UTMSourceTID": "35"
-                }
+                "DtObsTime": new Date().toISOString()
             };
         };
+
+
 
         var setRegistration = function (type) {
             service.registration = createRegistration(type);
@@ -231,14 +235,17 @@ angular
                 'DtObsTime',
                 createRegistration('snow')
             );
+            /*service.unsentRegistrations = LocalStorage.getAndSetObject(
+                unsentStorageKey,
+                'length',
+                []
+            );*/
+
         };
 
-        service.save = function (shouldGoBack) {
-
-            if (shouldGoBack)
-                $ionicHistory.goBack();
-            else
+        service.save = function () {
                 LocalStorage.setObject(storageKey, service.registration);
+                //LocalStorage.setObject(unsentStorageKey, service.unsentRegistrations);
         };
 
         service.createNewRegistration = function (type) {
@@ -305,11 +312,18 @@ angular
                     delete dangerObs.tempComment;
                 });
             }
+            if (angular.isArray(registration.AvalancheEvalProblem2)) {
+                registration.AvalancheEvalProblem2.forEach(function (obs) {
+                    if(obs.exposedHeight)
+                        delete obs.exposedHeight;
+                });
+            }
 
             angular.extend(registration, {
                 "ObserverGuid": user.Guid,
-                "ObserverGroupID": user.chosenObserverGroup,
-                "Email": !!AppSettings.emailReceipt
+                "ObserverGroupID": user.chosenObserverGroup || null,
+                "Email": !!AppSettings.emailReceipt,
+                "ObsLocation": ObsLocation.get()
             });
 
             var dataToSend = {
@@ -321,11 +335,22 @@ angular
 
             return $http.post(postUrl, dataToSend, httpConfig)
                 .then(function () {
+                    showAlert('Suksess!', 'Observasjon registrert!');
                     return resetRegistration();
                 })
                 .catch(function (error) {
-                    alert('Failed to send registration ' + error.reason);
-                    console.error('Failed to send registration', error)
+                    showAlert('Failed to send registration',  error.statusText + '. Saving to unsent registrations.');
+                    console.error('Failed to send registration: ' + error.statusText, error);
+                    /*var found = false;
+                    service.unsentRegistrations.forEach(function (reg) {
+                        if(reg.Id === service.registration.Id){
+                            found = true;
+                        }
+                    });
+                    if(found){
+                        service.unsentRegistrations.push(registration);
+                    }*/
+
                 });
 
         };

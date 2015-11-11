@@ -1,6 +1,6 @@
 angular
     .module('RegObs')
-    .controller('IceDangerObsCtrl', function IceDangerObsCtrl($scope, $ionicModal, $ionicPopup, Utility, Registration) {
+    .controller('IceDangerObsCtrl', function IceDangerObsCtrl($scope) {
 
         function init() {
             var vm = this;
@@ -12,7 +12,7 @@ angular
                 "På dette vannet",
                 "Mange vann i nærheten"
             ];
-            vm.registrationProp = 'DangerObs';
+
 
         }
 

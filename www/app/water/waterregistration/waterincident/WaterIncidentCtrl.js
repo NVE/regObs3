@@ -3,7 +3,6 @@ angular
     .controller('WaterIncidentCtrl', function ($scope) {
         function init() {
             var vm = this;
-            vm.registrationProp = 'Incident';
 
         }
 

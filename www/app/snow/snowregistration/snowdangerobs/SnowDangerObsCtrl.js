@@ -1,6 +1,6 @@
 angular
     .module('RegObs')
-    .controller('SnowDangerObsCtrl', function SnowDangerObsCtrl($scope, Registration) {
+    .controller('SnowDangerObsCtrl', function SnowDangerObsCtrl($scope) {
 
         function init() {
             var vm = this;

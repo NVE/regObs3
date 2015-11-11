@@ -4,13 +4,13 @@
             <label class="item item-input item-stacked-label">
                 <span class="input-label">Snødybde (cm)</span>
                 <input type="tel" placeholder="I hele centimeter"
-                       ng-model="vm.obs.SnowDepth" />
+                       ng-model="vm.SnowDepth" ng-change="vm.propChanged('SnowDepth')" />
             </label>
 
             <label class="item item-input item-stacked-label">
                 <span class="input-label">Nysnødybde (cm)</span>
                 <input type="tel" placeholder="I hele centimeter"
-                       ng-model="vm.obs.NewSnowDepth24" />
+                       ng-model="vm.NewSnowDepth24" ng-change="vm.propChanged('NewSnowDepth24')" />
             </label>
 
             <label class="item item-input item-stacked-label">
@@ -45,8 +45,7 @@
                           ng-model="vm.obs.Comment"></textarea>
             </label>
         </ion-list>
-
-        <regobs-form-footer registration-prop="vm.registrationProp"></regobs-form-footer>
+        <regobs-image-list></regobs-image-list>
     </ion-content>
 </ion-view>
 

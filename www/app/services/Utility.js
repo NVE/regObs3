@@ -24,11 +24,18 @@ angular
                 });
         };
 
+        service.getViewRepositories = function () {
+            return service
+                .getKdvElements()
+                .then(function (response) {
+                    return response.data.ViewRepositories;
+                });
+        };
+
         service.getKdvArray = function (key) {
             return service
                 .getKdvRepositories()
                 .then(function (KdvRepositories) {
-                    console.log(KdvRepositories[key]);
                     return KdvRepositories[key];
                 });
         };

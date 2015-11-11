@@ -1,11 +1,24 @@
 angular
     .module('RegObs')
-    .controller('SnowSurfaceObservationCtrl', function ($scope, Registration) {
+    .controller('SnowSurfaceObservationCtrl', function ($scope, $state, Registration) {
         function init(){
             var vm = this;
 
-            vm.registrationProp = 'SnowSurfaceObservation';
-            vm.obs = Registration.getPropertyAsObject(vm.registrationProp);
+            vm.obs = Registration.getPropertyAsObject($state.current.data.registrationType);
+            vm.SnowDepth = vm.obs.SnowDepth ? parseInt(vm.obs.SnowDepth*10000)/100 : undefined;
+            vm.NewSnowDepth24 = vm.obs.NewSnowDepth24 ? parseInt(vm.obs.NewSnowDepth24*10000)/100 : undefined;
+
+            vm.propChanged = function (prop){
+
+                var numText = vm[prop];
+                var num = parseFloat(numText);
+
+                if(num){
+                    vm.obs[prop] = (num/100);
+                }
+
+                console.log(vm.obs);
+            };
 
         }
 

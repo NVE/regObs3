@@ -1,10 +1,9 @@
 angular
     .module('RegObs')
-    .controller('WaterLevelCtrl', function ($scope, Registration) {
+    .controller('WaterLevelCtrl', function ($scope, $state, Registration) {
         function init() {
             var vm = this;
-            vm.registrationProp = 'WaterLevel';
-            vm.obs = Registration.getPropertyAsObject(vm.registrationProp);
+            vm.obs = Registration.getPropertyAsObject($state.current.data.registrationType);
             if(vm.obs.WaterLevelRefTID < 200 || vm.obs.MeasuredDischarge){
                 vm.choice = 1;
             } else if (vm.obs.WaterLevelRefTID >= 200){

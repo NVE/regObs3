@@ -1,11 +1,11 @@
+
 angular
     .module('RegObs')
-    .controller('IceCoverObsCtrl', function ($scope, Registration) {
+    .controller('IceCoverObsCtrl', function ($scope, $state, Registration) {
         function init(){
             var vm = this;
 
-            vm.registrationProp = 'IceCoverObs';
-            vm.iceCoverObs = Registration.getPropertyAsObject(vm.registrationProp);
+            vm.obs = Registration.getPropertyAsObject($state.current.data.registrationType);
 
         }
 

@@ -42,5 +42,28 @@
     </ion-nav-buttons>
 </ion-nav-bar>
 <ion-nav-view></ion-nav-view>
+<ion-footer-bar>
+    <div ng-if="appVm.showFormFooter" class="row row-no-padding">
+        <div class="col col-center text-center">
+            <regobs-album></regobs-album>
+        </div>
+        <div class="col col-50 col-center text-center">
+            <regobs-save-button></regobs-save-button>
+        </div>
+        <div class="col col-center text-center">
+            <regobs-camera></regobs-camera>
+        </div>
+    </div>
+    <div ng-if="appVm.showRegistrationFooter" class="row row-no-padding">
+        <div class="col col-center text-center">
+            <div class="button-bar">
+            <button  class="button button-assertive button-block button-clear icon-left ion-trash-b">Slett</button>
+            <button  class="button button-calm button-block button-clear  icon-right ion-upload">Send</button>
+
+            </div>
+        </div>
+
+    </div>
+</ion-footer-bar>
 </body>
 </html>

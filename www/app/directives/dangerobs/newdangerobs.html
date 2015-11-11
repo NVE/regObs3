@@ -15,7 +15,6 @@
                 <select ng-model="dangerObs.DangerSignTID"
                         ng-options="sign.Id as sign.Name for sign in dangerSignKdvArray"
                         ng-change="dangerSignChanged()">
-                    <option value="">Velg...</option>
                 </select>
             </label>
 
@@ -26,7 +25,6 @@
                 <select ng-model="dangerObs.tempArea"
                         ng-options="area for area in areaArray"
                         ng-change="commentChanged()">
-                    <option value="">Velg...</option>
                 </select>
             </label>
 

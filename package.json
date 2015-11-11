@@ -28,7 +28,8 @@
     "com.ionic.keyboard",
     "cordova-plugin-statusbar",
     "ionic-plugin-deploy",
-    "cordova-plugin-camera"
+    "cordova-plugin-camera",
+    "cordova-plugin-geolocation"
   ],
   "cordovaPlatforms": [
     "android"

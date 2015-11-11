@@ -12,7 +12,7 @@ var preen = require('preen');
 
 var paths = {
     sass: ['./scss/ionic.app.scss', './www/app/**/*.scss'],
-    js:   ['./www/app/app.js', './www/app/**/*.js'],
+    js:   ['./www/app/app.js', './www/app/AppCtrl.js', './www/app/**/*.js'],
     dist: './www/dist/'
 };
 

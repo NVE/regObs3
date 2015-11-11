@@ -3,9 +3,8 @@ angular
     .directive('regobsAlbum', function () {
         return {
             link: link,
-            scope: {
-                registrationProp: '='
-            },
+            scope: {},
+            replace: true,
             template: '<button class="button button-large button-clear">\
             <i class="icon ion-images"></i>\
             </button>'

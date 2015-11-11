@@ -9,6 +9,9 @@
                           ng-model="vm.obs.ObsHeader"></textarea>
             </label>
         </ion-list>
-        <regobs-form-footer registration-prop="vm.registrationProp"></regobs-form-footer>
+        <regobs-image-list registration-prop="vm.registrationProp"></regobs-image-list>
     </ion-content>
+    <ion-footer-bar>
+        <div class="row row-no-padding" registration-prop="vm.registrationProp" regobs-form-footer></div>
+    </ion-footer-bar>
 </ion-view>

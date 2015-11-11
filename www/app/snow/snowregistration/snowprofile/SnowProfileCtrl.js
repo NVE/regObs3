@@ -1,11 +1,11 @@
 angular
     .module('RegObs')
-    .controller('SnowProfileCtrl', function ($scope, Registration) {
+    .controller('SnowProfileCtrl', function ($scope, $state, Registration) {
 
         function init() {
             var vm = this;
-            vm.registrationProp = 'SnowProfile';
-            vm.obs = Registration.getPropertyAsObject(vm.registrationProp);
+
+            vm.obs = Registration.getPropertyAsObject($state.current.data.registrationType);
             vm.obs.Comment = 'Snøprofil fra app';
         }
 

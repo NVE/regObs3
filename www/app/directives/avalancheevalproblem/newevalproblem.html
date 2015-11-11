@@ -1,0 +1,151 @@
+<ion-modal-view>
+    <ion-header-bar>
+        <h1 class="title" ng-hide="editing">Nytt skredproblem</h1>
+        <h1 class="title" ng-show="editing">Rediger skredproblem</h1>
+        <button class="button button-clear button-positive" ng-click="modal.hide()">Avbryt</button>
+    </ion-header-bar>
+    <ion-content>
+        <ion-list>
+            <ion-checkbox ng-model="obs.AvalCauseTID" ng-true-value="24">
+                Det finnes ikke svake lag
+            </ion-checkbox>
+            <div ng-hide="obs.AvalCauseTID === 24">
+                <ion-item class="item-divider">Svakt lag</ion-item>
+
+                <label class="item item-input item-select item-stacked-label">
+                <span class="input-label">
+                    Svakt lag
+                </span>
+                    <select ng-model="obs.AvalCauseTID"
+                            ng-options="kdv.Id as kdv.Name for kdv in avalCauseKDV"
+                            ng-change="setAvalancheExtArray()">
+                        <option value="">Velg...</option>
+                    </select>
+                </label>
+
+                <kdv-dropdown
+                        title="Svakt lags dybde?"
+                        model="obs.AvalCauseDepthTID"
+                        kdv-key="Snow_AvalCauseDepthKDV">
+                </kdv-dropdown>
+                <ion-checkbox class="item-text-wrap" ng-repeat="flag in ::avalCauseAttributeFlags" ng-model="flag.val" ng-true-value="1" ng-false-value="0" ng-change="weakLayersCheckBoxFlagCreator()">
+                    {{::flag.Name}}
+                </ion-checkbox>
+            </div>
+
+            <ion-item class="item-divider">Mulighetene for skred?</ion-item>
+
+            <label class="item item-input item-select item-stacked-label">
+                <span class="input-label">
+                    Angi skredtype
+                </span>
+                <select ng-model="obs.AvalancheExtTID"
+                        ng-options="kdv.Id as kdv.Name for kdv in avalancheExtArray">
+                    <option value="">Velg...</option>
+                </select>
+            </label>
+
+            <kdv-dropdown
+                    title="Sannsynlig belastning for å løse ut skred"
+                    model="obs.AvalTriggerSimpleTID"
+                    kdv-key="Snow_AvalTriggerSimpleKDV">
+            </kdv-dropdown>
+
+            <kdv-dropdown
+                    title="Sannsynlighet for skred"
+                    model="obs.AvalProbabilityTID"
+                    kdv-key="Snow_AvalProbabilityKDV">
+            </kdv-dropdown>
+
+            <kdv-dropdown
+                    title="Størrelse på forventet skred"
+                    model="obs.DestructiveSizeTID"
+                    kdv-key="Snow_DestructiveSizeKDV">
+            </kdv-dropdown>
+
+            <ion-item class="item-divider">Utbredelsen på skredproblemet</ion-item>
+
+            <kdv-dropdown
+                    title="Utbredelse"
+                    model="obs.AvalPropagationTID"
+                    kdv-key="Snow_AvalPropagationKDV">
+            </kdv-dropdown>
+
+            <!--<kdv-dropdown
+                    title="Utsatt høyde"
+                    model="obs.ExposedHeightComboTID"
+                    kdv-key="Snow_ExposedHeightComboKDV">
+            </kdv-dropdown>-->
+            <div class="item item-input item-stacked-label">
+                <span class="input-label">
+                    Utsatt høyde
+                </span>
+
+                <button class="button button-block" ng-click="exposedHeight('top')" ng-class="{'button-positive':obs.exposedHeight.top}">Øverst</button>
+                <button class="button button-block" ng-click="exposedHeight('mid')" ng-class="{'button-positive':obs.exposedHeight.mid}">I midten</button>
+                <button class="button button-block" ng-click="exposedHeight('bot')" ng-class="{'button-positive':obs.exposedHeight.bot}">Nederst</button>
+
+            </div>
+
+            <label class="item item-input item-stacked-label item-select" ng-show="obs.ExposedHeightComboTID">
+                <span class="input-label">
+                    Høyde
+                </span>
+                <select ng-model="obs.ExposedHeight1"
+                        ng-options="height for height in heightArray">
+                    <option value="">Velg...</option>
+                </select>
+            </label>
+            <label class="item item-input item-stacked-label item-select" ng-show="obs.ExposedHeightComboTID === 4 || obs.ExposedHeightComboTID === 3">
+                <span class="input-label">
+                    Nedre høyde
+                </span>
+                <select ng-model="obs.ExposedHeight2"
+                        ng-options="height for height in heightArray">
+                    <option value="">Velg...</option>
+                </select>
+            </label>
+
+            <div class="item item-input item-stacked-label">
+                <span class="input-label">
+                    Eksposisjon
+                </span>
+                <div class="button-bar">
+                    <button class="button" ng-click="toggleExposition(7)" ng-class="{'button-positive':exposition[7]}">NV</button>
+                    <button class="button" ng-click="toggleExposition(0)" ng-class="{'button-positive':exposition[0]}">N</button>
+                    <button class="button" ng-click="toggleExposition(1)" ng-class="{'button-positive':exposition[1]}">NØ</button>
+                </div>
+                <div class="button-bar">
+                    <button class="button" ng-click="toggleExposition(6)" ng-class="{'button-positive':exposition[6]}">V</button>
+                    <button class="button" ng-click="toggleAllExpositions()" ng-class="{'button-positive':allExpositionsToggled}">Alle</button>
+                    <button class="button" ng-click="toggleExposition(2)" ng-class="{'button-positive':exposition[2]}">Ø</button>
+                </div>
+                <div class="button-bar">
+                    <button class="button" ng-click="toggleExposition(5)" ng-class="{'button-positive':exposition[5]}">SV</button>
+                    <button class="button" ng-click="toggleExposition(4)" ng-class="{'button-positive':exposition[4]}">S</button>
+                    <button class="button" ng-click="toggleExposition(3)" ng-class="{'button-positive':exposition[3]}">Sø</button>
+                </div>
+            </div>
+
+            <label class="item item-input item-stacked-label">
+                <span class="input-label">Kommentar</span>
+                <textarea placeholder="Ytterligere kommentar"
+                          name="comment"
+                          cols="30" rows="3"
+                          ng-model="obs.Comment"></textarea>
+            </label>
+        </ion-list>
+        <div class="padding">
+            <button class="button button-block button-calm"
+                    ng-click="add()"
+                    ng-hide="editing">Lagre</button>
+            <button class="button button-block button-calm"
+                    ng-click="modal.hide()"
+                    ng-show="editing">Lagre</button>
+            <button class="button button-block button-assertive button-clear"
+                    ng-click="delete()"
+                    ng-show="editing">Slett</button>
+        </div>
+
+    </ion-content>
+</ion-modal-view>

@@ -21,7 +21,7 @@
             </regobs-menu-item>
 
             <regobs-menu-item
-                    title="Snødekke (må gjøres om til meter)"
+                    title="Snødekke"
                     condition="vm.obsObjectExists('SnowSurfaceObservation')"
                     state="snowsurfaceobservation">
             </regobs-menu-item>
@@ -33,9 +33,10 @@
             </regobs-menu-item>
 
             <regobs-menu-item
-                    title="Skredproblem (ikke komplett)"
-                    condition="vm.obsObjectExists('AvalancheEvalProblem2')"
-                    state="avalancheevalproblem">
+                    title="Skredproblem"
+                    condition="vm.obsArrayExists('AvalancheEvalProblem2')"
+                    state="avalancheevalproblem"
+                    badge-text="vm.obsArrayExists('AvalancheEvalProblem2')">
             </regobs-menu-item>
 
             <regobs-menu-item
@@ -54,6 +55,7 @@
         <div class="padding">
             <button class="button button-block button-calm" ng-click="vm.sendRegistration()">Send</button>
             <button class="button button-block button-assertive button-clear" ng-click="vm.deleteRegistration()">Slett observasjoner i minnet</button>
+            Lokasjon: [{{appVm.getLocation().Latitude}}, {{appVm.getLocation().Longitude}}]
         </div>
 
     </ion-content>

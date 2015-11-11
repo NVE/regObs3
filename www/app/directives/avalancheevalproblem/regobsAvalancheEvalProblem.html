@@ -1,0 +1,18 @@
+
+<ion-list can-swipe="true">
+    <ion-item class="item-icon-right"
+              ng-repeat="obs in obsArray track by $index"
+              ng-click="edit(obs, $index)">
+        <ion-option-button class="button-assertive"
+                           ng-click="obsArray.splice($index, 1)">
+            Slett
+        </ion-option-button>
+        Skredproblem {{$index}}
+
+    </ion-item>
+</ion-list>
+<div class="padding">
+    <button class="button button-block button-balanced icon-left ion-plus"
+            ng-click="new()">Legg til nytt skredproblem</button>
+
+</div>

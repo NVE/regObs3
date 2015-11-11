@@ -1,12 +1,11 @@
 angular
     .module('RegObs')
-    .directive('regobsCamera', function ($ionicPlatform, $cordovaCamera, Registration) {
+    .directive('regobsCamera', function ($ionicPlatform, $cordovaCamera, $state, Registration) {
 
         return {
             link: link,
-            scope: {
-                registrationProp: '='
-            },
+            replace: true,
+            scope: {},
             template: '<button class="button button-positive button-large button-clear" ng-click="click()"><i class="icon ion-camera"></i></button>'
         };
 
@@ -28,7 +27,7 @@ angular
                     };
 
                     $cordovaCamera.getPicture(options).then(function(imageData) {
-                        Registration.addPicture(scope.registrationProp, 'data:image/jpeg;base64,' + imageData);
+                        Registration.addPicture($state.current.data.registrationType, 'data:image/jpeg;base64,' + imageData);
                         //image.src = "data:image/jpeg;base64," + imageData;
                     }, function(err) {
                         // error

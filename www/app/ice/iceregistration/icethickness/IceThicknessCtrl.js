@@ -1,41 +1,29 @@
 angular
     .module('RegObs')
-    .controller('IceThicknessCtrl', function ($scope, Utility, Registration) {
+    .controller('IceThicknessCtrl', function ($scope, $state, Utility, Registration) {
         function init() {
             var vm = this;
 
-            var loadKdvArray = function () {
-                return Utility
-                    .getKdvArray('Ice_IceLayerKDV')
-                    .then(function (response) {
-                        vm.iceLayerKdvArray = response;
-                    })
-            };
-
             vm.propChanged = function (prop){
-
-                var numText = vm[prop];
-                var num = parseFloat(numText);
-                console.log(num);
+                var num = parseFloat(vm[prop]);
+                console.log(vm.iceThickness);
                 if(num){
                     vm.iceThickness[prop] = (num/100);
                 }
             };
 
-            vm.registrationProp = 'IceThickness';
 
-            vm.iceThickness = Registration.getPropertyAsObject(vm.registrationProp);
+            vm.iceThickness = Registration.getPropertyAsObject($state.current.data.registrationType);
             vm.SnowDepth = vm.iceThickness.SnowDepth ? parseInt(vm.iceThickness.SnowDepth*10000)/100 : undefined;
             vm.SlushSnow = vm.iceThickness.SlushSnow ? parseInt(vm.iceThickness.SlushSnow*10000)/100 : undefined;
             vm.IceThicknessSum = vm.iceThickness.IceThicknessSum ? parseInt(vm.iceThickness.IceThicknessSum*10000)/100 : undefined;
-            loadKdvArray();
-
 
         }
 
         $scope.$on('$ionicView.loaded', init.bind(this));
     });
 
+/*
 var t = {
     "Registrations": [{
         "Id": "c08c3e0b-dfb3-421f-7965-d0bf0d778c90",
@@ -63,4 +51,4 @@ var t = {
             "Comment": "Kommentar"
         }
     }]
-}
+}*/

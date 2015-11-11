@@ -1,0 +1,15 @@
+<ion-list can-swipe="true">
+    <ion-item class="item-icon-right"
+              ng-repeat="layer in obsObject.IceThicknessLayer track by $index"
+              ng-click="edit(layer, $index)">
+        <ion-option-button class="button-assertive"
+                           ng-click="obsObject.IceThicknessLayer.splice($index, 1)">
+            Slett
+        </ion-option-button>
+        <span ng-bind="iceLayerDict[layer.IceLayerTID]"></span> - <span ng-bind="layer.IceLayerThickness*100"></span> cm
+
+    </ion-item>
+</ion-list>
+<div class="padding">
+    <button ng-click="new()" class="button  button-block button-balanced icon-left ion-plus">Registrer islag</button>
+</div>
