@@ -5,8 +5,8 @@ angular
             link: link,
             scope: {},
             replace: true,
-            template: '<button class="button button-large button-clear">\
-            <i class="icon ion-images"></i>\
+            template: '<button class="button button-clear button-block">\
+            <i class="icon calm ion-images"></i> Album\
             </button>'
         };
 

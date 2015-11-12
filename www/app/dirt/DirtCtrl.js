@@ -5,10 +5,8 @@ angular
     .module('RegObs')
     .controller('DirtCtrl', function DirtCtrl($scope) {
 
-        function init() {
-            var vm = this;
-        }
+        var vm = this;
 
-        $scope.$on( '$ionicView.loaded', init.bind(this) );
+        $scope.$on( '$ionicView.loaded', function(){});
 
     });

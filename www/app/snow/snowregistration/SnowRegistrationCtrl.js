@@ -2,38 +2,29 @@ angular
     .module('RegObs')
     .controller('SnowRegistrationCtrl', function SnowRegistrationCtrl($scope, Registration) {
 
-        function init() {
+        var vm = this;
 
-            var vm = this;
+        vm.send = Registration.send;
+        vm.remove = Registration.remove;
+        vm.obsObjectExists = Registration.propertyObjectExists;
+        vm.obsArrayExists = Registration.propertyArrayExists;
 
-            vm.sendRegistration = Registration.sendRegistration;
-            vm.deleteRegistration = Registration.deleteRegistration;
-            vm.obsObjectExists = Registration.propertyObjectExists;
-            vm.obsArrayExists = Registration.propertyArrayExists;
+        vm.avalancheObsExists = function () {
 
-            vm.avalancheObsExists = function () {
+            var avalancheObs = Registration.data.AvalancheObs;
+            var avalancheAct = Registration.data.AvalancheActivityObs;
 
-                var avalancheObs = Registration.registration.AvalancheObs;
-                var avalancheAct = Registration.registration.AvalancheActivityObs;
-
-                return (avalancheAct && avalancheAct.length) || !!(avalancheObs && avalancheObs.DtAvalancheTime);
-            };
+            return (avalancheAct && avalancheAct.length) || !!(avalancheObs && avalancheObs.DtAvalancheTime);
+        };
 
 
-            /*vm.dangerObsClicked = function () {
-             if (!angular.isArray(IceRegistration.registration.DangerObs) || !IceRegistration.registration.DangerObs.length) {
-             $ionicHistory.nextViewOptions({
-             disableAnimate: true
-             });
-             }
-             };*/
-        }
+        $scope.$on('$ionicView.loaded', function(){
 
-        $scope.$on('$ionicView.loaded', init.bind(this));
+        });
 
     });
 
-var shiz = {
+/*var shiz = {
     "Registrations": [{
         "Id": "9b7a4a75-270c-423a-3336-cf028cf2f4ef",
         "GeoHazardTID": 10,
@@ -67,4 +58,4 @@ var shiz = {
             "Comment": "Kommentar"
         }
     }]
-};
+};*/

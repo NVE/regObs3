@@ -1,27 +1,23 @@
 angular
     .module('RegObs')
     .controller('AvalancheObsCtrl', function ($scope, Registration) {
-        function init(){
-            var vm = this;
+        var vm = this;
+        vm.expositionArray = Registration.getExpositionArray();
+        vm.dateChange = function () {
+            console.log(vm.activityObject.DtAvalancheTime);
+        };
 
-            vm.expositionArray = Registration.getExpositionArray();
-
+        $scope.$on('$ionicView.loaded', function(){
             vm.activityObject = {};
-
-            vm.dateChange = function () {
-                console.log(vm.activityObject.DtAvalancheTime);
-            };
 
             vm.activityProp = 'AvalancheActivityObs';
             vm.registrationProp = '';
 
             vm.obs = Registration.getPropertyAsObject('AvalancheObs');
             vm.activityObsArray = Registration.getPropertyAsArray(vm.activityProp);
-
-        }
-
-        $scope.$on( '$ionicView.loaded', init.bind(this) );
+        });
     });
+/*
 //Ingen skred
 var shiz3 = {
     "Registrations": [{
@@ -93,4 +89,4 @@ var diz = {
             "Comment": "Kommentar "
         }
     }]
-};
+};*/

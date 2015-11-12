@@ -6,7 +6,7 @@ angular
             link: link,
             replace: true,
             scope: {},
-            template: '<button class="button button-positive button-large button-clear" ng-click="click()"><i class="icon ion-camera"></i></button>'
+            template: '<button class="button button-clear button-block" ng-click="click()"><i class="icon calm ion-camera"></i> Bilde</button>'
         };
 
         function link(scope){
@@ -27,7 +27,7 @@ angular
                     };
 
                     $cordovaCamera.getPicture(options).then(function(imageData) {
-                        Registration.addPicture($state.current.data.registrationType, 'data:image/jpeg;base64,' + imageData);
+                        Registration.addPicture($state.current.data.registrationProp, 'data:image/jpeg;base64,' + imageData);
                         //image.src = "data:image/jpeg;base64," + imageData;
                     }, function(err) {
                         // error

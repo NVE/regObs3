@@ -1,17 +1,12 @@
 angular
     .module('RegObs')
     .controller('SnowWeatherObservationCtrl', function ($scope, $state, Registration) {
-        function init(){
-            var vm = this;
+        var vm = this;
+        vm.windDirectionArray = Registration.getExpositionArray();
 
-            vm.registrationProp = 'WeatherObservation';
-            vm.obs = Registration.getPropertyAsObject($state.current.data.registrationType);
-            vm.windDirectionArray = Registration.getExpositionArray();
-            //vm.obs.WindDirection = vm.windDirectionArray[0].val;
-
-        }
-
-        $scope.$on( '$ionicView.loaded', init.bind(this) );
+        $scope.$on( '$ionicView.loaded', function(){
+            vm.obs = Registration.getPropertyAsObject($state.current.data.registrationProp);
+        });
     });
 
 /*

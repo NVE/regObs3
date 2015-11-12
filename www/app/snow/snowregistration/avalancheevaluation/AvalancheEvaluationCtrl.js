@@ -1,14 +1,12 @@
 angular
     .module('RegObs')
     .controller('AvalancheEvaluationCtrl', function ($scope, $state, Registration) {
-        function init(){
-            var vm = this;
 
-            vm.obs = Registration.getPropertyAsObject($state.current.data.registrationType);
+        var vm = this;
 
-        }
-
-        $scope.$on( '$ionicView.loaded', init.bind(this) );
+        $scope.$on('$ionicView.loaded', function(){
+            vm.obs = Registration.getPropertyAsObject($state.current.data.registrationProp);
+        });
     });
 
 /*

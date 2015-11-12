@@ -1,26 +1,23 @@
 angular
     .module('RegObs')
     .controller('IceThicknessCtrl', function ($scope, $state, Utility, Registration) {
-        function init() {
-            var vm = this;
 
-            vm.propChanged = function (prop){
-                var num = parseFloat(vm[prop]);
-                console.log(vm.iceThickness);
-                if(num){
-                    vm.iceThickness[prop] = (num/100);
-                }
-            };
+        var vm = this;
 
+        vm.propChanged = function (prop){
+            var num = parseFloat(vm[prop]);
+            console.log(vm.iceThickness);
+            if(num){
+                vm.iceThickness[prop] = (num/100);
+            }
+        };
 
-            vm.iceThickness = Registration.getPropertyAsObject($state.current.data.registrationType);
+        $scope.$on('$ionicView.loaded', function(){
+            vm.iceThickness = Registration.getPropertyAsObject($state.current.data.registrationProp);
             vm.SnowDepth = vm.iceThickness.SnowDepth ? parseInt(vm.iceThickness.SnowDepth*10000)/100 : undefined;
             vm.SlushSnow = vm.iceThickness.SlushSnow ? parseInt(vm.iceThickness.SlushSnow*10000)/100 : undefined;
             vm.IceThicknessSum = vm.iceThickness.IceThicknessSum ? parseInt(vm.iceThickness.IceThicknessSum*10000)/100 : undefined;
-
-        }
-
-        $scope.$on('$ionicView.loaded', init.bind(this));
+        });
     });
 
 /*

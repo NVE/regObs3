@@ -52,11 +52,8 @@
             </regobs-menu-item>
 
         </ion-list>
-        <div class="padding">
-            <button class="button button-block button-calm" ng-click="vm.sendRegistration()">Send</button>
-            <button class="button button-block button-assertive button-clear" ng-click="vm.deleteRegistration()">Slett observasjoner i minnet</button>
-            Lokasjon: [{{appVm.getLocation().Latitude}}, {{appVm.getLocation().Longitude}}]
-        </div>
+        <regobs-registration-tools></regobs-registration-tools>
+
 
     </ion-content>
 </ion-view>

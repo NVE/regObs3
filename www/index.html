@@ -34,7 +34,8 @@
 <ion-nav-bar nav-bar-class="" ng-cloak="">
     <ion-nav-back-button default-nav-back-button="" ng-click="goBack()">{{backTitle()}}</ion-nav-back-button>
     <ion-nav-buttons side="right">
-        <button class="button button-clear" ng-class="{&apos;ion-locked&apos;: !appVm.userService.getUser().anonymous}" ng-click="appVm.modal.show()">
+        <button class="button button-clear" ng-class="{&apos;ion-locked&apos;: !appVm.userService.getUser().anonymous}"
+                ng-click="appVm.modal.show()">
             {{!appVm.userService.getUser().anonymous ? &apos;&apos; : &apos;Logg inn&apos;}}
         </button>
         <button class="button button-icon button-clear ion-gear-a" ng-click="appVm.modal.show()">
@@ -42,27 +43,26 @@
     </ion-nav-buttons>
 </ion-nav-bar>
 <ion-nav-view></ion-nav-view>
-<ion-footer-bar>
-    <div ng-if="appVm.showFormFooter" class="row row-no-padding">
+<ion-footer-bar class="bar-dark">
+    <div ng-if="appVm.showFormFooter" class="row">
+        <div class="col col-center text-center">
+            <button class="button button-block  button-clear" ng-click="appVm.resetProperty()"><i class="icon stable ion-android-close"></i> Nullstill</button>
+        </div>
+
         <div class="col col-center text-center">
             <regobs-album></regobs-album>
-        </div>
-        <div class="col col-50 col-center text-center">
-            <regobs-save-button></regobs-save-button>
         </div>
         <div class="col col-center text-center">
             <regobs-camera></regobs-camera>
         </div>
     </div>
-    <div ng-if="appVm.showRegistrationFooter" class="row row-no-padding">
+    <div ng-if="appVm.showRegistrationFooter" class="row">
         <div class="col col-center text-center">
-            <div class="button-bar">
-            <button  class="button button-assertive button-block button-clear icon-left ion-trash-b">Slett</button>
-            <button  class="button button-calm button-block button-clear  icon-right ion-upload">Send</button>
-
-            </div>
+            <button class="button  button-block button-clear" ng-click="appVm.registration.remove()"><i class="icon stable ion-trash-a"></i> Slett</button>
         </div>
-
+        <div class="col col-center text-center">
+            <button class="button  button-block button-clear" ng-click="appVm.registration.send()"><i class="icon calm ion-upload"></i> Send</button>
+        </div>
     </div>
 </ion-footer-bar>
 </body>
