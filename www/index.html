@@ -6,6 +6,7 @@
     <title>regObs</title>
 
     <link href="dist/app.css" rel="stylesheet">
+    <link href="lib/leaflet/dist/leaflet.css" rel="stylesheet">
 
     <!-- IF using Sass (run gulp sass first), then uncomment below and remove the CSS includes above
     <link href="css/ionic.app.css" rel="stylesheet">
@@ -13,6 +14,7 @@
 
     <!-- ionic/angularjs js -->
     <script>window.phonegap = {}</script>
+    <script src="lib/leaflet/dist/leaflet.js"></script>
     <script src="lib/ionic/js/ionic.min.js"></script>
 
     <script src="lib/angular/angular.min.js"></script>
@@ -31,11 +33,10 @@
 </head>
 <body ng-app="RegObs" ng-controller="AppCtrl as appVm">
 
-<ion-nav-bar nav-bar-class="" ng-cloak="">
+<ion-nav-bar ng-cloak="">
     <ion-nav-back-button default-nav-back-button="" ng-click="goBack()">{{backTitle()}}</ion-nav-back-button>
     <ion-nav-buttons side="right">
-        <button class="button button-clear" ng-class="{&apos;ion-locked&apos;: !appVm.userService.getUser().anonymous}"
-                ng-click="appVm.modal.show()">
+        <button class="button button-clear" ng-class="{&apos;ion-locked&apos;: !appVm.userService.getUser().anonymous}" ng-click="appVm.modal.show()">
             {{!appVm.userService.getUser().anonymous ? &apos;&apos; : &apos;Logg inn&apos;}}
         </button>
         <button class="button button-icon button-clear ion-gear-a" ng-click="appVm.modal.show()">
@@ -45,23 +46,28 @@
 <ion-nav-view></ion-nav-view>
 <ion-footer-bar class="bar-dark">
     <div ng-if="appVm.showFormFooter" class="row">
-        <div class="col col-center text-center">
+        <div class="col col-center">
             <button class="button button-block  button-clear" ng-click="appVm.resetProperty()"><i class="icon stable ion-android-close"></i> Nullstill</button>
         </div>
 
-        <div class="col col-center text-center">
+        <div class="col col-center">
             <regobs-album></regobs-album>
         </div>
-        <div class="col col-center text-center">
+        <div class="col col-center">
             <regobs-camera></regobs-camera>
         </div>
     </div>
     <div ng-if="appVm.showRegistrationFooter" class="row">
-        <div class="col col-center text-center">
-            <button class="button  button-block button-clear" ng-click="appVm.registration.remove()"><i class="icon stable ion-trash-a"></i> Slett</button>
+        <div class="col col-center">
+            <button class="button  button-block button-clear" ng-click="appVm.registration.remove()">
+                <i class="icon stable ion-trash-a"></i> Slett
+            </button>
         </div>
-        <div class="col col-center text-center">
-            <button class="button  button-block button-clear" ng-click="appVm.registration.send()"><i class="icon calm ion-upload"></i> Send</button>
+        <div class="col col-center">
+            <button class="button  button-block button-clear" ng-click="appVm.registration.send()">
+                <ion-spinner class="spinner-light" ng-if="appVm.registration.sending"></ion-spinner>
+                <span ng-hide="appVm.registration.sending"><i class="icon calm ion-upload"></i> Send</span>
+            </button>
         </div>
     </div>
 </ion-footer-bar>

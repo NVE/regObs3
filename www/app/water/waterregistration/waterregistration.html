@@ -3,26 +3,26 @@
         <ion-list>
             <regobs-menu-item
                     title="Faretegn"
-                    condition="vm.obsArrayExists('DangerObs')"
+                    condition="vm.propertyExists('DangerObs')"
                     state="waterdangerobs"
-                    badge-text="vm.obsArrayExists('DangerObs')">
+                    badge-text="vm.reg.DangerObs.length">
             </regobs-menu-item>
 
             <regobs-menu-item
                     title="Vannstand"
-                    condition="vm.obsObjectExists('WaterLevel')"
+                    condition="vm.propertyExists('WaterLevel')"
                     state="waterlevel">
             </regobs-menu-item>
 
             <regobs-menu-item
                     title="Ulykke/Hendelse"
-                    condition="vm.obsObjectExists('Incident')"
+                    condition="vm.propertyExists('Incident')"
                     state="waterincident">
             </regobs-menu-item>
 
             <regobs-menu-item
                     title="Fritekst"
-                    condition="vm.obsObjectExists('GeneralObservation')"
+                    condition="vm.propertyExists('GeneralObservation')"
                     state="generalobs">
             </regobs-menu-item>
 

@@ -1,7 +1,7 @@
 angular
     .module('RegObs')
-    .factory('Registration', function Registration($rootScope, $http, $state, $ionicPopup, $ionicHistory, LocalStorage, Utility, User, ObsLocation, AppSettings) {
-        var registration = this;
+    .factory('Registration', function Registration($rootScope, $http, $state, $ionicPopup, $ionicHistory, LocalStorage, Utility, User, ObsLocation, AppSettings, RegobsPopup) {
+        var Registration = this;
 
         var storageKey = 'regobsRegistrations';
         var unsentStorageKey = 'regobsUnsentRegistrations';
@@ -183,31 +183,6 @@ angular
             "Lng": "10,7080138"
         };*/
 
-        var showConfirm = function (text, confirmText, confirmClass) {
-            return $ionicPopup.confirm({
-                title: 'Slett registrering',
-                template: text,
-                buttons: [
-                    {text: 'Avbryt'},
-                    {
-                        text: 'Slett',
-                        type: 'button-assertive',
-                        onTap: function (e) {
-                            // Returning a value will cause the promise to resolve with the given value.
-                            return true;
-                        }
-                    }
-                ]
-            });
-        };
-
-        var showAlert = function(title, text) {
-            return $ionicPopup.alert({
-                title: title,
-                template: text
-            });
-        };
-
         var createRegistration = function (type) {
             return {
                 "Id": Utility.createGuid(),
@@ -218,13 +193,13 @@ angular
         };
 
         var resetRegistration = function () {
-            return registration.create(registration.data.GeoHazardTID);
+            return Registration.create(Registration.data.GeoHazardTID);
         };
 
         var baseLength = Object.keys(createRegistration('snow')).length;
 
-        registration.load = function () {
-            registration.data = LocalStorage.getAndSetObject(
+        Registration.load = function () {
+            Registration.data = LocalStorage.getAndSetObject(
                 storageKey,
                 'DtObsTime',
                 createRegistration('snow')
@@ -237,19 +212,19 @@ angular
 
         };
 
-        registration.save = function () {
-                LocalStorage.setObject(storageKey, registration.data);
+        Registration.save = function () {
+                LocalStorage.setObject(storageKey, Registration.data);
                 //LocalStorage.setObject(unsentStorageKey, service.unsentRegistrations);
         };
 
-        registration.create = function (type) {
-            registration.data = createRegistration(type);
-            registration.save();
-            return registration.data;
+        Registration.create = function (type) {
+            Registration.data = createRegistration(type);
+            Registration.save();
+            return Registration.data;
         };
 
-        registration.remove = function () {
-            showConfirm('Er du sikker på at du vil slette påbegynt registrering?')
+        Registration.remove = function () {
+            RegobsPopup.delete('Slett registrering', 'Er du sikker på at du vil slette påbegynt registrering?')
                 .then(function (response) {
                     if (response) {
                         return resetRegistration();
@@ -257,22 +232,22 @@ angular
                 });
         };
 
-        registration.isOfType = function (type) {
-            return registration.data.GeoHazardTID === geoHazardTid[type];
+        Registration.isOfType = function (type) {
+            return Registration.data.GeoHazardTID === geoHazardTid[type];
         };
 
-        registration.isEmpty = function () {
-            return Object.keys(registration.data).length === baseLength;
+        Registration.isEmpty = function () {
+            return Object.keys(Registration.data).length === baseLength;
         };
 
-        registration.doesExistUnsent = function (type) {
-            return registration.isOfType(type) && !registration.isEmpty();
+        Registration.doesExistUnsent = function (type) {
+            return Registration.isOfType(type) && !Registration.isEmpty();
         };
 
-        registration.send = function () {
+        Registration.send = function () {
             var postUrl = AppSettings.getEndPoints().postRegistration;
             var user = User.getUser();
-            var data = registration.data;
+            var data = Registration.data;
             var httpConfig = {
                 headers: {
                     regObs_apptoken: AppSettings.appId,
@@ -308,14 +283,17 @@ angular
             console.log('User', user);
             console.log('Sending', data);
 
+            Registration.sending = true;
             return $http.post(postUrl, dataToSend, httpConfig)
                 .then(function () {
-                    showAlert('Suksess!', 'Observasjon registrert!');
+                    RegobsPopup.alert('Suksess!', 'Observasjon registrert!');
+                    Registration.sending = false;
                     return resetRegistration();
                 })
                 .catch(function (error) {
-                    showAlert('Failed to send registration',  error.statusText + '. Saving to unsent registrations.');
+                    RegobsPopup.alert('Failed to send registration',  error.statusText + '. Saving to unsent registrations.');
                     console.error('Failed to send registration: ' + error.statusText, error);
+                    Registration.sending = false;
                     /*var found = false;
                     service.unsentRegistrations.forEach(function (reg) {
                         if(reg.Id === service.data.Id){
@@ -330,50 +308,52 @@ angular
 
         };
 
-        registration.addPicture = function (propertyKey, data) {
-            var picArray = registration.getPropertyAsArray('Picture');
-            picArray.push({
-                RegistrationTID: registration.getRegistrationTID(propertyKey),
+        Registration.addPicture = function (propertyKey, data) {
+            Registration.initPropertyAsArray('Picture');
+            Registration.data.Picture.push({
+                RegistrationTID: Registration.getRegistrationTID(propertyKey),
                 PictureImageBase64: data,
                 PictureComment: ''
             });
         };
 
-        registration.getRegistrationTID = function (prop) {
+        Registration.getRegistrationTID = function (prop) {
             return OBSERVATIONS[prop].RegistrationTID;
         };
 
-        registration.getPropertyAsArray = function (prop) {
-            if (!registration.propertyArrayExists(prop)) {
-                registration.data[prop] = [];
+        Registration.initPropertyAsArray = function (prop) {
+            if (!Registration.propertyExists(prop)) {
+                Registration.data[prop] = [];
             }
-            return registration.data[prop];
+            return Registration.data;
         };
 
-        registration.getPropertyAsObject = function (prop) {
-            if (!registration.propertyObjectExists(prop)) {
-                registration.data[prop] = {};
+        Registration.initPropertyAsObject = function (prop) {
+            if (!Registration.propertyExists(prop)) {
+                Registration.data[prop] = {};
             }
-            return registration.data[prop];
+            return Registration.data;
         };
 
-        registration.resetProperty = function (prop) {
-            if(registration.propertyObjectExists(prop)){
-                registration.data[prop] = {};
-            } else if(registration.propertyArrayExists(prop)){
-                registration.data[prop] = [];
+        Registration.resetProperty = function (prop) {
+            if(Registration.propertyExists(prop)){
+                if(angular.isArray(Registration.data[prop])){
+                    Registration.data[prop] = [];
+                } else {
+                    Registration.data[prop] = {};
+                }
             }
         };
 
-        registration.propertyObjectExists = function (prop) {
-            return registration.data[prop] && Object.keys(registration.data[prop]).length;
+        Registration.propertyExists = function (prop) {
+            return !isEmpty(Registration.data[prop]);
         };
 
-        registration.propertyArrayExists = function (prop) {
-            return registration.data[prop] && registration.data[prop].length;
-        };
+        /*Registration.propertyArrayExists = function (prop) {
+            return Registration.data[prop] && Registration.data[prop].length;
+        };*/
 
-        registration.getExpositionArray = function () {
+        Registration.getExpositionArray = function () {
             return [
                 {"val": -1, "name": "Ikke gitt"},
                 {"val": 0, "name": "N - nordlig"},
@@ -393,26 +373,44 @@ angular
             var index = toState.name.indexOf('registrationNew');
             if (index > 0) {
                 var type = toState.name.substr(0, index); //snow, ice, dirt etc.
-                if (!registration.isOfType(type) && !registration.isEmpty()) {
+                if (!Registration.isOfType(type) && !Registration.isEmpty()) {
                     event.preventDefault();
-                    showConfirm('Du har en påbegynt ' + geoHazardNames[registration.data.GeoHazardTID] + '-registrering, dersom du går videre blir denne slettet. Vil du slette for å gå videre?')
+                    RegobsPopup.delete('Slett registrering', 'Du har en påbegynt ' + geoHazardNames[Registration.data.GeoHazardTID] + '-registrering, dersom du går videre blir denne slettet. Vil du slette for å gå videre?')
                         .then(function (response) {
                             if (response) {
-                                registration.create(type);
+                                Registration.create(type);
                                 $state.go(toState.name);
                             }
                         });
 
-                } else if (registration.isEmpty()) {
-                    registration.create(type);
+                } else if (Registration.isEmpty()) {
+                    Registration.create(type);
                 }
 
             }
         });
 
+        function isEmpty(obj) {
 
+            // null and undefined are "empty"
+            if (obj == null) return true;
 
-        registration.load();
+            // Assume if it has a length property with a non-zero value
+            // that that property is correct.
+            if (obj.length > 0)    return false;
+            if (obj.length === 0)  return true;
 
-        return registration;
+            // Otherwise, does it have any properties of its own?
+            // Note that this doesn't handle
+            // toString and valueOf enumeration bugs in IE < 9
+            for (var key in obj) {
+                if (Object.getOwnPropertyNames(obj).length > 0) return false;
+            }
+
+            return true;
+        }
+
+        Registration.load();
+
+        return Registration;
     });

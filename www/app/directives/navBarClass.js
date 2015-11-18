@@ -27,7 +27,7 @@ angular
                     activeHeaderBar.classList.add(newClass);
                 };
 
-                scope.$watch('appVm.settings.env', function (newVal) {
+                scope.$watch('appVm.settings.data', function (newVal) {
 
                     cachedNavBar = cachedNavBar || document.querySelector('.nav-bar-block[nav-bar="cached"]');
                     if (cachedNavBar)
@@ -39,7 +39,7 @@ angular
                         activeHeaderBar = activeHeaderBar || activeNavBar.querySelector('.bar-header');
                     else return;
 
-                    if (newVal === 'demo') {
+                    if (newVal.env === 'demo') {
                         removeClass(prodColor);
                         addClass(demoColor);
                     } else {

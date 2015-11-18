@@ -1,11 +1,11 @@
 angular.module('RegObs')
-    .controller('AppCtrl', function ($scope, $ionicModal, $state, ObsLocation, LocalStorage, Registration, AppSettings, User) {
+    .controller('AppCtrl', function ($scope, $ionicModal, $state, ObsLocation, LocalStorage, Registration, AppSettings, User, RegobsPopup) {
         var appVm = this;
 
         appVm.registration = Registration;
         appVm.settings = AppSettings;
         appVm.userService = User;
-        appVm.getLocation = ObsLocation.get;
+
         appVm.registrationIsType = Registration.doesExistUnsent;
 
         $ionicModal.fromTemplateUrl('app/settings/settings.html', {
@@ -26,7 +26,15 @@ angular.module('RegObs')
         };
 
         appVm.resetProperty = function () {
-            Registration.resetProperty($state.current.data.registrationProp);
+            RegobsPopup.delete('Tøm skjema?', 'Vil du nullstille dette skjemaet?', 'Nullstill').then(
+                function(res){
+                    if(res){
+                        Registration.resetProperty($state.current.data.registrationProp);
+                        $scope.$broadcast('$ionicView.loaded');
+                    }
+                }
+            );
+
         };
 
         appVm.logOut = function () {
@@ -37,9 +45,19 @@ angular.module('RegObs')
         };
 
         appVm.clearAppStorage = function () {
-            LocalStorage.clear();
-            Registration.load();
-            $state.go('start');
+            RegobsPopup.delete('Nullstill app?', 'Vil du slette lokalt lagret data og nullstille appen?', 'Nullstill').then(
+                function(res) {
+                    if(res) {
+                        LocalStorage.clear();
+                        Registration.load();
+                        AppSettings.load();
+                        User.load();
+                        headerColor.init();
+                        appVm.username = '';
+                        appVm.password = '';
+                        $state.go('start');
+                    }
+                });
         };
 
         $scope.$on('$ionicView.loaded', function () {
@@ -67,7 +85,7 @@ angular.module('RegObs')
             var currentProp = ($state.current.data || {}).registrationProp;
             console.log(currentProp);
             if(currentProp) {
-                if(!Registration.propertyArrayExists(currentProp) && !Registration.propertyObjectExists(currentProp)){
+                if(!Registration.propertyExists(currentProp)){
                     console.log('DELETE ' + currentProp);
                     delete Registration.data[currentProp];
                 }
@@ -83,6 +101,49 @@ angular.module('RegObs')
             appVm.showFormFooter = $state.current.data.showFormFooter;
             appVm.showRegistrationFooter = $state.current.data.showRegistrationFooter;
 
+        });
+
+
+        var headerColor = {
+            demoColor: 'bar-assertive',
+            prodColor: 'bar-dark',
+            removeClass: function (newClass) {
+                this.cachedHeaderBar.classList.remove(newClass);
+                this.activeHeaderBar.classList.remove(newClass);
+            },
+            addClass: function (newClass) {
+                this.cachedHeaderBar.classList.add(newClass);
+                this.activeHeaderBar.classList.add(newClass);
+            },
+            init: function() {
+                this.cachedNavBar = this.cachedNavBar || document.querySelector('.nav-bar-block[nav-bar="cached"]');
+                if (this.cachedNavBar)
+                    this.cachedHeaderBar = this.cachedHeaderBar || this.cachedNavBar.querySelector('.bar-header');
+                else return;
+
+                this.activeNavBar = this.activeNavBar || document.querySelector('.nav-bar-block[nav-bar="active"]');
+                if (this.activeNavBar)
+                    this.activeHeaderBar = this.activeHeaderBar || this.activeNavBar.querySelector('.bar-header');
+                else return;
+
+                if (AppSettings.data.env === 'demo') {
+                    this.removeClass(this.prodColor);
+                    this.addClass(this.demoColor);
+                } else {
+                    this.removeClass(this.demoColor);
+                    this.addClass(this.prodColor);
+                }
+            }
+        };
+
+
+        appVm.envChanged = function () {
+            AppSettings.save();
+            headerColor.init();
+        };
+
+        $scope.$applyAsync(function(){
+            headerColor.init();
         });
 
     });

@@ -1,6 +1,9 @@
 <div class="padding">
-    <button class="button button-block icon-left ion-refresh">Oppdater posisjon</button>
-    <button class="button button-block icon-left ion-pin">Sett posisjon i kart</button>
+    <button class="button button-block" ng-class="{'icon-left': !ObsLocation.fetching, 'ion-refresh': !ObsLocation.fetching}" ng-click="ObsLocation.fetchPosition()">
+        <ion-spinner class="spinner-dark" ng-if="ObsLocation.fetching"></ion-spinner>
+        <span ng-hide="ObsLocation.fetching">Oppdater posisjon</span>
+    </button>
+    <button class="button button-block icon-left ion-pin" ng-click="setPositionInMap()">Sett posisjon i kart</button>
     <button class="button button-block icon-left ion-search">Hent tidligere brukte steder</button>
-    Lokasjon: [{{appVm.getLocation().Latitude}}, {{appVm.getLocation().Longitude}}]
+    Lokasjon: [{{ObsLocation.get().Latitude}}, {{ObsLocation.get().Longitude}}]
 </div>

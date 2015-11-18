@@ -14,18 +14,18 @@ angular
             if(vm.date && vm.dateAccuracy){
                 var start = vm.date.getTime() - (vm.dateAccuracy*18e5);
                 var end = vm.date.getTime() + (vm.dateAccuracy*18e5);
-                vm.obs.DtLandSlideTime = new Date(start).toISOString();
-                vm.obs.DtLandSlideTimeEnd = new Date(end).toISOString();
+                vm.reg.LandSlideObs.DtLandSlideTime = new Date(start).toISOString();
+                vm.reg.LandSlideObs.DtLandSlideTimeEnd = new Date(end).toISOString();
             }
-            console.log(vm.obs);
+            console.log(vm.reg.LandSlideObs);
         };
 
         $scope.$on('$ionicView.loaded', function(){
-            vm.obs = Registration.getPropertyAsObject($state.current.data.registrationProp);
+            vm.reg = Registration.initPropertyAsObject($state.current.data.registrationProp);
 
-            if(vm.obs.DtLandSlideTime && vm.obs.DtLandSlideTimeEnd){
-                var start = new Date(vm.obs.DtLandSlideTime);
-                var end = new Date(vm.obs.DtLandSlideTimeEnd);
+            if(vm.reg.LandSlideObs.DtLandSlideTime && vm.reg.LandSlideObs.DtLandSlideTimeEnd){
+                var start = new Date(vm.reg.LandSlideObs.DtLandSlideTime);
+                var end = new Date(vm.reg.LandSlideObs.DtLandSlideTimeEnd);
                 var dt = end - start;
                 vm.dateAccuracy = dt/36e5;
                 vm.date = new Date(start.getTime() + (dt/2));

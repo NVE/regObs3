@@ -16,24 +16,24 @@
             <label class="item item-input item-stacked-label">
                 <span class="input-label">Nysnøgrense (moh)</span>
                 <input type="tel" placeholder="I meter over havet"
-                       ng-model="vm.obs.NewSnowLine" />
+                       ng-model="vm.reg.SnowSurfaceObservation.NewSnowLine" />
             </label>
 
             <label class="item item-input item-stacked-label">
                 <span class="input-label">Snøgrense (moh)</span>
                 <input type="tel" placeholder="I meter over havet"
-                       ng-model="vm.obs.SnowLine" />
+                       ng-model="vm.reg.SnowSurfaceObservation.SnowLine" />
             </label>
 
             <label class="item item-input item-stacked-label">
                 <span class="input-label">Grense lagdelt snø (moh)</span>
                 <input type="tel" placeholder="Øvre høydegrense for snø uten farlig lagdeling (også kalt førefall, vårskisnø, omdannet snø)"
-                       ng-model="vm.obs.HeightLimitLayeredSnow" />
+                       ng-model="vm.reg.SnowSurfaceObservation.HeightLimitLayeredSnow" />
             </label>
 
             <kdv-dropdown
                     title="Snøfokk"
-                    model="vm.obs.SnowDriftTID"
+                    model="vm.reg.SnowSurfaceObservation.SnowDriftTID"
                     kdv-key="Snow_SnowDriftKDV">
             </kdv-dropdown>
 
@@ -42,7 +42,7 @@
                 <textarea placeholder="Hvordan er snøfordelingen generelt ifht. høyde og eksposisjon. Er det forskjell i regionen?"
                           name="comment"
                           cols="30" rows="3"
-                          ng-model="vm.obs.Comment"></textarea>
+                          ng-model="vm.reg.SnowSurfaceObservation.Comment"></textarea>
             </label>
         </ion-list>
         <regobs-image-list></regobs-image-list>

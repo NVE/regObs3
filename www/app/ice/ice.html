@@ -6,8 +6,12 @@
                 <span class="badge badge-balanced" ng-if="appVm.registrationIsType('ice')">1</span>
                 <i class="icon icon-accessory ion-chevron-right"></i>
             </ion-item>
-            <ion-item>Se observasjoner</ion-item>
-            <ion-item>Se varsel</ion-item>
+            <div class="item item-complex">
+                <a class="item-content" href="" ng-click="vm.openObservations()">Se observasjoner</a>
+            </div>
+            <div class="item item-complex">
+                <a class="item-content" href="" ng-click="vm.openWarnings()">Se varsel</a>
+            </div>
         </ion-list>
     </ion-content>
 </ion-view>

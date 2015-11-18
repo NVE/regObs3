@@ -8,17 +8,17 @@ angular
             var num = parseFloat(numText);
 
             if(num){
-                vm.obs[prop] = (num/100);
+                vm.reg.SnowSurfaceObservation[prop] = (num/100);
             }
 
-            console.log(vm.obs);
+            console.log(vm.reg.SnowSurfaceObservation);
         };
 
 
         $scope.$on( '$ionicView.loaded', function(){
-            vm.obs = Registration.getPropertyAsObject($state.current.data.registrationProp);
-            vm.SnowDepth = vm.obs.SnowDepth ? parseInt(vm.obs.SnowDepth*10000)/100 : undefined;
-            vm.NewSnowDepth24 = vm.obs.NewSnowDepth24 ? parseInt(vm.obs.NewSnowDepth24*10000)/100 : undefined;
+            vm.reg = Registration.initPropertyAsObject($state.current.data.registrationProp);
+            vm.SnowDepth = vm.reg.SnowSurfaceObservation.SnowDepth ? parseInt(vm.reg.SnowSurfaceObservation.SnowDepth*10000)/100 : undefined;
+            vm.NewSnowDepth24 = vm.reg.SnowSurfaceObservation.NewSnowDepth24 ? parseInt(vm.reg.SnowSurfaceObservation.NewSnowDepth24*10000)/100 : undefined;
         });
     });
 

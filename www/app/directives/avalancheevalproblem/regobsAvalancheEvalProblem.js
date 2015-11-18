@@ -4,7 +4,7 @@
 angular
     .module('RegObs')
     .directive('regobsAvalancheEvalProblem',
-        function regobsAvalancheEvalProblem($filter, $ionicModal, $ionicPopup, Registration, Utility) {
+        function regobsAvalancheEvalProblem($filter, $ionicModal, RegobsPopup, Registration, Utility) {
             return {
                 link: link,
                 templateUrl: 'app/directives/avalancheevalproblem/regobsAvalancheEvalProblem.html',
@@ -16,8 +16,7 @@ angular
 
                 var viewArray, avalancheExtDict;
                 var indexEditing = -1;
-                $scope.registrationProp = 'AvalancheEvalProblem2';
-                $scope.obsArray = Registration.getPropertyAsArray($scope.registrationProp);
+                $scope.reg = Registration.initPropertyAsArray('AvalancheEvalProblem2');
                 $scope.heightArray = [
                     2500, 2400, 2300, 2200, 2100,
                     2000, 1900, 1800, 1700, 1600,
@@ -27,21 +26,8 @@ angular
                 ];
 
                 var showConfirm = function () {
-                    return $ionicPopup.confirm({
-                        title: 'Slett skredproblem',
-                        template: 'Er du sikker på at du vil slette dette skredproblemet?',
-                        buttons: [
-                            {text: 'Avbryt'},
-                            {
-                                text: 'Slett',
-                                type: 'button-assertive',
-                                onTap: function (e) {
-                                    // Returning a value will cause the promise to resolve with the given value.
-                                    return true;
-                                }
-                            }
-                        ]
-                    });
+                    return RegobsPopup.confirm('Slett skredproblem',
+                        'Er du sikker på at du vil slette dette skredproblemet?');
                 };
 
                 $scope.exposedHeight = function (where) {
@@ -87,7 +73,7 @@ angular
                 };
 
                 $scope.add = function () {
-                    $scope.obsArray.push($scope.obs);
+                    $scope.reg.AvalancheEvalProblem2.push($scope.obs);
                     $scope.modal.hide();
                 };
 
@@ -104,7 +90,7 @@ angular
                     showConfirm()
                         .then(function (response) {
                             if (response) {
-                                $scope.obsArray.splice(indexEditing, 1);
+                                $scope.reg.AvalancheEvalProblem2.splice(indexEditing, 1);
                                 $scope.modal.hide();
                                 indexEditing = -1;
                             }

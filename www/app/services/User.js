@@ -3,7 +3,7 @@ angular
     .factory('User', function User($http, LocalStorage, AppSettings) {
         var service = this;
         var storageKey = 'regobsUser';
-        var user = LocalStorage.getAndSetObject(storageKey, 'Guid', makeAnonymousUser());
+        var user;
 
         service.logIn = function (username, password) {
             var endpoints = AppSettings.getEndPoints();
@@ -44,11 +44,17 @@ angular
             LocalStorage.setObject(storageKey, user);
         };
 
+        service.load = function () {
+            user = LocalStorage.getAndSetObject(storageKey, 'Guid', makeAnonymousUser());
+        };
+
+        service.load();
+
         return service;
 
         function makeAnonymousUser() {
             return {
-                Guid: (AppSettings.env === 'demo' ? 'A9D7E614-2EE4-4589-B490-A36DDB586AF9' : '92E6A41D-8E7B-46A8-8957-3F14AA2544A0'),
+                Guid: (AppSettings.data.env === 'demo' ? 'A9D7E614-2EE4-4589-B490-A36DDB586AF9' : '92E6A41D-8E7B-46A8-8957-3F14AA2544A0'),
                 ObserverGroup: null,
                 anonymous: true
             };

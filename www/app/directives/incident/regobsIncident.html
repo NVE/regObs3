@@ -4,16 +4,16 @@
                 <textarea placeholder="Hvorfor skjedde det? Hvorfor gikk det forhåpentligvis bra? Kunne situasjonen vært unngått?"
                           name="comment"
                           cols="30" rows="3"
-                          ng-model="incident.IncidentText"></textarea>
+                          ng-model="reg.Incident.IncidentText"></textarea>
     </label>
     <kdv-dropdown
             title="Hva ble påvirket?*"
-            model="incident.ActivityInfluencedTID"
+            model="reg.Incident.ActivityInfluencedTID"
             kdv-key="{{activityInfluencedKdv}}">
     </kdv-dropdown>
     <kdv-dropdown
             title="Skadeomfang*"
-            model="incident.DamageExtentTID"
+            model="reg.Incident.DamageExtentTID"
             kdv-key="DamageExtentKDV">
     </kdv-dropdown>
 </ion-list>

@@ -1,6 +1,6 @@
 angular
     .module('RegObs')
-    .directive('regobsDangerObs', function dangerObs($ionicModal, Registration, $ionicPopup, Utility) {
+    .directive('regobsDangerObs', function dangerObs($ionicModal, Registration, RegobsPopup, Utility) {
         return {
             link: link,
             templateUrl: 'app/directives/dangerobs/regobsDangerObs.html',
@@ -14,24 +14,11 @@ angular
         function link($scope){
             var indexEditing = -1;
             var showConfirm = function () {
-                return $ionicPopup.confirm({
-                    title: 'Slett observasjoner',
-                    template: 'Er du sikker på at du vil slette dette faretegnet?',
-                    buttons: [
-                        {text: 'Avbryt'},
-                        {
-                            text: 'Slett',
-                            type: 'button-assertive',
-                            onTap: function (e) {
-                                // Returning a value will cause the promise to resolve with the given value.
-                                return true;
-                            }
-                        }
-                    ]
-                });
+                return RegobsPopup.delete('Slett observasjoner',
+                    'Er du sikker på at du vil slette dette faretegnet?');
             };
 
-            $scope.dangerObsArray = Registration.getPropertyAsArray('DangerObs');
+            $scope.reg = Registration.initPropertyAsArray('DangerObs');
 
             $scope.noDangerSign = {};
 
@@ -47,7 +34,7 @@ angular
 
             $scope.addDangerObs = function () {
                 $scope.commentChanged();
-                $scope.dangerObsArray.push($scope.dangerObs);
+                $scope.reg.DangerObs.push($scope.dangerObs);
                 $scope.modal.hide();
             };
 
@@ -73,7 +60,7 @@ angular
                 showConfirm()
                     .then(function (response) {
                         if (response) {
-                            $scope.dangerObsArray.splice(indexEditing, 1);
+                            $scope.reg.DangerObs.splice(indexEditing, 1);
                             $scope.modal.hide();
                             indexEditing = -1;
                         }

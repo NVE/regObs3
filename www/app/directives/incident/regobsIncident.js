@@ -12,6 +12,6 @@ angular
 
         function link(scope) {
 
-            scope.incident = Registration.getPropertyAsObject('Incident');
+            scope.reg = Registration.initPropertyAsObject('Incident');
         }
     });

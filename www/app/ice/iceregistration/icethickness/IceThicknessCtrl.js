@@ -6,17 +6,23 @@ angular
 
         vm.propChanged = function (prop){
             var num = parseFloat(vm[prop]);
-            console.log(vm.iceThickness);
+            console.log(vm.reg.IceThickness);
             if(num){
-                vm.iceThickness[prop] = (num/100);
+                vm.reg.IceThickness[prop] = (num/100);
             }
         };
 
+        $scope.$watch('vm.reg.IceThickness.IceThicknessSum', function () {
+            vm.IceThicknessSum = vm.reg.IceThickness.IceThicknessSum ? parseInt(vm.reg.IceThickness.IceThicknessSum*10000)/100 : undefined;
+        });
+
         $scope.$on('$ionicView.loaded', function(){
-            vm.iceThickness = Registration.getPropertyAsObject($state.current.data.registrationProp);
-            vm.SnowDepth = vm.iceThickness.SnowDepth ? parseInt(vm.iceThickness.SnowDepth*10000)/100 : undefined;
-            vm.SlushSnow = vm.iceThickness.SlushSnow ? parseInt(vm.iceThickness.SlushSnow*10000)/100 : undefined;
-            vm.IceThicknessSum = vm.iceThickness.IceThicknessSum ? parseInt(vm.iceThickness.IceThicknessSum*10000)/100 : undefined;
+            vm.reg = Registration.initPropertyAsObject($state.current.data.registrationProp);
+
+            console.log(vm.reg.IceThickness);
+            vm.SnowDepth = vm.reg.IceThickness.SnowDepth ? parseInt(vm.reg.IceThickness.SnowDepth*10000)/100 : undefined;
+            vm.SlushSnow = vm.reg.IceThickness.SlushSnow ? parseInt(vm.reg.IceThickness.SlushSnow*10000)/100 : undefined;
+            vm.IceThicknessSum = vm.reg.IceThickness.IceThicknessSum ? parseInt(vm.reg.IceThickness.IceThicknessSum*10000)/100 : undefined;
         });
     });
 

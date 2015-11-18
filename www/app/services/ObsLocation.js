@@ -5,7 +5,10 @@ angular
         var position;
         var options = {timeout: 10000, enableHighAccuracy: true};
 
+        ObsLocation.fetching = false;
+
         ObsLocation.fetchPosition = function () {
+            ObsLocation.fetching = true;
             return $cordovaGeolocation
                 .getCurrentPosition(options)
                 .then(success, error);
@@ -26,12 +29,14 @@ angular
         });
 
         function success (pos) {
+            ObsLocation.fetching = false;
             console.log('Got position:',pos);
             position = pos;
         }
 
         function error(err) {
             // error
+            ObsLocation.fetching = false;
             console.error(err);
             return err;
         }

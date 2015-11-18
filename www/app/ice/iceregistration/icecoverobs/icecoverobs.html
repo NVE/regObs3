@@ -4,25 +4,25 @@
 
             <kdv-dropdown
                     title="Isdekning*"
-                    model="vm.obs.IceCoverTID"
+                    model="vm.reg.IceCoverObs.IceCoverTID"
                     kdv-key="Ice_IceCoverKDV">
             </kdv-dropdown>
 
             <kdv-dropdown
                     title="Isdekning før observasjon"
-                    model="vm.obs.IceCoverBeforeTID"
+                    model="vm.reg.IceCoverObs.IceCoverBeforeTID"
                     kdv-key="Ice_IceCoverBeforeKDV">
             </kdv-dropdown>
 
             <kdv-dropdown
                     title="Bæreevne"
-                    model="vm.obs.IceCapacityTID"
+                    model="vm.reg.IceCoverObs.IceCapacityTID"
                     kdv-key="Ice_IceCapacityKDV">
             </kdv-dropdown>
 
             <kdv-dropdown
                     title="Skøytbarhet"
-                    model="vm.obs.IceSkateabilityTID"
+                    model="vm.reg.IceCoverObs.IceSkateabilityTID"
                     kdv-key="Ice_IceSkateabilityKDV">
             </kdv-dropdown>
 
@@ -31,7 +31,7 @@
                 <textarea placeholder="Ytterligere beskrivelse"
                           name="comment"
                           cols="30" rows="3"
-                          ng-model="vm.obs.Comment"></textarea>
+                          ng-model="vm.reg.IceCoverObs.Comment"></textarea>
             </label>
         </ion-list>
         <regobs-image-list></regobs-image-list>

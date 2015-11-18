@@ -1,10 +1,10 @@
 
 <ion-list can-swipe="true">
     <ion-item class="item-icon-right"
-              ng-repeat="obs in obsArray track by $index"
+              ng-repeat="obs in reg.AvalancheEvalProblem2 track by $index"
               ng-click="edit(obs, $index)">
         <ion-option-button class="button-assertive"
-                           ng-click="obsArray.splice($index, 1)">
+                           ng-click="reg.AvalancheEvalProblem2.splice($index, 1)">
             Slett
         </ion-option-button>
         Skredproblem {{$index}}

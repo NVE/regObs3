@@ -5,7 +5,7 @@ angular
         vm.windDirectionArray = Registration.getExpositionArray();
 
         $scope.$on( '$ionicView.loaded', function(){
-            vm.obs = Registration.getPropertyAsObject($state.current.data.registrationProp);
+            vm.reg = Registration.initPropertyAsObject($state.current.data.registrationProp);
         });
     });
 

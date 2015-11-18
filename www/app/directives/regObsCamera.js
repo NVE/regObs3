@@ -6,7 +6,7 @@ angular
             link: link,
             replace: true,
             scope: {},
-            template: '<button class="button button-clear button-block" ng-click="click()"><i class="icon calm ion-camera"></i> Bilde</button>'
+            template: '<button class="button button-clear button-block" ng-click="click()"><i class="icon calm ion-camera"></i> Foto</button>'
         };
 
         function link(scope){

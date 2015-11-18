@@ -3,32 +3,32 @@
         <ion-list>
             <kdv-dropdown
                     title="Nedbørstype"
-                    model="vm.obs.PrecipitationTID"
+                    model="vm.reg.WeatherObservation.PrecipitationTID"
                     kdv-key="Snow_PrecipitationKDV">
             </kdv-dropdown>
 
             <label class="item item-input item-stacked-label" >
                 <span class="input-label">Lufttemperatur (C)</span>
                 <input type="number" placeholder="Kan gis med 1 desimal"
-                       ng-model="vm.obs.AirTemperature" />
+                       ng-model="vm.reg.WeatherObservation.AirTemperature" />
             </label>
             <label class="item item-input item-stacked-label" >
                 <span class="input-label">Vindhastighet (m/s)</span>
                 <input type="number" placeholder="Kan gis med 1 desimal"
-                       ng-model="vm.obs.WindSpeed" />
+                       ng-model="vm.reg.WeatherObservation.WindSpeed" />
             </label>
 
             <label class="item item-input item-stacked-label">
                 <span class="input-label">Skydekke (%)</span>
                 <input type="tel" placeholder="Kun hele prosent"
-                       ng-model="vm.obs.CloudCover" />
+                       ng-model="vm.reg.WeatherObservation.CloudCover" />
             </label>
 
             <label class="item item-input item-stacked-label item-select">
                 <span class="input-label">
                     Vindretning
                 </span>
-                <select ng-model="vm.obs.WindDirection"
+                <select ng-model="vm.reg.WeatherObservation.WindDirection"
                         ng-options="dir.val as dir.name for dir in vm.windDirectionArray">
                     <option value="">Velg...</option>
                 </select>
@@ -39,7 +39,7 @@
                 <textarea placeholder="Hvordan har været vært i området siste døgn? Eks: Har det vært byger? Har det vært tempraturendringer? Hvor går nullisotermen?"
                           name="comment"
                           cols="30" rows="3"
-                          ng-model="vm.obs.Comment"></textarea>
+                          ng-model="vm.reg.WeatherObservation.Comment"></textarea>
             </label>
         </ion-list>
         <regobs-image-list></regobs-image-list>

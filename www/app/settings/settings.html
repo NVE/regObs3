@@ -17,8 +17,9 @@
                 </label>
             </div>
             <div class="padding">
-                <button type="submit" class="button button-block button-calm" style="height: 47px">
-                    <ion-spinner class="spinner-light" ng-show="appVm.loggingIn"></ion-spinner> <span ng-hide="appVm.loggingIn">Logg inn</span>
+                <button type="submit" class="button button-block button-calm">
+                    <ion-spinner class="spinner-light" ng-if="appVm.loggingIn"></ion-spinner>
+                    <span ng-hide="appVm.loggingIn">Logg inn</span>
                 </button>
             </div>
         </form>
@@ -41,13 +42,13 @@
                 Innstillinger
             </ion-item>
 
-            <ion-toggle ng-model="appVm.settings.emailReceipt" ng-change="appVm.settings.save()" toggle-class="toggle-calm">Send kvittering på epost?</ion-toggle>
+            <ion-toggle ng-model="appVm.settings.data.emailReceipt" ng-change="appVm.settings.save()" toggle-class="toggle-calm">Send kvittering på epost?</ion-toggle>
 
             <label class="item item-input item-select">
                 <div class="input-label">
                     Appmodus
                 </div>
-                <select ng-model="appVm.settings.env" ng-change="appVm.settings.save()" ng-options="env for env in appVm.settings.getEnvironments()">
+                <select ng-model="appVm.settings.data.env" ng-change="appVm.envChanged()" ng-options="env for env in appVm.settings.getEnvironments()">
                 </select>
             </label>
 

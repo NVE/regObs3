@@ -3,20 +3,20 @@
         <ion-list>
             <regobs-menu-item
                     title="Faretegn"
-                    condition="vm.obsArrayExists('DangerObs')"
+                    condition="vm.propertyExists('DangerObs')"
                     state="dirtdangerobs"
-                    badge-text="vm.obsArrayExists('DangerObs')">
+                    badge-text="vm.reg.DangerObs.length">
             </regobs-menu-item>
 
             <regobs-menu-item
                     title="Skredhendelse (Mangler kart)"
-                    condition="vm.obsObjectExists('LandSlideObs')"
+                    condition="vm.propertyExists('LandSlideObs')"
                     state="landslideobs">
             </regobs-menu-item>
 
             <regobs-menu-item
                     title="Fritekst"
-                    condition="vm.obsObjectExists('GeneralObservation')"
+                    condition="vm.propertyExists('GeneralObservation')"
                     state="generalobs">
             </regobs-menu-item>
 

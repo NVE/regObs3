@@ -17,8 +17,9 @@
         top: 64px;
     }
 }
-.button svg {
-    height: 100% !important;
+.button .spinner svg {
+    position: absolute;
+    top:7px;
 }
 
 /**

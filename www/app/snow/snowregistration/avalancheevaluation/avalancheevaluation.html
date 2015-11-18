@@ -6,7 +6,7 @@
                 <textarea placeholder="Vurdering av skredfare"
                           name="vurdering"
                           cols="30" rows="3"
-                          ng-model="vm.obs.AvalancheEvaluation"></textarea>
+                          ng-model="vm.reg.AvalancheEvaluation3.AvalancheEvaluation"></textarea>
             </label>
 
             <label class="item item-input item-stacked-label">
@@ -14,18 +14,18 @@
                 <textarea placeholder="Utvikling av skredfare"
                           name="utvikling"
                           cols="30" rows="3"
-                          ng-model="vm.obs.AvalancheDevelopment"></textarea>
+                          ng-model="vm.reg.AvalancheEvaluation3.AvalancheDevelopment"></textarea>
             </label>
 
             <kdv-dropdown
                     title="Faregrad"
-                    model="vm.obs.AvalancheDangerTID"
+                    model="vm.reg.AvalancheEvaluation3.AvalancheDangerTID"
                     kdv-key="Snow_AvalancheDangerKDV">
             </kdv-dropdown>
 
             <kdv-dropdown
                     title="Vurdering av varslet faregrad"
-                    model="vm.obs.ForeCastCorrectTID"
+                    model="vm.reg.AvalancheEvaluation3.ForeCastCorrectTID"
                     kdv-key="Snow_ForecastCorrectKDV">
             </kdv-dropdown>
 
@@ -34,7 +34,7 @@
                 <textarea placeholder="Hvordan er dagens lokale varsel i forhold til dine lokale vurderinger?"
                           name="comment"
                           cols="30" rows="3"
-                          ng-model="vm.obs.ForecastComment"></textarea>
+                          ng-model="vm.reg.AvalancheEvaluation3.ForecastComment"></textarea>
             </label>
         </ion-list>
         <regobs-image-list></regobs-image-list>

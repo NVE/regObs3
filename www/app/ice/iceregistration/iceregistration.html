@@ -3,32 +3,32 @@
         <ion-list>
             <regobs-menu-item
                     title="Faretegn"
-                    condition="vm.obsArrayExists('DangerObs')"
+                    condition="vm.propertyExists('DangerObs')"
                     state="icedangerobs"
-                    badge-text="vm.obsArrayExists('DangerObs')">
+                    badge-text="vm.reg.DangerObs.length">
             </regobs-menu-item>
 
             <regobs-menu-item
                     title="Isdekningsgrad"
-                    condition="vm.obsObjectExists('IceCoverObs')"
+                    condition="vm.propertyExists('IceCoverObs')"
                     state="icecoverobs">
             </regobs-menu-item>
 
             <regobs-menu-item
                     title="Istykkelse"
-                    condition="vm.obsObjectExists('IceThickness')"
+                    condition="vm.propertyExists('IceThickness')"
                     state="icethickness">
             </regobs-menu-item>
 
             <regobs-menu-item
                     title="Ulykke/hendelse"
-                    condition="vm.obsObjectExists('Incident')"
+                    condition="vm.propertyExists('Incident')"
                     state="iceincident">
             </regobs-menu-item>
 
             <regobs-menu-item
                     title="Fritekst"
-                    condition="vm.obsObjectExists('GeneralObservation')"
+                    condition="vm.propertyExists('GeneralObservation')"
                     state="generalobs">
             </regobs-menu-item>
 

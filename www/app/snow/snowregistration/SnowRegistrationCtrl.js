@@ -4,10 +4,8 @@ angular
 
         var vm = this;
 
-        vm.send = Registration.send;
-        vm.remove = Registration.remove;
-        vm.obsObjectExists = Registration.propertyObjectExists;
-        vm.obsArrayExists = Registration.propertyArrayExists;
+        vm.propertyExists = Registration.propertyExists;
+        vm.reg = Registration.data;
 
         vm.avalancheObsExists = function () {
 

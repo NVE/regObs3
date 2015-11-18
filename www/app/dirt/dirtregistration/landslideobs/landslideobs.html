@@ -18,29 +18,29 @@
             </label>
             <kdv-dropdown
                     title="Type skred"
-                    model="vm.obs.LandSlideTID"
+                    model="vm.reg.LandSlideObs.LandSlideTID"
                     kdv-key="Dirt_LandSlideKDV">
             </kdv-dropdown>
             <kdv-dropdown
                     title="Størrelse"
-                    model="vm.obs.LandSlideSizeTID"
+                    model="vm.reg.LandSlideObs.LandSlideSizeTID"
                     kdv-key="Dirt_LandSlideSizeKDV">
             </kdv-dropdown>
             <kdv-dropdown
                     title="Skredutløser"
-                    model="vm.obs.LandSlideTriggerTID"
+                    model="vm.reg.LandSlideObs.LandSlideTriggerTID"
                     kdv-key="Dirt_LandSlideTriggerKDV">
             </kdv-dropdown>
             <kdv-dropdown
                     title="Skadeomfang"
-                    model="vm.obs.DamageExtentTID"
+                    model="vm.reg.LandSlideObs.DamageExtentTID"
                     kdv-key="DamageExtentKDV">
             </kdv-dropdown>
 
 
 <!--            <kdv-dropdown
                     title="dropdown1"
-                    model="vm.obs.ActivityInfluencedTID"
+                    model="vm.reg.LandSlideObs.ActivityInfluencedTID"
                     kdv-key="Dirt_ActivityInfluencedKDV">
             </kdv-dropdown>-->
 
@@ -49,7 +49,7 @@
                 <textarea placeholder="Ytterligere kommentarer"
                           name="comment"
                           cols="30" rows="3"
-                          ng-model="vm.obs.Comment"></textarea>
+                          ng-model="vm.reg.LandSlideObs.Comment"></textarea>
             </label>
         </ion-list>
         <regobs-image-list></regobs-image-list>
