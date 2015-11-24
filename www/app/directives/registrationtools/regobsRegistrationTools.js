@@ -1,6 +1,6 @@
 angular
     .module('RegObs')
-    .directive('regobsRegistrationTools', function ($ionicModal,ObsLocation) {
+    .directive('regobsRegistrationTools', function ($ionicModal,ObsLocation,Registration) {
         return {
             link: link,
             scope: {},
@@ -9,6 +9,7 @@ angular
 
         function link(scope){
             scope.ObsLocation = ObsLocation;
+            scope.Registration = Registration;
 
             var loadModal = function () {
                 var url = 'app/directives/registrationtools/mapModal.html';

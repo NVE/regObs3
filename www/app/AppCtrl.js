@@ -26,14 +26,16 @@ angular.module('RegObs')
         };
 
         appVm.resetProperty = function () {
-            RegobsPopup.delete('Tøm skjema?', 'Vil du nullstille dette skjemaet?', 'Nullstill').then(
-                function(res){
-                    if(res){
-                        Registration.resetProperty($state.current.data.registrationProp);
-                        $scope.$broadcast('$ionicView.loaded');
+            var prop = $state.current.data.registrationProp;
+            if(Registration.propertyExists(prop))
+                RegobsPopup.delete('Tøm skjema?', 'Vil du nullstille dette skjemaet?', 'Nullstill').then(
+                    function(res){
+                        if(res){
+                            Registration.resetProperty(prop);
+                            $scope.$broadcast('$ionicView.loaded');
+                        }
                     }
-                }
-            );
+                );
 
         };
 

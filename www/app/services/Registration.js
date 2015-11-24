@@ -6,6 +6,13 @@ angular
         var storageKey = 'regobsRegistrations';
         var unsentStorageKey = 'regobsUnsentRegistrations';
 
+        var httpConfig = {
+            headers: {
+                regObs_apptoken: AppSettings.appId,
+                ApiJsonVersion: AppSettings.apiVersion
+            }
+        };
+
         var geoHazardTid = {
             snow: 10,
             dirt: 20,
@@ -184,19 +191,46 @@ angular
         };*/
 
         var createRegistration = function (type) {
+
             return {
                 "Id": Utility.createGuid(),
                 "GeoHazardTID": (isNaN(type) ? geoHazardTid[type] : type),
                 //Dette må genereres
-                "DtObsTime": new Date().toISOString()
+                "DtObsTime": new Date().toISOString(),
+                "ObsLocation": {}
             };
         };
 
         var resetRegistration = function () {
+
             return Registration.create(Registration.data.GeoHazardTID);
         };
 
+        var saveToUnsent = function (data) {
+            data.Registrations.forEach(function (regToSave) {
+                var found = false;
+                Registration.unsent.forEach(function (savedReg, i) {
+                    if(regToSave.Id === savedReg.Id){
+                        found = true;
+                        Registration.unsent[i] = regToSave;
+                    }
+                });
+                if(!found){
+                    Registration.unsent.push(regToSave);
+                }
+            });
+            Registration.save();
+
+        };
+
         var baseLength = Object.keys(createRegistration('snow')).length;
+
+        Registration.fetchPosition = function(){
+            ObsLocation.fetchPosition().then(function(){
+                Registration.data.ObsLocation = ObsLocation.get();
+                Registration.save();
+            });
+        };
 
         Registration.load = function () {
             Registration.data = LocalStorage.getAndSetObject(
@@ -204,32 +238,35 @@ angular
                 'DtObsTime',
                 createRegistration('snow')
             );
-            /*service.unsentRegistrations = LocalStorage.getAndSetObject(
+            Registration.unsent = LocalStorage.getAndSetObject(
                 unsentStorageKey,
                 'length',
                 []
-            );*/
+            );
 
         };
 
         Registration.save = function () {
                 LocalStorage.setObject(storageKey, Registration.data);
-                //LocalStorage.setObject(unsentStorageKey, service.unsentRegistrations);
+                LocalStorage.setObject(unsentStorageKey, Registration.unsent);
         };
 
         Registration.create = function (type) {
             Registration.data = createRegistration(type);
-            Registration.save();
+            Registration.fetchPosition();
+            console.log(Registration.data);
+
             return Registration.data;
         };
 
         Registration.remove = function () {
-            RegobsPopup.delete('Slett registrering', 'Er du sikker på at du vil slette påbegynt registrering?')
-                .then(function (response) {
-                    if (response) {
-                        return resetRegistration();
-                    }
-                });
+            if(!Registration.isEmpty())
+                RegobsPopup.delete('Slett registrering', 'Er du sikker på at du vil slette påbegynt registrering?')
+                    .then(function (response) {
+                        if (response) {
+                            return resetRegistration();
+                        }
+                    });
         };
 
         Registration.isOfType = function (type) {
@@ -245,68 +282,53 @@ angular
         };
 
         Registration.send = function () {
+
             var postUrl = AppSettings.getEndPoints().postRegistration;
-            var user = User.getUser();
-            var data = Registration.data;
-            var httpConfig = {
-                headers: {
-                    regObs_apptoken: AppSettings.appId,
-                    ApiJsonVersion: '0.9.0.20140408'
-                }
-            };
 
-            //Cleanup DangerObs
-            if (angular.isArray(data.DangerObs)) {
-                data.DangerObs.forEach(function (dangerObs) {
-                    delete dangerObs.tempArea;
-                    delete dangerObs.tempComment;
-                });
-            }
-            if (angular.isArray(data.AvalancheEvalProblem2)) {
-                data.AvalancheEvalProblem2.forEach(function (obs) {
-                    if(obs.exposedHeight)
-                        delete obs.exposedHeight;
-                });
+            prepareRegistrationForSending();
+
+            if(Registration.unsent.length) {
+                Registration.sending = true;
+                doPost(postUrl, {Registrations: Registration.unsent});
             }
 
-            angular.extend(data, {
-                "ObserverGuid": user.Guid,
-                "ObserverGroupID": user.chosenObserverGroup || null,
-                "Email": !!AppSettings.emailReceipt,
-                "ObsLocation": ObsLocation.get()
-            });
-
-            var dataToSend = {
-                Registrations: [data]
-            };
-
-            console.log('User', user);
-            console.log('Sending', data);
-
-            Registration.sending = true;
-            return $http.post(postUrl, dataToSend, httpConfig)
-                .then(function () {
-                    RegobsPopup.alert('Suksess!', 'Observasjon registrert!');
-                    Registration.sending = false;
-                    return resetRegistration();
-                })
-                .catch(function (error) {
-                    RegobsPopup.alert('Failed to send registration',  error.statusText + '. Saving to unsent registrations.');
-                    console.error('Failed to send registration: ' + error.statusText, error);
-                    Registration.sending = false;
-                    /*var found = false;
-                    service.unsentRegistrations.forEach(function (reg) {
-                        if(reg.Id === service.data.Id){
-                            found = true;
-                        }
-                    });
-                    if(found){
-                        service.unsentRegistrations.push(data);
-                    }*/
-
-                });
+            Registration.unsent = [];
+            resetRegistration();
 
         };
+
+        function prepareRegistrationForSending() {
+            if(!Registration.isEmpty()){
+
+                var user = User.getUser();
+                var data = Registration.data;
+
+                //Cleanup DangerObs
+                if (angular.isArray(data.DangerObs)) {
+                    data.DangerObs.forEach(function (dangerObs) {
+                        delete dangerObs.tempArea;
+                        delete dangerObs.tempComment;
+                    });
+                }
+                if (angular.isArray(data.AvalancheEvalProblem2)) {
+                    data.AvalancheEvalProblem2.forEach(function (obs) {
+                        if(obs.exposedHeight)
+                            delete obs.exposedHeight;
+                    });
+                }
+
+                angular.extend(data, {
+                    "ObserverGuid": user.Guid,
+                    "ObserverGroupID": user.chosenObserverGroup || null,
+                    "Email": !!AppSettings.emailReceipt
+                });
+
+                console.log('User', user);
+                console.log('Sending', data);
+
+                saveToUnsent({Registrations: [data]});
+            }
+        }
 
         Registration.addPicture = function (propertyKey, data) {
             Registration.initPropertyAsArray('Picture');
@@ -389,6 +411,49 @@ angular
 
             }
         });
+
+        function doPost(postUrl, dataToSend){
+            return $http.post(postUrl, dataToSend, httpConfig)
+                .then(function () {
+                    RegobsPopup.alert('Suksess!', 'Observasjon registrert!');
+                    Registration.sending = false;
+                })
+                .catch(function (error) {
+                    console.error('Failed to send registration: ' + error.statusText, error);
+                    Registration.sending = false;
+                    RegobsPopup.confirm(
+                        'Klarte ikke sende registrering',
+                        (error.statusText?error.statusText+'.':'Mangler nettilgang.') + ' Vil du prøve på nytt?',
+                        'Send','Lagre'
+                    ).then(function(confirmed){
+                        if(confirmed){
+                            console.log('Confirm!');
+                            doPost(postUrl, dataToSend, httpConfig);
+                        } else {
+                            console.log('Avbryt');
+                            var strings = {
+                                usendt: 'Usendt',
+                                registrering: 'registrering',
+                                denne: 'Denne'
+                            };
+                            if(dataToSend.Registrations.length > 1){
+                                strings.usendt = 'Usendte';
+                                strings.registrering = 'registreringer';
+                                strings.denne = 'Disse';
+                            }
+                            RegobsPopup.alert(
+                                'Lagret',
+                                strings.usendt + ' ' + strings.registrering+
+                                ' er lagret. '+strings.denne+
+                                ' kan sendes inn ved et senere tidspunkt.'
+                            );
+                            saveToUnsent(dataToSend);
+                        }
+                    });
+
+                });
+
+        }
 
         function isEmpty(obj) {
 

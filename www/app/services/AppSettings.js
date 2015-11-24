@@ -20,6 +20,7 @@ angular
 
         settings.data = Object.create(data);
         settings.appId = '***REMOVED***';
+        settings.apiVersion = '0.9.0.20140408';
 
         settings.load = function () {
             settings.data = LocalStorage.getAndSetObject(storageKey, 'env', Object.create(data));

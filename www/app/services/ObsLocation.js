@@ -9,6 +9,7 @@ angular
 
         ObsLocation.fetchPosition = function () {
             ObsLocation.fetching = true;
+            position = undefined;
             return $cordovaGeolocation
                 .getCurrentPosition(options)
                 .then(success, error);
@@ -24,14 +25,11 @@ angular
                 };
         };
 
-        $ionicPlatform.ready(function(){
-            ObsLocation.fetchPosition();
-        });
-
         function success (pos) {
             ObsLocation.fetching = false;
             console.log('Got position:',pos);
             position = pos;
+            return pos;
         }
 
         function error(err) {

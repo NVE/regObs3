@@ -1,10 +1,6 @@
-# Issues
+# Issues / forbedringer
 Badge på app icon dersom man har usendte registreringer?
 Offline maps
-Gjør om til cm og meter
-Legg til islag
-Kamera og GPS
-Usendte registreringer
 Registrer ny bruker/Glemt passord
 
 # regObs | Ionic
