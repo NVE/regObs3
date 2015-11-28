@@ -1,9 +1,15 @@
 <div class="padding">
-    <button class="button button-block" ng-class="{'icon-left': !ObsLocation.fetching, 'ion-refresh': !ObsLocation.fetching}" ng-click="Registration.fetchPosition()">
+    <div class="text-center">
+        Posisjon: {{getPositionText()}}
+    </div>
+    <button class="button button-block" ng-class="{'icon-left': !ObsLocation.fetching, 'ion-pinpoint': !ObsLocation.fetching, 'button-balanced':Registration.data.ObsLocation.UTMSourceTID===40}" ng-click="Registration.fetchPosition()">
         <ion-spinner class="spinner-dark" ng-if="ObsLocation.fetching"></ion-spinner>
-        <span ng-hide="ObsLocation.fetching">Oppdater posisjon</span>
+        <span ng-hide="ObsLocation.fetching">Hent posisjon fra GPS</span>
     </button>
-    <button class="button button-block icon-left ion-pin" ng-click="setPositionInMap()">Sett posisjon i kart</button>
-    <button class="button button-block icon-left ion-search">Hent tidligere brukte steder</button>
-    Lokasjon: [{{Registration.data.ObsLocation.Latitude}}, {{Registration.data.ObsLocation.Longitude}}]
+    <button class="button button-block icon-left ion-pin" ng-click="openPositionInMap()" ng-class="{'button-balanced':Registration.data.ObsLocation.UTMSourceTID===35}">Sett posisjon i kart</button>
+    <button class="button button-block" ng-click="loadPlaces()" ng-class="{'icon-left': !fetchingPlaces, 'ion-search': !fetchingPlaces, 'button-balanced':Registration.data.ObsLocation.ObsLocationId}">
+        <ion-spinner class="spinner-dark" ng-if="fetchingPlaces"></ion-spinner>
+        <span ng-hide="fetchingPlaces">Sett posisjon fra målepunkt</span>
+    </button>
+
 </div>

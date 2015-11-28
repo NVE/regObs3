@@ -8,6 +8,9 @@
     <link href="dist/app.css" rel="stylesheet">
     <link href="lib/leaflet/dist/leaflet.css" rel="stylesheet">
 
+    <!--<script src="https://api.tiles.mapbox.com/mapbox-gl-js/v0.11.4/mapbox-gl.js"></script>
+    <link href="https://api.tiles.mapbox.com/mapbox-gl-js/v0.11.4/mapbox-gl.css" rel="stylesheet">-->
+
     <!-- IF using Sass (run gulp sass first), then uncomment below and remove the CSS includes above
     <link href="css/ionic.app.css" rel="stylesheet">
     -->
@@ -34,18 +37,18 @@
 <body ng-app="RegObs" ng-controller="AppCtrl as appVm">
 
 <ion-nav-bar ng-cloak="">
-    <ion-nav-back-button default-nav-back-button="" ng-click="goBack()">{{backTitle()}}</ion-nav-back-button>
+    <ion-nav-back-button default-nav-back-button="" ng-click="goBack()">Tilbake</ion-nav-back-button>
     <ion-nav-buttons side="right">
-        <button class="button button-clear" ng-class="{&apos;ion-locked&apos;: !appVm.userService.getUser().anonymous}" ng-click="appVm.modal.show()">
-            {{!appVm.userService.getUser().anonymous ? &apos;&apos; : &apos;Logg inn&apos;}}
+        <button class="button button-clear" ng-class="{&apos;ion-locked&apos;: !appVm.userService.getUser().anonymous}" ng-show="appVm.currentState.name !== &apos;settings&apos; &amp;&amp; appVm.currentState.name !== &apos;help&apos; &amp;&amp; !appVm.userService.loggingIn" ng-bind="!appVm.userService.getUser().anonymous ? &apos;&apos; : &apos;Logg inn&apos;" ui-sref="settings">
         </button>
-        <button class="button button-icon button-clear ion-gear-a" ng-click="appVm.modal.show()">
+        <ion-spinner ng-if="appVm.userService.loggingIn &amp;&amp; appVm.currentState.name !== &apos;settings&apos;"></ion-spinner>
+        <button class="button button-icon button-clear ion-gear-a" ui-sref="settings" ng-show="appVm.currentState.name !== &apos;settings&apos; &amp;&amp; appVm.currentState.name !== &apos;help&apos;">
         </button>
     </ion-nav-buttons>
 </ion-nav-bar>
 <ion-nav-view></ion-nav-view>
-<ion-footer-bar class="bar-dark">
-    <div ng-if="appVm.showFormFooter" class="row">
+<ion-footer-bar class="bar-dark regobs-bar" ng-show="appVm.showFormFooter || appVm.showRegistrationFooter">
+    <div ng-if="appVm.showFormFooter" class="row row-no-padding">
         <div class="col col-center">
             <button class="button button-block  button-clear" ng-click="appVm.resetProperty()"><i class="icon stable ion-android-close"></i> Nullstill</button>
         </div>
@@ -57,7 +60,7 @@
             <regobs-camera></regobs-camera>
         </div>
     </div>
-    <div ng-if="appVm.showRegistrationFooter" class="row">
+    <div ng-if="appVm.showRegistrationFooter" class="row row-no-padding">
         <div class="col col-center">
             <button class="button  button-block button-clear" ng-click="appVm.registration.remove()">
                 <i class="icon stable ion-trash-a"></i> Slett

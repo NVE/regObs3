@@ -1,6 +1,10 @@
 <ion-view view-title="Snøobservasjon">
     <ion-content>
         <ion-list>
+            <label class="item item-input item-stacked-label">
+                <span class="input-label">Tid registrert</span>
+                <input type="datetime-local" ng-change="appVm.timeChanged(vm.DtObsTime)" ng-model="vm.DtObsTime">
+            </label>
             <regobs-menu-item
                     title="Faretegn"
                     condition="vm.propertyExists('DangerObs')"

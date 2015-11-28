@@ -320,7 +320,7 @@ angular
                 angular.extend(data, {
                     "ObserverGuid": user.Guid,
                     "ObserverGroupID": user.chosenObserverGroup || null,
-                    "Email": !!AppSettings.emailReceipt
+                    "Email": user.anonymous ? false : !!AppSettings.emailReceipt
                 });
 
                 console.log('User', user);

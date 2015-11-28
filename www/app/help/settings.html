@@ -1,0 +1,48 @@
+<ion-view view-title="Hjelp">
+    <ion-content padding="true">
+        <h3>Login</h3>
+
+        <p>
+            Vi ser gjerne at du logger inn når du registrerer på regObs. Som pålogget bruker kan vi knytte kompetanse til
+            observasjonene dine og du har mulighet til å administrere observasjonene senere.
+        </p>
+
+        <p>
+            Har du ikke bruker? Du kan
+            <a href='' ng-click="vm.openUrl('Account/Register')">
+                opprette ny bruker her
+            </a>.
+        </p>
+
+        <p>
+            Har du glemt passordet ditt? Få tilsendt
+            <a href='' ng-click="vm.openUrl('Account/PasswordRecovery')">
+                nytt passord her
+            </a>.
+        </p>
+
+        <h3>Grupper</h3>
+
+        <p>Som registrert bruker i regobs kan du melde deg inn i grupper. Dette administreres på regobs.no. Hvis du
+            velger en gruppe i appen, vil alle som er medlemer i gruppa får rettigheter for å administrere
+            observasjonene du sender inn. Observasjonene vil også merkes med gruppe navnet slik at det er lettere å søke
+            opp disse observasjonene senere.</p>
+
+        <h3>Kompass</h3>
+
+        <p>Hvis du aktiverer kompass settes retning bildet er tatt automatisk. Dette er fortsatt under utprøving og er
+            som utganspunkt ikke aktivert.</p>
+
+        <h3>GPS timeout</h3>
+
+        <p>Dette valget bestemmer hvor lenge appen skal lete før den setter posisjonen. Hvis du opplever at posisjon
+            ofte er unøyaktig så kan du sette en langre GPS timeout. Husk at når appen bruker GPS brukers mye av
+            batterikapasiteten.</p>
+
+        <h3>Kvittering på e-post</h3>
+
+        <p>Hvis du ønsker å få tilsendt en e-post med lenke til registreringene dine aktiverer du dette valget. E-posten
+            kan være en rask måte å finne igjen observasjonen om du vil etterregistrere informasjon på observasjonene
+            når du får tilgang til regobs.no.</p>
+    </ion-content>
+</ion-view>

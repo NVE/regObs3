@@ -1,9 +1,8 @@
 angular
     .module('RegObs')
-    .factory('ObsLocation', function ObsLocation($ionicPlatform, $cordovaGeolocation) {
+    .factory('ObsLocation', function ObsLocation(AppSettings, $ionicPlatform, $cordovaGeolocation) {
         var ObsLocation = this;
         var position;
-        var options = {timeout: 10000, enableHighAccuracy: true};
 
         ObsLocation.fetching = false;
 
@@ -11,7 +10,10 @@ angular
             ObsLocation.fetching = true;
             position = undefined;
             return $cordovaGeolocation
-                .getCurrentPosition(options)
+                .getCurrentPosition({
+                    timeout: !isNaN(AppSettings.data.gpsTimeout)?AppSettings.data.gpsTimeout*1000:10000,
+                    enableHighAccuracy: true
+                })
                 .then(success, error);
         };
 
@@ -21,8 +23,10 @@ angular
                     "Latitude": position.coords.latitude.toString(),
                     "Longitude": position.coords.longitude.toString(),
                     "Uncertainty": position.coords.accuracy.toString(),
-                    "UTMSourceTID": "35"
+                    "UTMSourceTID": 40
                 };
+
+            return {};
         };
 
         function success (pos) {

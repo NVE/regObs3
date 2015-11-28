@@ -1,0 +1,11 @@
+<ion-modal-view>
+    <ion-header-bar>
+        <button class="button button-clear button-positive" ng-click="vm.modal.hide()">Avbryt</button>
+        <h1 class="title">Kart</h1>
+        <button class="button button-clear button-positive" ng-click="vm.setLandslideInMap()">OK</button>
+
+    </ion-header-bar>
+    <ion-content scroll="false" data-tap-disabled="true">
+        <div id="map" data-tap-disabled="true" class="regobs-map" landslide-direction-map=""></div>
+    </ion-content>
+</ion-modal-view>

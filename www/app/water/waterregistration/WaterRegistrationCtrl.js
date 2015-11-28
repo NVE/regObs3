@@ -6,6 +6,7 @@ angular
 
         vm.propertyExists = Registration.propertyExists;
         vm.reg = Registration.data;
+        vm.DtObsTime = new Date(vm.reg.DtObsTime);
 
 
         $scope.$on('$ionicView.loaded', function(){});

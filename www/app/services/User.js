@@ -1,11 +1,14 @@
 angular
     .module('RegObs')
-    .factory('User', function User($http, LocalStorage, AppSettings) {
+    .factory('User', function User($http, LocalStorage, AppSettings, RegobsPopup) {
         var service = this;
         var storageKey = 'regobsUser';
         var user;
 
+        service.loggingIn = false;
+
         service.logIn = function (username, password) {
+            service.loggingIn = true;
             var endpoints = AppSettings.getEndPoints();
 
             var config = {
@@ -20,9 +23,18 @@ angular
                 user.chosenObserverGroup = null;
                 service.save();
                 console.log("Logged in user",user);
+                service.loggingIn = false;
 
             }, function (response) {
-                alert('Failed logging in!');
+                console.log(response);
+                var status = '';
+                if(response.status === 401){
+                    status = 'Feil brukernavn eller passord. Vennligst fyll inn på nytt og prøv igjen.'
+                } else if(response.status === -1){
+                    status = 'Klarte ikke å logge inn pga. manglende tilkobling til nett. Vennligst prøv igjen når dekningsforhold bedrer seg.'
+                }
+                RegobsPopup.alert('Oisann!', status);
+                service.loggingIn = false;
             });
         };
 

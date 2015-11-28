@@ -36,6 +36,18 @@ angular.module('RegObs', ['ionic', 'ngCordova'])
                     showRegistrationFooter: true
                 }
             })
+            .state('settings', {
+                url: '/settings',
+                templateUrl: 'app/settings/settingsview.html',
+                controller: 'SettingsViewCtrl as vm',
+                data: {
+                    defaultBack: {
+                        state: 'start',
+                        title: 'regObs'
+                    }
+                }
+            })
+
 
             //SNØ
             .state('snow', {
@@ -332,6 +344,19 @@ angular.module('RegObs', ['ionic', 'ngCordova'])
                     showFormFooter: true,
                     registrationProp: 'GeneralObservation'
                 }
+            })
+            .state('help', {
+                url: '/help/:page',
+                templateUrl: function(stateParams){
+                    return 'app/help/'+stateParams.page+'.html';
+                },
+                controller: 'HelpCtrl as vm',
+                data: {
+                    defaultBack: {
+                        state: 'start',
+                        title: 'regObs'
+                    }
+                }
             });
 
     })
@@ -342,7 +367,7 @@ angular.module('RegObs', ['ionic', 'ngCordova'])
             // Hide the accessory bar by default (remove this to show the accessory bar above the keyboard
             // for form inputs)*/
             if (window.cordova && window.cordova.plugins.Keyboard) {
-                //cordova.plugins.Keyboard.hideKeyboardAccessoryBar(true);
+                cordova.plugins.Keyboard.hideKeyboardAccessoryBar(false);
             }
 
             if (window.StatusBar) {

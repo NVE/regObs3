@@ -6,12 +6,12 @@
                 <textarea placeholder="Får du ikke formidlet det du vil med de andre skjemaene? bruk dette og skriv i vei!"
                           name="comment"
                           cols="30" rows="3"
-                          ng-model="vm.obs.ObsHeader"></textarea>
+                          ng-model="vm.reg.GeneralObservation.ObsHeader"></textarea>
             </label>
         </ion-list>
-        <regobs-image-list registration-prop="vm.registrationProp"></regobs-image-list>
+        <regobs-image-list></regobs-image-list>
+        <button ui-sref="help({page:'generalobservation'})" class="button button-positive button-block button-clear">
+            Hjelp
+        </button>
     </ion-content>
-    <ion-footer-bar>
-        <div class="row row-no-padding" registration-prop="vm.registrationProp" regobs-form-footer></div>
-    </ion-footer-bar>
 </ion-view>

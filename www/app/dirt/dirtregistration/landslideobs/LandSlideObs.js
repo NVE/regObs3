@@ -1,6 +1,6 @@
 angular
     .module('RegObs')
-    .controller('LandSlideObsCtrl', function ($scope, $state, Registration) {
+    .controller('LandSlideObsCtrl', function ($scope, $state,$ionicModal, Registration) {
         var vm = this;
         vm.dateArray = [
             { "Val": 0, "Name": "Ikke gitt" },
@@ -10,6 +10,31 @@ angular
             { "Val": 168, "Name": "Innen 1 uke" },
             { "Val": 672, "Name": "Innen 1 mnd" }
         ];
+
+        var loadModal = function () {
+            var url = 'app/dirt/dirtregistration/landslideobs/landslideMapModal.html';
+            return $ionicModal
+                .fromTemplateUrl(url, {
+                    scope: $scope,
+                    animation: 'slide-in-up'
+                }).then(function (modal) {
+                    vm.modal = modal;
+                    return modal;
+                });
+        };
+
+        loadModal();
+
+        vm.setLandslideInMap = function () {
+            vm.modal.hide();
+            $scope.$broadcast('setLandslideInMap');
+        };
+
+        vm.openLandslideInMap = function () {
+            vm.modal.show();
+            $scope.$broadcast('openLandslideInMap');
+        };
+
         vm.dateChanged = function () {
             if(vm.date && vm.dateAccuracy){
                 var start = vm.date.getTime() - (vm.dateAccuracy*18e5);
