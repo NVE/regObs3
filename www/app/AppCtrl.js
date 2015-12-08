@@ -64,9 +64,16 @@ angular.module('RegObs')
             Registration.save();
         });
 
-        $scope.$on('$ionicView.beforeEnter', function () {
+        $scope.$on('$ionicView.enter', function () {
             appVm.currentState = $state.current;
             console.log(appVm.currentState);
+            appVm.showTripFooter = $state.current.data.showTripFooter;
+            appVm.showFormFooter = $state.current.data.showFormFooter;
+            appVm.showRegistrationFooter = $state.current.data.showRegistrationFooter;
+        });
+
+        $scope.$on('$ionicView.beforeEnter', function () {
+
             appVm.showTripFooter = $state.current.data.showTripFooter;
             appVm.showFormFooter = $state.current.data.showFormFooter;
             appVm.showRegistrationFooter = $state.current.data.showRegistrationFooter;
