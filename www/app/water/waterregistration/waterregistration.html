@@ -1,10 +1,7 @@
 <ion-view view-title="Vannobservasjon">
     <ion-content>
         <ion-list>
-            <label class="item item-input item-stacked-label">
-                <span class="input-label">Tid ob</span>
-                <input type="datetime-local" ng-change="appVm.timeChanged(vm.DtObsTime)" ng-model="vm.DtObsTime">
-            </label>
+            <regobs-time></regobs-time>
             <regobs-menu-item
                     title="Faretegn"
                     condition="vm.propertyExists('DangerObs')"

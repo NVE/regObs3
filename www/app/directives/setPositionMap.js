@@ -3,7 +3,7 @@
  */
 angular
     .module('RegObs')
-    .directive('setPositionMap', function setPositionMap(Registration, AppSettings) {
+    .directive('setPositionMap', function setPositionMap(ObsLocation, AppSettings) {
         function link(scope, elem, attrs) {
             var options = scope.leafletMap;
             console.log(options);
@@ -55,34 +55,32 @@ angular
 
             scope.$on('openPositionInMap', function () {
                 map.invalidateSize();
-                obsLoc = Object.create(Registration.data.ObsLocation);
+                obsLoc = Object.create(ObsLocation.data);
                 console.log('Posiition in map!');
-                drawUserLocation();
+                drawUserLocation(obsLoc);
 
             });
 
             scope.$on('setPositionInMap', function () {
                 if (obsLoc) {
-                    Registration.data.ObsLocation = obsLoc;
-                    Registration.save();
+                    ObsLocation.set(obsLoc);
                 }
-
             });
 
             map.on('click', function (e) {
                 // alert("Lat, Lon : " + e.latlng.lat + ", " + e.latlng.lng);
-                if (obsLoc) {
-                    obsLoc = {
-                        Latitude: e.latlng.lat,
-                        Longitude: e.latlng.lng,
-                        Uncertainty: 1,
-                        UTMSourceTID: 35
-                    };
-                    drawUserLocation();
-                }
+
+                obsLoc = {
+                    Latitude: e.latlng.lat.toString(),
+                    Longitude: e.latlng.lng.toString(),
+                    Uncertainty: 1 + '',
+                    UTMSourceTID: ObsLocation.source.clickedInMap
+                };
+                drawUserLocation(obsLoc);
+
             });
 
-            function drawUserLocation() {
+            function drawUserLocation(obsLoc) {
                 console.log('DRAWUSER');
                 if (obsLoc.Latitude) {
                     var latlng = new L.LatLng(obsLoc.Latitude, obsLoc.Longitude);

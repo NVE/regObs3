@@ -1,9 +1,7 @@
-/**
- * Created by storskel on 03.06.2015.
- */
-angular
-    .module('RegObs')
-    .controller('WaterCtrl', function WaterCtrl($scope, $cordovaInAppBrowser) {
+(function () {
+    'use strict';
+
+    function WaterCtrl($scope, $cordovaInAppBrowser) {
 
         var vm = this;
 
@@ -11,7 +9,11 @@ angular
             $cordovaInAppBrowser.open('http://www.varsom.no/Flom', '_system' );
         };
 
-
         $scope.$on( '$ionicView.loaded', function(){} );
+    }
 
-    });
+    angular
+        .module('RegObs')
+        .controller('WaterCtrl', WaterCtrl);
+
+})();

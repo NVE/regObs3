@@ -1,10 +1,11 @@
-"use strict";
+(function () {
+    "use strict";
 
-angular.module('RegObs', ['ionic', 'ngCordova'])
-    /**
-     * State configuration
-     */
-    .config(function ($stateProvider, $urlRouterProvider, $ionicConfigProvider) {
+    angular.module('RegObs', ['ionic', 'ngCordova'])
+           .config(providers)
+           .run(setup);
+
+    function providers($stateProvider, $urlRouterProvider, $ionicConfigProvider) {
 
         if (ionic.Platform.isAndroid()) {
             $ionicConfigProvider.scrolling.jsScrolling(false);
@@ -72,6 +73,18 @@ angular.module('RegObs', ['ionic', 'ngCordova'])
                         title: 'Snø'
                     },
                     showRegistrationFooter: true
+                }
+            })
+            .state('snowtrip', {
+                url: '/snowtrip',
+                templateUrl: 'app/snow/trip/trip.html',
+                controller: 'TripCtrl as vm',
+                data: {
+                    defaultBack: {
+                        state: 'snow',
+                        title: 'Snø'
+                    },
+                    showTripFooter: true
                 }
             })
             .state('snowdangerobs', {
@@ -359,9 +372,9 @@ angular.module('RegObs', ['ionic', 'ngCordova'])
                 }
             });
 
-    })
+    }
 
-    .run(function ($ionicPlatform) {
+    function setup($ionicPlatform) {
         $ionicPlatform.ready(function () {
 
             // Hide the accessory bar by default (remove this to show the accessory bar above the keyboard
@@ -374,4 +387,8 @@ angular.module('RegObs', ['ionic', 'ngCordova'])
                 StatusBar.styleDefault();
             }
         });
-    });
+    }
+
+
+
+})();

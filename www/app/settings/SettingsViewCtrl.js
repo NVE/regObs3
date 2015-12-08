@@ -1,6 +1,6 @@
 angular
     .module('RegObs')
-    .controller('SettingsViewCtrl', function ($scope, $cordovaInAppBrowser, AppSettings, LocalStorage, Registration, User, HeaderColor, RegobsPopup) {
+    .controller('SettingsViewCtrl', function ($scope, $cordovaInAppBrowser, AppSettings, LocalStorage, ObsLocation, Registration, User, HeaderColor, RegobsPopup) {
         var vm = this;
 
         vm.settings = AppSettings;
@@ -28,7 +28,7 @@ angular
                     if(res) {
                         LocalStorage.clear();
                         Registration.load();
-                        AppSettings.load();
+                        AppSettings.load();                        
                         User.load();
                         HeaderColor.init();
                         vm.username = '';

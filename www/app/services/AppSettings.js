@@ -8,7 +8,7 @@ angular
         var storageKey = 'regobsAppSettings';
         var data = {
             env: 'demo',
-            emailReceipt: false,
+            emailReceipt: true,
             compass: false,
             gpsTimeout: 10,
             searchRange: 2500,
@@ -21,13 +21,15 @@ angular
             proxy: '/api'
         };
 
-        settings.data = Object.create(data);
+        //settings.data = Object.create(data);
         settings.appId = '***REMOVED***';
         settings.apiVersion = '0.9.0.20140408';
         settings.mapTileUrl = 'http://opencache.statkart.no/gatekeeper/gk/gk.open_gmaps?layers=topo2&zoom={z}&x={x}&y={y}&format=image/png';
         //'http://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}@2x.png'
         settings.load = function () {
-            settings.data = LocalStorage.getAndSetObject(storageKey, 'searchRange', Object.create(data));
+            settings.data = LocalStorage.getAndSetObject(storageKey, 'searchRange', angular.copy(data));
+            console.log(settings.data);
+            settings.save();
         };
 
         settings.save = function () {

@@ -1,0 +1,33 @@
+<ion-view view-title="Tur">
+    <ion-content>
+        <ion-list>
+
+            <kdv-dropdown
+                    title="Turtype*"
+                    model="appVm.tripId"
+                    kdv-key="TripTypeKDV">
+            </kdv-dropdown>
+
+            <label class="item item-input item-stacked-label item-select">
+                <span class="input-label">
+                    Observasjoner ventes før kl*
+                </span>
+                <select ng-model="appVm.tripMinutes"
+                        ng-options="min.val as min.name for min in vm.tripMinutesArray">
+                </select>
+            </label>
+
+            <label class="item item-input item-stacked-label">
+                <span class="input-label">Kommentar</span>
+                <textarea placeholder="Her kan du skrive inn hvilken obstur du skal på, hva du ser etter, osv."
+                          name="comment"
+                          cols="30" rows="3"
+                          ng-model="appVm.tripComment"></textarea>
+            </label>
+        </ion-list>
+        <regobs-registration-tools></regobs-registration-tools>
+        <button ui-sref="help({page:'snowtrip'})" class="button button-positive button-block button-clear">
+            Hjelp
+        </button>
+    </ion-content>
+</ion-view>

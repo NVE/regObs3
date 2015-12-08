@@ -13,81 +13,7 @@ angular
             }
         };
 
-        var geoHazardTid = {
-            snow: 10,
-            dirt: 20,
-            water: 60,
-            ice: 70
-        };
-        var geoHazardNames = {};
-        geoHazardNames[geoHazardTid.snow] = 'snø';
-        geoHazardNames[geoHazardTid.dirt] = 'jord';
-        geoHazardNames[geoHazardTid.ice] = 'is';
-        geoHazardNames[geoHazardTid.water] = 'vann';
 
-        //Brukt der det er bilder (RegistrationTID)
-        var OBSERVATIONS = {
-            Incident: {
-                name: "Ulykke/Hendelse",
-                RegistrationTID: "11"
-            },
-            DangerObs: {
-                name: "Faretegn",
-                RegistrationTID: "13"
-            },
-            SnowSurfaceObservation: {
-                name: "Snødekke",
-                RegistrationTID: "23"
-            },
-            AvalancheActivityObs: {
-                name: "Skredaktivitet",
-                RegistrationTID: "27"
-            },
-            AvalancheObs: {
-                name: "Snøskred",
-                RegistrationTID: "26"
-            },
-            WeatherObservation: {
-                name: "Vær",
-                RegistrationTID: "21"
-            },
-            SnowProfile: {
-                name: "Snøprofil",
-                RegistrationTID: "23"
-            },
-            AvalancheEvalProblem2: {
-                name: "Skredproblem",
-                RegistrationTID: "32"
-            },
-            AvalancheEvaluation3: {
-                name: "Skredfarevurdering",
-                RegistrationTID: "31"
-            },
-            Picture: {
-                name: "Bilde",
-                RegistrationTID: "12"
-            },
-            IceCoverObs: {
-                name: "Isdekningsgrad",
-                RegistrationTID: "51"
-            },
-            IceThickness: {
-                name: "Snø og istykkelse",
-                RegistrationTID: "50"
-            },
-            WaterLevel: {
-                name: "Vannstand",
-                RegistrationTID: "61"
-            },
-            LandSlideObs: {
-                name: "Skredhendelse",
-                RegistrationTID: "71"
-            },
-            GeneralObservation: {
-                name: "Fritekst",
-                RegistrationTID: "10"
-            }
-        };
 
 
   /*      var fareTegn = {
@@ -179,31 +105,21 @@ angular
             }]
         };
 
-        var trip = {
-            "GeoHazardID": 10,
-            "ObserverGuid": "3ec84df5-226f-4578-b28e-39a9773c4af4",
-            "TripTypeID": "30",
-            "ObservationExpectedMinutes": 780,
-            "Comment": "",
-            "DeviceGuid": "24ad5391-9865-4306-0677-5e72c2c31bc5",
-            "Lat": "59,9291293",
-            "Lng": "10,7080138"
-        };*/
+       */
 
         var createRegistration = function (type) {
 
             return {
                 "Id": Utility.createGuid(),
-                "GeoHazardTID": (isNaN(type) ? geoHazardTid[type] : type),
+                "GeoHazardTID": Utility.geoHazardTid(type),
                 //Dette må genereres
-                "DtObsTime": new Date().toISOString(),
-                "ObsLocation": {}
+                "DtObsTime": new Date().toISOString()
             };
         };
 
         var resetRegistration = function () {
 
-            return Registration.create(Registration.data.GeoHazardTID);
+            return Registration.createNew(Registration.data.GeoHazardTID);
         };
 
         var saveToUnsent = function (data) {
@@ -225,25 +141,17 @@ angular
 
         var baseLength = Object.keys(createRegistration('snow')).length;
 
-        Registration.fetchPosition = function(){
-            ObsLocation.fetchPosition().then(function(){
-                Registration.data.ObsLocation = ObsLocation.get();
-                Registration.save();
-            });
-        };
-
         Registration.load = function () {
             Registration.data = LocalStorage.getAndSetObject(
                 storageKey,
                 'DtObsTime',
-                createRegistration('snow')
+                Registration.createNew('snow')
             );
             Registration.unsent = LocalStorage.getAndSetObject(
                 unsentStorageKey,
                 'length',
                 []
             );
-
         };
 
         Registration.save = function () {
@@ -251,9 +159,9 @@ angular
                 LocalStorage.setObject(unsentStorageKey, Registration.unsent);
         };
 
-        Registration.create = function (type) {
+        Registration.createNew = function (type) {
             Registration.data = createRegistration(type);
-            Registration.fetchPosition();
+            ObsLocation.fetchPosition();
             console.log(Registration.data);
 
             return Registration.data;
@@ -270,7 +178,7 @@ angular
         };
 
         Registration.isOfType = function (type) {
-            return Registration.data.GeoHazardTID === geoHazardTid[type];
+            return Registration.data.GeoHazardTID === Utility.geoHazardTid(type);
         };
 
         Registration.isEmpty = function () {
@@ -285,6 +193,9 @@ angular
 
             var postUrl = AppSettings.getEndPoints().postRegistration;
 
+            if(!ObsLocation.isSet()) {
+                return RegobsPopup.alert('Posisjon ikke satt', 'Kan ikke sende inn uten posisjon.');
+            }
             prepareRegistrationForSending();
 
             if(Registration.unsent.length) {
@@ -294,6 +205,7 @@ angular
 
             Registration.unsent = [];
             resetRegistration();
+            Registration.save();
 
         };
 
@@ -317,10 +229,14 @@ angular
                     });
                 }
 
+                var location = angular.copy(ObsLocation.data);
+                delete location.place;
+
                 angular.extend(data, {
                     "ObserverGuid": user.Guid,
                     "ObserverGroupID": user.chosenObserverGroup || null,
-                    "Email": user.anonymous ? false : !!AppSettings.emailReceipt
+                    "Email": user.anonymous ? false : !!AppSettings.emailReceipt,
+                    "ObsLocation": location
                 });
 
                 console.log('User', user);
@@ -333,14 +249,10 @@ angular
         Registration.addPicture = function (propertyKey, data) {
             Registration.initPropertyAsArray('Picture');
             Registration.data.Picture.push({
-                RegistrationTID: Registration.getRegistrationTID(propertyKey),
+                RegistrationTID: Utility.registrationTid(propertyKey),
                 PictureImageBase64: data,
                 PictureComment: ''
             });
-        };
-
-        Registration.getRegistrationTID = function (prop) {
-            return OBSERVATIONS[prop].RegistrationTID;
         };
 
         Registration.initPropertyAsArray = function (prop) {
@@ -389,69 +301,58 @@ angular
             ];
         };
 
-        //Her sjekkes det om man har prøver å starte en ny registrering (ved at man går inn på en *registrationNew state)
-        //Dersom det finnes en registrering fra før av spørres brukeren om den skal slettes
-        $rootScope.$on('$stateChangeStart', function (event, toState, toParams, fromState, fromParams) {
-            var index = toState.name.indexOf('registrationNew');
-            if (index > 0) {
-                var type = toState.name.substr(0, index); //snow, ice, dirt etc.
-                if (!Registration.isOfType(type) && !Registration.isEmpty()) {
-                    event.preventDefault();
-                    RegobsPopup.delete('Slett registrering', 'Du har en påbegynt ' + geoHazardNames[Registration.data.GeoHazardTID] + '-registrering, dersom du går videre blir denne slettet. Vil du slette for å gå videre?')
-                        .then(function (response) {
-                            if (response) {
-                                Registration.create(type);
-                                $state.go(toState.name);
-                            }
-                        });
-
-                } else if (Registration.isEmpty()) {
-                    Registration.create(type);
-                }
-
-            }
-        });
-
         function doPost(postUrl, dataToSend){
-            return $http.post(postUrl, dataToSend, httpConfig)
-                .then(function () {
-                    RegobsPopup.alert('Suksess!', 'Observasjon registrert!');
-                    Registration.sending = false;
-                })
-                .catch(function (error) {
-                    console.error('Failed to send registration: ' + error.statusText, error);
-                    Registration.sending = false;
-                    RegobsPopup.confirm(
-                        'Klarte ikke sende registrering',
-                        (error.statusText?error.statusText+'.':'Mangler nettilgang.') + ' Vil du prøve på nytt?',
-                        'Send','Lagre'
-                    ).then(function(confirmed){
-                        if(confirmed){
-                            console.log('Confirm!');
-                            doPost(postUrl, dataToSend, httpConfig);
-                        } else {
-                            console.log('Avbryt');
-                            var strings = {
-                                usendt: 'Usendt',
-                                registrering: 'registrering',
-                                denne: 'Denne'
-                            };
-                            if(dataToSend.Registrations.length > 1){
-                                strings.usendt = 'Usendte';
-                                strings.registrering = 'registreringer';
-                                strings.denne = 'Disse';
-                            }
-                            RegobsPopup.alert(
-                                'Lagret',
-                                strings.usendt + ' ' + strings.registrering+
-                                ' er lagret. '+strings.denne+
-                                ' kan sendes inn ved et senere tidspunkt.'
-                            );
-                            saveToUnsent(dataToSend);
-                        }
-                    });
 
-                });
+            var success = function(){
+                var title = 'Suksess!';
+                var body = 'Observasjon registrert!';
+                RegobsPopup.alert(title, body);
+                Registration.sending = false;
+                Registration.save();
+            };
+
+            var exception = function(error){
+                console.error('Failed to send registration: ' + error.statusText, error);
+
+                Registration.sending = false;
+                var title = 'Klarte ikke sende registrering';
+                var body = (error.statusText? error.statusText + '.' : 'Mangler nettilgang.') + ' Vil du prøve på nytt?';
+
+                var handleUserAction = function(confirmed){
+                    if(confirmed){
+                        console.log('Confirmed sending again!');
+                        doPost(postUrl, dataToSend, httpConfig);
+                    } else {
+                        console.log('Avbryter sending');
+                        var strings = {
+                            usendt: 'Usendt',
+                            registrering: 'registrering',
+                            denne: 'Denne'
+                        };
+                        if(dataToSend.Registrations.length > 1){
+                            strings.usendt = 'Usendte';
+                            strings.registrering = 'registreringer';
+                            strings.denne = 'Disse';
+                        }
+                        RegobsPopup.alert(
+                            'Lagret',
+                            strings.usendt + ' ' + strings.registrering+
+                            ' er lagret. '+strings.denne+
+                            ' kan sendes inn ved et senere tidspunkt.'
+                        );
+                        saveToUnsent(dataToSend);
+                    }
+                };
+
+                RegobsPopup.confirm(title, body,'Send','Lagre')
+                    .then(handleUserAction);
+
+
+            };
+
+            return $http.post(postUrl, dataToSend, httpConfig)
+                .then(success)
+                .catch(exception);
 
         }
 
@@ -474,6 +375,29 @@ angular
 
             return true;
         }
+
+        //Her sjekkes det om man har prøver å starte en ny registrering (ved at man går inn på en *registrationNew state)
+        //Dersom det finnes en registrering fra før av spørres brukeren om den skal slettes
+        $rootScope.$on('$stateChangeStart', function (event, toState, toParams, fromState, fromParams) {
+            var index = toState.name.indexOf('registrationNew');
+            if (index > 0) {
+                var type = toState.name.substr(0, index); //snow, ice, dirt etc.
+                if (!Registration.isOfType(type) && !Registration.isEmpty()) {
+                    event.preventDefault();
+                    RegobsPopup.delete('Slett registrering', 'Du har en påbegynt ' + Utility.geoHazardNames(Registration.data.GeoHazardTID) + '-registrering, dersom du går videre blir denne slettet. Vil du slette for å gå videre?')
+                        .then(function (response) {
+                            if (response) {
+                                Registration.createNew(type);
+                                $state.go(toState.name);
+                            }
+                        });
+
+                } else if (Registration.isEmpty()) {
+                    Registration.createNew(type);
+                }
+
+            }
+        });
 
         Registration.load();
 

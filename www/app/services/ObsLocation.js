@@ -1,47 +1,101 @@
 angular
     .module('RegObs')
-    .factory('ObsLocation', function ObsLocation(AppSettings, $ionicPlatform, $cordovaGeolocation) {
+    .factory('ObsLocation', function ObsLocation($http, $ionicPlatform, $cordovaGeolocation, AppSettings, LocalStorage) {
         var ObsLocation = this;
-        var position;
+        var storageKey = 'regobsLocation';
 
-        ObsLocation.fetching = false;
+        function init(){
+            ObsLocation.fetching = false;
+            ObsLocation.data = LocalStorage.getObject(storageKey);
+            ObsLocation.source = {
+                clickedInMap: 35,
+                fetchedFromGPS: 40,
+                storedPosition: 45
+            };
+            if(!ObsLocation.isSet()){
+                ObsLocation.data = {};
+                save();
+            }
+            console.log(ObsLocation.data);
+        }
+
+        ObsLocation.isSet = function(){
+            return ObsLocation.data && (ObsLocation.data.Latitude || ObsLocation.data.ObsLocationId);
+        };
 
         ObsLocation.fetchPosition = function () {
+            console.log('fetchPosition called');
             ObsLocation.fetching = true;
-            position = undefined;
             return $cordovaGeolocation
                 .getCurrentPosition({
                     timeout: !isNaN(AppSettings.data.gpsTimeout)?AppSettings.data.gpsTimeout*1000:10000,
                     enableHighAccuracy: true
                 })
                 .then(success, error);
-        };
 
-        ObsLocation.get = function () {
-            if (position)
-                return {
+            function success (position) {
+                ObsLocation.fetching = false;
+                console.log('Got position:',position);
+                ObsLocation.set({
                     "Latitude": position.coords.latitude.toString(),
                     "Longitude": position.coords.longitude.toString(),
                     "Uncertainty": position.coords.accuracy.toString(),
-                    "UTMSourceTID": 40
-                };
+                    "UTMSourceTID": ObsLocation.source.fetchedFromGPS
+                });
+                return true;
+            }
 
-            return {};
+            function error(err) {
+                ObsLocation.fetching = false;
+                // error
+                console.error(err);
+                return err;
+            }
         };
 
-        function success (pos) {
-            ObsLocation.fetching = false;
-            console.log('Got position:',pos);
-            position = pos;
-            return pos;
+        ObsLocation.getObservationsWithinRadius = function(range, geohazardId){
+            return $http.get(
+                AppSettings.getEndPoints().getObservationsWithinRadius, {
+                    params: {
+                        latitude:ObsLocation.data.Latitude,
+                        longitude:ObsLocation.data.Longitude,
+                        range:range,
+                        geohazardId: geohazardId
+                    }
+                });
+        };
+
+        ObsLocation.get = function(){
+            return ObsLocation.data;
+        };
+
+        ObsLocation.set = function(loc){
+            if(loc){
+                ObsLocation.data = loc;
+                getLocationName(loc);
+                save();
+            }
+        };
+
+        function getLocationName(loc){
+            ObsLocation.data.place = undefined;
+            $http.get(AppSettings.getEndPoints().getLocationName, {
+                params: {
+                    latitude:loc.Latitude,
+                    longitude:loc.Longitude
+                }
+            }).then(function(response){
+                console.log(response);
+                ObsLocation.data.place = response.data.Data;
+                save();
+            });
         }
 
-        function error(err) {
-            // error
-            ObsLocation.fetching = false;
-            console.error(err);
-            return err;
+        function save(){
+            LocalStorage.setObject(storageKey, ObsLocation.data);
         }
+
+        init();
 
         return ObsLocation;
     });

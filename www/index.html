@@ -6,6 +6,7 @@
     <title>regObs</title>
 
     <link href="dist/app.css" rel="stylesheet">
+    <link rel="stylesheet" href="lib/Leaflet.awesome-markers/dist/leaflet.awesome-markers.css">
     <link href="lib/leaflet/dist/leaflet.css" rel="stylesheet">
 
     <!--<script src="https://api.tiles.mapbox.com/mapbox-gl-js/v0.11.4/mapbox-gl.js"></script>
@@ -18,6 +19,7 @@
     <!-- ionic/angularjs js -->
     <script>window.phonegap = {}</script>
     <script src="lib/leaflet/dist/leaflet.js"></script>
+    <script src="lib/Leaflet.awesome-markers/dist/leaflet.awesome-markers.js"></script>
     <script src="lib/ionic/js/ionic.min.js"></script>
 
     <script src="lib/angular/angular.min.js"></script>
@@ -39,15 +41,42 @@
 <ion-nav-bar ng-cloak="">
     <ion-nav-back-button default-nav-back-button="" ng-click="goBack()">Tilbake</ion-nav-back-button>
     <ion-nav-buttons side="right">
+        <button ng-show="appVm.trip.model.started &amp;&amp; !appVm.userService.getUser().anonymous" class="button button-balanced button-clear button-icon" ng-class="{&apos;ion-android-walk&apos;:!appVm.trip.sending}" ng-click="appVm.stopTrip()">
+            <ion-spinner ng-if="appVm.trip.sending" class="spinner-light"></ion-spinner>
+        </button>
+
         <button class="button button-clear" ng-class="{&apos;ion-locked&apos;: !appVm.userService.getUser().anonymous}" ng-show="appVm.currentState.name !== &apos;settings&apos; &amp;&amp; appVm.currentState.name !== &apos;help&apos; &amp;&amp; !appVm.userService.loggingIn" ng-bind="!appVm.userService.getUser().anonymous ? &apos;&apos; : &apos;Logg inn&apos;" ui-sref="settings">
         </button>
-        <ion-spinner ng-if="appVm.userService.loggingIn &amp;&amp; appVm.currentState.name !== &apos;settings&apos;"></ion-spinner>
+        <ion-spinner class="spinner-fix" ng-if="appVm.userService.loggingIn &amp;&amp; appVm.currentState.name !== &apos;settings&apos;"></ion-spinner>
         <button class="button button-icon button-clear ion-gear-a" ui-sref="settings" ng-show="appVm.currentState.name !== &apos;settings&apos; &amp;&amp; appVm.currentState.name !== &apos;help&apos;">
         </button>
     </ion-nav-buttons>
 </ion-nav-bar>
 <ion-nav-view></ion-nav-view>
-<ion-footer-bar class="bar-dark regobs-bar" ng-show="appVm.showFormFooter || appVm.showRegistrationFooter">
+<ion-footer-bar class="bar-dark regobs-bar" ng-show="appVm.showFormFooter || appVm.showRegistrationFooter || appVm.showTripFooter">
+
+    <div ng-if="appVm.showTripFooter" class="row row-no-padding">
+        <div class="col col-center">
+            <button class="button button-block button-clear" ng-click="appVm.resetTrip()" ng-hide="appVm.trip.model.started">
+                <i class="icon stable ion-android-close"></i> Nullstill
+            </button>
+        </div>
+
+        <div class="col col-center">
+            <button class="button  button-block button-clear" ng-click="appVm.startTrip(appVm.tripId, appVm.tripMinutes, appVm.tripComment)" ng-hide="appVm.trip.model.started">
+                <span>
+                    <i class="icon calm ion-android-walk"></i> Start tur
+                </span>
+            </button>
+            <button class="button  button-block button-clear" ng-click="appVm.stopTrip()" ng-show="appVm.trip.model.started">
+                <span>
+                    <i class="icon balanced ion-android-walk"></i> Avslutt tur
+                </span>
+            </button>
+        </div>
+
+    </div>
+
     <div ng-if="appVm.showFormFooter" class="row row-no-padding">
         <div class="col col-center">
             <button class="button button-block  button-clear" ng-click="appVm.resetProperty()"><i class="icon stable ion-android-close"></i> Nullstill</button>
@@ -68,7 +97,7 @@
         </div>
         <div class="col col-center">
             <button class="button  button-block button-clear" ng-click="appVm.registration.send()">
-                <ion-spinner class="spinner-light" ng-if="appVm.registration.sending"></ion-spinner>
+                <ion-spinner class="spinner-light spinner-fix" ng-if="appVm.registration.sending"></ion-spinner>
                 <span ng-hide="appVm.registration.sending">
                     <i class="icon calm ion-upload"></i> Send<span class="badge badge-assertive" ng-show="appVm.registration.unsent.length" ng-bind="appVm.registration.unsent.length"></span>
                 </span>

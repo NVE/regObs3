@@ -1,10 +1,32 @@
 angular.module('RegObs')
-    .controller('AppCtrl', function ($scope, $state, AppSettings, Registration, User, RegobsPopup, HeaderColor) {
+    .controller('AppCtrl', function ($scope, $state, AppSettings, Registration, Trip, User, RegobsPopup, HeaderColor) {
         var appVm = this;
 
         appVm.registration = Registration;
         appVm.userService = User;
         appVm.registrationIsType = Registration.doesExistUnsent;
+        appVm.trip = Trip;
+
+        appVm.resetTrip = function () {
+            if(appVm.tripId || appVm.tripMinutes || appVm.tripComment)
+            RegobsPopup.delete('Nullstill', 'Vil du nullstille skjema?', 'Nullstill')
+                .then(function(confirm){
+                    if(confirm){
+                        appVm.tripId = undefined;
+                        appVm.tripMinutes = undefined;
+                        appVm.tripComment = undefined;
+                    }
+                });
+
+        };
+
+        appVm.startTrip = function (id, expectedMinutes, comment) {
+            Trip.start(10,id,expectedMinutes,comment);
+        };
+
+        appVm.stopTrip = function () {
+            Trip.stop();
+        };
 
         appVm.resetProperty = function () {
             var prop = $state.current.data.registrationProp;
@@ -18,11 +40,6 @@ angular.module('RegObs')
                     }
                 );
         };
-
-        appVm.timeChanged = function (newTime) {
-            Registration.data.DtObsTime = new Date(newTime).toISOString();
-        };
-
 
         $scope.$applyAsync(function(){
             HeaderColor.init();
@@ -50,6 +67,7 @@ angular.module('RegObs')
         $scope.$on('$ionicView.beforeEnter', function () {
             appVm.currentState = $state.current;
             console.log(appVm.currentState);
+            appVm.showTripFooter = $state.current.data.showTripFooter;
             appVm.showFormFooter = $state.current.data.showFormFooter;
             appVm.showRegistrationFooter = $state.current.data.showRegistrationFooter;
         });

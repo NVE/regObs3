@@ -8,8 +8,7 @@ angular
         };
 
         function link(scope){
-            scope.ObsLocation = ObsLocation;
-            scope.Registration = Registration;
+            scope.ObsLocation = ObsLocation;            
 
             var chosenPlace;
 
@@ -24,6 +23,8 @@ angular
                         return modal;
                     });
             };
+
+            loadModal();
 
             var loadPlacesModal = function () {
                 var url = 'app/directives/registrationtools/placesModal.html';
@@ -41,25 +42,17 @@ angular
 
             scope.setPlace = function(place) {
                 chosenPlace = place;
-                Registration.data.ObsLocation = {
+                ObsLocation.set({
                     ObsLocationId: place.LocationId,
                     Name: place.Name
-                };
-                Registration.save();
+                });
                 scope.placesModal.hide();
             };
 
             scope.loadPlaces = function () {
                 scope.fetchingPlaces = true;
-                return $http.get(
-                    AppSettings.getEndPoints().getObservationsWithinRadius, {
-                        params: {
-                            latitude:Registration.data.ObsLocation.Latitude,
-                            longitude:Registration.data.ObsLocation.Longitude,
-                            range:AppSettings.data.searchRange,
-                            geohazardId: Registration.data.GeoHazardTID
-                        }
-                    })
+                return ObsLocation
+                    .getObservationsWithinRadius(AppSettings.data.searchRange, Registration.data.GeoHazardTID)
                     .then(function(res){
                         scope.fetchingPlaces = false;
                         console.log(res);
@@ -71,21 +64,29 @@ angular
 
                     })
                     .catch(function(err){
+                        console.log('Error fetching places', err);
                         scope.fetchingPlaces = false;
-
                     });
 
             };
 
             scope.getPositionText = function () {
-                var text = '';
-                if(Registration.data.ObsLocation.Latitude){
-                    var margin = Registration.data.ObsLocation.Uncertainty;
-                    var lat = $filter('number')(Registration.data.ObsLocation.Latitude, 3);
-                    var lng = $filter('number')(Registration.data.ObsLocation.Longitude, 3);
-                    text = lat+'N ' + lng+'E ' + '+/-' +margin+'m';
-                } else if (Registration.data.ObsLocation.ObsLocationId) {
-                    text = Registration.data.ObsLocation.Name;
+                var text = '',
+                    margin = ObsLocation.data.Uncertainty,
+                    place = ObsLocation.data.place,
+                    lat = ObsLocation.data.Latitude,
+                    lng = ObsLocation.data.Longitude,
+                    clickedInMap = ObsLocation.data.UTMSourceTID === ObsLocation.source.clickedInMap,
+                    marginText = clickedInMap ? '' : (' Usikkerhet: ' + margin + 'm');
+
+                if(place){
+                    text = place.Navn + ' / ' + place.Fylke + marginText;
+                } else if(lat){
+                    lat = $filter('number')(lat, 3);
+                    lng = $filter('number')(lng, 3);
+                    text = lat+'N ' + lng+'E ' + marginText;
+                } else if (ObsLocation.data.ObsLocationId) {
+                    text = ObsLocation.data.Name;
                 } else {
                     text = 'Ikke funnet';
                 }
@@ -93,8 +94,6 @@ angular
                 return text;
 
             };
-
-            loadModal();
 
             scope.openPositionInMap = function () {
                 scope.$broadcast('openPositionInMap');

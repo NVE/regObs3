@@ -10,17 +10,21 @@ angular
             elem.css('height', '100%');
 
             var start, stop;
+            var startIcon = L.AwesomeMarkers.icon({icon: 'play', prefix: 'ion', markerColor: 'green'});
+            var endIcon = L.AwesomeMarkers.icon({icon: 'stop', prefix: 'ion', markerColor: 'red'});
 
             var center = [
                 62.5,
                 10
             ];
 
+            var pos = L.circle(new L.LatLng(center[0], center[1]), 1);
+
             //var pos = L.circle(new L.LatLng(center[0], center[1]), 1);
 
             var map = L.map(elem[0], {
                 center: center,
-                zoom: 12,
+                zoom: 14,
                 zoomControl: false,
                 attributionControl: false
             });
@@ -32,6 +36,7 @@ angular
             //var layer = L.tileLayer('http://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}@2x.png');
 
             map.addLayer(layer);
+            pos.addTo(map);
             map.addLayer(markers);
 
             var polyline = L.polyline([new L.LatLng(0,0),new L.LatLng(0,0)], {color: 'red'}).addTo(map);
@@ -46,6 +51,10 @@ angular
             scope.$on('openLandslideInMap', function () {
                 map.invalidateSize();
                 var landSlideObs = Registration.data.LandSlideObs;
+                if(!start){
+                    var obsLoc = Object.create(Registration.data.ObsLocation);
+                    drawUserLocation(obsLoc);
+                }
 
                 if(!landSlideObs.StartLat){
                     start = undefined;
@@ -57,11 +66,11 @@ angular
 
                 if(landSlideObs.StopLat && !stop){
                     var stopPos = new L.LatLng(landSlideObs.StopLat,landSlideObs.StopLong);
-                    stop = createPopup(stopPos, 'Stop');
+                    stop = createPopup(stopPos, 'Stop', endIcon);
                 }
                 if(landSlideObs.StartLat && !start){
                     var startPos = new L.LatLng(landSlideObs.StartLat,landSlideObs.StartLong);
-                    start = createPopup(startPos, 'Start');
+                    start = createPopup(startPos, 'Start', startIcon);
                 } /* else if(start && !Registration.data.LandSlideObs.StartLat){
                     markers.clearLayers();
                     start = undefined;
@@ -74,24 +83,25 @@ angular
             });
 
             scope.$on('setLandslideInMap', function () {
+                var landSlideObs = Registration.data.LandSlideObs;
                 if(start){
                     var startLatLng = start.getLatLng();
-                    Registration.data.LandSlideObs.StartLat = startLatLng.lat;
-                    Registration.data.LandSlideObs.StartLong = startLatLng.lng;
+                    landSlideObs.StartLat = startLatLng.lat;
+                    landSlideObs.StartLong = startLatLng.lng;
                 }
                 if(stop){
                     var stopLatLng = stop.getLatLng();
-                    Registration.data.LandSlideObs.StopLat = stopLatLng.lat;
-                    Registration.data.LandSlideObs.StopLong = stopLatLng.lng;
+                    landSlideObs.StopLat = stopLatLng.lat;
+                    landSlideObs.StopLong = stopLatLng.lng;
                 }
             });
 
             map.on('click', function (e) {
                 //alert("Lat, Lon : " + e.latlng.lat + ", " + e.latlng.lng);
                 if(!start){
-                    start = createPopup(e.latlng, 'Start');
+                    start = createPopup(e.latlng, 'Start', startIcon);
                 } else if(!stop){
-                    stop = createPopup(e.latlng, 'Stop');
+                    stop = createPopup(e.latlng, 'Stop', endIcon);
                 }
                 if(start && stop){
                     polyline.setLatLngs([start.getLatLng(),stop.getLatLng()]);
@@ -99,9 +109,13 @@ angular
 
             });
 
-            function createPopup(latlng, text){
-                var p = new L.marker(latlng, {draggable:'true'})
-                    .bindPopup(text);
+            function createPopup(latlng, text, icon){
+                /*var p = new L.circle(new L.LatLng(center[0], center[1]), 1)                */
+                var p = new L.marker(latlng, {icon: icon, draggable: true})
+                    .bindPopup(text, {
+                        closeButton: false,
+                        closeOnClick: false
+                    });
 
                 p.on('dragend', function(){
                     var position = p.getLatLng();
@@ -122,6 +136,20 @@ angular
                 p.addTo(markers);
                 p.openPopup();
                 return p;
+            }
+
+            function drawUserLocation(obsLoc) {
+                console.log('DRAWUSER');
+                if (obsLoc.Latitude) {
+                    var latlng = new L.LatLng(obsLoc.Latitude, obsLoc.Longitude);
+                    map.panTo(latlng);
+                    //map.setZoom(12);
+                    if (obsLoc.Uncertainty) {
+                        var radius = obsLoc.Uncertainty / 2;
+                        pos.setLatLng(latlng);
+                        pos.setRadius(radius);
+                    }
+                }
             }
 
 

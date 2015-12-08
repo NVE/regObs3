@@ -44,6 +44,13 @@
       "dist/leaflet.css",
       "dist/leaflet.js",
       "dist/images/*.*"
+    ],
+    "Leaflet.awesome-markers": [
+        "dist/**/*.*"
     ]
+
+  },
+  "dependencies": {
+    "Leaflet.awesome-markers": "~2.0.2"
   }
 }
