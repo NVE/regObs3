@@ -209,27 +209,41 @@ angular
 
         };
 
+        function cleanupDangerObs(array){
+            if (angular.isArray(array)) {
+                array.forEach(function (dangerObs) {
+                    delete dangerObs.tempArea;
+                    delete dangerObs.tempComment;
+                });
+            }
+        }
+        function cleanupAvalancheEvalProblem(array){
+            if (angular.isArray(array)) {
+                array.forEach(function (obs) {
+                    if(obs.exposedHeight)
+                        delete obs.exposedHeight;
+                });
+            }
+        }
+
+        function cleanupGeneralObservation(obs){
+            if(obs){
+                obs.ObsHeader = '';
+            }
+        }
+
         function prepareRegistrationForSending() {
             if(!Registration.isEmpty()){
 
                 var user = User.getUser();
                 var data = Registration.data;
-
-                //Cleanup DangerObs
-                if (angular.isArray(data.DangerObs)) {
-                    data.DangerObs.forEach(function (dangerObs) {
-                        delete dangerObs.tempArea;
-                        delete dangerObs.tempComment;
-                    });
-                }
-                if (angular.isArray(data.AvalancheEvalProblem2)) {
-                    data.AvalancheEvalProblem2.forEach(function (obs) {
-                        if(obs.exposedHeight)
-                            delete obs.exposedHeight;
-                    });
-                }
-
                 var location = angular.copy(ObsLocation.data);
+
+                //Cleanup
+                cleanupDangerObs(data.DangerObs);
+                cleanupAvalancheEvalProblem(data.AvalancheEvalProblem2);
+                cleanupGeneralObservation(data.GeneralObservation);
+
                 delete location.place;
 
                 angular.extend(data, {
@@ -304,9 +318,11 @@ angular
         function doPost(postUrl, dataToSend){
 
             var success = function(){
-                var title = 'Suksess!';
-                var body = 'Observasjon registrert!';
-                RegobsPopup.alert(title, body);
+
+                RegobsPopup.alert(
+                    'Suksess!',
+                    'Observasjon registrert!'
+                );
                 Registration.sending = false;
                 Registration.save();
             };
@@ -324,29 +340,26 @@ angular
                         doPost(postUrl, dataToSend, httpConfig);
                     } else {
                         console.log('Avbryter sending');
-                        var strings = {
-                            usendt: 'Usendt',
-                            registrering: 'registrering',
-                            denne: 'Denne'
-                        };
-                        if(dataToSend.Registrations.length > 1){
-                            strings.usendt = 'Usendte';
-                            strings.registrering = 'registreringer';
-                            strings.denne = 'Disse';
-                        }
+
                         RegobsPopup.alert(
                             'Lagret',
-                            strings.usendt + ' ' + strings.registrering+
-                            ' er lagret. '+strings.denne+
-                            ' kan sendes inn ved et senere tidspunkt.'
+                            'Dataene dine er lagret. '+
+                            'Du kan prøve å sende inn på nytt ved et senere tidspunkt.'
                         );
                         saveToUnsent(dataToSend);
                     }
                 };
 
-                RegobsPopup.confirm(title, body,'Send','Lagre')
-                    .then(handleUserAction);
+                switch(error.status){
+                    case 422: // Innsendingen samstemmer ikke med forventet format
+                        RegobsPopup.alert('Format stemmer ikke', error.statusText);
+                        break;
+                    default:
+                        RegobsPopup.confirm(title, body,'Send','Lagre')
+                            .then(handleUserAction);
+                        break;
 
+                }
 
             };
 

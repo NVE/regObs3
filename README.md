@@ -9,14 +9,14 @@ Ionic version of regObs.
 ## Requirements to get up and running
 These are required to start developing:
 
-* Node.js
+* Node.js (0.12.7 and up)
 * Gulp
 * Bower
 * Cordova
 * Ionic
 
 ### Installation
-After you have installed latest version of [node.js](https://nodejs.org/en/), boot up a command prompt and run the following (make sure to use sudo, if you are on mac/linux):
+After you have installed [node.js](https://nodejs.org/en/), boot up a command prompt and run the following (make sure to use sudo, if you are on mac/linux):
 
     npm install -g gulp
     npm install -g bower
@@ -24,7 +24,7 @@ After you have installed latest version of [node.js](https://nodejs.org/en/), bo
     npm install -g ionic
 
 ## Getting Started
-1. Clone the repo `git clone https://github.com/bgraphic/varsom-hybrid`
+1. Clone the repo
 2. Run `npm install`
 
 ## Test deployment

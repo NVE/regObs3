@@ -86,13 +86,13 @@ angular
                 var landSlideObs = Registration.data.LandSlideObs;
                 if(start){
                     var startLatLng = start.getLatLng();
-                    landSlideObs.StartLat = startLatLng.lat;
-                    landSlideObs.StartLong = startLatLng.lng;
+                    landSlideObs.StartLat = startLatLng.lat.toString();
+                    landSlideObs.StartLong = startLatLng.lng.toString();
                 }
                 if(stop){
                     var stopLatLng = stop.getLatLng();
-                    landSlideObs.StopLat = stopLatLng.lat;
-                    landSlideObs.StopLong = stopLatLng.lng;
+                    landSlideObs.StopLat = stopLatLng.lat.toString();
+                    landSlideObs.StopLong = stopLatLng.lng.toString();
                 }
             });
 
