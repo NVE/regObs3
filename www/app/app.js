@@ -374,8 +374,25 @@
 
     }
 
-    function setup($ionicPlatform) {
+    function setup($ionicPlatform, Utility) {
+
         $ionicPlatform.ready(function () {
+
+            var timeDiff, diffDays;
+            var lastUpdate = LocalStorage.get('kdvUpdated', '2016-01-01');
+            var now = new Date();
+            var DAYS_BEFORE_KDV_UPDATE = 7;
+
+            lastUpdate = new Date(lastUpdate);
+            console.log('Last update', lastUpdate);
+
+            timeDiff = Math.abs(now.getTime() - lastUpdate.getTime());
+            diffDays = Math.ceil(timeDiff / (1000 * 3600 * 24));
+            console.log('Difference days', diffDays);
+
+            if(diffDays > DAYS_BEFORE_KDV_UPDATE) {
+                Utility.refreshKdvElements();
+            }
 
             // Hide the accessory bar by default (remove this to show the accessory bar above the keyboard
             // for form inputs)*/

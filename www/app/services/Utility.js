@@ -3,7 +3,7 @@
  */
 angular
     .module('RegObs')
-    .factory('Utility', function Utility($http) {
+    .factory('Utility', function Utility($http, $q, AppSettings, LocalStorage) {
         var service = this;
 
         var geoHazardTid = {
@@ -12,6 +12,7 @@ angular
             water: 60,
             ice: 70
         };
+        var DAYS_BEFORE_KDV_UPDATE = 7;
         var geoHazardNames = {};
         geoHazardNames[geoHazardTid.snow] = 'snø';
         geoHazardNames[geoHazardTid.dirt] = 'jord';
@@ -30,7 +31,7 @@ angular
             },
             SnowSurfaceObservation: {
                 name: "Snødekke",
-                RegistrationTID: "23"
+                RegistrationTID: "22"
             },
             AvalancheActivityObs: {
                 name: "Skredaktivitet",
@@ -101,7 +102,32 @@ angular
         };
 
         service.getKdvElements = function () {
-            return $http.get('app/json/kdvElements.json');
+
+            var deferred = $q.defer();
+            var kdvFromStorage = LocalStorage.getObject('kdvDropdowns');
+            console.log('Gangsta', kdvFromStorage);
+            if(kdvFromStorage.KdvRepositories){
+                deferred.resolve({data: kdvFromStorage});
+                return deferred.promise;
+
+            } else {
+                return $http.get('app/json/kdvElements.json');
+            }
+
+        };
+
+        service.refreshKdvElements = function(){
+
+                return $http.get(AppSettings.getEndPoints().getDropdowns, AppSettings.httpConfig)
+                    .then(function(res){
+                        console.log('Mannan', res);
+
+                        if(res.data && res.data.Data){
+                            LocalStorage.set('kdvDropdowns', res.data.Data);
+                            LocalStorage.set('kdvUpdated', Date.now());
+                        }
+                    });
+
         };
 
         service.getKdvRepositories = function () {

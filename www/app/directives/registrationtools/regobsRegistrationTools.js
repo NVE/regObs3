@@ -1,6 +1,6 @@
 angular
     .module('RegObs')
-    .directive('regobsRegistrationTools', function ($http, $filter, $ionicModal,AppSettings,ObsLocation,Registration) {
+    .directive('regobsRegistrationTools', function ($http, $filter, $ionicModal, AppSettings, RegobsPopup, ObsLocation, Registration) {
         return {
             link: link,
             scope: {},
@@ -42,10 +42,7 @@ angular
 
             scope.setPlace = function(place) {
                 chosenPlace = place;
-                ObsLocation.set({
-                    ObsLocationId: place.LocationId,
-                    Name: place.Name
-                });
+                ObsLocation.setPreviousUsedPlace(place.LocationId,place.Name);
                 scope.placesModal.hide();
             };
 
@@ -60,11 +57,21 @@ angular
                         if(result.data.length){
                             scope.places = result.data;
                             scope.placesModal.show();
+                        } else {
+                            RegobsPopup.alert(
+                                'Ingen treff',
+                                'Fant ingen eksisterende målepunkt innenfor ' + AppSettings.data.searchRange+
+                                ' meter. Søkeradius kan utvides i innstillinger.'
+                            );
                         }
 
                     })
                     .catch(function(err){
                         console.log('Error fetching places', err);
+                        RegobsPopup.alert(
+                            'Klarte ikke hente målepunkter',
+                            'Det oppsto en feil ved henting av eksisterende målepunkter. Vennligst prøv igjen senere.'
+                        );
                         scope.fetchingPlaces = false;
                     });
 
@@ -79,15 +86,15 @@ angular
                     clickedInMap = ObsLocation.data.UTMSourceTID === ObsLocation.source.clickedInMap,
                     marginText = clickedInMap ? '' : (' Usikkerhet: ' + margin + 'm');
 
-                if(place){
-                    text = place.Navn + ' / ' + place.Fylke + marginText;
-                } else if(lat){
-                    lat = $filter('number')(lat, 3);
-                    lng = $filter('number')(lng, 3);
-                    text = lat+'N ' + lng+'E ' + marginText;
-                } else if (ObsLocation.data.ObsLocationId) {
+                if (ObsLocation.data.ObsLocationId) {
                     text = ObsLocation.data.Name;
-                } else {
+                } else if(place){
+                     text = place.Navn + ' / ' + place.Fylke + marginText;
+                 } else if(lat){
+                     lat = $filter('number')(lat, 3);
+                     lng = $filter('number')(lng, 3);
+                     text = lat+'N ' + lng+'E ' + marginText;
+                 } else {
                     text = 'Ikke funnet';
                 }
 

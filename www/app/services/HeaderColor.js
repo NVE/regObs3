@@ -8,6 +8,7 @@ angular
 
         var demoColor = 'bar-assertive';
         var prodColor = 'bar-dark';
+        var testColor = 'bar-calm';
         var cachedHeaderBar, activeHeaderBar, cachedNavBar, activeNavBar;
 
         var removeClass = function (newClass) {
@@ -33,10 +34,16 @@ angular
 
             if (AppSettings.data.env === 'demo') {
                 removeClass(prodColor);
+                removeClass(testColor);
                 addClass(demoColor);
+            } else if (AppSettings.data.env === 'prod') {
+                removeClass(demoColor);
+                removeClass(testColor);
+                addClass(prodColor);
             } else {
                 removeClass(demoColor);
-                addClass(prodColor);
+                removeClass(prodColor);
+                addClass(testColor);
             }
         };
 

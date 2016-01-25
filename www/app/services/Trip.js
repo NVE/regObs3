@@ -22,12 +22,7 @@
             data: {}
         };
 
-        var httpConfig = {
-            headers: {
-                regObs_apptoken: AppSettings.appId,
-                ApiJsonVersion: AppSettings.apiVersion
-            }
-        };
+        var httpConfig = AppSettings.httpConfig;
 
         Trip.model = LocalStorage.getAndSetObject(
             storageKey, 'data', angular.copy(defaultModel)

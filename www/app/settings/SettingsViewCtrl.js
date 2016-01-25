@@ -1,10 +1,14 @@
 angular
     .module('RegObs')
-    .controller('SettingsViewCtrl', function ($scope, $cordovaInAppBrowser, AppSettings, LocalStorage, ObsLocation, Registration, User, HeaderColor, RegobsPopup) {
+    .controller('SettingsViewCtrl', function ($scope, $cordovaInAppBrowser, AppSettings, LocalStorage, ObsLocation, Registration, User, Utility, HeaderColor, RegobsPopup) {
         var vm = this;
 
         vm.settings = AppSettings;
         vm.userService = User;
+
+        vm.kdvUpdated = new Date(parseInt(LocalStorage.get('kdvUpdated')));
+
+
 
         vm.logIn = function () {
             User.logIn(vm.username, vm.password);
@@ -28,7 +32,7 @@ angular
                     if(res) {
                         LocalStorage.clear();
                         Registration.load();
-                        AppSettings.load();                        
+                        AppSettings.load();
                         User.load();
                         HeaderColor.init();
                         vm.username = '';
@@ -37,11 +41,27 @@ angular
                 });
         };
 
+        vm.refreshKdvElements = function () {
+            vm.refreshingKdv = true;
+            Utility.refreshKdvElements()
+                .then(function(){
+                    RegobsPopup.alert('Suksess!', 'Nedtrekkslister har blitt oppdatert.')
+                })
+                .catch(function(){
+                    RegobsPopup.alert('Det oppsto en feil', 'Det oppsto en feil ved oppdatering av nedtrekksmenyer. Vennligst prøv igjen senere');
+                })
+                .finally(function(){
+                    vm.refreshingKdv = false;
+                    vm.kdvUpdated = new Date(parseInt(LocalStorage.get('kdvUpdated')));
+                    console.log(vm.kdvUpdated);
+                });
+
+        };
+
         vm.envChanged = function () {
             vm.logOut();
             AppSettings.save();
             HeaderColor.init();
         };
 
-        $scope.$on('$ionicView.loaded', function(){});
     });

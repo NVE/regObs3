@@ -6,12 +6,7 @@ angular
         var storageKey = 'regobsRegistrations';
         var unsentStorageKey = 'regobsUnsentRegistrations';
 
-        var httpConfig = {
-            headers: {
-                regObs_apptoken: AppSettings.appId,
-                ApiJsonVersion: AppSettings.apiVersion
-            }
-        };
+        var httpConfig = AppSettings.httpConfig;
 
 
 
@@ -232,6 +227,17 @@ angular
             }
         }
 
+        function cleanupObsLocation(location){
+            delete location.place;
+            delete location.Name;
+            if(location.ObsLocationId){
+                delete location.Latitude;
+                delete location.Longitude;
+                delete location.Uncertainty;
+                delete location.UTMSourceTID;
+            }
+        }
+
         function prepareRegistrationForSending() {
             if(!Registration.isEmpty()){
 
@@ -243,13 +249,12 @@ angular
                 cleanupDangerObs(data.DangerObs);
                 cleanupAvalancheEvalProblem(data.AvalancheEvalProblem2);
                 cleanupGeneralObservation(data.GeneralObservation);
-
-                delete location.place;
+                cleanupObsLocation(location);
 
                 angular.extend(data, {
                     "ObserverGuid": user.Guid,
                     "ObserverGroupID": user.chosenObserverGroup || null,
-                    "Email": user.anonymous ? false : !!AppSettings.emailReceipt,
+                    "Email": user.anonymous ? false : !!AppSettings.data.emailReceipt,
                     "ObsLocation": location
                 });
 

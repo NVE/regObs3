@@ -46,12 +46,13 @@ angular
         };
 
         $scope.$on('$ionicView.loaded', function(){
+            var start,end,dt;
             vm.reg = Registration.initPropertyAsObject($state.current.data.registrationProp);
 
             if(vm.reg.LandSlideObs.DtLandSlideTime && vm.reg.LandSlideObs.DtLandSlideTimeEnd){
-                var start = new Date(vm.reg.LandSlideObs.DtLandSlideTime);
-                var end = new Date(vm.reg.LandSlideObs.DtLandSlideTimeEnd);
-                var dt = end - start;
+                start = new Date(vm.reg.LandSlideObs.DtLandSlideTime);
+                end = new Date(vm.reg.LandSlideObs.DtLandSlideTimeEnd);
+                dt = end - start;
                 vm.dateAccuracy = dt/36e5;
                 vm.date = new Date(start.getTime() + (dt/2));
             }

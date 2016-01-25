@@ -94,6 +94,13 @@
         </ion-list>
 
         <div class="padding">
+
+            <button ng-click="vm.refreshKdvElements()" class="button button-block">
+                <ion-spinner class="spinner-light" ng-if="vm.refreshingKdv"></ion-spinner>
+                Oppdatér nedtrekksmenyer
+            </button>
+            Oppdatert {{vm.kdvUpdated | date:'dd.MM, kl. HH:mm':'+0100'}}
+
             <button ng-click="vm.clearAppStorage()" class="button button-block">
                 Nullstill app
             </button>

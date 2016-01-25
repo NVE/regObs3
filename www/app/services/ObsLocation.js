@@ -61,7 +61,8 @@ angular
                         longitude:ObsLocation.data.Longitude,
                         range:range,
                         geohazardId: geohazardId
-                    }
+                    },
+                    timeout: AppSettings.data.gpsTimeout*1000
                 });
         };
 
@@ -77,13 +78,25 @@ angular
             }
         };
 
+        ObsLocation.setPreviousUsedPlace = function(id, name){
+            if(id){
+                ObsLocation.data.ObsLocationId = id;
+                ObsLocation.data.Name = name;
+                save();
+            }
+        };
+
         function getLocationName(loc){
+            if(!loc.Latitude) return;
+
             ObsLocation.data.place = undefined;
+
             $http.get(AppSettings.getEndPoints().getLocationName, {
                 params: {
                     latitude:loc.Latitude,
                     longitude:loc.Longitude
-                }
+                },
+                timeout: AppSettings.data.gpsTimeout*1000
             }).then(function(response){
                 console.log(response);
                 ObsLocation.data.place = response.data.Data;

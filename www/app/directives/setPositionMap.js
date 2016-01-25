@@ -73,7 +73,7 @@ angular
                 obsLoc = {
                     Latitude: e.latlng.lat.toString(),
                     Longitude: e.latlng.lng.toString(),
-                    Uncertainty: 1 + '',
+                    Uncertainty: '0',
                     UTMSourceTID: ObsLocation.source.clickedInMap
                 };
                 drawUserLocation(obsLoc);

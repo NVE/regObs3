@@ -8,22 +8,29 @@ angular
         var storageKey = 'regobsAppSettings';
         var data = {
             env: 'demo',
-            emailReceipt: true,
+            emailReceipt: false,
             compass: false,
             gpsTimeout: 10,
-            searchRange: 2500,
+            searchRange: 5000,
             locale: 'nb'
         };
 
         var baseUrls = {
             demo: 'https://api.nve.no/hydrology/demo/regobs/webapi',
-            //prod: 'https://api.nve.no/hydrology/regobs/webapi',
+            test: 'https://tst-h-web03.nve.no/regobswebapi',
+            prod: 'https://api.nve.no/hydrology/regobs/webapi',
             proxy: '/api'
         };
 
+        settings.httpConfig = {
+            headers: {
+                regObs_apptoken: '***REMOVED***',
+                ApiJsonVersion: '0.9.0.20140408'
+            },
+            timeout: 15000
+        };
+
         //settings.data = Object.create(data);
-        settings.appId = '***REMOVED***';
-        settings.apiVersion = '0.9.0.20140408';
         settings.mapTileUrl = 'http://opencache.statkart.no/gatekeeper/gk/gk.open_gmaps?layers=topo2&zoom={z}&x={x}&y={y}&format=image/png';
         //'http://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}@2x.png'
         settings.load = function () {

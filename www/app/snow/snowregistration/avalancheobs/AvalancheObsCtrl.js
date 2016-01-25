@@ -2,19 +2,30 @@ angular
     .module('RegObs')
     .controller('AvalancheObsCtrl', function ($scope, Registration) {
         var vm = this;
-        vm.expositionArray = Registration.getExpositionArray();
-        vm.dateChange = function () {
-            console.log(vm.activityObject.DtAvalancheTime);
-        };
+
 
         $scope.$on('$ionicView.loaded', function(){
-            vm.activityObject = {};
+            var arr = [
+                {
+                    "EstimatedNumTID":"3",
+                    "DtStart":"2015-11-09T22:37:00.000Z",
+                    "DtEnd":"2015-11-09T23:37:00.000Z",
+                    "ValidExposition":"11100001",
+                    "ExposedHeight1":2100,
+                    "ExposedHeight2":1500,
+                    "ExposedHeightComboTID":4,
+                    "AvalancheExtTID":"20",
+                    "AvalCauseTID":"12",
+                    "AvalTriggerSimpleTID":"21",
+                    "DestructiveSizeTID":"4",
+                    "AvalPropagationTID":"0",
+                    "Comment":"test"
+                }
+            ];
 
-            vm.activityProp = 'AvalancheActivityObs';
-            vm.registrationProp = '';
 
-            vm.obs = Registration.getPropertyAsObject('AvalancheObs');
-            vm.activityObsArray = Registration.getPropertyAsArray(vm.activityProp);
+            vm.reg = Registration.initPropertyAsObject("AvalancheActivityObs2");
+
         });
     });
 /*
