@@ -212,7 +212,7 @@ angular
                 });
             }
         }
-        function cleanupAvalancheEvalProblem(array){
+        function stripExposedHeight(array){
             if (angular.isArray(array)) {
                 array.forEach(function (obs) {
                     if(obs.exposedHeight)
@@ -247,9 +247,11 @@ angular
 
                 //Cleanup
                 cleanupDangerObs(data.DangerObs);
-                cleanupAvalancheEvalProblem(data.AvalancheEvalProblem2);
+                stripExposedHeight(data.AvalancheEvalProblem2);
+                stripExposedHeight(data.AvalancheActivityObs2);
                 cleanupGeneralObservation(data.GeneralObservation);
                 cleanupObsLocation(location);
+                delete data.avalChoice;
 
                 angular.extend(data, {
                     "ObserverGuid": user.Guid,
@@ -265,13 +267,33 @@ angular
             }
         }
 
+        Registration.hasPictures = function (propertyKey) {
+            if(angular.isArray(Registration.data.Picture)){
+                var tid = Utility.registrationTid(propertyKey);
+                return !!Registration.data.Picture.filter(function(pic){
+                    return pic.RegistrationTID === tid;
+                }).length;
+            }
+        };
+
         Registration.addPicture = function (propertyKey, data) {
             Registration.initPropertyAsArray('Picture');
-            Registration.data.Picture.push({
+            var pic = {
                 RegistrationTID: Utility.registrationTid(propertyKey),
                 PictureImageBase64: data,
                 PictureComment: ''
-            });
+            };
+            Registration.data.Picture.push(pic);
+            return pic;
+        };
+
+        Registration.removePictures = function (propertyKey) {
+            if(angular.isArray(Registration.data.Picture)){
+                var tid = Utility.registrationTid(propertyKey);
+                Registration.data.Picture = Registration.data.Picture.filter(function(pic){
+                    return pic.RegistrationTID !== tid;
+                });
+            }
         };
 
         Registration.initPropertyAsArray = function (prop) {
@@ -296,6 +318,7 @@ angular
                     Registration.data[prop] = {};
                 }
             }
+            Registration.removePictures(prop);
         };
 
         Registration.propertyExists = function (prop) {
@@ -394,6 +417,17 @@ angular
             return true;
         }
 
+        function stopEventAndWarnUser(event, toStateName){
+            event.preventDefault();
+            RegobsPopup.delete('Slett registrering', 'Du har en påbegynt ' + Utility.geoHazardNames(Registration.data.GeoHazardTID) + '-registrering, dersom du går videre blir denne slettet. Vil du slette for å gå videre?')
+                .then(function (response) {
+                    if (response) {
+                        Registration.createNew(type);
+                        $state.go(toStateName);
+                    }
+                });
+        }
+
         //Her sjekkes det om man har prøver å starte en ny registrering (ved at man går inn på en *registrationNew state)
         //Dersom det finnes en registrering fra før av spørres brukeren om den skal slettes
         $rootScope.$on('$stateChangeStart', function (event, toState, toParams, fromState, fromParams) {
@@ -401,14 +435,7 @@ angular
             if (index > 0) {
                 var type = toState.name.substr(0, index); //snow, ice, dirt etc.
                 if (!Registration.isOfType(type) && !Registration.isEmpty()) {
-                    event.preventDefault();
-                    RegobsPopup.delete('Slett registrering', 'Du har en påbegynt ' + Utility.geoHazardNames(Registration.data.GeoHazardTID) + '-registrering, dersom du går videre blir denne slettet. Vil du slette for å gå videre?')
-                        .then(function (response) {
-                            if (response) {
-                                Registration.createNew(type);
-                                $state.go(toState.name);
-                            }
-                        });
+                    stopEventAndWarnUser(event, toState.name);
 
                 } else if (Registration.isEmpty()) {
                     Registration.createNew(type);

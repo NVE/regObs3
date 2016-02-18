@@ -4,13 +4,13 @@
             <label class="item item-input item-stacked-label" >
                 <span class="input-label">Tørr snø før boring (cm)</span>
                 <input type="number" placeholder="I centimeter"
-                       ng-model="vm.SnowDepth" ng-change="vm.propChanged('SnowDepth')" />
+                       ng-model="vm.SnowDepth" ng-change="vm.propChanged('SnowDepth')" replacecomma="" />
             </label>
 
             <label class="item item-input item-stacked-label" >
                 <span class="input-label">Sørpe før boring (cm)</span>
                 <input type="number" placeholder="I centimeter"
-                       ng-model="vm.SlushSnow" ng-change="vm.propChanged('SlushSnow')" />
+                       ng-model="vm.SlushSnow" ng-change="vm.propChanged('SlushSnow')" replacecomma="" />
             </label>
 
             <regobs-ice-layer obs-object="vm.reg.IceThickness"></regobs-ice-layer>
@@ -18,7 +18,7 @@
             <label class="item item-input item-stacked-label" >
                 <span class="input-label">Total istykkelse (cm)*</span>
                 <input type="number" placeholder="I centimeter"
-                       ng-model="vm.IceThicknessSum" ng-change="vm.propChanged('IceThicknessSum')" />
+                       ng-model="vm.IceThicknessSum" ng-change="vm.propChanged('IceThicknessSum')" replacecomma="" />
             </label>
             <label class="item item-input item-stacked-label">
                 <span class="input-label">Kommentar</span>

@@ -25,7 +25,11 @@ angular
             $scope.save = Registration.save;
 
             $scope.commentChanged = function () {
-                $scope.dangerObs.Comment = 'Område: ' + $scope.dangerObs.tempArea + '. Beskrivelse: ' + ($scope.dangerObs.tempComment ? $scope.dangerObs.tempComment : '');
+                if($scope.dangerObs.tempArea && $scope.dangerObs.tempComment){
+                    $scope.dangerObs.Comment = 'Område: ' + $scope.dangerObs.tempArea + '. Beskrivelse: ' + $scope.dangerObs.tempComment;
+                } else {
+                    $scope.dangerObs.Comment = $scope.dangerObs.tempComment;
+                }
             };
 
             $scope.dangerSignChanged = function () {

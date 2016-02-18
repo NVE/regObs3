@@ -59,10 +59,12 @@
                             return $http.post(AppSettings.getEndPoints().trip, Trip.model.data, httpConfig);
                         }
                     })
-                    .then(function(){
-                        RegobsPopup.alert('Tur startet', 'Tur startet!');
-                        Trip.model.started = true;
-                        save();
+                    .then(function(http){
+                        if(http){
+                            RegobsPopup.alert('Tur startet', 'Tur startet!');
+                            Trip.model.started = true;
+                            save();
+                        }
                     })
                     .catch(function () {
                         RegobsPopup.alert('Feilmelding', 'Klarte ikke starte tur.');
@@ -79,17 +81,19 @@
         };
 
         Trip.stop = function(){
-            RegobsPopup.confirm('Bekreft innsending', 'Vil du avslutte denne turen?')
+            return RegobsPopup.confirm('Bekreft innsending', 'Vil du avslutte denne turen?')
                 .then(function (confirm) {
                     if(confirm){
                         Trip.sending = true;
                         return $http.put(AppSettings.getEndPoints().trip, Trip.model.data, httpConfig)
                     }
                 })
-                .then(function(){
-                    Trip.model = angular.copy(defaultModel);
-                    save();
-                    RegobsPopup.alert('Tur stoppet', 'Tur avsluttet!');
+                .then(function(http){
+                    if(http){
+                        Trip.model = angular.copy(defaultModel);
+                        save();
+                        return RegobsPopup.alert('Tur stoppet', 'Tur avsluttet!');
+                    }
                 })
                 .catch(function () {
                     RegobsPopup.alert('Feilmelding', 'Klarte ikke avslutte tur.');

@@ -93,3 +93,27 @@
     }
 }
 
+.exposedBot {
+    background: #fff url('../img/mountain-bottom-grey.png') no-repeat;
+    background-size: 100% 100%;
+    &.button-positive {
+        background-image: url('../img/mountain-bottom-black.png');
+    }
+}
+
+.exposedMid {
+    background: #fff url('../img/mountain-middle-grey.png') no-repeat;
+    background-size: 100% 100%;
+    &.button-positive {
+        background-image: url('../img/mountain-middle-black.png');
+    }
+}
+
+.exposedTop {
+    background: #fff url('../img/mountain-top-grey.png') no-repeat;
+    background-size: 100% 100%;
+    &.button-positive {
+        background-image: url('../img/mountain-top-black.png');
+    }
+}
+

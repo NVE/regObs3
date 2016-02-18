@@ -1,7 +1,7 @@
 <ion-view view-title="Vannobservasjon">
     <ion-content>
         <ion-list>
-            <regobs-time></regobs-time>
+            <regobs-time reg-object="vm.reg" reg-prop="DtObsTime"></regobs-time>
             <regobs-menu-item
                     title="Faretegn"
                     condition="vm.propertyExists('DangerObs')"

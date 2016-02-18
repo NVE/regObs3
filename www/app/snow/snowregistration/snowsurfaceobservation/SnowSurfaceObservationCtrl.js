@@ -1,6 +1,6 @@
 angular
     .module('RegObs')
-    .controller('SnowSurfaceObservationCtrl', function ($scope, $state, Registration) {
+    .controller('SnowSurfaceObservationCtrl', function ($scope, $state, Utility, Registration) {
         var vm = this;
         vm.propChanged = function (prop){
 
@@ -8,7 +8,7 @@ angular
             var num = parseFloat(numText);
 
             if(num){
-                vm.reg.SnowSurfaceObservation[prop] = (num/100);
+                vm.reg.SnowSurfaceObservation[prop] = Utility.nDecimal(num/100, 5);
             }
 
             console.log(vm.reg.SnowSurfaceObservation);
@@ -17,8 +17,8 @@ angular
 
         $scope.$on( '$ionicView.loaded', function(){
             vm.reg = Registration.initPropertyAsObject($state.current.data.registrationProp);
-            vm.SnowDepth = vm.reg.SnowSurfaceObservation.SnowDepth ? parseInt(vm.reg.SnowSurfaceObservation.SnowDepth*10000)/100 : undefined;
-            vm.NewSnowDepth24 = vm.reg.SnowSurfaceObservation.NewSnowDepth24 ? parseInt(vm.reg.SnowSurfaceObservation.NewSnowDepth24*10000)/100 : undefined;
+            vm.SnowDepth = vm.reg.SnowSurfaceObservation.SnowDepth ? Utility.twoDecimal(vm.reg.SnowSurfaceObservation.SnowDepth*100) : undefined;
+            vm.NewSnowDepth24 = vm.reg.SnowSurfaceObservation.NewSnowDepth24 ? Utility.twoDecimal(vm.reg.SnowSurfaceObservation.NewSnowDepth24*100) : undefined;
         });
     });
 

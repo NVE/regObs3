@@ -8,6 +8,11 @@ angular
 
         vm.kdvUpdated = new Date(parseInt(LocalStorage.get('kdvUpdated')));
 
+        $scope.$on('kdvUpdated', function(event, newDate){
+            vm.kdvUpdated = new Date(parseInt(newDate));
+            console.log('KDV UPDATE', newDate);
+        });
+
 
 
         vm.logIn = function () {

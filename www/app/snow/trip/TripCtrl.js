@@ -4,16 +4,18 @@
     function TripCtrl() {
         var vm = this;
 
-        var hour = new Date().getHours();
+        var now = new Date();
+        var hour = now.getHours();
         var i;
         vm.tripMinutesArray = [];
 
         for(i = hour+1; i < 25; i++){
             vm.tripMinutesArray.push({
-                val:(i-hour)*60,
+                val:i*60,
                 name:i+':00'
             });
         }
+        console.log('Trip Array', vm.tripMinutesArray);
 
     }
 

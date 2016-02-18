@@ -3,10 +3,9 @@
  */
 angular
     .module('RegObs')
-    .directive('landslideDirectionMap', function landslideDirectionMap(AppSettings, Registration) {
+    .directive('landslideDirectionMap', function landslideDirectionMap(AppSettings, Registration, ObsLocation) {
         function link(scope, elem, attrs) {
-            var options = scope.leafletMap;
-            console.log(options);
+
             elem.css('height', '100%');
 
             var start, stop;
@@ -50,9 +49,9 @@ angular
 
             scope.$on('openLandslideInMap', function () {
                 map.invalidateSize();
-                var landSlideObs = Registration.data.LandSlideObs;
+                var landSlideObs = Registration.data[scope.landslideDirectionMap];
                 if(!start){
-                    var obsLoc = Object.create(Registration.data.ObsLocation);
+                    var obsLoc = Object.create(ObsLocation.get());
                     drawUserLocation(obsLoc);
                 }
 
@@ -71,7 +70,7 @@ angular
                 if(landSlideObs.StartLat && !start){
                     var startPos = new L.LatLng(landSlideObs.StartLat,landSlideObs.StartLong);
                     start = createPopup(startPos, 'Start', startIcon);
-                } /* else if(start && !Registration.data.LandSlideObs.StartLat){
+                } /* else if(start && !Registration.data[scope.landslideDirectionMap].StartLat){
                     markers.clearLayers();
                     start = undefined;
                     stop = undefined;
@@ -83,7 +82,7 @@ angular
             });
 
             scope.$on('setLandslideInMap', function () {
-                var landSlideObs = Registration.data.LandSlideObs;
+                var landSlideObs = Registration.data[scope.landslideDirectionMap];
                 if(start){
                     var startLatLng = start.getLatLng();
                     landSlideObs.StartLat = startLatLng.lat.toString();
@@ -160,7 +159,7 @@ angular
             restrict: 'A',
             link: link,
             scope: {
-                leafletMap: '='
+                landslideDirectionMap: '@'
             }
         };
 

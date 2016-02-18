@@ -3,20 +3,20 @@
  */
 angular
     .module('RegObs')
-    .directive('regobsAvalancheEvalProblem',
-        function regobsAvalancheEvalProblem($filter, $ionicModal, RegobsPopup, Registration, Utility) {
+    .directive('regobsAvalancheActivity',
+        function regobsAvalancheActivity($filter, $ionicModal, RegobsPopup, Registration, Utility) {
             return {
                 link: link,
-                templateUrl: 'app/directives/avalancheevalproblem/regobsAvalancheEvalProblem.html',
+                templateUrl: 'app/directives/avalancheactivity/regobsAvalancheAvtivity.html',
                 scope: {},
                 restrict: 'EA'
             };
 
             function link($scope) {
 
-                var viewArray, avalancheExtDict, avalCauseDict;
+                var avalancheExtDict;
                 var indexEditing = -1;
-                $scope.reg = Registration.initPropertyAsArray('AvalancheEvalProblem2');
+                $scope.reg = Registration.data;
                 $scope.heightArray = [
                     2500, 2400, 2300, 2200, 2100,
                     2000, 1900, 1800, 1700, 1600,
@@ -60,20 +60,22 @@ angular
                     $scope.allExpositionsToggled = false;
                     $scope.editing = false;
                     $scope.obs = {
-                        AvalCauseTID: $scope.avalCauseKDV[0].Id,
+
                         exposedHeight: {
                             'top': false,
                             'mid': false,
                             'bot': false
                         }
                     };
-                    $scope.setAvalancheExtArray();
-                    loadAttributeValues();
+
                     $scope.modal.show();
                 };
 
                 $scope.add = function () {
-                    $scope.reg.AvalancheEvalProblem2.push($scope.obs);
+                    if(!$scope.reg.AvalancheActivityObs2){
+                        $scope.reg.AvalancheActivityObs2 = [];
+                    }
+                    $scope.reg.AvalancheActivityObs2.push($scope.obs);
                     $scope.modal.hide();
                 };
 
@@ -81,7 +83,6 @@ angular
                     indexEditing = index;
                     $scope.obs = obs;
                     loadValidExposition();
-                    loadAttributeValues();
                     $scope.editing = true;
                     $scope.modal.show();
                 };
@@ -90,7 +91,7 @@ angular
                     showConfirm()
                         .then(function (response) {
                             if (response) {
-                                $scope.reg.AvalancheEvalProblem2.splice(indexEditing, 1);
+                                $scope.reg.AvalancheActivityObs2.splice(indexEditing, 1);
                                 $scope.modal.hide();
                                 indexEditing = -1;
                             }
@@ -112,32 +113,9 @@ angular
                     updateValidExposition();
                 };
 
-                $scope.weakLayersCheckBoxFlagCreator = function () {
-                    $scope.obs.AvalCauseAttributes = $scope.avalCauseAttributeFlags
-                        .reduce(function (prevVal, curVal) {
-                            return prevVal + (curVal.val * curVal.Id);
-                        }, 0);
-                };
-
-                $scope.setAvalancheExtArray = function () {
-                    var filteredViewArray = $filter('filter')(viewArray, {AvalCauseTID: $scope.obs.AvalCauseTID}, true);
-                    console.log(filteredViewArray);
-                    $scope.avalancheExtArray = filteredViewArray.map(function (val) {
-                        return {
-                            Id: val.AvalancheExtTID,
-                            Name: avalancheExtDict[val.AvalancheExtTID + '']
-                        };
-                    });
-                    console.log($scope.avalancheExtArray);
-                };
-
-                $scope.getDisplayName = function(obs){
-                    var seperator = avalancheExtDict[obs.AvalancheExtTID]? ', ' : '';
-                    return (avalancheExtDict[obs.AvalancheExtTID] || '') + seperator + avalCauseDict[obs.AvalCauseTID];
-                };
 
                 var loadModal = function () {
-                    var url = 'app/directives/avalancheevalproblem/newevalproblem.html';
+                    var url = 'app/directives/avalancheactivity/newactivity.html';
                     return $ionicModal
                         .fromTemplateUrl(url, {
                             scope: $scope,
@@ -166,39 +144,14 @@ angular
                     }
                 };
 
-                var loadAttributeValues = function () {
-                    var setAttributes = ($scope.obs && $scope.obs.AvalCauseAttributes) || 0;
-                    for (var i = $scope.avalCauseAttributeFlags.length; i--;) {
-                        var flag = $scope.avalCauseAttributeFlags[i];
-                        if (flag.Id <= setAttributes) {
-                            flag.val = 1;
-                            setAttributes -= flag.Id;
-                        } else {
-                            flag.val = 0;
-                        }
-                    }
-                };
 
                 Utility
-                    .getViewRepositories()
-                    .then(function (KdvRepos) {
-                        viewArray = KdvRepos['AvalancheProblemMenu3V'];
-                    });
-                Utility
-                    .getKdvRepositories()
+                    .getKdvRepositories('Snow_AvalancheExtKDV')
                     .then(function (repos) {
                         //Snow_AvalCauseAttributeFlags
-                        $scope.avalCauseAttributeFlags = repos['Snow_AvalCauseAttributeFlags'];
-
-                        $scope.avalCauseKDV = repos['Snow_AvalCauseKDV'];
-
                         avalancheExtDict = {};
-                        avalCauseDict = {};
                         repos['Snow_AvalancheExtKDV'].forEach(function (val) {
                             avalancheExtDict[val.Id] = val.Name;
-                        });
-                        $scope.avalCauseKDV.forEach(function (val) {
-                            avalCauseDict[val.Id] = val.Name;
                         });
 
                     })

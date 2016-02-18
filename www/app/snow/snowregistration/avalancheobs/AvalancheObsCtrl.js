@@ -1,30 +1,84 @@
 angular
     .module('RegObs')
-    .controller('AvalancheObsCtrl', function ($scope, Registration) {
+    .controller('AvalancheObsCtrl', function ($scope, $ionicModal, Registration) {
         var vm = this;
+
+        var now = new Date().toISOString();
+
+        var noAvalanches = [
+            {
+                "EstimatedNumTID":"1",
+                "DtStart": now,
+                "DtEnd": now,
+                "DestructiveSizeTID":"0",
+                "AvalPropagationTID":"0",
+                "ExposedHeightComboTID": "0",
+                "AvalancheExtTID":"0",
+                "AvalCauseTID":"0",
+                "AvalTriggerSimpleTID":"0",
+
+                "Comment":""
+            }
+        ];
+
+        var loadModal = function () {
+            var url = 'app/snow/snowregistration/avalancheobs/avalancheMapModal.html';
+            return $ionicModal
+                .fromTemplateUrl(url, {
+                    scope: $scope,
+                    animation: 'slide-in-up'
+                }).then(function (modal) {
+                    vm.modal = modal;
+                    return modal;
+                });
+        };
+
+        loadModal();
+
+        vm.expoArray = Registration.getExpositionArray();
+        vm.heightArray = [
+            2500, 2400, 2300, 2200, 2100,
+            2000, 1900, 1800, 1700, 1600,
+            1500, 1400, 1300, 1200, 1100,
+            1000, 900, 800, 700, 600,
+            500, 400, 300, 200, 100, 0
+        ];
+
+
+        vm.setLandslideInMap = function () {
+            vm.modal.hide();
+            $scope.$broadcast('setLandslideInMap');
+        };
+
+        vm.openLandslideInMap = function () {
+            vm.modal.show();
+            $scope.$broadcast('openLandslideInMap');
+        };
+
+        $scope.$watch('vm.reg.avalChoice', function(newValue, oldValue) {
+            if(oldValue !== newValue) {
+                if (newValue === 0) {
+                    delete vm.reg.AvalancheObs;
+                    delete vm.reg.Incident;
+                    vm.reg = Registration.initPropertyAsArray("AvalancheActivityObs2");
+                    vm.reg.AvalancheActivityObs2 = angular.copy(noAvalanches);
+
+                } else if (newValue === 1) {
+                    delete vm.reg.AvalancheActivityObs2;
+                    vm.reg = Registration.initPropertyAsObject("AvalancheObs");
+                } else if (newValue === 2) {
+                    delete vm.reg.AvalancheObs;
+                    delete vm.reg.Incident;
+                    delete vm.reg.AvalancheActivityObs2;
+                    vm.reg = Registration.initPropertyAsArray("AvalancheActivityObs2");
+                }
+            }
+        });
 
 
         $scope.$on('$ionicView.loaded', function(){
-            var arr = [
-                {
-                    "EstimatedNumTID":"3",
-                    "DtStart":"2015-11-09T22:37:00.000Z",
-                    "DtEnd":"2015-11-09T23:37:00.000Z",
-                    "ValidExposition":"11100001",
-                    "ExposedHeight1":2100,
-                    "ExposedHeight2":1500,
-                    "ExposedHeightComboTID":4,
-                    "AvalancheExtTID":"20",
-                    "AvalCauseTID":"12",
-                    "AvalTriggerSimpleTID":"21",
-                    "DestructiveSizeTID":"4",
-                    "AvalPropagationTID":"0",
-                    "Comment":"test"
-                }
-            ];
 
-
-            vm.reg = Registration.initPropertyAsObject("AvalancheActivityObs2");
+            if(!vm.reg) vm.reg = Registration.initPropertyAsObject("AvalancheObs");
 
         });
     });

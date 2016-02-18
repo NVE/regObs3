@@ -1,7 +1,7 @@
 <ion-view view-title="Snøobservasjon">
     <ion-content>
         <ion-list>
-            <regobs-time></regobs-time>
+            <regobs-time reg-object="vm.reg" reg-prop="DtObsTime"></regobs-time>
             <regobs-menu-item
                     title="Faretegn"
                     condition="vm.propertyExists('DangerObs')"
@@ -10,7 +10,7 @@
             </regobs-menu-item>
 
             <regobs-menu-item
-                    title="Skred (ikke komplett)"
+                    title="Skred"
                     condition="vm.avalancheObsExists()"
                     state="avalancheobs"                   >
             </regobs-menu-item>

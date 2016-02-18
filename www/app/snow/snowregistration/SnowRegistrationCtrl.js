@@ -10,9 +10,12 @@ angular
         vm.avalancheObsExists = function () {
 
             var avalancheObs = Registration.data.AvalancheObs;
-            var avalancheAct = Registration.data.AvalancheActivityObs;
+            var avalancheAct = Registration.data.AvalancheActivityObs2;
 
-            return (avalancheAct && avalancheAct.length) || !!(avalancheObs && avalancheObs.DtAvalancheTime);
+            var retVal = (avalancheAct && avalancheAct.length) || !!(avalancheObs && avalancheObs.DtAvalancheTime);
+            console.log(avalancheObs);
+
+            return retVal;
         };
 
 

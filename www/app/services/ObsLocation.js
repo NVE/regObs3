@@ -37,9 +37,9 @@ angular
                 ObsLocation.fetching = false;
                 console.log('Got position:',position);
                 ObsLocation.set({
-                    "Latitude": position.coords.latitude.toString(),
-                    "Longitude": position.coords.longitude.toString(),
-                    "Uncertainty": position.coords.accuracy.toString(),
+                    "Latitude": position.coords.latitude.toFixed(4),
+                    "Longitude": position.coords.longitude.toFixed(4),
+                    "Uncertainty": parseInt(position.coords.accuracy).toString(),
                     "UTMSourceTID": ObsLocation.source.fetchedFromGPS
                 });
                 return true;

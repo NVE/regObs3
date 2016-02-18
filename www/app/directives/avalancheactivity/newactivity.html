@@ -1,70 +1,42 @@
 <ion-modal-view>
     <ion-header-bar>
-        <h1 class="title" ng-hide="editing">Nytt skredproblem</h1>
-        <h1 class="title" ng-show="editing">Rediger skredproblem</h1>
+        <h1 class="title" ng-hide="editing">Nytt skredaktivitet</h1>
+        <h1 class="title" ng-show="editing">Rediger skredaktivitet</h1>
         <button class="button button-clear button-positive" ng-click="modal.hide()">Avbryt</button>
     </ion-header-bar>
     <ion-content>
         <ion-list>
-            <ion-checkbox ng-model="obs.AvalCauseTID" ng-true-value="24" ng-change="setAvalancheExtArray()">
-                Det finnes ikke svake lag
-            </ion-checkbox>
-            <div ng-hide="obs.AvalCauseTID === 24">
-                <ion-item class="item-divider">Svakt lag</ion-item>
 
-                <label class="item item-input item-select item-stacked-label">
-                <span class="input-label">
-                    Svakt lag
-                </span>
-                    <select ng-model="obs.AvalCauseTID"
-                            ng-options="kdv.Id as kdv.Name for kdv in avalCauseKDV"
-                            ng-change="setAvalancheExtArray()">
-                    </select>
-                </label>
-
-                <kdv-dropdown
-                        title="Svakt lags dybde?"
-                        model="obs.AvalCauseDepthTID"
-                        kdv-key="Snow_AvalCauseDepthKDV">
-                </kdv-dropdown>
-                <ion-checkbox class="item-text-wrap" ng-repeat="flag in ::avalCauseAttributeFlags" ng-model="flag.val" ng-true-value="1" ng-false-value="0" ng-change="weakLayersCheckBoxFlagCreator()">
-                    {{::flag.Name}}
-                </ion-checkbox>
-            </div>
-
-            <ion-item class="item-divider">Mulighetene for skred?</ion-item>
-
-            <label class="item item-input item-select item-stacked-label">
-                <span class="input-label">
-                    Angi skredtype
-                </span>
-                <select ng-model="obs.AvalancheExtTID"
-                        ng-options="kdv.Id as kdv.Name for kdv in avalancheExtArray">
-                </select>
-            </label>
+            <regobs-time reg-data="obs.DtStart" text="Skred skjedd i perioden fra"></regobs-time>
+            <regobs-time reg-data="obs.DtEnd" text="Skred skjedd i perioden til"></regobs-time>
 
             <kdv-dropdown
-                    title="Sannsynlig belastning for å løse ut skred"
+                    title="Hvor mange skred er det snakk om?"
+                    model="obs.EstimatedNumTID"
+                    kdv-key="Snow_EstimatedNumKDV">
+            </kdv-dropdown>
+
+            <kdv-dropdown
+                    title="Angi skredtype"
+                    model="obs.AvalancheExtTID"
+                    kdv-key="Snow_AvalancheExtKDV">
+            </kdv-dropdown>
+
+            <kdv-dropdown
+                    title="Skredutløser"
                     model="obs.AvalTriggerSimpleTID"
                     kdv-key="Snow_AvalTriggerSimpleKDV">
             </kdv-dropdown>
 
-            <kdv-dropdown
-                    title="Sannsynlighet for skred"
-                    model="obs.AvalProbabilityTID"
-                    kdv-key="Snow_AvalProbabilityKDV">
-            </kdv-dropdown>
 
             <kdv-dropdown
-                    title="Størrelse på forventet skred"
+                    title="Størrelse"
                     model="obs.DestructiveSizeTID"
                     kdv-key="Snow_DestructiveSizeKDV">
             </kdv-dropdown>
 
-            <ion-item class="item-divider">Utbredelsen på skredproblemet</ion-item>
-
             <kdv-dropdown
-                    title="Utbredelse"
+                    title="Skredutbredelse"
                     model="obs.AvalPropagationTID"
                     kdv-key="Snow_AvalPropagationKDV">
             </kdv-dropdown>

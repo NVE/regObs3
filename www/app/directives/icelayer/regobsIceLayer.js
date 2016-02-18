@@ -80,7 +80,7 @@ angular
                 $scope.edit = function (obs, index) {
                     indexEditing = index;
                     $scope.iceLayer = obs;
-                    $scope.data.thickness = $scope.iceLayer.IceLayerThickness ? parseInt($scope.iceLayer.IceLayerThickness*10000)/100 : undefined;
+                    $scope.data.thickness = $scope.iceLayer.IceLayerThickness ? Utility.nDecimal($scope.iceLayer.IceLayerThickness*100,3) : undefined;
                     $scope.editing = true;
                     $scope.modal.show();
                 };
@@ -99,9 +99,13 @@ angular
                 $scope.thicknessChanged = function () {
                     var num = parseFloat($scope.data.thickness);
                     if(!isNaN(num)){
-                        $scope.iceLayer.IceLayerThickness = num/100;
+                        $scope.iceLayer.IceLayerThickness = Utility.nDecimal(num/100,3);
 
                     }
+                };
+
+                $scope.getLayerThicknessText = function(layer){
+                    return Utility.nDecimal(layer.IceLayerThickness*100, 3);
                 };
 
                 loadKdvArray().then(loadModal);

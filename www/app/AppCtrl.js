@@ -7,16 +7,18 @@ angular.module('RegObs')
         appVm.registrationIsType = Registration.doesExistUnsent;
         appVm.trip = Trip;
 
+        function resetForm(confirm){
+            if(confirm){
+                appVm.tripId = undefined;
+                appVm.tripMinutes = undefined;
+                appVm.tripComment = undefined;
+            }
+        }
+
         appVm.resetTrip = function () {
             if(appVm.tripId || appVm.tripMinutes || appVm.tripComment)
             RegobsPopup.delete('Nullstill', 'Vil du nullstille skjema?', 'Nullstill')
-                .then(function(confirm){
-                    if(confirm){
-                        appVm.tripId = undefined;
-                        appVm.tripMinutes = undefined;
-                        appVm.tripComment = undefined;
-                    }
-                });
+                .then(resetForm);
 
         };
 
@@ -25,12 +27,13 @@ angular.module('RegObs')
         };
 
         appVm.stopTrip = function () {
-            Trip.stop();
+            Trip.stop().then(resetForm);
         };
 
         appVm.resetProperty = function () {
             var prop = $state.current.data.registrationProp;
-            if(Registration.propertyExists(prop))
+
+            if(Registration.propertyExists(prop) || Registration.hasPictures(prop))
                 RegobsPopup.delete('Tøm skjema?', 'Vil du nullstille dette skjemaet?', 'Nullstill').then(
                     function(res){
                         if(res){

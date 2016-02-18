@@ -30,7 +30,8 @@
     "ionic-plugin-deploy",
     "cordova-plugin-camera",
     "cordova-plugin-geolocation",
-    "cordova-plugin-inappbrowser"
+    "cordova-plugin-inappbrowser",
+    "cordova-plugin-device-orientation"
   ],
   "cordovaPlatforms": [
     "android"

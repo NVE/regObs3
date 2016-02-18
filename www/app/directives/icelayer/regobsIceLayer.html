@@ -6,7 +6,7 @@
                            ng-click="obsObject.IceThicknessLayer.splice($index, 1)">
             Slett
         </ion-option-button>
-        <span ng-bind="iceLayerDict[layer.IceLayerTID]"></span> - <span ng-bind="layer.IceLayerThickness*100"></span> cm
+        <span ng-bind="iceLayerDict[layer.IceLayerTID]"></span> - <span ng-bind="getLayerThicknessText(layer)"></span> cm
 
     </ion-item>
 </ion-list>

@@ -3,7 +3,7 @@
  */
 angular
     .module('RegObs')
-    .factory('Utility', function Utility($http, $q, AppSettings, LocalStorage) {
+    .factory('Utility', function Utility($http, $q, $rootScope, AppSettings, LocalStorage) {
         var service = this;
 
         var geoHazardTid = {
@@ -105,8 +105,7 @@ angular
 
             var deferred = $q.defer();
             var kdvFromStorage = LocalStorage.getObject('kdvDropdowns');
-            console.log('Gangsta', kdvFromStorage);
-            if(kdvFromStorage.KdvRepositories){
+            if(kdvFromStorage && kdvFromStorage.KdvRepositories){
                 deferred.resolve({data: kdvFromStorage});
                 return deferred.promise;
 
@@ -120,11 +119,12 @@ angular
 
                 return $http.get(AppSettings.getEndPoints().getDropdowns, AppSettings.httpConfig)
                     .then(function(res){
-                        console.log('Mannan', res);
 
                         if(res.data && res.data.Data){
+                            var newDate = Date.now();
                             LocalStorage.set('kdvDropdowns', res.data.Data);
-                            LocalStorage.set('kdvUpdated', Date.now());
+                            LocalStorage.set('kdvUpdated', newDate);
+                            $rootScope.$broadcast('kdvUpdated', newDate);
                         }
                     });
 
@@ -152,6 +152,14 @@ angular
                 .then(function (KdvRepositories) {
                     return KdvRepositories[key];
                 });
+        };
+
+        service.twoDecimal = function(num){
+            return service.nDecimal(num,2);
+        };
+
+        service.nDecimal = function(num, n){
+            return parseFloat(num.toFixed(n))
         };
 
         /**
