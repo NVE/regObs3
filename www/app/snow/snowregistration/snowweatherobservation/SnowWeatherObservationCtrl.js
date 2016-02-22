@@ -8,13 +8,3 @@ angular
             vm.reg = Registration.initPropertyAsObject($state.current.data.registrationProp);
         });
     });
-
-/*
- "WeatherObservation": {
- "PrecipitationTID": "2",
- "AirTemperature": 1.1,
- "WindSpeed": 2.2,
- "WindDirection": "135",
- "CloudCover": "23",
- "Comment": "Kommentar"
- }*/

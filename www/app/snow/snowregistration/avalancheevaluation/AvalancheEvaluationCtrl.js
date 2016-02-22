@@ -8,12 +8,3 @@ angular
             vm.reg = Registration.initPropertyAsObject($state.current.data.registrationProp);
         });
     });
-
-/*
-"AvalancheEvaluation3": {
-    "AvalancheEvaluation": "Vurdering",
-        "AvalancheDevelopment": "Utvikling",
-        "AvalancheDangerTID": "3",
-        "ForeCastCorrectTID": "2",
-        "ForecastComment": "Kommentar"
-}*/

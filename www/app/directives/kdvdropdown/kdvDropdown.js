@@ -34,8 +34,6 @@ angular
                         scope.kdvArray  = kdvRepo;
                     }
 
-                    //scope.model = scope.model || scope.kdvArray[0].Id;
-                    //vm.iceCoverObs.IceCoverTID = vm.iceCoverObs.IceCoverTID || vm.kdvArrays.iceCover[0].Id;
                 });
         };
 

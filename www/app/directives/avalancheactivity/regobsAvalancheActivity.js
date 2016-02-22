@@ -14,7 +14,6 @@ angular
 
             function link($scope) {
 
-                var avalancheExtDict;
                 var indexEditing = -1;
                 $scope.reg = Registration.data;
                 $scope.heightArray = [
@@ -25,9 +24,74 @@ angular
                     500, 400, 300, 200, 100, 0
                 ];
 
+                $scope.noActivity = {};
+                $scope.dates = {
+                    timeFrames: [
+                        {
+                            id: 1,
+                            start: {h:0, m:0},
+                            end: {h:23, m:59},
+                            text: 'Ukjent når på dagen'
+                        },
+                        {
+                            id: 2,
+                            start: {h:0, m:0},
+                            end: {h:6, m:0},
+                            text: '0-6'
+                        },
+                        {
+                            id: 3,
+                            start: {h:6, m:0},
+                            end: {h:12, m:0},
+                            text: '6-12'
+                        },
+                        {
+                            id: 4,
+                            start: {h:12, m:0},
+                            end: {h:18, m:0},
+                            text: '12-18'
+                        },
+                        {
+                            id: 5,
+                            start: {h:18, m:0},
+                            end: {h:23, m:59},
+                            text: '18-24'
+                        }
+                    ]
+                };
+
                 var showConfirm = function () {
                     return RegobsPopup.confirm('Slett skredproblem',
                         'Er du sikker på at du vil slette dette skredproblemet?');
+                };
+
+                $scope.estimatedNumChanged = function () {
+                    $scope.noActivity.val = $scope.obs.EstimatedNumTID === $scope.estimatedNumKdvArray[1].Id;
+                };
+
+                $scope.dateChanged = function(){
+                    var now = new Date();
+
+                    /*if($scope.dates.DtStart > now){
+                        $scope.dates.DtStart = now;
+                    }*/
+                    console.log($scope.dates.timeFrame);
+
+                    var start = new Date($scope.dates.DtStart);
+                    start.setHours($scope.dates.timeFrame.start.h);
+                    start.setMinutes($scope.dates.timeFrame.start.m);
+                    start.setSeconds(0);
+                    start.setMilliseconds(0);
+
+                    var end = new Date($scope.dates.DtStart);
+                    end.setHours($scope.dates.timeFrame.end.h);
+                    end.setMinutes($scope.dates.timeFrame.end.m);
+                    end.setSeconds(0);
+                    end.setMilliseconds(0);
+
+                    $scope.obs.DtStart = start.toISOString();
+                    $scope.obs.DtEnd = end.toISOString();
+                    console.log($scope.obs);
                 };
 
                 $scope.exposedHeight = function (where) {
@@ -59,14 +123,17 @@ angular
                     $scope.exposition = [0, 0, 0, 0, 0, 0, 0, 0];
                     $scope.allExpositionsToggled = false;
                     $scope.editing = false;
+                    $scope.dates.DtStart = new Date();
+                    $scope.dates.timeFrame = $scope.dates.timeFrames[0];
                     $scope.obs = {
-
                         exposedHeight: {
                             'top': false,
                             'mid': false,
                             'bot': false
                         }
                     };
+                    $scope.dateChanged();
+                    $scope.estimatedNumChanged();
 
                     $scope.modal.show();
                 };
@@ -75,6 +142,7 @@ angular
                     if(!$scope.reg.AvalancheActivityObs2){
                         $scope.reg.AvalancheActivityObs2 = [];
                     }
+                    console.log($scope.reg);
                     $scope.reg.AvalancheActivityObs2.push($scope.obs);
                     $scope.modal.hide();
                 };
@@ -96,6 +164,15 @@ angular
                                 indexEditing = -1;
                             }
                         });
+                };
+
+                $scope.toggleNoActivity = function(){
+                    if ($scope.noActivity.val) {
+                        console.log('toggle');
+                        $scope.obs.EstimatedNumTID = $scope.estimatedNumKdvArray[1].Id;
+                    } else {
+                        $scope.obs.EstimatedNumTID = $scope.estimatedNumKdvArray[0].Id;
+                    }
                 };
 
                 $scope.toggleExposition = function (index) {
@@ -149,9 +226,14 @@ angular
                     .getKdvRepositories('Snow_AvalancheExtKDV')
                     .then(function (repos) {
                         //Snow_AvalCauseAttributeFlags
-                        avalancheExtDict = {};
+                        $scope.avalancheExtDict = {};
+                        $scope.estimatedNumDict = {};
                         repos['Snow_AvalancheExtKDV'].forEach(function (val) {
-                            avalancheExtDict[val.Id] = val.Name;
+                            $scope.avalancheExtDict[val.Id] = val.Name;
+                        });
+                        $scope.estimatedNumKdvArray = repos['Snow_EstimatedNumKDV'];
+                        $scope.estimatedNumKdvArray.forEach(function (val) {
+                            $scope.estimatedNumDict[val.Id] = val.Name;
                         });
 
                     })

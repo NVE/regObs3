@@ -9,6 +9,14 @@
     {
       "path": "/api",
       "proxyUrl": "https://api.nve.no/hydrology/demo/regobs/webapi"
+    },
+    {
+      "path": "/testapi",
+      "proxyUrl": "http://tst-h-web03.nve.no/regobswebapi"
+    },
+    {
+      "path": "/prodapi",
+      "proxyUrl": "https://api.nve.no/hydrology/regobs/webapi"
     }
   ]
 }

@@ -27,7 +27,7 @@ angular
         };
 
         vm.openUrl = function (relUrl) {
-            var base = AppSettings.data.env === 'prod' ? 'https://api.nve.no/hydrology/regobs/v0.9.0/' : 'http://h-web01.nve.no/stage_regobsservices/';
+            var base = AppSettings.getEndPoints().services;
             $cordovaInAppBrowser.open(base+relUrl, '_system' );
         };
 

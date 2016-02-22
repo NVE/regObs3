@@ -99,7 +99,7 @@
                 }
             })
             .state('avalancheobs', {
-                //Skred
+                //Skredhendelse
                 url: '/avalancheobs',
                 templateUrl: 'app/snow/snowregistration/avalancheobs/avalancheobs.html',
                 controller: 'AvalancheObsCtrl as vm',
@@ -107,6 +107,17 @@
                     defaultBack: defaultBackSnowRegistration,
                     showFormFooter: true,
                     registrationProp: 'AvalancheObs'
+                }
+            })
+            .state('avalancheactivityobs', {
+                //Skredaktivitet
+                url: '/avalancheactivityobs',
+                templateUrl: 'app/snow/snowregistration/avalancheactivityobs/avalancheactivityobs.html',
+                controller: 'AvalancheActivityObsCtrl as vm',
+                data: {
+                    defaultBack: defaultBackSnowRegistration,
+                    showFormFooter: true,
+                    registrationProp: 'AvalancheActivityObs2'
                 }
             })
             .state('snowweatherobservation', {
@@ -374,27 +385,13 @@
 
     }
 
-    function setup($ionicPlatform, LocalStorage, Utility) {
+    function setup($ionicPlatform, Utility) {
 
-        var timeDiff, diffDays;
-        var lastUpdate = LocalStorage.get('kdvUpdated', '2016-01-01');
-        var now = new Date();
-        var DAYS_BEFORE_KDV_UPDATE = 7;
-
-        lastUpdate = new Date(lastUpdate);
-        console.log('Last update', lastUpdate);
-
-        timeDiff = Math.abs(now.getTime() - lastUpdate.getTime());
-        diffDays = Math.ceil(timeDiff / (1000 * 3600 * 24));
-        console.log('Difference days', diffDays);
-
-        if(diffDays > DAYS_BEFORE_KDV_UPDATE) {
+        if(Utility.shouldUpdateKdvElements()){
             Utility.refreshKdvElements();
         }
 
         $ionicPlatform.ready(function () {
-
-
 
             // Hide the accessory bar by default (remove this to show the accessory bar above the keyboard
             // for form inputs)*/

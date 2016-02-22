@@ -7,12 +7,12 @@
                            ng-click="reg.AvalancheActivityObs2.splice($index, 1)">
             Slett
         </ion-option-button>
-        Skredaktivitet {{$index+1}}
+        {{estimatedNumDict[obs.EstimatedNumTID]}} {{avalancheExtDict[obs.AvalancheExtTID]}}
 
     </ion-item>
 </ion-list>
 <div class="padding">
     <button class="button button-block button-balanced icon-left ion-plus"
-            ng-click="new()">Legg til nytt skredproblem</button>
+            ng-click="new()">Legg til ny skredaktivitet</button>
 
 </div>

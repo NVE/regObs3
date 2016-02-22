@@ -17,17 +17,33 @@ angular
 
         var baseUrls = {
             demo: 'https://api.nve.no/hydrology/demo/regobs/webapi',
-            test: 'https://tst-h-web03.nve.no/regobswebapi',
+            test: 'http://tst-h-web03.nve.no/regobswebapi',
             prod: 'https://api.nve.no/hydrology/regobs/webapi',
-            proxy: '/api'
+            proxy: '/api',
+            prodproxy: '/prodapi',
+            testproxy: '/testapi'
+        };
+
+        var serviceUrls = {
+            demo:'http://stg-h-web03.nve.no/RegObsServices/',
+            proxy:'http://stg-h-web03.nve.no/RegObsServices/',
+            test:'http://tst-h-web03.nve.no/regobsservices_test/',
+            prod:'https://api.nve.no/hydrology/regobs/v1.0.0/'
+        };
+
+        var headers = {
+            regObs_apptoken: '***REMOVED***',
+            ApiJsonVersion: '0.9.0.20140408'
         };
 
         settings.httpConfig = {
-            headers: {
-                regObs_apptoken: '***REMOVED***',
-                ApiJsonVersion: '0.9.0.20140408'
-            },
+            headers: headers,
             timeout: 15000
+        };
+
+        settings.httpConfigRegistrationPost = {
+            headers: headers,
+            timeout: 120000
         };
 
         //settings.data = Object.create(data);
@@ -65,7 +81,7 @@ angular
                 getLocationName: baseUrls[settings.data.env] + '/Location/GetName', //?latitude=11.11&longitude=11.11&geoHazardId=15
                 postRegistration: baseUrls[settings.data.env] + '/registration', //Headers: regObs_apptoken, ApiJsonVersion
                 trip: baseUrls[settings.data.env] + '/trip', //POST= Start, PUT= Stop(object with DeviceGuid), Headers: regObs_apptoken, ApiJsonVersion
-                registerAccount: settings.data.env === 'demo' ? 'http://h-web01.nve.no/stage_RegObsServices' : 'https://api.nve.no/hydrology/regobs/v0.9.0/'
+                services: serviceUrls[settings.data.env]
             };
         };
 

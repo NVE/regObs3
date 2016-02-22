@@ -37,6 +37,10 @@ angular
                 name: "Skredaktivitet",
                 RegistrationTID: "27"
             },
+            AvalancheActivityObs2: {
+                name: "Skredaktivitet",
+                RegistrationTID: "33"
+            },
             AvalancheObs: {
                 name: "Snøskred",
                 RegistrationTID: "26"
@@ -113,6 +117,21 @@ angular
                 return $http.get('app/json/kdvElements.json');
             }
 
+        };
+
+        service.shouldUpdateKdvElements = function(){
+            var timeDiff, diffDays;
+            var lastUpdate = LocalStorage.get('kdvUpdated', '2016-01-01');
+            var now = new Date();
+
+            lastUpdate = new Date(lastUpdate);
+            console.log('Last update', lastUpdate);
+
+            timeDiff = Math.abs(now.getTime() - lastUpdate.getTime());
+            diffDays = Math.ceil(timeDiff / (1000 * 3600 * 24));
+            console.log('Difference days', diffDays);
+
+            return diffDays > DAYS_BEFORE_KDV_UPDATE;
         };
 
         service.refreshKdvElements = function(){

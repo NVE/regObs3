@@ -38,7 +38,7 @@ angular
 
             var map = L.map(elem[0], {
                 center: center,
-                zoom: 12,
+                zoom: 9,
                 zoomControl: false,
                 attributionControl: false
             });

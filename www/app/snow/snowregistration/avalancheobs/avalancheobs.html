@@ -1,146 +1,110 @@
 <ion-view view-title="Skred">
     <ion-content>
-        <ion-list>
-            <ion-checkbox ng-model="vm.reg.avalChoice" ng-true-value="0">Ingen skred</ion-checkbox>
-            <ion-checkbox ng-model="vm.reg.avalChoice" ng-true-value="1">Ett skred</ion-checkbox>
-            <ion-checkbox ng-model="vm.reg.avalChoice" ng-true-value="2">Flere skred</ion-checkbox>
-        </ion-list>
 
-        <!--"AvalancheObs": {
-        -"DtAvalancheTime": "2015-10-23T16:46",
-        -"AvalancheTID": "30",
-        -"DestructiveSizeTID": "4",
-        -"AvalancheTriggerTID": "23",
-        "HeightStartZone": "300",
-        -"TerrainStartZoneTID": "40",
-        "HeightStopZone": "200",
-        -"Aspect": "180",
-        -"StartLat": "59,913256524118324",
-        -"StartLong": "10,76685905456543",
-        -"StopLat": "59,91876362948221",
-        -"StopLong": "10,753469467163086",
-        -"AvalCauseTID": "5",
-        -"FractureHeight": 23,
-        -"FractureWidth": 23,
-        -"Trajectory": "Navn",
-        -"Comment": "Kommentar "
-        }-->
 
-        <div ng-show="vm.reg.avalChoice === 0">
-            <label class="item item-input item-input-inset">
-                    <textarea placeholder="Kommentar"
-                              name="comment"
-                              cols="30" rows="3"
-                              ng-model="vm.reg.AvalancheActivityObs2[0].Comment"></textarea>
-            </label>
+        <div class="padding">
+            <button class="button button-block icon-left ion-pin" ng-click="vm.openLandslideInMap()"
+                    ng-class="{'button-balanced':vm.reg.AvalancheObs.StartLat}">
+                Sett skredposisjon i kart
+            </button>
         </div>
+        <ion-list>
 
-        <div ng-show="vm.reg.avalChoice === 1">
-            <div class="padding">
-                <button class="button button-block icon-left ion-pin" ng-click="vm.openLandslideInMap()" ng-class="{'button-balanced':vm.reg.AvalancheObs.StartLat}">
-                    Sett skredposisjon i kart
-                </button>
-            </div>
-            <ion-list>
+            <regobs-time reg-object="vm.reg.AvalancheObs" reg-prop="DtAvalancheTime"
+                         text="Tid da skredet gikk"></regobs-time>
 
-                <regobs-time reg-object="vm.reg.AvalancheObs" reg-prop="DtAvalancheTime" text="Tid da skredet gikk"></regobs-time>
-
-                <label class="item item-input item-stacked-label item-select">
+            <label class="item item-input item-stacked-label item-select">
                     <span class="input-label">
                         Eksposisjon
                     </span>
-                    <select ng-model="vm.reg.AvalancheObs.Aspect"
-                            ng-options="dir.val as dir.name for dir in vm.expoArray">
-                    </select>
-                </label>
+                <select ng-model="vm.reg.AvalancheObs.Aspect"
+                        ng-options="dir.val as dir.name for dir in vm.expoArray">
+                </select>
+            </label>
 
-                <kdv-dropdown
-                        title="Størrelse"
-                        model="vm.reg.AvalancheObs.DestructiveSizeTID"
-                        kdv-key="Snow_DestructiveSizeKDV">
-                </kdv-dropdown>
+            <kdv-dropdown
+                    title="Størrelse"
+                    model="vm.reg.AvalancheObs.DestructiveSizeTID"
+                    kdv-key="Snow_DestructiveSizeKDV">
+            </kdv-dropdown>
 
-                <kdv-dropdown
-                        title="Skredtype"
-                        model="vm.reg.AvalancheObs.AvalancheTID"
-                        kdv-key="Snow_AvalancheKDV">
-                </kdv-dropdown>
+            <kdv-dropdown
+                    title="Skredtype"
+                    model="vm.reg.AvalancheObs.AvalancheTID"
+                    kdv-key="Snow_AvalancheKDV">
+            </kdv-dropdown>
 
-                <kdv-dropdown
-                        title="Skredutløser"
-                        model="vm.reg.AvalancheObs.AvalancheTriggerTID"
-                        kdv-key="Snow_AvalancheTriggerKDV">
-                </kdv-dropdown>
+            <kdv-dropdown
+                    title="Skredutløser"
+                    model="vm.reg.AvalancheObs.AvalancheTriggerTID"
+                    kdv-key="Snow_AvalancheTriggerKDV">
+            </kdv-dropdown>
 
-                <label class="item item-input item-stacked-label item-select">
+            <label class="item item-input item-stacked-label item-select">
                 <span class="input-label">
                     Høyde i løsneområdet
                 </span>
-                    <select ng-model="vm.reg.AvalancheObs.HeightStartZone"
-                            ng-options="height for height in vm.heightArray">
-                    </select>
-                </label>
+                <select ng-model="vm.reg.AvalancheObs.HeightStartZone"
+                        ng-options="height for height in vm.heightArray">
+                </select>
+            </label>
 
-                <kdv-dropdown
-                        title="Terrengtype i løsneområdet"
-                        model="vm.reg.AvalancheObs.TerrainStartZoneTID"
-                        kdv-key="Snow_TerrainStartZoneKDV">
-                </kdv-dropdown>
+            <kdv-dropdown
+                    title="Terrengtype i løsneområdet"
+                    model="vm.reg.AvalancheObs.TerrainStartZoneTID"
+                    kdv-key="Snow_TerrainStartZoneKDV">
+            </kdv-dropdown>
 
-                <label class="item item-input item-stacked-label item-select">
+            <label class="item item-input item-stacked-label item-select">
                 <span class="input-label">
                     Høyde i stoppområdet
                 </span>
-                    <select ng-model="vm.reg.AvalancheObs.HeightStopZone"
-                            ng-options="height for height in vm.heightArray">
-                    </select>
-                </label>
+                <select ng-model="vm.reg.AvalancheObs.HeightStopZone"
+                        ng-options="height for height in vm.heightArray">
+                </select>
+            </label>
 
-                <kdv-dropdown
-                        title="Svakt lag"
-                        model="vm.reg.AvalancheObs.AvalCauseTID"
-                        kdv-key="Snow_AvalCauseKDV">
-                </kdv-dropdown>
+            <kdv-dropdown
+                    title="Svakt lag"
+                    model="vm.reg.AvalancheObs.AvalCauseTID"
+                    kdv-key="Snow_AvalCauseKDV">
+            </kdv-dropdown>
 
-                <label class="item item-input item-stacked-label">
-                    <span class="input-label">Bruddhøyde (cm)</span>
-                    <input type="tel" placeholder="Høyde på bruddet i centimeter"
-                           ng-model="vm.reg.AvalancheObs.FractureHeight" />
-                </label>
+            <label class="item item-input item-stacked-label">
+                <span class="input-label">Bruddhøyde (cm)</span>
+                <input type="tel" placeholder="Høyde på bruddet i centimeter"
+                       ng-model="vm.reg.AvalancheObs.FractureHeight"/>
+            </label>
 
-                <label class="item item-input item-stacked-label">
-                    <span class="input-label">Bruddbredde (m)</span>
-                    <input type="tel" placeholder="Bredde på bruddkant i meter"
-                           ng-model="vm.reg.AvalancheObs.FractureWidth" />
-                </label>
+            <label class="item item-input item-stacked-label">
+                <span class="input-label">Bruddbredde (m)</span>
+                <input type="tel" placeholder="Bredde på bruddkant i meter"
+                       ng-model="vm.reg.AvalancheObs.FractureWidth"/>
+            </label>
 
-                <label class="item item-input item-input-inset">
+            <label class="item item-input item-input-inset">
                     <textarea placeholder="Skredbanenavn"
                               name="comment"
                               cols="30" rows="3"
                               ng-model="vm.reg.AvalancheObs.Trajectory"></textarea>
-                </label>
+            </label>
 
-                <label class="item item-input item-input-inset">
+            <label class="item item-input item-input-inset">
                     <textarea placeholder="Kommentar"
                               name="comment"
                               cols="30" rows="3"
                               ng-model="vm.reg.AvalancheObs.Comment"></textarea>
-                </label>
+            </label>
 
-                <ion-item class="item item-divider item-text-wrap">Legg til info hvis skredet kunne, eller har ført til ulykke eller skade</ion-item>
+            <ion-item class="item item-divider item-text-wrap">Legg til info hvis skredet kunne, eller har ført til
+                ulykke eller skade
+            </ion-item>
 
-                <regobs-incident activity-influenced-kdv="Snow_ActivityInfluencedKDV"></regobs-incident>
-
-
-            </ion-list>
-
-        </div>
+            <regobs-incident activity-influenced-kdv="Snow_ActivityInfluencedKDV"></regobs-incident>
 
 
-        <div ng-show="vm.reg.avalChoice === 2">
-            <regobs-avalanche-activity></regobs-avalanche-activity>
-        </div>
+        </ion-list>
+
 
         <regobs-image-list></regobs-image-list>
         <button ui-sref="help({page:'avalancheactivityobs'})" class="button button-positive button-block button-clear">
@@ -151,50 +115,3 @@
     </ion-content>
 </ion-view>
 
-<!--
-//Flere skkred
-var shiz = {
-"AvalancheActivityObs": [{
-"HeigthStartZone": "300",
-"DtAvalancheTime": "2015-10-26T11:42:00.287Z",
-"EstimatedNumTID": "3",
-"DestructiveSizeTID": "4",
-"AvalancheTID": "21",
-"Comment": "Kommentqr"
-}]
-}]
-
- "AvalancheActivityObs2": [
-        {
-            "EstimatedNumTID":"3", --act
-            "DtStart":"2015-11-09T22:37:00.000Z",
-            "DtEnd":"2015-11-09T23:37:00.000Z",
-            "ValidExposition":"11100001",--eval
-            "ExposedHeight1":2100,--eval
-            "ExposedHeight2":1500,--eval
-            "ExposedHeightComboTID":4,--eval
-            "AvalancheExtTID":"20",--eval
-            "AvalCauseTID":"12",--eval
-            "AvalTriggerSimpleTID":"21",--eval
-            "DestructiveSizeTID":"4",--act
-            "AvalPropagationTID":"0",--eval
-            "Comment":"test",
-        }
-    ]
-};-->
-<!--
-[{
-"AvalCauseTID":"12",
-"AvalCauseDepthTID":"2",
-"AvalCauseAttributes":5,
-"AvalancheExtTID":"20",
-"AvalTriggerSimpleTID":"21",
-"AvalProbabilityTID":"5",
-"DestructiveSizeTID":"4",
-"AvalPropagationTID":"0",
-"ExposedHeightComboTID":4,
-"ExposedHeight1":2100,
-"ExposedHeight2":1500,
-"ValidExposition":"11100001",
-"Comment":"Kommentar"
-}]-->

@@ -37,6 +37,18 @@
                     kdv-key="Snow_SnowDriftKDV">
             </kdv-dropdown>
 
+            <kdv-dropdown
+                    title="Snødekkehardhet"
+                    model="vm.reg.SnowSurfaceObservation.SnowSurfaceTID"
+                    kdv-key="Snow_SnowSurfaceKDV">
+            </kdv-dropdown>
+
+            <kdv-dropdown
+                    title="Overflatefuktighet"
+                    model="vm.reg.SnowSurfaceObservation.SurfaceWaterContentTID"
+                    kdv-key="Snow_SurfaceWaterContentKDV">
+            </kdv-dropdown>
+
             <label class="item item-input item-stacked-label">
                 <span class="input-label">Kommentar</span>
                 <textarea placeholder="Hvordan er snøfordelingen generelt ifht. høyde og eksposisjon. Er det forskjell i regionen?"
@@ -52,13 +64,3 @@
     </ion-content>
 </ion-view>
 
-<!--
-/*"SnowSurfaceObservation": {
-"SnowDepth": "0.0100",
-"NewSnowDepth24": "0.0200",
-"NewSnowLine": "3",
-"SnowLine": "4",
-"HeightLimitLayeredSnow": "5",
-"SnowDriftTID": "2",
-"Comment": "Kommentar "
-}*/-->

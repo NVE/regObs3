@@ -123,14 +123,3 @@ angular
             }
         });
 
-/*"IceThicknessLayer": [
-    {
-        "IceLayerID": 0, //økende id bare
-        "IceLayerTID": "1", //Sarpe osv
-        "IceLayerThickness": "0.0100"
-    }, {
-        "IceLayerID": 1,
-        "IceLayerTID": "9",
-        "IceLayerThickness": "0.0200"
-    }
-]*/

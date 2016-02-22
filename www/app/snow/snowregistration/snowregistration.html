@@ -10,9 +10,16 @@
             </regobs-menu-item>
 
             <regobs-menu-item
-                    title="Skred"
-                    condition="vm.avalancheObsExists()"
-                    state="avalancheobs"                   >
+                    title="Skredhendelse"
+                    condition="vm.propertyExists('AvalancheObs')"
+                    state="avalancheobs">
+            </regobs-menu-item>
+
+            <regobs-menu-item
+                    title="Skredaktivitet"
+                    condition="vm.propertyExists('AvalancheActivityObs2')"
+                    state="avalancheactivityobs"
+                    badge-text="vm.reg.AvalancheActivityObs2.length">
             </regobs-menu-item>
 
             <regobs-menu-item

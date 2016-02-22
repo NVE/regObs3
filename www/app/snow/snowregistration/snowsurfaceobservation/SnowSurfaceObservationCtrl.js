@@ -22,13 +22,3 @@ angular
         });
     });
 
-/*"SnowSurfaceObservation": {
-    "SnowDepth": "0.0100",
-        "NewSnowDepth24": "0.0200",
-        "NewSnowLine": "3",
-        "SnowLine": "4",
-        "HeightLimitLayeredSnow": "5",
-        "SnowDriftTID": "2",
-        "Comment": "Kommentar "
-}*/
-

@@ -9,7 +9,7 @@
     <button class="button button-block icon-left ion-pin" ng-click="openPositionInMap()" ng-class="{'button-balanced':ObsLocation.data.UTMSourceTID===35}">Sett posisjon i kart</button>
     <button ng-show="ObsLocation.isSet()" class="button button-block" ng-click="loadPlaces()" ng-class="{'icon-left': !fetchingPlaces, 'ion-search': !fetchingPlaces, 'button-balanced':ObsLocation.data.ObsLocationId}">
         <ion-spinner class="spinner-dark spinner-fix" ng-if="fetchingPlaces"></ion-spinner>
-        <span ng-hide="fetchingPlaces">Hent eksisterende målepunkt i nærheten</span>
+        <span ng-hide="fetchingPlaces">Finn målepunkt i nærheten</span>
     </button>
 
 </div>
