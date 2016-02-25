@@ -1,6 +1,6 @@
 angular
     .module('RegObs')
-    .directive('regobsCamera', function ($ionicPlatform, $cordovaCamera, $cordovaDeviceOrientation, $state, AppSettings, Registration) {
+    .directive('regobsCamera', function ($ionicPlatform, $cordovaCamera, $cordovaDeviceOrientation, $state, AppSettings, Pictures) {
 
         return {
             link: link,
@@ -35,7 +35,7 @@ angular
             $cordovaCamera
                 .getPicture(options)
                 .then(function (imageData) {
-                    var pic = Registration.addPicture($state.current.data.registrationProp, 'data:image/jpeg;base64,' + imageData);
+                    var pic = Pictures.addPicture($state.current.data.registrationProp, 'data:image/jpeg;base64,' + imageData);
                     //image.src = "data:image/jpeg;base64," + imageData;
                     if (AppSettings.data.compass) {
                         setOrientation(pic);

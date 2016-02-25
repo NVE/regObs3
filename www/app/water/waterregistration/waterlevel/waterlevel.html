@@ -2,36 +2,36 @@
     <ion-content>
         <ion-list>
 
-            <ion-checkbox ng-model="vm.choice"
+            <ion-checkbox ng-model="vm.reg.WaterLevelChoice"
                            ng-true-value="1"
                            ng-change="vm.resetModel()">Elv</ion-checkbox>
-            <ion-checkbox ng-model="vm.choice"
+            <ion-checkbox ng-model="vm.reg.WaterLevelChoice"
                            ng-true-value="2"
                            ng-change="vm.resetModel()">Innsjø/magasin</ion-checkbox>
 
-            <div ng-show="vm.choice">
+            <div ng-show="vm.reg.WaterLevelChoice">
             <label class="item item-input item-stacked-label">
-                <span class="input-label">Vannstand</span>
+                <span class="input-label">Vannstand (m)</span>
                 <input type="number" placeholder="I meter"
                        ng-model="vm.reg.WaterLevel.WaterLevelValue" replacecomma="" />
             </label>
 
-            <kdv-dropdown ng-show="vm.choice === 1"
+            <kdv-dropdown ng-show="vm.reg.WaterLevelChoice === 1"
                           title="Referansenivå"
                           model="vm.reg.WaterLevel.WaterLevelRefTID"
                           kdv-key="Water_WaterLevelRefKDV"
                           before="200">
             </kdv-dropdown>
 
-            <kdv-dropdown ng-show="vm.choice === 2"
+            <kdv-dropdown ng-show="vm.reg.WaterLevelChoice === 2"
                     title="Referansenivå"
                     model="vm.reg.WaterLevel.WaterLevelRefTID"
                     kdv-key="Water_WaterLevelRefKDV"
                     after="200">
             </kdv-dropdown>
 
-            <label ng-show="vm.choice === 1" class="item item-input item-stacked-label">
-                <span class="input-label">Faktisk vannføring</span>
+            <label ng-show="vm.reg.WaterLevelChoice === 1" class="item item-input item-stacked-label">
+                <span class="input-label">Faktisk vannføring (m3/s)</span>
                 <input type="number" placeholder="Gis som tall i m3/s"
                        ng-model="vm.reg.WaterLevel.MeasuredDischarge" />
             </label>

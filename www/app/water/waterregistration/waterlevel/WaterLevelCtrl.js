@@ -4,20 +4,24 @@ angular
 
         var vm = this;
 
+        var prevChoice;
+
         vm.resetModel = function () {
+            if(!vm.reg.WaterLevelChoice){
+                vm.reg.WaterLevelChoice = prevChoice;
+            } else {
+                prevChoice = vm.reg.WaterLevelChoice;
+            }
+
             if(vm.reg.WaterLevel.MeasuredDischarge){
                 delete vm.reg.WaterLevel.MeasuredDischarge;
             }
-            vm.reg.WaterLevel.WaterLevelRefTID = undefined;
+            delete vm.reg.WaterLevel.WaterLevelRefTID;
         };
 
 
         $scope.$on('$ionicView.loaded', function(){
             vm.reg = Registration.initPropertyAsObject($state.current.data.registrationProp);
-            if(vm.reg.WaterLevel.WaterLevelRefTID < 200 || vm.reg.WaterLevel.MeasuredDischarge){
-                vm.choice = 1;
-            } else if (vm.reg.WaterLevel.WaterLevelRefTID >= 200){
-                vm.choice = 2;
-            }
+
         });
     });

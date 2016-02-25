@@ -13,8 +13,9 @@ angular
 
             var config = {
                 headers: {
-                    'Authorization': 'Basic ' + btoa(username + ':' + password)
+                    Authorization: 'Basic ' + btoa(username + ':' + password)
                 },
+                timeout: AppSettings.httpConfig.timeout,
                 cache: true
             };
             return $http.get(endpoints.getObserver, config).then(function(response) {
@@ -32,6 +33,8 @@ angular
                     status = 'Feil brukernavn eller passord. Vennligst fyll inn på nytt og prøv igjen.'
                 } else if(response.status === -1){
                     status = 'Klarte ikke å logge inn pga. manglende tilkobling til nett. Vennligst prøv igjen når dekningsforhold bedrer seg.'
+                } else {
+                    status = 'Det oppsto en feil ved innlogging. Melding fra server: ' + response.statusText;
                 }
                 RegobsPopup.alert('Oisann!', status);
                 service.loggingIn = false;

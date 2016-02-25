@@ -5,32 +5,32 @@
 
             <regobs-menu-item
                     title="Isdekningsgrad"
-                    condition="vm.propertyExists('IceCoverObs')"
+                    condition="appVm.propertyExists('IceCoverObs')"
                     state="icecoverobs">
             </regobs-menu-item>
 
             <regobs-menu-item
                     title="Istykkelse"
-                    condition="vm.propertyExists('IceThickness')"
+                    condition="appVm.propertyExists('IceThickness')"
                     state="icethickness">
             </regobs-menu-item>
 
             <regobs-menu-item
                     title="Faretegn"
-                    condition="vm.propertyExists('DangerObs')"
+                    condition="appVm.propertyExists('DangerObs')"
                     state="icedangerobs"
                     badge-text="vm.reg.DangerObs.length">
             </regobs-menu-item>
 
             <regobs-menu-item
                     title="Ulykke/hendelse"
-                    condition="vm.propertyExists('Incident')"
+                    condition="appVm.propertyExists('Incident')"
                     state="iceincident">
             </regobs-menu-item>
 
             <regobs-menu-item
                     title="Fritekst"
-                    condition="vm.propertyExists('GeneralObservation')"
+                    condition="appVm.propertyExists('GeneralObservation')"
                     state="generalobs">
             </regobs-menu-item>
 

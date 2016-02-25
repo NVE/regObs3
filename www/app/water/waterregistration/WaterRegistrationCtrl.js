@@ -5,8 +5,7 @@
 
         var vm = this;
 
-        vm.propertyExists = Registration.propertyExists;
-        vm.reg = Registration.data;        
+        vm.reg = Registration.data;
 
         $scope.$on('$ionicView.loaded', function(){});
 

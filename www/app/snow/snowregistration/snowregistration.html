@@ -4,58 +4,58 @@
             <regobs-time reg-object="vm.reg" reg-prop="DtObsTime"></regobs-time>
             <regobs-menu-item
                     title="Faretegn"
-                    condition="vm.propertyExists('DangerObs')"
+                    condition="appVm.propertyExists('DangerObs')"
                     state="snowdangerobs"
                     badge-text="vm.reg.DangerObs.length">
             </regobs-menu-item>
 
             <regobs-menu-item
                     title="Skredhendelse"
-                    condition="vm.propertyExists('AvalancheObs')"
+                    condition="appVm.propertyExists('AvalancheObs')"
                     state="avalancheobs">
             </regobs-menu-item>
 
             <regobs-menu-item
                     title="Skredaktivitet"
-                    condition="vm.propertyExists('AvalancheActivityObs2')"
+                    condition="appVm.propertyExists('AvalancheActivityObs2')"
                     state="avalancheactivityobs"
                     badge-text="vm.reg.AvalancheActivityObs2.length">
             </regobs-menu-item>
 
             <regobs-menu-item
                     title="Vær"
-                    condition="vm.propertyExists('WeatherObservation')"
+                    condition="appVm.propertyExists('WeatherObservation')"
                     state="snowweatherobservation">
             </regobs-menu-item>
 
             <regobs-menu-item
                     title="Snødekke"
-                    condition="vm.propertyExists('SnowSurfaceObservation')"
+                    condition="appVm.propertyExists('SnowSurfaceObservation')"
                     state="snowsurfaceobservation">
             </regobs-menu-item>
 
             <regobs-menu-item
                     title="Snøprofil"
-                    condition="vm.propertyExists('SnowProfile')"
+                    condition="appVm.propertyExists('SnowProfile')"
                     state="snowprofile">
             </regobs-menu-item>
 
             <regobs-menu-item
                     title="Skredproblem"
-                    condition="vm.propertyExists('AvalancheEvalProblem2')"
+                    condition="appVm.propertyExists('AvalancheEvalProblem2')"
                     state="avalancheevalproblem"
                     badge-text="vm.reg.AvalancheEvalProblem2.length">
             </regobs-menu-item>
 
             <regobs-menu-item
                     title="Skredfarevurdering"
-                    condition="vm.propertyExists('AvalancheEvaluation3')"
+                    condition="appVm.propertyExists('AvalancheEvaluation3')"
                     state="avalancheevaluation">
             </regobs-menu-item>
 
             <regobs-menu-item
                     title="Fritekst"
-                    condition="vm.propertyExists('GeneralObservation')"
+                    condition="appVm.propertyExists('GeneralObservation')"
                     state="generalobs">
             </regobs-menu-item>
 

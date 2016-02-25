@@ -2,50 +2,55 @@
     <ion-content>
         <form ng-submit="vm.logIn()" ng-if="vm.userService.getUser().anonymous">
             <div class="list">
-                <label class="item item-input" >
+                <div ng-hide="vm.userService.loggingIn">
+                <label class="item item-input">
                     <i class="icon ion-email placeholder-icon"></i>
-                    <input type="email" placeholder="E-post" ng-model="vm.username" ng-disabled="vm.userService.loggingIn" />
+                    <input type="email" placeholder="E-post" ng-model="vm.username" />
                 </label>
                 <label class="item item-input">
                     <i class="icon ion-key placeholder-icon"></i>
-                    <input type="password" placeholder="Passord" ng-model="vm.password" ng-disabled="vm.userService.loggingIn" />
+                    <input type="password" placeholder="Passord" ng-model="vm.password" />
                 </label>
-            </div>
-            <div class="padding">
+                <div class="item">
+                    <button type="submit" class="button button-block button-calm">
+                        <span>Logg inn</span>
+                    </button>
+                    <div class="row row-no-padding">
+                        <div class="col">
+                            <a href='' class="button button-small button-positive button-clear button-block"
+                               ng-click="vm.openUrl('Account/PasswordRecovery')">
+                                Glemt passord
+                            </a>
 
-                <button type="submit" class="button button-block button-calm">
-                    <ion-spinner class="spinner-light" ng-if="vm.userService.loggingIn"></ion-spinner>
-                    <span ng-hide="vm.userService.loggingIn">Logg inn</span>
-                </button>
-                <div class="row row-no-padding">
-                    <div class="col">
-                        <a href='' class="button button-small button-positive button-clear button-block" ng-click="vm.openUrl('Account/PasswordRecovery')">
-                            Glemt passord
-                        </a>
-
-                    </div>
-                    <div class="col">
-                        <a href='' class="button button-small button-positive button-clear button-block" ng-click="vm.openUrl('Account/Register')">
-                            Lag ny bruker
-                        </a>
+                        </div>
+                        <div class="col">
+                            <a href='' class="button button-small button-positive button-clear button-block"
+                               ng-click="vm.openUrl('Account/Register')">
+                                Lag ny bruker
+                            </a>
+                        </div>
                     </div>
                 </div>
-
+                </div>
+                <div class="item text-center" ng-show="vm.userService.loggingIn">
+                    <ion-spinner class="spinner" ng-if="vm.userService.loggingIn"></ion-spinner>
+                    <p>Logger inn...</p>
+                </div>
             </div>
+
         </form>
         <form ng-submit="vm.logOut()" ng-if="!vm.userService.getUser().anonymous">
             <div class="list">
                 <div class="item">
                     Logget inn som {{vm.userService.getUser().email}}
                 </div>
-            </div>
-            <div class="padding">
-                <button type="submit" class="button button-block button-calm">
-                    Logg Ut
-                </button>
+                <div class="item">
+                    <button type="submit" class="button button-block button-calm">
+                        Logg Ut
+                    </button>
+                </div>
             </div>
         </form>
-
 
 
         <ion-list>
@@ -56,20 +61,23 @@
             <ion-toggle ng-model="vm.settings.data.emailReceipt"
                         ng-change="vm.settings.save()"
                         toggle-class="toggle-calm"
-                        ng-hide="vm.userService.getUser().anonymous">Send kvittering på epost?</ion-toggle>
+                        ng-hide="vm.userService.getUser().anonymous">Send kvittering på epost?
+            </ion-toggle>
             <ion-toggle ng-model="vm.settings.data.compass"
                         ng-change="vm.settings.save()"
-                        toggle-class="toggle-calm">Aktiver kompass på bilder?</ion-toggle>
+                        toggle-class="toggle-calm">Aktiver kompass på bilder?
+            </ion-toggle>
 
             <label class="item item-input item-select">
                 <div class="input-label">
                     Appmodus
                 </div>
-                <select ng-model="vm.settings.data.env" ng-change="vm.envChanged()" ng-options="env for env in vm.settings.getEnvironments()">
+                <select ng-model="vm.settings.data.env" ng-change="vm.envChanged()"
+                        ng-options="env for env in vm.settings.getEnvironments()">
                 </select>
             </label>
 
-            <label class="item item-input item-select">
+            <label class="item item-input item-select" ng-show="!vm.userService.getUser().anonymous">
                 <div class="input-label">
                     Gruppe
                 </div>
@@ -80,36 +88,36 @@
             </label>
 
             <label class="item item-input item-stacked-label">
-            <span class="input-label">GPS timeout</span>
-            <input type="tel" placeholder="I sekunder"
-                   ng-model="vm.settings.data.gpsTimeout" ng-change="vm.settings.save()" />
+                <span class="input-label">GPS timeout (s)</span>
+                <input type="tel" placeholder="I sekunder"
+                       ng-model="vm.settings.data.gpsTimeout" ng-change="vm.settings.save()"/>
             </label>
 
             <label class="item item-input item-stacked-label">
-                <span class="input-label">Søkelengde på målesteder</span>
+                <span class="input-label">Søkelengde på målesteder (M)</span>
                 <input type="tel" placeholder="I meter"
-                       ng-model="vm.settings.data.searchRange" ng-change="vm.settings.save()" />
+                       ng-model="vm.settings.data.searchRange" ng-change="vm.settings.save()"/>
             </label>
 
+            <ion-item class="text-center">
+                <button ng-click="vm.refreshKdvElements()" class="button button-block icon-left ion-refresh">
+                    Oppdater nedtrekksmenyer  <ion-spinner class="spinner spinner-fix" ng-if="vm.refreshingKdv"></ion-spinner>
+                </button>
+
+                <p>Oppdatert {{vm.kdvUpdated | date:'dd.MM, kl. HH:mm':'+0100'}}</p>
+            </ion-item>
+
+            <ion-item class="item-borderless">
+                <button ng-click="vm.clearAppStorage()" class="button button-block icon-left ion-medkit">
+                    Nullstill app
+                </button>
+                <button ui-sref="help({page:'settings'})" class="button button-positive button-block button-clear">
+                    Hjelp
+                </button>
+
+            </ion-item>
+
         </ion-list>
-
-        <div class="padding">
-
-            <button ng-click="vm.refreshKdvElements()" class="button button-block">
-                <ion-spinner class="spinner-light" ng-if="vm.refreshingKdv"></ion-spinner>
-                Oppdatér nedtrekksmenyer
-            </button>
-            Oppdatert {{vm.kdvUpdated | date:'dd.MM, kl. HH:mm':'+0100'}}
-
-            <button ng-click="vm.clearAppStorage()" class="button button-block">
-                Nullstill app
-            </button>
-
-            <button ui-sref="help({page:'settings'})" class="button button-positive button-block button-clear">
-                Hjelp
-            </button>
-
-        </div>
 
     </ion-content>
 </ion-view>

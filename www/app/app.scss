@@ -45,11 +45,14 @@
         font-size: 0.8em;
         color: $positive;
         text-transform: uppercase;
+        &.assertive {
+            color: $assertive;
+        }
     }
-    textarea {
+    &.item-input textarea {
         padding-bottom: 8px;
     }
-    select {
+    &.item-select select {
         max-width: 100%;
         display: block;
         white-space: pre-wrap;
@@ -64,14 +67,14 @@
 }
 .platform-android {
     .item-stacked-label {
-        select {
+        &.item-select select {
             margin-left: -4px;
         }
     }
 }
 .platform-ios {
     .item-stacked-label {
-        textarea {
+        &.item-input textarea {
             text-indent:-3px;
         }
     }
@@ -91,6 +94,17 @@
             right:0;
         }
     }
+}
+
+.regobs-image {
+    position: relative;
+}
+
+.regobs-image-delete {
+    position: absolute;
+    right: 0;
+    top: 0;
+    z-index: 10;
 }
 
 .exposedBot {

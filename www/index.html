@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html lang="nb">
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no, width=device-width">
@@ -9,15 +9,12 @@
     <link rel="stylesheet" href="lib/Leaflet.awesome-markers/dist/leaflet.awesome-markers.css">
     <link href="lib/leaflet/dist/leaflet.css" rel="stylesheet">
 
-    <!--<script src="https://api.tiles.mapbox.com/mapbox-gl-js/v0.11.4/mapbox-gl.js"></script>
-    <link href="https://api.tiles.mapbox.com/mapbox-gl-js/v0.11.4/mapbox-gl.css" rel="stylesheet">-->
-
     <!-- IF using Sass (run gulp sass first), then uncomment below and remove the CSS includes above
     <link href="css/ionic.app.css" rel="stylesheet">
     -->
 
     <!-- ionic/angularjs js -->
-    <script>//window.phonegap = {}</script>
+    <!--<script>window.phonegap = {}</script>-->
     <script src="lib/leaflet/dist/leaflet.js"></script>
     <script src="lib/Leaflet.awesome-markers/dist/leaflet.awesome-markers.js"></script>
     <script src="lib/ionic/js/ionic.min.js"></script>
@@ -97,7 +94,7 @@
         </div>
         <div class="col col-center">
             <button class="button  button-block button-clear" ng-click="appVm.registration.send()">
-                <ion-spinner class="spinner-light spinner-fix" ng-if="appVm.registration.sending"></ion-spinner>
+                <ion-spinner class="spinner-light" ng-if="appVm.registration.sending"></ion-spinner>
                 <span ng-hide="appVm.registration.sending">
                     <i class="icon calm ion-upload"></i> Send<span class="badge badge-assertive" ng-show="appVm.registration.unsent.length" ng-bind="appVm.registration.unsent.length"></span>
                 </span>

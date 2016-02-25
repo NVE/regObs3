@@ -7,40 +7,43 @@ angular
         var unsentStorageKey = 'regobsUnsentRegistrations';
 
         var httpConfig = AppSettings.httpConfigRegistrationPost;
+        var baseLength = Object.keys(createRegistration('snow')).length;
 
-        var createRegistration = function (type) {
+        var messages = [
+            'Dårlige nyheter...',
+            'Oisann!',
+            'Å nei!',
+            'Klarte ikke sende registrering',
+            'Ikke få panikk...',
+            'Problem med innsending',
+            'Dette er pinlig...',
+            'Uh oh...',
+            'Innsending feilet'
+        ];
+
+        function createRegistration(type) {
 
             return {
                 "Id": Utility.createGuid(),
                 "GeoHazardTID": Utility.geoHazardTid(type),
                 //Dette må genereres
                 "DtObsTime": new Date().toISOString()
+                /*,Picture: [{
+                    RegistrationTID: '10',
+                    PictureImageBase64: "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAUAAAAFCAYAAACNbyblAAAADElEQVQImWNgoBMAAABpAAFEI8ARAAAAAElFTkSuQmCC",
+                    PictureComment: ''
+                }, {
+                    RegistrationTID: '10',
+                    PictureImageBase64: "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAhAUAAAAFCAYAAACNbyblAAAADElEQVQImWNgoBMAAABpAAFEI8ARAAAAAElFTkSuQmCC",
+                    PictureComment: 'fghfgh'
+                }]*/
             };
-        };
+        }
 
-        var resetRegistration = function () {
+        function resetRegistration () {
 
             return Registration.createNew(Registration.data.GeoHazardTID);
-        };
-
-        var saveToUnsent = function (data) {
-            data.Registrations.forEach(function (regToSave) {
-                var found = false;
-                Registration.unsent.forEach(function (savedReg, i) {
-                    if(regToSave.Id === savedReg.Id){
-                        found = true;
-                        Registration.unsent[i] = regToSave;
-                    }
-                });
-                if(!found){
-                    Registration.unsent.push(regToSave);
-                }
-            });
-            Registration.save();
-
-        };
-
-        var baseLength = Object.keys(createRegistration('snow')).length;
+        }
 
         Registration.load = function () {
             Registration.data = LocalStorage.getAndSetObject(
@@ -76,6 +79,22 @@ angular
                             return resetRegistration();
                         }
                     });
+            else if(Registration.unsent.length){
+                var plural = Registration.unsent.length !== 1;
+                var text;
+                if(plural){
+                    text = 'Du har ' + Registration.unsent.length + ' usendte registreringer. Vil du slette disse?';
+                } else {
+                    text = 'Du har ' + Registration.unsent.length + ' usendt registrering. Vil du slette denne?';
+                }
+                RegobsPopup.delete('Slett usendte registreringer', text)
+                    .then(function (response) {
+                        if (response) {
+                            Registration.unsent = [];
+                            Registration.save();
+                        }
+                    });
+            }
         };
 
         Registration.isOfType = function (type) {
@@ -110,98 +129,6 @@ angular
 
         };
 
-        function cleanupDangerObs(array){
-            if (angular.isArray(array)) {
-                array.forEach(function (dangerObs) {
-                    delete dangerObs.tempArea;
-                    delete dangerObs.tempComment;
-                });
-            }
-        }
-        function stripExposedHeight(array){
-            if (angular.isArray(array)) {
-                array.forEach(function (obs) {
-                    if(obs.exposedHeight)
-                        delete obs.exposedHeight;
-                });
-            }
-        }
-
-        function cleanupGeneralObservation(obs){
-            if(obs){
-                obs.ObsHeader = '';
-            }
-        }
-
-        function cleanupObsLocation(location){
-            delete location.place;
-            delete location.Name;
-            if(location.ObsLocationId){
-                delete location.Latitude;
-                delete location.Longitude;
-                delete location.Uncertainty;
-                delete location.UTMSourceTID;
-            }
-        }
-
-        function prepareRegistrationForSending() {
-            if(!Registration.isEmpty()){
-
-                var user = User.getUser();
-                var data = Registration.data;
-                var location = angular.copy(ObsLocation.data);
-
-                //Cleanup
-                cleanupDangerObs(data.DangerObs);
-                stripExposedHeight(data.AvalancheEvalProblem2);
-                stripExposedHeight(data.AvalancheActivityObs2);
-                cleanupGeneralObservation(data.GeneralObservation);
-                cleanupObsLocation(location);
-                delete data.avalChoice;
-
-                angular.extend(data, {
-                    "ObserverGuid": user.Guid,
-                    "ObserverGroupID": user.chosenObserverGroup || null,
-                    "Email": user.anonymous ? false : !!AppSettings.data.emailReceipt,
-                    "ObsLocation": location
-                });
-
-                console.log('User', user);
-                console.log('Sending', data);
-
-                saveToUnsent({Registrations: [data]});
-            }
-        }
-
-        Registration.hasPictures = function (propertyKey) {
-            if(angular.isArray(Registration.data.Picture)){
-                var tid = Utility.registrationTid(propertyKey);
-                return !!Registration.data.Picture.filter(function(pic){
-                    return pic.RegistrationTID === tid;
-                }).length;
-            }
-        };
-
-        Registration.addPicture = function (propertyKey, data) {
-            Registration.initPropertyAsArray('Picture');
-            var pic = {
-                RegistrationTID: Utility.registrationTid(propertyKey),
-                PictureImageBase64: data,
-                PictureComment: ''
-            };
-            Registration.data.Picture.push(pic);
-            return pic;
-        };
-
-        Registration.removePictures = function (propertyKey) {
-            if(angular.isArray(Registration.data.Picture)){
-                var tid = Utility.registrationTid(propertyKey);
-                Registration.data.Picture = Registration.data.Picture.filter(function(pic){
-                    return pic.RegistrationTID !== tid;
-                });
-            }
-        };
-
         Registration.initPropertyAsArray = function (prop) {
             if (!Registration.propertyExists(prop)) {
                 Registration.data[prop] = [];
@@ -224,11 +151,11 @@ angular
                     Registration.data[prop] = {};
                 }
             }
-            Registration.removePictures(prop);
+
         };
 
         Registration.propertyExists = function (prop) {
-            return !isEmpty(Registration.data[prop]);
+            return !Utility.isEmpty(Registration.data[prop]);
         };
 
         /*Registration.propertyArrayExists = function (prop) {
@@ -249,6 +176,86 @@ angular
             ];
         };
 
+        function prepareRegistrationForSending() {
+            if(!Registration.isEmpty()){
+
+                var user = User.getUser();
+                var data = Registration.data;
+                var location = angular.copy(ObsLocation.data);
+
+                //Cleanup
+                cleanupDangerObs(data.DangerObs);
+                stripExposedHeight(data.AvalancheEvalProblem2);
+                stripExposedHeight(data.AvalancheActivityObs2);
+                cleanupGeneralObservation(data.GeneralObservation);
+                cleanupObsLocation(location);
+                delete data.avalChoice;
+                delete data.WaterLevelChoice;
+
+                angular.extend(data, {
+                    "ObserverGuid": user.Guid,
+                    "ObserverGroupID": user.chosenObserverGroup || null,
+                    "Email": user.anonymous ? false : !!AppSettings.data.emailReceipt,
+                    "ObsLocation": location
+                });
+
+                console.log('User', user);
+                console.log('Sending', data);
+
+                saveToUnsent({Registrations: [data]});
+            }
+            function cleanupDangerObs(array){
+                if (angular.isArray(array)) {
+                    array.forEach(function (dangerObs) {
+                        delete dangerObs.tempArea;
+                        delete dangerObs.tempComment;
+                    });
+                }
+            }
+            function stripExposedHeight(array){
+                if (angular.isArray(array)) {
+                    array.forEach(function (obs) {
+                        if(obs.exposedHeight)
+                            delete obs.exposedHeight;
+                    });
+                }
+            }
+
+            function cleanupGeneralObservation(obs){
+                if(obs){
+                    obs.ObsHeader = '';
+                }
+            }
+
+            function cleanupObsLocation(location){
+                delete location.place;
+                delete location.Name;
+                if(location.ObsLocationId){
+                    delete location.Latitude;
+                    delete location.Longitude;
+                    delete location.Uncertainty;
+                    delete location.UTMSourceTID;
+                }
+            }
+        }
+
+        function saveToUnsent (data) {
+            data.Registrations.forEach(function (regToSave) {
+                var found = false;
+                Registration.unsent.forEach(function (savedReg, i) {
+                    if(regToSave.Id === savedReg.Id){
+                        found = true;
+                        Registration.unsent[i] = regToSave;
+                    }
+                });
+                if(!found){
+                    Registration.unsent.push(regToSave);
+                }
+            });
+            Registration.save();
+
+        }
+
         function doPost(postUrl, dataToSend){
 
             var success = function(){
@@ -265,8 +272,8 @@ angular
                 console.error('Failed to send registration: ' + error.statusText, error);
 
                 Registration.sending = false;
-                var title = 'Klarte ikke sende registrering';
-                var body = (error.statusText? error.statusText + '.' : 'Mangler nettilgang.') + ' Vil du prøve på nytt?';
+                var title = getRandomMessage();
+                var body = (error.statusText? error.statusText + '.' : 'Fikk ikke kontakt med regObs-serveren. Dette kan skyldes manglende nettilgang.') + ' Vil du prøve på nytt?';
 
                 var handleUserAction = function(confirmed){
                     if(confirmed){
@@ -303,27 +310,11 @@ angular
 
         }
 
-        function isEmpty(obj) {
-
-            // null and undefined are "empty"
-            if (obj == null) return true;
-
-            // Assume if it has a length property with a non-zero value
-            // that that property is correct.
-            if (obj.length > 0)    return false;
-            if (obj.length === 0)  return true;
-
-            // Otherwise, does it have any properties of its own?
-            // Note that this doesn't handle
-            // toString and valueOf enumeration bugs in IE < 9
-            for (var key in obj) {
-                if (Object.getOwnPropertyNames(obj).length > 0) return false;
-            }
-
-            return true;
+        function getRandomMessage() {
+            return messages[Math.round(Math.random()*(messages.length-1))];
         }
 
-        function stopEventAndWarnUser(event, toStateName){
+        function stopEventAndWarnUser(event, toStateName, type){
             event.preventDefault();
             RegobsPopup.delete('Slett registrering', 'Du har en påbegynt ' + Utility.geoHazardNames(Registration.data.GeoHazardTID) + '-registrering, dersom du går videre blir denne slettet. Vil du slette for å gå videre?')
                 .then(function (response) {
@@ -341,7 +332,7 @@ angular
             if (index > 0) {
                 var type = toState.name.substr(0, index); //snow, ice, dirt etc.
                 if (!Registration.isOfType(type) && !Registration.isEmpty()) {
-                    stopEventAndWarnUser(event, toState.name);
+                    stopEventAndWarnUser(event, toState.name, type);
 
                 } else if (Registration.isEmpty()) {
                     Registration.createNew(type);

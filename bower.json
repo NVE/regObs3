@@ -2,20 +2,20 @@
   "name": "HelloIonic",
   "private": "true",
   "devDependencies": {
-    "ionic": "driftyco/ionic-bower#1.1.0",
+    "ionic": "driftyco/ionic-bower#1.2.4",
     "angular": "1.4.7",
-    "angular-animate": "1.4.7",
-    "angular-sanitize": "1.4.7",
-    "angular-ui-router": "0.2.15",
+    "angular-animate": "1.5.0",
+    "angular-sanitize": "1.5.0",
+    "angular-ui-router": "0.2.18",
     "ngCordova": "~0.1.20-alpha",
     "leaflet": "~0.7.7"
   },
   "resolutions": {
     "ionic": "~1.1.0",
-    "angular": "1.4.7",
-    "angular-animate": "1.4.7",
-    "angular-sanitize": "1.4.7",
-    "angular-ui-router": "0.2.15"
+    "angular": "1.5.0",
+    "angular-animate": "1.5.0",
+    "angular-sanitize": "1.5.0",
+    "angular-ui-router": "0.2.18"
   },
   "preen": {
     "ionic": [
@@ -46,9 +46,8 @@
       "dist/images/*.*"
     ],
     "Leaflet.awesome-markers": [
-        "dist/**/*.*"
+      "dist/**/*.*"
     ]
-
   },
   "dependencies": {
     "Leaflet.awesome-markers": "~2.0.2"

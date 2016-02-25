@@ -4,7 +4,6 @@ angular
 
         var vm = this;
 
-        vm.propertyExists = Registration.propertyExists;
         vm.reg = Registration.data;
 
     });
