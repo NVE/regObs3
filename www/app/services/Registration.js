@@ -67,6 +67,7 @@ angular
             Registration.data = createRegistration(type);
             ObsLocation.fetchPosition();
             console.log(Registration.data);
+            $rootScope.$broadcast('$ionicView.loaded');
 
             return Registration.data;
         };
@@ -273,7 +274,7 @@ angular
 
                 Registration.sending = false;
                 var title = getRandomMessage();
-                var body = (error.statusText? error.statusText + '.' : 'Fikk ikke kontakt med regObs-serveren. Dette kan skyldes manglende nettilgang.') + ' Vil du prøve på nytt?';
+                var body = 'Melding fra server: ' + error.statusText + '. Lagring av registreringen blir forsinket eller den feilet. Du kan lagre og sende inn senere, eller prøve igjen. Gi beskjed til regObs-teamet dersom problemet vedvarer. Beklager ulempen :(';
 
                 var handleUserAction = function(confirmed){
                     if(confirmed){
@@ -292,11 +293,15 @@ angular
                 };
 
                 switch(error.status){
+                    case 0:
+                        RegobsPopup.confirm(title, 'Fikk ikke kontakt med regObs-serveren. Dette kan skyldes manglende nettilgang. Du kan prøve på nytt, eller du kan lagre registrering for å sende inn senere.','Prøv igjen','Lagre')
+                            .then(handleUserAction);
+                        break;
                     case 422: // Innsendingen samstemmer ikke med forventet format
-                        RegobsPopup.alert('Format stemmer ikke', error.statusText);
+                        RegobsPopup.alert('Format stemmer ikke', 'Innsendingen samstemmer ikke med forventet format. Melding fra server: ' + error.statusText);
                         break;
                     default:
-                        RegobsPopup.confirm(title, body,'Send','Lagre')
+                        RegobsPopup.confirm(title, body,'Prøv igjen','Lagre')
                             .then(handleUserAction);
                         break;
 

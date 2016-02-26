@@ -85,6 +85,11 @@ angular
             };
         };
 
+        settings.getObservationsUrl = function(type){
+            var base = settings.data.env === 'prod'? 'www' : settings.data.env;
+            return 'http://' + base + '.regobs.no/'+type+'/Observations';
+        };
+
         settings.load();
 
         console.log(settings);

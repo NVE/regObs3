@@ -23,7 +23,7 @@ angular
 
             var map = L.map(elem[0], {
                 center: center,
-                zoom: 14,
+                zoom: 9,
                 zoomControl: false,
                 attributionControl: false
             });
@@ -141,6 +141,8 @@ angular
                 console.log('DRAWUSER');
                 if (obsLoc.Latitude) {
                     var latlng = new L.LatLng(obsLoc.Latitude, obsLoc.Longitude);
+                    var p = new L.Marker(latlng);
+                    p.addTo(map);
                     map.panTo(latlng);
                     //map.setZoom(12);
                     if (obsLoc.Uncertainty) {

@@ -47,6 +47,7 @@
         text-transform: uppercase;
         &.assertive {
             color: $assertive;
+            font-weight: bold;
         }
     }
     &.item-input textarea {
@@ -58,7 +59,7 @@
         white-space: pre-wrap;
         word-wrap: break-word;
         position: static;
-        padding: 3px 0 8px 0;
+        padding: 3px 0 8px 3px;
         direction: ltr;
         text-align: left;
     }
@@ -68,7 +69,7 @@
 .platform-android {
     .item-stacked-label {
         &.item-select select {
-            margin-left: -4px;
+            margin-left: -7px;
         }
     }
 }

@@ -73,6 +73,7 @@ angular.module('RegObs')
         });
 
         $scope.$on('$ionicView.enter', function () {
+            Trip.checkIfTripShouldBeAutoStopped();
             appVm.currentState = $state.current;
             console.log(appVm.currentState);
             appVm.showTripFooter = $state.current.data.showTripFooter;

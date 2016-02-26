@@ -70,11 +70,17 @@ angular
                         console.log('Error fetching places', err);
                         RegobsPopup.alert(
                             'Klarte ikke hente målepunkter',
-                            'Det oppsto en feil ved henting av eksisterende målepunkter. Vennligst prøv igjen senere.'
+                            'Dette kan skyldes at serverapplikasjonen må våkne og få seg en dugelig sterk kopp med kaffe først. Gi den noen minutter og prøv igjen.'
                         );
                         scope.fetchingPlaces = false;
                     });
 
+            };
+
+            scope.getDistanceText = function(distance){
+                if(!isNaN(distance)){
+                    return Math.round(distance);
+                }
             };
 
             scope.getPositionText = function () {

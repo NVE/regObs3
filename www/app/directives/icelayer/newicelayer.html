@@ -8,31 +8,36 @@
         <div class="padding">
             Islag registreres ovenfra og ned.
         </div>
+        <form name="newIceLayerForm" novalidate>
+            <ion-list>
 
-        <ion-list>
-
-            <label class="item item-input item-stacked-label item-select">
+                <label class="item item-input item-stacked-label item-select">
                 <span class="input-label">
                     Type is
                 </span>
-                <select ng-model="iceLayer.IceLayerTID"
-                        ng-options="kdv.Id as kdv.Name for kdv in iceLayerKdvArray">
-                </select>
-            </label>
+                    <select ng-model="iceLayer.IceLayerTID"
+                            ng-options="kdv.Id as kdv.Name for kdv in iceLayerKdvArray">
+                    </select>
+                </label>
 
-            <label class="item item-input item-stacked-label" >
-                <span class="input-label">Tykkelse på islag</span>
-                <input type="number" placeholder="I centimeter"
-                       ng-model="data.thickness" ng-change="thicknessChanged()" replacecomma="" />
-            </label>
+                <regobs-number
+                        field-name="vindhastighet"
+                        label="Tykkelse på islag (cm)"
+                        help-text="I centimeter"
+                        model="data.thickness"
+                        min="0"
+                        max="10000"
+                        change-handler="thicknessChanged()"
+                ></regobs-number>
 
-        </ion-list>
-        <div class="padding">
-            <button class="button button-block button-calm"
-                    ng-click="add()">Lagre</button>
-            <button class="button button-block button-assertive button-clear"
-                    ng-click="delete()"
-                    ng-show="editing">Slett</button>
-        </div>
+            </ion-list>
+            <div class="padding">
+                <regobs-save-button save-action="add()"></regobs-save-button>
+                <button class="button button-block button-assertive button-clear"
+                        ng-click="delete()"
+                        ng-show="editing">Slett
+                </button>
+            </div>
+        </form>
     </ion-content>
 </ion-modal-view>

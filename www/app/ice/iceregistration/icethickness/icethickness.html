@@ -1,34 +1,48 @@
 <ion-view view-title="Istykkelse">
     <ion-content>
-        <ion-list>
-            <label class="item item-input item-stacked-label" >
-                <span class="input-label">Tørr snø før boring (cm)</span>
-                <input type="number" placeholder="I centimeter"
-                       ng-model="vm.SnowDepth" ng-change="vm.propChanged('SnowDepth')" replacecomma="" />
-            </label>
+        <form name="iceThicknessForm" novalidate>
+            <ion-list>
 
-            <label class="item item-input item-stacked-label" >
-                <span class="input-label">Sørpe før boring (cm)</span>
-                <input type="number" placeholder="I centimeter"
-                       ng-model="vm.SlushSnow" ng-change="vm.propChanged('SlushSnow')" replacecomma="" />
-            </label>
+                <regobs-number
+                        field-name="tørrSnøFørBoring"
+                        label="Tørr snø før boring (cm)"
+                        help-text="I centimeter"
+                        model="vm.SnowDepth"
+                        min="0"
+                        max="1000"
+                        change-handler="vm.propChanged('SnowDepth')"
+                ></regobs-number>
 
-            <regobs-ice-layer obs-object="vm.reg.IceThickness"></regobs-ice-layer>
 
-            <label class="item item-input item-stacked-label" >
-                <span class="input-label">Total istykkelse (cm)*</span>
-                <input type="number" placeholder="I centimeter"
-                       ng-model="vm.IceThicknessSum" ng-change="vm.propChanged('IceThicknessSum')" replacecomma="" />
-            </label>
-            <label class="item item-input item-stacked-label">
-                <span class="input-label">Kommentar</span>
-                <textarea placeholder="Ytterligere beskrivelse"
-                          name="comment"
-                          cols="30" rows="3"
-                          ng-model="vm.reg.IceThickness.Comment"></textarea>
-            </label>
-        </ion-list>
-        <regobs-image-list></regobs-image-list>
+                <regobs-number
+                        field-name="sørpeFørBoring"
+                        label="Sørpe før boring (cm)"
+                        help-text="I centimeter"
+                        model="vm.SlushSnow"
+                        min="0"
+                        max="1000"
+                        change-handler="vm.propChanged('SlushSnow')"
+                ></regobs-number>
+
+                <regobs-ice-layer obs-object="vm.reg.IceThickness"></regobs-ice-layer>
+
+                <regobs-number
+                        field-name="totalIstykkelse"
+                        label="Total istykkelse (cm)"
+                        help-text="I centimeter"
+                        model="vm.IceThicknessSum"
+                        min="0"
+                        max="1000"
+                        change-handler="vm.propChanged('IceThicknessSum')"
+                ></regobs-number>
+
+                <regobs-comment
+                        placeholder="Ytterligere beskrivelse"
+                        model="vm.reg.IceThickness.Comment"
+                ></regobs-comment>
+            </ion-list>
+            <regobs-image-list></regobs-image-list>
+        </form>
         <button ui-sref="help({page:'icethickness'})" class="button button-positive button-block button-clear">
             Hjelp
         </button>

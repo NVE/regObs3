@@ -1,52 +1,61 @@
 <ion-view view-title="Vannstand">
     <ion-content>
-        <ion-list>
+        <form name="waterLevelForm" novalidate>
+            <ion-list>
 
-            <ion-checkbox ng-model="vm.reg.WaterLevelChoice"
-                           ng-true-value="1"
-                           ng-change="vm.resetModel()">Elv</ion-checkbox>
-            <ion-checkbox ng-model="vm.reg.WaterLevelChoice"
-                           ng-true-value="2"
-                           ng-change="vm.resetModel()">Innsjø/magasin</ion-checkbox>
+                <ion-checkbox ng-model="vm.reg.WaterLevelChoice"
+                              ng-true-value="1"
+                              ng-change="vm.resetModel()">Elv
+                </ion-checkbox>
+                <ion-checkbox ng-model="vm.reg.WaterLevelChoice"
+                              ng-true-value="2"
+                              ng-change="vm.resetModel()">Innsjø/magasin
+                </ion-checkbox>
 
-            <div ng-show="vm.reg.WaterLevelChoice">
-            <label class="item item-input item-stacked-label">
-                <span class="input-label">Vannstand (m)</span>
-                <input type="number" placeholder="I meter"
-                       ng-model="vm.reg.WaterLevel.WaterLevelValue" replacecomma="" />
-            </label>
+                <div ng-show="vm.reg.WaterLevelChoice">
 
-            <kdv-dropdown ng-show="vm.reg.WaterLevelChoice === 1"
-                          title="Referansenivå"
-                          model="vm.reg.WaterLevel.WaterLevelRefTID"
-                          kdv-key="Water_WaterLevelRefKDV"
-                          before="200">
-            </kdv-dropdown>
+                    <regobs-number
+                            field-name="vannstand"
+                            label="Vannstand (m)"
+                            help-text="I meter"
+                            model="vm.reg.WaterLevel.WaterLevelValue"
+                            min="0"
+                    ></regobs-number>
 
-            <kdv-dropdown ng-show="vm.reg.WaterLevelChoice === 2"
-                    title="Referansenivå"
-                    model="vm.reg.WaterLevel.WaterLevelRefTID"
-                    kdv-key="Water_WaterLevelRefKDV"
-                    after="200">
-            </kdv-dropdown>
 
-            <label ng-show="vm.reg.WaterLevelChoice === 1" class="item item-input item-stacked-label">
-                <span class="input-label">Faktisk vannføring (m3/s)</span>
-                <input type="number" placeholder="Gis som tall i m3/s"
-                       ng-model="vm.reg.WaterLevel.MeasuredDischarge" />
-            </label>
+                    <kdv-dropdown ng-show="vm.reg.WaterLevelChoice === 1"
+                                  title="Referansenivå"
+                                  model="vm.reg.WaterLevel.WaterLevelRefTID"
+                                  kdv-key="Water_WaterLevelRefKDV"
+                                  before="200">
+                    </kdv-dropdown>
 
-            <label class="item item-input item-stacked-label">
-                <span class="input-label">Kommentar</span>
-                <textarea placeholder="Ytterligere beskrivelse"
-                          name="comment"
-                          cols="30" rows="3"
-                          ng-model="vm.reg.WaterLevel.Comment"></textarea>
-            </label>
-            </div>
+                    <kdv-dropdown ng-show="vm.reg.WaterLevelChoice === 2"
+                                  title="Referansenivå"
+                                  model="vm.reg.WaterLevel.WaterLevelRefTID"
+                                  kdv-key="Water_WaterLevelRefKDV"
+                                  after="200">
+                    </kdv-dropdown>
 
-        </ion-list>
-        <regobs-image-list></regobs-image-list>
+                    <regobs-number
+                            ng-if="vm.reg.WaterLevelChoice === 1"
+                            field-name="vannføring"
+                            label="Faktisk vannføring (m3/s)"
+                            help-text="Gis som tall i m3/s"
+                            model="vm.reg.WaterLevel.MeasuredDischarge"
+                            min="0"
+                            max="500000000"
+                    ></regobs-number>
+                    <regobs-comment
+                            placeholder="Ytterligere beskrivelse"
+                            model="vm.reg.WaterLevel.Comment"
+                    ></regobs-comment>
+
+                </div>
+
+            </ion-list>
+            <regobs-image-list></regobs-image-list>
+        </form>
         <button ui-sref="help({page:'waterlevel'})" class="button button-positive button-block button-clear">
             Hjelp
         </button>

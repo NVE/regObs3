@@ -1,57 +1,47 @@
 <ion-view view-title="Skredhendelse">
     <ion-content>
         <div class="padding">
-            <button class="button button-block icon-left ion-pin" ng-click="vm.openLandslideInMap()" ng-class="{'button-balanced':vm.reg.LandSlideObs.StartLat}">
+            <button class="button button-block icon-left ion-pin" ng-click="vm.openLandslideInMap()"
+                    ng-class="{'button-balanced':vm.reg.LandSlideObs.StartLat}">
                 Sett skredposisjon i kart
             </button>
         </div>
-        <ion-list>
+        <form name="landslideForm" novalidate>
+            <ion-list>
+                <regobs-time reg-object="vm.reg.LandSlideObs" reg-prop="DtLandSlideTime"
+                             text="Når skjedde skredet tidligst"></regobs-time>
+                <regobs-time reg-object="vm.reg.LandSlideObs" reg-prop="DtLandSlideTimeEnd"
+                             text="Når skjedde skredet senest"></regobs-time>
 
-            <label class="item item-input item-stacked-label">
-                <span class="input-label">Tid da skredet gikk</span>
-                <input type="datetime-local" ng-change="vm.dateChanged()" ng-model="vm.date"
-                       placeholder="Tidspunkt for skredaktivitet">
-            </label>
-            <label class="item item-input item-select item-stacked-label">
-                <span class="input-label">
-                    Hvor sikkert er tiden gitt?
-                </span>
-                <select ng-model="vm.dateAccuracy"
-                        ng-options="kdv.Val as kdv.Name for kdv in vm.dateArray" ng-change="vm.dateChanged()">
+                <kdv-dropdown
+                        title="Type skred"
+                        model="vm.reg.LandSlideObs.LandSlideTID"
+                        kdv-key="Dirt_LandSlideKDV">
+                </kdv-dropdown>
+                <kdv-dropdown
+                        title="Størrelse"
+                        model="vm.reg.LandSlideObs.LandSlideSizeTID"
+                        kdv-key="Dirt_LandSlideSizeKDV">
+                </kdv-dropdown>
+                <kdv-dropdown
+                        title="Skredutløser"
+                        model="vm.reg.LandSlideObs.LandSlideTriggerTID"
+                        kdv-key="Dirt_LandSlideTriggerKDV">
+                </kdv-dropdown>
+                <kdv-dropdown
+                        title="Skadeomfang"
+                        model="vm.reg.LandSlideObs.DamageExtentTID"
+                        kdv-key="DamageExtentKDV">
+                </kdv-dropdown>
 
-                </select>
-            </label>
-            <kdv-dropdown
-                    title="Type skred"
-                    model="vm.reg.LandSlideObs.LandSlideTID"
-                    kdv-key="Dirt_LandSlideKDV">
-            </kdv-dropdown>
-            <kdv-dropdown
-                    title="Størrelse"
-                    model="vm.reg.LandSlideObs.LandSlideSizeTID"
-                    kdv-key="Dirt_LandSlideSizeKDV">
-            </kdv-dropdown>
-            <kdv-dropdown
-                    title="Skredutløser"
-                    model="vm.reg.LandSlideObs.LandSlideTriggerTID"
-                    kdv-key="Dirt_LandSlideTriggerKDV">
-            </kdv-dropdown>
-            <kdv-dropdown
-                    title="Skadeomfang"
-                    model="vm.reg.LandSlideObs.DamageExtentTID"
-                    kdv-key="DamageExtentKDV">
-            </kdv-dropdown>
+                <regobs-comment
+                        placeholder="Ytterligere kommentarer"
+                        model="vm.reg.LandSlideObs.Comment"
+                ></regobs-comment>
 
-
-            <label class="item item-input item-stacked-label">
-                <span class="input-label">Kommentar</span>
-                <textarea placeholder="Ytterligere kommentarer"
-                          name="comment"
-                          cols="30" rows="3"
-                          ng-model="vm.reg.LandSlideObs.Comment"></textarea>
-            </label>
-        </ion-list>
-        <regobs-image-list></regobs-image-list>
+            </ion-list>
+            <regobs-image-list></regobs-image-list>
+        </form>
         <button ui-sref="help({page:'landslideobs'})" class="button button-positive button-block button-clear">
             Hjelp
         </button>

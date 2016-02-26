@@ -5,9 +5,11 @@
 
         var vm = this;
 
-        vm.reg = Registration.data;
 
-        $scope.$on('$ionicView.loaded', function(){});
+
+        $scope.$on('$ionicView.loaded', function(){
+            vm.reg = Registration.data;
+        });
 
     }
 

@@ -8,8 +8,7 @@ angular
         var vm = this;
 
         vm.openObservations = function () {
-            var url = AppSettings.data.env === 'prod' ? 'http://www.regobs.no/LandSlide/Observations' : 'http://h-web01.nve.no/stage_regobsweb/LandSlide/Observations';
-            console.log(url);
+            var url = AppSettings.getObservationsUrl('LandSlide');
             $cordovaInAppBrowser.open(url, '_system' );
         };
         vm.openWarnings = function () {

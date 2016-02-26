@@ -2,14 +2,13 @@
     <ion-header-bar>
         <h1 class="title">Steder</h1>
         <button class="button button-clear button-positive" ng-click="placesModal.hide()">Avbryt</button>
-        <!--<button class="button button-clear button-positive" ng-click="placeChosen()">OK</button>-->
 
     </ion-header-bar>
     <ion-content>
         <ion-list>
             <ion-item href="" ng-repeat="place in places" ng-click="setPlace(place)">
-                <h2>{{place.Name}}</h2>
-                <p>{{place.Distance}} meter unna</p>
+                <h2>{{::place.Name}}</h2>
+                <p>{{::getDistanceText(place.Distance)}} meter unna</p>
             </ion-item>
         </ion-list>
     </ion-content>

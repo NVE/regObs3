@@ -3,6 +3,8 @@ angular
     .controller('DirtRegistrationCtrl', function DirtRegistrationCtrl($scope, Registration) {
 
         var vm = this;
-        vm.reg = Registration.data;
+        $scope.$on('$ionicView.loaded', function(){
+            vm.reg = Registration.data;
+        });
 
     });

@@ -195,7 +195,7 @@ angular
             // Note that this doesn't handle
             // toString and valueOf enumeration bugs in IE < 9
             for (var key in obj) {
-                if (Object.getOwnPropertyNames(obj).length > 0) return false;
+                if (obj[key] || obj[key] === 0) return false;
             }
 
             return true;

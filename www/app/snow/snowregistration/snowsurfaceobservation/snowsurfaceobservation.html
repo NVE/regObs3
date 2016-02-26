@@ -1,64 +1,89 @@
 <ion-view view-title="Snødekke">
     <ion-content>
-        <ion-list>
-            <label class="item item-input item-stacked-label">
-                <span class="input-label">Snødybde (cm)</span>
-                <input type="tel" placeholder="I hele centimeter"
-                       ng-model="vm.SnowDepth" ng-change="vm.propChanged('SnowDepth')" />
-            </label>
+        <form name="snowSurfaceForm" novalidate>
+            <ion-list>
 
-            <label class="item item-input item-stacked-label">
-                <span class="input-label">Nysnødybde (cm)</span>
-                <input type="tel" placeholder="I hele centimeter"
-                       ng-model="vm.NewSnowDepth24" ng-change="vm.propChanged('NewSnowDepth24')" />
-            </label>
+                <regobs-number
+                        field-name="snødybde"
+                        label="Snødybde (cm)"
+                        help-text="I hele centimeter"
+                        model="vm.SnowDepth"
+                        min="0"
+                        max="1000"
+                        step="1"
+                        pattern="[0-9]*"
+                        change-handler="vm.propChanged('SnowDepth')"
+                ></regobs-number>
+                <regobs-number
+                        field-name="nysnødybde"
+                        label="Nysnødybde (cm)"
+                        help-text="I hele centimeter"
+                        model="vm.NewSnowDepth24"
+                        min="0"
+                        max="1000"
+                        step="1"
+                        pattern="[0-9]*"
+                        change-handler="vm.propChanged('NewSnowDepth24')"
+                ></regobs-number>
+                <regobs-number
+                        field-name="nysnøgrense"
+                        label="Nysnøgrense (moh)"
+                        help-text="I meter over havet"
+                        model="vm.reg.SnowSurfaceObservation.NewSnowLine"
+                        min="0"
+                        max="3000"
+                        step="1"
+                        pattern="[0-9]*"
+                ></regobs-number>
+                <regobs-number
+                        field-name="snøgrense"
+                        label="Snøgrense (moh)"
+                        help-text="I meter over havet"
+                        model="vm.reg.SnowSurfaceObservation.SnowLine"
+                        min="0"
+                        max="3000"
+                        step="1"
+                        pattern="[0-9]*"
+                ></regobs-number>
+                <regobs-number
+                        field-name="grense-lagdelt-snø"
+                        label="Grense lagdelt snø (moh)"
+                        help-text="Øvre høydegrense for snø uten farlig lagdeling"
+                        model="vm.reg.SnowSurfaceObservation.HeightLimitLayeredSnow"
+                        min="0"
+                        max="3000"
+                        step="1"
+                        pattern="[0-9]*"
+                ></regobs-number>
 
-            <label class="item item-input item-stacked-label">
-                <span class="input-label">Nysnøgrense (moh)</span>
-                <input type="tel" placeholder="I meter over havet"
-                       ng-model="vm.reg.SnowSurfaceObservation.NewSnowLine" />
-            </label>
+                <kdv-dropdown
+                        title="Snøfokk"
+                        model="vm.reg.SnowSurfaceObservation.SnowDriftTID"
+                        kdv-key="Snow_SnowDriftKDV">
+                </kdv-dropdown>
 
-            <label class="item item-input item-stacked-label">
-                <span class="input-label">Snøgrense (moh)</span>
-                <input type="tel" placeholder="I meter over havet"
-                       ng-model="vm.reg.SnowSurfaceObservation.SnowLine" />
-            </label>
+                <kdv-dropdown
+                        title="Snødekkehardhet"
+                        model="vm.reg.SnowSurfaceObservation.SnowSurfaceTID"
+                        kdv-key="Snow_SnowSurfaceKDV">
+                </kdv-dropdown>
 
-            <label class="item item-input item-stacked-label">
-                <span class="input-label">Grense lagdelt snø (moh)</span>
-                <input type="tel" placeholder="Øvre høydegrense for snø uten farlig lagdeling (også kalt førefall, vårskisnø, omdannet snø)"
-                       ng-model="vm.reg.SnowSurfaceObservation.HeightLimitLayeredSnow" />
-            </label>
+                <kdv-dropdown
+                        title="Overflatefuktighet"
+                        model="vm.reg.SnowSurfaceObservation.SurfaceWaterContentTID"
+                        kdv-key="Snow_SurfaceWaterContentKDV">
+                </kdv-dropdown>
 
-            <kdv-dropdown
-                    title="Snøfokk"
-                    model="vm.reg.SnowSurfaceObservation.SnowDriftTID"
-                    kdv-key="Snow_SnowDriftKDV">
-            </kdv-dropdown>
+                <regobs-comment
+                        placeholder="Hvordan er snøfordelingen generelt ifht. høyde og eksposisjon. Er det forskjell i regionen?"
+                        model="vm.reg.SnowSurfaceObservation.Comment"
+                ></regobs-comment>
 
-            <kdv-dropdown
-                    title="Snødekkehardhet"
-                    model="vm.reg.SnowSurfaceObservation.SnowSurfaceTID"
-                    kdv-key="Snow_SnowSurfaceKDV">
-            </kdv-dropdown>
-
-            <kdv-dropdown
-                    title="Overflatefuktighet"
-                    model="vm.reg.SnowSurfaceObservation.SurfaceWaterContentTID"
-                    kdv-key="Snow_SurfaceWaterContentKDV">
-            </kdv-dropdown>
-
-            <label class="item item-input item-stacked-label">
-                <span class="input-label">Kommentar</span>
-                <textarea placeholder="Hvordan er snøfordelingen generelt ifht. høyde og eksposisjon. Er det forskjell i regionen?"
-                          name="comment"
-                          cols="30" rows="3"
-                          ng-model="vm.reg.SnowSurfaceObservation.Comment"></textarea>
-            </label>
-        </ion-list>
-        <regobs-image-list></regobs-image-list>
-        <button ui-sref="help({page:'snowsurfaceobservation'})" class="button button-positive button-block button-clear">
+            </ion-list>
+            <regobs-image-list></regobs-image-list>
+        </form>
+        <button ui-sref="help({page:'snowsurfaceobservation'})"
+                class="button button-positive button-block button-clear">
             Hjelp
         </button>
     </ion-content>

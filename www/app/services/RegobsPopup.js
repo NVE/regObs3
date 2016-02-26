@@ -21,12 +21,15 @@ angular
             });
         };
 
-        RegobsPopup.confirm = function (title, text, confirmText, cancelText) {
+        RegobsPopup.confirm = function (title, text, confirmText, cancelText, cancelType) {
             return $ionicPopup.confirm({
                 title: title,
                 template: text,
                 buttons: [
-                    {text: cancelText || 'Avbryt'},
+                    {
+                        text: cancelText || 'Avbryt',
+                        type: cancelType || ''
+                    },
                     {
                         text: confirmText || 'OK',
                         type: 'button-positive',

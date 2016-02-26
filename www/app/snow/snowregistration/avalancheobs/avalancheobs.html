@@ -1,112 +1,101 @@
 <ion-view view-title="Skred">
     <ion-content>
-
-
         <div class="padding">
             <button class="button button-block icon-left ion-pin" ng-click="vm.openLandslideInMap()"
                     ng-class="{'button-balanced':vm.reg.AvalancheObs.StartLat}">
                 Sett skredposisjon i kart
             </button>
         </div>
-        <ion-list>
+        <form name="avalancheForm" novalidate>
+            <ion-list>
 
-            <regobs-time reg-object="vm.reg.AvalancheObs" reg-prop="DtAvalancheTime"
-                         text="Tid da skredet gikk"></regobs-time>
+                <regobs-time reg-object="vm.reg.AvalancheObs" reg-prop="DtAvalancheTime"
+                             text="Tid da skredet gikk*"></regobs-time>
 
-            <label class="item item-input item-stacked-label item-select">
+                <label class="item item-input item-stacked-label item-select">
                     <span class="input-label">
                         Eksposisjon
                     </span>
-                <select ng-model="vm.reg.AvalancheObs.Aspect"
-                        ng-options="dir.val as dir.name for dir in vm.expoArray">
-                </select>
-            </label>
+                    <select ng-model="vm.reg.AvalancheObs.Aspect"
+                            ng-options="dir.val as dir.name for dir in vm.expoArray">
+                    </select>
+                </label>
 
-            <kdv-dropdown
-                    title="Størrelse"
-                    model="vm.reg.AvalancheObs.DestructiveSizeTID"
-                    kdv-key="Snow_DestructiveSizeKDV">
-            </kdv-dropdown>
+                <kdv-dropdown
+                        title="Størrelse"
+                        model="vm.reg.AvalancheObs.DestructiveSizeTID"
+                        kdv-key="Snow_DestructiveSizeKDV">
+                </kdv-dropdown>
 
-            <kdv-dropdown
-                    title="Skredtype"
-                    model="vm.reg.AvalancheObs.AvalancheTID"
-                    kdv-key="Snow_AvalancheKDV">
-            </kdv-dropdown>
+                <kdv-dropdown
+                        title="Skredtype"
+                        model="vm.reg.AvalancheObs.AvalancheTID"
+                        kdv-key="Snow_AvalancheKDV">
+                </kdv-dropdown>
 
-            <kdv-dropdown
-                    title="Skredutløser"
-                    model="vm.reg.AvalancheObs.AvalancheTriggerTID"
-                    kdv-key="Snow_AvalancheTriggerKDV">
-            </kdv-dropdown>
+                <kdv-dropdown
+                        title="Skredutløser"
+                        model="vm.reg.AvalancheObs.AvalancheTriggerTID"
+                        kdv-key="Snow_AvalancheTriggerKDV">
+                </kdv-dropdown>
 
-            <label class="item item-input item-stacked-label item-select">
-                <span class="input-label">
-                    Høyde i løsneområdet
-                </span>
-                <select ng-model="vm.reg.AvalancheObs.HeightStartZone"
-                        ng-options="height for height in vm.heightArray">
-                </select>
-            </label>
+                <kdv-dropdown
+                        title="Terrengtype i løsneområdet"
+                        model="vm.reg.AvalancheObs.TerrainStartZoneTID"
+                        kdv-key="Snow_TerrainStartZoneKDV">
+                </kdv-dropdown>
 
-            <kdv-dropdown
-                    title="Terrengtype i løsneområdet"
-                    model="vm.reg.AvalancheObs.TerrainStartZoneTID"
-                    kdv-key="Snow_TerrainStartZoneKDV">
-            </kdv-dropdown>
+                <kdv-dropdown
+                        title="Svakt lag"
+                        model="vm.reg.AvalancheObs.AvalCauseTID"
+                        kdv-key="Snow_AvalCauseKDV">
+                </kdv-dropdown>
 
-            <label class="item item-input item-stacked-label item-select">
-                <span class="input-label">
-                    Høyde i stoppområdet
-                </span>
-                <select ng-model="vm.reg.AvalancheObs.HeightStopZone"
-                        ng-options="height for height in vm.heightArray">
-                </select>
-            </label>
+                <regobs-number
+                        field-name="bruddhøyde"
+                        label="Bruddhøyde (cm)"
+                        help-text="Høyde på bruddet i centimeter"
+                        model="vm.reg.AvalancheObs.FractureHeight"
+                        min="0"
+                        max="50000"
+                        step="1"
+                        pattern="[0-9]*"
+                ></regobs-number>
 
-            <kdv-dropdown
-                    title="Svakt lag"
-                    model="vm.reg.AvalancheObs.AvalCauseTID"
-                    kdv-key="Snow_AvalCauseKDV">
-            </kdv-dropdown>
+                <regobs-number
+                        field-name="bruddbredde"
+                        label="Bruddbredde (m)"
+                        help-text="Bredde på bruddkant i meter"
+                        model="vm.reg.AvalancheObs.FractureWidth"
+                        min="0"
+                        max="50000"
+                        step="1"
+                        pattern="[0-9]*"
+                ></regobs-number>
 
-            <label class="item item-input item-stacked-label">
-                <span class="input-label">Bruddhøyde (cm)</span>
-                <input type="tel" placeholder="Høyde på bruddet i centimeter"
-                       ng-model="vm.reg.AvalancheObs.FractureHeight"/>
-            </label>
-
-            <label class="item item-input item-stacked-label">
-                <span class="input-label">Bruddbredde (m)</span>
-                <input type="tel" placeholder="Bredde på bruddkant i meter"
-                       ng-model="vm.reg.AvalancheObs.FractureWidth"/>
-            </label>
-
-            <label class="item item-input item-input-inset">
+                <label class="item item-input item-stacked-label">
+                    <span class="input-label">Skredbanenavn</span>
                     <textarea placeholder="Skredbanenavn"
-                              name="comment"
-                              cols="30" rows="3"
+                              name="skredbanenavn"
+                              cols="30" rows="3" maxlength="1024"
                               ng-model="vm.reg.AvalancheObs.Trajectory"></textarea>
-            </label>
+                </label>
 
-            <label class="item item-input item-input-inset">
-                    <textarea placeholder="Kommentar"
-                              name="comment"
-                              cols="30" rows="3"
-                              ng-model="vm.reg.AvalancheObs.Comment"></textarea>
-            </label>
+                <regobs-comment
+                        placeholder="Kommentar"
+                        model="vm.reg.AvalancheObs.Comment"
+                ></regobs-comment>
 
-            <ion-item class="item item-divider item-text-wrap">Legg til info hvis skredet kunne, eller har ført til
-                ulykke eller skade
-            </ion-item>
+                <ion-item class="item item-divider item-text-wrap">Legg til info hvis skredet kunne, eller har ført til
+                    ulykke eller skade
+                </ion-item>
 
-            <regobs-incident activity-influenced-kdv="Snow_ActivityInfluencedKDV"></regobs-incident>
+                <regobs-incident activity-influenced-kdv="Snow_ActivityInfluencedKDV"></regobs-incident>
 
+            </ion-list>
 
-        </ion-list>
-
-
-        <regobs-image-list></regobs-image-list>
+            <regobs-image-list></regobs-image-list>
+        </form>
         <button ui-sref="help({page:'avalancheactivityobs'})" class="button button-positive button-block button-clear">
             Hjelp
         </button>

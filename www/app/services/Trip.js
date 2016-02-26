@@ -88,22 +88,40 @@
                         return $http.put(AppSettings.getEndPoints().trip, Trip.model.data, httpConfig)
                     }
                 })
-                .then(function(http){
-                    if(http){
-                        Trip.model = angular.copy(defaultModel);
-                        save();
+                .then(function(httpPromise){
+                    if(httpPromise){
+                        stop();
                         return RegobsPopup.alert('Tur stoppet', 'Tur avsluttet!');
                     }
                 })
                 .catch(function () {
-                    RegobsPopup.alert('Feilmelding', 'Klarte ikke avslutte tur.');
+                    RegobsPopup.alert('Feilmelding', 'Klarte ikke avslutte tur, dette kan skyldes at den allerede har blitt avsluttet på nett, eller på serveren.');
+                    stop();
                 })
                 .finally(function () {
                     Trip.sending = false;
                 });
 
-
         };
+
+        Trip.checkIfTripShouldBeAutoStopped = function(){
+            if(!Trip.model.time){
+                return;
+            }
+            var now = new Date();
+            var modelTime = new Date(Trip.model.time);
+
+            if(Trip.model.time && now.getDay() !== modelTime.getDay()){
+                stop();
+                return RegobsPopup.alert('Tur stoppet', 'Gårsdagens tur har automatisk blitt avsluttet.');
+            }
+        };
+
+        function stop(){
+            Trip.model = angular.copy(defaultModel);
+            save();
+            Trip.sending = false;
+        }
 
         function save(){
             LocalStorage.setObject(storageKey, Trip.model);

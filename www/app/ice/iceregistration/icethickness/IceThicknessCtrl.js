@@ -13,6 +13,7 @@ angular
         };
 
         $scope.$watch('vm.reg.IceThickness.IceThicknessSum', function () {
+            if(vm.reg.IceThickness)
             vm.IceThicknessSum = vm.reg.IceThickness.IceThicknessSum ? Utility.twoDecimal(vm.reg.IceThickness.IceThicknessSum*100) : undefined;
         });
 

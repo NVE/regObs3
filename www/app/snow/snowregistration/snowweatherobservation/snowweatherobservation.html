@@ -9,23 +9,27 @@
                 </kdv-dropdown>
 
                 <regobs-number
-                        field-name="AirTemperature"
+                        field-name="lufttemperatur"
                         label="Lufttemperatur (C)"
                         help-text="Kan gis med 1 desimal"
                         model="vm.reg.WeatherObservation.AirTemperature"
                 ></regobs-number>
                 <regobs-number
-                        field-name="WindSpeed"
+                        field-name="vindhastighet"
                         label="Vindhastighet (m/s)"
                         help-text="Kan gis med 1 desimal"
                         model="vm.reg.WeatherObservation.WindSpeed"
+                        min="0"
                 ></regobs-number>
-
-                <label class="item item-input item-stacked-label">
-                    <span class="input-label" ng-class="{assertive:snowWeatherForm.CloudCover.$invalid}">Skydekke (%)</span>
-                    <input type="tel" name="CloudCover" placeholder="Kun hele prosent" min="0" max="100"
-                           ng-model="vm.reg.WeatherObservation.CloudCover" />
-                </label>
+                <regobs-number
+                        field-name="skydekke"
+                        label="Skydekke (%)"
+                        help-text="Kun hele prosent"
+                        model="vm.reg.WeatherObservation.CloudCover"
+                        min="0"
+                        step="1"
+                        pattern="[0-9]*"
+                ></regobs-number>
 
                 <label class="item item-input item-stacked-label item-select">
                     <span class="input-label">
@@ -36,14 +40,11 @@
                     </select>
                 </label>
 
-                <label class="item item-input item-stacked-label">
-                    <span class="input-label">Kommentar</span>
-                    <textarea placeholder="Hvordan har været vært i området siste døgn? Eks: Har det vært byger? Har det vært tempraturendringer? Hvor går nullisotermen?"
-                              name="comment"
-                              cols="30" rows="3"
-                              maxlength="1024"
-                              ng-model="vm.reg.WeatherObservation.Comment"></textarea>
-                </label>
+                <regobs-comment
+                    placeholder="Hvordan har været vært i området siste døgn? Eks: Har det vært byger? Har det vært tempraturendringer? Hvor går nullisotermen?"
+                    model="vm.reg.WeatherObservation.Comment"
+                ></regobs-comment>
+
             </ion-list>
             <regobs-image-list></regobs-image-list>
         </form>
