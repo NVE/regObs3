@@ -42,7 +42,7 @@
 
             </ion-list>
             <div class="padding">
-                <regobs-save-button save-action="addDangerObs()"></regobs-save-button>
+                <regobs-save-button ng-click="addDangerObs()" save-action="modal.close()"></regobs-save-button>
 
                 <button class="button button-block button-assertive button-clear"
                         ng-click="deleteDangerObs()"

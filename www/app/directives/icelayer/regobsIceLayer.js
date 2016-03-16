@@ -4,7 +4,7 @@
 angular
     .module('RegObs')
     .directive('regobsIceLayer',
-        function regobsIceLayer($ionicModal, RegobsPopup, Registration, Utility) {
+        function regobsIceLayer($ionicModal, $timeout, RegobsPopup, Registration, Utility) {
 
             return {
                 link: link,
@@ -15,7 +15,7 @@ angular
                 restrict: 'EA'
             };
 
-            function link($scope){
+            function link($scope) {
                 var id = 1;
                 var indexEditing = -1;
                 var loadModal = function () {
@@ -31,7 +31,7 @@ angular
                 };
                 var showConfirm = function () {
                     return RegobsPopup.confirm('Slett observasjoner',
-                       'Er du sikker på at du vil slette dette islaget?');
+                        'Er du sikker på at du vil slette dette islaget?');
                 };
                 var loadKdvArray = function () {
                     return Utility
@@ -40,7 +40,7 @@ angular
                             console.log(response);
                             $scope.iceLayerKdvArray = response;
                             $scope.iceLayerDict = {};
-                            response.forEach(function(val){
+                            response.forEach(function (val) {
                                 $scope.iceLayerDict[val.Id] = val.Name;
                             });
                             return response;
@@ -63,24 +63,29 @@ angular
                 };
 
                 $scope.add = function () {
-                    if(!$scope.editing){
+                    if (!$scope.obsObject && !$scope.iceLayer) {
+                        return;
+                    }
+                    if (!$scope.editing) {
                         $scope.obsObject.IceThicknessLayer = $scope.obsObject.IceThicknessLayer || [];
                         $scope.obsObject.IceThicknessLayer.push($scope.iceLayer);
                     }
 
                     var totalThickness = 0;
                     $scope.obsObject.IceThicknessLayer.forEach(function (layer) {
-                        totalThickness += layer.IceLayerThickness;
+                        if (layer && !isNaN(layer.IceLayerThickness))
+                            totalThickness += layer.IceLayerThickness;
                     });
                     $scope.obsObject.IceThicknessSum = totalThickness;
                     console.log($scope.obsObject);
                     $scope.modal.hide();
+                    $scope.iceLayer = null;
                 };
 
                 $scope.edit = function (obs, index) {
                     indexEditing = index;
                     $scope.iceLayer = obs;
-                    $scope.data.thickness = $scope.iceLayer.IceLayerThickness ? Utility.nDecimal($scope.iceLayer.IceLayerThickness*100,3) : undefined;
+                    $scope.data.thickness = $scope.iceLayer.IceLayerThickness ? Utility.nDecimal($scope.iceLayer.IceLayerThickness * 100, 3) : undefined;
                     $scope.editing = true;
                     $scope.modal.show();
                 };
@@ -97,26 +102,27 @@ angular
                 };
 
                 $scope.thicknessChanged = function () {
-                    var num = parseFloat($scope.data.thickness);
-                    if(!isNaN(num)){
-                        $scope.iceLayer.IceLayerThickness = Utility.nDecimal(num/100,3);
+                    $timeout(function () {
+                        var num = parseFloat($scope.data.thickness);
+                        if (!isNaN(num)) {
+                            $scope.iceLayer.IceLayerThickness = Utility.nDecimal(num / 100, 5);
 
-                    }
+                        }
+                    })
                 };
 
-                $scope.getLayerThicknessText = function(layer){
-                    return Utility.nDecimal(layer.IceLayerThickness*100, 3);
+                $scope.getLayerThicknessText = function (layer) {
+                    if (layer && !isNaN(layer.IceLayerThickness))
+                        return Utility.nDecimal(layer.IceLayerThickness * 100, 3);
                 };
 
                 loadKdvArray().then(loadModal);
-
-
 
                 $scope.$on('$ionicView.beforeLeave', function () {
                     $scope.modal.hide();
                 });
 
-                $scope.$on('$destroy', function() {
+                $scope.$on('$destroy', function () {
                     $scope.modal.remove();
                 });
 

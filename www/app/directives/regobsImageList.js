@@ -1,6 +1,6 @@
 angular
     .module('RegObs')
-    .directive('regobsImageList', function (Pictures,  $state, $ionicHistory) {
+    .directive('regobsImageList', function (Registration, Pictures, $state) {
         return {
             link: link,
             scope: {},
@@ -14,7 +14,7 @@ angular
                     <textarea cols="30" rows="3" placeholder="Bildekommentar" ng-model="pic.PictureComment"></textarea>\
                 </label>\
             </div>\
-            <div class="padding"><regobs-save-button save-action="saveAction()"></regobs-save-button></div>'
+            <div class="padding"><regobs-save-button save-action="saveAction()" go-back="true"></regobs-save-button></div>'
         };
 
         function link(scope){
@@ -22,7 +22,7 @@ angular
             scope.registrationProp = $state.current.data.registrationProp;
 
             scope.saveAction = function(){
-                $ionicHistory.goBack();
+                Registration.save();
             }
 
         }

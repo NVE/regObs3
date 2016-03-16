@@ -178,6 +178,7 @@ angular
         };
 
         service.nDecimal = function(num, n){
+            console.log(num);
             return parseFloat(num.toFixed(n))
         };
 

@@ -32,7 +32,7 @@
 
             </ion-list>
             <div class="padding">
-                <regobs-save-button save-action="add()"></regobs-save-button>
+                <regobs-save-button ng-click="add()" save-action="modal.hide()"></regobs-save-button>
                 <button class="button button-block button-assertive button-clear"
                         ng-click="delete()"
                         ng-show="editing">Slett

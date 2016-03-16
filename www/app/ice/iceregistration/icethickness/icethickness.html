@@ -1,5 +1,6 @@
 <ion-view view-title="Istykkelse">
     <ion-content>
+        <regobs-ice-layer obs-object="vm.reg.IceThickness"></regobs-ice-layer>
         <form name="iceThicknessForm" novalidate>
             <ion-list>
 
@@ -9,7 +10,7 @@
                         help-text="I centimeter"
                         model="vm.SnowDepth"
                         min="0"
-                        max="1000"
+                        max="10000"
                         change-handler="vm.propChanged('SnowDepth')"
                 ></regobs-number>
 
@@ -20,11 +21,11 @@
                         help-text="I centimeter"
                         model="vm.SlushSnow"
                         min="0"
-                        max="1000"
+                        max="10000"
                         change-handler="vm.propChanged('SlushSnow')"
                 ></regobs-number>
 
-                <regobs-ice-layer obs-object="vm.reg.IceThickness"></regobs-ice-layer>
+
 
                 <regobs-number
                         field-name="totalIstykkelse"
@@ -32,7 +33,7 @@
                         help-text="I centimeter"
                         model="vm.IceThicknessSum"
                         min="0"
-                        max="1000"
+                        max="10000"
                         change-handler="vm.propChanged('IceThicknessSum')"
                 ></regobs-number>
 

@@ -17,7 +17,40 @@ angular
 
         loadModal();
 
-        vm.expoArray = Registration.getExpositionArray();
+        vm.expoArray = [
+            {
+                name: 'N',
+                val: '10000000'
+            },
+            {
+                name: 'NØ',
+                val: '01000000'
+            },
+            {
+                name: 'Ø',
+                val: '00100000'
+            },
+            {
+                name: 'SØ',
+                val: '00010000'
+            },
+            {
+                name: 'S',
+                val: '00001000'
+            },
+            {
+                name: 'SV',
+                val: '00000100'
+            },
+            {
+                name: 'V',
+                val: '00000010'
+            },
+            {
+                name: 'NV',
+                val: '00000001'
+            }
+        ];
 
 
         vm.setLandslideInMap = function () {

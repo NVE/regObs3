@@ -68,9 +68,7 @@ angular.module('RegObs')
 
         });
 
-        $scope.$on('$ionicView.afterLeave', function () {
-            Registration.save();
-        });
+
 
         $scope.$on('$ionicView.enter', function () {
             Trip.checkIfTripShouldBeAutoStopped();
