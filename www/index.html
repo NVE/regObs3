@@ -15,7 +15,11 @@
     -->
 
     <!-- ionic/angularjs js -->
-    <script>window.phonegap = {}</script>
+    <script>
+        //Kommenter inn denne for å kunne velge
+        // proxy til web-api i settings når det kjøres i browser
+        window.phonegap = {}
+    </script>
     <script type="text/javascript" src="lib/ga-localstorage/GALocalStorage.js"></script>
     <script src="lib/leaflet/dist/leaflet.js"></script>
     <script src="lib/Leaflet.awesome-markers/dist/leaflet.awesome-markers.js"></script>
@@ -84,7 +88,8 @@
 
     <div ng-if="appVm.showFormFooter" class="row row-no-padding">
         <div class="col col-center">
-            <button class="button button-block  button-clear" ng-click="appVm.resetProperty()"><i class="icon stable ion-android-close"></i> Nullstill</button>
+            <button class="button button-block  button-clear" ng-click="appVm.resetProperty()"><i class="icon stable ion-android-close"></i> Nullstill
+            </button>
         </div>
 
         <div class="col col-center">

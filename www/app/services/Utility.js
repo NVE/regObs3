@@ -3,7 +3,7 @@
  */
 angular
     .module('RegObs')
-    .factory('Utility', function Utility($http, $q, $rootScope, AppSettings, LocalStorage) {
+    .factory('Utility', function Utility($http, $q, $rootScope, AppSettings, User, LocalStorage) {
         var service = this;
 
         var canvas;
@@ -89,29 +89,29 @@ angular
             }
         };
 
-        service.registrationTid = function(prop){
+        service.registrationTid = function (prop) {
             return OBSERVATIONS[prop].RegistrationTID;
         };
 
-        service.geoHazardNames = function(tid){
+        service.geoHazardNames = function (tid) {
             return geoHazardNames[tid];
         };
 
-        service.geoHazardTid = function(type){
+        service.geoHazardTid = function (type) {
             return (isNaN(type) ? geoHazardTid[type] : type);
         };
 
         //Antall tegn: 8-4-4-12
         //Format: xxxxxxxx-xxxx-4xxx-xxxx-xxxxxxxxxxxx
         service.createGuid = function () {
-            return (S4() + S4() + "-" + S4() + "-4" + S4().substr(0,3) + "-" + S4() + "-" + S4() + S4() + S4()).toLowerCase();
+            return (S4() + S4() + "-" + S4() + "-4" + S4().substr(0, 3) + "-" + S4() + "-" + S4() + S4() + S4()).toLowerCase();
         };
 
         service.getKdvElements = function () {
 
             var deferred = $q.defer();
             var kdvFromStorage = LocalStorage.getObject('kdvDropdowns');
-            if(kdvFromStorage && kdvFromStorage.KdvRepositories){
+            if (kdvFromStorage && kdvFromStorage.KdvRepositories) {
                 deferred.resolve({data: kdvFromStorage});
                 return deferred.promise;
 
@@ -121,7 +121,7 @@ angular
 
         };
 
-        service.shouldUpdateKdvElements = function(){
+        service.shouldUpdateKdvElements = function () {
             var timeDiff, diffDays;
             var lastUpdate = LocalStorage.get('kdvUpdated', '2016-01-01');
             var now = new Date();
@@ -136,18 +136,18 @@ angular
             return diffDays > DAYS_BEFORE_KDV_UPDATE;
         };
 
-        service.refreshKdvElements = function(){
+        service.refreshKdvElements = function () {
+            User.refreshObserverGroups();
+            return $http.get(AppSettings.getEndPoints().getDropdowns, AppSettings.httpConfig)
+                .then(function (res) {
 
-                return $http.get(AppSettings.getEndPoints().getDropdowns, AppSettings.httpConfig)
-                    .then(function(res){
-
-                        if(res.data && res.data.Data){
-                            var newDate = Date.now();
-                            LocalStorage.set('kdvDropdowns', res.data.Data);
-                            LocalStorage.set('kdvUpdated', newDate);
-                            $rootScope.$broadcast('kdvUpdated', newDate);
-                        }
-                    });
+                    if (res.data && res.data.Data) {
+                        var newDate = Date.now();
+                        LocalStorage.set('kdvDropdowns', res.data.Data);
+                        LocalStorage.set('kdvUpdated', newDate);
+                        $rootScope.$broadcast('kdvUpdated', newDate);
+                    }
+                });
 
         };
 
@@ -175,16 +175,16 @@ angular
                 });
         };
 
-        service.twoDecimal = function(num){
-            return service.nDecimal(num,2);
+        service.twoDecimal = function (num) {
+            return service.nDecimal(num, 2);
         };
 
-        service.nDecimal = function(num, n){
+        service.nDecimal = function (num, n) {
             console.log(num);
             return parseFloat(num.toFixed(n))
         };
 
-        service.isEmpty = function(obj) {
+        service.isEmpty = function (obj) {
 
             // null and undefined are "empty"
             if (obj == null) return true;
@@ -207,7 +207,7 @@ angular
         service.resizeImage = function resizeImage(longSideMax, url, callback) {
             var tempImg = new Image();
             tempImg.src = url;
-            tempImg.onload = function() {
+            tempImg.onload = function () {
                 // Get image size and aspect ratio.
                 var targetWidth = tempImg.width;
                 var targetHeight = tempImg.height;
@@ -228,7 +228,7 @@ angular
                 }
 
                 // Create canvas of required size.
-                if(!canvas) canvas = document.createElement('canvas');
+                if (!canvas) canvas = document.createElement('canvas');
                 canvas.width = targetWidth;
                 canvas.height = targetHeight;
 
@@ -241,20 +241,20 @@ angular
             };
         };
 
-        service.resizeAllImages = function(data){
+        service.resizeAllImages = function (data) {
             var deferred = $q.defer();
             var picturePresent, i, reg;
-            if(data && data.Registrations){
+            if (data && data.Registrations) {
                 picturePresent = 0;
-                for(i=0; i<data.Registrations.length; i++){
+                for (i = 0; i < data.Registrations.length; i++) {
                     reg = data.Registrations[i];
-                    if(reg.Picture){
+                    if (reg.Picture) {
                         picturePresent += reg.Picture.length;
-                        reg.Picture.forEach(function(pic){
-                            service.resizeImage(1200, pic.PictureImageBase64, function(imageData){
+                        reg.Picture.forEach(function (pic) {
+                            service.resizeImage(1200, pic.PictureImageBase64, function (imageData) {
                                 pic.PictureImageBase64 = imageData;
                                 picturePresent = picturePresent - 1;
-                                if(!picturePresent){
+                                if (!picturePresent) {
                                     deferred.resolve(data);
                                 }
                             });
@@ -264,7 +264,7 @@ angular
                 }
             }
 
-            if(!picturePresent){
+            if (!picturePresent) {
                 deferred.resolve(data);
             }
 
@@ -275,7 +275,7 @@ angular
          * @return {string}
          */
         function S4() {
-            return (((1+Math.random())*0x10000)|0).toString(16).substring(1);
+            return (((1 + Math.random()) * 0x10000) | 0).toString(16).substring(1);
         }
 
         return service;

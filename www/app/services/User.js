@@ -22,6 +22,7 @@ angular
                 user = JSON.parse(response.data.Data);
                 user.email = username;
                 user.chosenObserverGroup = null;
+                user.password = password;
                 service.save();
                 console.log("Logged in user",user);
                 service.loggingIn = false;
@@ -55,12 +56,18 @@ angular
             service.save();
         };
 
+        service.refreshObserverGroups = function(){
+            if(!user.anonymous){
+                service.logIn(user.email, user.password);
+            }
+        };
+
         service.save = function () {
             LocalStorage.setObject(storageKey, user);
         };
 
         service.load = function () {
-            user = LocalStorage.getAndSetObject(storageKey, 'Guid', makeAnonymousUser());
+            user = LocalStorage.getAndSetObject(storageKey, 'password', makeAnonymousUser());
         };
 
         service.load();

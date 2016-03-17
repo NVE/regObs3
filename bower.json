@@ -1,9 +1,9 @@
 {
-  "name": "HelloIonic",
+  "name": "regObs",
   "private": "true",
   "devDependencies": {
     "ionic": "driftyco/ionic-bower#1.2.4",
-    "angular": "1.4.7",
+    "angular": "1.5.0",
     "angular-animate": "1.5.0",
     "angular-sanitize": "1.5.0",
     "angular-ui-router": "0.2.18",
@@ -11,7 +11,7 @@
     "leaflet": "~0.7.7"
   },
   "resolutions": {
-    "ionic": "~1.1.0",
+    "ionic": "~1.2.4",
     "angular": "1.5.0",
     "angular-animate": "1.5.0",
     "angular-sanitize": "1.5.0",
