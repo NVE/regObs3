@@ -1,12 +1,18 @@
 angular
     .module('RegObs')
-    .controller('SettingsViewCtrl', function ($scope, $cordovaInAppBrowser, AppSettings, LocalStorage, ObsLocation, Registration, User, Utility, HeaderColor, RegobsPopup) {
+    .controller('SettingsViewCtrl', function ($scope, $http, $cordovaInAppBrowser, AppSettings, LocalStorage, ObsLocation, Registration, User, Utility, HeaderColor, RegobsPopup) {
         var vm = this;
 
         vm.settings = AppSettings;
         vm.userService = User;
 
         vm.kdvUpdated = new Date(parseInt(LocalStorage.get('kdvUpdated')));
+
+        $http.get('app/json/version.json')
+            .then(function(res){
+                console.log(res);
+                vm.version = res.data;
+            });
 
         $scope.$on('kdvUpdated', function(event, newDate){
             vm.kdvUpdated = new Date(parseInt(newDate));

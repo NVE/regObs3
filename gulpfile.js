@@ -9,6 +9,7 @@ var minifyCss = require('gulp-minify-css');
 var rename = require('gulp-rename');
 var sh = require('shelljs');
 var preen = require('preen');
+var jsonfile = require('jsonfile');
 
 var paths = {
     sass: ['./scss/ionic.app.scss', './www/app/**/*.scss'],
@@ -38,6 +39,21 @@ gulp.task('sass', function(done) {
 });
 
 gulp.task('scripts', function (done) {
+
+    jsonfile.readFile('./package.json', function(err, obj) {
+
+        var now = new Date();
+        var build = `${now.getFullYear()} ${now.getMonth()+1} ${now.getDate()} ${now.getHours()}${now.getMinutes()}${now.getSeconds()}`;
+        var obj = {
+            version: obj.version,
+            build: build
+        };
+        jsonfile.writeFile('./www/app/json/version.json', obj, function (err) {
+            console.error(err)
+        });
+        console.log(obj);
+    });
+
     gulp.src(paths.js)
         .pipe(concat('app.js'))
         .pipe(gulp.dest(paths.dist))

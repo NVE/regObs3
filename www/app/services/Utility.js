@@ -6,6 +6,8 @@ angular
     .factory('Utility', function Utility($http, $q, $rootScope, AppSettings, LocalStorage) {
         var service = this;
 
+        var canvas;
+
         var geoHazardTid = {
             snow: 10,
             dirt: 20,
@@ -200,6 +202,73 @@ angular
             }
 
             return true;
+        };
+
+        service.resizeImage = function resizeImage(longSideMax, url, callback) {
+            var tempImg = new Image();
+            tempImg.src = url;
+            tempImg.onload = function() {
+                // Get image size and aspect ratio.
+                var targetWidth = tempImg.width;
+                var targetHeight = tempImg.height;
+                var aspect = tempImg.width / tempImg.height;
+
+                // Calculate shorter side length, keeping aspect ratio on image.
+                // If source image size is less than given longSideMax, then it need to be
+                // considered instead.
+                if (tempImg.width > tempImg.height) {
+                    longSideMax = Math.min(tempImg.width, longSideMax);
+                    targetWidth = longSideMax;
+                    targetHeight = longSideMax / aspect;
+                }
+                else {
+                    longSideMax = Math.min(tempImg.height, longSideMax);
+                    targetHeight = longSideMax;
+                    targetWidth = longSideMax * aspect;
+                }
+
+                // Create canvas of required size.
+                if(!canvas) canvas = document.createElement('canvas');
+                canvas.width = targetWidth;
+                canvas.height = targetHeight;
+
+                var ctx = canvas.getContext("2d");
+                // Take image from top left corner to bottom right corner and draw the image
+                // on canvas to completely fill into.
+                ctx.drawImage(this, 0, 0, tempImg.width, tempImg.height, 0, 0, targetWidth, targetHeight);
+
+                callback(canvas.toDataURL("image/jpeg", 0.4));
+            };
+        };
+
+        service.resizeAllImages = function(data){
+            var deferred = $q.defer();
+            var picturePresent, i, reg;
+            if(data && data.Registrations){
+                picturePresent = 0;
+                for(i=0; i<data.Registrations.length; i++){
+                    reg = data.Registrations[i];
+                    if(reg.Picture){
+                        picturePresent += reg.Picture.length;
+                        reg.Picture.forEach(function(pic){
+                            service.resizeImage(1200, pic.PictureImageBase64, function(imageData){
+                                pic.PictureImageBase64 = imageData;
+                                picturePresent = picturePresent - 1;
+                                if(!picturePresent){
+                                    deferred.resolve(data);
+                                }
+                            });
+                        });
+                        console.log(reg.Picture);
+                    }
+                }
+            }
+
+            if(!picturePresent){
+                deferred.resolve(data);
+            }
+
+            return deferred.promise;
         };
 
         /**

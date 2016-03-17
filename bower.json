@@ -50,6 +50,7 @@
     ]
   },
   "dependencies": {
-    "Leaflet.awesome-markers": "~2.0.2"
+    "Leaflet.awesome-markers": "~2.0.2",
+    "ga-localstorage": "*"
   }
 }

@@ -2,14 +2,26 @@
     <div class="text-center">
         Posisjon: {{getPositionText()}}
     </div>
-    <button class="button button-block icon-left ion-pinpoint" ng-class="{'button-balanced':ObsLocation.data.UTMSourceTID===40}" ng-click="ObsLocation.fetchPosition()">
-        <span>Hent posisjon fra GPS</span>
-        <ion-spinner class="spinner-dark spinner-fix" ng-if="ObsLocation.fetching"></ion-spinner>
-    </button>
-    <button class="button button-block icon-left ion-pin" ng-click="openPositionInMap()" ng-class="{'button-balanced':ObsLocation.data.UTMSourceTID===35}">Sett posisjon i kart</button>
-    <button ng-show="ObsLocation.isSet()" class="button button-block icon-left ion-search" ng-click="loadPlaces()" ng-class="{'button-balanced':ObsLocation.data.ObsLocationId}">
-        <span>Finn målepunkt i nærheten</span>
-        <ion-spinner class="spinner-dark spinner-fix" ng-if="fetchingPlaces"></ion-spinner>
-    </button>
+    <div class="text-center">
+        <button ng-show="ObsLocation.isSet()" class="button button-clear icon-left ion-search" ng-click="loadPlaces()"
+                ng-class="{'button-balanced':ObsLocation.data.ObsLocationId}">
+            <span>Finn målepunkt i nærheten</span>
+            <ion-spinner class="spinner-dark spinner-fix" ng-if="fetchingPlaces"></ion-spinner>
+        </button>
+    </div>
+    <div class="button-bar">
+        <button class="button button-block icon-left ion-pinpoint"
+                ng-class="{'button-balanced':ObsLocation.data.UTMSourceTID===40}"
+                ng-click="ObsLocation.fetchPosition()">
+            <span>GPS</span>
+            <ion-spinner class="spinner-dark spinner-fix" ng-if="ObsLocation.fetching"></ion-spinner>
+        </button>
+        <button class="button button-block icon-left ion-pin" ng-click="openPositionInMap()"
+                ng-class="{'button-balanced':ObsLocation.data.UTMSourceTID===35}">Kart
+        </button>
+    </div>
+
+
+
 
 </div>

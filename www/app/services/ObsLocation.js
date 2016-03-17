@@ -48,7 +48,7 @@ angular
             function error(err) {
                 ObsLocation.fetching = false;
                 // error
-                console.error(err);
+                console.log('ObsLocation error',err);
                 return err;
             }
         };

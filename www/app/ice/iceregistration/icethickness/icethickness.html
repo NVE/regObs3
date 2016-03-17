@@ -1,6 +1,6 @@
 <ion-view view-title="Istykkelse">
     <ion-content>
-        <regobs-ice-layer obs-object="vm.reg.IceThickness"></regobs-ice-layer>
+
         <form name="iceThicknessForm" novalidate>
             <ion-list>
 
@@ -25,7 +25,7 @@
                         change-handler="vm.propChanged('SlushSnow')"
                 ></regobs-number>
 
-
+                <regobs-ice-layer obs-object="vm.reg.IceThickness"></regobs-ice-layer>
 
                 <regobs-number
                         field-name="totalIstykkelse"

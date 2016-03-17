@@ -14,8 +14,8 @@ angular
             scope.click = window.Camera && function () {
                     $ionicPlatform.ready(function () {
                         var options = {
-                            quality: 40,
-                            destinationType: Camera.DestinationType.DATA_URL,
+                            quality: 100,
+                            destinationType: Camera.DestinationType.FILE_URI,
                             sourceType: Camera.PictureSourceType.CAMERA,
                             allowEdit: false,
                             encodingType: Camera.EncodingType.JPEG,
@@ -34,8 +34,8 @@ angular
         function snapPic(options) {
             $cordovaCamera
                 .getPicture(options)
-                .then(function (imageData) {
-                    var pic = Pictures.addPicture($state.current.data.registrationProp, 'data:image/jpeg;base64,' + imageData);
+                .then(function (imageUri) {
+                    var pic = Pictures.addPicture($state.current.data.registrationProp, imageUri);
                     //image.src = "data:image/jpeg;base64," + imageData;
                     if (AppSettings.data.compass) {
                         setOrientation(pic);

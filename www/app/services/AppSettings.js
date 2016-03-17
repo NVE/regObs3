@@ -7,7 +7,7 @@ angular
         //default Values
         var storageKey = 'regobsAppSettings';
         var data = {
-            env: 'demo',
+            env: 'prod',
             emailReceipt: false,
             compass: false,
             gpsTimeout: 10,
@@ -16,13 +16,16 @@ angular
         };
 
         var baseUrls = {
+            prod: 'https://api.nve.no/hydrology/regobs/webapi_latest',
             demo: 'https://api.nve.no/hydrology/demo/regobs/webapi',
-            test: 'http://tst-h-web03.nve.no/regobswebapi',
-            prod: 'https://api.nve.no/hydrology/regobs/webapi',
-            proxy: '/api',
-            prodproxy: '/prodapi',
-            testproxy: '/testapi'
+            test: 'http://tst-h-web03.nve.no/regobswebapi'
         };
+
+        if(!ionic.Platform.isWebView()){
+            baseUrls.proxy = '/api';
+            baseUrls.prodproxy = '/prodapi';
+            baseUrls.testproxy = '/testapi';
+        }
 
         var serviceUrls = {
             demo:'http://stg-h-web03.nve.no/RegObsServices/',
@@ -33,7 +36,7 @@ angular
 
         var headers = {
             regObs_apptoken: '***REMOVED***',
-            ApiJsonVersion: '0.9.0.20140408'
+            ApiJsonVersion: '2.0.0'
         };
 
         settings.httpConfig = {
