@@ -35,6 +35,7 @@ angular
         };
 
         var headers = {
+            //regObs_apptoken: '***REMOVED***', //gammel
             regObs_apptoken: '***REMOVED***',
             ApiJsonVersion: '2.0.0'
         };

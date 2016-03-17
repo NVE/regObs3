@@ -22,6 +22,15 @@
     top:7px;
 }
 
+.button-bar{
+    .button.margin-left {
+        margin-left: 5px;
+    }
+    .button.margin-right {
+        margin-right: 5px;
+    }
+}
+
 /**
  * This CSS uses adjacent selectors instead of general sibling (~) selectors
  * for ion radio that are broken in iOS 9 UIWebView.
