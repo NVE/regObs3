@@ -39,8 +39,8 @@
             function getUserConfirmation() {
                 return RegobsPopup.delete(
                     'Skjema har mangler',
-                    'Hvis du fortsetter, kan du miste verdier du har skrevet inn. Avbryt for å rette markerte felter.',
-                    'OK'
+                    'Hvis du fortsetter, kan du miste verdier du har skrevet inn. Aktuelle felter er markert i rødt. Vil du fortsette?',
+                    'Fortsett'
                 )
             }
 

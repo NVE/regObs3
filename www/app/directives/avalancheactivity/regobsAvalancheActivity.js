@@ -139,11 +139,13 @@ angular
                 };
 
                 $scope.add = function () {
-                    if(!$scope.reg.AvalancheActivityObs2){
-                        $scope.reg.AvalancheActivityObs2 = [];
+                    if(!$scope.editing){
+                        if(!$scope.reg.AvalancheActivityObs2){
+                            $scope.reg.AvalancheActivityObs2 = [];
+                        }
+                        console.log($scope.reg);
+                        $scope.reg.AvalancheActivityObs2.push($scope.obs);
                     }
-                    console.log($scope.reg);
-                    $scope.reg.AvalancheActivityObs2.push($scope.obs);
                     $scope.modal.hide();
                 };
 

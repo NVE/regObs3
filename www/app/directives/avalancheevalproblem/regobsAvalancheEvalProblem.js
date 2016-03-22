@@ -73,7 +73,9 @@ angular
                 };
 
                 $scope.add = function () {
-                    $scope.reg.AvalancheEvalProblem2.push($scope.obs);
+                    if(!$scope.editing){
+                        $scope.reg.AvalancheEvalProblem2.push($scope.obs);
+                    }
                     $scope.modal.hide();
                 };
 
