@@ -10,6 +10,7 @@ angular
         var prodColor = 'bar-dark';
         var testColor = 'bar-calm';
         var cachedHeaderBar, activeHeaderBar, cachedNavBar, activeNavBar;
+        var environments = AppSettings.getEnvironments();
 
         var removeClass = function (newClass) {
             cachedHeaderBar.classList.remove(newClass);
@@ -32,11 +33,11 @@ angular
                 activeHeaderBar = activeHeaderBar || activeNavBar.querySelector('.bar-header');
             else return;
 
-            if (AppSettings.data.env === 'demo') {
+            if (AppSettings.data.env === environments[1]) { //demo
                 removeClass(prodColor);
                 removeClass(testColor);
                 addClass(demoColor);
-            } else if (AppSettings.data.env === 'prod') {
+            } else if (AppSettings.data.env === environments[0]) { //prod
                 removeClass(demoColor);
                 removeClass(testColor);
                 addClass(prodColor);

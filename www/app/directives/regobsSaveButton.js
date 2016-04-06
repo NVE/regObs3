@@ -51,6 +51,7 @@
             $scope.$on('$stateChangeStart', function (event, toState, toParams, fromState, fromParams) {
                 if (toState.name === backState && formIsInvalid() && !confirmed) {
                     event.preventDefault();
+                    $state.go(fromState.name);
                     getUserConfirmation()
                         .then(function (confirm) {
                             if (confirm) {

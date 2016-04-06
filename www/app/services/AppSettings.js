@@ -7,7 +7,7 @@ angular
         //default Values
         var storageKey = 'regobsAppSettings';
         var data = {
-            env: 'prod',
+            env: 'regObs',
             emailReceipt: false,
             compass: false,
             gpsTimeout: 10,
@@ -16,9 +16,9 @@ angular
         };
 
         var baseUrls = {
-            prod: 'https://api.nve.no/hydrology/regobs/webapi_latest',
-            demo: 'https://api.nve.no/hydrology/demo/regobs/webapi',
-            test: 'http://tst-h-web03.nve.no/regobswebapi'
+            'regObs': 'https://api.nve.no/hydrology/regobs/webapi_latest',
+            'demo regObs': 'https://api.nve.no/hydrology/demo/regobs/webapi',
+            'test regObs': 'http://tst-h-web03.nve.no/regobswebapi'
         };
 
         if(!ionic.Platform.isWebView()){
@@ -28,10 +28,10 @@ angular
         }
 
         var serviceUrls = {
-            demo:'http://stg-h-web03.nve.no/RegObsServices/',
-            proxy:'http://stg-h-web03.nve.no/RegObsServices/',
-            test:'http://tst-h-web03.nve.no/regobsservices_test/',
-            prod:'https://api.nve.no/hydrology/regobs/v1.0.0/'
+            'regObs':'https://api.nve.no/hydrology/regobs/v1.0.0/',
+            'demo regObs':'http://stg-h-web03.nve.no/RegObsServices/',
+            'test regObs':'http://tst-h-web03.nve.no/regobsservices_test/',
+            'proxy':'http://stg-h-web03.nve.no/RegObsServices/'
         };
 
         var headers = {
@@ -56,6 +56,10 @@ angular
         settings.load = function () {
             settings.data = LocalStorage.getAndSetObject(storageKey, 'searchRange', angular.copy(data));
             console.log(settings.data);
+            var environments = settings.getEnvironments();
+            if(environments.indexOf(settings.data.env) === -1){
+                settings.data.env = environments[0];
+            }
             settings.save();
         };
 

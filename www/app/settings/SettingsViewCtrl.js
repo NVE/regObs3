@@ -6,7 +6,7 @@ angular
         vm.settings = AppSettings;
         vm.userService = User;
 
-        vm.kdvUpdated = new Date(parseInt(LocalStorage.get('kdvUpdated')));
+        vm.kdvUpdated = kdvUpdatedTime(null, LocalStorage.get('kdvUpdated'));
 
         $http.get('app/json/version.json')
             .then(function(res){
@@ -14,12 +14,15 @@ angular
                 vm.version = res.data;
             });
 
-        $scope.$on('kdvUpdated', function(event, newDate){
-            vm.kdvUpdated = new Date(parseInt(newDate));
+        $scope.$on('kdvUpdated', kdvUpdatedTime);
+
+        function kdvUpdatedTime(event, newDate){
+            $scope.$applyAsync(function() {
+                vm.kdvUpdated =  moment(parseInt(newDate)).format('DD.MM, [kl.] HH:mm');
+            });
+
             console.log('KDV UPDATE', newDate);
-        });
-
-
+        }
 
         vm.logIn = function () {
             User.logIn(vm.username, vm.password);

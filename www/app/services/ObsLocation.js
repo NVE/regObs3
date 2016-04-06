@@ -28,8 +28,9 @@ angular
             ObsLocation.fetching = true;
             return $cordovaGeolocation
                 .getCurrentPosition({
-                    timeout: !isNaN(AppSettings.data.gpsTimeout)?AppSettings.data.gpsTimeout*1000:10000,
-                    enableHighAccuracy: true
+                    timeout: !isNaN(AppSettings.data.gpsTimeout)?(AppSettings.data.gpsTimeout*1000):10000,
+                    enableHighAccuracy: true,
+                    maximumAge: 3000
                 })
                 .then(success, error);
 

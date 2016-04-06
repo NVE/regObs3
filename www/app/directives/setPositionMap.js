@@ -38,7 +38,7 @@ angular
 
             var map = L.map(elem[0], {
                 center: center,
-                zoom: 9,
+                zoom: 5,
                 zoomControl: false,
                 attributionControl: false
             });
@@ -57,7 +57,7 @@ angular
                 map.invalidateSize();
                 obsLoc = Object.create(ObsLocation.data);
                 console.log('Posiition in map!');
-                drawUserLocation(obsLoc);
+                drawUserLocation(obsLoc, true);
 
             });
 
@@ -80,11 +80,14 @@ angular
 
             });
 
-            function drawUserLocation(obsLoc) {
+            function drawUserLocation(obsLoc, zoom) {
                 console.log('DRAWUSER');
                 if (obsLoc.Latitude) {
                     var latlng = new L.LatLng(obsLoc.Latitude, obsLoc.Longitude);
                     map.panTo(latlng);
+                    if(zoom){
+                        map.setZoom(9);
+                    }
                     //map.setZoom(12);
                     if (obsLoc.Uncertainty) {
                         var radius = obsLoc.Uncertainty / 2;

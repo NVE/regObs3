@@ -8,7 +8,7 @@ angular
             $timeout(function(){
                 var num = parseFloat(vm[prop]);
 
-                if(num){
+                if(!isNaN(num)){
                     console.log(num);
                     vm.reg.IceThickness[prop] = Utility.nDecimal(num/100, 5);
                 }
@@ -16,7 +16,7 @@ angular
         };
 
         $scope.$watch('vm.reg.IceThickness.IceThicknessSum', function () {
-            if(vm.reg.IceThickness)
+            if(!isNaN(vm.reg.IceThickness))
             vm.IceThicknessSum = vm.reg.IceThickness.IceThicknessSum ? Utility.nDecimal(vm.reg.IceThickness.IceThicknessSum*100,3) : undefined;
         });
 
@@ -24,9 +24,9 @@ angular
             vm.reg = Registration.initPropertyAsObject($state.current.data.registrationProp);
 
             console.log(vm.reg.IceThickness);
-            vm.SnowDepth = vm.reg.IceThickness.SnowDepth ? Utility.nDecimal(vm.reg.IceThickness.SnowDepth*100,3) : undefined;
-            vm.SlushSnow = vm.reg.IceThickness.SlushSnow ? Utility.nDecimal(vm.reg.IceThickness.SlushSnow*100,3) : undefined;
-            vm.IceThicknessSum = vm.reg.IceThickness.IceThicknessSum ? Utility.nDecimal(vm.reg.IceThickness.IceThicknessSum*100,3) : undefined;
+            vm.SnowDepth = !isNaN(vm.reg.IceThickness.SnowDepth) ? Utility.nDecimal(vm.reg.IceThickness.SnowDepth*100,3) : undefined;
+            vm.SlushSnow = !isNaN(vm.reg.IceThickness.SlushSnow) ? Utility.nDecimal(vm.reg.IceThickness.SlushSnow*100,3) : undefined;
+            vm.IceThicknessSum = !isNaN(vm.reg.IceThickness.IceThicknessSum) ? Utility.nDecimal(vm.reg.IceThickness.IceThicknessSum*100,3) : undefined;
         });
     });
 

@@ -34,6 +34,10 @@ angular
                         scope.kdvArray  = kdvRepo;
                     }
 
+                    /*if(!scope.model) {
+                        scope.model = scope.kdvArray[0].Id;
+                    }*/
+
                 });
         };
 

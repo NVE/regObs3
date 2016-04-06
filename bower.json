@@ -47,10 +47,14 @@
     ],
     "Leaflet.awesome-markers": [
       "dist/**/*.*"
+    ],
+    "moment": [
+      "min/**/*.*"
     ]
   },
   "dependencies": {
     "Leaflet.awesome-markers": "~2.0.2",
-    "ga-localstorage": "*"
+    "ga-localstorage": "*",
+    "moment": "^2.12.0"
   }
 }

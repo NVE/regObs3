@@ -31,6 +31,11 @@
     }
 }
 
+input:focus, select:focus, textarea:focus {
+
+    font-weight:bold;
+}
+
 /**
  * This CSS uses adjacent selectors instead of general sibling (~) selectors
  * for ion radio that are broken in iOS 9 UIWebView.
@@ -50,6 +55,7 @@
 }
 
 .item-stacked-label {
+    padding: 6px 16px 10px 16px;
     .input-label {
         font-size: 0.8em;
         color: $positive;
@@ -138,6 +144,22 @@
     background-size: 100% 100%;
     &.button-positive {
         background-image: url('../img/mountain-top-black.png');
+    }
+}
+
+.bullet-list {
+    list-style-type: disc;
+    margin: 10px 0;
+    li {
+        margin-left: 20px;
+    }
+}
+
+.numbered-list {
+    list-style-type: decimal;
+    margin: 10px 0;
+    li {
+        margin-left: 20px;
     }
 }
 
