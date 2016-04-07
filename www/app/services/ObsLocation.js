@@ -26,6 +26,7 @@ angular
         ObsLocation.fetchPosition = function () {
             console.log('fetchPosition called');
             ObsLocation.fetching = true;
+            return $ionicPlatform.ready(function(){
             return $cordovaGeolocation
                 .getCurrentPosition({
                     timeout: !isNaN(AppSettings.data.gpsTimeout)?(AppSettings.data.gpsTimeout*1000):10000,
@@ -33,6 +34,7 @@ angular
                     maximumAge: 3000
                 })
                 .then(success, error);
+              });
 
             function success (position) {
                 ObsLocation.fetching = false;

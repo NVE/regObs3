@@ -401,7 +401,7 @@
             }
 
             if (window.StatusBar) {
-                StatusBar.styleDefault();
+                StatusBar.styleLightContent();
             }
         });
     }
