@@ -94,7 +94,7 @@ angular
         };
 
         settings.getObservationsUrl = function(type){
-            var base = settings.data.env === 'prod'? 'www' : settings.data.env;
+            var base = settings.data.env === 'regObs'? 'www' : settings.data.env.replace(' regObs', '');
             return 'http://' + base + '.regobs.no/'+type+'/Observations';
         };
 
