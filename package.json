@@ -1,6 +1,6 @@
 {
   "name": "regObs",
-  "version": "3.0.1",
+  "version": "3.0.2",
   "description": "regObs: An Ionic project",
   "scripts": {
     "postinstall": "ionic state reset && bower install && gulp"

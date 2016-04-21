@@ -108,11 +108,10 @@ angular
         };
 
         Registration.send = function (force) {
-            if (!Registration.isEmpty()) {
+            var postUrl = AppSettings.getEndPoints().postRegistration;
+            if (!Registration.isEmpty() || Registration.unsent.length) {
 
                 if (!User.getUser().anonymous || force) {
-
-                    var postUrl = AppSettings.getEndPoints().postRegistration;
 
                     if (!ObsLocation.isSet()) {
                         return RegobsPopup.alert('Posisjon ikke satt', 'Kan ikke sende inn uten posisjon.');
@@ -122,11 +121,13 @@ angular
                     if (Registration.unsent.length) {
                         Registration.sending = true;
                         doPost(postUrl, {Registrations: Registration.unsent});
+                        Registration.unsent = [];
+                        resetRegistration();
                     }
 
-                    Registration.unsent = [];
-                    resetRegistration();
                     Registration.save();
+
+
                 } else {
                     RegobsPopup.confirm('Du er ikke innlogget', 'Vil du logge inn, eller fortsette med anonym innsending?', 'Send', 'Logg inn')
                         .then(function (confirmed) {
@@ -138,6 +139,8 @@ angular
                         });
                 }
             }
+
+
 
         };
 
