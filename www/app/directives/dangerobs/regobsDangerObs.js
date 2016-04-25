@@ -1,6 +1,6 @@
 angular
     .module('RegObs')
-    .directive('regobsDangerObs', function dangerObs($ionicModal, Registration, RegobsPopup, Utility) {
+    .directive('regobsDangerObs', function ($ionicModal, Registration, RegobsPopup, Utility) {
         return {
             link: link,
             templateUrl: 'app/directives/dangerobs/regobsDangerObs.html',

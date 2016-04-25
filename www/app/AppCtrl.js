@@ -31,7 +31,7 @@ angular.module('RegObs')
         };
 
         appVm.propertyExists = function(prop){
-            return Registration.propertyExists(prop) || Pictures.hasPictures(prop);
+            return Registration.propertyExists(prop) || Pictures.hasPictures(prop) || (prop === 'AvalancheObs' && Registration.propertyExists('Incident'));
         };
 
         appVm.resetProperty = function () {
@@ -42,6 +42,9 @@ angular.module('RegObs')
                     function(res){
                         if(res){
                             Registration.resetProperty(prop);
+                            if(prop === 'AvalancheObs'){
+                                Registration.resetProperty('Incident');
+                            }
                             Pictures.removePictures(prop);
                             $scope.$broadcast('$ionicView.loaded');
                         }

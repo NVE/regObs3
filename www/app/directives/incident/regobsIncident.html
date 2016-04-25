@@ -1,11 +1,9 @@
 <ion-list>
-    <label class="item item-input item-stacked-label">
-        <span class="input-label">Beskrivelse</span>
-                <textarea placeholder="Hvorfor skjedde det? Hvorfor gikk det forhåpentligvis bra? Kunne situasjonen vært unngått?"
-                          name="comment"
-                          cols="30" rows="3"
-                          ng-model="reg.Incident.IncidentText"></textarea>
-    </label>
+    <regobs-comment
+            placeholder="Hvorfor skjedde det? Hvorfor gikk det forhåpentligvis bra? Kunne situasjonen vært unngått?"
+            model="reg.Incident.IncidentText"
+            label-text="Beskrivelse"
+    ></regobs-comment>
     <kdv-dropdown
             title="Aktivitet"
             model="reg.Incident.ActivityInfluencedTID"
