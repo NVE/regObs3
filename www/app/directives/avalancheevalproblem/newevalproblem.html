@@ -126,13 +126,10 @@
                 </div>
             </div>
 
-            <label class="item item-input item-stacked-label">
-                <span class="input-label">Kommentar</span>
-                <textarea placeholder="Ytterligere kommentar"
-                          name="comment"
-                          cols="30" rows="3"
-                          ng-model="obs.Comment"></textarea>
-            </label>
+            <regobs-comment
+                    placeholder="Ytterligere kommentar"
+                    model="obs.Comment"
+            ></regobs-comment>
         </ion-list>
         <div class="padding">
             <button class="button button-block button-calm"

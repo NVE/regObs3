@@ -1,13 +1,10 @@
 <ion-view view-title="Fritekst">
     <ion-content>
         <ion-list>
-            <label class="item item-input item-stacked-label">
-                <span class="input-label">Skriv i vei!*</span>
-                <textarea placeholder="Får du ikke formidlet det du vil med de andre skjemaene? bruk dette og skriv i vei!"
-                          name="comment"
-                          cols="30" rows="5"
-                          ng-model="vm.reg.GeneralObservation.ObsComment"></textarea>
-            </label>
+            <regobs-comment
+                    placeholder="Får du ikke formidlet det du vil med de andre skjemaene? bruk dette og skriv i vei!"
+                    model="vm.reg.GeneralObservation.ObsComment"
+            ></regobs-comment>
         </ion-list>
         <regobs-image-list></regobs-image-list>
         <button ui-sref="help({page:'generalobservation'})" class="button button-positive button-block button-clear">
