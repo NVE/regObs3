@@ -1,6 +1,6 @@
 angular
     .module('RegObs')
-    .factory('ObsLocation', function ObsLocation($http, $ionicPlatform, $cordovaGeolocation, AppSettings, LocalStorage) {
+    .factory('ObsLocation', function ($http, $ionicPlatform, $cordovaGeolocation, AppSettings, LocalStorage) {
         var ObsLocation = this;
         var storageKey = 'regobsLocation';
 
@@ -26,15 +26,17 @@ angular
         ObsLocation.fetchPosition = function () {
             console.log('fetchPosition called');
             ObsLocation.fetching = true;
+            var timeout = parseInt(AppSettings.data.gpsTimeout);
+
             return $ionicPlatform.ready(function(){
-            return $cordovaGeolocation
-                .getCurrentPosition({
-                    timeout: !isNaN(AppSettings.data.gpsTimeout)?(AppSettings.data.gpsTimeout*1000):10000,
-                    enableHighAccuracy: true,
-                    maximumAge: 3000
-                })
-                .then(success, error);
-              });
+                return $cordovaGeolocation
+                    .getCurrentPosition({
+                        timeout: timeout?(timeout*1000):10000,
+                        enableHighAccuracy: true,
+                        maximumAge: 3000
+                    })
+                    .then(success, error);
+            });
 
             function success (position) {
                 ObsLocation.fetching = false;
