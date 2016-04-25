@@ -11,6 +11,7 @@
         },
         template: '<button class="button button-block button-calm" ng-click="$ctrl.save()">Lagre</button>',
         controller: function ($scope, $state, $ionicPlatform, $ionicHistory, RegobsPopup) {
+            'ngInject';
             var ctrl = this;
             var backState;
             var confirmed = false;

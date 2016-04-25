@@ -2,6 +2,7 @@
     'use strict';
 
     function PicturesService(Registration, RegobsPopup, Utility) {
+        'ngInject';
         var Pictures = this;
 
         var cache = {}; //To prevent filtering happening all the time

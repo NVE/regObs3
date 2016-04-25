@@ -6,6 +6,7 @@
            .run(setup);
 
     function providers($stateProvider, $urlRouterProvider, $ionicConfigProvider) {
+        'ngInject';
 
         if (ionic.Platform.isAndroid()) {
             $ionicConfigProvider.scrolling.jsScrolling(false);
@@ -386,6 +387,7 @@
     }
 
     function setup($ionicPlatform, Utility) {
+        'ngInject';
 
         if(Utility.shouldUpdateKdvElements()){
             Utility.refreshKdvElements();

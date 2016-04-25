@@ -1,6 +1,6 @@
 angular
     .module('RegObs')
-    .factory('AppSettings', function AppSettings(LocalStorage) {
+    .factory('AppSettings', function (LocalStorage) {
 
         var settings = this;
 

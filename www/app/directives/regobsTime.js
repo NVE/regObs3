@@ -66,9 +66,11 @@ angular
                 text: '@'
             },
             link: link,
-            template: '<label class="item item-input item-stacked-label">\
-                <span class="input-label" ng-bind="::getText()" ng-class="{assertive:formCtrl[regProp].$invalid}"></span>\
-                <input name="{{regProp}}" type="datetime-local" ng-change="timeChanged(DtObsTime)" ng-model="DtObsTime" required>\
-            </label>'
+            template: [
+                '<label class="item item-input item-stacked-label">',
+                    '<span class="input-label" ng-bind="::getText()" ng-class="{assertive:formCtrl[regProp].$invalid}"></span>',
+                    '<input name="{{regProp}}" type="datetime-local" ng-change="timeChanged(DtObsTime)" ng-model="DtObsTime" required>',
+                '</label>'
+            ].join('')
         };
     });

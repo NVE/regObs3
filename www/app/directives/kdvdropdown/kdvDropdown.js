@@ -1,6 +1,7 @@
 angular
     .module('RegObs')
     .directive('kdvDropdown', function (Utility) {
+        'ngInject';
 
         var link = function (scope) {
             Utility

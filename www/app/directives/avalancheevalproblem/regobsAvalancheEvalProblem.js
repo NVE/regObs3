@@ -5,6 +5,7 @@ angular
     .module('RegObs')
     .directive('regobsAvalancheEvalProblem',
         function regobsAvalancheEvalProblem($filter, $ionicModal, RegobsPopup, Registration, Utility) {
+            'ngInject';
             return {
                 link: link,
                 templateUrl: 'app/directives/avalancheevalproblem/regobsAvalancheEvalProblem.html',

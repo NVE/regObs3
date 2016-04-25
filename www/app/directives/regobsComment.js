@@ -7,6 +7,7 @@
             model: '='
         },
         controller: function($timeout, $rootScope, Utility){
+            'ngInject';
             var ctrl = this;
             var element;
 

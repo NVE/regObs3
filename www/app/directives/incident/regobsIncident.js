@@ -1,6 +1,7 @@
 angular
     .module('RegObs')
     .directive('regobsIncident', function dangerObs($ionicModal, Registration, $ionicPopup, Utility) {
+        'ngInject';
         return {
             link: link,
             templateUrl: 'app/directives/incident/regobsIncident.html',

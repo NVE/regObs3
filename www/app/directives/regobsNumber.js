@@ -23,6 +23,7 @@
             '</label>'
         ].join(''),
         controller: function Ctrl(Registration){
+            'ngInject';
             var ctrl = this;
             ctrl.reg = Registration.data;
         }

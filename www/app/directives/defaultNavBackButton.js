@@ -2,6 +2,7 @@ angular
     .module('RegObs')
     .directive('defaultNavBackButton',
     function defaultNavBackButton($ionicHistory, $state, $ionicConfig, $ionicViewSwitcher, $ionicPlatform) {
+        'ngInject';
         return {
             link: link,
             restrict: 'EA'

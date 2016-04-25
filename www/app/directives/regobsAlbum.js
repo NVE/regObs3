@@ -1,14 +1,19 @@
 angular
     .module('RegObs')
     .directive('regobsAlbum', function ($ionicPlatform, $cordovaCamera, $state, Pictures) {
+        'ngInject';
         return {
             link: link,
             scope: {},
             replace: true,
-            template: '<div><button class="button button-clear button-block" ng-click="click()" ng-hide="imgLoading">\
-            <i class="icon calm ion-images"></i> Album\
-            </button>\
-            <ion-spinner class="spinner-light" ng-if="imgLoading"></ion-spinner></div>'
+            template: [
+                '<div>',
+                    '<button class="button button-clear button-block" ng-click="click()" ng-hide="imgLoading">',
+                        '<i class="icon calm ion-images"></i> Album',
+                    '</button>',
+                    '<ion-spinner class="spinner-light" ng-if="imgLoading"></ion-spinner>',
+                '</div>'
+            ].join('')
         };
 
         function link(scope){

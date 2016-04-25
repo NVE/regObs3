@@ -5,6 +5,7 @@ angular
     .module('RegObs')
     .directive('regobsIceLayer',
         function regobsIceLayer($ionicModal, $timeout, RegobsPopup, Registration, Utility) {
+            'ngInject';
 
             return {
                 link: link,

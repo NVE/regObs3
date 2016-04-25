@@ -1,6 +1,7 @@
 angular
     .module('RegObs')
     .directive('regobsCamera', function ($ionicPlatform, $cordovaCamera, $cordovaDeviceOrientation, $state, AppSettings, Pictures) {
+        'ngInject';
 
         return {
             link: link,

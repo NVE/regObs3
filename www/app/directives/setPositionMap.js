@@ -3,28 +3,12 @@
  */
 angular
     .module('RegObs')
-    .directive('setPositionMap', function setPositionMap(ObsLocation, AppSettings) {
+    .directive('setPositionMap', function (ObsLocation, AppSettings) {
+        'ngInject';
         function link(scope, elem, attrs) {
             var options = scope.leafletMap;
             console.log(options);
             elem.css('height', '100%');
-
-
-            /*scope.$on('openPositionInMap', function () {
-                scope.$applyAsync(function () {
-                    mapboxgl.accessToken = 'pk.eyJ1Ijoia3N0b3JzdGVpbiIsImEiOiJjaWhlY2V6bTQwMDQ2dTltNG5oZm1udmpwIn0.9UXECYo4767bshimLp7B3w';
-                    var map = new mapboxgl.Map({
-                        container: 'map', // container id
-                        style: 'mapbox://styles/mapbox/streets-v8', //stylesheet location
-                        center: [-74.50, 40], // starting position
-                        zoom: 9 // starting zoom
-                    });
-                });
-
-
-            });*/
-
-
 
             var obsLoc;
 

@@ -4,6 +4,7 @@
 angular
     .module('RegObs')
     .directive('landslideDirectionMap', function landslideDirectionMap(AppSettings, Registration, ObsLocation) {
+        'ngInject';
         function link(scope, elem, attrs) {
 
             elem.css('height', '100%');

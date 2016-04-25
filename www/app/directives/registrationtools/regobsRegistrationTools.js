@@ -1,6 +1,7 @@
 angular
     .module('RegObs')
     .directive('regobsRegistrationTools', function ($http, $filter, $ionicModal, AppSettings, RegobsPopup, ObsLocation, Registration) {
+        'ngInject';
         return {
             link: link,
             scope: {},

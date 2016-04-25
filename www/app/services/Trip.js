@@ -13,6 +13,7 @@
     };*/
 
     function Trip($http, AppSettings, Utility, User, ObsLocation, RegobsPopup, LocalStorage) {
+        'ngInject';
 
         var Trip = this;
         var storageKey = 'regobsTrip';
