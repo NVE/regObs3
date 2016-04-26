@@ -24,8 +24,14 @@ angular
             $scope.noDangerSign = {};
 
             $scope.save = Registration.save;
+            var textArea;
 
             $scope.commentChanged = function () {
+              if(!textArea){
+                textArea = document.getElementById('dangerobs_text');
+              }
+
+              textArea.style.height = textArea.scrollHeight + "px";
                 if($scope.dangerObs.tempArea && $scope.dangerObs.tempComment){
                     $scope.dangerObs.Comment = 'Område: ' + $scope.dangerObs.tempArea + '. Beskrivelse: ' + $scope.dangerObs.tempComment;
                 } else {

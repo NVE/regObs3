@@ -3,13 +3,24 @@
               ng-repeat="layer in obsObject.IceThicknessLayer track by $index"
               ng-click="edit(layer, $index)">
         <ion-option-button class="button-assertive"
-                           ng-click="obsObject.IceThicknessLayer.splice($index, 1)">
+                           ng-click="delete($index)">
             Slett
         </ion-option-button>
         <span ng-bind="iceLayerDict[layer.IceLayerTID]"></span> - <span ng-bind="getLayerThicknessText(layer)"></span> cm
 
     </ion-item>
+
 </ion-list>
 <div class="padding">
     <button ng-click="new()" class="button  button-block button-balanced icon-left ion-plus">Registrer islag</button>
 </div>
+
+<regobs-number
+        field-name="totalIstykkelse"
+        label="Total istykkelse (cm)"
+        help-text="I centimeter"
+        model="iceThicknessSum"
+        min="0"
+        max="10000"
+        change-handler="sumChanged()"
+></regobs-number>

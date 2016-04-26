@@ -52,6 +52,8 @@ angular
                     thickness: 0
                 };
 
+                $scope.iceThicknessSum = Utility.nDecimal($scope.obsObject.IceThicknessSum*100,3);
+
                 $scope.new = function () {
                     indexEditing = -1;
                     $scope.editing = false;
@@ -72,16 +74,33 @@ angular
                         $scope.obsObject.IceThicknessLayer.push($scope.iceLayer);
                     }
 
-                    var totalThickness = 0;
-                    $scope.obsObject.IceThicknessLayer.forEach(function (layer) {
-                        if (layer && !isNaN(layer.IceLayerThickness))
-                            totalThickness += layer.IceLayerThickness;
-                    });
-                    $scope.obsObject.IceThicknessSum = totalThickness;
-                    console.log($scope.obsObject);
+                    calcSum();
                     $scope.modal.hide();
                     $scope.iceLayer = null;
                 };
+
+                function calcSum(){
+                  var totalThickness = 0;
+                  $scope.obsObject.IceThicknessLayer.forEach(function (layer) {
+                      if (layer && !isNaN(layer.IceLayerThickness))
+                          totalThickness += layer.IceLayerThickness;
+                  });
+                  $scope.obsObject.IceThicknessSum = totalThickness;
+                  console.log($scope.obsObject);
+                  $scope.iceThicknessSum =  Utility.nDecimal(totalThickness*100,3);
+                }
+
+                $scope.sumChanged = function(){
+                  $timeout(function () {
+                      var num = parseFloat($scope.iceThicknessSum);
+                      if (!isNaN(num)) {
+                          $scope.obsObject.IceThicknessSum = Utility.nDecimal(num / 100, 5);
+
+                      }
+                  })
+
+
+                }
 
                 $scope.edit = function (obs, index) {
                     indexEditing = index;
@@ -91,13 +110,17 @@ angular
                     $scope.modal.show();
                 };
 
-                $scope.delete = function () {
+                $scope.delete = function (index) {
+                  if(index){
+                    indexEditing = index;
+                  }
                     showConfirm()
                         .then(function (response) {
                             if (response) {
                                 $scope.obsObject.IceThicknessLayer.splice(indexEditing, 1);
                                 $scope.modal.hide();
                                 indexEditing = -1;
+                                calcSum();
                             }
                         });
                 };
@@ -107,6 +130,7 @@ angular
                         var num = parseFloat($scope.data.thickness);
                         if (!isNaN(num)) {
                             $scope.iceLayer.IceLayerThickness = Utility.nDecimal(num / 100, 5);
+                            calcSum();
 
                         }
                     })
@@ -129,4 +153,3 @@ angular
 
             }
         });
-

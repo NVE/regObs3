@@ -11,14 +11,12 @@ angular
                 if(!isNaN(num)){
                     console.log(num);
                     vm.reg.IceThickness[prop] = Utility.nDecimal(num/100, 5);
+
+                    console.log('IceThicknessSum', vm.IceThicknessSum);
                 }
             });
         };
 
-        $scope.$watch('vm.reg.IceThickness.IceThicknessSum', function () {
-            if(!isNaN(vm.reg.IceThickness))
-            vm.IceThicknessSum = vm.reg.IceThickness.IceThicknessSum ? Utility.nDecimal(vm.reg.IceThickness.IceThicknessSum*100,3) : undefined;
-        });
 
         $scope.$on('$ionicView.loaded', function(){
             vm.reg = Registration.initPropertyAsObject($state.current.data.registrationProp);
@@ -29,4 +27,3 @@ angular
             vm.IceThicknessSum = !isNaN(vm.reg.IceThickness.IceThicknessSum) ? Utility.nDecimal(vm.reg.IceThickness.IceThicknessSum*100,3) : undefined;
         });
     });
-

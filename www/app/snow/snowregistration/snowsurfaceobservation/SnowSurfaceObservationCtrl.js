@@ -1,8 +1,9 @@
 angular
     .module('RegObs')
-    .controller('SnowSurfaceObservationCtrl', function ($scope, $state, Utility, Registration) {
+    .controller('SnowSurfaceObservationCtrl', function ($scope, $state, $timeout, Utility, Registration) {
         var vm = this;
         vm.propChanged = function (prop){
+          $timeout(function(){
 
             var numText = vm[prop];
             var num = parseFloat(numText);
@@ -12,6 +13,7 @@ angular
             }
 
             console.log(vm.reg.SnowSurfaceObservation);
+          });
         };
 
 
@@ -21,4 +23,3 @@ angular
             vm.NewSnowDepth24 = vm.reg.SnowSurfaceObservation.NewSnowDepth24 ? Utility.twoDecimal(vm.reg.SnowSurfaceObservation.NewSnowDepth24*100) : undefined;
         });
     });
-
