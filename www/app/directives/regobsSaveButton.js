@@ -62,6 +62,7 @@
                                 $state.go(toState.name);
                             } else {
                                 $state.go($state.current, {}, {reload: true});
+
                             }
                         });
                 } else {
