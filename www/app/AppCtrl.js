@@ -1,5 +1,5 @@
 angular.module('RegObs')
-    .controller('AppCtrl', function ($scope, $state, AppSettings, Registration, Pictures, Trip, User, RegobsPopup, HeaderColor) {
+    .controller('AppCtrl', function ($scope, $state, AppSettings, Registration, Property, Trip, User, RegobsPopup, HeaderColor) {
         var appVm = this;
 
         appVm.registration = Registration;
@@ -31,25 +31,13 @@ angular.module('RegObs')
         };
 
         appVm.propertyExists = function(prop){
-            return Registration.propertyExists(prop) || Pictures.hasPictures(prop) || (prop === 'AvalancheObs' && Registration.propertyExists('Incident'));
+            return Property.exists(prop);
         };
 
         appVm.resetProperty = function () {
             var prop = $state.current.data.registrationProp;
 
-            if(appVm.propertyExists(prop))
-                RegobsPopup.delete('Tøm skjema?', 'Vil du nullstille dette skjemaet?', 'Nullstill').then(
-                    function(res){
-                        if(res){
-                            Registration.resetProperty(prop);
-                            if(prop === 'AvalancheObs'){
-                                Registration.resetProperty('Incident');
-                            }
-                            Pictures.removePictures(prop);
-                            $scope.$broadcast('$ionicView.loaded');
-                        }
-                    }
-                );
+            Property.reset(prop);
         };
 
         $scope.$applyAsync(function(){

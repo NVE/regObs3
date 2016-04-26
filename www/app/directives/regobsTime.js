@@ -29,32 +29,6 @@ angular
                 }
             });
 
-            /*scope.formCtrl = formCtrl;
-
-            scope.timeChanged = function (time) {
-                console.log('time changed');
-
-                var now = new Date();
-                var newTime = new Date(time);
-                if(newTime < now) {
-                    //Registration.data.DtObsTime = newTime.toISOString();
-                    scope.regObject = newTime.toISOString();
-                } else {
-                    //Registration.data.DtObsTime = now.toISOString();
-                    scope.regObject = now.toISOString();
-                    scope.DtObsTime = now;
-                }
-            };
-
-            scope.getText = function () {
-                return scope.text || 'Observasjonstidspunkt';
-            };
-
-            scope.$watch('regObject', function(newVal){
-                if(scope.regObject){
-                    scope.DtObsTime = new Date(scope.regObject);
-                }
-            });*/
 
         }
 

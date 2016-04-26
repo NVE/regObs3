@@ -10,7 +10,7 @@
             formCtrl: '?^form'
         },
         template: '<button class="button button-block button-calm" ng-click="$ctrl.save()">Lagre</button>',
-        controller: function ($scope, $state, $ionicPlatform, $ionicHistory, RegobsPopup) {
+        controller: function ($scope, $state, $ionicPlatform, $ionicHistory, Property, RegobsPopup) {
             'ngInject';
             var ctrl = this;
             var backState;
@@ -40,7 +40,7 @@
             function getUserConfirmation() {
                 return RegobsPopup.delete(
                     'Skjema har mangler',
-                    'Hvis du fortsetter, kan du miste verdier du har skrevet inn. Aktuelle felter er markert i rødt. Vil du fortsette?',
+                    'Hvis du fortsetter, mister du verdier du har skrevet inn. Aktuelle felter er markert i rødt. Vil du fortsette?',
                     'Fortsett'
                 )
             }
@@ -57,8 +57,11 @@
                         .then(function (confirm) {
                             if (confirm) {
                                 confirmed = true;
+                                Property.reset($state.current.data.registrationProp, true);
                                 ctrl.saveAction();
                                 $state.go(toState.name);
+                            } else {
+                                $state.go($state.current, {}, {reload: true});
                             }
                         });
                 } else {
