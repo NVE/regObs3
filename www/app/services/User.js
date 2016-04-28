@@ -32,8 +32,8 @@ angular
                 var status = '';
                 if(response.status === 401){
                     status = 'Feil brukernavn eller passord. Vennligst fyll inn på nytt og prøv igjen.'
-                } else if(response.status === -1){
-                    status = 'Klarte ikke å logge inn pga. manglende tilkobling til nett. Vennligst prøv igjen når dekningsforhold bedrer seg.'
+                } else if(response.status <= 0){
+                    status = 'Det er problemer med å nå tjenesten. Har du nett? Dersom dekningen er god, prøv igjen om noen minutter.'
                 } else {
                     status = 'Det oppsto en feil ved innlogging. Melding fra server: ' + response.statusText;
                 }

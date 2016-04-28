@@ -1,8 +1,3 @@
-# Issues / forbedringer
-Badge på app icon dersom man har usendte registreringer?
-Offline maps
-Registrer ny bruker/Glemt passord
-
 # regObs | Ionic
 Ionic version of regObs.
 
@@ -16,7 +11,7 @@ These are required to start developing:
 * Ionic
 
 ### Installation
-After you have installed [node.js](https://nodejs.org/en/), boot up a command prompt and run the following (make sure to use sudo, if you are on mac/linux):
+After you have installed [node.js](https://nodejs.org), boot up a command prompt and run the following (make sure to use sudo, if you are on mac/linux):
 
     npm install -g gulp
     npm install -g bower
@@ -33,17 +28,21 @@ run `ionic serve`
 
 In Ionic View app on device:
 1. Run `ionic upload`
-2. Share link with tester
+2. Log into your ionic.io accout
 3. Open ionic view and click download files, and view app
 
 ## Production deployment ios
-1. `ionic platform add ios`
+1. Install as above on a mac
 2. `ionic build ios`
-3. The resulting Xcode project can be signed with proper keys
-4. To run in emulator `ionic emulate ios`
+3. The resulting Xcode project under platforms/ios can be opened in Xcode
+4. To run in emulator from command line `ionic emulate ios`
 
 ## Production deployment android
-1. `ionic platform add android`
-2. `ionic build android`
-3. Resulting in apk
-4. To run on connected device: `ionic run android`
+0. Make sure to have the android sdk installed
+1. `ionic platform add android` if not already added
+2. `ionic build android --release`
+3. Resulting in apk under platforms/android/build/outputs/apk
+4. navigate to the folder
+5. Sign apk `jarsigner -verbose -sigalg SHA1withRSA -digestalg SHA1 -keystore nve.keystore .\android-release-unsigned.apk regobs`
+6. Optimize it `{Android SDK location}\android-sdk\build-tools\{version}\zipalign.exe -v 4 .\android-release-unsigned.apk regobs.apk`
+7. Upload resulting regobs.apk voa Google Play Developer console
