@@ -33,7 +33,7 @@ angular
                 if(response.status === 401){
                     status = 'Feil brukernavn eller passord. Vennligst fyll inn på nytt og prøv igjen.'
                 } else if(response.status <= 0){
-                    status = 'Det er problemer med å nå tjenesten. Har du nett? Dersom dekningen er god, prøv igjen om noen minutter.'
+                    status = 'Det er problemer med å nå tjenesten. Har du nett? Det kan hende at serverapplikasjonen må våkne og få seg en dugelig sterk kopp med kaffe først. Gi den noen minutter og prøv igjen.'
                 } else {
                     status = 'Det oppsto en feil ved innlogging. Melding fra server: ' + response.statusText;
                 }

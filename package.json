@@ -1,6 +1,6 @@
 {
   "name": "regObs",
-  "version": "3.0.2",
+  "version": "3.0.3",
   "description": "regObs: An Ionic project",
   "scripts": {
     "postinstall": "ionic state reset && bower install && gulp"
@@ -31,7 +31,8 @@
     "cordova-plugin-geolocation",
     "cordova-plugin-inappbrowser",
     "cordova-plugin-device-orientation",
-    "ionic-plugin-keyboard"
+    "ionic-plugin-keyboard",
+    "cordova-plugin-badge"
   ],
   "cordovaPlatforms": [
     "android",

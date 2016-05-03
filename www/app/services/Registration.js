@@ -1,6 +1,6 @@
 angular
     .module('RegObs')
-    .factory('Registration', function Registration($rootScope, $http, $state, $ionicPopup, $ionicHistory, LocalStorage, Utility, User, ObsLocation, AppSettings, RegobsPopup) {
+    .factory('Registration', function Registration($rootScope, $ionicPlatform, $cordovaBadge, $http, $state, $ionicPopup, $ionicHistory, LocalStorage, Utility, User, ObsLocation, AppSettings, RegobsPopup) {
         var Registration = this;
 
         var storageKey = 'regobsRegistrations';
@@ -269,6 +269,11 @@ angular
                 }
             });
             Registration.save();
+            $cordovaBadge.set(Registration.unsent.length).then(function() {
+                // You have permission, badge set.
+            }, function(err) {
+                // You do not have permission.
+            });
 
         }
 
@@ -284,6 +289,11 @@ angular
                 );
                 Registration.sending = false;
                 Registration.save();
+                $cordovaBadge.clear().then(function() {
+                    // You have permission, badge cleared.
+                }, function(err) {
+                    // You do not have permission.
+                });
             };
 
             var exception = function (error) {
@@ -309,19 +319,14 @@ angular
                     }
                 };
 
-                switch (error.status) {
-                    case -1:
-                        RegobsPopup.confirm(title, 'Fikk ikke kontakt med regObs-serveren. Dette kan skyldes manglende nettilgang. Du kan prøve på nytt, eller du kan lagre registrering for å sende inn senere.', 'Prøv igjen', 'Lagre')
-                            .then(handleUserAction);
-                        break;
-                    case 422: // Innsendingen samstemmer ikke med forventet format
-                        RegobsPopup.alert('Format stemmer ikke', 'Innsendingen samstemmer ikke med forventet format. Melding fra server: ' + error.statusText);
-                        break;
-                    default:
-                        RegobsPopup.confirm(title, body, 'Prøv igjen', 'Lagre')
-                            .then(handleUserAction);
-                        break;
-
+                if (error.status <= 0) {
+                    RegobsPopup.confirm(title, 'Fikk ikke kontakt med regObs-serveren. Dette kan skyldes manglende nettilgang, eller at serveren er midlertidig utilgjengelig. Du kan prøve på nytt, eller du kan lagre registrering for å sende inn senere.', 'Prøv igjen', 'Lagre')
+                        .then(handleUserAction);
+                } else if(error.status === 422) {
+                    RegobsPopup.alert('Format stemmer ikke', 'Det oppsto et problem ved at innsendingen ikke samstemmer med forventet format. Beklager ulempen:( Melding fra server: ' + error.statusText);
+                } else {
+                    RegobsPopup.confirm(title, body, 'Prøv igjen', 'Lagre')
+                        .then(handleUserAction);
                 }
 
             };
@@ -369,6 +374,12 @@ angular
                     Registration.createNew(type);
                 }
 
+            }
+        });
+
+        $ionicPlatform.on('resume', function(event){
+            if(Registration.isEmpty()){
+                resetRegistration();
             }
         });
 

@@ -69,10 +69,16 @@ angular
                     })
                     .catch(function(err){
                         console.log('Error fetching places', err);
-                        RegobsPopup.alert(
-                            'Klarte ikke hente målepunkter',
-                            'Dette kan skyldes at serverapplikasjonen må våkne og få seg en dugelig sterk kopp med kaffe først. Gi den noen minutter og prøv igjen.'
-                        );
+                        var header = 'Klarte ikke hente målepunkter';
+                        var message;
+                        if(err.status <= 0){
+                            message =
+                                'Dette kan skyldes manglende nett, eller at serverapplikasjonen må våkne og få seg en dugelig sterk kopp med kaffe først. Gi den noen minutter og prøv igjen.';
+                        } else {
+                            message =
+                                'Det oppsto dessverre et problem med å hente målepunkter, beklager ulempen.. Vennligst prøv igjen om noen minutter og se om det bedrer seg. Melding mottatt fra server: ' + err.statusText;
+                        }
+                        RegobsPopup.alert(header, message);
                         scope.fetchingPlaces = false;
                     });
 
