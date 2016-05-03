@@ -1,6 +1,6 @@
 angular
     .module('RegObs')
-    .factory('Registration', function Registration($rootScope, $ionicPlatform, $cordovaBadge, $http, $state, $ionicPopup, $ionicHistory, LocalStorage, Utility, User, ObsLocation, AppSettings, RegobsPopup) {
+    .factory('Registration', function Registration($rootScope, $ionicPlatform, $http, $state, $ionicPopup, $ionicHistory, LocalStorage, Utility, User, ObsLocation, AppSettings, RegobsPopup) {
         var Registration = this;
 
         var storageKey = 'regobsRegistrations';
@@ -192,6 +192,9 @@ angular
         };
 
         function prepareRegistrationForSending() {
+          if(Registration.isEmpty()){
+            return null;
+          }
 
             var user = User.getUser();
 
@@ -269,11 +272,9 @@ angular
                 }
             });
             Registration.save();
-            $cordovaBadge.set(Registration.unsent.length).then(function() {
-                // You have permission, badge set.
-            }, function(err) {
-                // You do not have permission.
-            });
+            if(window.cordova && window.cordova.plugins.notification.badge){
+              cordova.plugins.notification.badge.set(Registration.unsent.length);
+            }
 
         }
 
@@ -289,11 +290,9 @@ angular
                 );
                 Registration.sending = false;
                 Registration.save();
-                $cordovaBadge.clear().then(function() {
-                    // You have permission, badge cleared.
-                }, function(err) {
-                    // You do not have permission.
-                });
+                if(window.cordova && window.cordova.plugins.notification.badge){
+                  cordova.plugins.notification.badge.clear();
+                }
             };
 
             var exception = function (error) {
