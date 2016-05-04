@@ -58,6 +58,13 @@ angular
         Registration.save = function () {
             LocalStorage.setObject(storageKey, Registration.data);
             LocalStorage.setObject(unsentStorageKey, Registration.unsent);
+            if(window.cordova && window.cordova.plugins.notification.badge){
+              if(Registration.unsent.length){
+                cordova.plugins.notification.badge.set(Registration.unsent.length);
+              } else {
+                cordova.plugins.notification.badge.clear();
+              }
+            }
         };
 
         Registration.createNew = function (type) {
@@ -90,6 +97,7 @@ angular
                         if (response) {
                             Registration.unsent = [];
                             Registration.save();
+
                         }
                     });
             }
@@ -272,9 +280,7 @@ angular
                 }
             });
             Registration.save();
-            if(window.cordova && window.cordova.plugins.notification.badge){
-              cordova.plugins.notification.badge.set(Registration.unsent.length);
-            }
+
 
         }
 
@@ -290,9 +296,6 @@ angular
                 );
                 Registration.sending = false;
                 Registration.save();
-                if(window.cordova && window.cordova.plugins.notification.badge){
-                  cordova.plugins.notification.badge.clear();
-                }
             };
 
             var exception = function (error) {
