@@ -110,12 +110,10 @@ angular
         Registration.send = function (force) {
             var postUrl = AppSettings.getEndPoints().postRegistration;
             if (!Registration.isEmpty() || Registration.unsent.length) {
+                if (!ObsLocation.isSet()) {
+                    return RegobsPopup.alert('Posisjon ikke satt', 'Kan ikke sende inn uten posisjon.');
+                } else if (!User.getUser().anonymous || force) {
 
-                if (!User.getUser().anonymous || force) {
-
-                    if (!ObsLocation.isSet()) {
-                        return RegobsPopup.alert('Posisjon ikke satt', 'Kan ikke sende inn uten posisjon.');
-                    }
                     prepareRegistrationForSending();
 
                     if (Registration.unsent.length) {
