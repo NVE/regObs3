@@ -1,6 +1,6 @@
 angular
     .module('RegObs')
-    .factory('Registration', function Registration($rootScope, $ionicPlatform, $cordovaBadge, $http, $state, $ionicPopup, $ionicHistory, LocalStorage, Utility, User, ObsLocation, AppSettings, RegobsPopup) {
+    .factory('Registration', function Registration($rootScope, $ionicPlatform, $http, $state, $ionicPopup, $ionicHistory, LocalStorage, Utility, User, ObsLocation, AppSettings, RegobsPopup) {
         var Registration = this;
 
         var storageKey = 'regobsRegistrations';
@@ -58,6 +58,13 @@ angular
         Registration.save = function () {
             LocalStorage.setObject(storageKey, Registration.data);
             LocalStorage.setObject(unsentStorageKey, Registration.unsent);
+            if(window.cordova && window.cordova.plugins.notification.badge){
+              if(Registration.unsent.length){
+                cordova.plugins.notification.badge.set(Registration.unsent.length);
+              } else {
+                cordova.plugins.notification.badge.clear();
+              }
+            }
         };
 
         Registration.createNew = function (type) {
@@ -90,6 +97,7 @@ angular
                         if (response) {
                             Registration.unsent = [];
                             Registration.save();
+
                         }
                     });
             }
@@ -190,6 +198,9 @@ angular
         };
 
         function prepareRegistrationForSending() {
+          if(Registration.isEmpty()){
+            return null;
+          }
 
             var user = User.getUser();
 
@@ -267,11 +278,7 @@ angular
                 }
             });
             Registration.save();
-            $cordovaBadge.set(Registration.unsent.length).then(function() {
-                // You have permission, badge set.
-            }, function(err) {
-                // You do not have permission.
-            });
+
 
         }
 
@@ -287,11 +294,6 @@ angular
                 );
                 Registration.sending = false;
                 Registration.save();
-                $cordovaBadge.clear().then(function() {
-                    // You have permission, badge cleared.
-                }, function(err) {
-                    // You do not have permission.
-                });
             };
 
             var exception = function (error) {
