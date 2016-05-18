@@ -8,3 +8,4 @@ plugins/
 www/dist/
 config.keys.js
 www/lib/
+nve.keystore
