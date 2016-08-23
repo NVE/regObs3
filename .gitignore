@@ -9,3 +9,4 @@ www/dist/
 config.keys.js
 www/lib/
 nve.keystore
+secret.json

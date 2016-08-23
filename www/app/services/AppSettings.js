@@ -1,6 +1,6 @@
 angular
     .module('RegObs')
-    .factory('AppSettings', function (LocalStorage) {
+    .factory('AppSettings', function (LocalStorage, $http) {
 
         var settings = this;
 
@@ -34,23 +34,28 @@ angular
             'proxy':'http://stg-h-web03.nve.no/RegObsServices/'
         };
 
-        var headers = {
-            //regObs_apptoken: '***REMOVED***', //gammel
-            regObs_apptoken: '***REMOVED***',
-            ApiJsonVersion: '2.0.0'
-        };
+        $http.get('app/json/secret.json')
+            .then(function(response){
+                console.log('Setting the app token', response)
+                var headers = {
+                    regObs_apptoken: response.data.apiKey,
+                    ApiJsonVersion: '2.0.0'
+                };
 
-        settings.httpConfig = {
-            headers: headers,
-            timeout: 15000
-        };
+                settings.httpConfig = {
+                    headers: headers,
+                    timeout: 15000
+                };
 
-        settings.httpConfigRegistrationPost = {
-            headers: headers,
-            timeout: 120000
-        };
+                settings.httpConfigRegistrationPost = {
+                    headers: headers,
+                    timeout: 120000
+                };
+            })
+            .catch(function(error){
+                console.log('Could not set proper http header settings. Do you have app/json/secret.json with proper app token?', error)
+            })        
 
-        //settings.data = Object.create(data);
         settings.mapTileUrl = 'http://opencache.statkart.no/gatekeeper/gk/gk.open_gmaps?layers=matrikkel_bakgrunn&zoom={z}&x={x}&y={y}&format=image/png';
         //'http://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}@2x.png'
         settings.load = function () {
