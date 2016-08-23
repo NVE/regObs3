@@ -24,6 +24,13 @@ In Ionic View app on device:
 2. Log into your ionic.io accout
 3. Open ionic view and click download files, and view app
 
+## App token
+To use the regObs API, you need a valid app token. Request one from the regobs team. When you have a valid app token, create file `secret.json` in the folder `www/app/json`. The file should have the following format:
+
+    {
+    	"apiKey": "your app token here"
+    }
+
 ## Production deployment
 When deploying to production, remember to remove the cordova-plugin-console plugin, as this is meant purely for debugging purposes. This can be done by running `cordova plugin rm cordova-plugin-console`. It will still remain in the package.json file, and therefore be installed on fresh pulls of the repo, or when you run `ionic state reset`.
 
