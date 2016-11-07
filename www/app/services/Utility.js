@@ -55,6 +55,10 @@ angular
                 name: "Snøprofil",
                 RegistrationTID: "23"
             },
+            StabilityTest: {
+                name: "Stabilitetstest",
+                RegistrationTID: "25"
+            },
             AvalancheEvalProblem2: {
                 name: "Skredproblem",
                 RegistrationTID: "32"

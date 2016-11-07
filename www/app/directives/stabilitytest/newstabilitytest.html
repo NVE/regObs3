@@ -1,0 +1,54 @@
+<ion-modal-view>
+    <ion-header-bar>
+        <button class="button button-clear button-calm" ng-click="modal.hide()">Avbryt</button>
+        <h1 class="title" ng-hide="editing">Ny stabilitetstest</h1>
+        <h1 class="title" ng-show="editing">Rediger stabilitetstest</h1>
+        <button class="button button-clear button-calm" ng-click="addStabilityTest()">OK</button>
+    </ion-header-bar>
+    <ion-content>
+        <form name="newStabilityTestForm" novalidate>
+            <ion-list>
+                <kdv-dropdown title="Test Type"
+                              model="stabilityTest.PropagationTID"
+                              kdv-key="Snow_PropagationKDV">
+                </kdv-dropdown>
+                <regobs-number field-name="tapsFracture"
+                               label="Antall Slag"
+                               help-text="Ikke gitt"
+                               model="stabilityTest.TapsFracture"
+                               min="0"
+                               max="100"
+                               step="1"
+                               pattern="[0-9]*"></regobs-number>
+
+                <regobs-number field-name="fractureDepth"
+                               label="Avstand fra toppen"
+                               help-text="I hele centimeter"
+                               model="stabilityTest.FractureDepth"
+                               min="0"
+                               max="10000"
+                               step="1"
+                               pattern="[0-9]*"></regobs-number>
+
+                <kdv-dropdown title="Bruddtype"
+                              model="stabilityTest.ComprTestFractureTID"
+                              kdv-key="Snow_ComprTestFractureKDV">
+                </kdv-dropdown>
+                <kdv-dropdown title="Stabilitet"
+                              model="stabilityTest.StabilityEvalTID"
+                              kdv-key="Snow_StabilityEvalKDV">
+                </kdv-dropdown>
+                <regobs-comment model="stabilityTest.Comment"></regobs-comment>
+            </ion-list>
+            <div class="padding">
+                <regobs-save-button ng-click="addStabilityTest()" save-action=""></regobs-save-button>
+
+                <button class="button button-block button-assertive button-clear"
+                        ng-click="deleteStabilityTest()"
+                        ng-show="editing">
+                    Slett
+                </button>
+            </div>
+        </form>
+    </ion-content>
+</ion-modal-view>

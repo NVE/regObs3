@@ -10,3 +10,8 @@ config.keys.js
 www/lib/
 nve.keystore
 secret.json
+/.vs/config/applicationhost.config
+/bin/Android
+/.vs/regObs3/v14/.suo
+/res
+/build.json

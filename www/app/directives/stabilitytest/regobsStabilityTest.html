@@ -1,0 +1,16 @@
+<ion-list can-swipe="true">
+    <ion-item class="item-icon-right"
+              ng-repeat="stest in reg.CompressionTest track by $index"
+              ng-click="editStabilityTest(stest, $index)">
+        <ion-option-button class="button-assertive"
+                           ng-click="reg.CompressionTest.splice($index, 1)">
+            Slett
+        </ion-option-button>
+        {{getStabilityTestName(stest)}}
+    </ion-item>
+</ion-list>
+<div class="padding">
+    <button class="button button-block button-balanced icon-left ion-plus"
+            ng-click="newStabilityTest()">Legg til ny stabilitetstest</button>
+
+</div>

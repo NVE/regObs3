@@ -99,6 +99,17 @@
                     registrationProp: 'DangerObs'
                 }
             })
+            .state('stabilitytest', {
+                //Stabilitetstest
+                url: '/stabilitytest',
+                templateUrl: 'app/snow/snowregistration/stabilitytest/stabilitytest.html',
+                controller: 'SnowStabilityTestCtrl as vm',
+                data: {
+                    defaultBack: defaultBackSnowRegistration,
+                    showFormFooter: true,
+                    registrationProp: 'StabilityTest'
+                }
+            })
             .state('avalancheobs', {
                 //Skredhendelse
                 url: '/avalancheobs',

@@ -18,7 +18,9 @@
                 if(!element){
                     element = document.getElementById(ctrl.textareaId);
                 }
-                element.style.height = element.scrollHeight + "px";
+                if (element && element.style) {
+                    element.style.height = element.scrollHeight + "px";
+                }
             };
 
             $rootScope.$on('$ionicView.enter', function(){
