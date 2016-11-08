@@ -191,7 +191,7 @@ angular
         service.isEmpty = function (obj) {
 
             // null and undefined are "empty"
-            if (obj === null) return true;
+            if (obj === null || obj === undefined) return true;
 
             // Assume if it has a length property with a non-zero value
             // that that property is correct.
