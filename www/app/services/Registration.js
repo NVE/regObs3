@@ -1,6 +1,6 @@
 angular
     .module('RegObs')
-    .factory('Registration', function Registration($rootScope, $ionicPlatform, $http, $state, $ionicPopup, $ionicHistory, LocalStorage, Utility, User, ObsLocation, AppSettings, RegobsPopup) {
+    .factory('Registration', function Registration($rootScope, $ionicPlatform, $http, $state, $ionicPopup, $ionicHistory, $cordovaBadge, LocalStorage, Utility, User, ObsLocation, AppSettings, RegobsPopup) {
         var Registration = this;
 
         var storageKey = 'regobsRegistrations';
@@ -56,15 +56,24 @@ angular
         };
 
         Registration.save = function () {
+            console.log('save start');
             LocalStorage.setObject(storageKey, Registration.data);
             LocalStorage.setObject(unsentStorageKey, Registration.unsent);
-            if(window.cordova && window.cordova.plugins.notification.badge){
-              if(Registration.unsent.length){
-                cordova.plugins.notification.badge.set(Registration.unsent.length);
-              } else {
-                cordova.plugins.notification.badge.clear();
-              }
+            console.log('save before badge');
+            try {
+                if (window.cordova && window.cordova.plugins.notification.badge) {
+                    if (Registration.unsent.length) {
+                        cordova.plugins.notification.badge.set(Registration.unsent.length);
+                    } else {
+                        cordova.plugins.notification.badge.clear();
+                    }
+                }
+            } catch (ex) {
+                console.log('Exception on badge set ' +ex.message);
             }
+
+
+            console.log('save complete');
         };
 
         Registration.createNew = function (type) {
@@ -126,7 +135,7 @@ angular
 
                     if (Registration.unsent.length) {
                         Registration.sending = true;
-                        doPost(postUrl, {Registrations: Registration.unsent});
+                        doPost(postUrl, { Registrations: Registration.unsent });
                         Registration.unsent = [];
                         resetRegistration();
                     }
@@ -185,22 +194,22 @@ angular
 
         Registration.getExpositionArray = function () {
             return [
-                {"val": -1, "name": "Ikke gitt"},
-                {"val": 0, "name": "N - nordlig"},
-                {"val": 45, "name": "NØ - nordøstlig"},
-                {"val": 90, "name": "Ø - østlig"},
-                {"val": 135, "name": "SØ - sørøstlig"},
-                {"val": 180, "name": "S - sørlig"},
-                {"val": 225, "name": "SV - sørvestlig"},
-                {"val": 270, "name": "V - vestlig"},
-                {"val": 315, "name": "NV - nordvestlig"}
+                { "val": -1, "name": "Ikke gitt" },
+                { "val": 0, "name": "N - nordlig" },
+                { "val": 45, "name": "NØ - nordøstlig" },
+                { "val": 90, "name": "Ø - østlig" },
+                { "val": 135, "name": "SØ - sørøstlig" },
+                { "val": 180, "name": "S - sørlig" },
+                { "val": 225, "name": "SV - sørvestlig" },
+                { "val": 270, "name": "V - vestlig" },
+                { "val": 315, "name": "NV - nordvestlig" }
             ];
         };
 
         function prepareRegistrationForSending() {
-          if(Registration.isEmpty()){
-            return null;
-          }
+            if (Registration.isEmpty()) {
+                return null;
+            }
 
             var user = User.getUser();
 
@@ -226,7 +235,7 @@ angular
             console.log('User', user);
             console.log('Sending', data);
 
-            saveToUnsent({Registrations: [data]});
+            saveToUnsent({ Registrations: [data] });
 
             function cleanupDangerObs(array) {
                 if (angular.isArray(array)) {
@@ -322,7 +331,7 @@ angular
                 if (error.status <= 0) {
                     RegobsPopup.confirm(title, 'Fikk ikke kontakt med regObs-serveren. Dette kan skyldes manglende nettilgang, eller at serveren er midlertidig utilgjengelig. Du kan prøve på nytt, eller du kan lagre registrering for å sende inn senere.', 'Prøv igjen', 'Lagre')
                         .then(handleUserAction);
-                } else if(error.status === 422) {
+                } else if (error.status === 422) {
                     RegobsPopup.alert('Format stemmer ikke', 'Det oppsto et problem ved at innsendingen ikke samstemmer med forventet format. Beklager ulempen:( Melding fra server: ' + error.statusText);
                 } else {
                     RegobsPopup.confirm(title, body, 'Prøv igjen', 'Lagre')
@@ -377,8 +386,8 @@ angular
             }
         });
 
-        $ionicPlatform.on('resume', function(event){
-            if(Registration.isEmpty()){
+        $ionicPlatform.on('resume', function (event) {
+            if (Registration.isEmpty()) {
                 resetRegistration();
             }
         });
