@@ -191,7 +191,7 @@ angular
         service.isEmpty = function (obj) {
 
             // null and undefined are "empty"
-            if (obj == null) return true;
+            if (obj === null) return true;
 
             // Assume if it has a length property with a non-zero value
             // that that property is correct.
@@ -275,9 +275,7 @@ angular
             return deferred.promise;
         };
 
-        /**
-         * @return {string}
-         */
+
         function S4() {
             return (((1 + Math.random()) * 0x10000) | 0).toString(16).substring(1);
         }

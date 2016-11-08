@@ -6,7 +6,7 @@ angular
         var storageKey = 'regobsRegistrations';
         var unsentStorageKey = 'regobsUnsentRegistrations';
 
-        var httpConfig = AppSettings.httpConfigRegistrationPost;
+        //var httpConfig = AppSettings.httpConfigRegistrationPost;
         var baseLength = Object.keys(createRegistration('snow')).length;
 
         var messages = [
@@ -332,7 +332,7 @@ angular
             };
 
             var post = function () {
-                return $http.post(postUrl, data, httpConfig)
+                return $http.post(postUrl, data, AppSettings.httpConfigRegistrationPost)
                     .then(success)
                     .catch(exception);
             };
