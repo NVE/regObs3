@@ -1,6 +1,6 @@
 angular
     .module('RegObs')
-    .factory('Registration', function Registration($rootScope, $ionicPlatform, $http, $state, $ionicPopup, $ionicHistory, $cordovaBadge, LocalStorage, Utility, User, ObsLocation, AppSettings, RegobsPopup) {
+    .factory('Registration', function Registration($rootScope, $ionicPlatform, $http, $state, $ionicPopup, $ionicHistory, $cordovaBadge, LocalStorage, Utility, User, ObsLocation, AppSettings, RegobsPopup, AppLogging) {
         var Registration = this;
 
         var storageKey = 'regobsRegistrations';
@@ -56,10 +56,10 @@ angular
         };
 
         Registration.save = function () {
-            console.log('save start');
+            AppLogging.log('save start');
             LocalStorage.setObject(storageKey, Registration.data);
             LocalStorage.setObject(unsentStorageKey, Registration.unsent);
-            console.log('save before badge');
+            AppLogging.log('save before badge');
             try {
                 if (window.cordova && window.cordova.plugins.notification.badge) {
                     if (Registration.unsent.length) {
@@ -69,17 +69,17 @@ angular
                     }
                 }
             } catch (ex) {
-                console.log('Exception on badge set ' +ex.message);
+                AppLogging.error('Exception on badge set ' + ex.message);
             }
 
 
-            console.log('save complete');
+            AppLogging.log('save complete');
         };
 
         Registration.createNew = function (type) {
             Registration.data = createRegistration(type);
             ObsLocation.fetchPosition();
-            console.log(Registration.data);
+            AppLogging.log(Registration.data);
             $rootScope.$broadcast('$ionicView.loaded');
 
             return Registration.data;
@@ -232,8 +232,8 @@ angular
                 "ObsLocation": location
             });
 
-            console.log('User', user);
-            console.log('Sending', data);
+            AppLogging.log('User', user);
+            AppLogging.log('Sending', data);
 
             saveToUnsent({ Registrations: [data] });
 
@@ -306,7 +306,7 @@ angular
             };
 
             var exception = function (error) {
-                console.error('Failed to send registration: ' + error.statusText, error);
+                AppLogging.error('Failed to send registration: ' + error.statusText, error);
 
                 Registration.sending = false;
                 var title = getRandomMessage();
@@ -314,10 +314,10 @@ angular
 
                 var handleUserAction = function (confirmed) {
                     if (confirmed) {
-                        console.log('Confirmed sending again!');
+                        AppLogging.log('Confirmed sending again!');
                         post();
                     } else {
-                        console.log('Avbryter sending');
+                        AppLogging.log('Avbryter sending');
 
                         RegobsPopup.alert(
                             'Lagret',

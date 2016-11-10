@@ -1,6 +1,6 @@
 angular
     .module('RegObs')
-    .directive('regobsDangerObs', function ($ionicModal, Registration, RegobsPopup, Utility) {
+    .directive('regobsDangerObs', function ($ionicModal, Registration, RegobsPopup, Utility, AppLogging) {
         'ngInject';
         return {
             link: link,
@@ -83,7 +83,7 @@ angular
             $scope.toggleNoDangerSign = function () {
 
                 if ($scope.noDangerSign.val) {
-                    console.log('toggle');
+                    AppLogging.log('toggle');
                     $scope.dangerObs.DangerSignTID = $scope.dangerSignKdvArray[1].Id;
                 } else {
                     $scope.dangerObs.DangerSignTID = $scope.dangerSignKdvArray[0].Id;
@@ -117,7 +117,7 @@ angular
                 return Utility
                     .getKdvArray($scope.dangerSignKdv)
                     .then(function (response) {
-                        console.log(response);
+                        AppLogging.log(response);
                         $scope.dangerSignKdvArray = response;
                         return response;
                     });

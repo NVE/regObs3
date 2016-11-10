@@ -20,7 +20,6 @@ angular
                 $window.localStorage.setItem(key, angular.toJson(value));
             },
             getObject: function (key, defaultValue) {
-                console.log('Fetching from local storage');
                 var fetched = $window.localStorage.getItem(key);
                 return fetched && fetched !== 'undefined'? angular.fromJson(fetched) : defaultValue;
             },

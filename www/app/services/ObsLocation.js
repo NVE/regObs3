@@ -1,6 +1,6 @@
 angular
     .module('RegObs')
-    .factory('ObsLocation', function ($http, $ionicPlatform, $cordovaGeolocation, AppSettings, LocalStorage) {
+    .factory('ObsLocation', function ($http, $ionicPlatform, $cordovaGeolocation, AppSettings, LocalStorage, AppLogging) {
         var ObsLocation = this;
         var storageKey = 'regobsLocation';
 
@@ -16,7 +16,7 @@ angular
                 ObsLocation.data = {};
                 save();
             }
-            console.log(ObsLocation.data);
+            AppLogging.log(ObsLocation.data);
         }
 
         ObsLocation.isSet = function(){
@@ -24,7 +24,7 @@ angular
         };
 
         ObsLocation.fetchPosition = function () {
-            console.log('fetchPosition called');
+            AppLogging.log('fetchPosition called');
             ObsLocation.fetching = true;
             var timeout = parseInt(AppSettings.data.gpsTimeout);
 
@@ -40,7 +40,7 @@ angular
 
             function success (position) {
                 ObsLocation.fetching = false;
-                console.log('Got position:',position);
+                AppLogging.log('Got position:', position);
                 ObsLocation.set({
                     "Latitude": position.coords.latitude.toFixed(4),
                     "Longitude": position.coords.longitude.toFixed(4),
@@ -53,7 +53,7 @@ angular
             function error(err) {
                 ObsLocation.fetching = false;
                 // error
-                console.log('ObsLocation error',err);
+                AppLogging.log('ObsLocation error', err);
                 return err;
             }
         };
@@ -84,7 +84,7 @@ angular
                     Uncertainty: loc.Uncertainty,
                     UTMSourceTID: loc.UTMSourceTID
                 };
-                console.log('ObsLocation set to', ObsLocation);
+                AppLogging.log('ObsLocation set to', ObsLocation);
                 getLocationName(ObsLocation.data);
                 save();
             }
@@ -110,7 +110,7 @@ angular
                 },
                 timeout: AppSettings.data.gpsTimeout*1000
             }).then(function(response){
-                console.log(response);
+                AppLogging.log(response);
                 ObsLocation.data.place = response.data.Data;
                 save();
             });

@@ -1,6 +1,6 @@
 angular
     .module('RegObs')
-    .directive('regobsIncident', function dangerObs($ionicModal, Registration, $ionicPopup, Utility) {
+    .directive('regobsIncident', function dangerObs($ionicModal, Registration, $ionicPopup, Utility, AppLogging) {
         'ngInject';
         return {
             link: link,
@@ -18,7 +18,7 @@ angular
             scope.$on('$stateChangeStart', function () {
 
                 if (!Registration.propertyExists('Incident')) {
-                    console.log('DELETE INCIDENT');
+                    AppLogging.log('DELETE INCIDENT');
                     delete Registration.data['Incident'];
                 }
 
