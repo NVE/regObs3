@@ -16,3 +16,4 @@ secret.json
 /res
 /build.json
 /bld/iOS/Debug
+/bin/iOS/Debug

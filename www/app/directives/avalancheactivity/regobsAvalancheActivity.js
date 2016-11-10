@@ -4,7 +4,7 @@
 angular
     .module('RegObs')
     .directive('regobsAvalancheActivity',
-        function regobsAvalancheActivity($filter, $ionicModal, RegobsPopup, Registration, Utility) {
+        function regobsAvalancheActivity($filter, $ionicModal, RegobsPopup, Registration, Utility, AppLogging) {
             'ngInject';
             return {
                 link: link,
@@ -76,7 +76,7 @@ angular
                     /*if($scope.dates.DtStart > now){
                         $scope.dates.DtStart = now;
                     }*/
-                    console.log($scope.dates.timeFrame);
+                    AppLogging.log($scope.dates.timeFrame);
 
                     var start = new Date($scope.dates.DtStart);
                     start.setHours($scope.dates.timeFrame.start.h);
@@ -92,7 +92,7 @@ angular
 
                     $scope.obs.DtStart = start.toISOString();
                     $scope.obs.DtEnd = end.toISOString();
-                    console.log($scope.obs);
+                    AppLogging.log($scope.obs);
                 };
 
                 $scope.exposedHeight = function (where) {
@@ -115,7 +115,7 @@ angular
                     } else {
                         $scope.obs.ExposedHeightComboTID = 0;
                     }
-                    console.log($scope.obs);
+                    AppLogging.log($scope.obs);
                     $scope.obs.ExposedHeight2 = 0;
                 };
 
@@ -144,7 +144,7 @@ angular
                         if(!$scope.reg.AvalancheActivityObs2){
                             $scope.reg.AvalancheActivityObs2 = [];
                         }
-                        console.log($scope.reg);
+                        AppLogging.log($scope.reg);
                         $scope.reg.AvalancheActivityObs2.push($scope.obs);
                     }
                     $scope.modal.hide();
@@ -171,7 +171,7 @@ angular
 
                 $scope.toggleNoActivity = function(){
                     if ($scope.noActivity.val) {
-                        console.log('toggle');
+                        AppLogging.log('toggle');
                         $scope.obs.EstimatedNumTID = $scope.estimatedNumKdvArray[1].Id;
                     } else {
                         $scope.obs.EstimatedNumTID = $scope.estimatedNumKdvArray[0].Id;
