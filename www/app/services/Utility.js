@@ -3,7 +3,7 @@
  */
 angular
     .module('RegObs')
-    .factory('Utility', function Utility($http, $q, $rootScope, AppSettings, User, LocalStorage) {
+    .factory('Utility', function Utility($http, $q, $rootScope, AppSettings, User, LocalStorage, AppLogging) {
         var service = this;
 
         var canvas;
@@ -131,11 +131,11 @@ angular
             var now = new Date();
 
             lastUpdate = new Date(lastUpdate);
-            console.log('Last update', lastUpdate);
+            AppLogging.log('Last update', lastUpdate);
 
             timeDiff = Math.abs(now.getTime() - lastUpdate.getTime());
             diffDays = Math.ceil(timeDiff / (1000 * 3600 * 24));
-            console.log('Difference days', diffDays);
+            AppLogging.log('Difference days', diffDays);
 
             return diffDays > DAYS_BEFORE_KDV_UPDATE;
         };
@@ -184,7 +184,7 @@ angular
         };
 
         service.nDecimal = function (num, n) {
-            console.log(num);
+            AppLogging.log(num);
             return parseFloat(num.toFixed(n))
         };
 
@@ -263,7 +263,7 @@ angular
                                 }
                             });
                         });
-                        console.log(reg.Picture);
+                        AppLogging.log(reg.Picture);
                     }
                 }
             }

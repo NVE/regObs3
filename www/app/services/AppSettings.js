@@ -1,6 +1,6 @@
 angular
     .module('RegObs')
-    .factory('AppSettings', function (LocalStorage, $http) {
+    .factory('AppSettings', function (LocalStorage, $http, $log) {
 
         var settings = this;
 
@@ -12,7 +12,7 @@ angular
             compass: false,
             gpsTimeout: 10,
             searchRange: 5000,
-            locale: 'nb'
+            locale: 'nb',
         };
 
         var baseUrls = {
@@ -35,8 +35,7 @@ angular
         };
 
         $http.get('app/json/secret.json')
-            .then(function(response){
-                console.log('Setting the app token', response)
+            .then(function (response) {
                 var headers = {
                     regObs_apptoken: response.data.apiKey,
                     ApiJsonVersion: '2.0.0'
@@ -52,15 +51,14 @@ angular
                     timeout: 120000
                 };
             })
-            .catch(function(error){
-                console.log('Could not set proper http header settings. Do you have app/json/secret.json with proper app token?', error)
-            })        
+            .catch(function (error) {
+                $log.error('Could not set proper http header settings. Do you have app/json/secret.json with proper app token? ' + JSON.stringify(error));
+            });
 
         settings.mapTileUrl = 'http://opencache.statkart.no/gatekeeper/gk/gk.open_gmaps?layers=matrikkel_bakgrunn&zoom={z}&x={x}&y={y}&format=image/png';
         //'http://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}@2x.png'
         settings.load = function () {
             settings.data = LocalStorage.getAndSetObject(storageKey, 'searchRange', angular.copy(data));
-            console.log(settings.data);
             var environments = settings.getEnvironments();
             if(environments.indexOf(settings.data.env) === -1){
                 settings.data.env = environments[0];
@@ -69,7 +67,6 @@ angular
         };
 
         settings.save = function () {
-            console.log('Changedsetting', settings);
             LocalStorage.setObject(storageKey, settings.data);
         };
 
@@ -105,7 +102,6 @@ angular
 
         settings.load();
 
-        console.log(settings);
 
         return settings;
 

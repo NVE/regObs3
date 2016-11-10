@@ -10,7 +10,7 @@
             formCtrl: '?^form'
         },
         template: '<button class="button button-block button-calm" ng-click="$ctrl.save()">Lagre</button>',
-        controller: function ($scope, $state, $ionicPlatform, $ionicHistory, Property, RegobsPopup) {
+        controller: function ($scope, $state, $ionicPlatform, $ionicHistory, Property, RegobsPopup, AppLogging) {
             'ngInject';
             var ctrl = this;
             var backState;
@@ -18,7 +18,7 @@
 
             ctrl.save = function () {
                 confirmed = false;
-                console.log('formCtrl', ctrl.formCtrl);
+                AppLogging.log('formCtrl', ctrl.formCtrl);
                 if (formIsInvalid()) {
                     getUserConfirmation()
                         .then(saveAndGoBack);

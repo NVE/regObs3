@@ -4,7 +4,7 @@
 angular
     .module('RegObs')
     .directive('regobsIceLayer',
-        function regobsIceLayer($ionicModal, $timeout, RegobsPopup, Registration, Utility) {
+        function regobsIceLayer($ionicModal, $timeout, RegobsPopup, Registration, Utility, AppLogging) {
             'ngInject';
 
             return {
@@ -38,7 +38,7 @@ angular
                     return Utility
                         .getKdvArray('Ice_IceLayerKDV')
                         .then(function (response) {
-                            console.log(response);
+                            AppLogging.log(response);
                             $scope.iceLayerKdvArray = response;
                             $scope.iceLayerDict = {};
                             response.forEach(function (val) {
@@ -86,7 +86,7 @@ angular
                           totalThickness += layer.IceLayerThickness;
                   });
                   $scope.obsObject.IceThicknessSum = totalThickness;
-                  console.log($scope.obsObject);
+                  AppLogging.log($scope.obsObject);
                   $scope.iceThicknessSum =  Utility.nDecimal(totalThickness*100,3);
                 }
 

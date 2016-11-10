@@ -1,19 +1,19 @@
 angular
     .module('RegObs')
-    .directive('regobsTime', function($timeout){
-        function link(scope, elem, attrs, formCtrl){
+    .directive('regobsTime', function ($timeout, AppLogging) {
+        function link(scope, elem, attrs, formCtrl) {
             scope.formCtrl = formCtrl;
 
             scope.timeChanged = function (time) {
-                console.log('time changed',scope.regObject);
-                $timeout(function(){
-                    if(!scope.regObject){
+                AppLogging.log('time changed', scope.regObject);
+                $timeout(function () {
+                    if (!scope.regObject) {
                         scope.regObject = {};
                     }
 
                     var now = new Date();
                     var newTime = new Date(time);
-                    if(newTime < now) {
+                    if (newTime < now) {
                         //Registration.data.DtObsTime = newTime.toISOString();
                         scope.regObject[scope.regProp] = newTime.toISOString();
                     } else {
@@ -28,8 +28,8 @@ angular
                 return scope.text || 'Observasjonstidspunkt';
             };
 
-            scope.$watch('regObject', function(newVal){
-                if(scope.regObject){
+            scope.$watch('regObject', function (newVal) {
+                if (scope.regObject) {
                     scope.DtObsTime = new Date(scope.regObject[scope.regProp]);
                 }
             });
