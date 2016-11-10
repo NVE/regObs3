@@ -16,7 +16,7 @@ angular
                     Authorization: 'Basic ' + btoa(username + ':' + password)
                 },
                 timeout: AppSettings.httpConfig.timeout,
-                cache: true
+                cache: false
             };
             return $http.get(endpoints.getObserver, config).then(function(response) {
                 user = JSON.parse(response.data.Data);
