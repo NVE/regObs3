@@ -116,7 +116,7 @@ angular
             var deferred = $q.defer();
             var kdvFromStorage = LocalStorage.getObject('kdvDropdowns');
             if (kdvFromStorage && kdvFromStorage.KdvRepositories) {
-                deferred.resolve({data: kdvFromStorage});
+                deferred.resolve({ data: kdvFromStorage });
                 return deferred.promise;
 
             } else {
@@ -147,12 +147,49 @@ angular
 
                     if (res.data && res.data.Data) {
                         var newDate = Date.now();
-                        LocalStorage.set('kdvDropdowns', res.data.Data);
-                        LocalStorage.set('kdvUpdated', newDate);
-                        $rootScope.$broadcast('kdvUpdated', newDate);
+                        var newKdvElements = JSON.parse(res.data.Data);
+                        service.getKdvElements().then(function (response) { //Getting old values to update
+                            var oldKdvElements = response.data;
+                            var prop;
+                            for (prop in oldKdvElements.KdvRepositories) {
+                                if (oldKdvElements.KdvRepositories.hasOwnProperty(prop)) {
+                                    if (newKdvElements.KdvRepositories[prop]) { //Key exists in updated values
+                                        AppLogging.debug('Updating existing KdvRepository: ' + prop);
+                                        oldKdvElements.KdvRepositories[prop] = newKdvElements.KdvRepositories[prop];
+                                    } else {
+                                        AppLogging.warn('Existing Kdv-key not found in updated data: ' + prop +'. Keeping existing data for this key');
+                                    }
+                                }
+                            }
+                            for (prop in newKdvElements.KdvRepositories) {
+                                if (newKdvElements.KdvRepositories.hasOwnProperty(prop) && !oldKdvElements.KdvRepositories.hasOwnProperty(prop)) {
+                                    AppLogging.debug('New KdvRepository not found in existing Repository: ' + prop);
+                                    oldKdvElements.KdvRepositories[prop] = newKdvElements.KdvRepositories[prop]; //New key exists in updated data
+                                }
+                            }
+
+                            for (prop in oldKdvElements.ViewRepositories) {
+                                if (oldKdvElements.ViewRepositories.hasOwnProperty(prop)) {
+                                    if (newKdvElements.ViewRepositories[prop]) { //Key exists in updated values
+                                        AppLogging.debug('Updating existing ViewRepository: ' + prop);
+                                        oldKdvElements.ViewRepositories[prop] = newKdvElements.ViewRepositories[prop];
+                                    }
+                                }
+                            }
+                            for (prop in newKdvElements.ViewRepositories) {
+                                if (newKdvElements.ViewRepositories.hasOwnProperty(prop) && !oldKdvElements.ViewRepositories.hasOwnProperty(prop)) {
+                                    AppLogging.debug('New ViewRepository not found in existing Repository: ' + prop);
+                                    oldKdvElements.ViewRepositories[prop] = newKdvElements.ViewRepositories[prop]; //New key exists in updated data
+                                }
+                            }
+
+
+                            LocalStorage.set('kdvDropdowns', JSON.stringify(oldKdvElements));
+                            LocalStorage.set('kdvUpdated', newDate);
+                            $rootScope.$broadcast('kdvUpdated', newDate);
+                        });                    
                     }
                 });
-
         };
 
         service.getKdvRepositories = function () {
@@ -195,8 +232,8 @@ angular
 
             // Assume if it has a length property with a non-zero value
             // that that property is correct.
-            if (obj.length > 0)    return false;
-            if (obj.length === 0)  return true;
+            if (obj.length > 0) return false;
+            if (obj.length === 0) return true;
 
             // Otherwise, does it have any properties of its own?
             // Note that this doesn't handle
