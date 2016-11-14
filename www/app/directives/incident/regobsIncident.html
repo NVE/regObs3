@@ -2,7 +2,7 @@
     <regobs-comment
             placeholder="Hvorfor skjedde det? Hvorfor gikk det forhåpentligvis bra? Kunne situasjonen vært unngått?"
             model="reg.Incident.IncidentText"
-            label-text="Beskrivelse"
+            label-text="Beskrivelse" required="required"
     ></regobs-comment>
     <kdv-dropdown
             title="Aktivitet"
@@ -10,8 +10,9 @@
             kdv-key="{{activityInfluencedKdv}}">
     </kdv-dropdown>
     <kdv-dropdown
-            title="Skadeomfang"
-            model="reg.Incident.DamageExtentTID"
-            kdv-key="DamageExtentKDV">
+        title="Skadeomfang"
+        model="reg.Incident.DamageExtentTID"
+        kdv-key="DamageExtentKDV">
     </kdv-dropdown>
+    <regobs-incident-url></regobs-incident-url>
 </ion-list>

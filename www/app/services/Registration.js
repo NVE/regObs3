@@ -194,7 +194,7 @@ angular
 
         Registration.getExpositionArray = function () {
             return [
-                { "val": -1, "name": "Ikke gitt" },
+                { "val": null, "name": "Ikke gitt" },
                 { "val": 0, "name": "N - nordlig" },
                 { "val": 45, "name": "NØ - nordøstlig" },
                 { "val": 90, "name": "Ø - østlig" },
