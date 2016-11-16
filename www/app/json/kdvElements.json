@@ -1675,6 +1675,32 @@
         "Id": 52,
         "Name": "Slettet av admin"
       }
+    ],
+    "ForecastAccurateKDV": [
+      {
+        "Id": 0,
+        "Name": "Ikke spesifisert"
+      },
+      {
+        "Id": 1,
+        "Name": "Varsel ikke gitt"
+      },
+      {
+        "Id": 2,
+        "Name": "Varsel for lavt"
+      },
+      {
+        "Id": 3,
+        "Name": "Varsel stemte"
+      },
+      {
+        "Id": 4,
+        "Name": "Varsel for høyt"
+      },
+      {
+        "Id": 9,
+        "Name": "Varsel ikke kjent"
+      }
     ]
   },
   "ViewRepositories": {
