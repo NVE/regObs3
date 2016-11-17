@@ -55,7 +55,7 @@ angular
                 name: "Snøprofil",
                 RegistrationTID: "23"
             },
-            StabilityTest: {
+            CompressionTest: {
                 name: "Stabilitetstest",
                 RegistrationTID: "25"
             },
@@ -222,7 +222,7 @@ angular
 
         service.nDecimal = function (num, n) {
             AppLogging.log(num);
-            return parseFloat(num.toFixed(n))
+            return parseFloat(num.toFixed(n));
         };
 
         service.isEmpty = function (obj) {
@@ -239,7 +239,10 @@ angular
             // Note that this doesn't handle
             // toString and valueOf enumeration bugs in IE < 9
             for (var key in obj) {
-                if (obj[key] || obj[key] === 0) return false;
+                if (obj.hasOwnProperty(key)) {
+                    //if (obj[key] || obj[key] === 0) return false;
+                    return service.isEmpty(obj[key]);
+                }
             }
 
             return true;

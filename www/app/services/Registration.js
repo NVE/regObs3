@@ -222,6 +222,7 @@ angular
             stripExposedHeight(data.AvalancheActivityObs2);
             cleanupGeneralObservation(data.GeneralObservation);
             cleanupObsLocation(location);
+            cleanupStabilityTest(data.CompressionTest);
             delete data.avalChoice;
             delete data.WaterLevelChoice;
 
@@ -236,6 +237,14 @@ angular
             AppLogging.log('Sending', data);
 
             saveToUnsent({ Registrations: [data] });
+
+            function cleanupStabilityTest(array) {
+                if (angular.isArray(array)) {
+                    array.forEach(function (stest) {
+                        delete stest.tempFractureDepth;
+                    });
+                }
+            }
 
             function cleanupDangerObs(array) {
                 if (angular.isArray(array)) {

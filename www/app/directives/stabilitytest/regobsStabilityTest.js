@@ -1,6 +1,6 @@
 angular
     .module('RegObs')
-    .directive('regobsStabilityTest', function ($ionicModal, Registration, RegobsPopup, Utility) {
+    .directive('regobsStabilityTest', function ($ionicModal, Registration, RegobsPopup, Utility, AppLogging) {
         'ngInject';
         return {
             link: link,
@@ -8,7 +8,7 @@ angular
             restrict: 'EA'
         };
 
-        function link($scope){
+        function link($scope) {
             var indexEditing = -1;
             var showConfirm = function () {
                 return RegobsPopup.delete('Slett stabilitetstest',
@@ -19,8 +19,15 @@ angular
 
             $scope.save = Registration.save;
 
+            var setFractureDepth = function(stest) {
+                if (stest && stest.tempFractureDepth > 0) {
+                    stest.FractureDepth = stest.tempFractureDepth / 100.0; //FractureDepth is in meter, so cm has to be converted to m
+                }
+            };
+
             $scope.addStabilityTest = function () {
-                if(!$scope.editing){
+                setFractureDepth($scope.stabilityTest);
+                if (!$scope.editing) {                   
                     $scope.reg.CompressionTest.push($scope.stabilityTest);
                 }
                 $scope.modal.hide();
@@ -50,8 +57,50 @@ angular
                     });
             };
 
+            var loadSnowPropagationKdvArray = function () {
+                return Utility
+                    .getKdvArray('Snow_PropagationKDV')
+                    .then(function (response) {
+                        $scope.snowPropagationKdvArray = response;
+                        return response;
+                    });
+            };
+
+            var loadComprTestFractureKdvArray = function () {
+                return Utility
+                    .getKdvArray('Snow_ComprTestFractureKDV')
+                    .then(function (response) {
+                        $scope.snowComprTestFractureKdvArray = response;
+                        return response;
+                    });
+            };
+
+            $scope.getPropagationName = function (tid) {
+                if (angular.isArray($scope.snowPropagationKdvArray)) {
+                    for (var i = 0; i < $scope.snowPropagationKdvArray.length; i++) {
+                        var item = $scope.snowPropagationKdvArray[i];
+                        if (item.Id === tid) {
+                            return item.Name;
+                        }
+                    }
+                }
+                return '';
+            };
+
+            $scope.getComprTestFractureName = function (tid) {
+                if (angular.isArray($scope.snowComprTestFractureKdvArray)) {
+                    for (var i = 0; i < $scope.snowComprTestFractureKdvArray.length; i++) {
+                        var item = $scope.snowComprTestFractureKdvArray[i];
+                        if (item.Id === tid) {
+                            return item.Name;
+                        }
+                    }
+                }
+                return '';
+            };
+
             $scope.getStabilityTestName = function (stabilityTest) {
-                return stabilityTest.PropagationTID + stabilityTest.TapsFracture + '@' + stabilityTest.FractureDepth + 'cm' + stabilityTest.ComprTestFractureTID;
+                return $scope.getPropagationName(stabilityTest.PropagationTID) + ' ' + (stabilityTest.TapsFracture || '') + '@' + (stabilityTest.tempFractureDepth || '') + 'cm' + $scope.getComprTestFractureName(stabilityTest.ComprTestFractureTID);
             };
 
             var loadModal = function () {
@@ -66,13 +115,13 @@ angular
                     });
             };
 
-            loadModal();
+            loadSnowPropagationKdvArray().then(loadComprTestFractureKdvArray).then(loadModal);
 
             $scope.$on('$ionicView.beforeLeave', function () {
                 $scope.modal.hide();
             });
 
-            $scope.$on('$destroy', function() {
+            $scope.$on('$destroy', function () {
                 $scope.modal.remove();
             });
         }
