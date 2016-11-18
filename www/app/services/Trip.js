@@ -23,8 +23,6 @@
             data: {}
         };
 
-        var httpConfig = AppSettings.httpConfig;
-
         Trip.model = LocalStorage.getAndSetObject(
             storageKey, 'data', angular.copy(defaultModel)
         );
@@ -57,7 +55,7 @@
                     .then(function (confirm) {
                         if(confirm){
                             Trip.sending = true;
-                            return $http.post(AppSettings.getEndPoints().trip, Trip.model.data, httpConfig);
+                            return $http.post(AppSettings.getEndPoints().trip, Trip.model.data, AppSettings.httpConfig);
                         }
                     })
                     .then(function(http){
@@ -86,7 +84,7 @@
                 .then(function (confirm) {
                     if(confirm){
                         Trip.sending = true;
-                        return $http.put(AppSettings.getEndPoints().trip, Trip.model.data, httpConfig)
+                        return $http.put(AppSettings.getEndPoints().trip, Trip.model.data, AppSettings.httpConfig);
                     }
                 })
                 .then(function(httpPromise){

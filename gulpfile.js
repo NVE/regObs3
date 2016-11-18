@@ -43,15 +43,15 @@ gulp.task('scripts', function (done) {
     jsonfile.readFile('./package.json', function(err, obj) {
 
         var now = new Date();
-        var build = `${now.getFullYear()} ${now.getMonth()+1} ${now.getDate()} ${now.getHours()}${now.getMinutes()}${now.getSeconds()}`;
-        var obj = {
+        var build = `${now.getFullYear()} ${('0' +(now.getMonth()+1)).slice(-2)} ${('0' +now.getDate()).slice(-2)} ${('0' +now.getHours()).slice(-2)}${('0' +now.getMinutes()).slice(-2)}${('0'+now.getSeconds()).slice(-2)}`;
+        var vobj = {
             version: obj.version,
             build: build
         };
-        jsonfile.writeFile('./www/app/json/version.json', obj, function (err) {
-            console.error(err)
+        jsonfile.writeFile('./www/app/json/version.json', vobj, function (err2) {
+            console.error(err2);
         });
-        console.log(obj);
+        console.log(vobj);
     });
 
     gulp.src(paths.js)
