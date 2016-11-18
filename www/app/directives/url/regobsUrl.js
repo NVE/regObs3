@@ -1,14 +1,30 @@
 ﻿angular
     .module('RegObs')
-    .directive('regobsIncidentUrl', function dangerObs($ionicModal, Registration, RegobsPopup, Utility, AppLogging) {
+    .directive('regobsUrl', function dangerObs($ionicModal, Registration, RegobsPopup, Utility, AppLogging) {
         'ngInject';
         return {
             link: link,
-            templateUrl: 'app/directives/incident/regobsIncidentUrl.html',
-            restrict: 'EA'
+            templateUrl: 'app/directives/url/regobsUrl.html',
+            restrict: 'EA',
+            scope: {
+                model: '=',
+                property: '@'
+            }
         };
 
         function link($scope) {
+
+            var init = function()
+            {
+                if ($scope.model && $scope.property) {
+                    if (Utility.isEmpty($scope.model[$scope.property])) {
+                        $scope.model[$scope.property] = [];
+                    }
+                    $scope.urls = $scope.model[$scope.property];
+                }
+            };
+
+            init();
 
             var indexEditing = -1;
 
@@ -17,19 +33,8 @@
                     'Er du sikker på at du vil slette url?');
             };
 
-            var init = function () {
-                Registration.initPropertyAsObject('Incident');
 
-                if (Utility.isEmpty(Registration.data.Incident.IncidentURLs)) {
-                    Registration.data.Incident.IncidentURLs = [];
-                }
-
-                $scope.incidentUrls = Registration.data.Incident.IncidentURLs;
-            };
-
-            init();
-
-            $scope.newIncidentUrl = function () {
+            $scope.newUrl = function () {
                 $scope.editing = false;
                 $scope.url = {
                     UrlLine: '',
@@ -38,7 +43,7 @@
                 $scope.modal.show();
             };
 
-            $scope.editIncidentUrl = function (url, index) {
+            $scope.editUrl = function (url, index) {
                 indexEditing = index;
                 $scope.url = url;
                 $scope.editing = true;
@@ -47,7 +52,7 @@
 
             $scope.addUrl = function () {
                 if (!$scope.editing) {
-                    $scope.incidentUrls.push($scope.url);
+                    $scope.urls.push($scope.url);
                 }
                 $scope.modal.hide();
             };
@@ -56,7 +61,7 @@
                 showConfirm()
                     .then(function (response) {
                         if (response) {
-                            $scope.incidentUrls.splice(indexEditing, 1);
+                            $scope.urls.splice(indexEditing, 1);
                             $scope.modal.hide();
                             indexEditing = -1;
                         }
@@ -64,7 +69,7 @@
             };
 
             var loadModal = function () {
-                var url = 'app/directives/incident/newIncidentUrl.html';
+                var url = 'app/directives/url/newUrl.html';
                 return $ionicModal
                     .fromTemplateUrl(url, {
                         scope: $scope,

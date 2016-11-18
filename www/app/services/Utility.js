@@ -241,7 +241,9 @@ angular
             for (var key in obj) {
                 if (obj.hasOwnProperty(key)) {
                     //if (obj[key] || obj[key] === 0) return false;
-                    return service.isEmpty(obj[key]);
+                    if (!service.isEmpty(obj[key])) {
+                        return false;
+                    }
                 }
             }
 
