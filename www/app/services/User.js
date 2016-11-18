@@ -15,7 +15,7 @@ angular
                 headers: {
                     Authorization: 'Basic ' + btoa(username + ':' + password)
                 },
-                timeout: AppSettings.httpConfig.timeout,
+                timeout: AppSettings.httpConfig && AppSettings.httpConfig.timeout ? AppSettings.httpConfig.timeout : 15000,
                 cache: false
             };
             return $http.get(endpoints.getObserver, config).then(function(response) {
