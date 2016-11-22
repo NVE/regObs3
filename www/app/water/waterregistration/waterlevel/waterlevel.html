@@ -12,14 +12,14 @@
                               ng-change="vm.resetModel()">Innsjø/magasin
                 </ion-checkbox>
 
-                <div ng-show="vm.reg.WaterLevelChoice">
+                <div ng-if="vm.reg.WaterLevelChoice">
 
                     <regobs-number
                             field-name="vannstand"
                             label="Vannstand (m)"
                             help-text="I meter"
                             model="vm.reg.WaterLevel.WaterLevelValue"
-                            min="0"
+                            min="0" max="9999"
                     ></regobs-number>
 
 

@@ -73,17 +73,18 @@
 
         <div class="col col-center">
             <button class="button  button-block button-clear" ng-click="appVm.startTrip(appVm.tripId, appVm.tripMinutes, appVm.tripComment)" ng-hide="appVm.trip.model.started">
-                <span>
+                <ion-spinner class="spinner-light" ng-show="appVm.trip.sending"></ion-spinner>
+                <span ng-hide="appVm.trip.sending">
                     <i class="icon calm ion-android-walk"></i> Start tur
                 </span>
             </button>
             <button class="button  button-block button-clear" ng-click="appVm.stopTrip()" ng-show="appVm.trip.model.started">
-                <span>
+                <ion-spinner class="spinner-light" ng-show="appVm.trip.sending"></ion-spinner>
+                <span ng-hide="appVm.trip.sending">
                     <i class="icon balanced ion-android-walk"></i> Avslutt tur
                 </span>
             </button>
         </div>
-
     </div>
 
     <div ng-if="appVm.showFormFooter" class="row row-no-padding">
