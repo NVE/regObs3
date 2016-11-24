@@ -5,7 +5,7 @@
                   return function (exception, cause) {
                       var appSettings = AppSettingsProvider.$get();
                       if (ga_storage) {
-                          ga_storage._trackEvent('Error', exception.message, appSettings.data.env, cause + '\n' + exception.stack);
+                          ga_storage._trackEvent('Error ' + appSettings.data.env, (cause || '') + ' ' + exception.message, exception.stack);
                       }
                       $delegate(exception, cause);
                   };
