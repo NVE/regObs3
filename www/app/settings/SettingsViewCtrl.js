@@ -62,7 +62,7 @@ angular
                     RegobsPopup.alert('Suksess!', 'Nedtrekksmenyene har blitt oppdatert.');
                 })
                 .catch(function(){
-                    RegobsPopup.alert('Beklager, klarte ikke å oppdatere nedtrekksmenyene', 'Vennligst sjekk om du har nettverk tilgjengelig og prøv på nytt.');
+                    RegobsPopup.alert('Oisann! Appen klarte ikke oppdatere nedtrekksmenyene', 'Dette kan skyldes manglende nett, eller at serverapplikasjonen må våkne og få seg en dugelig sterk kopp med kaffe først. Gi den noen minutter og prøv igjen.');
                 })
                 .finally(function(){
                     vm.refreshingKdv = false;
