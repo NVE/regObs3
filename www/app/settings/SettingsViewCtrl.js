@@ -58,11 +58,11 @@ angular
         vm.refreshKdvElements = function () {
             vm.refreshingKdv = true;
             Utility.refreshKdvElements()
-                .then(function(){
-                    RegobsPopup.alert('Suksess!', 'Nedtrekkslister har blitt oppdatert.')
+                .then(function() {
+                    RegobsPopup.alert('Suksess!', 'Nedtrekksmenyene har blitt oppdatert.');
                 })
                 .catch(function(){
-                    RegobsPopup.alert('Det oppsto en feil', 'Det oppsto en feil ved oppdatering av nedtrekksmenyer. Vennligst prøv igjen senere');
+                    RegobsPopup.alert('Beklager, klarte ikke å oppdatere nedtrekksmenyene', 'Vennligst sjekk om du har nettverk tilgjengelig og prøv på nytt.');
                 })
                 .finally(function(){
                     vm.refreshingKdv = false;
