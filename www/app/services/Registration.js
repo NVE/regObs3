@@ -55,11 +55,8 @@ angular
             );
         };
 
-        Registration.save = function () {
-            AppLogging.log('save start');
-            LocalStorage.setObject(storageKey, Registration.data);
-            LocalStorage.setObject(unsentStorageKey, Registration.unsent);
-            AppLogging.log('save before badge');
+        Registration.setBadge = function() {
+            AppLogging.log('setting badge');
             try {
                 if (window.cordova && window.cordova.plugins.notification.badge) {
                     if (Registration.unsent.length) {
@@ -71,7 +68,14 @@ angular
             } catch (ex) {
                 AppLogging.error('Exception on badge set ' + ex.message);
             }
+        }
 
+        Registration.save = function () {
+            AppLogging.log('save start');
+            LocalStorage.setObject(storageKey, Registration.data);
+            LocalStorage.setObject(unsentStorageKey, Registration.unsent);
+
+            Registration.setBadge();
 
             AppLogging.log('save complete');
         };
