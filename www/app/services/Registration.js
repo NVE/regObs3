@@ -223,6 +223,8 @@ angular
             cleanupGeneralObservation(data.GeneralObservation);
             cleanupObsLocation(location);
             cleanupStabilityTest(data.CompressionTest);
+            cleanupIncidenct(data.Incident);
+
             delete data.avalChoice;
             delete data.WaterLevelChoice;
 
@@ -278,6 +280,12 @@ angular
                     delete location.Longitude;
                     delete location.Uncertainty;
                     delete location.UTMSourceTID;
+                }
+            }
+
+            function cleanupIncidenct(incident) {
+                if (incident && !incident.IncidentText) {
+                    incident.IncidentText = '';
                 }
             }
         }

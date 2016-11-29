@@ -10,21 +10,21 @@
             <ion-checkbox ng-model="noActivity.val" ng-change="toggleNoActivity()">
                 Ingen skredaktivitet observert
             </ion-checkbox>
-            <label class="item item-input item-stacked-label item-select">
-                <span class="input-label">
-                    Dato
-                </span>
-                <input type="date" ng-model="dates.DtStart" ng-change="dateChanged()">
-            </label>
-            <label class="item item-input item-stacked-label item-select">
-                <span class="input-label">
-                    Antatt tidsrom
-                </span>
-                <select ng-model="dates.timeFrame"
-                        ng-options="tf as tf.text for tf in dates.timeFrames track by tf.id"
-                        ng-change="dateChanged()"></select>
-            </label>
             <div ng-hide="noActivity.val">
+                <label class="item item-input item-stacked-label item-select">
+                    <span class="input-label">
+                        Dato
+                    </span>
+                    <input type="date" ng-model="dates.DtStart" ng-change="dateChanged()">
+                </label>
+                <label class="item item-input item-stacked-label item-select">
+                    <span class="input-label">
+                        Antatt tidsrom
+                    </span>
+                    <select ng-model="dates.timeFrame"
+                            ng-options="tf as tf.text for tf in dates.timeFrames track by tf.id"
+                            ng-change="dateChanged()"></select>
+                </label>
                 <label class="item item-input item-stacked-label item-select">
                     <span class="input-label">
                         Hvor mange skred er det snakk om?
