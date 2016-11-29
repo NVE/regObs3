@@ -55,11 +55,8 @@ angular
             );
         };
 
-        Registration.save = function () {
-            AppLogging.log('save start');
-            LocalStorage.setObject(storageKey, Registration.data);
-            LocalStorage.setObject(unsentStorageKey, Registration.unsent);
-            AppLogging.log('save before badge');
+        Registration.setBadge = function() {
+            AppLogging.log('setting badge');
             try {
                 if (window.cordova && window.cordova.plugins.notification.badge) {
                     if (Registration.unsent.length) {
@@ -71,7 +68,14 @@ angular
             } catch (ex) {
                 AppLogging.error('Exception on badge set ' + ex.message);
             }
+        }
 
+        Registration.save = function () {
+            AppLogging.log('save start');
+            LocalStorage.setObject(storageKey, Registration.data);
+            LocalStorage.setObject(unsentStorageKey, Registration.unsent);
+
+            Registration.setBadge();
 
             AppLogging.log('save complete');
         };
@@ -188,6 +192,11 @@ angular
             return !Utility.isEmpty(Registration.data[prop]);
         };
 
+        Registration.hasImageForRegistration = function (prop) {
+            var registrationTid = Utility.registrationTid(prop);
+            return Registration.data.Picture && Registration.data.Picture.filter(function(item) { return item.RegistrationTID === registrationTid }).length > 0;
+        };
+
         /*Registration.propertyArrayExists = function (prop) {
          return Registration.data[prop] && Registration.data[prop].length;
          };*/
@@ -195,14 +204,14 @@ angular
         Registration.getExpositionArray = function () {
             return [
                 { "val": null, "name": "Ikke gitt" },
-                { "val": 0, "name": "N - nordlig" },
-                { "val": 45, "name": "NØ - nordøstlig" },
-                { "val": 90, "name": "Ø - østlig" },
-                { "val": 135, "name": "SØ - sørøstlig" },
-                { "val": 180, "name": "S - sørlig" },
-                { "val": 225, "name": "SV - sørvestlig" },
-                { "val": 270, "name": "V - vestlig" },
-                { "val": 315, "name": "NV - nordvestlig" }
+                { "val": 0, "name": "N - mot nord" },
+                { "val": 45, "name": "NØ - mot nordøst" },
+                { "val": 90, "name": "Ø - mot øst" },
+                { "val": 135, "name": "SØ - mot sørøst" },
+                { "val": 180, "name": "S - mot sør" },
+                { "val": 225, "name": "SV - mot sørvest" },
+                { "val": 270, "name": "V - mot vest" },
+                { "val": 315, "name": "NV - mot nordvest" }
             ];
         };
 

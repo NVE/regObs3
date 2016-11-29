@@ -50,9 +50,17 @@
                 $scope.modal.show();
             };
 
+            var deleteCurrentUrl = function () {
+                if (indexEditing >= 0 && indexEditing < $scope.urls.length) {
+                    $scope.urls.splice(indexEditing, 1);
+                }
+            };
+
             $scope.addUrl = function () {
-                if (!$scope.editing) {
+                if (!$scope.editing && !Utility.isEmpty($scope.url)) {
                     $scope.urls.push($scope.url);
+                } else if (Utility.isEmpty($scope.url)) {
+                    deleteCurrentUrl(); //remove empty url
                 }
                 $scope.modal.hide();
             };
@@ -61,7 +69,7 @@
                 showConfirm()
                     .then(function (response) {
                         if (response) {
-                            $scope.urls.splice(indexEditing, 1);
+                            deleteCurrentUrl();
                             $scope.modal.hide();
                             indexEditing = -1;
                         }

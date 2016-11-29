@@ -58,8 +58,10 @@ angular
             };
 
             $scope.changeTestType = function() {
-                if ($scope.isCTNorECTX()) {
+                if ($scope.isCTNorECTXorCTVorECTV()) {
                     $scope.stabilityTest.TapsFracture = null;
+                }
+                if ($scope.isCTNorECTX()) {
                     $scope.stabilityTest.ComprTestFractureTID = null;
                 }
             };
@@ -68,6 +70,16 @@ angular
                 return $scope.stabilityTest &&
                     $scope.stabilityTest.PropagationTID &&
                     ($scope.stabilityTest.PropagationTID === 15 || $scope.stabilityTest.PropagationTID === 24);
+            };
+
+            $scope.isCTVorECTV = function () {
+                return $scope.stabilityTest &&
+                    $scope.stabilityTest.PropagationTID &&
+                    ($scope.stabilityTest.PropagationTID === 11 || $scope.stabilityTest.PropagationTID === 21);
+            };
+
+            $scope.isCTNorECTXorCTVorECTV = function() {
+                return $scope.isCTNorECTX() || $scope.isCTVorECTV();
             };
 
             var loadSnowPropagationKdvArray = function () {

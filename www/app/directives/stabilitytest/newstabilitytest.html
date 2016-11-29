@@ -14,13 +14,13 @@
                             ng-options="kdv.Id as kdv.Name for kdv in snowPropagationKdvArray"></select>
                 </label> 
                
-                <label ng-hide="isCTNorECTX()" class="item item-input item-select item-stacked-label">
+                <label ng-hide="isCTNorECTXorCTVorECTV()" class="item item-input item-select item-stacked-label">
                     <span class="input-label">Antall Slag</span>
                     <select ng-model="stabilityTest.TapsFracture"
                             ng-options="n as n for n in [1,2,3,4,5,6,7,8,9,10,11,12,13,14,16,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30]"></select>
                 </label>
 
-                <regobs-number field-name="fractureDepth"
+                <regobs-number ng-hide="isCTNorECTX()" field-name="fractureDepth"
                                    label="Avstand fra toppen (cm)"
                                    help-text="I hele centimeter"
                                    model="stabilityTest.tempFractureDepth"

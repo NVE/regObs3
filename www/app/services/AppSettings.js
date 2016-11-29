@@ -16,29 +16,22 @@ angular
         };
 
         var baseUrls = {
-            'regObs': 'https://api.nve.no/hydrology/regobs/webapi_latest',
+            'regObs': 'https://api.nve.no/hydrology/regobs/webapi_v3.0.6',
             'demo regObs': 'https://api.nve.no/hydrology/demo/regobs/webapi',
             'test regObs': 'http://tst-h-web03.nve.no/regobswebapi'
         };
 
-        if(!ionic.Platform.isWebView()){
-            baseUrls.proxy = '/api';
-            baseUrls.prodproxy = '/prodapi';
-            baseUrls.testproxy = '/testapi';
-        }
-
         var serviceUrls = {
-            'regObs':'https://api.nve.no/hydrology/regobs/v1.0.0/',
-            'demo regObs':'http://stg-h-web03.nve.no/RegObsServices/',
-            'test regObs':'http://tst-h-web03.nve.no/regobsservices_test/',
-            'proxy':'http://stg-h-web03.nve.no/RegObsServices/'
-        };
+            'regObs': 'https://api.nve.no/hydrology/regobs/v3.0.6/',
+            'demo regObs' : 'http://stg-h-web03.nve.no/RegObsServices/',
+            'test regObs': 'http://tst-h-web03.nve.no/regobsservices_test/'
+            };
 
         $http.get('app/json/secret.json')
             .then(function (response) {
                 var headers = {
                     regObs_apptoken: response.data.apiKey,
-                    ApiJsonVersion: '2.0.0'
+                    ApiJsonVersion: '3.0.6'
                 };
 
                 settings.httpConfig = {
@@ -95,9 +88,13 @@ angular
             };
         };
 
+        settings.getWebRoot = function () {
+            var base = settings.data.env === 'regObs' ? 'www' : settings.data.env.replace(' regObs', '');
+            return 'http://' + base + '.regobs.no/';
+        };
+
         settings.getObservationsUrl = function(type){
-            var base = settings.data.env === 'regObs'? 'www' : settings.data.env.replace(' regObs', '');
-            return 'http://' + base + '.regobs.no/'+type+'/Observations';
+            return settings.getWebRoot() + type + '/Observations';
         };
 
         settings.load();
