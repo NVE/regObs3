@@ -1,15 +1,16 @@
 ﻿angular
     .module('RegObs')
-    .directive('mapMenu', function mapmenu($ionicModal, $ionicPopup, Utility, AppLogging) {
-        'ngInject';
-        return {
-            link: link,
-            templateUrl: 'app/directives/mapmenu/mapmenu.html',
-            scope: {
-            },
-            restrict: 'EA'
-        };
+    .component('mapMenu', {
+        templateUrl: 'app/directives/mapmenu/mapmenu.html',
+        controller: function(AppSettings) {
+            'ngInject';
+            var ctrl = this;
 
-        function link(scope) {
+            ctrl.showSteepness = AppSettings.data.showSteepnessMap || true;
+
+            ctrl.onSettingsChanged = function () {
+                AppSettings.data.showSteepnessMap = ctrl.showSteepness;
+                AppSettings.save();
+            }
         }
     });
