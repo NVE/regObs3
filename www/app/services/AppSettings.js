@@ -1,6 +1,6 @@
-angular
+﻿angular
     .module('RegObs')
-    .factory('AppSettings', function (LocalStorage, $http, $log) {
+    .factory('AppSettings', function (LocalStorage, $http, $log, $rootScope) {
 
         var settings = this;
 
@@ -13,6 +13,8 @@ angular
             gpsTimeout: 10,
             searchRange: 5000,
             locale: 'nb',
+            appmode: undefined,
+            obsvalidtime: 7 * 24 * 60 * 60 
         };
 
         var baseUrls = {
@@ -21,17 +23,17 @@ angular
             'test regObs': 'http://tst-h-web03.nve.no/regobswebapi'
         };
 
-        if(!ionic.Platform.isWebView()){
+        if (!ionic.Platform.isWebView()) {
             baseUrls.proxy = '/api';
             baseUrls.prodproxy = '/prodapi';
             baseUrls.testproxy = '/testapi';
         }
 
         var serviceUrls = {
-            'regObs':'https://api.nve.no/hydrology/regobs/v1.0.0/',
-            'demo regObs':'http://stg-h-web03.nve.no/RegObsServices/',
-            'test regObs':'http://tst-h-web03.nve.no/regobsservices_test/',
-            'proxy':'http://stg-h-web03.nve.no/RegObsServices/'
+            'regObs': 'https://api.nve.no/hydrology/regobs/v1.0.0/',
+            'demo regObs': 'http://stg-h-web03.nve.no/RegObsServices/',
+            'test regObs': 'http://tst-h-web03.nve.no/regobsservices_test/',
+            'proxy': 'http://stg-h-web03.nve.no/RegObsServices/'
         };
 
         $http.get('app/json/secret.json')
@@ -60,7 +62,7 @@ angular
         settings.load = function () {
             settings.data = LocalStorage.getAndSetObject(storageKey, 'searchRange', angular.copy(data));
             var environments = settings.getEnvironments();
-            if(environments.indexOf(settings.data.env) === -1){
+            if (environments.indexOf(settings.data.env) === -1) {
                 settings.data.env = environments[0];
             }
             settings.save();
@@ -95,9 +97,20 @@ angular
             };
         };
 
-        settings.getObservationsUrl = function(type){
-            var base = settings.data.env === 'regObs'? 'www' : settings.data.env.replace(' regObs', '');
-            return 'http://' + base + '.regobs.no/'+type+'/Observations';
+        settings.getObservationsUrl = function (type) {
+            var base = settings.data.env === 'regObs' ? 'www' : settings.data.env.replace(' regObs', '');
+            return 'http://' + base + '.regobs.no/' + type + '/Observations';
+        };
+
+        settings.getAppMode = function () {
+            return settings.data.appmode;
+        };
+
+        settings.setAppMode = function (mode) {
+            settings.data.appmode = mode;
+            settings.save();
+
+            $rootScope.$broadcast('$regobs.appModeChanged', mode);
         };
 
         settings.load();

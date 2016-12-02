@@ -32,8 +32,8 @@ angular
               }
 
               textArea.style.height = textArea.scrollHeight + "px";
-              if ($scope.dangerObs.tempArea && $scope.dangerObs.tempArea !== 'Ikke gitt') {
-                  $scope.dangerObs.Comment = 'Område: ' + $scope.dangerObs.tempArea +($scope.dangerObs.tempComment ? '. Beskrivelse: ' + $scope.dangerObs.tempComment : '');
+                if($scope.dangerObs.tempArea && $scope.dangerObs.tempComment){
+                    $scope.dangerObs.Comment = 'Område: ' + $scope.dangerObs.tempArea + '. Beskrivelse: ' + $scope.dangerObs.tempComment;
                 } else {
                     $scope.dangerObs.Comment = $scope.dangerObs.tempComment;
                 }

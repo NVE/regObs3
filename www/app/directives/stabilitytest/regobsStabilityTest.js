@@ -57,19 +57,6 @@ angular
                     });
             };
 
-            $scope.changeTestType = function() {
-                if ($scope.isCTNorECTX()) {
-                    $scope.stabilityTest.TapsFracture = null;
-                    $scope.stabilityTest.ComprTestFractureTID = null;
-                }
-            };
-
-            $scope.isCTNorECTX = function() {
-                return $scope.stabilityTest &&
-                    $scope.stabilityTest.PropagationTID &&
-                    ($scope.stabilityTest.PropagationTID === 15 || $scope.stabilityTest.PropagationTID === 24);
-            };
-
             var loadSnowPropagationKdvArray = function () {
                 return Utility
                     .getKdvArray('Snow_PropagationKDV')

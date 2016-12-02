@@ -37,16 +37,34 @@ angular
             };
         }
 
+        Registration.createAndGoToNewRegistration = function () {
+            var appMode = AppSettings.getAppMode();
+            if (Registration.isEmpty()) {
+                Registration.createNew(Utility.geoHazardTid(appMode));
+            }
+            if (appMode === 'snow') {               
+                $state.go('snowregistrationNew');
+            } else if (appMode === 'dirt') {
+                $state.go('dirtregistrationNew');
+            } else if (appMode === 'water') {
+                $state.go('waterregistrationNew');
+            } else if (appMode === 'ice') {
+                $state.go('iceregistrationNew');
+            }
+        };
+
         function resetRegistration() {
 
-            return Registration.createNew(Registration.data.GeoHazardTID);
+            //return Registration.createNew(Registration.data.GeoHazardTID);
+            Registration.data = {};
+            Registration.save();
         }
 
         Registration.load = function () {
             Registration.data = LocalStorage.getAndSetObject(
                 storageKey,
                 'DtObsTime',
-                Registration.createNew('snow')
+                {} //Registration.createNew('snow')
             );
             Registration.unsent = LocalStorage.getAndSetObject(
                 unsentStorageKey,
@@ -55,8 +73,11 @@ angular
             );
         };
 
-        Registration.setBadge = function() {
-            AppLogging.log('setting badge');
+        Registration.save = function () {
+            AppLogging.log('save start');
+            LocalStorage.setObject(storageKey, Registration.data);
+            LocalStorage.setObject(unsentStorageKey, Registration.unsent);
+            AppLogging.log('save before badge');
             try {
                 if (window.cordova && window.cordova.plugins.notification.badge) {
                     if (Registration.unsent.length) {
@@ -68,22 +89,15 @@ angular
             } catch (ex) {
                 AppLogging.error('Exception on badge set ' + ex.message);
             }
-        }
 
-        Registration.save = function () {
-            AppLogging.log('save start');
-            LocalStorage.setObject(storageKey, Registration.data);
-            LocalStorage.setObject(unsentStorageKey, Registration.unsent);
-
-            Registration.setBadge();
 
             AppLogging.log('save complete');
         };
 
         Registration.createNew = function (type) {
             Registration.data = createRegistration(type);
-            ObsLocation.fetchPosition();
-            AppLogging.log(Registration.data);
+            //ObsLocation.fetchAndSetPosition();
+            //AppLogging.log(Registration.data);
             $rootScope.$broadcast('$ionicView.loaded');
 
             return Registration.data;
@@ -121,7 +135,7 @@ angular
         };
 
         Registration.isEmpty = function () {
-            return Object.keys(Registration.data).length === baseLength;
+            return Object.keys(Registration.data).length <= baseLength;
         };
 
         Registration.doesExistUnsent = function (type) {
@@ -227,8 +241,6 @@ angular
             cleanupGeneralObservation(data.GeneralObservation);
             cleanupObsLocation(location);
             cleanupStabilityTest(data.CompressionTest);
-            cleanupIncidenct(data.Incident);
-
             delete data.avalChoice;
             delete data.WaterLevelChoice;
 
@@ -284,12 +296,6 @@ angular
                     delete location.Longitude;
                     delete location.Uncertainty;
                     delete location.UTMSourceTID;
-                }
-            }
-
-            function cleanupIncidenct(incident) {
-                if (incident && !incident.IncidentText) {
-                    incident.IncidentText = '';
                 }
             }
         }
@@ -407,11 +413,11 @@ angular
             }
         });
 
-        $ionicPlatform.on('resume', function (event) {
-            if (Registration.isEmpty()) {
-                resetRegistration();
-            }
-        });
+        //$ionicPlatform.on('resume', function (event) {
+        //    if (Registration.isEmpty()) {
+        //        resetRegistration();
+        //    }
+        //});
 
         Registration.load();
 

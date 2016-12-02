@@ -1,24 +1,12 @@
 (function () {
     "use strict";
 
-    angular.module('RegObs', ['ionic', 'ngCordova'])
+    angular.module('RegObs', ['ionic', 'ngCordova', 'ion-floating-menu'])
            .config(providers)
            .run(setup);
-
-    function providers($provide, $stateProvider, $urlRouterProvider, $ionicConfigProvider, AppSettingsProvider) {
+    
+    function providers($stateProvider, $urlRouterProvider, $ionicConfigProvider, AppSettingsProvider) {
         'ngInject';
-
-        $provide.decorator('$exceptionHandler', ['$delegate',
-              function ($delegate) {
-                  return function (exception, cause) {
-                      var appSettings = AppSettingsProvider.$get();
-                      if (ga_storage) {
-                          ga_storage._trackEvent('Error ' + appSettings.data.env, (cause || '') + ' ' + exception.message, exception.stack);
-                      }
-                      $delegate(exception, cause);
-                  };
-              }
-        ]);
 
         if (ionic.Platform.isAndroid()) {
             $ionicConfigProvider.scrolling.jsScrolling(false);
@@ -41,13 +29,28 @@
             title: 'Vannobservasjon'
         };
 
-        $urlRouterProvider.otherwise('/start');
+        var appSettings = AppSettingsProvider.$get();
+        if (!appSettings.getAppMode()) {
+            $urlRouterProvider.otherwise('/wizard');
+        } else {
+            $urlRouterProvider.otherwise('/start');
+        }
+
+        
         $stateProvider
+            .state('wizard', {
+                url: '/wizard',
+                templateUrl: 'app/startwizard/startwizard.html',
+                controller: 'StartWizardCtrl as vm'
+            })
             .state('start', {
                 url: '/start',
-                templateUrl: 'app/app.html',
+                templateUrl: 'app/map/mapstart.html',
+                controller: 'MapStartCtrl as vm',
                 data: {
-                    showRegistrationFooter: true
+                    showMapToggle: true,
+                    showRegistrationFooter: true,
+                    showGeoModeToggle: true
                 }
             })
             .state('settings', {
@@ -61,7 +64,17 @@
                     }
                 }
             })
-
+            .state('mapdownload', {
+                url: '/mapdownload',
+                templateUrl: 'app/map/mapdownload.html',
+                controller: 'MapDownloadCtrl as vm',
+                data: {
+                    defaultBack: {
+                        state: 'start',
+                        title: 'regObs'
+                    }
+                }
+            })
 
             //SNØ
             .state('snow', {
@@ -395,8 +408,8 @@
             })
             .state('help', {
                 url: '/help/:page',
-                templateUrl: function (stateParams) {
-                    return 'app/help/' + stateParams.page + '.html';
+                templateUrl: function(stateParams){
+                    return 'app/help/'+stateParams.page+'.html';
                 },
                 controller: 'HelpCtrl as vm',
                 data: {
@@ -408,10 +421,10 @@
             });
     }
 
-    function setup($ionicPlatform, Utility, AppLogging, Registration) {
+    function setup($ionicPlatform, Utility, AppLogging) {
         'ngInject';
 
-        if (Utility.shouldUpdateKdvElements()) {
+        if(Utility.shouldUpdateKdvElements()){
             Utility.refreshKdvElements();
         }
 
@@ -428,8 +441,6 @@
             if (window.StatusBar) {
                 StatusBar.styleLightContent();
             }
-
-            Registration.setBadge(); //Update badge on startup
         });
     }
 })();

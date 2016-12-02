@@ -1,0 +1,44 @@
+﻿<ion-view view-title="regObs">
+    <ion-content>
+        <ion-list>
+            <ion-item class="item-text-wrap">
+                <h2>Last ned og lagre kart for bruk uten mobilnett</h2>
+                <p>Området for forhåndsnedlasting er gitt av kartutsnittet som ligger i appen nå.</p>
+            </ion-item>           
+            <div class="item item-divider">
+                Velg nedlasting:
+            </div>
+            <ion-toggle toggle-class="toggle-calm">
+                Topografisk kart
+            </ion-toggle>
+            <ion-toggle toggle-class="toggle-calm">
+                Bratthets kart
+            </ion-toggle>
+            <ion-toggle toggle-class="toggle-calm">
+                Kvikkleire kart
+            </ion-toggle>
+            <ion-toggle toggle-class="toggle-calm">
+                Svekket is kart
+            </ion-toggle>
+            <div class="item item-divider">
+                Velg zoomnivå:
+            </div>
+            <div class="item range range-positive">
+                <input type="range" name="volume" min="1" max="15" value="5">
+            </div>
+            <div class="padding">
+                <button class="button button-block button-calm">
+                    Last ned kart
+                </button>
+            </div>
+            <div class="padding">
+                <button class="button button-block">
+                    Slett lagrede kart
+                </button>
+            </div>
+            <button class="button button-positive button-block button-clear">
+                Hjelp
+            </button>
+        </ion-list>
+    </ion-content>
+</ion-view>
