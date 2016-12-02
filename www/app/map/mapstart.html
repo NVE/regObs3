@@ -1,0 +1,15 @@
+﻿<ion-view view-title="regObs">
+    <ion-floating-button button-class="regobs-gps-center" button-color="#fff" icon-color="#444" icon="ion-pinpoint" has-footer="true" click="vm.gpsCenterClick()">
+    </ion-floating-button>
+    <ion-floating-menu menu-color="#444" menu-open-color="#444" menu-open-icon="ion-close" has-footer="true">
+        <ion-floating-item text-class="regobs-menu-text" click="vm.updateObservationsInMap()" button-color="#444" icon="ion-loop" text="Oppdater observasjoner i kartet"></ion-floating-item>
+        <ion-floating-item text-class="regobs-menu-text" button-color="#444" icon="ion-ios-list" text="Se observasjoner i tabell"></ion-floating-item>
+        <ion-floating-item text-class="regobs-menu-text" button-color="#444" icon="ion-eye" text="Se varsel"></ion-floating-item>
+        <ion-floating-item ng-if="vm.showTrip()" click="vm.gotoState('snowtrip')" text-class="regobs-menu-text" button-color="#444" icon="ion-android-walk" text="Meld fra om tur"></ion-floating-item>
+        <ion-floating-item ng-if="!vm.showEditRegistration()" click="vm.newRegistration()" text-class="regobs-menu-text" button-color="#444" icon="ion-plus" text="{{vm.getNewObservationText()}}"></ion-floating-item>
+        <ion-floating-item ng-if="vm.showEditRegistration()" click="vm.newRegistration()" text-class="regobs-menu-text" button-color="#444" icon="ion-edit" text="Endre observasjon"></ion-floating-item>
+    </ion-floating-menu>
+    <ion-content scroll="false">
+        <div id="map" data-tap-disabled="true" class="regobs-map" set-position-map=""></div>
+    </ion-content>
+</ion-view>

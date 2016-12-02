@@ -6,14 +6,15 @@
     <meta name="format-detection" content="telephone=no">
     <title>regObs</title>
 
-    <link href="dist/app.css" rel="stylesheet">
-    <link rel="stylesheet" href="lib/Leaflet.awesome-markers/dist/leaflet.awesome-markers.css">
+
+    <link href="lib/Leaflet.awesome-markers/dist/leaflet.awesome-markers.css" rel="stylesheet">
     <link href="lib/leaflet/dist/leaflet.css" rel="stylesheet">
+    <link href="lib/ion-floating-menu/dist/ion-floating-menu.css" rel="stylesheet" />
+    <link href="dist/app.css" rel="stylesheet">
 
     <!-- IF using Sass (run gulp sass first), then uncomment below and remove the CSS includes above
     <link href="css/ionic.app.css" rel="stylesheet">
     -->
-
     <!-- ionic/angularjs js -->
     <script>
         //Kommenter inn denne for ionic view
@@ -24,21 +25,18 @@
     <script src="lib/moment/min/moment.min.js"></script>
     <script src="lib/Leaflet.awesome-markers/dist/leaflet.awesome-markers.js"></script>
     <script src="lib/ionic/js/ionic.min.js"></script>
-
     <script src="lib/angular/angular.min.js"></script>
     <script src="lib/angular-animate/angular-animate.min.js"></script>
     <script src="lib/angular-sanitize/angular-sanitize.min.js"></script>
     <script src="lib/angular-ui-router/release/angular-ui-router.min.js"></script>
     <script src="lib/ionic/js/ionic-angular.min.js"></script>
     <script src="lib/ngCordova/dist/ng-cordova.min.js"></script>
-
+    <script src="lib/ion-floating-menu/dist/ion-floating-menu.js" type="text/javascript"></script>
     <!-- cordova script (this will be a 404 during development) -->
     <!-- Cordova is bootstrapped by ionic-service-core, uncomment this if you remove ionic-service-core... -->
     <script src="cordova.js"></script>
-
     <!-- your app's js -->
     <script src="dist/app.js"></script>
-
     <script type="text/javascript">
 
         ga_storage._setAccount('UA-32394009-4');
@@ -46,75 +44,89 @@
     </script>
 </head>
 <body ng-app="RegObs" ng-controller="AppCtrl as appVm">
-
-<ion-nav-bar ng-cloak="">
-    <ion-nav-back-button default-nav-back-button="" ng-click="goBack()">Tilbake</ion-nav-back-button>
-    <ion-nav-buttons side="right">
-        <button ng-show="appVm.trip.model.started &amp;&amp; !appVm.userService.getUser().anonymous" class="button button-balanced button-clear button-icon" ng-class="{&apos;ion-android-walk&apos;:!appVm.trip.sending}" ng-click="appVm.stopTrip()">
-            <ion-spinner ng-if="appVm.trip.sending" class="spinner-light"></ion-spinner>
-        </button>
-
-        <button class="button button-clear" ng-class="{&apos;ion-locked&apos;: !appVm.userService.getUser().anonymous}" ng-show="appVm.currentState.name !== &apos;settings&apos; &amp;&amp; appVm.currentState.name !== &apos;help&apos; &amp;&amp; !appVm.userService.loggingIn" ng-bind="!appVm.userService.getUser().anonymous ? &apos;&apos; : &apos;Logg inn&apos;" ui-sref="settings">
-        </button>
-        <ion-spinner class="spinner-fix" ng-if="appVm.userService.loggingIn &amp;&amp; appVm.currentState.name !== &apos;settings&apos;"></ion-spinner>
-        <button class="button button-icon button-clear ion-gear-a" ui-sref="settings" ng-show="appVm.currentState.name !== &apos;settings&apos; &amp;&amp; appVm.currentState.name !== &apos;help&apos;">
-        </button>
-    </ion-nav-buttons>
-</ion-nav-bar>
-<ion-nav-view></ion-nav-view>
-<ion-footer-bar class="bar-dark regobs-bar" ng-show="appVm.showFormFooter || appVm.showRegistrationFooter || appVm.showTripFooter">
-
-    <div ng-if="appVm.showTripFooter" class="row row-no-padding">
-        <div class="col col-center">
-            <button class="button button-block button-clear" ng-click="appVm.resetTrip()" ng-hide="appVm.trip.model.started">
-                <i class="icon stable ion-android-close"></i> Nullstill
-            </button>
-        </div>
-
-        <div class="col col-center">
-            <button class="button  button-block button-clear" ng-click="appVm.startTrip(appVm.tripId, appVm.tripMinutes, appVm.tripComment)" ng-hide="appVm.trip.model.started">
-                <ion-spinner class="spinner-light" ng-show="appVm.trip.sending"></ion-spinner>
-                <span ng-hide="appVm.trip.sending">
-                    <i class="icon calm ion-android-walk"></i> Start tur
-                </span>
-            </button>
-            <button class="button  button-block button-clear" ng-click="appVm.stopTrip()" ng-show="appVm.trip.model.started">
-                <ion-spinner class="spinner-light" ng-show="appVm.trip.sending"></ion-spinner>
-                <span ng-hide="appVm.trip.sending">
-                    <i class="icon balanced ion-android-walk"></i> Avslutt tur
-                </span>
-            </button>
-        </div>
-    </div>
-
-    <div ng-if="appVm.showFormFooter" class="row row-no-padding">
-        <div class="col col-center">
-            <button class="button button-block  button-clear" ng-click="appVm.resetProperty()"><i class="icon stable ion-android-close"></i> Nullstill
-            </button>
-        </div>
-
-        <div class="col col-center">
-            <regobs-album></regobs-album>
-        </div>
-        <div class="col col-center">
-            <regobs-camera></regobs-camera>
-        </div>
-    </div>
-    <div ng-if="appVm.showRegistrationFooter" class="row row-no-padding">
-        <div class="col col-center">
-            <button class="button  button-block button-clear" ng-click="appVm.registration.remove()">
-                <i class="icon stable ion-trash-a"></i> Slett
-            </button>
-        </div>
-        <div class="col col-center">
-            <button class="button  button-block button-clear" ng-click="appVm.registration.send()">
-                <ion-spinner class="spinner-light" ng-if="appVm.registration.sending"></ion-spinner>
-                <span ng-hide="appVm.registration.sending">
-                    <i class="icon calm ion-upload"></i> Send<span class="badge badge-assertive" ng-show="appVm.registration.unsent.length" ng-bind="appVm.registration.unsent.length"></span>
-                </span>
-            </button>
-        </div>
-    </div>
-</ion-footer-bar>
+    <ion-side-menus enable-menu-with-back-views="false">
+        <!-- Left menu -->
+        <ion-side-menu side="left">
+            <map-menu></map-menu>
+        </ion-side-menu>
+        <ion-side-menu-content>
+            <!-- Main content, usually <ion-nav-view> -->
+            <ion-nav-bar ng-cloak="">
+                <ion-nav-buttons side="left">
+                    <div ng-if="appVm.showMapToggle()">
+                        <!-- Toggle left side menu -->
+                        <button menu-toggle="left" class="button button-icon icon ion-map"></button>
+                    </div>
+                </ion-nav-buttons>
+                <ion-nav-back-button default-nav-back-button="" ng-click="goBack()">Tilbake</ion-nav-back-button>
+                <ion-nav-buttons side="right">
+                    <button ng-show="appVm.trip.model.started && !appVm.userService.getUser().anonymous" class="button button-balanced button-clear button-icon" ng-class="{'ion-android-walk':!appVm.trip.sending}" ng-click="appVm.stopTrip()">
+                        <ion-spinner ng-if="appVm.trip.sending" class="spinner-light"></ion-spinner>
+                    </button>
+                    <button class="button button-clear" ng-class="{'ion-locked': !appVm.userService.getUser().anonymous}" ng-show="appVm.currentState.name !== 'settings' && appVm.currentState.name !== 'help' && !appVm.userService.loggingIn" ng-bind="!appVm.userService.getUser().anonymous ? '' : 'Logg inn'" ui-sref="settings"></button>
+                    <ion-spinner class="spinner-fix" ng-if="appVm.userService.loggingIn && appVm.currentState.name !== 'settings'"></ion-spinner>
+                    <button class="button button-icon button-clear ion-gear-a" ui-sref="settings" ng-show="appVm.currentState.name !== 'settings' && appVm.currentState.name !== 'help'"></button>
+                </ion-nav-buttons>
+            </ion-nav-bar>
+            <ion-nav-view></ion-nav-view>
+            <ion-footer-bar ng-class="appVm.getEnvClass()" ng-show="appVm.showFooter()">
+                <div ng-if="appVm.showTripFooter()" class="row row-no-padding">
+                    <div class="col col-center">
+                        <button class="button button-block button-clear" ng-click="appVm.resetTrip()" ng-hide="appVm.trip.model.started">
+                            <i class="icon stable ion-android-close"></i> Nullstill
+                        </button>
+                    </div>
+                    <div class="col col-center">
+                        <button class="button  button-block button-clear" ng-click="appVm.startTrip(appVm.tripId, appVm.tripMinutes, appVm.tripComment)" ng-hide="appVm.trip.model.started">
+                            <ion-spinner class="spinner-light" ng-show="appVm.trip.sending"></ion-spinner>
+                            <span ng-hide="appVm.trip.sending">
+                                <i class="icon calm ion-android-walk"></i> Start tur
+                            </span>
+                        </button>
+                        <button class="button  button-block button-clear" ng-click="appVm.stopTrip()" ng-show="appVm.trip.model.started">
+                            <ion-spinner class="spinner-light" ng-show="appVm.trip.sending"></ion-spinner>
+                            <span ng-hide="appVm.trip.sending">
+                                <i class="icon balanced ion-android-walk"></i> Avslutt tur
+                            </span>
+                        </button>
+                    </div>
+                </div>
+                <div ng-if="appVm.showFormFooter()" class="row row-no-padding">
+                    <div class="col col-center">
+                        <button class="button button-block  button-clear" ng-click="appVm.resetProperty()">
+                            <i class="icon stable ion-android-close"></i> Nullstill
+                        </button>
+                    </div>
+                    <div class="col col-center">
+                        <regobs-album></regobs-album>
+                    </div>
+                    <div class="col col-center">
+                        <regobs-camera></regobs-camera>
+                    </div>
+                </div>
+                <div ng-if="appVm.showRegistrationFooter()" class="row row-no-padding">
+                    <div class="col col-center">
+                        <button class="button  button-block button-clear" ng-click="appVm.registration.remove()">
+                            <i class="icon stable ion-trash-a"></i> Slett
+                        </button>
+                    </div>
+                    <div class="col col-center">
+                        <ion-spinner class="spinner-light" ng-if="appVm.registration.sending"></ion-spinner>
+                        <button ng-hide="appVm.registration.sending" class="button  button-block button-clear" ng-click="appVm.registration.send()">
+                            <i class="icon stable ion-upload"></i> Send <span class="badge badge-assertive" ng-show="appVm.registration.unsent.length" ng-bind="appVm.registration.unsent.length"></span>
+                        </button>
+                    </div>
+                </div>
+                <div ng-if="appVm.showGeoModeToggle()" class="row row-no-padding">
+                    <div class="button-bar">
+                        <a class="button" ng-class="{'active':appVm.getAppMode() === 'snow'}" ng-click="appVm.setAppMode('snow')">Snø</a>
+                        <a class="button" ng-class="{'active':appVm.getAppMode() === 'dirt'}" ng-click="appVm.setAppMode('dirt')">Jord</a>
+                        <a class="button" ng-class="{'active':appVm.getAppMode() === 'water'}" ng-click="appVm.setAppMode('water')">Vann</a>
+                        <a class="button" ng-class="{'active':appVm.getAppMode() === 'ice'}" ng-click="appVm.setAppMode('ice')">Is</a>
+                    </div>
+                </div>
+            </ion-footer-bar>
+        </ion-side-menu-content>
+    </ion-side-menus>
 </body>
 </html>

@@ -352,10 +352,6 @@
         "Name": "Vann/sørpe (mellomlag)"
       },
       {
-        "Id": 7,
-        "Name": "Trolig sørpeis+stålis"
-      },
-      {
         "Id": 9,
         "Name": "Sarr"
       },
@@ -409,7 +405,7 @@
       },
       {
         "Id": 10,
-        "Name": "Liten fare for å gå igjennom"
+        "Name": "Liten fare for å gå gjennom"
       },
       {
         "Id": 20,
@@ -421,7 +417,7 @@
       },
       {
         "Id": 40,
-        "Name": "Uten bæreevne"
+        "Name": "Nesten uten bæreevne"
       }
     ],
     "Ice_IceProblemKDV": [
@@ -431,15 +427,15 @@
       },
       {
         "Id": 10,
-        "Name": "Isgang/ispropp"
+        "Name": "Isgang/ispropp \r\n"
       },
       {
         "Id": 20,
-        "Name": "Kjøving/svelling"
+        "Name": "Kjøving/svelling\r\n"
       },
       {
         "Id": 30,
-        "Name": "Bunnisdam"
+        "Name": "Bunnisdam \r\n"
       },
       {
         "Id": 40,
@@ -506,16 +502,20 @@
         "Name": "Ikke spesifisert"
       },
       {
-        "Id": 111,
-        "Name": "Topptur  "
+        "Id": 110,
+        "Name": "Langrenn"
       },
       {
-        "Id": 113,
-        "Name": "Ski offpist"
+        "Id": 111,
+        "Name": "Topptur "
       },
       {
         "Id": 112,
-        "Name": "Ski i anlegg"
+        "Name": "Alpinanlegg i løype"
+      },
+      {
+        "Id": 113,
+        "Name": "Alpinanlegg utenfor løype"
       },
       {
         "Id": 114,
@@ -527,27 +527,23 @@
       },
       {
         "Id": 116,
-        "Name": "Klatring"
-      },
-      {
-        "Id": 117,
-        "Name": "Fottur"
-      },
-      {
-        "Id": 130,
-        "Name": "Snøskuter"
+        "Name": "Vinterklatring"
       },
       {
         "Id": 120,
-        "Name": "Vei"
+        "Name": "På veg"
+      },
+      {
+        "Id": 130,
+        "Name": "På skuter"
       },
       {
         "Id": 140,
-        "Name": "Jernbane"
+        "Name": "På jernbane"
       },
       {
         "Id": 160,
-        "Name": "Hus"
+        "Name": "På bebyggelse"
       },
       {
         "Id": 190,
@@ -560,24 +556,20 @@
         "Name": "Ikke gitt"
       },
       {
-        "Id": 12,
-        "Name": "Tørt løssnøskred"
-      },
-      {
         "Id": 11,
         "Name": "Vått løssnøskred"
       },
       {
-        "Id": 22,
-        "Name": "Tørt flakskred"
+        "Id": 12,
+        "Name": "Tørt løssnøskred"
       },
       {
         "Id": 21,
         "Name": "Vått flakskred"
       },
       {
-        "Id": 27,
-        "Name": "Glideskred"
+        "Id": 22,
+        "Name": "Tørt flakskred"
       },
       {
         "Id": 30,
@@ -640,10 +632,6 @@
         "Name": "Våte flakskred"
       },
       {
-        "Id": 27,
-        "Name": "Glideskred"
-      },
-      {
         "Id": 30,
         "Name": "Sørpeskred "
       },
@@ -683,11 +671,11 @@
       },
       {
         "Id": 19,
-        "Name": "Kantkornet under skare"
+        "Name": "Kantkornet under skaren"
       },
       {
         "Id": 18,
-        "Name": "Kantkornet over skare"
+        "Name": "Kantkornet over skaren"
       },
       {
         "Id": 22,
@@ -767,7 +755,7 @@
       },
       {
         "Id": 1,
-        "Name": "Få bratte heng"
+        "Name": "Isolerte faresoner"
       },
       {
         "Id": 2,
@@ -809,7 +797,7 @@
       },
       {
         "Id": 6,
-        "Name": "Fuktig helt til bakken"
+        "Name": "Fuktig helt til bakken\r\n"
       },
       {
         "Id": 7,
@@ -845,7 +833,7 @@
       },
       {
         "Id": 1,
-        "Name": "1 - Harmløst (sluff)"
+        "Name": "1 - Harmløst"
       },
       {
         "Id": 2,
@@ -986,6 +974,10 @@
         "Name": "Hagl"
       },
       {
+        "Id": 7,
+        "Name": "Sprøhagl"
+      },
+      {
         "Id": 8,
         "Name": "Underkjølt regn"
       }
@@ -1044,26 +1036,6 @@
       {
         "Id": 40,
         "Name": "I renne eller forsenkning "
-      },
-      {
-        "Id": 50,
-        "Name": "Svaberg"
-      },
-      {
-        "Id": 60,
-        "Name": "Skål"
-      },
-      {
-        "Id": 70,
-        "Name": "I skogen"
-      },
-      {
-        "Id": 75,
-        "Name": "Hogstfelt"
-      },
-      {
-        "Id": 95,
-        "Name": "Overalt i terrenget"
       },
       {
         "Id": 99,
@@ -1138,22 +1110,46 @@
         "Name": "Sørpe"
       }
     ],
-    "Snow_StabilityEvalKDV": [
+    "Snow_PropagationKDV": [
       {
         "Id": 0,
         "Name": "Ikke gitt"
       },
       {
-        "Id": 1,
-        "Name": "God "
+        "Id": 11,
+        "Name": "CTV"
       },
       {
-        "Id": 2,
-        "Name": "Middels "
+        "Id": 12,
+        "Name": "CTE"
       },
       {
-        "Id": 3,
-        "Name": "Dårlig"
+        "Id": 13,
+        "Name": "CTM"
+      },
+      {
+        "Id": 14,
+        "Name": "CTH"
+      },
+      {
+        "Id": 15,
+        "Name": "CTN"
+      },
+      {
+        "Id": 21,
+        "Name": "ECTV"
+      },
+      {
+        "Id": 22,
+        "Name": "ECTP"
+      },
+      {
+        "Id": 23,
+        "Name": "ECTN"
+      },
+      {
+        "Id": 24,
+        "Name": "ECTX"
       }
     ],
     "Snow_ComprTestFractureKDV": [
@@ -1175,49 +1171,25 @@
       },
       {
         "Id": 4,
-        "Name": "Gikk ikke til brudd "
+        "Name": "Gikk ikke til brudd"
       }
     ],
-    "Snow_PropagationKDV": [
+    "Snow_StabilityEvalKDV": [
       {
         "Id": 0,
-        "Name": "Ikke gitt "
+        "Name": "Ikke gitt"
       },
       {
-        "Id": 11,
-        "Name": "CTV "
+        "Id": 1,
+        "Name": "God"
       },
       {
-        "Id": 12,
-        "Name": "CTE "
+        "Id": 2,
+        "Name": "Middels"
       },
       {
-        "Id": 13,
-        "Name": "CTM "
-      },
-      {
-        "Id": 14,
-        "Name": "CTH "
-      },
-      {
-        "Id": 15,
-        "Name": "CTN "
-      },
-      {
-        "Id": 21,
-        "Name": "ECTV"
-      },
-      {
-        "Id": 22,
-        "Name": "ECTP "
-      },
-      {
-        "Id": 23,
-        "Name": "ECTN "
-      },
-      {
-        "Id": 24,
-        "Name": "ECTX "
+        "Id": 3,
+        "Name": "Dårlig"
       }
     ],
     "Water_DangerSignKDV": [
@@ -1386,24 +1358,6 @@
       {
         "Id": 120,
         "Name": "1320"
-      }
-    ],
-    "ForecastAccurateKDV": [
-      {
-        "Id": 0,
-        "Name": "Ikke gitt"
-      },
-      {
-        "Id": 1,
-        "Name": "Varslet faregrad er riktig"
-      },
-      {
-        "Id": 2,
-        "Name": "Varslet faregrad er for lav"
-      },
-      {
-        "Id": 3,
-        "Name": "Varslet faregrad er for høy"
       }
     ],
     "DamageExtentKDV": [
@@ -1716,6 +1670,32 @@
       {
         "Id": 52,
         "Name": "Slettet av admin"
+      }
+    ],
+    "ForecastAccurateKDV": [
+      {
+        "Id": 0,
+        "Name": "Ikke spesifisert"
+      },
+      {
+        "Id": 1,
+        "Name": "Varsel ikke gitt"
+      },
+      {
+        "Id": 2,
+        "Name": "Varsel for lavt"
+      },
+      {
+        "Id": 3,
+        "Name": "Varsel stemte"
+      },
+      {
+        "Id": 4,
+        "Name": "Varsel for høyt"
+      },
+      {
+        "Id": 9,
+        "Name": "Varsel ikke kjent"
       }
     ]
   },

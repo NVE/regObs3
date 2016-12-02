@@ -10,7 +10,7 @@
             formCtrl: '?^form'
         },
         template: '<button class="button button-block button-calm" ng-click="$ctrl.save()">Lagre</button>',
-        controller: function ($scope, $state, $ionicPlatform, $ionicHistory, Property, RegobsPopup, AppLogging, $document, $element) {
+        controller: function ($scope, $state, $ionicPlatform, $ionicHistory, Property, RegobsPopup, AppLogging) {
             'ngInject';
             var ctrl = this;
             var backState;
@@ -74,22 +74,10 @@
                 ctrl.save();
             }, 101);
 
-            var stopRKey = function (evt) {
-                var node = (evt.target) ? evt.target :
-                                         ((evt.srcElement) ? evt.srcElement : null);
-                if ((evt.keyCode === 13) && (node.type === "number")) {
-                    evt.preventDefault();
-                }
-            };
-
             ctrl.$onInit = function () {
                 backState = $state.current.data.defaultBack.state;
-                $document.on('keydown', stopRKey);
-            };
 
-            ctrl.$onDestroy = function () {
-                $document.off('keydown', stopRKey);
-            }
+            };
 
         }
     };

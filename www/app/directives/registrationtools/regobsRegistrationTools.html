@@ -14,7 +14,7 @@
     <div class="button-bar">
         <button class="button margin-right icon-left ion-pinpoint"
                 ng-class="{'button-balanced':ObsLocation.data.UTMSourceTID===40&&!ObsLocation.data.ObsLocationId}"
-                ng-click="ObsLocation.fetchPosition()">
+                ng-click="ObsLocation.fetchAndSetPosition()">
             <span>GPS</span>
             <ion-spinner class="spinner-dark spinner-fix" ng-if="ObsLocation.fetching"></ion-spinner>
         </button>

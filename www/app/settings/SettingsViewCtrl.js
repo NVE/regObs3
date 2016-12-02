@@ -1,6 +1,6 @@
 angular
     .module('RegObs')
-    .controller('SettingsViewCtrl', function ($scope, $http, $cordovaInAppBrowser, AppSettings, LocalStorage, ObsLocation, Registration, User, Utility, HeaderColor, RegobsPopup, AppLogging) {
+    .controller('SettingsViewCtrl', function ($scope, $rootScope, $http, $state, $cordovaInAppBrowser, AppSettings, LocalStorage, ObsLocation, Registration, User, Utility, HeaderColor, RegobsPopup, AppLogging) {
         var vm = this;
 
         vm.settings = AppSettings;
@@ -45,12 +45,13 @@ angular
                 function(res) {
                     if(res) {
                         LocalStorage.clear();
-                        Registration.load();
+                        //Registration.load();
                         AppSettings.load();
                         User.load();
                         HeaderColor.init();
                         vm.username = '';
                         vm.password = '';
+                        $state.go('wizard');
                     }
                 });
         };
@@ -58,11 +59,11 @@ angular
         vm.refreshKdvElements = function () {
             vm.refreshingKdv = true;
             Utility.refreshKdvElements()
-                .then(function() {
-                    RegobsPopup.alert('Suksess!', 'Nedtrekksmenyene har blitt oppdatert.');
+                .then(function(){
+                    RegobsPopup.alert('Suksess!', 'Nedtrekkslister har blitt oppdatert.')
                 })
                 .catch(function(){
-                    RegobsPopup.alert('Oisann! Appen klarte ikke oppdatere nedtrekksmenyene', 'Dette kan skyldes manglende nett, eller at serverapplikasjonen må våkne og få seg en dugelig sterk kopp med kaffe først. Gi den noen minutter og prøv igjen.');
+                    RegobsPopup.alert('Det oppsto en feil', 'Det oppsto en feil ved oppdatering av nedtrekksmenyer. Vennligst prøv igjen senere');
                 })
                 .finally(function(){
                     vm.refreshingKdv = false;

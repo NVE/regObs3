@@ -23,46 +23,62 @@ angular
             return ObsLocation.data && (ObsLocation.data.Latitude || ObsLocation.data.ObsLocationId);
         };
 
-        ObsLocation.fetchPosition = function () {
-            AppLogging.log('fetchPosition called');
-            ObsLocation.fetching = true;
-            //var timeout = parseInt(AppSettings.data.gpsTimeout);
-
-            return $ionicPlatform.ready(function(){
-                //return $cordovaGeolocation
-                //    .getCurrentPosition({
-                //        timeout: timeout?(timeout*1000):10000,
-                //        enableHighAccuracy: true,
-                //        maximumAge: 3000
-                //    })
-                //    .then(success, error);
-                return Utility.getAccurateCurrentPosition().then(success, error);
-            });
-
-            function success(position) {
-                AppLogging.log('fetch position success');
-                ObsLocation.fetching = false;
-                AppLogging.log('Got accurate position: ' + JSON.stringify(position));
-                ObsLocation.set({
-                    "Latitude": position.coords.latitude.toFixed(4),
-                    "Longitude": position.coords.longitude.toFixed(4),
-                    "Uncertainty": parseInt(position.coords.accuracy).toString(),
-                    "UTMSourceTID": ObsLocation.source.fetchedFromGPS
-                });
-                return true;
-            }
-
-            function error(err) {
-                ObsLocation.fetching = false;
-                // error
-                AppLogging.log('ObsLocation error');
-                if(err)
-                    AppLogging.log(JSON.stringify(err));
-                return err;
-            }
+        ObsLocation.remove = function () {
+            ObsLocation.data = {};
+            save();
         };
 
-        ObsLocation.getObservationsWithinRadius = function(range, geohazardId){
+        //ObsLocation.fetchGPSPosition = function (success, error) {
+        //    var timeout = parseInt(AppSettings.data.gpsTimeout);
+
+        //    return $ionicPlatform.ready(function () {
+        //        return $cordovaGeolocation
+        //            .getCurrentPosition({
+        //                timeout: timeout ? (timeout * 1000) : 10000,
+        //                enableHighAccuracy: true,
+        //                maximumAge: 3000
+        //            })
+        //            .then(success, error);
+        //    });
+        //};
+
+        //ObsLocation.fetchAndSetPosition = function () {
+        //    AppLogging.log('fetchAndSetPosition called');
+        //    ObsLocation.fetching = true;
+        //    //var timeout = parseInt(AppSettings.data.gpsTimeout);
+
+        //    //return $ionicPlatform.ready(function(){
+        //    //    return $cordovaGeolocation
+        //    //        .getCurrentPosition({
+        //    //            timeout: timeout?(timeout*1000):10000,
+        //    //            enableHighAccuracy: true,
+        //    //            maximumAge: 3000
+        //    //        })
+        //    //        .then(success, error);
+        //    //});
+        //    ObsLocation.fetchGPSPosition(success, error);
+
+        //    function success (position) {
+        //        ObsLocation.fetching = false;
+        //        AppLogging.log('Got position:', position);
+        //        ObsLocation.set({
+        //            "Latitude": position.coords.latitude.toFixed(4),
+        //            "Longitude": position.coords.longitude.toFixed(4),
+        //            "Uncertainty": parseInt(position.coords.accuracy).toString(),
+        //            "UTMSourceTID": ObsLocation.source.fetchedFromGPS
+        //        });
+        //        return true;
+        //    }
+
+        //    function error(err) {
+        //        ObsLocation.fetching = false;
+        //        // error
+        //        AppLogging.log('ObsLocation error', err);
+        //        return err;
+        //    }
+        //};
+
+        ObsLocation.getObservationsWithinRadius = function(range, geohazardId) {
             return $http.get(
                 AppSettings.getEndPoints().getObservationsWithinRadius, {
                     params: {
@@ -88,7 +104,7 @@ angular
                     Uncertainty: loc.Uncertainty,
                     UTMSourceTID: loc.UTMSourceTID
                 };
-                AppLogging.log('ObsLocation set to: ' +JSON.stringify(ObsLocation));
+                AppLogging.log('ObsLocation set to', ObsLocation);
                 getLocationName(ObsLocation.data);
                 save();
             }

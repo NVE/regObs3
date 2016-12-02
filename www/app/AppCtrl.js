@@ -1,5 +1,5 @@
 angular.module('RegObs')
-    .controller('AppCtrl', function ($scope, $state, AppSettings, Registration, Property, Trip, User, RegobsPopup, HeaderColor, AppLogging) {
+    .controller('AppCtrl', function ($scope, $state, $ionicHistory, AppSettings, Registration, Property, Trip, User, RegobsPopup, HeaderColor, AppLogging, $ionicSideMenuDelegate) {
         var appVm = this;
 
         appVm.registration = Registration;
@@ -40,11 +40,46 @@ angular.module('RegObs')
             Property.reset(prop);
         };
 
-        $scope.$applyAsync(function(){
-            HeaderColor.init();
-        });
+        appVm.hasRegistration = function() {
+            return !(appVm.registration.isEmpty() && !appVm.registration.unsent.length);
+        };
+
+        appVm.getEnvClass = function () {
+            return AppSettings.data.env === 'regObs' ? 'bar-dark' : (AppSettings.data.env === 'demo regObs' ? 'bar-assertive' : 'bar-calm');
+        };
+
+        appVm.getAppMode = AppSettings.getAppMode;
+        appVm.setAppMode = AppSettings.setAppMode;
+
+        appVm.showTripFooter = function () {
+            return $state.current && $state.current.data && $state.current.data.showTripFooter;
+        };
+
+        appVm.showFormFooter = function () {
+            return $state.current && $state.current.data && $state.current.data.showFormFooter;
+        };
+
+        appVm.showRegistrationFooter = function () {
+            return $state.current && $state.current.data && $state.current.data.showRegistrationFooter && appVm.hasRegistration();
+        };
+
+        appVm.showGeoModeToggle = function () {
+            return $state.current && $state.current.data && $state.current.data.showGeoModeToggle && !appVm.hasRegistration();
+        };
+
+        appVm.showMapToggle = function () {
+            return $state.current && $state.current.data && $state.current.data.showMapToggle;
+        };
+
+        appVm.showFooter = function () {
+            return appVm.showTripFooter() ||
+                appVm.showFormFooter() ||
+                appVm.showRegistrationFooter() ||
+                appVm.showGeoModeToggle();
+        };
 
         $scope.$on('$ionicView.loaded', function () {
+            HeaderColor.init();
         });
 
         $scope.$on('$stateChangeStart', function () {
@@ -69,17 +104,20 @@ angular.module('RegObs')
             appVm.currentState = $state.current;
             AppLogging.log(appVm.currentState);
             ga_storage._trackPageview(appVm.currentState.name);
-            appVm.showTripFooter = $state.current.data.showTripFooter;
-            appVm.showFormFooter = $state.current.data.showFormFooter;
-            appVm.showRegistrationFooter = $state.current.data.showRegistrationFooter;
+            //appVm.showTripFooter = $state.current.data.showTripFooter;
+            //appVm.showFormFooter = $state.current.data.showFormFooter;
+            //appVm.showRegistrationFooter = $state.current.data.showRegistrationFooter;
+            //appVm.showMapToggle = $state.current.data.showMapToggle;
+
+            $ionicSideMenuDelegate.edgeDragThreshold(25);
         });
 
-        $scope.$on('$ionicView.beforeEnter', function () {
+        //$scope.$on('$ionicView.beforeEnter', function () {
 
-            appVm.showTripFooter = $state.current.data.showTripFooter;
-            appVm.showFormFooter = $state.current.data.showFormFooter;
-            appVm.showRegistrationFooter = $state.current.data.showRegistrationFooter;
-        });
-
-
+        //    appVm.showTripFooter = $state.current.data.showTripFooter;
+        //    appVm.showFormFooter = $state.current.data.showFormFooter;
+        //    appVm.showRegistrationFooter = $state.current.data.showRegistrationFooter;
+        //    appVm.showMapToggle = $state.current.data.showMapToggle;
+        //    appVm.showGeoModeToggle = $state.current.data.showGeoModeToggle;
+        //});
     });

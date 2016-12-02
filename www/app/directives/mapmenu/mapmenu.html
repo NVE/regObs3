@@ -1,0 +1,62 @@
+﻿<ion-content>
+    <ion-list>
+        <div class="item item-divider">
+            Kartvalg
+        </div>
+        <ion-toggle toggle-class="toggle-calm">
+            Vis observasjoner
+        </ion-toggle>
+        <label class="item item-input item-select item-stacked-label">
+            <span class="input-label">
+                Vis observasjoner
+            </span>
+            <select>
+                <option>3 dager tilbake i tid</option>
+            </select>
+        </label>
+        <ion-toggle toggle-class="toggle-calm">
+            Vis tidligere brukte steder
+        </ion-toggle>
+        <ion-item class="item-icon-right item-text-wrap" ui-sref="mapdownload" menu-close>
+            Last ned og lagre kartutsnittet
+            <i class="icon icon-accessory ion-chevron-right"></i>
+        </ion-item>
+        <div class="item item-divider">
+            Kartvalg for snø
+        </div>
+        <ion-toggle toggle-class="toggle-calm">
+            Vis bratthetskartet
+        </ion-toggle>
+        <label class="item item-input item-select item-stacked-label">
+            <span class="input-label">
+                Gjennomsiktighet
+            </span>
+            <select>
+                <option>Heldekkende</option>
+                <option>25% gjennomsiktig</option>
+                <option>50% gjennomsiktig</option>
+                <option>75% gjennomsiktig</option>
+            </select>
+        </label>
+        <div class="item item-divider">
+            Tegnforklaring
+        </div>
+        <ion-item class="item-text-wrap">
+            <p>Fargene gir brattheten i terrenget. <br/>I grader er de:</p>
+            <div class="steepness-info">
+                <div><div class="box green"></div>27-30</div>
+                <div><div class="box yellow"></div>30-35</div>
+                <div><div class="box orange"></div>35-40</div>
+                <div><div class="box lightred"></div>40-45</div>
+                <div><div class="box darkred"></div>45-50</div>
+                <div><div class="box brownred"></div>> 50</div>
+            </div>
+        </ion-item>
+        <ion-item class="item-text-wrap">
+            <button class="button button-positive button-block button-clear">
+                Hjelp
+            </button>
+            <p>Kart levert av lordum osv. By default, side menus are hidden underneath their side menu content and can be opened by swiping the content left or right or by toggling a button to show the side menu.</p>
+        </ion-item>
+    </ion-list>
+</ion-content>

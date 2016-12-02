@@ -1,0 +1,66 @@
+﻿<ion-view hide-nav-bar="true">
+    <ion-content scroll="false">
+        <div class="bar bar-header">
+            <div class="h1 title"></div>
+            <a class="button icon-right ion-close button-clear button-assertive" ng-click="vm.setAppMode('snow')">Ok, jeg kan dette</a>
+        </div>
+        <ion-slides options="vm.options" slider="data.slider">
+            <ion-slide-page>
+                <img class="info-img" ng-src="img/066.jpg">
+                <div class="info-cards">
+                    <div class="card">
+                        <div class="item item-text-wrap">
+                            Les andres observasjoner.
+                            <br />Les varsel.
+                            <br />Planlegg turen med regObs og Varsom!
+                        </div>
+                    </div>
+                    <a class="button icon-right ion-chevron-right button-clear button-dark" style="float: right" ng-click="vm.nextInfoClick()">Neste</a>
+                </div>
+            </ion-slide-page>
+            <ion-slide-page>
+                <img class="info-img" ng-src="img/274914-2.jpg">
+                <div class="info-cards">
+                    <div class="card">
+                        <div class="item item-text-wrap">
+                            Vær en helt!
+                            <br />Del dine observasjoner med andre som er på tur på regObs.
+                        </div>
+                    </div>
+                    <a class="button icon-right ion-chevron-right button-clear button-dark" style="float: right" ng-click="vm.nextInfoClick()">Neste</a>
+                </div>
+            </ion-slide-page>
+            <ion-slide-page>
+                <div class="card">
+                    <div class="item item-text-wrap">
+                        For å komme igang velger du først hva du er interessert i. Valget bestemmer hva som dukker opp i kartet og hvilke observasjoner du kan sende inn.
+                    </div>
+                </div>
+                <div class="card item-text-wrapitem-text-wrap" ng-click="vm.setAppMode('snow')">
+                    <div class="item item-avatar">
+                        <img src="img/sno.png">
+                        <h2>Ta meg til snøen!</h2>
+                    </div>
+                </div>
+                <div class="card item-text-wrap" ng-click="vm.setAppMode('dirt')">
+                    <div class="item item-avatar">
+                        <img src="img/jord.png">
+                        <h2>Jord til jordskredvarslingen!</h2>
+                    </div>
+                </div>
+                <div class="card item-text-wrap" ng-click="vm.setAppMode('water')">
+                    <div class="item item-avatar">
+                        <img src="img/vann.png">
+                        <h2>Vannstand, vannføring og flomskader!</h2>
+                    </div>
+                </div>
+                <div class="card item-text-wrap" ng-click="vm.setAppMode('ice')">
+                    <div class="item item-avatar">
+                        <img src="img/is.png">
+                        <h2>Istykkelse, bæreevne og skøyteforhold!</h2>
+                    </div>
+                </div>
+            </ion-slide-page>
+        </ion-slides>
+    </ion-content>
+</ion-view>
