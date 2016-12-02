@@ -24,7 +24,7 @@
         <div class="item item-divider">
             Kartvalg for snø
         </div>
-        <ion-toggle toggle-class="toggle-calm">
+        <ion-toggle toggle-class="toggle-calm" ng-model="$ctrl.showSteepness" ng-change="$ctrl.onSettingsChanged()">
             Vis bratthetskartet
         </ion-toggle>
         <label class="item item-input item-select item-stacked-label">

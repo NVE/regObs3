@@ -14,7 +14,8 @@
             searchRange: 5000,
             locale: 'nb',
             appmode: undefined,
-            obsvalidtime: 7 * 24 * 60 * 60 
+            obsvalidtime: 7 * 24 * 60 * 60,
+            showSteepnessMap: true
         };
 
         var baseUrls = {
@@ -51,6 +52,9 @@
             });
 
         settings.mapTileUrl = 'http://opencache.statkart.no/gatekeeper/gk/gk.open_gmaps?layers=matrikkel_bakgrunn&zoom={z}&x={x}&y={y}&format=image/png';
+
+        settings.steepnessMapTileUrl = 'http://test-gisapp.nve.no/arcgis/rest/services/BratthetSnoskred/MapServer/tile/{z}/{y}/{x}';
+
         //'http://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}@2x.png'
         settings.load = function () {
             settings.data = LocalStorage.getAndSetObject(storageKey, 'searchRange', angular.copy(data));
@@ -63,6 +67,8 @@
 
         settings.save = function () {
             LocalStorage.setObject(storageKey, settings.data);
+
+            $rootScope.$broadcast('$regObs.appSettingsChanged');
         };
 
         settings.getLocale = function () {

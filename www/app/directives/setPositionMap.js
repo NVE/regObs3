@@ -30,12 +30,12 @@ angular
             });
 
             var layer = L.tileLayer(AppSettings.mapTileUrl);
+            map.addLayer(layer);
+
+            var steepnessLayer;
 
             var icon = L.AwesomeMarkers.icon({ icon: 'arrow-move', prefix: 'ion', markerColor: 'green', extraClasses: 'map-obs-marker' });
             var iconSet = L.AwesomeMarkers.icon({ icon: 'ion-flag', prefix: 'ion', markerColor: 'gray', extraClasses: 'map-obs-marker map-obs-marker-set' });
-
-            map.addLayer(layer);
-
 
 
             map.on('locationfound',
@@ -66,6 +66,19 @@ angular
                 }, false);
             };
 
+            var addSteepnessMap = function () {
+                if (!steepnessLayer) {
+                    steepnessLayer = L.tileLayer(AppSettings.steepnessMapTileUrl);
+                    map.addLayer(steepnessLayer);
+                } else {
+                    map.addLayer(steepnessLayer);
+                }
+            };
+
+            var removeSteepnessMap = function () {
+                map.removeLayer(steepnessLayer);
+            };
+
             scope.$on('$destroy', function () {
                 clearWatch();
                 map.remove();
@@ -86,6 +99,14 @@ angular
                     if (map) {
                         map.panTo(userMarker.getLatLng());
                     }
+                }
+            });
+
+            $rootScope.$on('$regObs.appSettingsChanged', function () {
+                if (AppSettings.data.showSteepnessMap) {
+                    addSteepnessMap();
+                } else {
+                    removeSteepnessMap();
                 }
             });
 
@@ -320,6 +341,8 @@ angular
                 }
             }
 
+            
+
             $rootScope.$on('$regobs.appModeChanged', function () {
                 createMarkerMenu();
             });
@@ -327,6 +350,10 @@ angular
             var init = function () {
                 AppLogging.log('setPositionMap init');
                 map.invalidateSize();
+
+                if (AppSettings.data.showSteepnessMap) {
+                    addSteepnessMap();
+                }
 
                 if (ObsLocation.isSet()) {
                     drawObsLocation(true);
