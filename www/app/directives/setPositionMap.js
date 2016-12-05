@@ -6,7 +6,7 @@ angular
     .directive('setPositionMap', function (ObsLocation, AppSettings, AppLogging, $state, $rootScope, Registration, Utility, Observations) {
         'ngInject';
         function link(scope, elem, attrs) {
-
+            var marker, userMarker, pathLine, popup, markerMenu, steepnessLayer, firstLoad = true, isDragging = false;
             var options = scope.leafletMap;
             AppLogging.log(options);
             elem.css('height', '100%');
@@ -20,7 +20,7 @@ angular
                 center = [currentPosition.Latitude, currentPosition.Longitude];
             }
 
-            var marker, userMarker, pathLine, popup, markerMenu, firstLoad = true, isDragging = false, observationsLayerGroup;
+
 
             var map = L.map(elem[0], {
                 center: center,
@@ -30,9 +30,9 @@ angular
             });
 
             var layer = L.tileLayer(AppSettings.mapTileUrl);
-            map.addLayer(layer);
-
-            var steepnessLayer;
+            var tilesLayerGroup = L.layerGroup().addLayer(layer).addTo(map);
+            var observationsLayerGroup = L.layerGroup().addTo(map);
+            var markersLayerGroup = L.layerGroup().addTo(map);
 
             var icon = L.AwesomeMarkers.icon({ icon: 'arrow-move', prefix: 'ion', markerColor: 'green', extraClasses: 'map-obs-marker' });
             var iconSet = L.AwesomeMarkers.icon({ icon: 'ion-flag', prefix: 'ion', markerColor: 'gray', extraClasses: 'map-obs-marker map-obs-marker-set' });
@@ -69,14 +69,14 @@ angular
             var addSteepnessMap = function () {
                 if (!steepnessLayer) {
                     steepnessLayer = L.tileLayer(AppSettings.steepnessMapTileUrl);
-                    map.addLayer(steepnessLayer);
-                } else {
-                    map.addLayer(steepnessLayer);
                 }
+                tilesLayerGroup.addLayer(steepnessLayer);
             };
 
             var removeSteepnessMap = function () {
-                map.removeLayer(steepnessLayer);
+                if (steepnessLayer) {
+                    tilesLayerGroup.removeLayer(steepnessLayer);
+                }
             };
 
             scope.$on('$destroy', function () {
@@ -102,21 +102,25 @@ angular
                 }
             });
 
-            $rootScope.$on('$regObs.appSettingsChanged', function () {
+            var updateMapFromSettings = function () {
                 if (AppSettings.data.showSteepnessMap) {
                     addSteepnessMap();
                 } else {
                     removeSteepnessMap();
                 }
-            });
+
+                if (steepnessLayer) {
+                    steepnessLayer.setOpacity(AppSettings.data.steepnessMapOpacity);
+                }
+            };
+
+            $rootScope.$on('$regObs.appSettingsChanged', function () {
+                updateMapFromSettings();
+
+            });          
 
             var drawObservations = function () {
-                if (!observationsLayerGroup) {
-                    observationsLayerGroup = L.layerGroup();
-                    observationsLayerGroup.addTo(map);
-                } else {
-                    observationsLayerGroup.clearLayers();
-                }
+                observationsLayerGroup.clearLayers();
                 Observations.observations.forEach(function (obs) {
                     var obsIcon = L.AwesomeMarkers.icon({ icon: 'ion-flag', prefix: 'ion', markerColor: 'white', iconColor: '#444', extraClasses: 'map-obs-marker-observation' });
                     var latlng = new L.LatLng(obs.LatLngObject.Latitude, obs.LatLngObject.Longitude);
@@ -196,16 +200,18 @@ angular
 
             var createMarkerMenu = function () {
                 if (marker) {
-                    markerMenu = L.markerMenu({
-                        radius: 55, // radius of the circle,
-                        size: [34, 34], // menu items width and height
-                        items: getMarkerMenuItems()
-                    });
-                    marker.setMenu(markerMenu);
+                    if (!markerMenu) {
+                        markerMenu = L.markerMenu({
+                            radius: 55, // radius of the circle,
+                            size: [34, 34], // menu items width and height
+                            items: getMarkerMenuItems()
+                        });
+                        marker.setMenu(markerMenu);
+                    }
                 }
             };
 
-            
+
 
             function drawObsLocation(zoom) {
                 AppLogging.log('DRAW Current Obs position');
@@ -247,7 +253,7 @@ angular
                             updateDistanceLine(true);
                             createMarkerMenu();
                         });
-                        marker.addTo(map);
+                        marker.addTo(markersLayerGroup);
                     } else {
                         marker.setLatLng(latlng);
                     }
@@ -278,7 +284,7 @@ angular
                 if (userMarker && latlng) {
                     var path = [latlng, userMarker.getLatLng()];
                     if (!pathLine) {
-                        pathLine = L.polyline(path, { color: 'black', weight: 6, opacity: .5, dashArray: "10,10" }).addTo(map);
+                        pathLine = L.polyline(path, { color: 'black', weight: 6, opacity: .5, dashArray: "10,10" }).addTo(markersLayerGroup);
                     } else {
                         pathLine.setLatLngs(path);
                     }
@@ -311,7 +317,7 @@ angular
                     updateDistanceLineLatLng(latlng);
                 } else {
                     if (pathLine) {
-                        map.removeLayer(pathLine);
+                        markersLayerGroup.removeLayer(pathLine);
                         pathLine = null;
                     }
                 }
@@ -326,7 +332,7 @@ angular
 
                     if (!userMarker) {
                         userMarker = L.userMarker(latlng, { pulsing: true, accuracy: accuracy, smallIcon: true });
-                        userMarker.addTo(map);
+                        userMarker.addTo(markersLayerGroup);
                     } else {
                         userMarker.setLatLng(latlng);
                     }
@@ -341,9 +347,10 @@ angular
                 }
             }
 
-            
+
 
             $rootScope.$on('$regobs.appModeChanged', function () {
+                markerMenu = null;
                 createMarkerMenu();
             });
 
@@ -351,9 +358,7 @@ angular
                 AppLogging.log('setPositionMap init');
                 map.invalidateSize();
 
-                if (AppSettings.data.showSteepnessMap) {
-                    addSteepnessMap();
-                }
+                updateMapFromSettings();
 
                 if (ObsLocation.isSet()) {
                     drawObsLocation(true);
