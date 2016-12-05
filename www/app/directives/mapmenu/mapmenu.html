@@ -3,55 +3,105 @@
         <div class="item item-divider">
             Kartvalg
         </div>
-        <ion-toggle toggle-class="toggle-calm">
+        <ion-toggle toggle-class="toggle-calm" ng-model="$ctrl.settings.showObservations" ng-change="$ctrl.onSettingsChanged()">
             Vis observasjoner
         </ion-toggle>
-        <label class="item item-input item-select item-stacked-label">
+        <label class="item item-input item-select item-stacked-label" ng-show="$ctrl.settings.showObservations">
             <span class="input-label">
                 Vis observasjoner
             </span>
-            <select>
-                <option>3 dager tilbake i tid</option>
-            </select>
+            <select ng-model="$ctrl.settings.showObservationsDaysBack"
+                    ng-options="option.value as option.name for option in $ctrl.daysBackArray" ng-change="$ctrl.onSettingsChanged()"></select>
         </label>
-        <ion-toggle toggle-class="toggle-calm">
+        <ion-toggle toggle-class="toggle-calm" ng-model="$ctrl.settings.showPreviouslyUsedPlaces" ng-change="$ctrl.onSettingsChanged()">
             Vis tidligere brukte steder
         </ion-toggle>
         <ion-item class="item-icon-right item-text-wrap" ui-sref="mapdownload" menu-close>
             Last ned og lagre kartutsnittet
             <i class="icon icon-accessory ion-chevron-right"></i>
         </ion-item>
-        <div class="item item-divider">
-            Kartvalg for snø
-        </div>
-        <ion-toggle toggle-class="toggle-calm" ng-model="$ctrl.showSteepness" ng-change="$ctrl.onSettingsChanged()">
-            Vis bratthetskartet
-        </ion-toggle>
-        <label class="item item-input item-select item-stacked-label">
-            <span class="input-label">
-                Gjennomsiktighet
-            </span>
-            <select>
-                <option>Heldekkende</option>
-                <option>25% gjennomsiktig</option>
-                <option>50% gjennomsiktig</option>
-                <option>75% gjennomsiktig</option>
-            </select>
-        </label>
-        <div class="item item-divider">
-            Tegnforklaring
-        </div>
-        <ion-item class="item-text-wrap">
-            <p>Fargene gir brattheten i terrenget. <br/>I grader er de:</p>
-            <div class="steepness-info">
-                <div><div class="box green"></div>27-30</div>
-                <div><div class="box yellow"></div>30-35</div>
-                <div><div class="box orange"></div>35-40</div>
-                <div><div class="box lightred"></div>40-45</div>
-                <div><div class="box darkred"></div>45-50</div>
-                <div><div class="box brownred"></div>> 50</div>
+        <div ng-show="$ctrl.settings.appmode === 'snow'">
+            <div class="item item-divider">
+                Kartvalg for snø
             </div>
-        </ion-item>
+            <ion-toggle toggle-class="toggle-calm" ng-model="$ctrl.settings.showSteepnessMap" ng-change="$ctrl.onSettingsChanged()">
+                Vis bratthetskartet
+            </ion-toggle>
+            <div ng-show="$ctrl.settings.showSteepnessMap">
+                <label class="item item-input item-select item-stacked-label">
+                    <span class="input-label">
+                        Gjennomsiktighet
+                    </span>
+                    <select ng-model="$ctrl.settings.steepnessMapOpacity"
+                            ng-options="option.value as option.name for option in $ctrl.opacityArray" ng-change="$ctrl.onSettingsChanged()"></select>
+                </label>
+                <div class="item item-divider">
+                    Tegnforklaring
+                </div>
+                <ion-item class="item-text-wrap">
+                    <p>Fargene gir brattheten i terrenget. <br />I grader er de:</p>
+                    <div class="steepness-info">
+                        <div><div class="box green"></div>27-30</div>
+                        <div><div class="box yellow"></div>30-35</div>
+                        <div><div class="box orange"></div>35-40</div>
+                        <div><div class="box lightred"></div>40-45</div>
+                        <div><div class="box darkred"></div>45-50</div>
+                        <div><div class="box brownred"></div>> 50</div>
+                    </div>
+                </ion-item>
+            </div>
+        </div>
+        <div ng-show="$ctrl.settings.appmode === 'dirt'">
+            <div class="item item-divider">
+                Kartvalg for jord
+            </div>
+            <!--<ion-toggle toggle-class="toggle-calm" ng-model="$ctrl.settings.showSteepnessMap" ng-change="$ctrl.onSettingsChanged()">
+                Vis kvikkleirekart
+            </ion-toggle>
+            <div ng-show="$ctrl.settings.showSteepnessMap">
+                <label class="item item-input item-select item-stacked-label">
+                    <span class="input-label">
+                        Gjennomsiktighet
+                    </span>
+                    <select ng-model="$ctrl.settings.steepnessMapOpacity"
+                            ng-options="option.value as option.name for option in $ctrl.opacityArray" ng-change="$ctrl.onSettingsChanged()"></select>
+                </label>
+            </div>-->
+        </div>
+        <div ng-show="$ctrl.settings.appmode === 'ice'">
+            <div class="item item-divider">
+                Kartvalg for is
+            </div>
+            <!--<ion-toggle toggle-class="toggle-calm" ng-model="$ctrl.settings.showSteepnessMap" ng-change="$ctrl.onSettingsChanged()">
+                Vis svekket is kart
+            </ion-toggle>
+            <div ng-show="$ctrl.settings.showSteepnessMap">
+                <label class="item item-input item-select item-stacked-label">
+                    <span class="input-label">
+                    Gjennomsiktighet
+                </span>
+                    <select ng-model="$ctrl.settings.steepnessMapOpacity"
+                            ng-options="option.value as option.name for option in $ctrl.opacityArray" ng-change="$ctrl.onSettingsChanged()"></select>
+                </label>
+            </div>-->
+        </div>
+        <div ng-show="$ctrl.settings.appmode === 'water'">
+            <div class="item item-divider">
+                Kartvalg for vann
+            </div>
+            <!--<ion-toggle toggle-class="toggle-calm" ng-model="$ctrl.settings.showSteepnessMap" ng-change="$ctrl.onSettingsChanged()">
+            Vis svekket is kart
+        </ion-toggle>
+        <div ng-show="$ctrl.settings.showSteepnessMap">
+            <label class="item item-input item-select item-stacked-label">
+                <span class="input-label">
+                    Gjennomsiktighet
+                </span>
+                <select ng-model="$ctrl.settings.steepnessMapOpacity"
+                        ng-options="option.value as option.name for option in $ctrl.opacityArray" ng-change="$ctrl.onSettingsChanged()"></select>
+            </label>
+        </div>-->
+        </div>
         <ion-item class="item-text-wrap">
             <button class="button button-positive button-block button-clear">
                 Hjelp

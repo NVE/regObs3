@@ -15,7 +15,11 @@
             locale: 'nb',
             appmode: undefined,
             obsvalidtime: 7 * 24 * 60 * 60,
-            showSteepnessMap: true
+            showSteepnessMap: true,
+            steepnessMapOpacity: 1.0,
+            showObservations: true,
+            showObservationsDaysBack: 3,
+            showPreviouslyUsedPlaces: true
         };
 
         var baseUrls = {
