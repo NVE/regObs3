@@ -55,9 +55,18 @@
                 $log.error('Could not set proper http header settings. Do you have app/json/secret.json with proper app token? ' + JSON.stringify(error));
             });
 
-        settings.mapTileUrl = 'http://opencache.statkart.no/gatekeeper/gk/gk.open_gmaps?layers=matrikkel_bakgrunn&zoom={z}&x={x}&y={y}&format=image/png';
+        //settings.mapTileUrl = 'http://opencache.statkart.no/gatekeeper/gk/gk.open_gmaps?layers=matrikkel_bakgrunn&zoom={z}&x={x}&y={y}&format=image/png';
 
-        settings.steepnessMapTileUrl = 'http://test-gisapp.nve.no/arcgis/rest/services/BratthetSnoskred/MapServer/tile/{z}/{y}/{x}';
+        //settings.steepnessMapTileUrl = 'http://test-gisapp.nve.no/arcgis/rest/services/BratthetSnoskred/MapServer/tile/{z}/{y}/{x}';
+
+        settings.tiles = [
+            { name: 'topo', description: 'Topografisk kart', url: 'http://opencache.statkart.no/gatekeeper/gk/gk.open_gmaps?layers=matrikkel_bakgrunn&zoom={z}&x={x}&y={y}&format=image/png' },
+            { name: 'steepness', description: 'Bratthets kart', url: 'http://test-gisapp.nve.no/arcgis/rest/services/BratthetSnoskred/MapServer/tile/{z}/{y}/{x}' }
+        ];
+
+        settings.mapTileUrl = function() {
+            return settings.tiles[0].url;
+        };
 
         //'http://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}@2x.png'
         settings.load = function () {
