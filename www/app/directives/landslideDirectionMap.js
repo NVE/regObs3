@@ -31,7 +31,7 @@ angular
 
 
 
-            var layer = L.tileLayer(AppSettings.mapTileUrl);
+            var layer = L.tileLayer(AppSettings.mapTileUrl());
             var markers = new L.FeatureGroup();
             //var layer = L.tileLayer('http://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}@2x.png');
 

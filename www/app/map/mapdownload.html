@@ -8,31 +8,42 @@
             <div class="item item-divider">
                 Velg nedlasting:
             </div>
-            <ion-toggle toggle-class="toggle-calm">
+            <ion-toggle toggle-class="toggle-calm" ng-model="vm.maps[0].selected">
                 Topografisk kart
             </ion-toggle>
-            <ion-toggle toggle-class="toggle-calm">
+            <ion-toggle toggle-class="toggle-calm" ng-model="vm.maps[1].selected">
                 Bratthets kart
             </ion-toggle>
-            <ion-toggle toggle-class="toggle-calm">
+            <ion-toggle toggle-class="toggle-calm" ng-disabled="true">
                 Kvikkleire kart
             </ion-toggle>
-            <ion-toggle toggle-class="toggle-calm">
+            <ion-toggle toggle-class="toggle-calm" ng-disabled="true">
                 Svekket is kart
             </ion-toggle>
             <div class="item item-divider">
                 Velg zoomnivå:
             </div>
             <div class="item range range-positive">
-                <input type="range" name="volume" min="1" max="15" value="5">
+                <input type="range" min="1" max="15" step="1" ng-model="vm.zoomlevel">
             </div>
+            <label class="item item-input item-stacked-label">
+                <div>
+                    {{vm.selectedMaps()}} kart.
+                </div>
+                <div>
+                    {{vm.zoomlevel}} zoom nivåer. {{vm.mapFragmentCount()}} delkart.
+                </div>
+                <div>
+                    Ca {{vm.size()}} av {{vm.availableDiskspace}} tilgjengelig.
+                </div>
+            </label>
             <div class="padding">
                 <button class="button button-block button-calm">
                     Last ned kart
                 </button>
             </div>
             <div class="padding">
-                <button class="button button-block">
+                <button class="button button-block" ng-click="vm.deleteMaps()">
                     Slett lagrede kart
                 </button>
             </div>
