@@ -1,0 +1,14 @@
+﻿
+<div ng-if="downloadStatus">
+    <div class="bar bar-subheader bar-positive" style="padding: 0px; height: 8px;">
+        <progress id="progressbar" max="100" value="{{ downloadStatus.percent }}" class="progress"> </progress>
+    </div>
+    <label><span ng-bind="downloadStatus.done"></span>/<span ng-bind="downloadStatus.total"></span></label> 
+    <div ng-show="downloadStatus.hasError">
+        <label class="item-text-wrap assertive">Klarte ikke laste ned kartblad</label>
+    </div>
+</div>
+<div class="popup-buttons">
+    <button class="button" ng-hide="downloadComplete()" ng-click="cancelDownload()">Avbryt</button>
+    <button class="button button-calm" ng-show="downloadComplete()" ng-click="closePopup()">Ok</button>
+</div>

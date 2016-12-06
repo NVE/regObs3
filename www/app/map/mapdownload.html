@@ -1,55 +1,62 @@
 ﻿<ion-view view-title="regObs">
     <ion-content>
         <ion-list>
-            <ion-item class="item-text-wrap">
-                <h2>Last ned og lagre kart for bruk uten mobilnett</h2>
-                <p>Området for forhåndsnedlasting er gitt av kartutsnittet som ligger i appen nå.</p>
-            </ion-item>           
-            <div class="item item-divider">
-                Velg nedlasting:
-            </div>
-            <ion-toggle toggle-class="toggle-calm" ng-model="vm.maps[0].selected">
-                Topografisk kart
-            </ion-toggle>
-            <ion-toggle toggle-class="toggle-calm" ng-model="vm.maps[1].selected">
-                Bratthets kart
-            </ion-toggle>
-            <ion-toggle toggle-class="toggle-calm" ng-disabled="true">
-                Kvikkleire kart
-            </ion-toggle>
-            <ion-toggle toggle-class="toggle-calm" ng-disabled="true">
-                Svekket is kart
-            </ion-toggle>
-            <div class="item item-divider">
-                Velg zoomnivå:
-            </div>
-            <div class="item range range-positive">
-                <input type="range" min="1" max="15" step="1" ng-model="vm.zoomlevel">
-            </div>
-            <label class="item item-input item-stacked-label">
-                <div>
-                    {{vm.selectedMaps()}} kart.
+            <div ng-if="!vm.isLoading">
+                <div ngg-if="!vm.hasMapDownloaded()">
+                    <ion-item class="item-text-wrap">
+                        <h2>Last ned og lagre kart for bruk uten mobilnett</h2>
+                        <p>Området for forhåndsnedlasting er gitt av kartutsnittet som ligger i appen nå.</p>
+                    </ion-item>
+                    <div class="item item-divider">
+                        Velg nedlasting:
+                    </div>
+                    <ion-toggle toggle-class="toggle-calm" ng-model="vm.maps[0].selected" ng-change="vm.updateCounts()">
+                        Topografisk kart
+                    </ion-toggle>
+                    <ion-toggle toggle-class="toggle-calm" ng-model="vm.maps[1].selected" ng-change="vm.updateCounts()">
+                        Bratthets kart
+                    </ion-toggle>
+                    <ion-toggle toggle-class="toggle-calm" ng-disabled="true">
+                        Kvikkleire kart
+                    </ion-toggle>
+                    <ion-toggle toggle-class="toggle-calm" ng-disabled="true">
+                        Svekket is kart
+                    </ion-toggle>
+                    <div class="item item-divider">
+                        Velg zoomnivå:
+                    </div>
+                    <div class="item range range-positive">
+                        <i class="icon ion-ios-minus-outline" ng-click="vm.subtractZoomLevel()"></i>
+                        <input type="range" min="1" max="15" step="1" ng-model="vm.zoomlevel" ng-change="vm.updateCounts()">
+                        <i class="icon ion-ios-plus-outline" ng-click="vm.addZoomLevel()"></i>
+                    </div>
+                    <div class="item item-input item-stacked-label item-text-wrap" ng-class="{'assertive':vm.downloadDisabled()}">
+                        <div>
+                            {{vm.selectedMaps()}} kart.
+                        </div>
+                        <div>
+                            {{vm.zoomlevel}} zoom nivåer. {{vm.mapFragmentCount}} delkart.
+                        </div>
+                        <div>
+                            Ca {{vm.size}} av {{vm.availableDiskspace}} tilgjengelig.
+                        </div>
+                        <div ng-show="vm.limitReached">Du har oversteget grensen på 10 000 delkart som det er mulig å laste ned fra Statens Kartverk</div>
+                    </div>
+                    <div class="padding">
+                        <button class="button button-block button-calm" ng-disabled="vm.downloadDisabled()" ng-click="vm.download()">
+                            Last ned kart
+                        </button>
+                    </div>
+                    <div class="padding">
+                        <button class="button button-block" ng-click="vm.deleteMaps()">
+                            Slett lagrede kart
+                        </button>
+                    </div>
+                    <button class="button button-positive button-block button-clear">
+                        Hjelp
+                    </button>
                 </div>
-                <div>
-                    {{vm.zoomlevel}} zoom nivåer. {{vm.mapFragmentCount()}} delkart.
-                </div>
-                <div>
-                    Ca {{vm.size()}} av {{vm.availableDiskspace}} tilgjengelig.
-                </div>
-            </label>
-            <div class="padding">
-                <button class="button button-block button-calm">
-                    Last ned kart
-                </button>
             </div>
-            <div class="padding">
-                <button class="button button-block" ng-click="vm.deleteMaps()">
-                    Slett lagrede kart
-                </button>
-            </div>
-            <button class="button button-positive button-block button-clear">
-                Hjelp
-            </button>
         </ion-list>
     </ion-content>
 </ion-view>
