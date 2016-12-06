@@ -199,14 +199,14 @@ angular
         Registration.getExpositionArray = function () {
             return [
                 { "val": null, "name": "Ikke gitt" },
-                { "val": 0, "name": "N - nordlig" },
-                { "val": 45, "name": "NØ - nordøstlig" },
-                { "val": 90, "name": "Ø - østlig" },
-                { "val": 135, "name": "SØ - sørøstlig" },
-                { "val": 180, "name": "S - sørlig" },
-                { "val": 225, "name": "SV - sørvestlig" },
-                { "val": 270, "name": "V - vestlig" },
-                { "val": 315, "name": "NV - nordvestlig" }
+                { "val": 0, "name": "N - mot nord" },
+                { "val": 45, "name": "NØ - mot nordøst" },
+                { "val": 90, "name": "Ø - mot øst" },
+                { "val": 135, "name": "SØ - mot sørøst" },
+                { "val": 180, "name": "S - mot sør" },
+                { "val": 225, "name": "SV - mot sørvest" },
+                { "val": 270, "name": "V - mot vest" },
+                { "val": 315, "name": "NV - mot nordvest" }
             ];
         };
 
