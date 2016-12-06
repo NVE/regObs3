@@ -30,7 +30,8 @@ L.TileLayer.Cordova = L.TileLayer.extend({
             name: null,
             autocache: false,
             debug: false
-        }, options);
+        },
+            options);
         if (!options.folder) throw "L.TileLayer.Cordova: missing required option: folder";
         if (!options.name) throw "L.TileLayer.Cordova: missing required option: name";
         L.TileLayer.prototype.initialize.call(this, url, options);
@@ -46,50 +47,56 @@ L.TileLayer.Cordova = L.TileLayer.extend({
         // offline is underneath the local filesystem: /path/to/sdcard/FOLDER/name-z-x-y.png
         // tip: the file extension isn't really relevant; using .png works fine without juggling file extensions from their URL templates
         var myself = this;
-        myself._url_online = myself._url; // Do this early, so it's done before the time-intensive filesystem activity starts.
- //       if (!window.requestFileSystem && this.options.debug) console.log("L.TileLayer.Cordova: device does not support requestFileSystem");
- //       if (!window.requestFileSystem) throw "L.TileLayer.Cordova: device does not support requestFileSystem";
+        myself._url_online = myself
+            ._url; // Do this early, so it's done before the time-intensive filesystem activity starts.
+        //       if (!window.requestFileSystem && this.options.debug) console.log("L.TileLayer.Cordova: device does not support requestFileSystem");
+        //       if (!window.requestFileSystem) throw "L.TileLayer.Cordova: device does not support requestFileSystem";
         if (myself.options.debug) console.log("Opening filesystem");
-        window.requestFileSystem = window.requestFileSystem || window.webkitRequestFileSystem;
-        if (window.requestFileSystem) {
-            window.requestFileSystem(
-                window.PERSISTENT,
-                0,
-                function(fshandle) {
-                    if (myself.options.debug) console.log("requestFileSystem OK " + options.folder);
-                    myself.fshandle = fshandle;
-                    myself.fshandle.root.getDirectory(
-                        options.folder,
-                        { create: true, exclusive: false },
-                        function(dirhandle) {
-                            if (myself.options.debug) console.log("getDirectory OK " + options.folder);
-                            myself.dirhandle = dirhandle;
-                            myself.dirhandle.setMetadata(null, null, { "com.apple.MobileBackup": 1 });
+        try {
+            document.addEventListener("deviceready",
+                function() {
+                    window.requestFileSystem(
+                        LocalFileSystem.PERSISTENT,
+                        0,
+                        function(fshandle) {
+                            if (myself.options.debug) console.log("requestFileSystem OK " + options.folder);
+                            myself.fshandle = fshandle;
+                            myself.fshandle.root.getDirectory(
+                                options.folder,
+                                { create: true, exclusive: false },
+                                function(dirhandle) {
+                                    if (myself.options.debug) console.log("getDirectory OK " + options.folder);
+                                    myself.dirhandle = dirhandle;
+                                    myself.dirhandle.setMetadata(null, null, { "com.apple.MobileBackup": 1 });
 
-                            // Android's toURL() has a trailing / but iOS does not; better to have 2 than to have 0 !
-                            myself._url_offline = dirhandle.toURL() +
-                                '/' +
-                                [myself.options.name, '{z}', '{x}', '{y}'].join('-') +
-                                '.png';
+                                    // Android's toURL() has a trailing / but iOS does not; better to have 2 than to have 0 !
+                                    myself._url_offline = dirhandle.toURL() +
+                                        '/' +
+                                        [myself.options.name, '{z}', '{x}', '{y}'].join('-') +
+                                        '.png';
 
-                            if (success_callback) success_callback();
+                                    if (success_callback) success_callback();
+                                },
+                                function(error) {
+                                    if (myself.options.debug)
+                                    console.log("getDirectory failed (code " + error.code + ")" + options.folder);
+                                    throw "L.TileLayer.Cordova: " +
+                                        options.name +
+                                        ": getDirectory failed with code " +
+                                        error.code;
+                                }
+                            );
                         },
                         function(error) {
                             if (myself.options.debug)
-                                console.log("getDirectory failed (code " + error.code + ")" + options.folder);
-                            throw "L.TileLayer.Cordova: " +
-                                options.name +
-                                ": getDirectory failed with code " +
-                                error.code;
+                                console.log("requestFileSystem failed (code " + error.code + ")" + options.folder);
+                            throw "L.TileLayer.Cordova: " + options.name + ": requestFileSystem failed with code " + error.code;
                         }
                     );
-                },
-                function(error) {
-                    if (myself.options.debug)
-                        console.log("requestFileSystem failed (code " + error.code + ")" + options.folder);
-                    throw "L.TileLayer.Cordova: " + options.name + ": requestFileSystem failed with code " + error.code;
-                }
-            );
+                });
+        } catch (error) {
+            if (myself.options.debug)
+                console.log("requestFileSystem failed (" + error.message + ")" + options.folder);
         }
 
         // done, return ourselves because method chaining is cool
@@ -111,8 +118,8 @@ L.TileLayer.Cordova = L.TileLayer.extend({
     },
 
     /*
-	 * Returns current online/offline state.
-	 */
+     * Returns current online/offline state.
+     */
 
     isOnline: function () {
         return (this._url == this._url_online);
@@ -179,6 +186,34 @@ L.TileLayer.Cordova = L.TileLayer.extend({
 
     },
 
+    calculateXYZSizeFromBounds: function (bounds, zmin, zmax) {
+        // Given a bounds (such as that obtained by calling MAP.getBounds()) and a range of zoom levels, returns the list of XYZ trios comprising that view.
+        // The caller may then call downloadXYZList() with progress and error callbacks to do the fetching.
+
+        var xyzlist = 0;
+
+        for (z = zmin; z <= zmax; z++) {
+
+            // Figure out the tile for the northwest point of the bounds.
+            t1_x = this.getX(bounds.getNorthWest().lng, z);
+            t1_y = this.getY(bounds.getNorthWest().lat, z);
+
+            // Figure out the tile for the southeast point of the bounds.
+            t2_x = this.getX(bounds.getSouthEast().lng, z);
+            t2_y = this.getY(bounds.getSouthEast().lat, z);
+
+            // Now that we have the coordinates of the two opposing points (in the correct order!), we can iterate over the square.
+            for (var x = t1_x; x <= t2_x; x++) {
+                for (var y = t1_y; y <= t2_y; y++) {
+                    xyzlist++;
+                }
+            }
+
+        }
+
+        return xyzlist;
+    },
+
     getX: function (lon, z) {
         return Math.floor((lon + 180) / 360 * Math.pow(2, z));
     },
@@ -217,17 +252,13 @@ L.TileLayer.Cordova = L.TileLayer.extend({
                 if (success_callback) success_callback();
             },
             function (error) {
-                var errmsg;
+                var errmsg = '';
                 switch (error.code) {
                     case FileTransferError.FILE_NOT_FOUND_ERR:
-                        errmsg = "One of these was not found:\n";
-                        errmsg += urls[index].url + "\n";
-                        errmsg += urls[index].filename;
+                        errmsg = "Not found: " + sourceurl;
                         break;
                     case FileTransferError.INVALID_URL_ERR:
-                        errmsg = "Invalid URL:\n";
-                        errmsg += urls[index].url + "\n";
-                        errmsg += urls[index].filename;
+                        errmsg = "Invalid URL:" + sourceurl;
                         break;
                     case FileTransferError.CONNECTION_ERR:
                         errmsg = "Connection error at the web server.\n";
@@ -238,10 +269,10 @@ L.TileLayer.Cordova = L.TileLayer.extend({
         );
     },
 
-    downloadXYZList: function (xyzlist, overwrite, progress_callback, complete_callback, error_callback) {
+    downloadXYZList: function (xyzlist, overwrite, progress_callback, complete_callback, error_callback, cancel_callback) {
         var myself = this;
 
-        function runThisOneByIndex(xyzs, index, cbprog, cbdone, cberr) {
+        function runThisOneByIndex(xyzs, index, cbprog, cbdone, cberr, cbcancel) {
             var x = xyzs[index].x;
             var y = xyzs[index].y;
             var z = xyzs[index].z;
@@ -253,45 +284,68 @@ L.TileLayer.Cordova = L.TileLayer.extend({
                 if (cbprog) cbprog(index, xyzs.length);
 
                 if (index + 1 < xyzs.length) {
-                    runThisOneByIndex(xyzs, index + 1, cbprog, cbdone, cberr);
+                    runThisOneByIndex(xyzs, index + 1, cbprog, cbdone, cberr, cbcancel);
                 } else {
                     if (cbdone) cbdone();
                 }
             }
             function yesReally() {
-                myself.downloadAndStoreTile(
-                    x, y, z,
-                    doneWithIt,
-                    function (errmsg) {
-                        // an error in downloading, so we bail on the whole process and run the error callback
-                        if (cberr) cberr(errmsg);
-                    }
-                );
+                try {
+                    myself.downloadAndStoreTile(
+                        x,
+                        y,
+                        z,
+                        doneWithIt,
+                        function (errmsg) {
+                            // an error in downloading, so we bail on the whole process and run the error callback
+                            if (cberr) cberr(errmsg);
+                            doneWithIt();
+                        }
+                    );
+                } catch (error) {
+                    if (cberr) cberr(error.message);
+                    doneWithIt();
+                }
             }
 
-            // trick: if 'overwrite' is true we can just go ahead and download
-            // BUT... if overwrite is false, then test that the file doesn't exist first by failing to open it
-            if (overwrite) {
-                if (myself.options.debug) console.log("Tile " + z + '/' + x + '/' + y + " -- " + "Overwrite=true so proceeding.");
-                yesReally();
-            } else {
-                var filename = [myself.options.name, z, x, y].join('-') + '.png';
-                myself.dirhandle.getFile(
-                    filename,
-                    { create: false },
-                    function () { // opened the file OK, and we didn't ask for overwrite... we're done here, same as if we had downloaded properly
-                        if (myself.options.debug) console.log(filename + " exists. Skipping.");
-                        doneWithIt();
-                    },
-                    function () { // failed to open file, guess we are good to download it since we don't have it
-                        if (myself.options.debug) console.log(filename + " missing. Fetching.");
-                        yesReally();
-                    }
-                );
+            var cancel = false;
+            if (cbcancel) {
+                cancel = cbcancel();
+            }
 
+            if (cancel) {
+                if (cberr) cberr('Cancelled by user');
+            } else {
+                // trick: if 'overwrite' is true we can just go ahead and download
+                // BUT... if overwrite is false, then test that the file doesn't exist first by failing to open it
+                if (overwrite) {
+                    if (myself.options.debug)
+                        console.log("Tile " + z + '/' + x + '/' + y + " -- " + "Overwrite=true so proceeding.");
+                    yesReally();
+                } else {
+                    try {
+                        var filename = [myself.options.name, z, x, y].join('-') + '.png';
+                        myself.dirhandle.getFile(
+                            filename,
+                            { create: false },
+                            function () {
+                                // opened the file OK, and we didn't ask for overwrite... we're done here, same as if we had downloaded properly
+                                if (myself.options.debug) console.log(filename + " exists. Skipping.");
+                                doneWithIt();
+                            },
+                            function () { // failed to open file, guess we are good to download it since we don't have it
+                                if (myself.options.debug) console.log(filename + " missing. Fetching.");
+                                yesReally();
+                            }
+                        );
+                    } catch (error) {
+                        if (cberr) cberr(error.message);
+                    }
+
+                }
             }
         }
-        runThisOneByIndex(xyzlist, 0, progress_callback, complete_callback, error_callback);
+        runThisOneByIndex(xyzlist, 0, progress_callback, complete_callback, error_callback, cancel_callback);
     },
 
     /*
@@ -302,6 +356,11 @@ L.TileLayer.Cordova = L.TileLayer.extend({
 
     getDiskUsage: function (callback) {
         var myself = this;
+        if (!myself.dirhandle) {
+            if (callback) callback(0, 0);
+            return;
+        }
+
         var dirReader = myself.dirhandle.createReader();
         dirReader.readEntries(function (entries) {
             // a mix of files & directories. In our case we know it's all files and all cached tiles, so just add up the filesize
@@ -337,32 +396,32 @@ L.TileLayer.Cordova = L.TileLayer.extend({
         var myself = this;
         if (myself.dirhandle) {
             var dirReader = myself.dirhandle.createReader();
-            dirReader.readEntries(function(entries) {
-                    var success = 0;
-                    var failed = 0;
+            dirReader.readEntries(function (entries) {
+                var success = 0;
+                var failed = 0;
 
-                    function processFileEntry(index) {
-                        if (index >= entries.length) {
-                            if (callback) callback(success, failed);
-                            return;
-                        }
-
-                        // if (myself.options.debug) console.log( entries[index] );
-                        entries[index].remove(
-                            function() {
-                                success++;
-                                processFileEntry(index + 1);
-                            },
-                            function() {
-                                failed++;
-                                processFileEntry(index + 1);
-                            }
-                        );
+                function processFileEntry(index) {
+                    if (index >= entries.length) {
+                        if (callback) callback(success, failed);
+                        return;
                     }
 
-                    processFileEntry(0);
-                },
-                function() {
+                    // if (myself.options.debug) console.log( entries[index] );
+                    entries[index].remove(
+                        function () {
+                            success++;
+                            processFileEntry(index + 1);
+                        },
+                        function () {
+                            failed++;
+                            processFileEntry(index + 1);
+                        }
+                    );
+                }
+
+                processFileEntry(0);
+            },
+                function () {
                     throw "L.TileLayer.Cordova: emptyCache: Failed to read directory";
                 });
         } else {

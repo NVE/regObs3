@@ -427,3 +427,11 @@ input:focus, select:focus, textarea:focus {
     margin-left: 8px !important;
     margin-top: 14px !important;
 }
+
+.progress {
+    margin: 0px;
+    height: 8px;
+    background-color: #F1292B!important;
+    border-radius: 2 px;
+    box-shadow: 0 2 px 5 px rgba(0, 0, 0, 0.25) inset;
+}
