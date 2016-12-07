@@ -2,7 +2,7 @@
     <ion-content>
         <ion-list>
             <div ng-if="!vm.isLoading">
-                <div ngg-if="!vm.hasMapDownloaded()">
+                <div ng-if="!vm.hasMapDownloaded() || vm.downloadAgain">
                     <ion-item class="item-text-wrap">
                         <h2>Last ned og lagre kart for bruk uten mobilnett</h2>
                         <p>Området for forhåndsnedlasting er gitt av kartutsnittet som ligger i appen nå.</p>
@@ -47,15 +47,29 @@
                             Last ned kart
                         </button>
                     </div>
+                </div>
+                <div ng-if="vm.hasMapDownloaded()">
+                    <div class="item item-input item-stacked-label item-text-wrap">
+                        <div ng-repeat="tile in vm.maps">
+                            <div ng-if="tile.filecount">
+                                <span ng-bind="tile.filecount"></span> kartblad (<span ng-bind="tile.bytesReadable"></span>) <span ng-bind="tile.description"></span>
+                            </div>
+                        </div>
+                    </div>
                     <div class="padding">
                         <button class="button button-block" ng-click="vm.deleteMaps()">
                             Slett lagrede kart
                         </button>
                     </div>
-                    <button class="button button-positive button-block button-clear">
-                        Hjelp
-                    </button>
+                    <div class="padding" ng-if="!vm.downloadAgain">
+                        <button class="button button-block button-calm" ng-click="vm.downloadAgain = true">
+                            Last ned på nytt
+                        </button>
+                    </div>
                 </div>
+                <button class="button button-positive button-block button-clear">
+                    Hjelp
+                </button>
             </div>
         </ion-list>
     </ion-content>

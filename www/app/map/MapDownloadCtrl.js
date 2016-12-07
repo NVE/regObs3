@@ -1,9 +1,9 @@
 ﻿angular
     .module('RegObs')
-    .controller('MapDownloadCtrl', function ($scope, $ionicPopup, AppSettings, AppLogging, Map, $cordovaFile, $timeout, $cordovaDevice) {
+    .controller('MapDownloadCtrl', function ($scope, $ionicPopup, AppSettings, AppLogging, Map, $cordovaFile, $timeout, $cordovaDevice, $pbService) {
         var vm = this;
 
-        var averageMapPartSize = 33610;
+        var averageMapPartSize = 51887;
         var maxMapFragments = 10000;
 
         vm.maps = AppSettings.tiles;
@@ -42,6 +42,7 @@
         vm.availableDiskspace = '';
         vm.availableDiskspaceBytes = 0;
         vm.limitReached = false;
+        vm.downloadAgain = false;
 
         vm.updateCounts = function () {
             var fragmentsFromBaseMap = Map.calculateXYZSize(1, vm.zoomlevel);
@@ -79,6 +80,38 @@
             }
         };
 
+        $scope.progressOptions = {
+            color: '#333',
+            // This has to be the same size as the maximum width to
+            // prevent clipping
+            strokeWidth: 4,
+            trailWidth: 1,
+            easing: 'easeInOut',
+            duration: 10,
+            from: { color: '#aaa', width: 1 },
+            to: { color: '#333', width: 4 },
+            // Set default step function for all animate calls
+            step: function (state, circle) {
+                circle.path.setAttribute('stroke', state.color);
+                circle.path.setAttribute('stroke-width', state.width);
+                var text = '<i class="icon ion-ios-cloud-download"></i><div class="downloadprogress-percent">' + $scope.downloadStatus.percent + '%</div><div class="downloadprogress-value">(' + $scope.downloadStatus.done + '/' + $scope.downloadStatus.total + ')' + '</div>';
+                circle.setText(text);
+            }
+        };
+
+        var updateUsage = function () {
+            vm.maps.forEach(function (item) {
+                var tile = Map.getTileByName(item.name);
+                tile.getDiskUsage(function (filecount, bytes) {
+                    $timeout(function () {
+                        item.filecount = filecount;
+                        item.bytes = bytes;
+                        item.bytesReadable = humanFileSize(bytes, true);
+                    },0);
+                });
+            });
+        };
+
         var downloadMap = function () {
             var mapsToDownload = [];
             vm.maps.forEach(function (item) {
@@ -87,26 +120,35 @@
                 }
             });
 
-            Map.downloadMap(1, vm.zoomlevel, mapsToDownload, function (status) {
-                $timeout(function () {
-                    $scope.downloadStatus = status;
-                    AppLogging.log('Map download progress: ' + JSON.stringify(status));
-                }, 0);
-            }, function (status) {
-                $timeout(function () {
-                    $scope.downloadStatus = status;
-                    AppLogging.log('Map download complete: ' + JSON.stringify(status));
-                    cancel = false;
-                }, 0);
-            }, function () {
-                return cancel;
-            });
-        }
+            Map.downloadMap(1,
+                vm.zoomlevel,
+                mapsToDownload,
+                function (status) {
+                    $timeout(function () {
+                        $scope.downloadStatus = status;
+                        $pbService.animate('progress', (status.percent / 100.0));
+                        AppLogging.log('Map download progress: ' + JSON.stringify(status));
+                    }, 0);
+                },
+                function (status) {
+                    $timeout(function () {
+                        updateUsage();
+                        $scope.downloadStatus = status;
+                        $pbService.animate('progress', 1.0);
+                        AppLogging.log('Map download complete: ' + JSON.stringify(status));
+                        cancel = false;
+                        vm.downloadAgain = false;
+                    },0);
+                },
+                function () {
+                    return cancel;
+                });
+        };
 
         var showProgress = function () {
             vm.popup = $ionicPopup.show({
                 templateUrl: 'app/map/mapdownloadprogress.html',
-                title: 'Laster ned kart',
+                title: 'Laster ned kartblad',
                 scope: $scope
             });
         };
@@ -117,8 +159,12 @@
         };
 
         vm.deleteMaps = function () {
-            Map.emptyCache();
+            Map.emptyCache().then(function () {
+                updateUsage();
+            });
         };
+
+        
 
         vm.hasMapDownloaded = function () {
             return vm.maps.filter(function (item) {
@@ -140,16 +186,7 @@
             }
         };
 
-        var updateUsage = function () {
-            vm.maps.forEach(function (item) {
-                var tile = Map.getTileByName(item.name);
-                tile.getDiskUsage(function (filecount, bytes) {
-                    item.filecount = filecount;
-                    item.bytes = bytes;
-                    item.bytesReadable = humanFileSize(bytes, true);
-                });
-            });
-        };
+
 
         $scope.$on('$ionicView.beforeLeave', function () {
         });

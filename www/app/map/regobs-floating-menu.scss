@@ -1,0 +1,63 @@
+﻿#floating-menu ion-floating-item > li {
+    transition: all 0s;
+    -webkit-transition: all 0s;
+    -moz-transition: 0s;
+}
+
+#floating-menu.active ion-floating-item:nth-child(1) > li {
+    transform: translateY(-70px) translateZ(0);
+    -webkit-transform: translateY(-70px) translateZ(0);
+    transition-delay: 0ms;
+    -webkit-transition-delay: 0ms;
+}
+
+#floating-menu.active ion-floating-item:nth-child(2) > li {
+    transform: translateY(-140px) translateZ(0);
+    -webkit-transform: translateY(-140px) translateZ(0);
+    transition-delay: 0ms;
+    -webkit-transition-delay: 0ms;
+}
+
+#floating-menu.active ion-floating-item:nth-child(3) > li {
+    transform: translateY(-210px) translateZ(0);
+    -webkit-transform: translateY(-210px) translateZ(0);
+    transition-delay: 0ms;
+    -webkit-transition-delay: 0ms;
+}
+
+#floating-menu.active ion-floating-item:nth-child(4) > li {
+    transform: translateY(-280px) translateZ(0);
+    -webkit-transform: translateY(-280px) translateZ(0);
+    transition-delay: 0ms;
+    -webkit-transition-delay: 0ms;
+}
+
+#floating-menu.active ion-floating-item:nth-child(5) > li {
+    transform: translateY(-350px) translateZ(0);
+    -webkit-transform: translateY(-350px) translateZ(0);
+    transition-delay: 0ms;
+    -webkit-transition-delay: 0ms;
+}
+
+#floating-menu.active ion-floating-item:nth-child(6) > li {
+    transform: translateY(-420px) translateZ(0);
+    -webkit-transform: translateY(-420px) translateZ(0);
+    transition-delay: 0ms;
+    -webkit-transition-delay: 0ms;
+}
+
+#floating-menu.active ion-floating-item:nth-child(7) > li {
+    transform: translateY(-490px) translateZ(0);
+    -webkit-transform: translateY(-490px) translateZ(0);
+    transition-delay: 0ms;
+    -webkit-transition-delay: 0ms;
+}
+
+@media (min-device-width : 200px) {
+    /* iPhone 4 */
+    #floating-menu {
+        width: 40px;
+        height: 40px;
+        line-height: 40px;
+    }
+}

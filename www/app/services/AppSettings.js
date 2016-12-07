@@ -68,6 +68,17 @@
             return settings.tiles[0].url;
         };
 
+        settings.getTileByName = function (name) {
+            var filter = settings.tiles.filter(function (t) {
+                return t.name === name;
+            });
+            if (filter.length > 0) {
+                return filter[0];
+            } else {
+                return null;
+            }
+        };
+
         //'http://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}@2x.png'
         settings.load = function () {
             settings.data = LocalStorage.getAndSetObject(storageKey, 'searchRange', angular.copy(data));

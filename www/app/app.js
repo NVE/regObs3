@@ -1,7 +1,7 @@
 (function () {
     "use strict";
 
-    angular.module('RegObs', ['ionic', 'ngCordova', 'ion-floating-menu'])
+    angular.module('RegObs', ['ionic', 'ngCordova', 'ion-floating-menu', 'angularProgressbar'])
            .config(providers)
            .run(setup);
     
