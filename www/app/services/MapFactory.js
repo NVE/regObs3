@@ -1,6 +1,6 @@
 ﻿angular
     .module('RegObs')
-    .factory('Map', function (AppSettings, AppLogging, ObsLocation, Observations, Utility, $state, Registration, $ionicPlatform) {
+    .factory('Map', function (AppSettings, AppLogging, ObsLocation, Observations, Utility, $state, Registration, $ionicPlatform, $rootScope, $q) {
         var service = this;
         var map, obsLocationMarker, observationsLayerGroup, markersLayerGroup, tilesLayerGroup, userMarker, pathLine, popup, markerMenu, firstLoad = true, isDragging = false, tiles = [];
         var icon = L.AwesomeMarkers.icon({ icon: 'arrow-move', prefix: 'ion', markerColor: 'green', extraClasses: 'map-obs-marker' });
@@ -290,7 +290,7 @@
 
             $ionicPlatform.ready(function () {
                 AppSettings.tiles.forEach(function (tile) {
-                    var t = L.tileLayerCordova(tile.url, { folder: 'regobsMapData', name: tile.name, debug: true });
+                    var t = L.tileLayerRegObs(tile.url, { folder: 'map-' + tile.name, name: tile.name, debug: true });
                     tiles.push(t);
                 });
                 tiles[0].addTo(tilesLayerGroup);
@@ -419,13 +419,17 @@
                 var total = xyzList.length * mapsArray.length;
                 var done = 0;
                 mapStatus.forEach(function (item) {
+                    done += item.done;
+                    if (done === total) {
+                        item.complete = true;
+                    }
+
                     if (!item.complete) {
                         hasAnyRunning = true;
                     }
-                    if (item.error) {
+                    if (item.error > 0) {
                         hasAnyError = true;
                     }
-                    done += item.done;
                 });
                 var percent = Math.round(100 * done / total);
                 if ((hasAnyRunning && progressCallback) || mapStatus.length < mapsArray.length) {
@@ -436,7 +440,8 @@
             };
             mapsArray.forEach(function (item) {
                 var tile = getTileByName(item);
-                var status = { name: item, total: xyzList.length, done: 0, percent: 0, complete: false };
+                var description = AppSettings.getTileByName(item).description;
+                var status = { name: item, description: description, total: xyzList.length, done: 0, percent: 0, complete: false, error: 0 };
                 mapStatus.push(status);
                 tile.downloadXYZList(xyzList,
                     false,
@@ -453,23 +458,61 @@
                         checkProgress();
                     },
                     function (error) {
-                        status.error = error;
+                        status.error++;
                         checkProgress();
                     }, cancelCallback);
             });
         }
 
         service.emptyCache = function () {
-            var index = 0;
-            tiles.forEach(function (t) {
-                var name = AppSettings.tiles[index].name;
-                t.emptyCache(function (oks, fails) {
-                    var message = "Cleared cache for map " + name + ".\n" + oks + " deleted OK\n" + fails + " failed";
-                    AppLogging.log(message);
+            return $q(function(resolve) {
+                var index = 0;
+                var callbacks = [];
+                var checkCallback = function() {
+                    if (callbacks.length === tiles.length) {
+                        resolve(callbacks);
+                    }
+                };
+
+                if (!tiles) {
+                    resolve(callbacks);
+                }
+
+                tiles.forEach(function(t) {
+                    var name = AppSettings.tiles[index].name;
+                    t.emptyCache(function(oks, fails) {
+                        AppLogging.log("Cleared cache for map " +
+                            name +
+                            ".\n" +
+                            oks +
+                            " deleted OK\n" +
+                            fails +
+                            " failed");
+                        callbacks.push({ name: name, ok: oks, failed: fails });
+                        checkCallback();
+                    });
+                    index++;
                 });
-                index++;
             });
         };
+
+        //var onOffline = function () {
+        //    AppLogging.log("Going offline");
+        //    tiles.forEach(function (t) {
+        //        t.goOffline();
+        //    });
+        //};
+
+        //var onOnline = function () {
+        //    AppLogging.log("Going online");
+        //    tiles.forEach(function (t) {
+        //        t.goOnline();
+        //    });
+        //};
+
+        //$rootScope.$on('$cordovaNetwork:online', onOnline);
+
+        //$rootScope.$on('$cordovaNetwork:offline', onOffline);
 
         return service;
     });

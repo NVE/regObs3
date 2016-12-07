@@ -1,5 +1,5 @@
 ﻿/*
- * L.TileLayer.Cordova
+ * L.TileLayer.RegObs
  * A subclass of L.TileLayer which provides caching of tiles to a local filesystem using Cordova's File API
  * as well as methods for "switching" the layer between online mode (load from URLs) or offline mode (load from local stash)
  * Intended use is with Cordova/Phonegap applications, to cache tiles for later use.
@@ -18,11 +18,11 @@
  * Accepts an optional success_callback, which will be called when the time-intensive filesystem activities are complete.
  */
 
-L.tileLayerCordova = function (url, options, success_callback) {
-    return new L.TileLayer.Cordova(url, options, success_callback);
+L.tileLayerRegObs = function (url, options, success_callback) {
+    return new L.TileLayer.RegObs(url, options, success_callback);
 }
 
-L.TileLayer.Cordova = L.TileLayer.extend({
+L.TileLayer.RegObs = L.TileLayer.extend({
     initialize: function (url, options, success_callback) {
         // check required options or else choke and die
         options = L.extend({
@@ -47,24 +47,24 @@ L.TileLayer.Cordova = L.TileLayer.extend({
         // offline is underneath the local filesystem: /path/to/sdcard/FOLDER/name-z-x-y.png
         // tip: the file extension isn't really relevant; using .png works fine without juggling file extensions from their URL templates
         var myself = this;
-        myself._url_online = myself
-            ._url; // Do this early, so it's done before the time-intensive filesystem activity starts.
-        //       if (!window.requestFileSystem && this.options.debug) console.log("L.TileLayer.Cordova: device does not support requestFileSystem");
-        //       if (!window.requestFileSystem) throw "L.TileLayer.Cordova: device does not support requestFileSystem";
+        myself._url_online = myself._url; // Do this early, so it's done before the time-intensive filesystem activity starts.
+        myself._url_offline = myself._url; //Fallback to online map if no device storage present.
+        //       if (!window.requestFileSystem && this.options.debug) console.log("L.TileLayer.RegObs: device does not support requestFileSystem");
+        //       if (!window.requestFileSystem) throw "L.TileLayer.RegObs: device does not support requestFileSystem";
         if (myself.options.debug) console.log("Opening filesystem");
         try {
             document.addEventListener("deviceready",
-                function() {
+                function () {
                     window.requestFileSystem(
                         LocalFileSystem.PERSISTENT,
                         0,
-                        function(fshandle) {
+                        function (fshandle) {
                             if (myself.options.debug) console.log("requestFileSystem OK " + options.folder);
                             myself.fshandle = fshandle;
                             myself.fshandle.root.getDirectory(
                                 options.folder,
                                 { create: true, exclusive: false },
-                                function(dirhandle) {
+                                function (dirhandle) {
                                     if (myself.options.debug) console.log("getDirectory OK " + options.folder);
                                     myself.dirhandle = dirhandle;
                                     myself.dirhandle.setMetadata(null, null, { "com.apple.MobileBackup": 1 });
@@ -74,12 +74,12 @@ L.TileLayer.Cordova = L.TileLayer.extend({
                                         '/' +
                                         [myself.options.name, '{z}', '{x}', '{y}'].join('-') +
                                         '.png';
-
+                                    myself._url = myself._url_offline; //setting default url to offline url
                                     if (success_callback) success_callback();
                                 },
-                                function(error) {
+                                function (error) {
                                     if (myself.options.debug)
-                                    console.log("getDirectory failed (code " + error.code + ")" + options.folder);
+                                        console.log("getDirectory failed (code " + error.code + ")" + options.folder);
                                     throw "L.TileLayer.Cordova: " +
                                         options.name +
                                         ": getDirectory failed with code " +
@@ -87,7 +87,7 @@ L.TileLayer.Cordova = L.TileLayer.extend({
                                 }
                             );
                         },
-                        function(error) {
+                        function (error) {
                             if (myself.options.debug)
                                 console.log("requestFileSystem failed (code " + error.code + ")" + options.folder);
                             throw "L.TileLayer.Cordova: " + options.name + ": requestFileSystem failed with code " + error.code;
@@ -101,6 +101,132 @@ L.TileLayer.Cordova = L.TileLayer.extend({
 
         // done, return ourselves because method chaining is cool
         return this;
+    },
+
+    createTile: function (coords, done) {
+        var tile = L.TileLayer.prototype.createTile.call(this, coords, done);
+        tile._originalCoords = coords;
+        tile._originalSrc = tile.src;
+
+        return tile;
+    },
+
+    getTileOnlineUrl: function (coords) {
+        var data = {
+            r: L.Browser.retina ? '@2x' : '',
+            s: this._getSubdomain(coords),
+            x: coords.x,
+            y: coords.y,
+            z: coords.z
+        };
+        return L.Util.template(this._url_online, L.extend(data, this.options));
+    },
+
+    getTileScaledUrl: function (coords) {
+        var z = coords.z = coords.fallback ? coords.z : this._getZoomForUrl();
+
+        var data = {
+            r: L.Browser.retina ? '@2x' : '',
+            s: this._getSubdomain(coords),
+            x: coords.x,
+            y: coords.y,
+            z: z
+        };
+        if (this._map && !this._map.options.crs.infinite) {
+            var invertedY = this._globalTileRange.max.y - coords.y;
+            if (this.options.tms) {
+                data['y'] = invertedY;
+            }
+            data['-y'] = invertedY;
+        }
+
+        return L.Util.template(this._url, L.extend(data, this.options));
+    },
+
+    _createCurrentCoords: function (originalCoords) {
+        var currentCoords = this._wrapCoords(originalCoords);
+
+        currentCoords.fallback = true;
+
+        return currentCoords;
+    },
+
+    _tileOnErrorScale: function (done, tile, e) {
+        var layer = this, // `this` is bound to the Tile Layer in TLproto.createTile.
+			originalCoords = tile._originalCoords,
+			currentCoords = tile._currentCoords = tile._currentCoords || layer._createCurrentCoords(originalCoords),
+			fallbackZoom = tile._fallbackZoom = (tile._fallbackZoom || originalCoords.z) - 1,
+			scale = tile._fallbackScale = (tile._fallbackScale || 1) * 2,
+			tileSize = layer.getTileSize(),
+			style = tile.style,
+			newUrl, top, left;
+
+        if (layer.options.debug)
+            console.log("Try to fallback to scaled tile on next zoom level");
+
+        // If no lower zoom tiles are available, fallback to errorTile.
+        if (fallbackZoom < layer.options.minNativeZoom) {
+            if (layer.options.debug)
+                console.log("no lower zoom tiles are available, fallback to errorTile.");
+            done(e, tile);
+            return;
+        }
+
+        // Modify tilePoint for replacement img.
+        currentCoords.z = fallbackZoom;
+        currentCoords.x = Math.floor(currentCoords.x / 2);
+        currentCoords.y = Math.floor(currentCoords.y / 2);
+
+        // Generate new src path.
+        newUrl = layer.getTileScaledUrl(currentCoords);
+
+        // Zoom replacement img.
+        style.width = (tileSize.x * scale) + 'px';
+        style.height = (tileSize.y * scale) + 'px';
+
+        // Compute margins to adjust position.
+        top = (originalCoords.y - currentCoords.y * scale) * tileSize.y;
+        style.marginTop = (-top) + 'px';
+        left = (originalCoords.x - currentCoords.x * scale) * tileSize.x;
+        style.marginLeft = (-left) + 'px';
+
+        // Crop (clip) image.
+        // `clip` is deprecated, but browsers support for `clip-path: inset()` is far behind.
+        // http://caniuse.com/#feat=css-clip-path
+        style.clip = 'rect(' + top + 'px ' + (left + tileSize.x) + 'px ' + (top + tileSize.y) + 'px ' + left + 'px)';
+
+        layer.fire('tilefallback', {
+            tile: tile,
+            url: tile._originalSrc,
+            urlMissing: tile.src,
+            urlFallback: newUrl
+        });
+
+        tile.src = newUrl;
+    },
+
+    _tileOnError: function (done, tile, e) {
+        var layer = this;
+        if (tile.fallbackToOnline) { //Online has been tried, try to scale instead
+            layer._tileOnErrorScale(done, tile, e);
+        } else {
+            if (layer.options.debug)
+                console.log("Try to fallback to online tile.");
+
+            var newUrl = layer.getTileOnlineUrl(tile._originalCoords);
+
+            tile.fallbackToOnline = true; //Try to fallback to online map tile
+
+            layer.fire('tilefallback',
+            {
+                tile: tile,
+                url: tile._originalSrc,
+                urlMissing: tile.src,
+                urlFallback: newUrl
+            });
+
+            tile.src = newUrl;
+        }
     },
 
     /*
@@ -122,10 +248,10 @@ L.TileLayer.Cordova = L.TileLayer.extend({
      */
 
     isOnline: function () {
-        return (this._url == this._url_online);
+        return (this._url === this._url_online);
     },
     isOffline: function () {
-        return (this._url == this._url_offline);
+        return (this._url === this._url_offline);
     },
 
     /*
@@ -314,7 +440,7 @@ L.TileLayer.Cordova = L.TileLayer.extend({
             }
 
             if (cancel) {
-                if (cberr) cberr('Cancelled by user');
+                if (cbdone) cbdone();
             } else {
                 // trick: if 'overwrite' is true we can just go ahead and download
                 // BUT... if overwrite is false, then test that the file doesn't exist first by failing to open it
@@ -340,6 +466,7 @@ L.TileLayer.Cordova = L.TileLayer.extend({
                         );
                     } catch (error) {
                         if (cberr) cberr(error.message);
+                        doneWithIt();
                     }
 
                 }
@@ -388,7 +515,7 @@ L.TileLayer.Cordova = L.TileLayer.extend({
             }
             processFileEntry(0);
         }, function () {
-            throw "L.TileLayer.Cordova: getDiskUsage: Failed to read directory";
+            throw "L.TileLayer.RegObs: getDiskUsage: Failed to read directory";
         });
     },
 
@@ -422,7 +549,7 @@ L.TileLayer.Cordova = L.TileLayer.extend({
                 processFileEntry(0);
             },
                 function () {
-                    throw "L.TileLayer.Cordova: emptyCache: Failed to read directory";
+                    throw "L.TileLayer.RegObs: emptyCache: Failed to read directory";
                 });
         } else {
             if (callback) callback(0, 0);
@@ -465,8 +592,8 @@ L.TileLayer.Cordova = L.TileLayer.extend({
             if (done_callback) done_callback(retval);
 
         }, function () {
-            throw "L.TileLayer.Cordova: getCacheContents: Failed to read directory";
+            throw "L.TileLayer.RegObs: getCacheContents: Failed to read directory";
         });
     }
 
-}); // end of L.TileLayer.Cordova class
+}); // end of L.TileLayer.RegObs class

@@ -13,6 +13,6 @@
     <AndroidEmulatorID>AndroidDevice;Device</AndroidEmulatorID>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|iOS'">
-    <DebuggerFlavor>iOSRemoteDevice</DebuggerFlavor>
+    <DebuggerFlavor>RippleiPhone4</DebuggerFlavor>
   </PropertyGroup>
 </Project>
