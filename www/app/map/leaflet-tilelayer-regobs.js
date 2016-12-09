@@ -29,7 +29,9 @@ L.TileLayer.RegObs = L.TileLayer.extend({
             folder: null,
             name: null,
             autocache: false,
-            debug: false
+            debugFunc: null,
+            fallbackToZoomLevel: true,
+            minNativeZoom: 0
         },
             options);
         if (!options.folder) throw "L.TileLayer.Cordova: missing required option: folder";
@@ -47,11 +49,12 @@ L.TileLayer.RegObs = L.TileLayer.extend({
         // offline is underneath the local filesystem: /path/to/sdcard/FOLDER/name-z-x-y.png
         // tip: the file extension isn't really relevant; using .png works fine without juggling file extensions from their URL templates
         var myself = this;
+
         myself._url_online = myself._url; // Do this early, so it's done before the time-intensive filesystem activity starts.
         myself._url_offline = myself._url; //Fallback to online map if no device storage present.
         //       if (!window.requestFileSystem && this.options.debug) console.log("L.TileLayer.RegObs: device does not support requestFileSystem");
         //       if (!window.requestFileSystem) throw "L.TileLayer.RegObs: device does not support requestFileSystem";
-        if (myself.options.debug) console.log("Opening filesystem");
+        myself.debug("Opening filesystem");
         try {
             document.addEventListener("deviceready",
                 function () {
@@ -59,13 +62,13 @@ L.TileLayer.RegObs = L.TileLayer.extend({
                         LocalFileSystem.PERSISTENT,
                         0,
                         function (fshandle) {
-                            if (myself.options.debug) console.log("requestFileSystem OK " + options.folder);
+                            myself.debug("requestFileSystem OK " + options.folder);
                             myself.fshandle = fshandle;
                             myself.fshandle.root.getDirectory(
                                 options.folder,
                                 { create: true, exclusive: false },
                                 function (dirhandle) {
-                                    if (myself.options.debug) console.log("getDirectory OK " + options.folder);
+                                    myself.debug("getDirectory OK " + options.folder);
                                     myself.dirhandle = dirhandle;
                                     myself.dirhandle.setMetadata(null, null, { "com.apple.MobileBackup": 1 });
 
@@ -78,29 +81,33 @@ L.TileLayer.RegObs = L.TileLayer.extend({
                                     if (success_callback) success_callback();
                                 },
                                 function (error) {
-                                    if (myself.options.debug)
-                                        console.log("getDirectory failed (code " + error.code + ")" + options.folder);
-                                    throw "L.TileLayer.Cordova: " +
-                                        options.name +
-                                        ": getDirectory failed with code " +
-                                        error.code;
+                                    myself.debug("getDirectory failed (code " + error.code + ")" + options.folder);
+                                    //throw "L.TileLayer.Cordova: " +
+                                    //    options.name +
+                                    //    ": getDirectory failed with code " +
+                                    //    error.code;
                                 }
                             );
                         },
                         function (error) {
-                            if (myself.options.debug)
-                                console.log("requestFileSystem failed (code " + error.code + ")" + options.folder);
-                            throw "L.TileLayer.Cordova: " + options.name + ": requestFileSystem failed with code " + error.code;
+                            myself.debug("requestFileSystem failed (code " + error.code + ")" + options.folder);
+                            //throw "L.TileLayer.Cordova: " + options.name + ": requestFileSystem failed with code " + error.code;
                         }
                     );
                 });
         } catch (error) {
-            if (myself.options.debug)
-                console.log("requestFileSystem failed (" + error.message + ")" + options.folder);
+            myself.debug("requestFileSystem failed (" + error.message + ")" + options.folder);
         }
 
         // done, return ourselves because method chaining is cool
         return this;
+    },
+
+    debug: function (message) {
+        var tile = this;
+        if (tile.options.debugFunc) {
+            tile.options.debugFunc(message);
+        }
     },
 
     createTile: function (coords, done) {
@@ -144,9 +151,15 @@ L.TileLayer.RegObs = L.TileLayer.extend({
     },
 
     _createCurrentCoords: function (originalCoords) {
+        this.debug('Create current coords');
+        this.debug('Original coords:' + JSON.stringify(originalCoords));
+
         var currentCoords = this._wrapCoords(originalCoords);
 
         currentCoords.fallback = true;
+
+
+        this.debug('New current coords:' + JSON.stringify(currentCoords));
 
         return currentCoords;
     },
@@ -161,13 +174,13 @@ L.TileLayer.RegObs = L.TileLayer.extend({
 			style = tile.style,
 			newUrl, top, left;
 
-        if (layer.options.debug)
-            console.log("Try to fallback to scaled tile on next zoom level");
+        if (currentCoords && (currentCoords.x === 0 && currentCoords.y === 0)) {
+            currentCoords = tile._currentCoords = layer._createCurrentCoords(originalCoords);
+        }
 
         // If no lower zoom tiles are available, fallback to errorTile.
         if (fallbackZoom < layer.options.minNativeZoom) {
-            if (layer.options.debug)
-                console.log("no lower zoom tiles are available, fallback to errorTile.");
+            layer.debug("no lower zoom tiles are available, fallback to errorTile.");
             done(e, tile);
             return;
         }
@@ -179,6 +192,13 @@ L.TileLayer.RegObs = L.TileLayer.extend({
 
         // Generate new src path.
         newUrl = layer.getTileScaledUrl(currentCoords);
+
+        layer.debug('Fallback to next zoom level: ' + fallbackZoom
+            + ' for zoom: ' + originalCoords.z + 'new x: '
+            + currentCoords.x + ' y: ' + currentCoords.y
+            + ' original coordinates x: '
+            + originalCoords.x + ' y: ' + originalCoords.y
+            + ' minNativeZoom:' + layer.options.minNativeZoom);
 
         // Zoom replacement img.
         style.width = (tileSize.x * scale) + 'px';
@@ -208,10 +228,13 @@ L.TileLayer.RegObs = L.TileLayer.extend({
     _tileOnError: function (done, tile, e) {
         var layer = this;
         if (tile.fallbackToOnline) { //Online has been tried, try to scale instead
-            layer._tileOnErrorScale(done, tile, e);
+            if (layer.options.fallbackToZoomLevel) {
+                layer._tileOnErrorScale(done, tile, e);
+            } else {
+                done(e, tile);
+            }
         } else {
-            if (layer.options.debug)
-                console.log("Try to fallback to online tile.");
+            layer.debug("Try to fallback to online tile.");
 
             var newUrl = layer.getTileOnlineUrl(tile._originalCoords);
 
@@ -270,7 +293,7 @@ L.TileLayer.RegObs = L.TileLayer.extend({
             var t_y = this.getY(lat, z);
 
             var radius = z == zmin ? 0 : Math.pow(2, z - zmin - 1);
-            if (this.options.debug) console.log("Calculate pyramid: Z " + z + " : " + "Radius of " + radius);
+            this.debug("Calculate pyramid: Z " + z + " : " + "Radius of " + radius);
 
             for (var x = t_x - radius; x <= t_x + radius; x++) {
                 for (var y = t_y - radius; y <= t_y + radius; y++) {
@@ -359,27 +382,30 @@ L.TileLayer.RegObs = L.TileLayer.extend({
 
     downloadAndStoreTile: function (x, y, z, success_callback, error_callback) {
         var myself = this;
-        var filename = myself.dirhandle.toURL() + '/' + [myself.options.name, z, x, y].join('-') + '.png';
         var sourceurl = myself._url_online.replace('{z}', z).replace('{x}', x).replace('{y}', y);
-        if (myself.options.subdomains) {
-            var idx = Math.floor(Math.random() * myself.options.subdomains.length);
-            var dom = myself.options.subdomains[idx];
-            sourceurl = sourceurl.replace('{s}', dom);
-        }
-        if (myself.options.debug) console.log("Download " + sourceurl + " => " + filename);
+        var mapname = [myself.options.name, z, x, y].join('-') + '.png';
+        myself.debug("Download " + sourceurl + " => " + mapname);
 
-        var transfer = new FileTransfer();
-        transfer.download(
-            sourceurl,
-            filename,
-            function (file) {
-                // tile downloaded OK; set the iOS "don't back up" flag then move on
-                file.setMetadata(null, null, { "com.apple.MobileBackup": 1 });
-                if (success_callback) success_callback();
-            },
-            function (error) {
-                var errmsg = '';
-                switch (error.code) {
+        if (myself.dirhandle) {
+            var filename = myself.dirhandle.toURL() + '/' + mapname;
+            if (myself.options.subdomains) {
+                var idx = Math.floor(Math.random() * myself.options.subdomains.length);
+                var dom = myself.options.subdomains[idx];
+                sourceurl = sourceurl.replace('{s}', dom);
+            }
+
+            var transfer = new FileTransfer();
+            transfer.download(
+                sourceurl,
+                filename,
+                function(file) {
+                    // tile downloaded OK; set the iOS "don't back up" flag then move on
+                    file.setMetadata(null, null, { "com.apple.MobileBackup": 1 });
+                    if (success_callback) success_callback();
+                },
+                function(error) {
+                    var errmsg = '';
+                    switch (error.code) {
                     case FileTransferError.FILE_NOT_FOUND_ERR:
                         errmsg = "Not found: " + sourceurl;
                         break;
@@ -389,10 +415,13 @@ L.TileLayer.RegObs = L.TileLayer.extend({
                     case FileTransferError.CONNECTION_ERR:
                         errmsg = "Connection error at the web server.\n";
                         break;
+                    }
+                    if (error_callback) error_callback(errmsg);
                 }
-                if (error_callback) error_callback(errmsg);
-            }
-        );
+            );
+        } else {
+            if (error_callback) error_callback('No dirhandle found');
+        }
     },
 
     downloadXYZList: function (xyzlist, overwrite, progress_callback, complete_callback, error_callback, cancel_callback) {
@@ -445,22 +474,22 @@ L.TileLayer.RegObs = L.TileLayer.extend({
                 // trick: if 'overwrite' is true we can just go ahead and download
                 // BUT... if overwrite is false, then test that the file doesn't exist first by failing to open it
                 if (overwrite) {
-                    if (myself.options.debug)
-                        console.log("Tile " + z + '/' + x + '/' + y + " -- " + "Overwrite=true so proceeding.");
+                    myself.debug("Tile " + z + '/' + x + '/' + y + " -- " + "Overwrite=true so proceeding.");
                     yesReally();
                 } else {
                     try {
                         var filename = [myself.options.name, z, x, y].join('-') + '.png';
+                        myself.debug("Check for existing file: " + filename);
                         myself.dirhandle.getFile(
                             filename,
                             { create: false },
                             function () {
                                 // opened the file OK, and we didn't ask for overwrite... we're done here, same as if we had downloaded properly
-                                if (myself.options.debug) console.log(filename + " exists. Skipping.");
+                                myself.debug(filename + " exists. Skipping.");
                                 doneWithIt();
                             },
                             function () { // failed to open file, guess we are good to download it since we don't have it
-                                if (myself.options.debug) console.log(filename + " missing. Fetching.");
+                                myself.debug(filename + " missing. Fetching.");
                                 yesReally();
                             }
                         );

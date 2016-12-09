@@ -11,6 +11,7 @@ var rename = require('gulp-rename');
 var sh = require('shelljs');
 var preen = require('preen');
 var jsonfile = require('jsonfile');
+var Server = require('karma').Server;
 
 var paths = {
     sass: ['./scss/ionic.app.scss', './www/app/**/*.scss'],
@@ -22,6 +23,21 @@ gulp.task('default', ['preen','sass', 'scripts']);
 
 gulp.task('preen', function (cb) {
     preen.preen({}, cb);
+});
+
+gulp.task('test', function (done) {
+    new Server({
+        configFile: require('path').resolve('karma.conf.js'),
+        singleRun: true
+    }, function(err){
+        if(err === 0){
+            done();
+        } else {
+            done(new gutil.PluginError('karma', {
+                message: 'Karma Tests failed'
+            }));
+        }
+    }).start();
 });
 
 gulp.task('sass', function(done) {

@@ -66,6 +66,8 @@
 
         //settings.steepnessMapTileUrl = 'http://test-gisapp.nve.no/arcgis/rest/services/BratthetSnoskred/MapServer/tile/{z}/{y}/{x}';
 
+        settings.maxMapZoomLevel = 17;
+
         settings.tiles = [
             { name: 'topo', description: 'Topografisk kart', url: 'http://opencache.statkart.no/gatekeeper/gk/gk.open_gmaps?layers=matrikkel_bakgrunn&zoom={z}&x={x}&y={y}&format=image/png' },
             { name: 'steepness', description: 'Bratthets kart', url: 'http://test-gisapp.nve.no/arcgis/rest/services/BratthetSnoskred/MapServer/tile/{z}/{y}/{x}' }
