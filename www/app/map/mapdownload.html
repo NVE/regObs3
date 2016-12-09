@@ -1,8 +1,8 @@
 ﻿<ion-view view-title="regObs">
     <ion-content>
-        <ion-list>
-            <div ng-if="!vm.isLoading">
-                <div ng-if="!vm.hasMapDownloaded() || vm.downloadAgain">
+        <div ng-if="!vm.isLoading">
+            <div ng-if="!vm.hasMapDownloaded() || vm.downloadAgain">
+                <ion-list>
                     <ion-item class="item-text-wrap">
                         <h2>Last ned og lagre kart for bruk uten mobilnett</h2>
                         <p>Området for forhåndsnedlasting er gitt av kartutsnittet som ligger i appen nå.</p>
@@ -27,7 +27,7 @@
                     </div>
                     <div class="item range range-positive">
                         <i class="icon ion-ios-minus-outline" ng-click="vm.subtractZoomLevel()"></i>
-                        <input type="range" min="1" max="15" step="1" ng-model="vm.zoomlevel" ng-change="vm.updateCounts()">
+                        <input type="range" min="1" max="{{vm.maxMapZoomLevel}}" step="1" ng-model="vm.zoomlevel" ng-change="vm.updateCounts()">
                         <i class="icon ion-ios-plus-outline" ng-click="vm.addZoomLevel()"></i>
                     </div>
                     <div class="item item-input item-stacked-label item-text-wrap" ng-class="{'assertive':vm.downloadDisabled()}">
@@ -47,12 +47,17 @@
                             Last ned kart
                         </button>
                     </div>
-                </div>
-                <div ng-if="vm.hasMapDownloaded()">
+                </ion-list>
+            </div>
+            <div ng-if="vm.hasMapDownloaded()">
+                <ion-list>
+                    <div class="item item-divider">
+                        Lagrede kart:
+                    </div>
                     <div class="item item-input item-stacked-label item-text-wrap">
                         <div ng-repeat="tile in vm.maps">
                             <div ng-if="tile.filecount">
-                                <span ng-bind="tile.filecount"></span> kartblad (<span ng-bind="tile.bytesReadable"></span>) <span ng-bind="tile.description"></span>
+                                <span ng-bind="tile.description"></span> - <span ng-bind="tile.filecount"></span> kartblad (<span ng-bind="tile.bytesReadable"></span>)
                             </div>
                         </div>
                     </div>
@@ -63,14 +68,14 @@
                     </div>
                     <div class="padding" ng-if="!vm.downloadAgain">
                         <button class="button button-block button-calm" ng-click="vm.downloadAgain = true">
-                            Last ned på nytt
+                            Last ned mer
                         </button>
                     </div>
-                </div>
-                <button class="button button-positive button-block button-clear">
-                    Hjelp
-                </button>
+                </ion-list>
             </div>
-        </ion-list>
+            <button class="button button-positive button-block button-clear">
+                Hjelp
+            </button>
+        </div>
     </ion-content>
 </ion-view>

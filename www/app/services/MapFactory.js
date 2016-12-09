@@ -93,6 +93,7 @@
                     });
                 }
                 if (obsLocationMarker.getMenu() !== markerMenu) {
+                    AppLogging.log('setting new marker menu');
                     obsLocationMarker.setMenu(markerMenu);
                 }
             }
@@ -118,23 +119,33 @@
 
                     obsLocationMarker.on('drag', function (event) {
                         var marker = event.target;
-                        var position = marker.getLatLng();
-                        updateDistanceLineLatLng(position, true);
-                        openAndUpdatePopup(position);
+                        if (marker) {
+                            var position = marker.getLatLng();
+                            if (position) {
+                                updateDistanceLineLatLng(position, true);
+                                openAndUpdatePopup(position);
+                            }
+                        }
                     });
                     obsLocationMarker.on('dragend', function (event) {
-                        var marker = event.target;
-                        closePopup();
-                        marker.setIcon(iconSet);
-                        var position = marker.getLatLng();
-                        var obsLoc = {
-                            Latitude: position.lat.toString(),
-                            Longitude: position.lng.toString(),
-                            Uncertainty: '0',
-                            UTMSourceTID: ObsLocation.source.clickedInMap
-                        }
-                        ObsLocation.set(obsLoc);
                         isDragging = false;
+                        closePopup();
+                        var marker = event.target;
+                        if (marker) {
+                            if (marker.options.icon !== iconSet) {
+                                marker.setIcon(iconSet);
+                            }
+                            var position = marker.getLatLng();
+                            if (position) {
+                                var obsLoc = {
+                                    Latitude: position.lat.toString(),
+                                    Longitude: position.lng.toString(),
+                                    Uncertainty: '0',
+                                    UTMSourceTID: ObsLocation.source.clickedInMap
+                                }
+                                ObsLocation.set(obsLoc);
+                            }
+                        }
                         updateDistanceLine(true);
                         createMarkerMenu();
                     });
@@ -144,7 +155,9 @@
                 }
 
                 if (ObsLocation.isSet()) {
-                    obsLocationMarker.setIcon(iconSet);
+                    if (obsLocationMarker.options.icon !== iconSet) {
+                        obsLocationMarker.setIcon(iconSet);
+                    }
                     createMarkerMenu();
                     updateDistanceLine(true);
                 }
@@ -278,6 +291,7 @@
             map = L.map(elem, {
                 center: center,
                 zoom: 5,
+                maxZoom: AppSettings.maxMapZoomLevel,
                 zoomControl: false,
                 attributionControl: false
             });
@@ -290,7 +304,7 @@
 
             $ionicPlatform.ready(function () {
                 AppSettings.tiles.forEach(function (tile) {
-                    var t = L.tileLayerRegObs(tile.url, { folder: 'map-' + tile.name, name: tile.name, debug: true });
+                    var t = L.tileLayerRegObs(tile.url, { folder: 'map-' + tile.name, name: tile.name, debugFunc: AppLogging.log });
                     tiles.push(t);
                 });
                 tiles[0].addTo(tilesLayerGroup);
@@ -302,8 +316,7 @@
                        Latitude: position.latitude,
                        Longitude: position.longitude,
                        Uncertainty: position.accuracy
-                   },
-                       !ObsLocation.isSet() && firstLoad);
+                   }, !ObsLocation.isSet() && firstLoad);
                    firstLoad = false;
                });
 
@@ -341,9 +354,7 @@
         };
 
         service.changeAppMode = function () {
-            if (obsLocationMarker && obsLocationMarker.getMenu()) {
-                obsLocationMarker.removeMenu();
-            }
+            removeMarkerMenu();
             markerMenu = null;
             createMarkerMenu();
         };
@@ -395,7 +406,9 @@
 
         service.calculateXYZList = function (zoomMin, zoomMax) {
             if (!map || !tiles) return [];
-            return tiles[0].calculateXYZListFromBounds(map.getBounds(), zoomMin, zoomMax);
+            var bounds = map.getBounds();
+            AppLogging.log('Calculation xyz list from bounds: ' + JSON.stringify(bounds) + 'zmin: ' + zoomMin + ' zmax:' + zoomMax);
+            return tiles[0].calculateXYZListFromBounds(bounds, zoomMin, zoomMax);
         };
 
         service.calculateXYZSize = function (zoomMin, zoomMax) {
@@ -413,6 +426,7 @@
 
             var mapStatus = [];
             var xyzList = service.calculateXYZList(zoomMin, zoomMax);
+            AppLogging.log('Download map for xyz list: ' + JSON.stringify(xyzList));
             var checkProgress = function () {
                 var hasAnyRunning = false;
                 var hasAnyError = false;
@@ -465,10 +479,10 @@
         }
 
         service.emptyCache = function () {
-            return $q(function(resolve) {
+            return $q(function (resolve) {
                 var index = 0;
                 var callbacks = [];
-                var checkCallback = function() {
+                var checkCallback = function () {
                     if (callbacks.length === tiles.length) {
                         resolve(callbacks);
                     }
@@ -478,9 +492,9 @@
                     resolve(callbacks);
                 }
 
-                tiles.forEach(function(t) {
+                tiles.forEach(function (t) {
                     var name = AppSettings.tiles[index].name;
-                    t.emptyCache(function(oks, fails) {
+                    t.emptyCache(function (oks, fails) {
                         AppLogging.log("Cleared cache for map " +
                             name +
                             ".\n" +
