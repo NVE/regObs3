@@ -357,6 +357,7 @@
             removeMarkerMenu();
             markerMenu = null;
             createMarkerMenu();
+            service.updateMapFromSettings();
         };
 
         service.updateObservationsInMap = function () {
@@ -371,13 +372,29 @@
         };
 
         service.updateMapFromSettings = function () {
-            var appMode = AppSettings.getAppMode();
+            //var appMode = AppSettings.getAppMode();
             hideAllTiles();
-            if (appMode === 'snow') {
-                if (AppSettings.data.showSteepnessMap) {
-                    showTile('steepness', AppSettings.data.steepnessMapOpacity);
+            var geoId = Utility.getCurrentGeoHazardTid();
+            AppSettings.data.maps.forEach(function(mapSetting) {
+                if (mapSetting.geoHazardTid === geoId) {
+                    if (mapSetting.tiles) {
+                        mapSetting.tiles.forEach(function(tileSetting) {
+                            if (tileSetting.visible) {
+                                showTile(tileSetting.name, tileSetting.opacity);
+                            }
+                        });
+                    }
                 }
-            }
+            });
+            //if (appMode === 'snow') {
+            //    if (AppSettings.data.showSteepnessMap) {
+            //        showTile('steepness', AppSettings.data.steepnessMapOpacity);
+            //    }
+            //}else if (appMode === 'ice') {
+            //    if (AppSettings.data.showIceMap) {
+            //        showTile('ice', AppSettings.data.steepnessMapOpacity);
+            //    }
+            //}
         };
 
         service.startWatch = function () {
