@@ -16,7 +16,13 @@
             appmode: undefined,
             obsvalidtime: 7 * 24 * 60 * 60,
             showSteepnessMap: true,
+            showIceMap: true,
             steepnessMapOpacity: 1.0,
+            iceMapOpacity: 1.0,
+            maps: [
+                { geoHazardTid: 10, tiles: [{ name: 'steepness', opacity: 1.0, visible: true }] },
+                { geoHazardTid: 70, tiles: [{ name: 'ice', opacity: 1.0, visible: true }] }
+            ],
             showObservations: true,
             showObservationsDaysBack: 3,
             showPreviouslyUsedPlaces: true
@@ -64,13 +70,12 @@
 
         //settings.mapTileUrl = 'http://opencache.statkart.no/gatekeeper/gk/gk.open_gmaps?layers=matrikkel_bakgrunn&zoom={z}&x={x}&y={y}&format=image/png';
 
-        //settings.steepnessMapTileUrl = 'http://test-gisapp.nve.no/arcgis/rest/services/BratthetSnoskred/MapServer/tile/{z}/{y}/{x}';
-
         settings.maxMapZoomLevel = 17;
 
         settings.tiles = [
-            { name: 'topo', description: 'Topografisk kart', url: 'http://opencache.statkart.no/gatekeeper/gk/gk.open_gmaps?layers=matrikkel_bakgrunn&zoom={z}&x={x}&y={y}&format=image/png' },
-            { name: 'steepness', description: 'Bratthets kart', url: 'http://test-gisapp.nve.no/arcgis/rest/services/BratthetSnoskred/MapServer/tile/{z}/{y}/{x}' }
+            { name: 'topo', description: 'Topografisk kart', maxDownloadLimit:10000, url: 'http://opencache.statkart.no/gatekeeper/gk/gk.open_gmaps?layers=matrikkel_bakgrunn&zoom={z}&x={x}&y={y}&format=image/png' },
+            { name: 'steepness', description: 'Bratthetskart', geoHazardTid: 10, url: 'http://test-gisapp.nve.no/arcgis/rest/services/wmts/Bratthet/MapServer/tile/{z}/{y}/{x}' },
+            { name: 'ice', description: 'Svekket is', geoHazardTid: 70, url: 'http://test-gisapp.nve.no/arcgis/rest/services/wmts/SvekketIs/MapServer/tile/{z}/{y}/{x}' }
         ];
 
         settings.mapTileUrl = function() {

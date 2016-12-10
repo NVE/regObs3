@@ -24,15 +24,15 @@
             <div class="item item-divider">
                 Kartvalg for snø
             </div>
-            <ion-toggle toggle-class="toggle-calm" ng-model="$ctrl.settings.showSteepnessMap" ng-change="$ctrl.onSettingsChanged()">
+            <ion-toggle toggle-class="toggle-calm" ng-model="$ctrl.settings.maps[0].tiles[0].visible" ng-change="$ctrl.onSettingsChanged()">
                 Vis bratthetskartet
             </ion-toggle>
-            <div ng-show="$ctrl.settings.showSteepnessMap">
+            <div ng-show="$ctrl.settings.maps[0].tiles[0].visible">
                 <label class="item item-input item-select item-stacked-label">
                     <span class="input-label">
                         Gjennomsiktighet
                     </span>
-                    <select ng-model="$ctrl.settings.steepnessMapOpacity"
+                    <select ng-model="$ctrl.settings.maps[0].tiles[0].opacity"
                             ng-options="option.value as option.name for option in $ctrl.opacityArray" ng-change="$ctrl.onSettingsChanged()"></select>
                 </label>
                 <div class="item item-divider">
@@ -84,6 +84,18 @@
                             ng-options="option.value as option.name for option in $ctrl.opacityArray" ng-change="$ctrl.onSettingsChanged()"></select>
                 </label>
             </div>-->
+            <ion-toggle toggle-class="toggle-calm" ng-model="$ctrl.settings.maps[1].tiles[0].visible" ng-change="$ctrl.onSettingsChanged()">
+                Vis svekket is
+            </ion-toggle>
+            <div ng-show="$ctrl.settings.maps[1].tiles[0].visible">
+                <label class="item item-input item-select item-stacked-label">
+                    <span class="input-label">
+                        Gjennomsiktighet
+                    </span>
+                    <select ng-model="$ctrl.settings.maps[1].tiles[0].opacity"
+                            ng-options="option.value as option.name for option in $ctrl.opacityArray" ng-change="$ctrl.onSettingsChanged()"></select>
+                </label>
+            </div>
         </div>
         <div ng-show="$ctrl.settings.appmode === 'water'">
             <div class="item item-divider">
