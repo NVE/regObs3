@@ -23,7 +23,8 @@
     "karma-chrome-launcher": "^2.0.0",
     "karma-jasmine": "^1.1.0",
     "preen": "^1.2.0",
-    "shelljs": "^0.3.0"
+    "shelljs": "^0.3.0",
+    "wd": "^1.0.0"
   },
   "cordovaPlugins": [
     "cordova-plugin-device@1.1.3",

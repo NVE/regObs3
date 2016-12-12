@@ -32,7 +32,7 @@ module.exports = function (config) {
             { pattern: 'www/app/app.js', included: true },
             { pattern: 'www/app/AppCtrl.js', included: true },
             { pattern: 'www/app/**/*.js', included: true },
-            { pattern: 'tests/**/*.js', included: true }
+            { pattern: 'tests/unittests/**/*.js', included: true }
         ],
 
 
