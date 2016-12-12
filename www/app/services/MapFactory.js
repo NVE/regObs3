@@ -2,7 +2,7 @@
     .module('RegObs')
     .factory('Map', function (AppSettings, AppLogging, ObsLocation, Observations, Utility, $state, Registration, $ionicPlatform, $rootScope, $q) {
         var service = this;
-        var map, obsLocationMarker, observationsLayerGroup, markersLayerGroup, tilesLayerGroup, userMarker, pathLine, popup, popupInfoObservation, markerMenu, firstLoad = true, isDragging = false, tiles = [];
+        var map, obsLocationMarker, observationsLayerGroup, markersLayerGroup, tilesLayerGroup, userMarker, pathLine, popup, markerMenu, firstLoad = true, isDragging = false, tiles = [];
         var icon = L.AwesomeMarkers.icon({ icon: 'arrow-move', prefix: 'ion', markerColor: 'green', extraClasses: 'map-obs-marker' });
         var iconSet = L.AwesomeMarkers.icon({ icon: 'ion-flag', prefix: 'ion', markerColor: 'gray', extraClasses: 'map-obs-marker map-obs-marker-set' });
         var center = [
@@ -88,7 +88,8 @@
                 if (!markerMenu) {
                     markerMenu = L.markerMenu({
                         radius: 55, // radius of the circle,
-                        size: [34, 34], // menu items width and height
+                        size: [38, 38], // menu items width and height
+                        offset: [0,20],
                         items: getMarkerMenuItems()
                     });
                 }
@@ -96,6 +97,28 @@
                     AppLogging.log('setting new marker menu');
                     obsLocationMarker.setMenu(markerMenu);
                 }
+            }
+        };
+
+        var setObsLocation = function(latlng) {
+            if (obsLocationMarker && latlng) {
+
+                obsLocationMarker.setLatLng(latlng);
+                closePopup();
+
+                if (obsLocationMarker.options.icon !== iconSet) {
+                    obsLocationMarker.setIcon(iconSet);
+                }
+                var obsLoc = {
+                    Latitude: latlng.lat.toString(),
+                    Longitude: latlng.lng.toString(),
+                    Uncertainty: '0',
+                    UTMSourceTID: ObsLocation.source.clickedInMap
+                };
+                ObsLocation.set(obsLoc);
+                updateDistanceLine(true);
+                createMarkerMenu();
+                obsLocationMarker.openMenu();
             }
         };
 
@@ -129,25 +152,10 @@
                     });
                     obsLocationMarker.on('dragend', function (event) {
                         isDragging = false;
-                        closePopup();
                         var marker = event.target;
                         if (marker) {
-                            if (marker.options.icon !== iconSet) {
-                                marker.setIcon(iconSet);
-                            }
-                            var position = marker.getLatLng();
-                            if (position) {
-                                var obsLoc = {
-                                    Latitude: position.lat.toString(),
-                                    Longitude: position.lng.toString(),
-                                    Uncertainty: '0',
-                                    UTMSourceTID: ObsLocation.source.clickedInMap
-                                }
-                                ObsLocation.set(obsLoc);
-                            }
+                            setObsLocation(marker.getLatLng());
                         }
-                        updateDistanceLine(true);
-                        createMarkerMenu();
                     });
                     obsLocationMarker.addTo(markersLayerGroup);
                 } else {
@@ -161,16 +169,6 @@
                     obsLocationMarker.unbindPopup();
                     createMarkerMenu();
                     updateDistanceLine(true);
-                } else {
-                    if (!popupInfoObservation) {
-                        popupInfoObservation = L.popup()
-                            .setContent('Du kan sette posisjon manuelt ved å dra markør, hvis ikke blir observert lokasjon satt til din gjeldende gps posisjon.');
-                        obsLocationMarker.on('popupclose', obsLocationMarker.unbindPopup);//remove info popup when closed
-                        obsLocationMarker.bindPopup(popupInfoObservation).openPopup();
-                    }
-                    if (obsLocationMarker.options.icon !== icon) {
-                        obsLocationMarker.setIcon(icon);                      
-                    }
                 }
 
                 if (zoom) {
@@ -313,13 +311,11 @@
 
             tiles = [];
 
-            //$ionicPlatform.ready(function () {
-                AppSettings.tiles.forEach(function (tile) {
-                    var t = L.tileLayerRegObs(tile.url, { folder: 'map-' + tile.name, name: tile.name, debugFunc: AppLogging.log });
-                    tiles.push(t);
-                });
-                tiles[0].addTo(tilesLayerGroup);
-            //}, false);
+            AppSettings.tiles.forEach(function (tile) {
+                var t = L.tileLayerRegObs(tile.url, { folder: 'map-' + tile.name, name: tile.name, debugFunc: AppLogging.log });
+                tiles.push(t);
+            });
+            tiles[0].addTo(tilesLayerGroup);
 
             map.on('locationfound',
                function (position) {
@@ -335,6 +331,15 @@
                 function (e) {
                     AppLogging.log('GPS error: ' + e.message);
                 });
+
+            map.on('contextmenu', function(e) {
+                setObsLocation(e.latlng);
+            });
+
+            map.on('click', function (e) {
+                //TODO: hide menus
+                AppLogging.log('Click in map - hide floating menu');
+            });
 
             service.updateMapFromSettings();
 
@@ -383,7 +388,6 @@
         };
 
         service.updateMapFromSettings = function () {
-            //var appMode = AppSettings.getAppMode();
             hideAllTiles();
             var geoId = Utility.getCurrentGeoHazardTid();
             AppSettings.data.maps.forEach(function(mapSetting) {
@@ -397,15 +401,6 @@
                     }
                 }
             });
-            //if (appMode === 'snow') {
-            //    if (AppSettings.data.showSteepnessMap) {
-            //        showTile('steepness', AppSettings.data.steepnessMapOpacity);
-            //    }
-            //}else if (appMode === 'ice') {
-            //    if (AppSettings.data.showIceMap) {
-            //        showTile('ice', AppSettings.data.steepnessMapOpacity);
-            //    }
-            //}
         };
 
         service.startWatch = function () {

@@ -337,9 +337,10 @@ input:focus, select:focus, textarea:focus {
 
 .leaflet-marker-menu-item {
     background: #fff;
-    border-radius: 17px;
+    border-radius: 22px;
     box-shadow: 0 2px 10px 0 rgba(0, 0, 0, 0.2), 0 2px 5px 0 rgba(0, 0, 0, 0.2);
     display: table;
+    font-size: 18px;
 }
 
 .leaflet-marker-menu-item .icon {
