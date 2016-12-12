@@ -16,13 +16,4 @@ describe("testJSONParse", function () {
         expect(norm.Name).toEqual("Maria");
         expect(norm.PersonalIdentifier).toEqual(2111858);
     });
-
-    it("test fails", function () {
-        // Invoke the unit being tested as necessary
-        var json = '{"Name": "Maria", "PersonalIdentifier": 2111858}';
-        var norm = JSON.parse(json);
-
-        // Check the results; "expect" and toEqual are Jasmine methods.
-        expect(norm.Name).toEqual("Maria-failed");
-    });
 });

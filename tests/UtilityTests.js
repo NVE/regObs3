@@ -15,8 +15,33 @@
     }));
 
 
-    it("undefined object returns empty", function () {
+    it("test isEmpty: undefined object returns true", function () {
         // Invoke the unit being tested as necessary
         expect(utility.isEmpty(undefined)).toEqual(true);
+    });
+
+    it("test isEmpty: null returnes true", function () {
+        // Invoke the unit being tested as necessary
+        expect(utility.isEmpty(null)).toEqual(true);
+    });
+
+    it("test isEmpty: empty array returnes true", function () {
+        // Invoke the unit being tested as necessary
+        expect(utility.isEmpty([])).toEqual(true);
+    });
+
+    it("test isEmpty: object with no properties returns true", function () {
+        // Invoke the unit being tested as necessary
+        expect(utility.isEmpty({})).toEqual(true);
+    });
+
+    it("test isEmpty: object with empty properties returns true", function () {
+        // Invoke the unit being tested as necessary
+        expect(utility.isEmpty({prop1:null, prop2:undefined, prop3:[], prop4:''})).toEqual(true);
+    });
+
+    it("test isEmpty: nested object with empty properties returns true", function () {
+        // Invoke the unit being tested as necessary
+        expect(utility.isEmpty({ prop1: { prop1: null, prop2: undefined, prop3: [], prop4: '' }, prop2: undefined, prop3: [], prop4: '' })).toEqual(true);
     });
 });
