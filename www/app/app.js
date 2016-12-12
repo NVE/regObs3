@@ -421,7 +421,7 @@
             });
     }
 
-    function setup($ionicPlatform, Utility, AppLogging) {
+    function setup($ionicPlatform, Utility, AppLogging, Registration) {
         'ngInject';
 
         if(Utility.shouldUpdateKdvElements()){
@@ -441,6 +441,8 @@
             if (window.StatusBar) {
                 StatusBar.styleLightContent();
             }
+
+            Registration.setBadge(); //Update badge on startup
         });
     }
 })();

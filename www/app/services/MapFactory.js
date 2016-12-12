@@ -2,7 +2,7 @@
     .module('RegObs')
     .factory('Map', function (AppSettings, AppLogging, ObsLocation, Observations, Utility, $state, Registration, $ionicPlatform, $rootScope, $q) {
         var service = this;
-        var map, obsLocationMarker, observationsLayerGroup, markersLayerGroup, tilesLayerGroup, userMarker, pathLine, popup, markerMenu, firstLoad = true, isDragging = false, tiles = [];
+        var map, obsLocationMarker, observationsLayerGroup, markersLayerGroup, tilesLayerGroup, userMarker, pathLine, popup, popupInfoObservation, markerMenu, firstLoad = true, isDragging = false, tiles = [];
         var icon = L.AwesomeMarkers.icon({ icon: 'arrow-move', prefix: 'ion', markerColor: 'green', extraClasses: 'map-obs-marker' });
         var iconSet = L.AwesomeMarkers.icon({ icon: 'ion-flag', prefix: 'ion', markerColor: 'gray', extraClasses: 'map-obs-marker map-obs-marker-set' });
         var center = [
@@ -158,8 +158,19 @@
                     if (obsLocationMarker.options.icon !== iconSet) {
                         obsLocationMarker.setIcon(iconSet);
                     }
+                    obsLocationMarker.unbindPopup();
                     createMarkerMenu();
                     updateDistanceLine(true);
+                } else {
+                    if (!popupInfoObservation) {
+                        popupInfoObservation = L.popup()
+                            .setContent('Du kan sette posisjon manuelt ved å dra markør, hvis ikke blir observert lokasjon satt til din gjeldende gps posisjon.');
+                        obsLocationMarker.on('popupclose', obsLocationMarker.unbindPopup);//remove info popup when closed
+                        obsLocationMarker.bindPopup(popupInfoObservation).openPopup();
+                    }
+                    if (obsLocationMarker.options.icon !== icon) {
+                        obsLocationMarker.setIcon(icon);                      
+                    }
                 }
 
                 if (zoom) {
@@ -302,13 +313,13 @@
 
             tiles = [];
 
-            $ionicPlatform.ready(function () {
+            //$ionicPlatform.ready(function () {
                 AppSettings.tiles.forEach(function (tile) {
                     var t = L.tileLayerRegObs(tile.url, { folder: 'map-' + tile.name, name: tile.name, debugFunc: AppLogging.log });
                     tiles.push(t);
                 });
                 tiles[0].addTo(tilesLayerGroup);
-            }, false);
+            //}, false);
 
             map.on('locationfound',
                function (position) {

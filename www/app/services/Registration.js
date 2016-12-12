@@ -73,11 +73,8 @@ angular
             );
         };
 
-        Registration.save = function () {
-            AppLogging.log('save start');
-            LocalStorage.setObject(storageKey, Registration.data);
-            LocalStorage.setObject(unsentStorageKey, Registration.unsent);
-            AppLogging.log('save before badge');
+        Registration.setBadge = function() {
+            AppLogging.log('setting badge');
             try {
                 if (window.cordova && window.cordova.plugins.notification.badge) {
                     if (Registration.unsent.length) {
@@ -89,7 +86,14 @@ angular
             } catch (ex) {
                 AppLogging.error('Exception on badge set ' + ex.message);
             }
+        };
 
+        Registration.save = function () {
+            AppLogging.log('save start');
+            LocalStorage.setObject(storageKey, Registration.data);
+            LocalStorage.setObject(unsentStorageKey, Registration.unsent);
+
+            Registration.setBadge();
 
             AppLogging.log('save complete');
         };
@@ -231,7 +235,7 @@ angular
 
         function prepareRegistrationForSending() {
             if (Registration.isEmpty()) {
-                return null;
+                return;
             }
 
             var user = User.getUser();
@@ -246,6 +250,8 @@ angular
             cleanupGeneralObservation(data.GeneralObservation);
             cleanupObsLocation(location);
             cleanupStabilityTest(data.CompressionTest);
+            cleanupIncidenct(data.Incident);
+
             delete data.avalChoice;
             delete data.WaterLevelChoice;
 
@@ -303,7 +309,13 @@ angular
                     delete location.UTMSourceTID;
                 }
             }
-        }
+
+            function cleanupIncidenct(incident) {
+                if (incident && !incident.IncidentText) {
+                    incident.IncidentText = '';
+                }
+            }
+        };
 
         function saveToUnsent(data) {
             data.Registrations.forEach(function (regToSave) {
