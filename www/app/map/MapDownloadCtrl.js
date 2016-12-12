@@ -4,7 +4,6 @@
         var vm = this;
 
         var averageMapPartSize = 51887;
-        var maxMapFragments = 10000;
 
         vm.maps = AppSettings.tiles;
         vm.maps.forEach(function (item) {
@@ -42,11 +41,32 @@
         vm.tooBigSize = false;
         vm.availableDiskspace = '';
         vm.availableDiskspaceBytes = 0;
-        vm.limitReached = false;
         vm.downloadAgain = false;
+        var fragmentsFromBaseMap = 0;
+
+        vm.mapsWithLimitReached = function () {
+            return vm.maps.filter(function (item) {
+                return item.limitReached === true;
+            });
+        };
+
+        vm.anyMapLimitReached = function() {
+            return vm.mapsWithLimitReached().length > 0;
+        };
+
+        var checkMaxLimits = function () {
+            vm.maps.forEach(function (item) {
+                item.limitReached = false;
+                if (item.selected) {
+                    if (fragmentsFromBaseMap > item.maxDownloadLimit) {
+                        item.limitReached = true;
+                    }
+                }
+            });
+        };
 
         vm.updateCounts = function () {
-            var fragmentsFromBaseMap = Map.calculateXYZSize(1, vm.zoomlevel);
+            fragmentsFromBaseMap = Map.calculateXYZSize(1, vm.zoomlevel);
             vm.mapFragmentCount = fragmentsFromBaseMap * vm.selectedMaps();
             var bytes = vm.mapFragmentCount * averageMapPartSize;
             vm.size = humanFileSize(bytes, true);
@@ -55,15 +75,11 @@
             } else {
                 vm.tooBigSize = false;
             }
-            if (fragmentsFromBaseMap > maxMapFragments) {
-                vm.limitReached = true;
-            } else {
-                vm.limitReached = false;
-            }
+            checkMaxLimits();
         };
 
         vm.downloadDisabled = function () {
-            return vm.tooBigSize || vm.selectedMaps() === 0 || vm.limitReached;
+            return vm.tooBigSize || vm.selectedMaps() === 0 || vm.anyMapLimitReached();
         }
 
         var cancel = false;
@@ -152,7 +168,7 @@
                         $scope.downloadStatus = status;
                         $pbService.animate('progress', 1.0);
                         AppLogging.log('Map download complete: ' + JSON.stringify(status));
-                        
+
                     }, 0);
                 },
                 function () {
@@ -201,7 +217,7 @@
             }
         };
 
-        var updateFreeDiskSpace = function() {
+        var updateFreeDiskSpace = function () {
             return $cordovaFile.getFreeDiskSpace()
                     .then(function (success) {
                         var ios = $cordovaDevice.getDevice() && $cordovaDevice.getDevice().platform === 'iOS';
@@ -213,9 +229,9 @@
                         AppLogging.warn('Could not get available diskspace. ' + JSON.stringify(error));
                         vm.availableDiskspace = 'Ukjent';
                     }).then(vm.updateCounts);
-        };      
+        };
 
-        var init = function() {
+        var init = function () {
             vm.isLoading = true;
             $ionicLoading.show();
             cancel = false;

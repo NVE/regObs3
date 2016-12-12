@@ -73,9 +73,9 @@
         settings.maxMapZoomLevel = 17;
 
         settings.tiles = [
-            { name: 'topo', description: 'Topografisk kart', maxDownloadLimit:10000, url: 'http://opencache.statkart.no/gatekeeper/gk/gk.open_gmaps?layers=matrikkel_bakgrunn&zoom={z}&x={x}&y={y}&format=image/png' },
+            { name: 'topo', description: 'Topografisk kart', maxDownloadLimit: 10000, url: 'http://opencache.statkart.no/gatekeeper/gk/gk.open_gmaps?layers=matrikkel_bakgrunn&zoom={z}&x={x}&y={y}&format=image/png', maxLimitMessage: 'Statens Kartverk har en grense på 10 000 kartblad per bruker per døgn.' },
             { name: 'steepness', description: 'Bratthetskart', geoHazardTid: 10, url: 'http://test-gisapp.nve.no/arcgis/rest/services/wmts/Bratthet/MapServer/tile/{z}/{y}/{x}' },
-            { name: 'ice', description: 'Svekket is', geoHazardTid: 70, url: 'http://test-gisapp.nve.no/arcgis/rest/services/wmts/SvekketIs/MapServer/tile/{z}/{y}/{x}' }
+            { name: 'ice', description: 'Svekket iskart', geoHazardTid: 70, url: 'http://test-gisapp.nve.no/arcgis/rest/services/wmts/SvekketIs/MapServer/tile/{z}/{y}/{x}' }
         ];
 
         settings.mapTileUrl = function() {
