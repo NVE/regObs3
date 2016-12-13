@@ -6,7 +6,7 @@
 
         //default Values
         var storageKey = 'regobsAppSettings';
-        var data = {
+        settings._defaults = {
             env: 'regObs',
             emailReceipt: false,
             compass: false,
@@ -95,11 +95,12 @@
 
         //'http://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}@2x.png'
         settings.load = function () {
-            settings.data = LocalStorage.getAndSetObject(storageKey, 'searchRange', angular.copy(data));
+            settings.data = LocalStorage.getAndMergeObject(storageKey, angular.copy(settings._defaults));
             var environments = settings.getEnvironments();
             if (environments.indexOf(settings.data.env) === -1) {
                 settings.data.env = environments[0];
             }
+
             settings.save();
         };
 
@@ -146,7 +147,6 @@
         settings.setAppMode = function (mode) {
             settings.data.appmode = mode;
             settings.save();
-
             $rootScope.$broadcast('$regobs.appModeChanged', mode);
         };
 

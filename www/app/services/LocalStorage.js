@@ -3,7 +3,7 @@
  */
 angular
     .module('RegObs')
-    .factory('LocalStorage', function LocalStorage($window) {
+    .factory('LocalStorage', ['$window', function($window) {
         return {
             set: function (key, value) {
                 $window.localStorage.setItem(key, value);
@@ -23,8 +23,18 @@ angular
                 var fetched = $window.localStorage.getItem(key);
                 return fetched && fetched !== 'undefined'? angular.fromJson(fetched) : defaultValue;
             },
+            getAndMergeObject: function(key, defaultValue) {
+                var fetched = $window.localStorage.getItem(key);
+                if (fetched && fetched !== 'undefined') {
+                    var obj = angular.fromJson(fetched);
+                    angular.merge(obj, defaultValue);
+                    return obj;
+                } else {
+                    return defaultValue;
+                }
+            },
             clear: function(){
                 $window.localStorage.clear();
             }
         }
-    });
+    }]);
