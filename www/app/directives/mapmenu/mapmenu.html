@@ -16,8 +16,8 @@
         <ion-toggle toggle-class="toggle-calm" ng-model="$ctrl.settings.showPreviouslyUsedPlaces" ng-change="$ctrl.onSettingsChanged()">
             Vis tidligere brukte steder
         </ion-toggle>
-        <ion-item class="item-icon-right item-text-wrap" ui-sref="mapdownload" menu-close>
-            Last ned og lagre kartutsnittet
+        <ion-item class="item-icon-left item-icon-right item-text-wrap" ui-sref="mapdownload" menu-close>
+            <i class="icon ion-ios-cloud-download"></i> Last ned og lagre kartutsnittet
             <i class="icon icon-accessory ion-chevron-right"></i>
         </ion-item>
         <div ng-show="$ctrl.settings.appmode === 'snow'">

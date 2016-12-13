@@ -4,6 +4,11 @@
     -moz-transition: 0s;
 }
 
+#floating-button {
+    right: auto !important;
+    left: 20px !important;
+}
+
 #floating-menu.active ion-floating-item:nth-child(1) > li {
     transform: translateY(-70px) translateZ(0);
     -webkit-transform: translateY(-70px) translateZ(0);
