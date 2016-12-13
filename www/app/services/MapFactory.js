@@ -1,14 +1,58 @@
 ﻿angular
     .module('RegObs')
-    .factory('Map', function (AppSettings, AppLogging, ObsLocation, Observations, Utility, $state, Registration, $ionicPlatform, $rootScope, $q) {
+    .factory('Map', function (AppSettings, AppLogging, ObsLocation, Observations, Utility, $state, Registration, $ionicPlatform, $rootScope, $q, $timeout) {
         var service = this;
-        var map, obsLocationMarker, observationsLayerGroup, markersLayerGroup, tilesLayerGroup, userMarker, pathLine, popup, markerMenu, firstLoad = true, isDragging = false, tiles = [];
+        var map,
+            obsLocationMarker,
+            observationsLayerGroup,
+            markersLayerGroup,
+            tilesLayerGroup,
+            userMarker,
+            pathLine,
+            popup,
+            markerMenu,
+            closeMarkerMenuTimer, observationInfo, firstLoad = true, isDragging = false, tiles = [];
         var icon = L.AwesomeMarkers.icon({ icon: 'arrow-move', prefix: 'ion', markerColor: 'green', extraClasses: 'map-obs-marker' });
         var iconSet = L.AwesomeMarkers.icon({ icon: 'ion-flag', prefix: 'ion', markerColor: 'gray', extraClasses: 'map-obs-marker map-obs-marker-set' });
         var center = [
                 62.5,
                 10
         ];
+
+        var createObservationInfo = function() {
+            observationInfo = L.control();
+
+            observationInfo.onAdd = function() {
+                this._div = L.DomUtil.create('div', 'map-observation-info'); // create a div with a class "info"
+                this.update();
+                return this._div;
+            };
+
+            var flag = '<i class="icon ion-flag"></i> ';
+
+            observationInfo.updateFromLatLng = function(latlng) {
+                if (latlng && userMarker) {
+                    var distance = userMarker.getLatLng().distanceTo(latlng).toFixed(0);
+                    this._div.innerHTML = flag + getDistanceText(distance);
+                }
+            };
+
+            observationInfo.update = function() {
+                if (ObsLocation.isSet() && userMarker) {
+                    var obsLoc = ObsLocation.get();
+                    var latlng = new L.LatLng(obsLoc.Latitude, obsLoc.Longitude);
+                    this.updateFromLatLng(latlng);
+                } else if (userMarker) {
+                    this._div.innerHTML = flag +'0m';
+                } else if (ObsLocation.isSet()) {
+                    this._div.innerHTML = flag;
+                } else {
+                    this._div.innerHTML = flag +'Ikke satt';
+                }
+            };
+
+            observationInfo.addTo(map);
+        };
 
         var drawObservations = function () {
             if (observationsLayerGroup) {
@@ -50,6 +94,8 @@
             if (obsLocationMarker) {
                 obsLocationMarker.setIcon(icon);
             }
+
+            observationInfo.update();
         }
 
         var getMarkerMenuItems = function () {
@@ -89,7 +135,7 @@
                     markerMenu = L.markerMenu({
                         radius: 55, // radius of the circle,
                         size: [38, 38], // menu items width and height
-                        offset: [0,20],
+                        offset: [0, 20],
                         items: getMarkerMenuItems()
                     });
                 }
@@ -100,11 +146,16 @@
             }
         };
 
-        var setObsLocation = function(latlng) {
+        var setObsLocation = function (latlng) {
             if (obsLocationMarker && latlng) {
 
+                if (closeMarkerMenuTimer) {
+                    $timeout.cancel(closeMarkerMenuTimer);
+                }
+
                 obsLocationMarker.setLatLng(latlng);
-                closePopup();
+                
+                //closePopup();
 
                 if (obsLocationMarker.options.icon !== iconSet) {
                     obsLocationMarker.setIcon(iconSet);
@@ -117,8 +168,12 @@
                 };
                 ObsLocation.set(obsLoc);
                 updateDistanceLine(true);
+                observationInfo.update();
                 createMarkerMenu();
                 obsLocationMarker.openMenu();
+                closeMarkerMenuTimer = $timeout(function () {
+                    obsLocationMarker.closeMenu();
+                }, 3000);
             }
         };
 
@@ -146,7 +201,8 @@
                             var position = marker.getLatLng();
                             if (position) {
                                 updateDistanceLineLatLng(position, true);
-                                openAndUpdatePopup(position);
+                                //openAndUpdatePopup(position);
+                                observationInfo.updateFromLatLng(position);
                             }
                         }
                     });
@@ -169,6 +225,7 @@
                     obsLocationMarker.unbindPopup();
                     createMarkerMenu();
                     updateDistanceLine(true);
+                    observationInfo.update();
                 }
 
                 if (zoom) {
@@ -184,7 +241,7 @@
             } else {
                 dText = (distance || 0) + ' m';
             }
-            return dText + ' til observasjonspunkt';
+            return dText;
         };
 
         var updateDistanceLineLatLng = function (latlng) {
@@ -247,6 +304,7 @@
 
                 if (!isDragging) {
                     drawObsLocation(false);
+                    observationInfo.update();
                 }
 
                 if (zoom) {
@@ -332,7 +390,7 @@
                     AppLogging.log('GPS error: ' + e.message);
                 });
 
-            map.on('contextmenu', function(e) {
+            map.on('contextmenu', function (e) {
                 setObsLocation(e.latlng);
             });
 
@@ -340,6 +398,8 @@
                 //TODO: hide menus
                 AppLogging.log('Click in map - hide floating menu');
             });
+
+            createObservationInfo();
 
             service.updateMapFromSettings();
 
@@ -390,10 +450,10 @@
         service.updateMapFromSettings = function () {
             hideAllTiles();
             var geoId = Utility.getCurrentGeoHazardTid();
-            AppSettings.data.maps.forEach(function(mapSetting) {
+            AppSettings.data.maps.forEach(function (mapSetting) {
                 if (mapSetting.geoHazardTid === geoId) {
                     if (mapSetting.tiles) {
-                        mapSetting.tiles.forEach(function(tileSetting) {
+                        mapSetting.tiles.forEach(function (tileSetting) {
                             if (tileSetting.visible) {
                                 showTile(tileSetting.name, tileSetting.opacity);
                             }
