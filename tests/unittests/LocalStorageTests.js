@@ -35,4 +35,13 @@
 
         expect(result).toEqual('default value');
     }));
+
+    it("getAndMergeObject: Get existing storage value stored value", inject(function (LocalStorage) {
+
+        store = { 'key': '{"env":"test" }' };
+
+        var result = LocalStorage.getAndMergeObject('key', { env: "prod" });
+
+        expect(result.env).toEqual('test');
+    }));
 });

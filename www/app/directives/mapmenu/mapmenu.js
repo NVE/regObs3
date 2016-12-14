@@ -2,7 +2,7 @@
     .module('RegObs')
     .component('mapMenu', {
         templateUrl: 'app/directives/mapmenu/mapmenu.html',
-        controller: function(AppSettings) {
+        controller: function (AppSettings, $state, OfflineMap) {
             'ngInject';
             var ctrl = this;
 
@@ -12,6 +12,19 @@
 
             ctrl.onSettingsChanged = function() {
                 AppSettings.save();
+            };
+
+            ctrl.downloadMap = function() {
+                OfflineMap.getOfflineAreas()
+               .then(function (result) {
+                   if (result.length > 0) {
+                       $state.go('offlinemapoverview');
+                   } else {
+                       $state.go('mapareadownload');
+                   }
+               }, function (error) {
+                   $state.go('offlinemapoverview');
+               });
             };
         }
     });

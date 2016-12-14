@@ -1,0 +1,25 @@
+﻿<ion-view>
+    <ion-content>
+        <ion-list>
+            <div ng-repeat="area in vm.offlineAreas track by $index">
+                <ion-item class="item-icon-left item-icon-right item-text-wrap" ui-sref="mapdownload">
+                    <i class="icon ion-map"></i> {{area.name}}
+                    <span class="item-note">
+                        {{vm.humanFileSize(area.size)}}
+                    </span>
+                    <i class="icon icon-accessory ion-chevron-right"></i>
+                </ion-item>
+            </div>
+            <div class="padding">
+                <button class="button button-block button-calm" ng-click="vm.downloadArea()">
+                    Last ned nytt område
+                </button>
+            </div>
+            <div class="padding" ng-if="vm.offlineAreas.length > 0">
+                <button class="button button-block" ng-click="vm.deleteMaps()">
+                    Slett lagrede kart
+                </button>
+            </div>
+        </ion-list>
+    </ion-content>
+</ion-view>

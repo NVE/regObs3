@@ -23,12 +23,13 @@ angular
                 var fetched = $window.localStorage.getItem(key);
                 return fetched && fetched !== 'undefined'? angular.fromJson(fetched) : defaultValue;
             },
-            getAndMergeObject: function(key, defaultValue) {
+            getAndMergeObject: function (key, defaultValue) {           
                 var fetched = $window.localStorage.getItem(key);
                 if (fetched && fetched !== 'undefined') {
                     var obj = angular.fromJson(fetched);
-                    angular.merge(obj, defaultValue);
-                    return obj;
+                    var defaults = angular.copy(defaultValue);
+                    angular.merge(defaults, obj);
+                    return defaults;
                 } else {
                     return defaultValue;
                 }

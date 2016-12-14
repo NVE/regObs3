@@ -64,14 +64,25 @@
                     }
                 }
             })
-            .state('mapdownload', {
-                url: '/mapdownload',
-                templateUrl: 'app/map/mapdownload.html',
-                controller: 'MapDownloadCtrl as vm',
+            .state('offlinemapoverview', {
+                url: '/offlinemapoverview',
+                templateUrl: 'app/map/offlinemapoverview.html',
+                controller: 'OfflineMapOverviewCtrl as vm',
                 data: {
                     defaultBack: {
                         state: 'start',
-                        title: 'regObs'
+                        title: 'Offline kart'
+                    }
+                }
+            })
+            .state('mapareadownload', {
+                url: '/mapareadownload',
+                templateUrl: 'app/map/mapareadownload.html',
+                controller: 'MapAreaDownloadCtrl as vm',
+                data: {
+                    defaultBack: {
+                        state: 'offlinemapoverview',
+                        title: 'Last ned område'
                     }
                 }
             })
