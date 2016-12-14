@@ -1,15 +1,44 @@
 ﻿angular
     .module('RegObs')
-    .controller('MapDownloadCtrl', function ($scope, $ionicPopup, AppSettings, AppLogging, Map, $cordovaFile, $timeout, $cordovaDevice, $pbService, $q, $ionicLoading, $ionicScrollDelegate, Utility) {
+    .controller('MapAreaDownloadCtrl', function ($ionicPlatform, $ionicLoading, $filter, $ionicScrollDelegate, OfflineMap, AppLogging, AppSettings, Map, $cordovaFile, $cordovaDevice, $ionicPopup, $scope, $pbService, $state, $timeout, Utility) {
         var vm = this;
 
         var averageMapPartSize = 51887;
+        var fragmentsFromBaseMap = 0;
 
+        vm.size = 0;
+        vm.tooBigSize = false;
+        vm.availableDiskspace = '';
+        vm.availableDiskspaceBytes = 0;
+        vm.mapFragmentCount = 0;
+        vm.maxMapZoomLevel = AppSettings.maxMapZoomLevel;
         vm.maps = AppSettings.tiles;
         vm.maps.forEach(function (item) {
             item.selected = false;
         });
         vm.maps[0].selected = true;
+        vm.isLoading = true;
+        vm.name = '';
+
+        vm.detailLevels = [
+            { zoomLevel: 11, customZoomLevel: false },
+            { zoomLevel: 14, customZoomLevel: false },
+            { zoomLevel: 17, customZoomLevel: false },
+            { customZoomLevel: true }
+        ];
+        vm.selectedDetailLevel = vm.detailLevels[1];
+        vm.zoomlevel = vm.detailLevels[1].zoomLevel;
+
+        vm.detailLevelChange = function () {
+            if (vm.selectedDetailLevel.zoomLevel) {
+                vm.zoomlevel = vm.selectedDetailLevel.zoomLevel;
+            }
+            vm.updateCounts();
+        };
+
+        vm.customZoomLevel = function () {
+            return vm.selectedDetailLevel.customZoomLevel;
+        };
 
         vm.selectedMaps = function () {
             return vm.maps.filter(function (item) {
@@ -17,16 +46,12 @@
             }).length;
         };
 
-        vm.zoomlevel = 5;
-
-        vm.mapFragmentCount = 0;
-        vm.size = 0;
-        vm.maxMapZoomLevel = AppSettings.maxMapZoomLevel;
-        vm.tooBigSize = false;
-        vm.availableDiskspace = '';
-        vm.availableDiskspaceBytes = 0;
-        vm.downloadAgain = false;
-        var fragmentsFromBaseMap = 0;
+        vm.addZoomLevel = function () {
+            if (vm.zoomlevel < AppSettings.maxMapZoomLevel) {
+                vm.zoomlevel++;
+                vm.updateCounts();
+            }
+        };
 
         vm.mapsWithLimitReached = function () {
             return vm.maps.filter(function (item) {
@@ -34,8 +59,26 @@
             });
         };
 
-        vm.anyMapLimitReached = function() {
+        vm.anyMapLimitReached = function () {
             return vm.mapsWithLimitReached().length > 0;
+        };
+
+        vm.subtractZoomLevel = function () {
+            if (vm.zoomlevel > 1) {
+                vm.zoomlevel--;
+                vm.updateCounts();
+            }
+        };
+
+        vm.setZoomLevel = function (level) {
+            vm.zoomlevel = level;
+            vm.customZoomLevel = false;
+            vm.updateCounts();
+        };
+
+        vm.setCustomZoomLevel = function () {
+            vm.customZoomLevel = true;
+            vm.updateCounts();
         };
 
         var checkMaxLimits = function () {
@@ -49,22 +92,39 @@
             });
         };
 
+
         vm.updateCounts = function () {
-            fragmentsFromBaseMap = Map.calculateXYZSize(1, vm.zoomlevel);
-            vm.mapFragmentCount = fragmentsFromBaseMap * vm.selectedMaps();
-            var bytes = vm.mapFragmentCount * averageMapPartSize;
-            vm.size = Utility.humanFileSize(bytes, true);
-            if (bytes > vm.availableDiskspaceBytes) {
-                vm.tooBigSize = true;
-            } else {
-                vm.tooBigSize = false;
+            if (vm.bounds) {
+                fragmentsFromBaseMap = Map.calculateXYZSizeFromBounds(vm.bounds, 1, vm.zoomlevel);
+                vm.mapFragmentCount = fragmentsFromBaseMap * vm.selectedMaps();
+                var bytes = vm.mapFragmentCount * averageMapPartSize;
+                vm.size = Utility.humanFileSize(bytes, true);
+                if (bytes > vm.availableDiskspaceBytes) {
+                    vm.tooBigSize = true;
+                } else {
+                    vm.tooBigSize = false;
+                }
+                checkMaxLimits();
             }
-            checkMaxLimits();
         };
 
         vm.downloadDisabled = function () {
             return vm.tooBigSize || vm.selectedMaps() === 0 || vm.anyMapLimitReached();
         }
+
+        var updateFreeDiskSpace = function () {
+            return $cordovaFile.getFreeDiskSpace()
+                    .then(function (success) {
+                        var ios = $cordovaDevice.getDevice() && $cordovaDevice.getDevice().platform === 'iOS';
+                        vm.availableDiskspaceBytes = success * (ios ? 1 : 1000);
+                        //ios returns result in bytes, and android in kB
+                        vm.availableDiskspace = Utility.humanFileSize(vm.availableDiskspaceBytes, true);
+                    },
+                    function (error) {
+                        AppLogging.warn('Could not get available diskspace. ' + JSON.stringify(error));
+                        vm.availableDiskspace = 'Ukjent';
+                    }).finally(vm.updateCounts);
+        };
 
         var cancel = false;
         $scope.cancelDownload = function () {
@@ -78,8 +138,8 @@
         $scope.closePopup = function () {
             if (vm.popup) {
                 vm.popup.close();
-                init();
             }
+            $state.go('start');
         };
 
         $scope.progressOptions = {
@@ -101,36 +161,6 @@
             }
         };
 
-        var updateUsage = function () {
-            return $q(function (resolve) {
-                if (!vm.maps) {
-                    resolve();
-                } else {
-                    var callbacks = 0;
-                    var checkCallbacks = function () {
-                        if (callbacks === vm.maps.length) {
-                            resolve();
-                        }
-                    }
-                    vm.maps.forEach(function (item) {
-                        var tile = Map.getTileByName(item.name);
-                        tile.getDiskUsage(function (filecount, bytes) {
-                            $timeout(function () {
-                                item.filecount = filecount;
-                                item.bytes = bytes;
-                                item.bytesReadable = Utility.humanFileSize(bytes, true);
-                                callbacks++;
-
-                                checkCallbacks();
-                            }, 0);
-                        });
-                    });
-                }
-            });
-        };
-
-       
-
         var downloadMap = function () {
             var mapsToDownload = [];
             vm.maps.forEach(function (item) {
@@ -139,7 +169,7 @@
                 }
             });
 
-            Map.downloadMap(1,
+            Map.downloadMapFromBounds(vm.name, vm.bounds, 1,
                 vm.zoomlevel,
                 mapsToDownload,
                 function (status) {
@@ -175,60 +205,19 @@
             downloadMap();
         };
 
-        vm.deleteMaps = function () {
-            Map.emptyCache().then(function () {
-                updateUsage();
-            });
-        };
-
-
-
-        vm.hasMapDownloaded = function () {
-            return vm.maps.filter(function (item) {
-                return item.filecount > 0;
-            }).length > 0;
-        };
-
-        vm.addZoomLevel = function () {
-            if (vm.zoomlevel < AppSettings.maxMapZoomLevel) {
-                vm.zoomlevel++;
-                vm.updateCounts();
-            }
-        };
-
-        vm.subtractZoomLevel = function () {
-            if (vm.zoomlevel > 1) {
-                vm.zoomlevel--;
-                vm.updateCounts();
-            }
-        };
-
-        var updateFreeDiskSpace = function () {
-            return $cordovaFile.getFreeDiskSpace()
-                    .then(function (success) {
-                        var ios = $cordovaDevice.getDevice() && $cordovaDevice.getDevice().platform === 'iOS';
-                        vm.availableDiskspaceBytes = success * (ios ? 1 : 1000);
-                        //ios returns result in bytes, and android in kB
-                        vm.availableDiskspace = Utility.humanFileSize(vm.availableDiskspaceBytes, true);
-                    },
-                    function (error) {
-                        AppLogging.warn('Could not get available diskspace. ' + JSON.stringify(error));
-                        vm.availableDiskspace = 'Ukjent';
-                    }).then(vm.updateCounts);
-        };
 
         var init = function () {
             vm.isLoading = true;
-            $ionicLoading.show();
             cancel = false;
-            vm.downloadAgain = false;
+            vm.name = $filter('date')(new Date(), 'yyyy-MM-dd HH:mm:ss');
+            $ionicLoading.show();
 
-            updateUsage().then(updateFreeDiskSpace).then(function () {
+            updateFreeDiskSpace().finally(function () {
                 vm.isLoading = false;
                 $ionicLoading.hide();
                 $ionicScrollDelegate.resize();
             });
         };
 
-        init();
+        $scope.$on('$ionicView.enter', init);
     });

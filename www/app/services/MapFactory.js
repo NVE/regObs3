@@ -1,6 +1,6 @@
 ﻿angular
     .module('RegObs')
-    .factory('Map', function (AppSettings, AppLogging, ObsLocation, Observations, Utility, $state, Registration, $ionicPlatform, $rootScope, $q, $timeout) {
+    .factory('Map', function (AppSettings, AppLogging, ObsLocation, Observations, Utility, $state, Registration, $ionicPlatform, $rootScope, $q, $timeout, OfflineMap) {
         var service = this;
         var map,
             obsLocationMarker,
@@ -19,10 +19,10 @@
                 10
         ];
 
-        var createObservationInfo = function() {
+        var createObservationInfo = function () {
             observationInfo = L.control();
 
-            observationInfo.onAdd = function() {
+            observationInfo.onAdd = function () {
                 this._div = L.DomUtil.create('div', 'map-observation-info'); // create a div with a class "info"
                 this.update();
                 return this._div;
@@ -30,24 +30,24 @@
 
             var flag = '<i class="icon ion-flag"></i> ';
 
-            observationInfo.updateFromLatLng = function(latlng) {
+            observationInfo.updateFromLatLng = function (latlng) {
                 if (latlng && userMarker) {
                     var distance = userMarker.getLatLng().distanceTo(latlng).toFixed(0);
                     this._div.innerHTML = flag + getDistanceText(distance);
                 }
             };
 
-            observationInfo.update = function() {
+            observationInfo.update = function () {
                 if (ObsLocation.isSet() && userMarker) {
                     var obsLoc = ObsLocation.get();
                     var latlng = new L.LatLng(obsLoc.Latitude, obsLoc.Longitude);
                     this.updateFromLatLng(latlng);
                 } else if (userMarker) {
-                    this._div.innerHTML = flag +'0m';
+                    this._div.innerHTML = flag + '0m';
                 } else if (ObsLocation.isSet()) {
                     this._div.innerHTML = flag;
                 } else {
-                    this._div.innerHTML = flag +'Ikke satt';
+                    this._div.innerHTML = flag + 'Ikke satt';
                 }
             };
 
@@ -154,7 +154,7 @@
                 }
 
                 obsLocationMarker.setLatLng(latlng);
-                
+
                 //closePopup();
 
                 if (obsLocationMarker.options.icon !== iconSet) {
@@ -370,7 +370,7 @@
             tiles = [];
 
             AppSettings.tiles.forEach(function (tile) {
-                var t = L.tileLayerRegObs(tile.url, { folder: 'map-' + tile.name, name: tile.name, debugFunc: AppLogging.log });
+                var t = L.tileLayerRegObs(tile.url, { folder: AppSettings.mapFolder, name: tile.name, debugFunc: AppLogging.log });
                 tiles.push(t);
             });
             tiles[0].addTo(tilesLayerGroup);
@@ -414,6 +414,14 @@
             map.invalidateSize();
 
             return map;
+        };
+
+        service.getCenter = function () {
+            return map.getCenter();
+        };
+
+        service.getZoom = function () {
+            return map.getZoom();
         };
 
         service.getTiles = function () {
@@ -487,79 +495,170 @@
             }
         };
 
-        service.calculateXYZList = function (zoomMin, zoomMax) {
-            if (!map || !tiles) return [];
-            var bounds = map.getBounds();
-            AppLogging.log('Calculation xyz list from bounds: ' + JSON.stringify(bounds) + 'zmin: ' + zoomMin + ' zmax:' + zoomMax);
+        //service.calculateXYZList = function (zoomMin, zoomMax) {
+        //    if (!map) return [];
+        //    var bounds = map.getBounds();
+        //    return service.calculateXYZListFromBounds(bounds, zoomMin, zoomMax);
+        //};
+
+        service.calculateXYZListFromBounds = function (bounds, zoomMin, zoomMax) {
+            if (!tiles) return [];
             return tiles[0].calculateXYZListFromBounds(bounds, zoomMin, zoomMax);
         };
 
-        service.calculateXYZSize = function (zoomMin, zoomMax) {
+        //service.calculateXYZSize = function (zoomMin, zoomMax) {
+        //    if (!map || !tiles) return 0;
+        //    return tiles[0].calculateXYZSizeFromBounds(map.getBounds(), zoomMin, zoomMax);
+        //};
+
+        service.calculateXYZSizeFromBounds = function (bounds, zoomMin, zoomMax) {
             if (!map || !tiles) return 0;
-            return tiles[0].calculateXYZSizeFromBounds(map.getBounds(), zoomMin, zoomMax);
+            return tiles[0].calculateXYZSizeFromBounds(bounds, zoomMin, zoomMax);
         };
 
-        service.downloadMap = function (zoomMin, zoomMax, mapsArray, progressCallback, completeCallback, cancelCallback) {
-            if (!zoomMin)
-                throw Error('zoomMin must be set');
-            if (!zoomMax)
-                throw Error('zoomMax must be set');
-            if (!mapsArray || mapsArray.length <= 0)
-                throw Error('Maps array must be an array of map names');
+        
 
-            var mapStatus = [];
-            var xyzList = service.calculateXYZList(zoomMin, zoomMax);
-            AppLogging.log('Download map for xyz list: ' + JSON.stringify(xyzList));
-            var checkProgress = function () {
-                var hasAnyRunning = false;
-                var hasAnyError = false;
-                var total = xyzList.length * mapsArray.length;
-                var done = 0;
-                mapStatus.forEach(function (item) {
-                    done += item.done;
-                    if (done === total) {
-                        item.complete = true;
-                    }
+        service.downloadMapFromXyzList = function (name, xyzList, zoomMin, zoomMax, mapsArray, progressCallback, completeCallback, cancelCallback) {
+            var offlineAreas = [];
 
-                    if (!item.complete) {
-                        hasAnyRunning = true;
+            var downloadMapFromXyzListInternal = function() {
+                if (!zoomMin)
+                    throw Error('zoomMin must be set');
+                if (!zoomMax)
+                    throw Error('zoomMax must be set');
+                if (!mapsArray || mapsArray.length <= 0)
+                    throw Error('Maps array must be an array of map names');
+                if (!xyzList)
+                    throw Error('Xyz list must be set!');
+
+                var area = { name: name, size: 0, tiles: xyzList.length * mapsArray.length, maps: mapsArray, xyzList: xyzList, zoom: zoomMax };
+                offlineAreas.push(area);
+
+                var mapStatus = [];
+
+                AppLogging.log('Download map for xyz list: ' + JSON.stringify(xyzList));
+                var checkProgress = function (tile) {
+                    var hasAnyRunning = false;
+                    var hasAnyError = false;
+                    var total = xyzList.length * mapsArray.length;
+                    var done = 0;
+                    var errors = 0;
+                    mapStatus.forEach(function (item) {
+                        done += item.done;
+                        if (done === total) {
+                            item.complete = true;
+                        }
+
+                        if (!item.complete) {
+                            hasAnyRunning = true;
+                        }
+                        if (item.error > 0) {
+                            errors += item.error;
+                            hasAnyError = true;
+                        }
+                    });
+                    var percent = Math.round(100 * done / total);
+                    if (hasAnyRunning || (mapStatus.length < mapsArray.length)) {
+                        if (progressCallback) {
+                            progressCallback({
+                                complete: false,
+                                total: total,
+                                done: done,
+                                percent: percent,
+                                status: mapStatus,
+                                hasError: hasAnyError
+                            });
+                        }
+                    } else {
+                        tile.getDiskUsage(function(files, bytes) {
+                            area.size = bytes;
+                            area.hasError = hasAnyError;
+                            area.tiles = done - errors;
+
+                            OfflineMap.saveOfflineAreas(offlineAreas)
+                                .finally(function () {
+                                    if (completeCallback) {
+                                        completeCallback({
+                                            complete: true,
+                                            total: total,
+                                            done: done,
+                                            percent: percent,
+                                            status: mapStatus,
+                                            hasError: hasAnyError
+                                        });
+                                    }
+                                });
+                        });
                     }
-                    if (item.error > 0) {
-                        hasAnyError = true;
-                    }
+                };
+                mapsArray.forEach(function (item) {
+                    var tile = getTileByName(item);
+                    var description = AppSettings.getTileByName(item).description;
+                    var status = {
+                        name: item,
+                        description: description,
+                        total: xyzList.length,
+                        done: 0,
+                        percent: 0,
+                        complete: false,
+                        error: 0
+                    };
+                    mapStatus.push(status);
+                    tile.downloadXYZList(xyzList,
+                        false,
+                        function (done, total) {
+                            status.done = done;
+                            status.total = total;
+                            status.percent = Math.round(100 * done / total);
+                            checkProgress(tile);
+                        },
+                        function () {
+                            status.complete = true;
+                            status.done = status.total;
+                            status.percent = 100;
+                            checkProgress(tile);
+                        },
+                        function (error) {
+                            status.error++;
+                            checkProgress(tile);
+                        },
+                        cancelCallback);
                 });
-                var percent = Math.round(100 * done / total);
-                if ((hasAnyRunning && progressCallback) || mapStatus.length < mapsArray.length) {
-                    progressCallback({ complete: false, total: total, done: done, percent: percent, status: mapStatus, hasError: hasAnyError });
-                } else if (completeCallback) {
-                    completeCallback({ complete: true, total: total, done: done, percent: percent, status: mapStatus, hasError: hasAnyError });
-                }
             };
-            mapsArray.forEach(function (item) {
-                var tile = getTileByName(item);
-                var description = AppSettings.getTileByName(item).description;
-                var status = { name: item, description: description, total: xyzList.length, done: 0, percent: 0, complete: false, error: 0 };
-                mapStatus.push(status);
-                tile.downloadXYZList(xyzList,
-                    false,
-                    function (done, total) {
-                        status.done = done;
-                        status.total = total;
-                        status.percent = Math.round(100 * done / total);
-                        checkProgress();
-                    },
-                    function () {
-                        status.complete = true;
-                        status.done = status.total;
-                        status.percent = 100;
-                        checkProgress();
-                    },
-                    function (error) {
-                        status.error++;
-                        checkProgress();
-                    }, cancelCallback);
-            });
-        }
+
+            OfflineMap.getOfflineAreas()
+                .then(function(success) {
+                    offlineAreas = success;
+                })
+                .finally(downloadMapFromXyzListInternal);
+        };
+
+        service.downloadMapFromBounds = function (name, bounds, zoomMin, zoomMax, mapsArray, progressCallback, completeCallback, cancelCallback) {
+            var xyzList = service.calculateXYZListFromBounds(bounds, zoomMin, zoomMax);
+            service.downloadMapFromXyzList(name, xyzList,
+                zoomMin,
+                zoomMax,
+                mapsArray,
+                progressCallback,
+                completeCallback,
+                cancelCallback);
+        };
+
+        //service.downloadMap = function (zoomMin, zoomMax, mapsArray, progressCallback, completeCallback, cancelCallback) {
+        //        if (!zoomMin)
+        //            throw Error('zoomMin must be set');
+        //        if (!zoomMax)
+        //            throw Error('zoomMax must be set');
+
+        //        var xyzList = service.calculateXYZList(zoomMin, zoomMax);
+        //        service.downloadMapFromXyzList(xyzList,
+        //            zoomMin,
+        //            zoomMax,
+        //            mapsArray,
+        //            progressCallback,
+        //            completeCallback,
+        //            cancelCallback);
+        //    };
 
         service.emptyCache = function () {
             return $q(function (resolve) {

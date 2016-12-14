@@ -1,0 +1,60 @@
+﻿<ion-view title="Velg område">
+    <ion-content>
+        <!--<div id="mapSelect" data-tap-disabled="true" map-area-select onChange="vm.changeMapZoom"></div>-->
+        <map-area-select on-change="vm.updateCounts()" bounds="vm.bounds"></map-area-select>
+        <ion-list>
+            <div class="item item-input item-stacked-label item-text-wrap" ng-class="{'assertive':vm.downloadDisabled()}">
+                <div>
+                    {{vm.selectedMaps()}} kart.
+                </div>
+                <div>
+                    {{vm.zoomlevel}} zoom nivåer. {{vm.mapFragmentCount}} delkart.
+                </div>
+                <div>
+                    Ca {{vm.size}} av {{vm.availableDiskspace}} tilgjengelig.
+                </div>
+                <div ng-repeat="tile in vm.mapsWithLimitReached()">
+                    {{tile.maxLimitMessage || 'Maks grense for nedlasting av kartblad nådd'}}
+                </div>
+            </div>
+            <div class="item item-divider">
+                Navn:
+            </div>
+            <label class="item item-input">
+                <input type="text" ng-model="vm.name" />
+            </label>
+            <div class="item item-divider">
+                Velg detaljnivå:
+            </div>
+            <ion-radio ng-model="vm.selectedDetailLevel" ng-value="vm.detailLevels[0]" ng-change="vm.detailLevelChange()">Lavt</ion-radio>
+            <ion-radio ng-model="vm.selectedDetailLevel" ng-value="vm.detailLevels[1]" ng-change="vm.detailLevelChange()">Middels</ion-radio>
+            <ion-radio ng-model="vm.selectedDetailLevel" ng-value="vm.detailLevels[2]" ng-change="vm.detailLevelChange()">Høyt</ion-radio>           
+            <ion-radio ng-model="vm.selectedDetailLevel" ng-value="vm.detailLevels[3]" ng-change="vm.detailLevelChange()">Egendefinert</ion-radio>
+            <div class="item range range-positive" ng-show="vm.customZoomLevel()">
+                <i class="icon ion-ios-minus-outline" ng-click="vm.subtractZoomLevel()"></i>
+                <input type="range" min="1" max="{{vm.maxMapZoomLevel}}" step="1" ng-model="vm.zoomlevel" ng-change="vm.updateCounts()">
+                <i class="icon ion-ios-plus-outline" ng-click="vm.addZoomLevel()"></i>
+            </div>
+            <div class="item item-divider">
+                Velg kart:
+            </div>
+            <ion-toggle toggle-class="toggle-calm" ng-model="vm.maps[0].selected" ng-change="vm.updateCounts()">
+                Topografisk kart
+            </ion-toggle>
+            <ion-toggle toggle-class="toggle-calm" ng-model="vm.maps[1].selected" ng-change="vm.updateCounts()">
+                Bratthets kart
+            </ion-toggle>
+            <ion-toggle toggle-class="toggle-calm" ng-disabled="true">
+                Kvikkleire kart
+            </ion-toggle>
+            <ion-toggle toggle-class="toggle-calm" ng-model="vm.maps[2].selected" ng-change="vm.updateCounts()">
+                Svekket is kart
+            </ion-toggle>
+            <div class="padding">
+                <button class="button button-block button-calm" ng-disabled="vm.downloadDisabled()" ng-click="vm.download()">
+                    Last ned dette området
+                </button>
+            </div>
+        </ion-list>
+    </ion-content>
+</ion-view>
