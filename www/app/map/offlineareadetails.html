@@ -1,0 +1,19 @@
+﻿<ion-view title="{{vm.area.name}}">
+    <ion-content>
+        <map-area-select disable-user-interaction="true" bounds="vm.bounds"></map-area-select>
+        <div class="padding">
+            <div>
+                {{vm.area.maps.length}} kart.
+            </div>
+            <div>
+                {{vm.area.zoom}} zoom nivåer. {{vm.area.tiles}} delkart.
+            </div>
+            <div>
+                {{vm.humanFileSize}}
+            </div>
+            <button class="button button-block" ng-click="vm.deleteMap()">
+                Slett dette området
+            </button>
+        </div>
+    </ion-content>
+</ion-view>

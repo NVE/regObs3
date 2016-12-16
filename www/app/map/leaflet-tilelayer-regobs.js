@@ -54,50 +54,55 @@ L.TileLayer.RegObs = L.TileLayer.extend({
         myself._url_offline = myself._url; //Fallback to online map if no device storage present.
         //       if (!window.requestFileSystem && this.options.debug) console.log("L.TileLayer.RegObs: device does not support requestFileSystem");
         //       if (!window.requestFileSystem) throw "L.TileLayer.RegObs: device does not support requestFileSystem";
-        myself.debug("Opening filesystem");
+        //myself.debug("Opening filesystem");
         try {
-            document.addEventListener("deviceready",
-                function () {
-                    window.requestFileSystem(
-                        LocalFileSystem.PERSISTENT,
-                        0,
-                        function (fshandle) {
-                            myself.debug("requestFileSystem OK " + options.folder);
-                            myself.fshandle = fshandle;
-                            myself.fshandle.root.getDirectory(
-                                options.folder,
-                                { create: true, exclusive: false },
-                                function (dirhandle) {
-                                    myself.debug("getDirectory OK " + options.folder);
-                                    myself.dirhandle = dirhandle;
-                                    myself.dirhandle.setMetadata(null, null, { "com.apple.MobileBackup": 1 });
+        document.addEventListener("deviceready",
+            function () {
+                //window.requestFileSystem(
+                //    LocalFileSystem.PERSISTENT,
+                //    0,
+                //    function (fshandle) {
+                //        myself.debug("requestFileSystem OK " + options.folder);
+                //        myself.fshandle = fshandle;
+                //        myself.fshandle.root.getDirectory(
+                //            options.folder,
+                //            { create: true, exclusive: false },
+                //            function (dirhandle) {
+                //                myself.debug("getDirectory OK " + options.folder);
+                //                myself.dirhandle = dirhandle;
+                //                myself.dirhandle.setMetadata(null, null, { "com.apple.MobileBackup": 1 });
 
-                                    // Android's toURL() has a trailing / but iOS does not; better to have 2 than to have 0 !
-                                    myself._url_offline = dirhandle.toURL() +
-                                        '/' +
-                                        [myself.options.name, '{z}', '{x}', '{y}'].join('-') +
-                                        '.png';
-                                    myself._url = myself._url_offline; //setting default url to offline url
-                                    if (success_callback) success_callback();
-                                },
-                                function (error) {
-                                    myself.debug("getDirectory failed (code " + error.code + ")" + options.folder);
-                                    //throw "L.TileLayer.Cordova: " +
-                                    //    options.name +
-                                    //    ": getDirectory failed with code " +
-                                    //    error.code;
-                                }
-                            );
-                        },
-                        function (error) {
-                            myself.debug("requestFileSystem failed (code " + error.code + ")" + options.folder);
-                            //throw "L.TileLayer.Cordova: " + options.name + ": requestFileSystem failed with code " + error.code;
-                        }
-                    );
-                });
-        } catch (error) {
+                //                // Android's toURL() has a trailing / but iOS does not; better to have 2 than to have 0 !
+                //                myself._url_offline = dirhandle.toURL() +
+                //                    '/' +
+                //                    [myself.options.name, '{z}', '{x}', '{y}'].join('-') +
+                //                    '.png';
+                //                myself._url = myself._url_offline; //setting default url to offline url
+                //                if (success_callback) success_callback();
+                //            },
+                //            function (error) {
+                //                myself.debug("getDirectory failed (code " + error.code + ")" + options.folder);
+                //                //throw "L.TileLayer.Cordova: " +
+                //                //    options.name +
+                //                //    ": getDirectory failed with code " +
+                //                //    error.code;
+                //            }
+                //        );
+                //    },
+                //    function (error) {
+                //        myself.debug("requestFileSystem failed (code " + error.code + ")" + options.folder);
+                //        //throw "L.TileLayer.Cordova: " + options.name + ": requestFileSystem failed with code " + error.code;
+                //    }
+                //);
+                myself._url_offline = cordova.file.dataDirectory + myself.options.folder + '/' + [myself.options.name, '{z}', '{x}', '{y}'].join('-') + '.png';
+                if (!myself._url_offline.startsWith('file://tmp/ripple')) {
+                    myself._url = myself._url_offline; //only offer offline mode when not emulating
+                }
+                
+            });
+         } catch (error) {
             myself.debug("requestFileSystem failed (" + error.message + ")" + options.folder);
-        }
+         }
 
         // done, return ourselves because method chaining is cool
         return this;
@@ -234,10 +239,8 @@ L.TileLayer.RegObs = L.TileLayer.extend({
                 done(e, tile);
             }
         } else {
-            layer.debug("Try to fallback to online tile.");
-
             var newUrl = layer.getTileOnlineUrl(tile._originalCoords);
-
+            layer.debug("Could not find local tile: " + tile._originalSrc + ". Try to fallback to online tile: " + newUrl);
             tile.fallbackToOnline = true; //Try to fallback to online map tile
 
             layer.fire('tilefallback',
@@ -380,128 +383,8 @@ L.TileLayer.RegObs = L.TileLayer.extend({
         return (180 / Math.PI * Math.atan(0.5 * (Math.exp(n) - Math.exp(-n))));
     },
 
-    downloadAndStoreTile: function (x, y, z, success_callback, error_callback) {
-        var myself = this;
-        var sourceurl = myself._url_online.replace('{z}', z).replace('{x}', x).replace('{y}', y);
-        var mapname = [myself.options.name, z, x, y].join('-') + '.png';
-        myself.debug("Download " + sourceurl + " => " + mapname);
-
-        if (myself.dirhandle) {
-            var filename = myself.dirhandle.toURL() + '/' + mapname;
-            if (myself.options.subdomains) {
-                var idx = Math.floor(Math.random() * myself.options.subdomains.length);
-                var dom = myself.options.subdomains[idx];
-                sourceurl = sourceurl.replace('{s}', dom);
-            }
-
-            var transfer = new FileTransfer();
-            transfer.download(
-                sourceurl,
-                filename,
-                function(file) {
-                    // tile downloaded OK; set the iOS "don't back up" flag then move on
-                    file.setMetadata(null, null, { "com.apple.MobileBackup": 1 });
-                    if (success_callback) success_callback();
-                },
-                function(error) {
-                    var errmsg = '';
-                    switch (error.code) {
-                    case FileTransferError.FILE_NOT_FOUND_ERR:
-                        errmsg = "Not found: " + sourceurl;
-                        break;
-                    case FileTransferError.INVALID_URL_ERR:
-                        errmsg = "Invalid URL:" + sourceurl;
-                        break;
-                    case FileTransferError.CONNECTION_ERR:
-                        errmsg = "Connection error at the web server.\n";
-                        break;
-                    }
-                    if (error_callback) error_callback(errmsg);
-                }
-            );
-        } else {
-            if (error_callback) error_callback('No dirhandle found');
-        }
-    },
-
-    downloadXYZList: function (xyzlist, overwrite, progress_callback, complete_callback, error_callback, cancel_callback) {
-        var myself = this;
-
-        function runThisOneByIndex(xyzs, index, cbprog, cbdone, cberr, cbcancel) {
-            var x = xyzs[index].x;
-            var y = xyzs[index].y;
-            var z = xyzs[index].z;
-
-            // thanks to closures this function would call downloadAndStoreTile() for this XYZ, then do the callbacks and all...
-            // all we need to do is call it below, depending on the overwrite outcome
-            function doneWithIt() {
-                // the download was skipped and not an error, so call the progress callback; then either move on to the next one, or else call our success callback
-                if (cbprog) cbprog(index, xyzs.length);
-
-                if (index + 1 < xyzs.length) {
-                    runThisOneByIndex(xyzs, index + 1, cbprog, cbdone, cberr, cbcancel);
-                } else {
-                    if (cbdone) cbdone();
-                }
-            }
-            function yesReally() {
-                try {
-                    myself.downloadAndStoreTile(
-                        x,
-                        y,
-                        z,
-                        doneWithIt,
-                        function (errmsg) {
-                            // an error in downloading, so we bail on the whole process and run the error callback
-                            if (cberr) cberr(errmsg);
-                            doneWithIt();
-                        }
-                    );
-                } catch (error) {
-                    if (cberr) cberr(error.message);
-                    doneWithIt();
-                }
-            }
-
-            var cancel = false;
-            if (cbcancel) {
-                cancel = cbcancel();
-            }
-
-            if (cancel) {
-                if (cbdone) cbdone();
-            } else {
-                // trick: if 'overwrite' is true we can just go ahead and download
-                // BUT... if overwrite is false, then test that the file doesn't exist first by failing to open it
-                if (overwrite) {
-                    myself.debug("Tile " + z + '/' + x + '/' + y + " -- " + "Overwrite=true so proceeding.");
-                    yesReally();
-                } else {
-                    try {
-                        var filename = [myself.options.name, z, x, y].join('-') + '.png';
-                        myself.debug("Check for existing file: " + filename);
-                        myself.dirhandle.getFile(
-                            filename,
-                            { create: false },
-                            function () {
-                                // opened the file OK, and we didn't ask for overwrite... we're done here, same as if we had downloaded properly
-                                myself.debug(filename + " exists. Skipping.");
-                                doneWithIt();
-                            },
-                            function () { // failed to open file, guess we are good to download it since we don't have it
-                                myself.debug(filename + " missing. Fetching.");
-                                yesReally();
-                            }
-                        );
-                    } catch (error) {
-                        if (cberr) cberr(error.message);
-                        doneWithIt();
-                    }
-
-                }
-            }
-        }
-        runThisOneByIndex(xyzlist, 0, progress_callback, complete_callback, error_callback, cancel_callback);
+    getMapFilename: function (x, y, z) {
+        return [this.options.name, z, x, y].join('-') + '.png';
     },
 
     /*
@@ -510,119 +393,172 @@ L.TileLayer.RegObs = L.TileLayer.extend({
      *
      */
 
-    getDiskUsage: function (callback) {
-        var myself = this;
-        if (!myself.dirhandle) {
-            if (callback) callback(0, 0);
-            return;
-        }
+    //getDiskUsage: function (callback) {
+    //    var myself = this;
+    //    if (!myself.dirhandle) {
+    //        if (callback) callback(0, 0);
+    //        return;
+    //    }
 
-        var dirReader = myself.dirhandle.createReader();
-        dirReader.readEntries(function (entries) {
-            // a mix of files & directories. In our case we know it's all files and all cached tiles, so just add up the filesize
-            var files = 0;
-            var bytes = 0;
+    //    var dirReader = myself.dirhandle.createReader();
+    //    dirReader.readEntries(function (entries) {
+    //        // a mix of files & directories. In our case we know it's all files and all cached tiles, so just add up the filesize
+    //        var files = 0;
+    //        var bytes = 0;
 
-            function processFileEntry(index) {
-                if (index >= entries.length) {
-                    if (callback) callback(files, bytes);
-                    return;
-                }
+    //        function processFileEntry(index) {
+    //            if (index >= entries.length) {
+    //                if (callback) callback(files, bytes);
+    //                return;
+    //            }
 
-                // if (myself.options.debug) console.log( entries[index] );
-                entries[index].file(
-                    function (fileinfo) {
-                        bytes += fileinfo.size;
-                        files++;
-                        processFileEntry(index + 1);
-                    },
-                    function () {
-                        // failed to get file info? impossible, but if it somehow happens just skip on to the next file
-                        processFileEntry(index + 1);
-                    }
-                );
-            }
-            processFileEntry(0);
-        }, function () {
-            throw "L.TileLayer.RegObs: getDiskUsage: Failed to read directory";
-        });
-    },
+    //            // if (myself.options.debug) console.log( entries[index] );
+    //            entries[index].file(
+    //                function (fileinfo) {
+    //                    bytes += fileinfo.size;
+    //                    files++;
+    //                    processFileEntry(index + 1);
+    //                },
+    //                function () {
+    //                    // failed to get file info? impossible, but if it somehow happens just skip on to the next file
+    //                    processFileEntry(index + 1);
+    //                }
+    //            );
+    //        }
+    //        processFileEntry(0);
+    //    }, function () {
+    //        throw "L.TileLayer.RegObs: getDiskUsage: Failed to read directory";
+    //    });
+    //},
 
-    emptyCache: function (callback) {
-        var myself = this;
-        if (myself.dirhandle) {
-            var dirReader = myself.dirhandle.createReader();
-            dirReader.readEntries(function (entries) {
-                var success = 0;
-                var failed = 0;
+    //getDiskUsageForXyzList: function (xyzList, callback) {
+    //    var myself = this;
+    //    if (!myself.dirhandle) {
+    //        if (callback) callback(0, 0);
+    //        return;
+    //    }
 
-                function processFileEntry(index) {
-                    if (index >= entries.length) {
-                        if (callback) callback(success, failed);
-                        return;
-                    }
+    //    var dirReader = myself.dirhandle.createReader();
+    //    dirReader.readEntries(function (entries) {
+    //        // a mix of files & directories. In our case we know it's all files and all cached tiles, so just add up the filesize
+    //        var files = 0;
+    //        var bytes = 0;
 
-                    // if (myself.options.debug) console.log( entries[index] );
-                    entries[index].remove(
-                        function () {
-                            success++;
-                            processFileEntry(index + 1);
-                        },
-                        function () {
-                            failed++;
-                            processFileEntry(index + 1);
-                        }
-                    );
-                }
+    //        var fileExistsInXyzList = function (name) {
+    //            var found = false;
+    //            xyzList.forEach(function (item) {
+    //                var mapname = myself.getMapFilename(item.x, item.y, item.z);
+    //                if (mapname === name) {
+    //                    found = true;
+    //                    return;
+    //                }
+    //            });
+    //            return found;
+    //        };
 
-                processFileEntry(0);
-            },
-                function () {
-                    throw "L.TileLayer.RegObs: emptyCache: Failed to read directory";
-                });
-        } else {
-            if (callback) callback(0, 0);
-        }
-    },
+    //        function processFileEntry(index) {
+    //            if (index >= entries.length) {
+    //                if (callback) callback(files, bytes);
+    //                return;
+    //            }
 
-    getCacheContents: function (done_callback) {
-        var myself = this;
-        var dirReader = myself.dirhandle.createReader();
-        dirReader.readEntries(function (entries) {
+    //            // if (myself.options.debug) console.log( entries[index] );
+    //            entries[index].file(
+    //                function (fileinfo) {
+    //                    myself.debug('File:' + JSON.stringify(fileinfo));
+    //                    if (fileExistsInXyzList(fileinfo.name)) {
+    //                        bytes += fileinfo.size;
+    //                        files++;
+    //                    }
+    //                    processFileEntry(index + 1);
+    //                },
+    //                function () {
+    //                    // failed to get file info? impossible, but if it somehow happens just skip on to the next file
+    //                    processFileEntry(index + 1);
+    //                }
+    //            );
+    //        }
+    //        processFileEntry(0);
+    //    }, function () {
+    //        throw "L.TileLayer.RegObs: getDiskUsage: Failed to read directory";
+    //    });
+    //}
 
-            var retval = [];
-            for (var i = 0; i < entries.length; i++) {
-                var e = entries[i];
-                if (e.isFile) {
+    //emptyCache: function (callback) {
+    //    var myself = this;
+    //    if (myself.dirhandle) {
+    //        var dirReader = myself.dirhandle.createReader();
+    //        dirReader.readEntries(function (entries) {
+    //            var success = 0;
+    //            var failed = 0;
 
-                    var myEntry = {
-                        name: e.name,
-                        fullPath: e.fullPath,
-                        nativeURL: e.nativeURL
-                    };
+    //            function processFileEntry(index) {
+    //                if (index >= entries.length) {
+    //                    if (callback) callback(success, failed);
+    //                    return;
+    //                }
 
-                    // Extract the x,y,z pieces from the filename.
-                    var parts_outer = e.name.split(".");
-                    if (parts_outer.length >= 1) {
-                        var parts = parts_outer[0].split('-');
-                        if (parts.length >= 4) {
-                            myEntry['z'] = parts[1];
-                            myEntry['x'] = parts[2];
-                            myEntry['y'] = parts[3];
-                            myEntry['lat'] = myself.getLat(myEntry.y, myEntry.z);
-                            myEntry['lng'] = myself.getLng(myEntry.x, myEntry.z);
-                        }
-                    }
+    //                // if (myself.options.debug) console.log( entries[index] );
+    //                entries[index].remove(
+    //                    function () {
+    //                        success++;
+    //                        processFileEntry(index + 1);
+    //                    },
+    //                    function () {
+    //                        failed++;
+    //                        processFileEntry(index + 1);
+    //                    }
+    //                );
+    //            }
 
-                    retval.push(myEntry);
-                }
-            }
+    //            processFileEntry(0);
+    //        },
+    //            function () {
+    //                throw "L.TileLayer.RegObs: emptyCache: Failed to read directory";
+    //            });
+    //    } else {
+    //        if (callback) callback(0, 0);
+    //    }
+    //},
 
-            if (done_callback) done_callback(retval);
+    //getCacheContents: function (done_callback) {
+    //    var myself = this;
+    //    var dirReader = myself.dirhandle.createReader();
+    //    dirReader.readEntries(function (entries) {
 
-        }, function () {
-            throw "L.TileLayer.RegObs: getCacheContents: Failed to read directory";
-        });
-    }
+    //        var retval = [];
+    //        for (var i = 0; i < entries.length; i++) {
+    //            var e = entries[i];
+    //            if (e.isFile) {
+
+    //                var myEntry = {
+    //                    name: e.name,
+    //                    fullPath: e.fullPath,
+    //                    nativeURL: e.nativeURL
+    //                };
+
+    //                // Extract the x,y,z pieces from the filename.
+    //                var parts_outer = e.name.split(".");
+    //                if (parts_outer.length >= 1) {
+    //                    var parts = parts_outer[0].split('-');
+    //                    if (parts.length >= 4) {
+    //                        myEntry['z'] = parts[1];
+    //                        myEntry['x'] = parts[2];
+    //                        myEntry['y'] = parts[3];
+    //                        myEntry['lat'] = myself.getLat(myEntry.y, myEntry.z);
+    //                        myEntry['lng'] = myself.getLng(myEntry.x, myEntry.z);
+    //                    }
+    //                }
+
+    //                retval.push(myEntry);
+    //            }
+    //        }
+
+    //        if (done_callback) done_callback(retval);
+
+    //    }, function () {
+    //        throw "L.TileLayer.RegObs: getCacheContents: Failed to read directory";
+    //    });
+    //}
 
 }); // end of L.TileLayer.RegObs class

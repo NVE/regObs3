@@ -28,7 +28,9 @@
         };
 
         $scope.$on('$ionicView.enter', function () {
+            $ionicHistory.clearHistory();
             $scope.$broadcast('startGpsWatch');
+
         });
 
         $scope.$on('$ionicView.leave', function () {

@@ -81,8 +81,18 @@
                 controller: 'MapAreaDownloadCtrl as vm',
                 data: {
                     defaultBack: {
-                        state: 'offlinemapoverview',
-                        title: 'Last ned område'
+                        state: 'offlinemapoverview'
+                    }
+                }
+            })
+            .state('offlineareadetails', {
+                url: '/offlineareadetails',
+                templateUrl: 'app/map/offlineareadetails.html',
+                controller: 'OfflineAreaDetailsCtrl as vm',
+                params: {area:null},
+                data: {
+                    defaultBack: {
+                        state: 'offlinemapoverview'
                     }
                 }
             })

@@ -3,7 +3,7 @@
     .controller('MapAreaDownloadCtrl', function ($ionicPlatform, $ionicLoading, $filter, $ionicScrollDelegate, OfflineMap, AppLogging, AppSettings, Map, $cordovaFile, $cordovaDevice, $ionicPopup, $scope, $pbService, $state, $timeout, Utility) {
         var vm = this;
 
-        var averageMapPartSize = 51887;
+        var averageMapPartSize = 37693; //ca størrelse på kartblad
         var fragmentsFromBaseMap = 0;
 
         vm.size = 0;
@@ -169,7 +169,7 @@
                 }
             });
 
-            Map.downloadMapFromBounds(vm.name, vm.bounds, 1,
+            OfflineMap.downloadMapFromBounds(vm.name, vm.bounds, 1,
                 vm.zoomlevel,
                 mapsToDownload,
                 function (status) {
