@@ -36,12 +36,13 @@ angular
             }
 
             var change = function () {
-                $timeout(function() {
-                        ctrl.bounds = map.getBounds();
-                        if (ctrl.onChange) {
-                            ctrl.onChange();
-                        }
-                    },0);
+                $timeout(function () {
+                    ctrl.bounds = map.getBounds();
+                    ctrl.zoom = map.getZoom();
+                    if (ctrl.onChange) {
+                        ctrl.onChange();
+                    }
+                }, 0);
             };
 
             map.on('moveend', change);
@@ -58,6 +59,7 @@ angular
         },
         bindings: {
             bounds: '=',
+            zoom: '=',
             onChange: '&',
             disableUserInteraction: '<'
         }
