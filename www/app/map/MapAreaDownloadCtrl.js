@@ -20,37 +20,48 @@
         vm.isLoading = true;
         vm.name = '';
 
-        vm.detailLevels = [
-            { zoomLevel: 11, customZoomLevel: false },
-            { zoomLevel: 14, customZoomLevel: false },
-            { zoomLevel: 17, customZoomLevel: false },
-            { customZoomLevel: true }
-        ];
-        vm.selectedDetailLevel = vm.detailLevels[1];
-        vm.zoomlevel = vm.detailLevels[1].zoomLevel;
-
-        vm.detailLevelChange = function () {
-            if (vm.selectedDetailLevel.zoomLevel) {
-                vm.zoomlevel = vm.selectedDetailLevel.zoomLevel;
-            }
-            vm.updateCounts();
+        var getEstimatedSize = function (zoomlevel) {
+            var fragments = Map.calculateXYZSizeFromBounds(vm.bounds, 1, zoomlevel);
+            var tiles = fragments * vm.selectedMaps();
+            var bytes = tiles * averageMapPartSize;
+            var humanSize = Utility.humanFileSize(bytes, true);
+            return { humanSize: humanSize, bytes: bytes, tiles: tiles };
         };
 
-        vm.customZoomLevel = function () {
-            return vm.selectedDetailLevel.customZoomLevel;
+        vm.extraDetailLevel = [{ extraLevels: 0, description: 'Ingen' }];
+        vm.selectedDetailLevel = 2;
+
+        var calculateDetailLevels = function () {
+            vm.extraDetailLevel = [{ extraLevels: 0, description: 'Ingen' }];
+            if (vm.currentZoom) {
+                for (var i = 2; vm.currentZoom + i <= 17 && i<=6; i += 2) {
+                    var size = getEstimatedSize(vm.currentZoom + i);
+                    if (size.bytes < vm.availableDiskspaceBytes) {
+                        vm.extraDetailLevel.push({
+                            extraLevels: i,
+                            description: '+' + i + ' (' + size.humanSize + ')'
+                        });
+                    } else {
+                        AppLogging.log('Detail size ' +i +' ' + size.humanSize + 'is larger than available ' + vm.availableDiskspace);
+                        break;
+                    }
+                }
+            }
+
+            //Setting selected detail level to one less if levels has changed and selected value is bigger
+            if (vm.extraDetailLevel[vm.extraDetailLevel.length - 1].extraLevels < vm.selectedDetailLevel) {
+                vm.selectedDetailLevel = vm.extraDetailLevel[vm.extraDetailLevel.length - 1].extraLevels;
+            }
+        };
+
+        vm.zoomlevel = function () {
+            return (vm.currentZoom || 0) + vm.selectedDetailLevel;
         };
 
         vm.selectedMaps = function () {
             return vm.maps.filter(function (item) {
                 return item.selected;
             }).length;
-        };
-
-        vm.addZoomLevel = function () {
-            if (vm.zoomlevel < AppSettings.maxMapZoomLevel) {
-                vm.zoomlevel++;
-                vm.updateCounts();
-            }
         };
 
         vm.mapsWithLimitReached = function () {
@@ -61,24 +72,6 @@
 
         vm.anyMapLimitReached = function () {
             return vm.mapsWithLimitReached().length > 0;
-        };
-
-        vm.subtractZoomLevel = function () {
-            if (vm.zoomlevel > 1) {
-                vm.zoomlevel--;
-                vm.updateCounts();
-            }
-        };
-
-        vm.setZoomLevel = function (level) {
-            vm.zoomlevel = level;
-            vm.customZoomLevel = false;
-            vm.updateCounts();
-        };
-
-        vm.setCustomZoomLevel = function () {
-            vm.customZoomLevel = true;
-            vm.updateCounts();
         };
 
         var checkMaxLimits = function () {
@@ -92,14 +85,13 @@
             });
         };
 
-
         vm.updateCounts = function () {
             if (vm.bounds) {
-                fragmentsFromBaseMap = Map.calculateXYZSizeFromBounds(vm.bounds, 1, vm.zoomlevel);
-                vm.mapFragmentCount = fragmentsFromBaseMap * vm.selectedMaps();
-                var bytes = vm.mapFragmentCount * averageMapPartSize;
-                vm.size = Utility.humanFileSize(bytes, true);
-                if (bytes > vm.availableDiskspaceBytes) {
+                calculateDetailLevels();
+                var estimatedSize = getEstimatedSize(vm.zoomlevel());
+                vm.mapFragmentCount = estimatedSize.tiles;
+                vm.size = estimatedSize.humanSize;
+                if (estimatedSize.bytes > vm.availableDiskspaceBytes) {
                     vm.tooBigSize = true;
                 } else {
                     vm.tooBigSize = false;
@@ -170,7 +162,7 @@
             });
 
             OfflineMap.downloadMapFromBounds(vm.name, vm.bounds, 1,
-                vm.zoomlevel,
+                vm.zoomlevel(),
                 mapsToDownload,
                 function (status) {
                     $timeout(function () {

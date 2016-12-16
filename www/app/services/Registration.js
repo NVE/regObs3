@@ -42,7 +42,7 @@ angular
             if (Registration.isEmpty()) {
                 Registration.createNew(Utility.geoHazardTid(appMode));
             }
-            if (appMode === 'snow') {               
+            if (appMode === 'snow') {
                 $state.go('snowregistrationNew');
             } else if (appMode === 'dirt') {
                 $state.go('dirtregistrationNew');
@@ -73,7 +73,7 @@ angular
             );
         };
 
-        Registration.setBadge = function() {
+        Registration.setBadge = function () {
             AppLogging.log('setting badge');
             try {
                 if (window.cordova && window.cordova.plugins.notification.badge) {
@@ -136,6 +136,37 @@ angular
 
         Registration.isOfType = function (type) {
             return Registration.data.GeoHazardTID === Utility.geoHazardTid(type);
+        };
+
+        Registration.getObservationsLength = function () {
+            if (Registration.isEmpty()) {
+                return 0;
+            } else {
+                var count = 0;
+                var base = Object.keys(createRegistration('snow'));
+                for (var key in Registration.data) {
+                    if (Registration.data.hasOwnProperty(key)) {
+                        if (base.filter(function (item) { return item === key }).length === 0) {
+                            if (Array.isArray(Registration.data[key])) {
+                                count += Registration.data[key].length;
+                            } else {
+                                count++;
+                            }
+                        }
+                    }
+                }
+                return count;
+            }
+        }
+
+        Registration.getSendText = function () {
+            if (Registration.isEmpty()) {
+                return '';
+            } else if (Registration.getObservationsLength() === 1) {
+                return '1';
+            } else {
+                return '1 (' + Registration.getObservationsLength() + ')';
+            }
         };
 
         Registration.isEmpty = function () {

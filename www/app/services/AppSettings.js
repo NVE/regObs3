@@ -20,8 +20,8 @@
             steepnessMapOpacity: 1.0,
             iceMapOpacity: 1.0,
             maps: [
-                { geoHazardTid: 10, tiles: [{ name: 'steepness', opacity: 1.0, visible: true }] },
-                { geoHazardTid: 70, tiles: [{ name: 'ice', opacity: 1.0, visible: true }] }
+                { geoHazardTid: 10, tiles: [{ name: 'steepness', opacity: 0.5, visible: true }] },
+                { geoHazardTid: 70, tiles: [{ name: 'ice', opacity: 0.5, visible: true }] }
             ],
             showObservations: true,
             showObservationsDaysBack: 3,
