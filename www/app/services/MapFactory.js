@@ -1,6 +1,6 @@
 ﻿angular
     .module('RegObs')
-    .factory('Map', function (AppSettings, AppLogging, ObsLocation, Observations, Utility, $state, Registration, $ionicPlatform, $rootScope, $q, $timeout, OfflineMap) {
+    .factory('Map', function (AppSettings, AppLogging, ObsLocation, Observations, Utility, $state, Registration, $ionicPlatform, $rootScope, $q, $timeout) {
         var service = this;
         var map,
             obsLocationMarker,
@@ -518,131 +518,7 @@
 
         
 
-        service.downloadMapFromXyzList = function (name, xyzList, zoomMin, zoomMax, mapsArray, progressCallback, completeCallback, cancelCallback) {
-            var offlineAreas = [];
-
-            var downloadMapFromXyzListInternal = function() {
-                if (!zoomMin)
-                    throw Error('zoomMin must be set');
-                if (!zoomMax)
-                    throw Error('zoomMax must be set');
-                if (!mapsArray || mapsArray.length <= 0)
-                    throw Error('Maps array must be an array of map names');
-                if (!xyzList)
-                    throw Error('Xyz list must be set!');
-
-                var area = { name: name, size: 0, tiles: xyzList.length * mapsArray.length, maps: mapsArray, xyzList: xyzList, zoom: zoomMax };
-                offlineAreas.push(area);
-
-                var mapStatus = [];
-
-                AppLogging.log('Download map for xyz list: ' + JSON.stringify(xyzList));
-                var checkProgress = function (tile) {
-                    var hasAnyRunning = false;
-                    var hasAnyError = false;
-                    var total = xyzList.length * mapsArray.length;
-                    var done = 0;
-                    var errors = 0;
-                    mapStatus.forEach(function (item) {
-                        done += item.done;
-                        if (done === total) {
-                            item.complete = true;
-                        }
-
-                        if (!item.complete) {
-                            hasAnyRunning = true;
-                        }
-                        if (item.error > 0) {
-                            errors += item.error;
-                            hasAnyError = true;
-                        }
-                    });
-                    var percent = Math.round(100 * done / total);
-                    if (hasAnyRunning || (mapStatus.length < mapsArray.length)) {
-                        if (progressCallback) {
-                            progressCallback({
-                                complete: false,
-                                total: total,
-                                done: done,
-                                percent: percent,
-                                status: mapStatus,
-                                hasError: hasAnyError
-                            });
-                        }
-                    } else {
-                        tile.getDiskUsage(function(files, bytes) {
-                            area.size = bytes;
-                            area.hasError = hasAnyError;
-                            area.tiles = done - errors;
-
-                            OfflineMap.saveOfflineAreas(offlineAreas)
-                                .finally(function () {
-                                    if (completeCallback) {
-                                        completeCallback({
-                                            complete: true,
-                                            total: total,
-                                            done: done,
-                                            percent: percent,
-                                            status: mapStatus,
-                                            hasError: hasAnyError
-                                        });
-                                    }
-                                });
-                        });
-                    }
-                };
-                mapsArray.forEach(function (item) {
-                    var tile = getTileByName(item);
-                    var description = AppSettings.getTileByName(item).description;
-                    var status = {
-                        name: item,
-                        description: description,
-                        total: xyzList.length,
-                        done: 0,
-                        percent: 0,
-                        complete: false,
-                        error: 0
-                    };
-                    mapStatus.push(status);
-                    tile.downloadXYZList(xyzList,
-                        false,
-                        function (done, total) {
-                            status.done = done;
-                            status.total = total;
-                            status.percent = Math.round(100 * done / total);
-                            checkProgress(tile);
-                        },
-                        function () {
-                            status.complete = true;
-                            status.done = status.total;
-                            status.percent = 100;
-                            checkProgress(tile);
-                        },
-                        function (error) {
-                            status.error++;
-                            checkProgress(tile);
-                        },
-                        cancelCallback);
-                });
-            };
-
-            OfflineMap.getOfflineAreas()
-                .then(function(success) {
-                    offlineAreas = success;
-                })
-                .finally(downloadMapFromXyzListInternal);
-        };
-
-        service.downloadMapFromBounds = function (name, bounds, zoomMin, zoomMax, mapsArray, progressCallback, completeCallback, cancelCallback) {
-            var xyzList = service.calculateXYZListFromBounds(bounds, zoomMin, zoomMax);
-            service.downloadMapFromXyzList(name, xyzList,
-                zoomMin,
-                zoomMax,
-                mapsArray,
-                progressCallback,
-                completeCallback,
-                cancelCallback);
-        };
+        
 
         //service.downloadMap = function (zoomMin, zoomMax, mapsArray, progressCallback, completeCallback, cancelCallback) {
         //        if (!zoomMin)
@@ -660,37 +536,37 @@
         //            cancelCallback);
         //    };
 
-        service.emptyCache = function () {
-            return $q(function (resolve) {
-                var index = 0;
-                var callbacks = [];
-                var checkCallback = function () {
-                    if (callbacks.length === tiles.length) {
-                        resolve(callbacks);
-                    }
-                };
+        //service.emptyCache = function () {
+        //    return $q(function (resolve) {
+        //        var index = 0;
+        //        var callbacks = [];
+        //        var checkCallback = function () {
+        //            if (callbacks.length === tiles.length) {
+        //                resolve(callbacks);
+        //            }
+        //        };
 
-                if (!tiles) {
-                    resolve(callbacks);
-                }
+        //        if (!tiles) {
+        //            resolve(callbacks);
+        //        }
 
-                tiles.forEach(function (t) {
-                    var name = AppSettings.tiles[index].name;
-                    t.emptyCache(function (oks, fails) {
-                        AppLogging.log("Cleared cache for map " +
-                            name +
-                            ".\n" +
-                            oks +
-                            " deleted OK\n" +
-                            fails +
-                            " failed");
-                        callbacks.push({ name: name, ok: oks, failed: fails });
-                        checkCallback();
-                    });
-                    index++;
-                });
-            });
-        };
+        //        tiles.forEach(function (t) {
+        //            var name = AppSettings.tiles[index].name;
+        //            t.emptyCache(function (oks, fails) {
+        //                AppLogging.log("Cleared cache for map " +
+        //                    name +
+        //                    ".\n" +
+        //                    oks +
+        //                    " deleted OK\n" +
+        //                    fails +
+        //                    " failed");
+        //                callbacks.push({ name: name, ok: oks, failed: fails });
+        //                checkCallback();
+        //            });
+        //            index++;
+        //        });
+        //    });
+        //};
 
         //var onOffline = function () {
         //    AppLogging.log("Going offline");

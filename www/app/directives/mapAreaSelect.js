@@ -8,18 +8,32 @@ angular
         template: '<div class="map-area-select" data-tap-disabled="true"></div>',
         controller: function ($element, Map, $scope, AppSettings, AppLogging, $timeout) {
             var ctrl = this;
-            var center = Map.getCenter();
-            var zoom = Map.getZoom();
+
             var changeTimer;
 
             var div = $element.find('div')[0];
             var map = L.map(div, {
-                center: center,
-                zoom: zoom,
                 zoomControl: false,
                 attributionControl: false,
                 maxZoom: AppSettings.maxMapZoomLevel
             });
+
+            var tile = AppSettings.tiles[0];
+
+            var layer = L.tileLayerRegObs(tile.url, { folder: AppSettings.mapFolder, name: tile.name, debugFunc: AppLogging.log });
+            map.addLayer(layer);
+
+            if (ctrl.bounds) {
+                map.fitBounds(ctrl.bounds);
+            } else {
+                map.setView(Map.getCenter(), Map.getZoom());
+            }
+
+            if (ctrl.disableUserInteraction) {
+                map._handlers.forEach(function (handler) {
+                    handler.disable();
+                });
+            }
 
             var change = function () {
                 $timeout(function() {
@@ -33,9 +47,6 @@ angular
             map.on('moveend', change);
             map.on('zoomend', change);
 
-            var layer = L.tileLayer(AppSettings.mapTileUrl());
-            map.addLayer(layer);
-
             change();
 
             $scope.$on('$destroy', function () {
@@ -47,6 +58,7 @@ angular
         },
         bindings: {
             bounds: '=',
-            onChange: '&'
+            onChange: '&',
+            disableUserInteraction: '<'
         }
     });
