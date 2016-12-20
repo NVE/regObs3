@@ -125,6 +125,7 @@
                 getDropdowns: baseUrls[settings.data.env] + '/kdvelements',
                 getLocationName: baseUrls[settings.data.env] + '/Location/GetName', //?latitude=11.11&longitude=11.11&geoHazardId=15
                 postRegistration: baseUrls[settings.data.env] + '/registration', //Headers: regObs_apptoken, ApiJsonVersion
+                getRegistration: baseUrls[settings.data.env] + '/search/avalanche',
                 trip: baseUrls[settings.data.env] + '/trip', //POST= Start, PUT= Stop(object with DeviceGuid), Headers: regObs_apptoken, ApiJsonVersion
                 services: serviceUrls[settings.data.env]
             };

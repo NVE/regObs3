@@ -176,7 +176,6 @@
                         $scope.downloadStatus = status;
                         $pbService.animate('progress', 1.0);
                         AppLogging.log('Map download complete: ' + JSON.stringify(status));
-
                     }, 0);
                 },
                 function () {

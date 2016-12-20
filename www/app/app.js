@@ -1,16 +1,27 @@
 (function () {
     "use strict";
 
-    angular.module('RegObs', ['ionic', 'ngCordova', 'ion-floating-menu', 'angularProgressbar'])
+    angular.module('RegObs', ['ionic', 'ngCordova', 'ion-floating-menu', 'angularProgressbar', 'pascalprecht.translate'])
            .config(providers)
            .run(setup);
-    
-    function providers($stateProvider, $urlRouterProvider, $ionicConfigProvider, AppSettingsProvider) {
+
+    function providers($stateProvider, $urlRouterProvider, $ionicConfigProvider, AppSettingsProvider, $translateProvider) {
         'ngInject';
 
         if (ionic.Platform.isAndroid()) {
             $ionicConfigProvider.scrolling.jsScrolling(false);
         }
+
+        var langMap = {
+            'nb_NO': 'no'
+        };
+
+        $translateProvider.useStaticFilesLoader({
+            prefix: './app/json/localization/',
+            suffix: '.json'
+        }).registerAvailableLanguageKeys(['no'], langMap)
+            .preferredLanguage('no')
+            .fallbackLanguage(['no']);
 
         var defaultBackIceRegistration = {
             state: 'iceregistrationNew',
@@ -36,7 +47,6 @@
             $urlRouterProvider.otherwise('/start');
         }
 
-        
         $stateProvider
             .state('wizard', {
                 url: '/wizard',
@@ -89,7 +99,7 @@
                 url: '/offlineareadetails',
                 templateUrl: 'app/map/offlineareadetails.html',
                 controller: 'OfflineAreaDetailsCtrl as vm',
-                params: {area:null},
+                params: { area: null },
                 data: {
                     defaultBack: {
                         state: 'offlinemapoverview'
@@ -97,26 +107,50 @@
                 }
             })
 
-            //SNØ
-            .state('snow', {
-                url: '/snow',
-                templateUrl: 'app/snow/snow.html',
-                controller: 'SnowCtrl as vm',
+            .state('observationdetails',{
+                url: '/observationdetails',
+                templateUrl: 'app/map/observations/observationdetails.html',
+                controller: 'ObservationDetailsCtrl as vm',
+                params: { observation: null },
                 data: {
                     defaultBack: {
-                        state: 'start',
-                        title: 'regObs'
-                    },
-                    showRegistrationFooter: true
+                        state: 'start'
+                    }
                 }
             })
+
+            .state('locationdetails', {
+                url: '/locationdetails',
+                templateUrl: 'app/map/location/locationdetails.html',
+                controller: 'LocationDetailsCtrl as vm',
+                params: { location: null },
+                data: {
+                    defaultBack: {
+                        state: 'start'
+                    }
+                }
+            })
+
+            //SNØ
+            //.state('snow', {
+            //    url: '/snow',
+            //    templateUrl: 'app/snow/snow.html',
+            //    controller: 'SnowCtrl as vm',
+            //    data: {
+            //        defaultBack: {
+            //            state: 'start',
+            //            title: 'regObs'
+            //        },
+            //        showRegistrationFooter: true
+            //    }
+            //})
             .state('snowregistrationNew', {
                 url: '/snowregistration',
                 templateUrl: 'app/snow/snowregistration/snowregistration.html',
                 controller: 'SnowRegistrationCtrl as vm',
                 data: {
                     defaultBack: {
-                        state: 'snow',
+                        state: 'start',
                         title: 'Snø'
                     },
                     showRegistrationFooter: true
@@ -128,7 +162,7 @@
                 controller: 'TripCtrl as vm',
                 data: {
                     defaultBack: {
-                        state: 'snow',
+                        state: 'start',
                         title: 'Snø'
                     },
                     showTripFooter: true
@@ -235,25 +269,25 @@
             })
 
             //IS
-            .state('ice', {
-                url: '/ice',
-                templateUrl: 'app/ice/ice.html',
-                controller: 'IceCtrl as vm',
-                data: {
-                    defaultBack: {
-                        state: 'start',
-                        title: 'regObs'
-                    },
-                    showRegistrationFooter: true
-                }
-            })
+            //.state('ice', {
+            //    url: '/ice',
+            //    templateUrl: 'app/ice/ice.html',
+            //    controller: 'IceCtrl as vm',
+            //    data: {
+            //        defaultBack: {
+            //            state: 'start',
+            //            title: 'regObs'
+            //        },
+            //        showRegistrationFooter: true
+            //    }
+            //})
             .state('iceregistrationNew', {
                 url: '/iceregistration',
                 templateUrl: 'app/ice/iceregistration/iceregistration.html',
                 controller: 'IceRegistrationCtrl as vm',
                 data: {
                     defaultBack: {
-                        state: 'ice',
+                        state: 'start',
                         title: 'Is'
                     },
                     showRegistrationFooter: true
@@ -305,26 +339,26 @@
             })
 
             //VANN
-            .state('water', {
-                url: '/water',
-                templateUrl: 'app/water/water.html',
-                controller: 'WaterCtrl as vm',
-                data: {
-                    defaultBack: {
-                        state: 'start',
-                        title: 'regObs'
-                    },
-                    showRegistrationFooter: true
-                }
+            //.state('water', {
+            //    url: '/water',
+            //    templateUrl: 'app/water/water.html',
+            //    controller: 'WaterCtrl as vm',
+            //    data: {
+            //        defaultBack: {
+            //            state: 'start',
+            //            title: 'regObs'
+            //        },
+            //        showRegistrationFooter: true
+            //    }
 
-            })
+            //})
             .state('waterregistrationNew', {
                 url: '/waterregistration',
                 templateUrl: 'app/water/waterregistration/waterregistration.html',
                 controller: 'WaterRegistrationCtrl as vm',
                 data: {
                     defaultBack: {
-                        state: 'water',
+                        state: 'start',
                         title: 'Vann'
                     },
                     showRegistrationFooter: true
@@ -365,25 +399,25 @@
             })
 
             //JORD
-            .state('dirt', {
-                url: '/dirt',
-                templateUrl: 'app/dirt/dirt.html',
-                controller: 'DirtCtrl as vm',
-                data: {
-                    defaultBack: {
-                        state: 'start',
-                        title: 'regObs'
-                    },
-                    showRegistrationFooter: true
-                }
-            })
+            //.state('dirt', {
+            //    url: '/dirt',
+            //    templateUrl: 'app/dirt/dirt.html',
+            //    controller: 'DirtCtrl as vm',
+            //    data: {
+            //        defaultBack: {
+            //            state: 'start',
+            //            title: 'regObs'
+            //        },
+            //        showRegistrationFooter: true
+            //    }
+            //})
             .state('dirtregistrationNew', {
                 url: '/dirtregistration',
                 templateUrl: 'app/dirt/dirtregistration/dirtregistration.html',
                 controller: 'DirtRegistrationCtrl as vm',
                 data: {
                     defaultBack: {
-                        state: 'dirt',
+                        state: 'start',
                         title: 'Jord'
                     },
                     showRegistrationFooter: true
@@ -429,8 +463,8 @@
             })
             .state('help', {
                 url: '/help/:page',
-                templateUrl: function(stateParams){
-                    return 'app/help/'+stateParams.page+'.html';
+                templateUrl: function (stateParams) {
+                    return 'app/help/' + stateParams.page + '.html';
                 },
                 controller: 'HelpCtrl as vm',
                 data: {
@@ -445,7 +479,7 @@
     function setup($ionicPlatform, Utility, AppLogging, Registration) {
         'ngInject';
 
-        if(Utility.shouldUpdateKdvElements()){
+        if (Utility.shouldUpdateKdvElements()) {
             Utility.refreshKdvElements();
         }
 

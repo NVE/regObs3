@@ -20,7 +20,7 @@
         //Kommenter inn denne for ionic view
         //window.phonegap = {}
     </script>
-    <script type="text/javascript" src="lib/ga-localstorage/GALocalStorage.js"></script>
+    <script src="lib/ga-localstorage/GALocalStorage.js"></script>
     <script src="lib/leaflet/dist/leaflet.js"></script>
     <script src="lib/moment/min/moment.min.js"></script>
     <script src="lib/progressbar.js/dist/progressbar.min.js" type="text/javascript"></script>
@@ -31,10 +31,12 @@
     <script src="lib/angular-sanitize/angular-sanitize.min.js"></script>
     <script src="lib/angular-ui-router/release/angular-ui-router.min.js"></script>
     <script src="lib/angular-progressbar/dist/angular-progressbar.min.js"></script>
+    <script src="lib/angular-translate/angular-translate.js"></script>
+    <script src="lib/angular-translate-loader-static-files/angular-translate-loader-static-files.js"></script>
     <script src="lib/ionic/js/ionic-angular.min.js"></script>
     <script src="lib/ngCordova/dist/ng-cordova.min.js"></script>
     <script src="lib/ion-floating-menu/dist/ion-floating-menu.js" type="text/javascript"></script>
-   
+
     <!-- cordova script (this will be a 404 during development) -->
     <!-- Cordova is bootstrapped by ionic-service-core, uncomment this if you remove ionic-service-core... -->
     <script src="cordova.js"></script>
@@ -61,7 +63,7 @@
                         <button menu-toggle="left" class="button button-icon icon ion-map"></button>
                     </div>
                 </ion-nav-buttons>
-                <ion-nav-back-button default-nav-back-button="" ng-click="goBack()">Tilbake</ion-nav-back-button>
+                <ion-nav-back-button default-nav-back-button="" ng-click="goBack()">{{"BACK" | translate}}</ion-nav-back-button>
                 <ion-nav-buttons side="right">
                     <button ng-show="appVm.trip.model.started && !appVm.userService.getUser().anonymous" class="button button-balanced button-clear button-icon" ng-class="{'ion-android-walk':!appVm.trip.sending}" ng-click="appVm.stopTrip()">
                         <ion-spinner ng-if="appVm.trip.sending" class="spinner-light"></ion-spinner>
