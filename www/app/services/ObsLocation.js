@@ -110,10 +110,18 @@ angular
             }
         };
 
-        ObsLocation.setPreviousUsedPlace = function(id, name){
+        ObsLocation.setPreviousUsedPlace = function(id, name, loc){
             if(id){
                 ObsLocation.data.ObsLocationId = id;
                 ObsLocation.data.Name = name;
+
+                if (loc) {
+                    ObsLocation.data.Latitude = loc.Latitude;
+                    ObsLocation.data.Longitude = loc.Longitude;
+                    ObsLocation.data.Uncertainty = loc.Uncertainty;
+                    ObsLocation.data.UTMSourceTID = loc.UTMSourceTID;
+                }
+
                 save();
             }
         };

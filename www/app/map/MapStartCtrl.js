@@ -1,5 +1,5 @@
 ﻿angular.module('RegObs')
-    .controller('MapStartCtrl', function ($scope, $state, $ionicHistory, AppSettings, Registration, Property, Trip, User, RegobsPopup, HeaderColor, AppLogging, $ionicSideMenuDelegate, ObsLocation, Utility) {
+    .controller('MapStartCtrl', function ($scope, $state, $ionicHistory, Map, AppSettings, Registration, Property, Trip, User, RegobsPopup, HeaderColor, AppLogging, $ionicSideMenuDelegate, ObsLocation, Utility) {
         var appVm = this;
 
         appVm.gotoState = function (state) {
@@ -30,6 +30,8 @@
         $scope.$on('$ionicView.enter', function () {
             $ionicHistory.clearHistory();
             $scope.$broadcast('startGpsWatch');
+
+            Map.updateMapFromSettings();
 
         });
 

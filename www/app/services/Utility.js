@@ -21,6 +21,12 @@ angular
         geoHazardNames[geoHazardTid.ice] = 'is';
         geoHazardNames[geoHazardTid.water] = 'vann';
 
+        var geoHazardColors = {};
+        geoHazardColors[geoHazardTid.snow] = '#F2F2F2';
+        geoHazardColors[geoHazardTid.dirt] = '#F4B183';
+        geoHazardColors[geoHazardTid.ice] = '#C9C9C9';
+        geoHazardColors[geoHazardTid.water] = '#9DC3E6';
+
         //Brukt der det er bilder (RegistrationTID)
         var OBSERVATIONS = {
             Incident: {
@@ -99,6 +105,21 @@ angular
 
         service.geoHazardNames = function (tid) {
             return geoHazardNames[tid];
+        };
+
+        service.geoHazardColor = function (tid) {
+            return geoHazardColors[tid];
+        };
+
+        service.getGeoHazardType = function (tid) {
+            for (var prop in geoHazardTid) {
+                if (geoHazardTid.hasOwnProperty(prop)) {
+                    if (geoHazardTid[prop] === tid) {
+                        return prop;
+                    }
+                }
+            }
+            return undefined; //not found
         };
 
         service.geoHazardTid = function (type) {

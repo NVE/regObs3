@@ -1,0 +1,20 @@
+﻿<ion-view title="">
+    <ion-content>
+        <ion-list>
+            <div class="item item-divider">
+                {{"PREVIOUS_USED_PLACE_FOR" | translate}} {{vm.geoHazardName}}
+            </div>
+            <div class="item item-text-wrap">
+                {{vm.location.Name}}
+                <div class="item-note" ng-show="vm.distance">
+                    {{vm.distance}} {{"AWAY" | translate}}
+                </div>
+            </div>
+            <div class="padding">
+                <button class="button button-block button-balanced item-text-wrap" ng-click="vm.startNewRegistration()">
+                    {{"START_NEW_REGISTRATION_ON" | translate}} {{vm.location.Name}}
+                </button>
+            </div>
+        </ion-list>       
+    </ion-content>
+</ion-view>

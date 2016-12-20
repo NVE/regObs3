@@ -1,3 +1,24 @@
+$snow: #F2F2F2;
+$dirt: #F4B183;
+$water: #9DC3E6;
+$ice: #C9C9C9;
+
+.snow {
+    background-color: $snow;
+}
+
+.dirt {
+    background-color: $dirt;
+}
+
+.water {
+    background-color: $water;
+}
+
+.ice {
+    background-color: $ice;
+}
+
 @media (min-width: 680px) {
     .modal {
         top: 0 !important;
@@ -186,13 +207,13 @@ input:focus, select:focus, textarea:focus {
     width: 100% !important;
 }
 
-.swiper-container-horizontal > .swiper-pagination {
+/*.swiper-container-horizontal > .swiper-pagination {
     bottom: 30px;
 }
 
 .swiper-slide {
     padding-top: 43px;
-}
+}*/
 
 .steepness-info {
     padding: 10px;

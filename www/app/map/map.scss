@@ -138,3 +138,23 @@
     margin: 30px;
     border: 2px solid red;
 }
+
+.nearby-location-marker {
+    border-radius: 50%;
+	width: 30px;
+	height: 30px;
+    position: relative;
+    left: -9px;
+    top: -10px;
+}
+
+.nearby-location-marker-inner {
+    border: 5px solid brown;
+    border-radius: 20px;
+    height:20px;
+    width:20px;
+    position: relative;
+    left: 5px;
+    top: 5px;
+}
+

@@ -7,11 +7,18 @@
             observationsLayerGroup,
             markersLayerGroup,
             tilesLayerGroup,
+            locationLayerGroup,
             userMarker,
             pathLine,
             popup,
             markerMenu,
-            closeMarkerMenuTimer, observationInfo, firstLoad = true, isDragging = false, tiles = [];
+            closeMarkerMenuTimer,
+            observationInfo,
+            firstLoad = true,
+            isDragging = false,
+            tiles = [],
+            isProgramaticZoom = false,
+            followMode = true;
         var icon = L.AwesomeMarkers.icon({ icon: 'arrow-move', prefix: 'ion', markerColor: 'green', extraClasses: 'map-obs-marker' });
         var iconSet = L.AwesomeMarkers.icon({ icon: 'ion-flag', prefix: 'ion', markerColor: 'gray', extraClasses: 'map-obs-marker map-obs-marker-set' });
         var center = [
@@ -54,22 +61,74 @@
             observationInfo.addTo(map);
         };
 
-        var drawObservations = function () {
-            if (observationsLayerGroup) {
-                observationsLayerGroup.clearLayers();
-                Observations.observations.forEach(function (obs) {
-                    var obsIcon = L.AwesomeMarkers.icon({
-                        icon: 'ion-flag',
-                        prefix: 'ion',
-                        markerColor: 'white',
-                        iconColor: '#444',
-                        extraClasses: 'map-obs-marker-observation'
-                    });
-                    var latlng = new L.LatLng(obs.LatLngObject.Latitude, obs.LatLngObject.Longitude);
-                    var m = new L.Marker(latlng, { icon: obsIcon });
-                    m.addTo(observationsLayerGroup);
-                });
+        var getObsIcon = function (obs) {
+            //var color = Utility.geoHazardColor(obs.GeoHazardTid);
+            var color = 'white';
+            var iconColor = '#444';
+            if (obs.GeoHazardTid === 20) {
+                color = 'beige';
+                iconColor = '#FFF';
+            } else if (obs.GeoHazardTid === 60) {
+                color = 'blue';
+                iconColor = '#FFF';
+            } else if (obs.GeoHazardTid === 70) {
+                color = 'cadetblue';
+                iconColor = '#FFF';
             }
+            return L.AwesomeMarkers.icon({
+                icon: 'ion-flag',
+                prefix: 'ion',
+                markerColor: color,
+                iconColor: iconColor,
+                extraClasses: 'map-obs-marker-observation'
+            });
+        }
+
+        var drawObservations = function () {
+            observationsLayerGroup.clearLayers();
+            Observations.getStoredObservations(Utility.getCurrentGeoHazardTid()).forEach(function (obs) {
+                var latlng = new L.LatLng(obs.LatLngObject.Latitude, obs.LatLngObject.Longitude);
+                var m = new L.Marker(latlng, { icon: getObsIcon(obs) });
+                m.on('click',
+                    function () {
+                        $state.go('observationdetails', { observation: obs });
+                    });
+                m.addTo(observationsLayerGroup);
+            });
+
+        };
+
+        var hideObservations = function () {
+            observationsLayerGroup.clearLayers();
+        };
+
+        var updateNearbyLocations = function (lat, lng, distance, geoHazardTid) {
+            return $q(function (resolve, reject) {
+                Observations.getNearbyLocations(lat, lng, distance, geoHazardTid)
+                    .then(function () {
+                        drawStoredLocations();
+                        resolve();
+                    }).catch(reject);
+            });
+        };
+
+        var drawStoredLocations = function () {
+            locationLayerGroup.clearLayers();
+
+            var geoHazardTid = Utility.getCurrentGeoHazardTid();
+            var storedLocations = Observations.getLocations(geoHazardTid);
+            storedLocations.forEach(function (loc) {
+                var latlng = new L.LatLng(loc.LatLngObject.Latitude, loc.LatLngObject.Longitude);
+                var geoHazardType = Utility.getGeoHazardType(loc.geoHazardId);
+                var myIcon = L.divIcon({ className: 'my-div-icon', html: '<div class="nearby-location-marker ' + geoHazardType + '"><div class="nearby-location-marker-inner"></div></div>' });
+                var m = L.marker(latlng, { icon: myIcon });
+                m.on('click', function () { $state.go('locationdetails', { location: loc }) });
+                m.addTo(locationLayerGroup);
+            });
+        };
+
+        var hideLocations = function () {
+            locationLayerGroup.clearLayers();
         };
 
         var startTrip = function () {
@@ -229,7 +288,9 @@
                 }
 
                 if (zoom) {
+                    isProgramaticZoom = true;
                     map.setView(latlng, 9);
+                    isProgramaticZoom = false;
                 }
             }
         }
@@ -256,24 +317,24 @@
             }
         };
 
-        var closePopup = function () {
-            if (popup && map) {
-                map.closePopup(popup);
-            }
-        }
+        //var closePopup = function () {
+        //    if (popup && map) {
+        //        map.closePopup(popup);
+        //    }
+        //}
 
-        var openAndUpdatePopup = function (latlng) {
-            if (userMarker && latlng) {
-                var distance = userMarker.getLatLng().distanceTo(obsLocationMarker.getLatLng()).toFixed(0);
-                var center = pathLine.getBounds().getCenter();
-                if (!popup) {
-                    popup = L.popup().setLatLng(center).setContent(getDistanceText(distance));
-                } else {
-                    popup.setLatLng(center).setContent(getDistanceText(distance));
-                }
-                popup.openOn(map);
-            }
-        };
+        //var openAndUpdatePopup = function (latlng) {
+        //    if (userMarker && latlng) {
+        //        var distance = userMarker.getLatLng().distanceTo(obsLocationMarker.getLatLng()).toFixed(0);
+        //        var center = pathLine.getBounds().getCenter();
+        //        if (!popup) {
+        //            popup = L.popup().setLatLng(center).setContent(getDistanceText(distance));
+        //        } else {
+        //            popup.setLatLng(center).setContent(getDistanceText(distance));
+        //        }
+        //        popup.openOn(map);
+        //    }
+        //};
 
         var updateDistanceLine = function () {
             if (ObsLocation.isSet() && userMarker) {
@@ -308,7 +369,13 @@
                 }
 
                 if (zoom) {
+                    isProgramaticZoom = true;
                     map.setView(latlng, 9);
+                    isProgramaticZoom = false;
+                }
+
+                if (followMode) {
+                    map.panTo(latlng);
                 }
             }
         }
@@ -347,6 +414,10 @@
             }
         };
 
+        var disableFollowMode = function () {
+            followMode = false;
+        };
+
         service.createMap = function (elem) {
             firstLoad = true;
 
@@ -363,7 +434,9 @@
                 attributionControl: false
             });
 
+            //TODO: Create LayerGroup object instead of many variables
             tilesLayerGroup = L.layerGroup().addTo(map);
+            locationLayerGroup = L.layerGroup().addTo(map);
             observationsLayerGroup = L.layerGroup().addTo(map);
             markersLayerGroup = L.layerGroup().addTo(map);
 
@@ -399,6 +472,13 @@
                 AppLogging.log('Click in map - hide floating menu');
             });
 
+            map.on('dragstart', disableFollowMode);
+            map.on('zoomstart', function () {
+                if (!isProgramaticZoom) {
+                    disableFollowMode();
+                }
+            });
+
             createObservationInfo();
 
             service.updateMapFromSettings();
@@ -409,9 +489,9 @@
                 drawObsLocation(false);
             }
 
-            drawObservations();
+            //drawObservations();
 
-            map.invalidateSize();
+            // map.invalidateSize();
 
             return map;
         };
@@ -428,7 +508,18 @@
             return tiles;
         };
 
+        service.getUserDistanceFrom = function (lat, lng) {
+            if (userMarker) {
+                var latlng = new L.LatLng(lat, lng);
+                var distance = userMarker.getLatLng().distanceTo(latlng).toFixed(0);
+                var description = getDistanceText(distance);
+                return { distance: distance, description: description };
+            }
+            return { distance: null, description: 'Ikke kjent' };
+        };
+
         service.centerMapToUser = function () {
+            followMode = true;
             if (userMarker) {
                 AppLogging.log('Center map to user marker');
                 if (map) {
@@ -451,10 +542,12 @@
                 var distance = bounds.getNorthWest().distanceTo(bounds.getSouthEast()).toFixed(0);
                 var geoHazardTid = Utility.getCurrentGeoHazardTid();
                 Observations.updateObservationsWithinRadius(center.lat, center.lng, distance, geoHazardTid)
+                    .then(updateNearbyLocations(center.lat, center.lng, distance, geoHazardTid))
                     .then(drawObservations);
             }
         };
 
+        //TODO: Move/Rename this to map.refresh() or something
         service.updateMapFromSettings = function () {
             hideAllTiles();
             var geoId = Utility.getCurrentGeoHazardTid();
@@ -469,6 +562,20 @@
                     }
                 }
             });
+            if (AppSettings.data.showPreviouslyUsedPlaces) {
+                drawStoredLocations();
+            } else {
+                hideLocations();
+            }
+            if (AppSettings.data.showObservations) {
+                drawObservations();
+            } else {
+                hideObservations();
+            }
+
+            drawObsLocation(false);
+            observationInfo.update();
+            service.invalidateSize();
         };
 
         service.startWatch = function () {
@@ -495,96 +602,16 @@
             }
         };
 
-        //service.calculateXYZList = function (zoomMin, zoomMax) {
-        //    if (!map) return [];
-        //    var bounds = map.getBounds();
-        //    return service.calculateXYZListFromBounds(bounds, zoomMin, zoomMax);
-        //};
-
         service.calculateXYZListFromBounds = function (bounds, zoomMin, zoomMax) {
             if (!tiles) return [];
             return tiles[0].calculateXYZListFromBounds(bounds, zoomMin, zoomMax);
         };
 
-        //service.calculateXYZSize = function (zoomMin, zoomMax) {
-        //    if (!map || !tiles) return 0;
-        //    return tiles[0].calculateXYZSizeFromBounds(map.getBounds(), zoomMin, zoomMax);
-        //};
-
         service.calculateXYZSizeFromBounds = function (bounds, zoomMin, zoomMax) {
             if (!map || !tiles) return 0;
             return tiles[0].calculateXYZSizeFromBounds(bounds, zoomMin, zoomMax);
         };
-
-        
-
-        
-
-        //service.downloadMap = function (zoomMin, zoomMax, mapsArray, progressCallback, completeCallback, cancelCallback) {
-        //        if (!zoomMin)
-        //            throw Error('zoomMin must be set');
-        //        if (!zoomMax)
-        //            throw Error('zoomMax must be set');
-
-        //        var xyzList = service.calculateXYZList(zoomMin, zoomMax);
-        //        service.downloadMapFromXyzList(xyzList,
-        //            zoomMin,
-        //            zoomMax,
-        //            mapsArray,
-        //            progressCallback,
-        //            completeCallback,
-        //            cancelCallback);
-        //    };
-
-        //service.emptyCache = function () {
-        //    return $q(function (resolve) {
-        //        var index = 0;
-        //        var callbacks = [];
-        //        var checkCallback = function () {
-        //            if (callbacks.length === tiles.length) {
-        //                resolve(callbacks);
-        //            }
-        //        };
-
-        //        if (!tiles) {
-        //            resolve(callbacks);
-        //        }
-
-        //        tiles.forEach(function (t) {
-        //            var name = AppSettings.tiles[index].name;
-        //            t.emptyCache(function (oks, fails) {
-        //                AppLogging.log("Cleared cache for map " +
-        //                    name +
-        //                    ".\n" +
-        //                    oks +
-        //                    " deleted OK\n" +
-        //                    fails +
-        //                    " failed");
-        //                callbacks.push({ name: name, ok: oks, failed: fails });
-        //                checkCallback();
-        //            });
-        //            index++;
-        //        });
-        //    });
-        //};
-
-        //var onOffline = function () {
-        //    AppLogging.log("Going offline");
-        //    tiles.forEach(function (t) {
-        //        t.goOffline();
-        //    });
-        //};
-
-        //var onOnline = function () {
-        //    AppLogging.log("Going online");
-        //    tiles.forEach(function (t) {
-        //        t.goOnline();
-        //    });
-        //};
-
-        //$rootScope.$on('$cordovaNetwork:online', onOnline);
-
-        //$rootScope.$on('$cordovaNetwork:offline', onOffline);
+       
 
         return service;
     });
