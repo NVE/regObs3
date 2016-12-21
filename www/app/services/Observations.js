@@ -120,7 +120,7 @@
             return locations;
         };
 
-        service.getNearbyLocations = function (latitude, longitude, range, geohazardId) {
+        service.getNearbyLocations = function (latitude, longitude, range, geohazardId, canceller) {
             return $q(function (resolve, reject) {
                 $http.get(
                         AppSettings.getEndPoints().getObservationsWithinRadius,
@@ -131,7 +131,7 @@
                                 range: range,
                                 geohazardId: geohazardId
                             },
-                            timeout: AppSettings.httpConfig.timeout
+                            timeout: canceller ? canceller.promise : AppSettings.httpConfig.timeout
                         })
                     .then(function (result) {
                         AppLogging.log('Observations: ' + JSON.stringify(result));
@@ -152,18 +152,38 @@
                             LocalStorage.setObject(locationsStorageKey, existingLocations);
                             resolve();
                         } else {
-                            reject(new Error('Could not get json result'));
+                            reject('Could not get json result');
                         }
                     }).catch(reject);
             });
         };
 
 
-        service.updateObservationsWithinRadius = function (latitude, longitude, range, geohazardId) {
+        service.updateObservationsWithinRadius = function (latitude, longitude, range, geohazardId, canceller) {
+            var canceled = false;
+            if (canceller) {
+                canceller.promise.then(function () { canceled = true; });
+            }
+
             return $q(function (resolve, reject) {
-                setTimeout(function () {
-                    resolve(service.observations);
-                }, 10000);
+                var doWork = function (i) {
+                    AppLogging.log('DoWork ' +i);
+                    if (canceled) {
+                        AppLogging.log('updateObservationsWithinRadius canceled');
+                        reject('Canceled');
+                    } else {
+                        if (i <= 0) {
+                            resolve(service.observations);
+                        } else {
+                            i--;
+                            setTimeout(function () {
+                                doWork(i);
+                            }, 100);
+                        }
+                    }
+                };
+
+                doWork(200);
             });
             //return $q(function(resolve, reject) {
             //    $http.get(

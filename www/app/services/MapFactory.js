@@ -1,6 +1,6 @@
 ﻿angular
     .module('RegObs')
-    .factory('Map', function (AppSettings, AppLogging, ObsLocation, Observations, Utility, $state, Registration, $ionicPlatform, $rootScope, $q, $timeout) {
+    .factory('Map', function (AppSettings, AppLogging, ObsLocation, Observations, Utility, $state, Registration, $ionicPlatform, $rootScope, $q, $timeout, $ionicPopup, $interval, RegobsPopup) {
         var service = this;
         var map,
             obsLocationMarker,
@@ -535,17 +535,105 @@
             service.updateMapFromSettings();
         };
 
+        //var cancelUpdatePromise;
+
         service.updateObservationsInMap = function () {
             if (map) {
                 var center = map.getCenter();
                 var bounds = map.getBounds();
                 var distance = bounds.getNorthWest().distanceTo(bounds.getSouthEast()).toFixed(0);
                 var geoHazardTid = Utility.getCurrentGeoHazardTid();
-                Observations.updateObservationsWithinRadius(center.lat, center.lng, distance, geoHazardTid)
-                    .then(updateNearbyLocations(center.lat, center.lng, distance, geoHazardTid))
-                    .then(drawObservations);
+
+                var workFunc = function (onProgress, cancel) {
+                    return $q(function (resolve, reject) {
+                        var canceled = false;
+                        if (cancel) {
+                            cancel.promise.then(function () { canceled = true; });
+                        }
+
+                        var i = 0;
+                        var progress = new RegObs.ProggressStatus(200);
+
+                        var doWork = function () {
+                            AppLogging.log('dowork ' + progress.getDone());
+                            
+                            if (canceled) {
+                                //AppLogging.log('work canceled');
+                                reject('Canceled');
+                            } else {
+                                if (progress.isDone()) {
+                                    resolve();
+                                } else {
+                                    //progress.addComplete();
+                                    progress.addError(new Error('Something failed'));
+
+                                    onProgress(progress);
+                                    setTimeout(function () {
+                                        doWork(i);
+                                    },100);
+                                }
+                            }
+                        };
+
+                        doWork();
+                    });
+                };
+
+                RegobsPopup.downloadProgress('test', workFunc, { longTimoutMessageDelay: 5, closeOnComplete: false })
+                    .then(function() {
+                        AppLogging.log('progress completed');
+                    })
+                    .catch(function() {
+                        AppLogging.log('progress cancelled');
+                    });
+
+
+                //var cancelUpdatePromise = $q.defer();
+
+                //var updateCalls = [Observations.updateObservationsWithinRadius(center.lat, center.lng, distance, geoHazardTid, cancelUpdatePromise),
+                //                    updateNearbyLocations(center.lat, center.lng, distance, geoHazardTid, cancelUpdatePromise)];
+
+                //var scope = $rootScope.$new();
+                //scope.tooLongTime = false;
+                //scope.timer = 0;
+
+                //var interval = $interval(function () {
+                //    scope.timer += 1;
+                //    if (scope.timer > 10) {
+                //        scope.tooLongTime = true;
+                //    }
+                //}, 1000);
+
+                //var myPopup = $ionicPopup.show({
+                //    template: '<p ng-if="tooLongTime">Tjenesten bruker for mye tid. Det kan være dårlig internett der du er eller at regObs av andre grunner er utilgjengelig. Du kan vente eller avbryte og prøve igjen senere</p>',
+                //    title: 'Oppdaterer kartet med det siste fra regObs',
+                //    //subTitle: 'Please use normal things',
+                //    scope: scope,
+                //    buttons: [
+                //        {
+                //            text: '<b>Avbryt</b>',
+                //            type: 'button-positive',
+                //            onTap: function (e) {
+                //                cancelUpdatePromise.resolve();
+                //            }
+                //        }
+                //    ]
+                //});
+
+                //$q.all(updateCalls).then(function () {
+                //    $interval.cancel(interval);
+                //    drawObservations();
+                //    myPopup.close();
+                //});
             }
         };
+
+        //service.cancelUpdateObservationInMap = function() {
+        //    if (cancelUpdatePromise) {
+        //        cancelUpdatePromise.resolve();
+        //        cancelUpdatePromise = null;
+        //    }
+        //};
 
         //TODO: Move/Rename this to map.refresh() or something
         service.updateMapFromSettings = function () {
@@ -611,7 +699,7 @@
             if (!map || !tiles) return 0;
             return tiles[0].calculateXYZSizeFromBounds(bounds, zoomMin, zoomMax);
         };
-       
+
 
         return service;
     });

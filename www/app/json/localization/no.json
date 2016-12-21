@@ -1,10 +1,14 @@
 ﻿{
+  "OK": "Ok",
+  "CANCEL": "Avbryt",  
   "SNOW": "Snø",
   "ICE": "Is",
   "DIRT": "Jord",
-  "WATER": "Vann",    
+  "WATER": "Vann",
   "BACK": "Tilbake",
   "PREVIOUS_USED_PLACE_FOR": "Tidligere brukt sted for",
   "AWAY": "unna",
-  "START_NEW_REGISTRATION_ON": "Start ny registrering på"
+  "START_NEW_REGISTRATION_ON": "Start ny registrering på",
+  "SLOW_DOWNLOAD_MESSAGE": "Tjenesten bruker for mye tid. Det kan være dårlig internett der du er eller at regObs av andre grunner er utilgjengelig. Du kan vente eller avbryte og prøve igjen senere",
+  "FAILED": "Feilet"
 }

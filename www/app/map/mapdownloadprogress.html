@@ -1,10 +1,5 @@
-﻿
-<div ng-if="downloadStatus">
-    <!--<div class="bar bar-subheader bar-positive" style="padding: 0px; height: 8px;">
-        <progress id="progressbar" max="100" value="{{ downloadStatus.percent }}" class="progress"> </progress>
-    </div>-->
+﻿<div ng-if="downloadStatus">
     <div class="downloadprogress" pb-circle progress-key="progress" options="progressOptions"></div>
-    <!--<label><span ng-bind="downloadStatus.done"></span>/<span ng-bind="downloadStatus.total"></span></label>--> 
     <div ng-show="downloadStatus.hasError" class="item-text-wrap assertive text-center">
         <i class="icon ion-alert-circled"></i>
         <div ng-repeat="tileStatus in downloadStatus.status">
