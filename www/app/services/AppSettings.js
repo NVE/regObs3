@@ -138,9 +138,13 @@
             };
         };
 
-        settings.getObservationsUrl = function (type) {
+        settings.getWebRoot = function() {
             var base = settings.data.env === 'regObs' ? 'www' : settings.data.env.replace(' regObs', '');
-            return 'http://' + base + '.regobs.no/' + type + '/Observations';
+            return 'http://' + base + '.regobs.no/';
+        };
+
+        settings.getObservationsUrl = function (type) {
+            return settings.getWebRoot() + type + '/Observations';
         };
 
         settings.getAppMode = function () {

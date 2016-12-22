@@ -237,7 +237,6 @@
         };
 
         var drawObsLocation = function (zoom) {
-            AppLogging.log('DRAW Current Obs position');
             var latlng;
             if (ObsLocation.isSet()) {
                 latlng = L.latLng(ObsLocation.get().Latitude, ObsLocation.get().Longitude);
@@ -350,7 +349,6 @@
         }
 
         var drawUserLocation = function (obsLoc, zoom) {
-            AppLogging.log('DRAW user position');
             if (obsLoc.Latitude && obsLoc.Longitude) {
                 var latlng = new L.LatLng(obsLoc.Latitude, obsLoc.Longitude);
 
@@ -548,38 +546,23 @@
                     return $q(function (resolve, reject) {
                         var canceled = false;
                         if (cancel) {
-                            cancel.promise.then(function () { canceled = true; });
+                            cancel.promise.then(function() {
+                                canceled = true;
+                                reject('Canceled');
+                            });
                         }
 
-                        var i = 0;
-                        var progress = new RegObs.ProggressStatus(200);
-
-                        var doWork = function () {
-                            AppLogging.log('dowork ' + progress.getDone());
-                            
-                            if (canceled) {
-                                //AppLogging.log('work canceled');
-                                reject('Canceled');
-                            } else {
-                                if (progress.isDone()) {
-                                    resolve();
-                                } else {
-                                    //progress.addComplete();
-                                    progress.addError(new Error('Something failed'));
-
-                                    onProgress(progress);
-                                    setTimeout(function () {
-                                        doWork(i);
-                                    },100);
-                                }
-                            }
-                        };
-
-                        doWork();
+                        var progress = new RegObs.ProggressStatus();
+                        Observations.updateObservationsWithinRadius(center.lat, center.lng, distance, geoHazardTid, progress, onProgress, cancel)
+                            .then(function () {
+                                //TODO: Update nearby locations
+                                resolve();
+                            });
+                        //TODO: Delete old registrations
                     });
                 };
 
-                RegobsPopup.downloadProgress('test', workFunc, { longTimoutMessageDelay: 5, closeOnComplete: false })
+                RegobsPopup.downloadProgress('Oppdaterer kartet med det siste fra regObs', workFunc, { longTimoutMessageDelay: 10, closeOnComplete: true })
                     .then(function() {
                         AppLogging.log('progress completed');
                     })
