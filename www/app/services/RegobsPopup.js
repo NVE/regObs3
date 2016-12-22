@@ -55,6 +55,7 @@ angular
                 scope.progressName = Math.random().toString(36); //create unique name for DOM element
                 var defaultOptions = {
                     closeOnComplete: true, //Close popup automatically on completed, else ok button is shown.
+                    closeOnError: false, //Close popup automatically when there is some errors.
                     longTimoutMessageDelay: 0, //Delay for timout message in seconds. 0 means never show.
                     progressOptions: {
                         color: '#333',
@@ -99,7 +100,6 @@ angular
                 scope.cancelDownload = function() {
                     cancelUpdatePromise.resolve();
                 };
-                scope.showOkButton = !result.closeOnComplete;
                 scope.complete = false;
 
                 var popup = $ionicPopup.show({
@@ -130,7 +130,11 @@ angular
                     scope.complete = true;
 
                     if (result.closeOnComplete) {
-                        popup.close();
+                        if (scope.downloadStatus && scope.downloadStatus.hasError() && !result.closeOnError) {
+                            return;
+                        } else {
+                            popup.close();
+                        }
                     }
                 };
 

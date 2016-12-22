@@ -3,9 +3,12 @@
     <div ng-show="downloadStatus.hasError()" class="item-text-wrap assertive text-center">
         <i class="icon ion-alert-circled"></i> <span ng-bind="downloadStatus.getErrors().length"></span>/<span ng-bind="downloadStatus.getTotal()"></span> {{"FAILED" | translate | lowercase}}
     </div>
-    <div class="item-text-wrap text-center" ng-if="showLongDownloadMessage">{{"SLOW_DOWNLOAD_MESSAGE" | translate}}</div>
 </div>
+<div ng-if="!downloadStatus && !complete" class="text-center">
+    <ion-spinner></ion-spinner>
+</div>
+<div class="item-text-wrap text-center" ng-if="showLongDownloadMessage && !complete">{{"SLOW_DOWNLOAD_MESSAGE" | translate}}</div>
 <div class="popup-buttons">
-    <button class="button" ng-hide="complete" ng-click="cancelDownload()">{{"CANCEL" | translate}}</button>
-    <button class="button button-calm" ng-show="showOkButton && complete" ng-click="closePopup()">{{"OK" | translate}}</button>
+    <button class="button button-dark" ng-hide="complete" ng-click="cancelDownload()">{{"CANCEL" | translate}}</button>
+    <button class="button button-calm" ng-show="complete" ng-click="closePopup()">{{"OK" | translate}}</button>
 </div>

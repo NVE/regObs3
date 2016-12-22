@@ -136,8 +136,6 @@
             return 'http://' + base + '.regobs.no/';
         };
 
-        settings.getObservationsUrl = function(type){
-            return settings.getWebRoot() + type + '/Observations';
         settings.getObservationsUrl = function (type) {
             var base = settings.data.env === 'regObs' ? 'www' : settings.data.env.replace(' regObs', '');
             return 'http://' + base + '.regobs.no/' + type + '/Observations';
