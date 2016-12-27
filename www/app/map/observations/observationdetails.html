@@ -1,5 +1,10 @@
 ﻿<ion-view>
     <ion-content>
+        <div ng-repeat="reg in vm.registrations">
+            <registration-detail registration="reg"></registration-detail>
+        </div>
+    </ion-content>
+    <!--<ion-content>
         <div ng-if="vm.registration">
             <div class="padding">
                 <div>
@@ -12,19 +17,19 @@
             <div class="observation-slides">
                 <ion-slides options="options" slider="data.slider">
                     <ion-slide-page>
-                        <img ng-src="http://tst-h-web03.nve.no/regobsservices_test/Image/orginal/38445" />
+                        <img ng-src="http://tst-h-web03.nve.no/regobsservices_test/Image/orginal/38445"/>
                         <p class="padding" style="font-size: 12px; color: darkgray">
                             <strong>Bilde 1 av 3:</strong> Snøprofil &bull; Profil jeg grov i topplagene i NØ vendt side. ECTN12@7 cm Q2. Tørt vindpåvirket (…)
                         </p>
                     </ion-slide-page>
                     <ion-slide-page>
-                        <img ng-src="http://tst-h-web03.nve.no/regobsservices_test/Image/orginal/38445" />
+                        <img ng-src="http://tst-h-web03.nve.no/regobsservices_test/Image/orginal/38445"/>
                         <p class="padding" style="font-size: 12px; color: darkgray">
                             <strong>Bilde 2 av 3:</strong> Snøprofil &bull; Profil jeg grov i topplagene i NØ vendt side. ECTN12@7 cm Q2. Tørt vindpåvirket (…)
                         </p>
                     </ion-slide-page>
                     <ion-slide-page>
-                        <img ng-src="http://tst-h-web03.nve.no/regobsservices_test/Image/orginal/38372" style="max-height: 250px" />
+                        <img ng-src="http://tst-h-web03.nve.no/regobsservices_test/Image/orginal/38372" style="max-height: 250px"/>
                         <p class="padding" style="font-size: 12px; color: darkgray">
                             <strong>Bilde 3 av 3:</strong> Snøprofil &bull; Profil jeg grov i topplagene i NØ vendt side. ECTN12@7 cm Q2. Tørt vindpåvirket (…)
                         </p>
@@ -34,33 +39,6 @@
             <div class="padding">
                 <strong>Faretegn:</strong> Ingen faretegn observert. <strong>Skredaktivitet:</strong> 5.april 2016, 18:45 &bull; Ingen skredaktivitet. <strong>Værobservasjon:</strong> Ikke nedbør &bull; 5,0°C &bull; 2,0 m/s mot vest • 20% skydekke &bull; Pent vær siste døgn. Lite vind. Snødekke: 100cm totalt &bull; 0cm nysnø &bull; Snøgrense på 100moh. Grense lagdelt snø er på 500 moh &bull; Ikke (…) <strong>Snøprofil:</strong> Profil jeg grov i ... <strong>Værobservasjon:</strong> Ikke nedbør &bull; 5,0°C &bull; 2,0 m/s mot vest • 20% skydekke &bull; Pent vær siste døgn. Lite vind. Snødekke: 100cm totalt &bull; 0cm nysnø &bull; Snøgrense på 100moh. Grense lagdelt snø er på 500 moh &bull; Ikke (…)
             </div>
-        </div>
-    </ion-content>
-    <!--<ion-content>
-        <div class="padding">
-            <div>
-                <strong>VESTERÅLEN</strong> &bull; 5. april 2016 18:45 &bull; 6 <i class="icon ion-eye"></i>
-            </div>
-            <div>Steinar@Obskorps (<i class="icon ion-ios-star-outline"></i><i class="icon ion-ios-star-outline"></i><i class="icon ion-ios-star-outline"></i><i class="icon ion-ios-star-outline"></i>)</div>
-        </div>
-        <div class="observation-slides">
-            <ion-slides options="options" slider="data.slider">
-                <ion-slide-page>
-                    <img ng-src="http://tst-h-web03.nve.no/regobsservices_test/Image/orginal/38445"/>
-                    <p class="padding" style="font-size: 12px; color: darkgray"><strong>Bilde 1 av 3:</strong> Snøprofil &bull; Profil jeg grov i topplagene i NØ vendt side. ECTN12@7 cm Q2. Tørt vindpåvirket (…)</p>
-                </ion-slide-page>
-                <ion-slide-page>
-                    <img ng-src="http://tst-h-web03.nve.no/regobsservices_test/Image/orginal/38445"/>
-                    <p class="padding" style="font-size: 12px;color: darkgray"><strong>Bilde 2 av 3:</strong> Snøprofil &bull; Profil jeg grov i topplagene i NØ vendt side. ECTN12@7 cm Q2. Tørt vindpåvirket (…)</p>
-                </ion-slide-page>
-                <ion-slide-page>
-                    <img ng-src="http://tst-h-web03.nve.no/regobsservices_test/Image/orginal/38372" style="max-height: 250px"/>
-                    <p class="padding" style="font-size: 12px;color: darkgray"><strong>Bilde 3 av 3:</strong> Snøprofil &bull; Profil jeg grov i topplagene i NØ vendt side. ECTN12@7 cm Q2. Tørt vindpåvirket (…)</p>
-                </ion-slide-page>
-            </ion-slides>
-        </div>
-        <div class="padding">
-            <strong>Faretegn:</strong> Ingen faretegn observert. <strong>Skredaktivitet:</strong> 5.april 2016, 18:45 &bull; Ingen skredaktivitet. <strong>Værobservasjon:</strong> Ikke nedbør &bull; 5,0°C &bull; 2,0 m/s mot vest • 20% skydekke &bull; Pent vær siste døgn. Lite vind. Snødekke: 100cm totalt &bull; 0cm nysnø &bull; Snøgrense på 100moh. Grense lagdelt snø er på 500 moh &bull; Ikke (…) <strong>Snøprofil:</strong> Profil jeg grov i ... <strong>Værobservasjon:</strong> Ikke nedbør &bull; 5,0°C &bull; 2,0 m/s mot vest • 20% skydekke &bull; Pent vær siste døgn. Lite vind. Snødekke: 100cm totalt &bull; 0cm nysnø &bull; Snøgrense på 100moh. Grense lagdelt snø er på 500 moh &bull; Ikke (…)
         </div>
     </ion-content>-->
 </ion-view>

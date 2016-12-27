@@ -1,6 +1,6 @@
 ﻿angular
     .module('RegObs')
-    .factory('Observations', function ($http, AppSettings, LocalStorage, AppLogging, Utility, $q, $cordovaFile) {
+    .factory('Observations', function ($http, AppSettings, LocalStorage, AppLogging, Utility, $q, PresistentStorage) {
         var service = this;
         var storageKey = 'regobsObservations';
         var locationsStorageKey = 'regObsLocations';
@@ -107,7 +107,7 @@
             return items;
         };
 
-        service.getRegistrationDetails = function (id, cancel) {
+        service.getRegistrationDetailsFromApi = function (id, cancel) {
             return $q(function (resolve, reject) {
                 $http.post(
                         AppSettings.getEndPoints().getRegistration, //TODO: Search by geoHazardId
@@ -121,6 +121,34 @@
                         }
                     })
                     .catch(reject);
+            });
+        };
+
+        /**
+         * Get registration details from device storage
+         * @param {} id Registration Id
+         * @returns {} Registration json if found, else reject promise
+         */
+        service.getRegistrationDetailsFromStorage = function (id) {
+            if (!id) throw Error('id must be set!');
+            var location = service._getRegistrationStorageLocation(id);
+            return PresistentStorage.readAsText(location)
+                .then(function (text) {
+                    AppLogging.log('Found registration id ' + id + ' on storage path ' + location);
+                    return JSON.parse(text);
+                });
+        };
+
+        /**
+         * Get registratoin details. If not found in local storage, try to fetch from api
+         * @param {} id 
+         * @returns {} Promise with registration json
+         */
+        service.getRegistrationDetails = function (id) {
+            return service.getRegistrationDetailsFromStorage(id)
+            .catch(function (error) {
+                AppLogging.log('Registration id ' +id +' not found in local storage. Get registration details from api instead. Error: ' +JSON.stringify(error));
+                return service.getRegistrationDetailsFromApi(id);
             });
         };
 
@@ -181,67 +209,23 @@
             });
         };
 
-        var createDir = function (directory) {
-            return $q(function (resolve, reject) {
-                $cordovaFile.checkDir(cordova.file.dataDirectory, directory)
-                    .then(resolve)
-                    .catch(function () {
-                        AppLogging.log('directory ' + directory + ' not found, creating');
-                        $cordovaFile.createDir(cordova.file.dataDirectory, directory, false).then(resolve)
-                        .catch(reject);
-                    });
-            });
+        /**
+         * Helper method to get storage location for saved registration
+         * @param {} id 
+         * @returns {} 
+         */
+        service._getRegistrationStorageLocation = function (id) {
+            return 'reg/' + AppSettings.data.env.replace(/ /g, '') + '/' + id + '.json';
         };
 
-        var createDirRecursively = function (directory) {
-            return $q(function (resolve) {
-                var directories = directory.split('/');
-                var i = 0;
-
-                var createDirFragment = function () {
-                    if (i < directories.length) {
-                        createDir(directories[i])
-                            .then(function () {
-                                i++;
-                                createDirFragment();
-                            });
-                    } else {
-                        resolve();
-                    }
-                };
-
-                createDirFragment();
-            });
-        };
-
-        var saveRegistrationDetails = function (registration) {
-            var directory = 'reg/' + AppSettings.data.env.replace(/ /g, '');
-            var filename = registration.RegId + '.json';
-            var writeFile = function () {
-                AppLogging.log('Saving registration details to ' + cordova.file.dataDirectory + directory + '/' + filename);
-                return $cordovaFile.writeFile(cordova.file.dataDirectory, directory + '/' + filename, JSON.stringify(registration), true);
-            };
-            return createDirRecursively(directory).then(writeFile);
+        service._saveRegistrationDetails = function (registration) {
+            return PresistentStorage.storeFile(service._getRegistrationStorageLocation(registration.RegId), JSON.stringify(registration));
         };
 
         var downloadPicture = function (id, progress, onProgress, cancel) {
             return $q(function (resolve) {
-                var directory = 'picture/' + AppSettings.data.env.replace(/ /g, '');
-                var filename = id + '.jpg';
+                var path = 'picture/' + AppSettings.data.env.replace(/ /g, '') + '/' + id + '.jpg';
                 var url = AppSettings.getWebRoot() + 'Picture/image/' + id;
-
-                var writeFile = function (data) {
-                    AppLogging.log('Saving picture details to ' +
-                        cordova.file.dataDirectory +
-                        directory +
-                        '/' +
-                        filename);
-                    return $cordovaFile.writeFile(cordova.file.dataDirectory, directory + '/' + filename, data, true);
-                };
-
-                var checkIfImageExists = function () {
-                    return $cordovaFile.checkFile(cordova.file.dataDirectory, directory + '/' + filename);
-                };
 
                 var progressFunc = function () {
                     progress.addComplete();
@@ -258,23 +242,25 @@
 
                 var getImageFromHttp = function () {
                     AppLogging.log('Get image from url: ' + url);
-                    return $http.get(url, { timeout: cancel.promise });
+                    return $http.get(url, { responseType: 'arraybuffer', timeout: cancel.promise });
                 };
 
                 var storeImage = function (result) {
-                    return createDirRecursively(directory).then(function () { return writeFile(result.data); });
+                    return PresistentStorage.storeFile(path, result.data, url);
                 };
 
                 var downloadImage = function () {
-                    getImageFromHttp
+                    getImageFromHttp()
                         .then(storeImage)
                         .then(progressFunc)
                         .catch(errorFunc);
                 };
 
-                checkIfImageExists()
-                    .then(progressFunc) //progress if image allready exists
-                    .catch(downloadImage); //Download image if image do not exist
+                downloadImage();
+
+                //PresistentStorage.checkIfFileExsists(path)
+                //    .then(progressFunc) //progress if image allready exists
+                //    .catch(downloadImage); //Download image if image do not exist
             });
         };
 
@@ -291,10 +277,10 @@
         };
 
         var downloadRegistration = function (id, progress, onProgress, cancel) {
-            return service.getRegistrationDetails(id, cancel)
+            return service.getRegistrationDetailsFromApi(id, cancel)
                 .then(function (result) {
                     progress.setTotal(progress.getTotal() + result.PictureCount); //Adding pictures to download
-                    return saveRegistrationDetails(result)
+                    return service._saveRegistrationDetails(result)
                         .then(function () {
                             AppLogging.log('Completed saving registration ' + id);
                             progress.addComplete();
@@ -348,7 +334,6 @@
 
 
         service.updateObservationsWithinRadius = function (latitude, longitude, range, geohazardId, progress, onProgress, cancel) {
-            //return $q(function (resolve) {
             var downloadAllRegistrations = function (locations) {
                 var total = 0;
                 locations.forEach(function (item) {
@@ -382,39 +367,7 @@
                     cancel);
             })
              .then(downloadAllRegistrations);
-            //});
-            //return $q(function(resolve, reject) {
-            //    $http.get(
-            //            AppSettings.getEndPoints().getObservationsWithinRadius,
-            //            {
-            //                params: {
-            //                    latitude: latitude,
-            //                    longitude: longitude,
-            //                    range: range,
-            //                    geohazardId: geohazardId
-            //                },
-            //                timeout: AppSettings.httpConfig.timeout
-            //            })
-            //        .then(function(result) {
-            //                AppLogging.log('Observations: ' + JSON.stringify(result));
-            //                var timestamp = new Date().getTime();
-            //                if (result.data && result.data.Data) {
-            //                    var data = JSON.parse(result.data.Data);
-            //                    if (data.data) {
-            //                        data.data.forEach(function(obs) {
-            //                            obs.timestamp = timestamp;
-            //                            if (!observationExists(obs.LocationId)) {
-            //                                service.observations.push(obs);
-            //                            }
-            //                        });
-            //                        service.save();
-            //                    }
-            //                }
-
-            //                resolve(service.observations);
-            //            },
-            //            reject);
-            //});
+            //TODO: Delete old registrations
         };
 
         var init = function () {

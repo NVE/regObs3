@@ -1,0 +1,18 @@
+﻿<div class="padding">
+    <div>
+        <strong>{{$ctrl.registration.MunicipalName}}</strong> &bull; {{$ctrl.registration.DtObsTime}} &bull; {{$ctrl.registration.Registrations.length}} <i class="icon ion-eye"></i>
+    </div>
+    <div>
+        Steinar@Obskorps (<i class="icon ion-ios-star-outline"></i><i class="icon ion-ios-star-outline"></i><i class="icon ion-ios-star-outline"></i><i class="icon ion-ios-star-outline"></i>)
+    </div>
+</div>
+<div class="observation-slides">
+    <ion-slides slider="data.slider">
+        <ion-slide-page ng-repeat="img in $ctrl.images track by $index">
+            <img ng-src="{{img.url}}" alt="obsimg" />
+            <p class="padding" style="font-size: 12px; color: darkgray">
+                <strong>Bilde {{$index}} av {{$ctrl.images.length}}:</strong> {{img.description}}
+            </p>
+        </ion-slide-page>
+    </ion-slides>
+</div>

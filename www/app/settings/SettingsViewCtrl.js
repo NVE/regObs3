@@ -1,6 +1,6 @@
 angular
     .module('RegObs')
-    .controller('SettingsViewCtrl', function ($scope, $rootScope, $http, $state, $cordovaInAppBrowser, AppSettings, LocalStorage, ObsLocation, Registration, User, Utility, HeaderColor, RegobsPopup, AppLogging) {
+    .controller('SettingsViewCtrl', function ($scope, $rootScope, $http, $state, $cordovaInAppBrowser, $ionicLoading, AppSettings, LocalStorage, ObsLocation, Registration, User, Utility, HeaderColor, RegobsPopup, AppLogging, PresistentStorage) {
         var vm = this;
 
         vm.settings = AppSettings;
@@ -43,15 +43,19 @@ angular
         vm.clearAppStorage = function () {
             RegobsPopup.delete('Nullstill app?', 'Vil du slette lokalt lagret data og nullstille appen?', 'Nullstill').then(
                 function(res) {
-                    if(res) {
+                    if (res) {
+                        $ionicLoading.show();
                         LocalStorage.clear();
-                        //Registration.load();
-                        AppSettings.load();
-                        User.load();
-                        HeaderColor.init();
-                        vm.username = '';
-                        vm.password = '';
-                        $state.go('wizard');
+                        PresistentStorage.clear().then(function() {
+                            //Registration.load();
+                            AppSettings.load();
+                            User.load();
+                            HeaderColor.init();
+                            vm.username = '';
+                            vm.password = '';
+                            $ionicLoading.hide();
+                            $state.go('wizard');
+                        });                      
                     }
                 });
         };

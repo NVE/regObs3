@@ -10,7 +10,6 @@
             locationLayerGroup,
             userMarker,
             pathLine,
-            popup,
             markerMenu,
             closeMarkerMenuTimer,
             observationInfo,
@@ -214,8 +213,6 @@
 
                 obsLocationMarker.setLatLng(latlng);
 
-                //closePopup();
-
                 if (obsLocationMarker.options.icon !== iconSet) {
                     obsLocationMarker.setIcon(iconSet);
                 }
@@ -259,7 +256,6 @@
                             var position = marker.getLatLng();
                             if (position) {
                                 updateDistanceLineLatLng(position, true);
-                                //openAndUpdatePopup(position);
                                 observationInfo.updateFromLatLng(position);
                             }
                         }
@@ -315,25 +311,6 @@
                 }
             }
         };
-
-        //var closePopup = function () {
-        //    if (popup && map) {
-        //        map.closePopup(popup);
-        //    }
-        //}
-
-        //var openAndUpdatePopup = function (latlng) {
-        //    if (userMarker && latlng) {
-        //        var distance = userMarker.getLatLng().distanceTo(obsLocationMarker.getLatLng()).toFixed(0);
-        //        var center = pathLine.getBounds().getCenter();
-        //        if (!popup) {
-        //            popup = L.popup().setLatLng(center).setContent(getDistanceText(distance));
-        //        } else {
-        //            popup.setLatLng(center).setContent(getDistanceText(distance));
-        //        }
-        //        popup.openOn(map);
-        //    }
-        //};
 
         var updateDistanceLine = function () {
             if (ObsLocation.isSet() && userMarker) {
@@ -543,80 +520,26 @@
                 var geoHazardTid = Utility.getCurrentGeoHazardTid();
 
                 var workFunc = function (onProgress, cancel) {
-                    return $q(function (resolve, reject) {
-                        var canceled = false;
-                        if (cancel) {
-                            cancel.promise.then(function() {
-                                canceled = true;
-                                reject('Canceled');
-                            });
-                        }
-
-                        var progress = new RegObs.ProggressStatus();
-                        Observations.updateObservationsWithinRadius(center.lat, center.lng, distance, geoHazardTid, progress, onProgress, cancel)
-                            .then(function () {
-                                //TODO: Update nearby locations
-                                resolve();
-                            });
-                        //TODO: Delete old registrations
-                    });
+                    return Observations
+                        .updateObservationsWithinRadius(center.lat,
+                            center.lng,
+                            distance,
+                            geoHazardTid,
+                            new RegObs.ProggressStatus(),
+                            onProgress,
+                            cancel);
                 };
 
                 RegobsPopup.downloadProgress('Oppdaterer kartet med det siste fra regObs', workFunc, { longTimoutMessageDelay: 10, closeOnComplete: true })
-                    .then(function() {
+                    .then(function () {
                         AppLogging.log('progress completed');
                     })
-                    .catch(function() {
+                    .catch(function () {
                         AppLogging.log('progress cancelled');
-                    });
-
-
-                //var cancelUpdatePromise = $q.defer();
-
-                //var updateCalls = [Observations.updateObservationsWithinRadius(center.lat, center.lng, distance, geoHazardTid, cancelUpdatePromise),
-                //                    updateNearbyLocations(center.lat, center.lng, distance, geoHazardTid, cancelUpdatePromise)];
-
-                //var scope = $rootScope.$new();
-                //scope.tooLongTime = false;
-                //scope.timer = 0;
-
-                //var interval = $interval(function () {
-                //    scope.timer += 1;
-                //    if (scope.timer > 10) {
-                //        scope.tooLongTime = true;
-                //    }
-                //}, 1000);
-
-                //var myPopup = $ionicPopup.show({
-                //    template: '<p ng-if="tooLongTime">Tjenesten bruker for mye tid. Det kan være dårlig internett der du er eller at regObs av andre grunner er utilgjengelig. Du kan vente eller avbryte og prøve igjen senere</p>',
-                //    title: 'Oppdaterer kartet med det siste fra regObs',
-                //    //subTitle: 'Please use normal things',
-                //    scope: scope,
-                //    buttons: [
-                //        {
-                //            text: '<b>Avbryt</b>',
-                //            type: 'button-positive',
-                //            onTap: function (e) {
-                //                cancelUpdatePromise.resolve();
-                //            }
-                //        }
-                //    ]
-                //});
-
-                //$q.all(updateCalls).then(function () {
-                //    $interval.cancel(interval);
-                //    drawObservations();
-                //    myPopup.close();
-                //});
+                    })
+                    .finally(service.updateMapFromSettings);
             }
         };
-
-        //service.cancelUpdateObservationInMap = function() {
-        //    if (cancelUpdatePromise) {
-        //        cancelUpdatePromise.resolve();
-        //        cancelUpdatePromise = null;
-        //    }
-        //};
 
         //TODO: Move/Rename this to map.refresh() or something
         service.updateMapFromSettings = function () {
