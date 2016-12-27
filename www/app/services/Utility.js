@@ -368,6 +368,18 @@ angular
             return bytes.toFixed(1) + ' ' + units[u];
         };
 
+        /**
+         * Is ripple emulator running?
+         * @returns {boolean} - true if ripple emulator is running 
+         */
+        service.isRippleEmulator = function() {
+            return window.parent && window.parent.ripple;
+        };
+
+        service.isString = function(obj) {
+            return typeof obj === 'string' || obj instanceof String;
+        };
+
         return service;
 
     });

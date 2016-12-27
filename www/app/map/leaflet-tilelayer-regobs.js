@@ -111,7 +111,7 @@ L.TileLayer.RegObs = L.TileLayer.extend({
     debug: function (message) {
         var tile = this;
         if (tile.options.debugFunc) {
-            tile.options.debugFunc(message);
+            //tile.options.debugFunc(message);
         }
     },
 
