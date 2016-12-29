@@ -16,7 +16,8 @@
             'nb_NO': 'no'
         };
 
-        $translateProvider.useStaticFilesLoader({
+        $translateProvider.useSanitizeValueStrategy('escapeParameters')
+        .useStaticFilesLoader({
             prefix: './app/json/localization/',
             suffix: '.json'
         }).registerAvailableLanguageKeys(['no'], langMap)

@@ -151,6 +151,21 @@
             $rootScope.$broadcast('$regobs.appModeChanged', mode);
         };
 
+        settings.getWebImageUrl = function(id) {
+            return settings.getWebRoot() + 'Picture/image/' + id;
+        };
+
+        settings.imageRootFolder = 'picture';
+        settings.registrationRootFolder = 'reg';
+
+        settings.getImageRelativePath = function (id) {
+            return  settings.imageRootFolder +'/' +settings.data.env.replace(/ /g, '') + '/' + id + '.jpg';
+        };
+
+        settings.getRegistrationRelativePath = function(id) {
+            return settings.registrationRootFolder + '/' + settings.data.env.replace(/ /g, '') + '/' + id + '.json';
+        };
+
         settings.load();
 
 

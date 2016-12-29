@@ -380,6 +380,10 @@ angular
             return typeof obj === 'string' || obj instanceof String;
         };
 
+        service.isObsImage = function(registration) {
+            return registration.RegistrationTid === 12 || registration.RegistrationTid === 23;
+        };
+
         return service;
 
     });
