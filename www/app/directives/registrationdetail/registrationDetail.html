@@ -1,18 +1,23 @@
 ﻿<div class="padding">
     <div>
-        <strong>{{$ctrl.registration.MunicipalName}}</strong> &bull; {{$ctrl.registration.DtObsTime}} &bull; {{$ctrl.registration.Registrations.length}} <i class="icon ion-eye"></i>
+        <strong>{{$ctrl.registration.MunicipalName}}</strong> &bull; {{$ctrl.registration.DtObsTime | date:'dd.MM.yyyy HH:mm:ss'}} &bull; {{$ctrl.observationCount()}} <i class="icon ion-eye"></i>
     </div>
     <div>
-        Steinar@Obskorps (<i class="icon ion-ios-star-outline"></i><i class="icon ion-ios-star-outline"></i><i class="icon ion-ios-star-outline"></i><i class="icon ion-ios-star-outline"></i>)
+        {{$ctrl.registration.NickName}} (<i ng-repeat="star in $ctrl.registration.CompetenceLevelName track by $index" class="icon ion-ios-star-outline"></i>)
     </div>
 </div>
 <div class="observation-slides">
     <ion-slides slider="data.slider">
         <ion-slide-page ng-repeat="img in $ctrl.images track by $index">
-            <img ng-src="{{img.url}}" alt="obsimg" />
-            <p class="padding" style="font-size: 12px; color: darkgray">
-                <strong>Bilde {{$index}} av {{$ctrl.images.length}}:</strong> {{img.description}}
+            <img ng-src="{{img.url}}" alt="obsimg" class="obs-detail-image" />
+            <p class="padding obs-detail-image-text">
+                <strong>{{'IMAGE' | translate}} {{($index+1)}} {{'OF' | translate}} {{$ctrl.images.length}}:</strong> {{img.description}}
             </p>
         </ion-slide-page>
     </ion-slides>
+</div>
+<div class="padding">
+    <span ng-repeat="obs in $ctrl.descriptions">
+        <strong>{{obs.name}}:</strong>&nbsp;<span ng-repeat="desc in obs.description track by $index"><span ng-if="$index > 0">&nbsp;&bull;&nbsp;</span>{{desc}}</span>
+    </span>
 </div>

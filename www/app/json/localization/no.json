@@ -10,5 +10,7 @@
   "AWAY": "unna",
   "START_NEW_REGISTRATION_ON": "Start ny registrering på",
   "SLOW_DOWNLOAD_MESSAGE": "Tjenesten bruker for mye tid. Det kan være dårlig internett der du er eller at regObs av andre grunner er utilgjengelig. Du kan vente eller avbryte og prøve igjen senere",
-  "FAILED": "Feilet"
+  "FAILED": "Feilet",
+  "IMAGE": "Bilde",
+  "OF": "av"  
 }

@@ -131,10 +131,10 @@
          */
         service.getRegistrationDetailsFromStorage = function (id) {
             if (!id) throw Error('id must be set!');
-            var location = service._getRegistrationStorageLocation(id);
-            return PresistentStorage.readAsText(location)
+            var path = AppSettings.getRegistrationRelativePath(id);
+            return PresistentStorage.readAsText(path)
                 .then(function (text) {
-                    AppLogging.log('Found registration id ' + id + ' on storage path ' + location);
+                    AppLogging.log('Found registration id ' + id + ' on storage path ' + path);
                     return JSON.parse(text);
                 });
         };
@@ -209,23 +209,14 @@
             });
         };
 
-        /**
-         * Helper method to get storage location for saved registration
-         * @param {} id 
-         * @returns {} 
-         */
-        service._getRegistrationStorageLocation = function (id) {
-            return 'reg/' + AppSettings.data.env.replace(/ /g, '') + '/' + id + '.json';
-        };
-
         service._saveRegistrationDetails = function (registration) {
-            return PresistentStorage.storeFile(service._getRegistrationStorageLocation(registration.RegId), JSON.stringify(registration));
+            return PresistentStorage.storeFile(AppSettings.getRegistrationRelativePath(registration.RegId), JSON.stringify(registration));
         };
 
         var downloadPicture = function (id, progress, onProgress, cancel) {
             return $q(function (resolve) {
-                var path = 'picture/' + AppSettings.data.env.replace(/ /g, '') + '/' + id + '.jpg';
-                var url = AppSettings.getWebRoot() + 'Picture/image/' + id;
+                var path = AppSettings.getImageRelativePath(id);
+                var url = AppSettings.getWebImageUrl(id);
 
                 var progressFunc = function () {
                     progress.addComplete();
@@ -256,11 +247,9 @@
                         .catch(errorFunc);
                 };
 
-                downloadImage();
-
-                //PresistentStorage.checkIfFileExsists(path)
-                //    .then(progressFunc) //progress if image allready exists
-                //    .catch(downloadImage); //Download image if image do not exist
+                PresistentStorage.checkIfFileExsists(path)
+                    .then(progressFunc) //progress if image allready exists
+                    .catch(downloadImage); //Download image if image do not exist
             });
         };
 
@@ -268,7 +257,7 @@
             var tasks = [];
             AppLogging.log('Saving pictures for registration ' + registration.RegId);
             registration.Registrations.forEach(function (item) {
-                if (item.RegistrationTid === 12 || item.RegistrationTid === 23) {
+                if (Utility.isObsImage(item)) {
                     var pictureId = item.TypicalValue2;
                     tasks.push(downloadPicture(pictureId, progress, onProgress, cancel));
                 }

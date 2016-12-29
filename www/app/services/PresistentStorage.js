@@ -60,7 +60,7 @@ angular.module('RegObs').factory('PresistentStorage', function (AppSettings, $co
         var writeFile = function () {
             return $cordovaFile.writeFile(cordova.file.dataDirectory, path, content, true);
         };
-        if (path.indexOf('/')>0) {
+        if (path.indexOf('/') > 0) {
             var directory = path.substr(0, path.lastIndexOf('/'));
             return service._createDirRecursively(directory).then(writeFile);
         } else {
@@ -124,7 +124,7 @@ angular.module('RegObs').factory('PresistentStorage', function (AppSettings, $co
     };
 
     service._emulateClear = function () {
-        return $q(function(resolve) {
+        return $q(function (resolve) {
             LocalStorage.clear();
             resolve();
         });
@@ -184,11 +184,11 @@ angular.module('RegObs').factory('PresistentStorage', function (AppSettings, $co
         }
     };
 
-    service.clear = function () {
+    service.removeRecursively = function (folder) {
         if (Utility.isRippleEmulator()) {
             return service._emulateClear();
         } else {
-            return $cordovaFile.removeRecursively(cordova.file.dataDirectory, '');
+            return $cordovaFile.removeRecursively(cordova.file.dataDirectory, folder);
         }
     };
 
