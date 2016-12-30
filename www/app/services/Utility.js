@@ -384,6 +384,21 @@ angular
             return registration.RegistrationTid === 12 || registration.RegistrationTid === 23;
         };
 
+        /**
+         * Get distance text formatted in km or meter depending on how large the distance value is
+         * @param {} distance in meter
+         * @returns {} km or meter distance text
+         */
+        service.getDistanceText = function (distance) {
+            var dText;
+            if (distance > 1000) {
+                dText = (distance / 1000).toFixed(1) + ' km';
+            } else {
+                dText = (distance || 0) + ' m';
+            }
+            return dText;
+        };
+
         return service;
 
     });

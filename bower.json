@@ -56,7 +56,8 @@
     "progressbar.js": "^1.0.1",
     "angular-progressbar": "^0.1.0",
     "angular-translate": "2.11.0",
-    "angular-translate-loader-static-files": "^2.13.1"
+    "angular-translate-loader-static-files": "^2.13.1",
+    "leaflet.markercluster": "^1.0.0"
   },
   "resolutions": {
     "angular-ui-router": "0.3.2",
