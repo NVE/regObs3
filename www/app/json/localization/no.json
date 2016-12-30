@@ -12,5 +12,8 @@
   "SLOW_DOWNLOAD_MESSAGE": "Tjenesten bruker for mye tid. Det kan være dårlig internett der du er eller at regObs av andre grunner er utilgjengelig. Du kan vente eller avbryte og prøve igjen senere",
   "FAILED": "Feilet",
   "IMAGE": "Bilde",
-  "OF": "av"  
+  "OF": "av",
+  "VIEW_WEB_REGISTRATION": "Se registrering på web",
+  "HELP": "Hjelp",
+  "MAP_BY": "Topografisk kart levert av" 
 }

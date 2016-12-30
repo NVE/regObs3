@@ -115,10 +115,10 @@
         </div>-->
         </div>
         <ion-item class="item-text-wrap">
-            <button class="button button-positive button-block button-clear">
-                Hjelp
+            <button class="button button-positive button-block button-clear" ui-sref="help({page:'maphelp'})" menu-close>
+                {{'HELP'|translate}}
             </button>
-            <p>Kart levert av lordum osv. By default, side menus are hidden underneath their side menu content and can be opened by swiping the content left or right or by toggling a button to show the side menu.</p>
+            <p>{{'MAP_BY'|translate}} <a href="" ng-click="$ctrl.openStatKart()">©Kartverket</a></p>
         </ion-item>
     </ion-list>
 </ion-content>

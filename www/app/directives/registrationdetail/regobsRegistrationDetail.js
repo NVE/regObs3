@@ -1,6 +1,6 @@
 ﻿angular.module('RegObs').component('registrationDetail', {
     templateUrl: 'app/directives/registrationdetail/registrationDetail.html',
-    controller: function (AppSettings, PresistentStorage, AppLogging, Utility) {
+    controller: function (AppSettings, PresistentStorage, AppLogging, Utility, $cordovaInAppBrowser) {
         var ctrl = this;
 
         ctrl.images = [];
@@ -22,6 +22,11 @@
                 result.push(item.TypicalValue1);
             }
             return result;
+        };
+
+        ctrl.onViewWebRegistrationClick = function () {
+            var url = AppSettings.getWebRoot() + '/Registration/' + ctrl.registration.RegId;
+            $cordovaInAppBrowser.open(url, '_system');
         };
 
         var init = function() {

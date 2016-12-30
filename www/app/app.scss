@@ -271,7 +271,7 @@ input:focus, select:focus, textarea:focus {
     position: relative;
 }
 
-.downloadprogress  .icon {
+.downloadprogress .icon {
     font-size: 46px;
 }
 
@@ -286,4 +286,8 @@ input:focus, select:focus, textarea:focus {
 
 .downloadprogress .progressbar-text {
     text-align: center;
+}
+
+.item-stacked-label.item-select select {
+    padding: 3px 0 8px 7px !important;
 }

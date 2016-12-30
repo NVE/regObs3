@@ -2,7 +2,7 @@
     .module('RegObs')
     .component('mapMenu', {
         templateUrl: 'app/directives/mapmenu/mapmenu.html',
-        controller: function (AppSettings, $state, OfflineMap) {
+        controller: function (AppSettings, $state, OfflineMap, $cordovaInAppBrowser) {
             'ngInject';
             var ctrl = this;
 
@@ -25,6 +25,10 @@
                }, function (error) {
                    $state.go('offlinemapoverview');
                });
+            };
+
+            ctrl.openStatKart = function() {
+                $cordovaInAppBrowser.open('http://kartverket.no/', '_system');
             };
         }
     });
