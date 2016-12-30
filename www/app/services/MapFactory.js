@@ -2,63 +2,47 @@
     .module('RegObs')
     .factory('Map', function (AppSettings, AppLogging, ObsLocation, Observations, Utility, $state, Registration, $ionicPlatform, $rootScope, $q, $timeout, $ionicPopup, $interval, RegobsPopup) {
         var service = this;
-        var map,
-            obsLocationMarker,
-            observationsLayerGroup,
-            markersLayerGroup,
-            tilesLayerGroup,
-            locationLayerGroup,
-            userMarker,
-            pathLine,
-            markerMenu,
-            closeMarkerMenuTimer,
-            observationInfo,
-            firstLoad = true,
-            isDragging = false,
-            tiles = [],
-            isProgramaticZoom = false,
-            followMode = true;
-        var icon = L.AwesomeMarkers.icon({ icon: 'arrow-move', prefix: 'ion', markerColor: 'green', extraClasses: 'map-obs-marker' });
-        var iconSet = L.AwesomeMarkers.icon({ icon: 'ion-flag', prefix: 'ion', markerColor: 'gray', extraClasses: 'map-obs-marker map-obs-marker-set' });
-        var center = [
-                62.5,
-                10
-        ];
+        var map, //Leaflet map
+            layerGroups, //Layer groups object
+            obsLocationMarker, //Leaflet marker for current obs location
+            userMarker, //Leaflet marker for user position
+            pathLine, //Leaflet (dotted) path between user position and current obs location
+            markerMenu, //Obs location marker menu
+            closeMarkerMenuTimer, //Timer for automatically closing marker menu
+            observationInfo, //Obs location information. Displayed on top right corner
+            isDragging = false, //is user currently dragging map?
+            tiles = [], //Map tiles
+            isProgramaticZoom = false, //Is currently programatic zoom
+            followMode = true, //Follow user position, or has user manually dragged or zoomed map?
+            icon = L.AwesomeMarkers.icon({ icon: 'arrow-move', prefix: 'ion', markerColor: 'green', extraClasses: 'map-obs-marker' }),
+            iconSet = L.AwesomeMarkers.icon({ icon: 'ion-flag', prefix: 'ion', markerColor: 'gray', extraClasses: 'map-obs-marker map-obs-marker-set' }),
+            center = [62.5, 10]; //default map center when no observation or user location
 
-        var createObservationInfo = function () {
-            observationInfo = L.control();
+        /**
+         * Update info text with distance from user to observation
+         * @param {} latlng 
+         * @returns {} 
+         */
+        service._updateObsInfoText = function (latlng) {
+            if (!observationInfo) return;
 
-            observationInfo.onAdd = function () {
-                this._div = L.DomUtil.create('div', 'map-observation-info'); // create a div with a class "info"
-                this.update();
-                return this._div;
-            };
+            if (!latlng && ObsLocation.isSet()) {
+                var obsLoc = ObsLocation.get();
+                latlng = new L.LatLng(obsLoc.Latitude, obsLoc.Longitude);
+            }
 
-            var flag = '<i class="icon ion-flag"></i> ';
+            var text = '';
+            if (latlng && userMarker) {
+                var distance = userMarker.getLatLng().distanceTo(latlng).toFixed(0);
+                text = Utility.getDistanceText(distance);
+            }else if (userMarker && !latlng) {
+                text = '0m';
+            } else if (!ObsLocation.isSet()) {
+                text = 'Ikke satt';
+            }
 
-            observationInfo.updateFromLatLng = function (latlng) {
-                if (latlng && userMarker) {
-                    var distance = userMarker.getLatLng().distanceTo(latlng).toFixed(0);
-                    this._div.innerHTML = flag + getDistanceText(distance);
-                }
-            };
-
-            observationInfo.update = function () {
-                if (ObsLocation.isSet() && userMarker) {
-                    var obsLoc = ObsLocation.get();
-                    var latlng = new L.LatLng(obsLoc.Latitude, obsLoc.Longitude);
-                    this.updateFromLatLng(latlng);
-                } else if (userMarker) {
-                    this._div.innerHTML = flag + '0m';
-                } else if (ObsLocation.isSet()) {
-                    this._div.innerHTML = flag;
-                } else {
-                    this._div.innerHTML = flag + 'Ikke satt';
-                }
-            };
-
-            observationInfo.addTo(map);
-        };
+            observationInfo.setText(text);
+        };       
 
         var getObsIcon = function (obs) {
             //var color = Utility.geoHazardColor(obs.GeoHazardTid);
@@ -84,7 +68,7 @@
         }
 
         var drawObservations = function () {
-            observationsLayerGroup.clearLayers();
+            layerGroups.observations.clearLayers();
             Observations.getStoredObservations(Utility.getCurrentGeoHazardTid()).forEach(function (obs) {
                 var latlng = new L.LatLng(obs.LatLngObject.Latitude, obs.LatLngObject.Longitude);
                 var m = new L.Marker(latlng, { icon: getObsIcon(obs) });
@@ -92,27 +76,27 @@
                     function () {
                         $state.go('observationdetails', { observation: obs });
                     });
-                m.addTo(observationsLayerGroup);
+                m.addTo(layerGroups.observations);
             });
 
         };
 
         var hideObservations = function () {
-            observationsLayerGroup.clearLayers();
+            layerGroups.observations.clearLayers();
         };
 
-        var updateNearbyLocations = function (lat, lng, distance, geoHazardTid) {
-            return $q(function (resolve, reject) {
-                Observations.getNearbyLocations(lat, lng, distance, geoHazardTid)
-                    .then(function () {
-                        drawStoredLocations();
-                        resolve();
-                    }).catch(reject);
-            });
-        };
+        //var updateNearbyLocations = function (lat, lng, distance, geoHazardTid) {
+        //    return $q(function (resolve, reject) {
+        //        Observations.getNearbyLocations(lat, lng, distance, geoHazardTid)
+        //            .then(function () {
+        //                drawStoredLocations();
+        //                resolve();
+        //            }).catch(reject);
+        //    });
+        //};
 
         var drawStoredLocations = function () {
-            locationLayerGroup.clearLayers();
+            layerGroups.locations.clearLayers();
 
             var geoHazardTid = Utility.getCurrentGeoHazardTid();
             var storedLocations = Observations.getLocations(geoHazardTid);
@@ -122,12 +106,12 @@
                 var myIcon = L.divIcon({ className: 'my-div-icon', html: '<div class="nearby-location-marker ' + geoHazardType + '"><div class="nearby-location-marker-inner"></div></div>' });
                 var m = L.marker(latlng, { icon: myIcon });
                 m.on('click', function () { $state.go('locationdetails', { location: loc }) });
-                m.addTo(locationLayerGroup);
+                m.addTo(layerGroups.locations);
             });
         };
 
         var hideLocations = function () {
-            locationLayerGroup.clearLayers();
+            layerGroups.locations.clearLayers();
         };
 
         var startTrip = function () {
@@ -145,7 +129,7 @@
         var clearObsLocation = function () {
             ObsLocation.remove();
             if (userMarker) {
-                drawObsLocation(userMarker.getLatLng(), false);
+                drawObsLocation();
                 updateDistanceLine(false);
             }
             removeMarkerMenu();
@@ -153,7 +137,8 @@
                 obsLocationMarker.setIcon(icon);
             }
 
-            observationInfo.update();
+            //observationInfo.update();
+            service._updateObsInfoText();
         }
 
         var getMarkerMenuItems = function () {
@@ -224,7 +209,7 @@
                 };
                 ObsLocation.set(obsLoc);
                 updateDistanceLine(true);
-                observationInfo.update();
+                service._updateObsInfoText();
                 createMarkerMenu();
                 obsLocationMarker.openMenu();
                 closeMarkerMenuTimer = $timeout(function () {
@@ -233,7 +218,7 @@
             }
         };
 
-        var drawObsLocation = function (zoom) {
+        var drawObsLocation = function () {
             var latlng;
             if (ObsLocation.isSet()) {
                 latlng = L.latLng(ObsLocation.get().Latitude, ObsLocation.get().Longitude);
@@ -256,7 +241,7 @@
                             var position = marker.getLatLng();
                             if (position) {
                                 updateDistanceLineLatLng(position, true);
-                                observationInfo.updateFromLatLng(position);
+                                service._updateObsInfoText(position);
                             }
                         }
                     });
@@ -267,7 +252,7 @@
                             setObsLocation(marker.getLatLng());
                         }
                     });
-                    obsLocationMarker.addTo(markersLayerGroup);
+                    obsLocationMarker.addTo(layerGroups.user);
                 } else {
                     obsLocationMarker.setLatLng(latlng);
                 }
@@ -279,33 +264,19 @@
                     obsLocationMarker.unbindPopup();
                     createMarkerMenu();
                     updateDistanceLine(true);
-                    observationInfo.update();
-                }
-
-                if (zoom) {
-                    isProgramaticZoom = true;
-                    map.setView(latlng, 9);
-                    isProgramaticZoom = false;
+                    service._updateObsInfoText();
                 }
             }
         }
 
-        var getDistanceText = function (distance) {
-            var dText;
-            if (distance > 1000) {
-                dText = (distance / 1000).toFixed(1) + ' km';
-            } else {
-                dText = (distance || 0) + ' m';
-            }
-            return dText;
-        };
+        
 
         var updateDistanceLineLatLng = function (latlng) {
             if (userMarker && latlng) {
                 var path = [latlng, userMarker.getLatLng()];
                 if (!pathLine) {
                     pathLine = L.polyline(path, { color: 'black', weight: 6, opacity: .5, dashArray: "10,10" })
-                        .addTo(markersLayerGroup);
+                        .addTo(layerGroups.user);
                 } else {
                     pathLine.setLatLngs(path);
                 }
@@ -319,13 +290,13 @@
                 updateDistanceLineLatLng(latlng);
             } else {
                 if (pathLine) {
-                    markersLayerGroup.removeLayer(pathLine);
+                    layerGroups.user.removeLayer(pathLine);
                     pathLine = null;
                 }
             }
         }
 
-        var drawUserLocation = function (obsLoc, zoom) {
+        var drawUserLocation = function (obsLoc) {
             if (obsLoc.Latitude && obsLoc.Longitude) {
                 var latlng = new L.LatLng(obsLoc.Latitude, obsLoc.Longitude);
 
@@ -333,20 +304,15 @@
 
                 if (!userMarker) {
                     userMarker = L.userMarker(latlng, { pulsing: true, accuracy: accuracy, smallIcon: true });
-                    userMarker.addTo(markersLayerGroup);
+                    userMarker.addTo(layerGroups.user);
                 } else {
                     userMarker.setLatLng(latlng);
+                    userMarker.setAccuracy(accuracy);
                 }
 
                 if (!isDragging) {
-                    drawObsLocation(false);
-                    observationInfo.update();
-                }
-
-                if (zoom) {
-                    isProgramaticZoom = true;
-                    map.setView(latlng, 9);
-                    isProgramaticZoom = false;
+                    drawObsLocation();
+                    service._updateObsInfoText();
                 }
 
                 if (followMode) {
@@ -357,7 +323,7 @@
 
         var hideAllTiles = function () {
             for (var i = 1; i < tiles.length; i++) {
-                tilesLayerGroup.removeLayer(tiles[i]);
+                layerGroups.tiles.removeLayer(tiles[i]);
             }
         };
 
@@ -378,13 +344,13 @@
         service.getTileByName = getTileByName;
 
         var showTile = function (name, opacity) {
-            if (tilesLayerGroup) {
+            if (layerGroups.tiles) {
                 var t = getTileByName(name);
                 if (t) {
                     if (opacity) {
                         t.setOpacity(opacity);
                     }
-                    tilesLayerGroup.addLayer(t);
+                    layerGroups.tiles.addLayer(t);
                 }
             }
         };
@@ -394,7 +360,7 @@
         };
 
         service.createMap = function (elem) {
-            firstLoad = true;
+            var firstLoad = true;
 
             if (ObsLocation.isSet()) {
                 var currentPosition = ObsLocation.get();
@@ -408,12 +374,13 @@
                 zoomControl: false,
                 attributionControl: false
             });
-
-            //TODO: Create LayerGroup object instead of many variables
-            tilesLayerGroup = L.layerGroup().addTo(map);
-            locationLayerGroup = L.layerGroup().addTo(map);
-            observationsLayerGroup = L.layerGroup().addTo(map);
-            markersLayerGroup = L.layerGroup().addTo(map);
+            
+            layerGroups = { //Layers are added in order
+                tiles: L.layerGroup().addTo(map),                              
+                locations: L.markerClusterGroup().addTo(map),
+                observations: L.markerClusterGroup().addTo(map),
+                user: L.layerGroup().addTo(map)
+            };
 
             tiles = [];
 
@@ -421,7 +388,7 @@
                 var t = L.tileLayerRegObs(tile.url, { folder: AppSettings.mapFolder, name: tile.name, debugFunc: AppLogging.log });
                 tiles.push(t);
             });
-            tiles[0].addTo(tilesLayerGroup);
+            tiles[0].addTo(layerGroups.tiles);
 
             map.on('locationfound',
                function (position) {
@@ -429,7 +396,10 @@
                        Latitude: position.latitude,
                        Longitude: position.longitude,
                        Uncertainty: position.accuracy
-                   }, !ObsLocation.isSet() && firstLoad);
+                    });
+                    if (!ObsLocation.isSet() && firstLoad) {
+                        service.setView(L.latLng(position.latitude, position.longitude));
+                    }
                    firstLoad = false;
                });
 
@@ -454,21 +424,21 @@
                 }
             });
 
-            createObservationInfo();
-
+            observationInfo = L.obsLocationInfo().addTo(map);
             service.updateMapFromSettings();
 
+            drawObsLocation();
             if (ObsLocation.isSet()) {
-                drawObsLocation(true);
-            } else {
-                drawObsLocation(false);
+                service.setView(L.latLng(ObsLocation.get().Latitude, ObsLocation.get().Longitude));
             }
 
-            //drawObservations();
-
-            // map.invalidateSize();
-
             return map;
+        };
+
+        service.setView = function(latlng, zoom) {
+            isProgramaticZoom = true;
+            map.setView(latlng, zoom || 9);
+            isProgramaticZoom = false;
         };
 
         service.getCenter = function () {
@@ -487,7 +457,7 @@
             if (userMarker) {
                 var latlng = new L.LatLng(lat, lng);
                 var distance = userMarker.getLatLng().distanceTo(latlng).toFixed(0);
-                var description = getDistanceText(distance);
+                var description = Utility.getDistanceText(distance);
                 return { distance: distance, description: description };
             }
             return { distance: null, description: 'Ikke kjent' };
@@ -509,8 +479,6 @@
             createMarkerMenu();
             service.updateMapFromSettings();
         };
-
-        //var cancelUpdatePromise;
 
         service.updateObservationsInMap = function () {
             if (map) {
@@ -567,8 +535,8 @@
                 hideObservations();
             }
 
-            drawObsLocation(false);
-            observationInfo.update();
+            drawObsLocation();
+            service._updateObsInfoText();
             service.invalidateSize();
         };
 
