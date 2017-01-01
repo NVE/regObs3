@@ -44,34 +44,37 @@
             observationInfo.setText(text);
         };
 
-        var getObsIcon = function (obs) {
-            //var color = Utility.geoHazardColor(obs.GeoHazardTid);
-            var color = 'white';
-            var iconColor = '#444';
-            if (obs.GeoHazardTid === 20) {
-                color = 'beige';
-                iconColor = '#FFF';
-            } else if (obs.GeoHazardTid === 60) {
-                color = 'blue';
-                iconColor = '#FFF';
-            } else if (obs.GeoHazardTid === 70) {
-                color = 'cadetblue';
-                iconColor = '#FFF';
-            }
-            return L.AwesomeMarkers.icon({
-                icon: 'ion-flag',
-                prefix: 'ion',
-                markerColor: color,
-                iconColor: iconColor,
-                extraClasses: 'map-obs-marker-observation'
-            });
-        }
+        //var getObsIcon = function (obs) {
+        //    //var color = Utility.geoHazardColor(obs.GeoHazardTid);
+        //    var color = 'white';
+        //    var iconColor = '#444';
+        //    if (obs.GeoHazardTid === 20) {
+        //        color = 'beige';
+        //        iconColor = '#FFF';
+        //    } else if (obs.GeoHazardTid === 60) {
+        //        color = 'blue';
+        //        iconColor = '#FFF';
+        //    } else if (obs.GeoHazardTid === 70) {
+        //        color = 'cadetblue';
+        //        iconColor = '#FFF';
+        //    }
+        //    return L.AwesomeMarkers.icon({
+        //        icon: 'ion-flag',
+        //        prefix: 'ion',
+        //        markerColor: color,
+        //        iconColor: iconColor,
+        //        extraClasses: 'map-obs-marker-observation'
+        //    });
+        //}
 
         var drawObservations = function () {
             layerGroups.observations.clearLayers();
             Observations.getStoredObservations(Utility.getCurrentGeoHazardTid()).forEach(function (obs) {
                 var latlng = new L.LatLng(obs.LatLngObject.Latitude, obs.LatLngObject.Longitude);
-                var m = new L.Marker(latlng, { icon: getObsIcon(obs) });
+                var geoHazardType = Utility.getGeoHazardType(obs.GeoHazardTid);
+                var myIcon = L.divIcon({ className: 'my-div', html: '<div class="observation-pin ' + geoHazardType + '"><i class="icon ion-flag observation-pin-icon"></div>' });
+                var m = L.marker(latlng, { icon: myIcon });
+                //var m = new L.Marker(latlng, { icon: getObsIcon(obs) });
                 m.on('click',
                     function () {
                         $state.go('observationdetails', { observation: obs });
@@ -380,10 +383,15 @@
                 locations: L.markerClusterGroup({
                     iconCreateFunction: function (cluster) {
                         var innerDiv = '<div class="nearby-location-marker-inner nearby-location-marker-inner-cluster">' + cluster.getChildCount() + '</div>';
-                        return L.divIcon({ html: innerDiv, className: 'nearby-location-marker nearby-location-marker-cluster snow', iconSize: L.point(30, 30) });
+                        return L.divIcon({ html: innerDiv, className: 'nearby-location-marker obs-marker-cluster snow', iconSize: L.point(30, 30) });
                     }
                 }).addTo(map),
-                observations: L.markerClusterGroup().addTo(map),
+                observations: L.markerClusterGroup({
+                    iconCreateFunction: function (cluster) {
+                        var innerDiv = '<div class="observation-pin obs-marker-cluster snow"><div class="observation-pin-icon">' + cluster.getChildCount() + '</div></div>';
+                        return L.divIcon({ html: innerDiv, className: 'observation-pin-cluster', iconSize: L.point(30, 30) });
+                    }
+                }).addTo(map),
                 user: L.layerGroup().addTo(map)
             };
 
