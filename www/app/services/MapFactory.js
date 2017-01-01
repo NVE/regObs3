@@ -35,14 +35,14 @@
             if (latlng && userMarker) {
                 var distance = userMarker.getLatLng().distanceTo(latlng).toFixed(0);
                 text = Utility.getDistanceText(distance);
-            }else if (userMarker && !latlng) {
+            } else if (userMarker && !latlng) {
                 text = '0m';
             } else if (!ObsLocation.isSet()) {
                 text = 'Ikke satt';
             }
 
             observationInfo.setText(text);
-        };       
+        };
 
         var getObsIcon = function (obs) {
             //var color = Utility.geoHazardColor(obs.GeoHazardTid);
@@ -269,7 +269,7 @@
             }
         }
 
-        
+
 
         var updateDistanceLineLatLng = function (latlng) {
             if (userMarker && latlng) {
@@ -374,10 +374,15 @@
                 zoomControl: false,
                 attributionControl: false
             });
-            
+
             layerGroups = { //Layers are added in order
-                tiles: L.layerGroup().addTo(map),                              
-                locations: L.markerClusterGroup().addTo(map),
+                tiles: L.layerGroup().addTo(map),
+                locations: L.markerClusterGroup({
+                    iconCreateFunction: function (cluster) {
+                        var innerDiv = '<div class="nearby-location-marker-inner nearby-location-marker-inner-cluster">' + cluster.getChildCount() + '</div>';
+                        return L.divIcon({ html: innerDiv, className: 'nearby-location-marker nearby-location-marker-cluster snow', iconSize: L.point(30, 30) });
+                    }
+                }).addTo(map),
                 observations: L.markerClusterGroup().addTo(map),
                 user: L.layerGroup().addTo(map)
             };
@@ -396,10 +401,10 @@
                        Latitude: position.latitude,
                        Longitude: position.longitude,
                        Uncertainty: position.accuracy
-                    });
-                    if (!ObsLocation.isSet() && firstLoad) {
-                        service.setView(L.latLng(position.latitude, position.longitude));
-                    }
+                   });
+                   if (!ObsLocation.isSet() && firstLoad) {
+                       service.setView(L.latLng(position.latitude, position.longitude));
+                   }
                    firstLoad = false;
                });
 
@@ -435,7 +440,7 @@
             return map;
         };
 
-        service.setView = function(latlng, zoom) {
+        service.setView = function (latlng, zoom) {
             isProgramaticZoom = true;
             map.setView(latlng, zoom || 9);
             isProgramaticZoom = false;

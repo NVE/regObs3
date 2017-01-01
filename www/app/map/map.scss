@@ -1,4 +1,8 @@
-﻿.map-observation-info {
+﻿.regobs-map {
+    height: 100%;
+}
+
+.map-observation-info {
     padding: 6px 8px;
     background: white;
     background: rgba(255,255,255,0.8);
@@ -143,9 +147,12 @@
     border-radius: 50%;
 	width: 30px;
 	height: 30px;
-    position: relative;
-    left: -9px;
-    top: -10px;
+    margin-left: -15px;
+    margin-top: -15px;
+}
+
+.nearby-location-marker-cluster {
+    opacity: 0.8 !important;
 }
 
 .nearby-location-marker-inner {
@@ -156,5 +163,10 @@
     position: relative;
     left: 5px;
     top: 5px;
+}
+
+.nearby-location-marker-inner-cluster {
+    border: 2px solid brown;
+    text-align: center;
 }
 
