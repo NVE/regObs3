@@ -233,7 +233,7 @@
 
             if (latlng) {
                 if (!obsLocationMarker) {
-                    obsLocationMarker = new L.Marker(latlng, { icon: icon, draggable: 'true' });
+                    obsLocationMarker = new L.Marker(latlng, { icon: icon, draggable: 'true', zIndexOffset: 1000 });
                     obsLocationMarker.on('dragstart', function (event) {
                         isDragging = true;
                     });
@@ -306,7 +306,7 @@
                 var accuracy = obsLoc.Uncertainty || 1;
 
                 if (!userMarker) {
-                    userMarker = L.userMarker(latlng, { pulsing: true, accuracy: accuracy, smallIcon: true });
+                    userMarker = L.userMarker(latlng, { pulsing: true, accuracy: accuracy, smallIcon: true, zIndexOffset: 1000 });
                     userMarker.addTo(layerGroups.user);
                 } else {
                     userMarker.setLatLng(latlng);
