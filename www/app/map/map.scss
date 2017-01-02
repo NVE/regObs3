@@ -175,8 +175,8 @@
     height:30px;
     border-radius: 50% 50% 50% 0;
     transform: rotate(-45deg);
-    margin-left: -15px;
-    margin-top: -15px;
+    margin-left: -10px;
+    margin-top: -23px;
     border: 2px solid brown;
 }
 
@@ -184,6 +184,17 @@
     transform: rotate(45deg);
     display: block;
     position: relative;
-    left: 5px;
-    top: 14px;
+    left: 6px;
+    top: 12px;
+}
+
+.map-help-pin {
+    display: inline-block;
+    padding: 10px;
+}
+
+.map-help-pin-text {
+    position: absolute; 
+    left: 5px; 
+    top:-2px
 }

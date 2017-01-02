@@ -25,11 +25,27 @@
     "angular-animate": [
       "angular-animate.min.js"
     ],
+    "angular-progressbar": [
+      "dist/angular-progressbar.min.js",
+      "dist/*.map"
+    ],
     "angular-sanitize": [
       "angular-sanitize.min.js"
     ],
+    "angular-translate": [
+      "angular-translate.min.js"
+    ],
+    "angular-translate-loader-static-files": [
+      "angular-translate-loader-static-files.js"
+    ],
     "angular-ui-router": [
       "release/angular-ui-router.min.js"
+    ],
+    "ga-localstorage": [
+      "GALocalStorage.js"
+    ],
+    "ion-floating-menu": [
+      "dist/*.min.*"
     ],
     "ngCordova": [
       "dist/ng-cordova.min.js"
@@ -42,8 +58,15 @@
     "Leaflet.awesome-markers": [
       "dist/**/*.*"
     ],
+    "leaflet.markercluster": [
+      "dist/leaflet.markercluster.js",
+      "dist/*.css"
+    ],
     "moment": [
       "min/**/*.*"
+    ],
+    "progressbar.js": [
+      "dist/*.min.*"
     ]
   },
   "dependencies": {
@@ -64,6 +87,7 @@
     "angular-animate": "1.5.8",
     "angular": "^1.0.8",
     "angular-sanitize": "1.5.8",
-    "progressbar.js": "^1.0.1"
+    "progressbar.js": "^1.0.1",
+    "angular-translate": "~2.13.1"
   }
 }
