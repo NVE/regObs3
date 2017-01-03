@@ -98,10 +98,6 @@
     ],
     "Dirt_LandSlideKDV": [
       {
-        "Id": 0,
-        "Name": "Ikke gitt "
-      },
-      {
         "Id": 1,
         "Name": "Utglidning"
       },

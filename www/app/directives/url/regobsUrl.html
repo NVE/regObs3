@@ -12,7 +12,6 @@
                            ng-click="urls.splice($index, 1)">
             Slett
         </ion-option-button>
-        {{url.UrlDescription}}
-
+        {{url.UrlDescription || url.UrlLine}}
     </ion-item>
 </ion-list>
