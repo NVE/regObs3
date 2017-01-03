@@ -61,19 +61,17 @@
                 $log.error('Could not set proper http header settings. Do you have app/json/secret.json with proper app token? ' + JSON.stringify(error));
             });
 
-        //settings.mapTileUrl = 'http://opencache.statkart.no/gatekeeper/gk/gk.open_gmaps?layers=matrikkel_bakgrunn&zoom={z}&x={x}&y={y}&format=image/png';
-
         settings.maxMapZoomLevel = 17;
 
         settings.mapFolder = 'maps';
 
         settings.tiles = [
-            { name: 'topo', description: 'Topografisk kart', maxDownloadLimit: 10000, url: 'http://opencache.statkart.no/gatekeeper/gk/gk.open_gmaps?layers=matrikkel_bakgrunn&zoom={z}&x={x}&y={y}&format=image/png', maxLimitMessage: 'Statens Kartverk har en grense på 10 000 kartblad per bruker per døgn.' },
+            { name: 'topo', description: 'Topografisk kart', maxDownloadLimit: 10000, url: 'http://opencache.statkart.no/gatekeeper/gk/gk.open_gmaps?layers=matrikkel_bakgrunn&zoom={z}&x={x}&y={y}&format=image/jpeg', maxLimitMessage: 'Statens Kartverk har en grense på 10 000 kartblad per bruker per døgn.' },
             { name: 'steepness', description: 'Bratthetskart', geoHazardTid: 10, url: 'http://test-gisapp.nve.no/arcgis/rest/services/wmts/Bratthet/MapServer/tile/{z}/{y}/{x}' },
             { name: 'ice', description: 'Svekket iskart', geoHazardTid: 70, url: 'http://test-gisapp.nve.no/arcgis/rest/services/wmts/SvekketIs/MapServer/tile/{z}/{y}/{x}' }
         ];
 
-        settings.mapTileUrl = function() {
+        settings.mapTileUrl = function () {
             return settings.tiles[0].url;
         };
 
@@ -88,7 +86,6 @@
             }
         };
 
-        //'http://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}@2x.png'
         settings.load = function () {
             settings.data = LocalStorage.getAndMergeObject(storageKey, angular.copy(settings._defaults));
             var environments = settings.getEnvironments();
@@ -102,7 +99,7 @@
         settings.save = function () {
             LocalStorage.setObject(storageKey, settings.data);
 
-            $rootScope.$broadcast('$regObs.appSettingsChanged');
+            $rootScope.$broadcast('$regObs:appSettingsChanged');
         };
 
         settings.getLocale = function () {
@@ -161,7 +158,7 @@
             var baseUrl = 'http://www.varsom.no/';
             switch (settings.data.appmode) {
                 case 'snow':
-                    return baseUrl + 'snoskredvarsling';  
+                    return baseUrl + 'snoskredvarsling';
                 case 'ice':
                     return baseUrl + 'isvarsling';
             }
@@ -179,7 +176,7 @@
             $rootScope.$broadcast('$regobs.appModeChanged', mode);
         };
 
-        settings.getWebImageUrl = function(id) {
+        settings.getWebImageUrl = function (id) {
             return settings.getWebRoot() + 'Picture/image/' + id;
         };
 
@@ -187,10 +184,10 @@
         settings.registrationRootFolder = 'reg';
 
         settings.getImageRelativePath = function (id) {
-            return  settings.imageRootFolder +'/' +settings.data.env.replace(/ /g, '') + '/' + id + '.jpg';
+            return settings.imageRootFolder + '/' + settings.data.env.replace(/ /g, '') + '/' + id + '.jpg';
         };
 
-        settings.getRegistrationRelativePath = function(id) {
+        settings.getRegistrationRelativePath = function (id) {
             return settings.registrationRootFolder + '/' + settings.data.env.replace(/ /g, '') + '/' + id + '.json';
         };
 

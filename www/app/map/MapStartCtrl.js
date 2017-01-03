@@ -67,7 +67,8 @@
         });
 
         $scope.$on('$ionicView.leave', Map.clearWatch);
-        $scope.$on('$regObs.appSettingsChanged', Map.updateMapFromSettings);
+        $scope.$on('$regObs:appSettingsChanged', Map.updateMapFromSettings);
+        $scope.$on('$regObs:registrationSaved', Map.updateMapFromSettings);
 
         $scope.$on('$regObs:mapItemSelected', function (event, item) {
             $timeout(function () {

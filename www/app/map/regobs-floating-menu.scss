@@ -7,15 +7,30 @@
 #floating-button {
     right: 20px !important;
     left: auto !important;
+}
+
+.regobs-gps-center #floating-button { 
     bottom: 90px !important;
+}
+
+.hasFooter .regobs-gps-center #floating-button {
+    bottom: 120px !important;
 }
 
 .regobs-menu #floating-button {
     bottom: 20px !important;
 }
 
+.hasFooter .regobs-menu #floating-button {
+    bottom: 50px !important;
+}
+
 .regobs-button-item-selected #floating-button {
     bottom: 50px !important;
+}
+
+.hasFooter .regobs-button-item-selected #floating-button {
+    bottom: 94px !important;
 }
 
 .regobs-button-tour #floating-button {
