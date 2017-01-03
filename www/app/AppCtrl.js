@@ -1,5 +1,5 @@
 angular.module('RegObs')
-    .controller('AppCtrl', function ($scope, $state, $ionicHistory, AppSettings, Registration, Property, Trip, User, RegobsPopup, HeaderColor, AppLogging, $ionicSideMenuDelegate) {
+    .controller('AppCtrl', function ($scope, $rootScope, $state, $ionicHistory, AppSettings, Registration, Property, Trip, User, RegobsPopup, HeaderColor, AppLogging, $ionicSideMenuDelegate, $ionicPopover) {
         var appVm = this;
 
         appVm.registration = Registration;
@@ -32,6 +32,10 @@ angular.module('RegObs')
 
         appVm.propertyExists = function(prop){
             return Property.exists(prop);
+        };
+
+        appVm.openTopPopover = function ($event) {
+            appVm.topPopover.show($event);
         };
 
         appVm.resetProperty = function () {
@@ -71,11 +75,26 @@ angular.module('RegObs')
             return $state.current && $state.current.data && $state.current.data.showMapToggle;
         };
 
+        var popoverScope = $rootScope.$new();
+        popoverScope.currentAppMode = AppSettings.getAppMode();
+        popoverScope.goToSettings = function() {
+            appVm.topPopover.hide();
+            $state.go('settings');
+        };
+        popoverScope.changeAppMode = function (mode) {
+            appVm.topPopover.hide();
+            AppSettings.setAppMode(mode);
+        };
+        
+        $ionicPopover.fromTemplateUrl('app/menus/topPopover.html', { scope: popoverScope }).then(function (popover) {
+            appVm.topPopover = popover;
+        });
+
         appVm.showFooter = function () {
             return appVm.showTripFooter() ||
                 appVm.showFormFooter() ||
-                appVm.showRegistrationFooter() ||
-                appVm.showGeoModeToggle();
+                appVm.showRegistrationFooter();
+                // || appVm.showGeoModeToggle();
         };
 
         $scope.$on('$ionicView.loaded', function () {

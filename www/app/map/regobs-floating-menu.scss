@@ -5,8 +5,21 @@
 }
 
 #floating-button {
-    right: auto !important;
-    left: 20px !important;
+    right: 20px !important;
+    left: auto !important;
+    bottom: 90px !important;
+}
+
+.regobs-menu #floating-button {
+    bottom: 20px !important;
+}
+
+.regobs-button-item-selected #floating-button {
+    bottom: 50px !important;
+}
+
+.regobs-button-tour #floating-button {
+    right: 85px !important;
 }
 
 #floating-menu.active ion-floating-item:nth-child(1) > li {
@@ -112,6 +125,11 @@
         width: 50px;
         height: 50px;
         line-height: 50px;
+        bottom: 80px !important;
+    }
+
+    .regobs-button-tour #floating-button {
+        right: 77px !important;
     }
 
     #floating-menu li span.label-container {
@@ -204,6 +222,7 @@
         width: 40px;
         height: 40px;
         line-height: 40px;
+        bottom: 70px !important;
     }
 
     #floating-menu li span.label-container {
@@ -259,6 +278,7 @@
         width: 40px;
         height: 40px;
         line-height: 40px;
+        bottom: 70px !important;
     }
 
     #floating-menu.active ion-floating-item:nth-child(1) > li {

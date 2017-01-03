@@ -144,8 +144,37 @@
         };
 
         settings.getObservationsUrl = function (type) {
+            if (!type) {
+                switch (settings.data.appmode) {
+                    case 'dirt':
+                        type = 'LandSlide';
+                        break;
+                    case 'ice':
+                        type = 'Ice';
+                        break;
+                    case 'water':
+                        type = 'Flood';
+                        break;
+                    default:
+                        type = 'Avalanche';
+                        break;
+                }
+            }
+
             return settings.getWebRoot() + type + '/Observations';
         };
+
+        settings.getWarningUrl = function () {
+            var baseUrl = 'http://www.varsom.no/';
+            switch (settings.data.appmode) {
+                case 'snow':
+                    return baseUrl + 'snoskredvarsling';  
+                case 'ice':
+                    return baseUrl + 'isvarsling';
+            }
+            return baseUrl + 'flom-og-jordskredvarsling';
+        };
+
 
         settings.getAppMode = function () {
             return settings.data.appmode;

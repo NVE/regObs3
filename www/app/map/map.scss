@@ -198,3 +198,13 @@
     left: 5px; 
     top:-2px
 }
+
+.map-selected-info{
+    height: 70px;
+    width: 100%;
+    position: fixed;
+    bottom: 0px;
+    background-color: white;
+    z-index: 999;
+    margin: 0px !important;
+}
