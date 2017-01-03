@@ -199,7 +199,7 @@
     top:-2px
 }
 
-.map-selected-info{
+.map-selected-info {
     height: 70px;
     width: 100%;
     position: fixed;
@@ -207,4 +207,8 @@
     background-color: white;
     z-index: 999;
     margin: 0px !important;
+}
+
+.hasFooter .map-selected-info {
+    bottom: 44px;
 }

@@ -96,6 +96,8 @@ angular
             Registration.setBadge();
 
             AppLogging.log('save complete');
+
+            $rootScope.$broadcast('$regObs:registrationSaved');
         };
 
         Registration.createNew = function (type) {
