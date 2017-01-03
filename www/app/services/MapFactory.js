@@ -18,6 +18,23 @@
             iconSet = L.AwesomeMarkers.icon({ icon: 'ion-flag', prefix: 'ion', markerColor: 'gray', extraClasses: 'map-obs-marker map-obs-marker-set' }),
             center = [62.5, 10]; //default map center when no observation or user location
 
+
+        /**
+         * Map selected item, this could be observations, nearby places or location marker
+         */
+        service._selectedItem = null;
+
+        /**
+         * Set selected item
+         * @param {} header 
+         * @param {} description 
+         * @returns {} 
+         */
+        service._setSelectedItem = function (item) {
+            service._selectedItem = item;
+            $rootScope.$broadcast('$regObs:mapItemSelected', item);
+        };
+
         /**
          * Update info text with distance from user to observation
          * @param {} latlng 
@@ -77,7 +94,11 @@
                 //var m = new L.Marker(latlng, { icon: getObsIcon(obs) });
                 m.on('click',
                     function () {
-                        $state.go('observationdetails', { observation: obs });
+                        //$state.go('observationdetails', { observation: obs });
+                        var distance = service.getUserDistanceFrom(obs.LatLngObject.Latitude, obs.LatLngObject.Longitude);
+                        var registrations = obs.Registrations.length;
+                        var description = registrations + ' registreringer ' + distance.description + ' unna';
+                        service._setSelectedItem({ header: obs.LocationName, description: description });
                     });
                 m.addTo(layerGroups.observations);
             });
@@ -108,7 +129,11 @@
                 var geoHazardType = Utility.getGeoHazardType(loc.geoHazardId);
                 var myIcon = L.divIcon({ className: 'my-div-icon', html: '<div class="nearby-location-marker ' + geoHazardType + '"><div class="nearby-location-marker-inner"></div></div>' });
                 var m = L.marker(latlng, { icon: myIcon });
-                m.on('click', function () { $state.go('locationdetails', { location: loc }) });
+                m.on('click', function() {
+                    //$state.go('locationdetails', { location: loc })
+                    var distance = service.getUserDistanceFrom(loc.LatLngObject.Latitude, loc.LatLngObject.Longitude);
+                    service._setSelectedItem({header: loc.Name, description:distance.description});
+                });
                 m.addTo(layerGroups.locations);
             });
         };
@@ -192,12 +217,20 @@
             }
         };
 
+        service._setLocationSelected = function() {
+            if (obsLocationMarker) {
+                var latlng = obsLocationMarker.getLatLng();
+                var distance = service.getUserDistanceFrom(latlng.lat, latlng.lng);
+                service._setSelectedItem({ header: 'Ny snøobservasjon', description: distance.description +' unna' });
+            }
+        };
+
         var setObsLocation = function (latlng) {
             if (obsLocationMarker && latlng) {
 
-                if (closeMarkerMenuTimer) {
-                    $timeout.cancel(closeMarkerMenuTimer);
-                }
+                //if (closeMarkerMenuTimer) {
+                //    $timeout.cancel(closeMarkerMenuTimer);
+                //}
 
                 obsLocationMarker.setLatLng(latlng);
 
@@ -213,11 +246,12 @@
                 ObsLocation.set(obsLoc);
                 updateDistanceLine(true);
                 service._updateObsInfoText();
-                createMarkerMenu();
-                obsLocationMarker.openMenu();
-                closeMarkerMenuTimer = $timeout(function () {
-                    obsLocationMarker.closeMenu();
-                }, 3000);
+                //createMarkerMenu();
+                //obsLocationMarker.openMenu();
+                //closeMarkerMenuTimer = $timeout(function () {
+                //    obsLocationMarker.closeMenu();
+                //}, 3000);
+                service._setLocationSelected();
             }
         };
 
@@ -236,6 +270,10 @@
                     obsLocationMarker = new L.Marker(latlng, { icon: icon, draggable: 'true', zIndexOffset: 1000 });
                     obsLocationMarker.on('dragstart', function (event) {
                         isDragging = true;
+                    });
+
+                    obsLocationMarker.on('click', function (event) {
+                        service._setLocationSelected();
                     });
 
                     obsLocationMarker.on('drag', function (event) {
@@ -264,8 +302,8 @@
                     if (obsLocationMarker.options.icon !== iconSet) {
                         obsLocationMarker.setIcon(iconSet);
                     }
-                    obsLocationMarker.unbindPopup();
-                    createMarkerMenu();
+                    //obsLocationMarker.unbindPopup();
+                    //createMarkerMenu();
                     updateDistanceLine(true);
                     service._updateObsInfoText();
                 }
@@ -428,6 +466,7 @@
             map.on('click', function (e) {
                 //TODO: hide menus
                 AppLogging.log('Click in map - hide floating menu');
+                service._setSelectedItem(null);
             });
 
             map.on('dragstart', disableFollowMode);

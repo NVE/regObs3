@@ -1,0 +1,31 @@
+﻿<ion-popover-view>
+    <ion-content>
+        <ion-list class="smaller-list-items">
+            <ion-item class="item-icon-left item-text-wrap" ng-if="!showEditRegistration()" ng-click="newRegistration()">
+                <i class="icon ion-plus"></i> Ny snøobservasjon
+            </ion-item>
+            <ion-item class="item-icon-left item-text-wrap" ng-if="showEditRegistration()" ng-click="newRegistration()">
+                <i class="icon ion-edit"></i> Endre snøobservasjon
+            </ion-item>
+            <ion-item class="item-icon-left item-text-wrap" ng-if="showTrip()" ng-click="newTrip()">
+                <i class="icon ion-android-walk"></i> Meld fra om tur
+            </ion-item>
+            <ion-item class="item-icon-left item-text-wrap" ng-click="openWebWarning()">
+                <i class="icon ion-eye"></i> Se varsel
+            </ion-item>
+            <ion-item class="item-icon-left item-text-wrap" ng-click="viewObservations()">
+                <i class="icon ion-ios-list"></i> Se observasjoner i tabell
+            </ion-item>
+            <ion-item class="item-icon-left item-text-wrap" ng-click="updateObservationsInMap()">
+                <i class="icon ion-loop"></i> Oppdater observasjoner i kartet
+            </ion-item>
+        </ion-list>
+    </ion-content>
+</ion-popover-view>
+
+<!--<ion-floating-item text-class="regobs-menu-text" click="vm.updateObservationsInMap()" button-color="#444" icon="ion-loop" text="Oppdater observasjoner i kartet"></ion-floating-item>
+<ion-floating-item text-class="regobs-menu-text" button-color="#444" icon="ion-ios-list" text="Se observasjoner i tabell"></ion-floating-item>
+<ion-floating-item text-class="regobs-menu-text" button-color="#444" icon="ion-eye" text="Se varsel"></ion-floating-item>
+<ion-floating-item ng-if="vm.showTrip()" click="vm.gotoState('snowtrip')" text-class="regobs-menu-text" button-color="#444" icon="ion-android-walk" text="Meld fra om tur"></ion-floating-item>
+<ion-floating-item ng-if="!vm.showEditRegistration()" click="vm.newRegistration()" text-class="regobs-menu-text" button-color="#444" icon="ion-plus" text="{{vm.getNewObservationText()}}"></ion-floating-item>
+<ion-floating-item ng-if="vm.showEditRegistration()" click="vm.newRegistration()" text-class="regobs-menu-text" button-color="#444" icon="ion-edit" text="Endre observasjon"></ion-floating-item>-->

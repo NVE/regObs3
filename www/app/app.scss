@@ -291,3 +291,25 @@ input:focus, select:focus, textarea:focus {
 .item-stacked-label.item-select select {
     padding: 3px 0 8px 7px !important;
 }
+
+.smaller-list-items .item {
+    font-size: 13px;
+}
+
+.smaller-list-items .icon {
+    font-size: 20px;
+}
+
+.smaller-list-items .item-icon-left .icon {
+    left: 7px;
+}
+
+.smaller-list-items .item {
+    padding: 14px;
+}
+
+.smaller-list-items .item-icon-left {
+    padding-left: 44px;
+}
+
+

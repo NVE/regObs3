@@ -9,13 +9,10 @@
     <ShowAllFiles>false</ShowAllFiles>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Android'">
-    <DebuggerFlavor>RippleNexus</DebuggerFlavor>
+    <DebuggerFlavor>AndroidEmulator</DebuggerFlavor>
     <AndroidEmulatorID>AndroidDevice;Device</AndroidEmulatorID>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|iOS'">
-    <DebuggerFlavor>iOSLocalDevice</DebuggerFlavor>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|iOS'">
-    <DebuggerFlavor>iOSRemoteDevice</DebuggerFlavor>
+    <DebuggerFlavor>RippleiPhone5</DebuggerFlavor>
   </PropertyGroup>
 </Project>

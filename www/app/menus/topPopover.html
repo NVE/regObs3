@@ -1,0 +1,14 @@
+﻿<ion-popover-view>
+    <ion-content>
+        <ion-list>
+            <ion-item class="item-icon-left" ng-click="goToSettings()">
+                <i class="icon ion-gear-a"></i> Logg inn
+            </ion-item>
+            <!--<button class="button button-icon button-clear ion-gear-a" ui-sref="settings" ng-show="appVm.currentState.name !== 'settings' && appVm.currentState.name !== 'help'"></button>-->
+            <ion-radio ng-model="currentAppMode" value="snow" ng-change="changeAppMode(currentAppMode)">Snø</ion-radio>
+            <ion-radio ng-model="currentAppMode" value="dirt" ng-change="changeAppMode(currentAppMode)">Jord</ion-radio>
+            <ion-radio ng-model="currentAppMode" value="water" ng-change="changeAppMode(currentAppMode)">Vann</ion-radio>
+            <ion-radio ng-model="currentAppMode" value="ice" ng-change="changeAppMode(currentAppMode)">Is</ion-radio>
+        </ion-list>
+    </ion-content>
+</ion-popover-view>
