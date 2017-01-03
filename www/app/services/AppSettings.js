@@ -38,7 +38,7 @@ angular
             .then(function (response) {
                 var headers = {
                     regObs_apptoken: response.data.apiKey,
-                    ApiJsonVersion: '2.0.0'
+                    ApiJsonVersion: '3.0.6'
                 };
 
                 settings.httpConfig = {
