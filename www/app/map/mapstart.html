@@ -21,7 +21,7 @@
             </ion-floating-button>
         </div>
         <div class="map-selected-info list card" ng-show="vm.mapSelectedItem">
-            <div class="item">
+            <div class="item" ng-click="vm.openSelectedItem()" on-swipe-up="vm.openSelectedItem()">
                 <!--<img src="mcfly.jpg">-->
                 <h2>{{vm.mapSelectedItem.header}}</h2>
                 <p>{{vm.mapSelectedItem.description}}</p>

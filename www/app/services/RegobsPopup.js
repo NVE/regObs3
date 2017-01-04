@@ -133,7 +133,7 @@ angular
                         if (scope.downloadStatus && scope.downloadStatus.hasError() && !result.closeOnError) {
                             return;
                         } else {
-                            popup.close();
+                            scope.closePopup();
                         }
                     }
                 };
