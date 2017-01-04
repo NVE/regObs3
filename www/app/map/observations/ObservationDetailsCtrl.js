@@ -1,6 +1,6 @@
 ﻿angular
     .module('RegObs')
-    .controller('ObservationDetailsCtrl', function ($stateParams, $ionicLoading, Observations, AppLogging, $q) {
+    .controller('ObservationDetailsCtrl', function ($stateParams) {
         var vm = this;
 
         vm.options = {
@@ -8,34 +8,34 @@
         };
 
         vm.observation = $stateParams.observation;
-        vm.registrations = [];
+        //vm.registrations = [];
 
-        var getRegistrationDetails = function (id) {
-            return $q(function(resolve, reject) {
-                Observations.getRegistrationDetails(id)
-                    .then(function(success) {
-                        vm.registrations.push(success);
-                        resolve();
-                    })
-                    .catch(function(error) {
-                        AppLogging.log('Could not get registration details ' + JSON.stringify(error));
-                        reject(error);
-                    });
-            });
-        }
+        //var getRegistrationDetails = function (id) {
+        //    return $q(function(resolve, reject) {
+        //        Observations.getRegistrationDetails(id)
+        //            .then(function(success) {
+        //                vm.registrations.push(success);
+        //                resolve();
+        //            })
+        //            .catch(function(error) {
+        //                AppLogging.log('Could not get registration details ' + JSON.stringify(error));
+        //                reject(error);
+        //            });
+        //    });
+        //}
 
-        var init = function () {
-            $ionicLoading.show();       
-            vm.registrations = [];
-            var tasks = [];
-            vm.observation.Registrations.forEach(function(item) {
-                tasks.push(getRegistrationDetails(item.RegistrationTid));
-            });
+        //var init = function () {
+        //    $ionicLoading.show();       
+        //    vm.registrations = [];
+        //    var tasks = [];
+        //    vm.observation.Registrations.forEach(function(item) {
+        //        tasks.push(getRegistrationDetails(item.RegId));
+        //    });
 
-            $q.all(tasks).then(function() {
-                $ionicLoading.hide();
-            });
-        };
+        //    $q.all(tasks).then(function() {
+        //        $ionicLoading.hide();
+        //    });
+        //};
 
-        init();
+        //init();
     });

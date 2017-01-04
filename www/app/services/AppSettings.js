@@ -126,6 +126,7 @@
                 getObserver: baseUrls[settings.data.env] + '/Account/GetObserver', //Header Authorization: Basic btoa('user':'pass')
                 getObserverGroups: baseUrls[settings.data.env] + '/Account/GetObserverGroups', //?guid=xxxxxxxx-xxxx-4xxx-xxxxx-xxxxxxxxxxxx,
                 getObservationsWithinRadius: baseUrls[settings.data.env] + '/Observations/GetObservationsWithinRadius',
+                getRegistrationsWithinRadius: baseUrls[settings.data.env] + '/Registration/WithinRadius', //POST json {"GeoHazardId": 60,"LangKey" : 1,"FromDate": "2013-01-03","ToDate": "2017-01-03","Latitude": 59.927032,"Longtitude": 10.710034,"Radius": 40000,"ReturnCount": 100}
                 getDropdowns: baseUrls[settings.data.env] + '/kdvelements',
                 getLocationName: baseUrls[settings.data.env] + '/Location/GetName', //?latitude=11.11&longitude=11.11&geoHazardId=15
                 postRegistration: baseUrls[settings.data.env] + '/registration', //Headers: regObs_apptoken, ApiJsonVersion
@@ -196,6 +197,10 @@
 
         settings.getRegistrationRelativePath = function (id) {
             return settings.registrationRootFolder + '/' + settings.data.env.replace(/ /g, '') + '/' + id + '.json';
+        };
+
+        settings.getObservationsFromDateISOString = function() {
+            return moment().subtract(settings.data.showObservationsDaysBack, 'days').startOf('day').toISOString();
         };
 
         settings.load();

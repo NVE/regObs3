@@ -61,63 +61,33 @@
             observationInfo.setText(text);
         };
 
-        //var getObsIcon = function (obs) {
-        //    //var color = Utility.geoHazardColor(obs.GeoHazardTid);
-        //    var color = 'white';
-        //    var iconColor = '#444';
-        //    if (obs.GeoHazardTid === 20) {
-        //        color = 'beige';
-        //        iconColor = '#FFF';
-        //    } else if (obs.GeoHazardTid === 60) {
-        //        color = 'blue';
-        //        iconColor = '#FFF';
-        //    } else if (obs.GeoHazardTid === 70) {
-        //        color = 'cadetblue';
-        //        iconColor = '#FFF';
-        //    }
-        //    return L.AwesomeMarkers.icon({
-        //        icon: 'ion-flag',
-        //        prefix: 'ion',
-        //        markerColor: color,
-        //        iconColor: iconColor,
-        //        extraClasses: 'map-obs-marker-observation'
-        //    });
-        //}
-
         var drawObservations = function () {
             layerGroups.observations.clearLayers();
-            Observations.getStoredObservations(Utility.getCurrentGeoHazardTid()).forEach(function (obs) {
-                var latlng = new L.LatLng(obs.LatLngObject.Latitude, obs.LatLngObject.Longitude);
-                var geoHazardType = Utility.getGeoHazardType(obs.GeoHazardTid);
-                var myIcon = L.divIcon({ className: 'my-div', html: '<div class="observation-pin ' + geoHazardType + '"><i class="icon ion-flag observation-pin-icon"></div>' });
-                var m = L.marker(latlng, { icon: myIcon });
-                //var m = new L.Marker(latlng, { icon: getObsIcon(obs) });
-                m.on('click',
-                    function () {
-                        //$state.go('observationdetails', { observation: obs });
-                        var distance = service.getUserDistanceFrom(obs.LatLngObject.Latitude, obs.LatLngObject.Longitude);
-                        var registrations = obs.Registrations.length;
-                        var description = registrations + ' registreringer ' + distance.description + ' unna';
-                        service._setSelectedItem({ header: obs.LocationName, description: description });
+            Observations.getStoredObservations(Utility.getCurrentGeoHazardTid()).then(function(result) {
+                result.forEach(function(obs) {
+                    var latlng = new L.LatLng(obs.LatLngObject.Latitude, obs.LatLngObject.Longitude);
+                    var geoHazardType = AppSettings.getAppMode();
+                    var myIcon = L.divIcon({
+                        className: 'my-div',
+                        html: '<div class="observation-pin ' +geoHazardType +'"><i class="icon ion-flag observation-pin-icon"></div>'
                     });
-                m.addTo(layerGroups.observations);
+                    var m = L.marker(latlng, { icon: myIcon });
+                    m.on('click',
+                        function() {
+                            var distance = service
+                                .getUserDistanceFrom(obs.LatLngObject.Latitude, obs.LatLngObject.Longitude);
+                            var registrations = obs.Registrations.length;
+                            var description = registrations + ' registreringer ' + distance.description + ' unna'; //TODO: translate text
+                            service._setSelectedItem({ header: obs.LocationName, description: description, item: obs });
+                        });
+                    m.addTo(layerGroups.observations);
+                });
             });
-
         };
 
         var hideObservations = function () {
             layerGroups.observations.clearLayers();
         };
-
-        //var updateNearbyLocations = function (lat, lng, distance, geoHazardTid) {
-        //    return $q(function (resolve, reject) {
-        //        Observations.getNearbyLocations(lat, lng, distance, geoHazardTid)
-        //            .then(function () {
-        //                drawStoredLocations();
-        //                resolve();
-        //            }).catch(reject);
-        //    });
-        //};
 
         var drawStoredLocations = function () {
             layerGroups.locations.clearLayers();
@@ -419,12 +389,14 @@
             layerGroups = { //Layers are added in order
                 tiles: L.layerGroup().addTo(map),
                 locations: L.markerClusterGroup({
+                    showCoverageOnHover: false,
                     iconCreateFunction: function (cluster) {
                         var innerDiv = '<div class="nearby-location-marker-inner nearby-location-marker-inner-cluster">' + cluster.getChildCount() + '</div>';
                         return L.divIcon({ html: innerDiv, className: 'nearby-location-marker obs-marker-cluster snow', iconSize: L.point(30, 30) });
                     }
                 }).addTo(map),
                 observations: L.markerClusterGroup({
+                    showCoverageOnHover: false,
                     iconCreateFunction: function (cluster) {
                         var innerDiv = '<div class="observation-pin obs-marker-cluster snow"><div class="observation-pin-icon">' + cluster.getChildCount() + '</div></div>';
                         return L.divIcon({ html: innerDiv, className: 'observation-pin-cluster', iconSize: L.point(30, 30) });
@@ -536,28 +508,30 @@
             if (map) {
                 var center = map.getCenter();
                 var bounds = map.getBounds();
-                var distance = bounds.getNorthWest().distanceTo(bounds.getSouthEast()).toFixed(0);
+                var radius = parseInt((bounds.getNorthWest().distanceTo(bounds.getSouthEast()) / 2).toFixed(0));
                 var geoHazardTid = Utility.getCurrentGeoHazardTid();
 
                 var workFunc = function (onProgress, cancel) {
                     return Observations
                         .updateObservationsWithinRadius(center.lat,
                             center.lng,
-                            distance,
+                            radius,
                             geoHazardTid,
                             new RegObs.ProggressStatus(),
                             onProgress,
                             cancel);
                 };
 
-                RegobsPopup.downloadProgress('Oppdaterer kartet med det siste fra regObs', workFunc, { longTimoutMessageDelay: 10, closeOnComplete: true })
-                    .then(function () {
-                        AppLogging.log('progress completed');
-                    })
-                    .catch(function () {
-                        AppLogging.log('progress cancelled');
-                    })
-                    .finally(service.updateMapFromSettings);
+                RegobsPopup.downloadProgress('Oppdaterer kartet med det siste fra regObs',
+                    workFunc,
+                    { longTimoutMessageDelay: 10, closeOnComplete: true })
+                .then(function() {
+                    AppLogging.log('progress completed');
+                })
+                .catch(function() {
+                    AppLogging.log('progress cancelled');
+                })
+                .finally(service.updateMapFromSettings);
             }
         };
 

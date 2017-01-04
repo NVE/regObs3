@@ -29,7 +29,8 @@
             $cordovaInAppBrowser.open(url, '_system');
         };
 
-        var init = function() {
+        var init = function () {
+            AppLogging.log('Registration details: ' + JSON.stringify(ctrl.registration));
             ctrl.registration.Registrations.forEach(function(item) {
                 if (Utility.isObsImage(item)) {
                     var pictureId = item.TypicalValue2;

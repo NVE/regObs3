@@ -6,7 +6,7 @@
         {{$ctrl.registration.NickName}} <span ng-if="$ctrl.registration.CompetenceLevelName">(<i ng-repeat="star in $ctrl.registration.CompetenceLevelName track by $index" class="icon ion-ios-star-outline"></i>)</span>
     </div>
 </div>
-<div class="observation-slides">
+<div class="observation-slides" ng-if="$ctrl.images.length">
     <ion-slides slider="data.slider">
         <ion-slide-page ng-repeat="img in $ctrl.images track by $index">
             <img ng-src="{{img.url}}" alt="obsimg" class="obs-detail-image" />

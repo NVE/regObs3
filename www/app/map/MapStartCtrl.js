@@ -3,11 +3,15 @@
         var appVm = this;
 
         appVm.gotoState = $state.go;
-        //appVm.newRegistration = Registration.createAndGoToNewRegistration;
+        appVm.newRegistration = Registration.createAndGoToNewRegistration;
         //appVm.getNewObservationText = Utility.getNewObservationText;
         appVm.gpsCenterClick = Map.centerMapToUser;
         //appVm.updateObservationsInMap = Map.updateObservationsInMap;
-
+        appVm.openSelectedItem = function () {
+            if (appVm.mapSelectedItem && appVm.mapSelectedItem.item) {
+                $state.go('observationdetails', { observation: appVm.mapSelectedItem.item });
+            }
+        };
 
         //appVm.showTrip = function () {
         //    return AppSettings.getAppMode() === 'snow';
@@ -23,8 +27,8 @@
 
         var popoverScope = {
             updateObservationsInMap: function () {
-                Map.updateObservationsInMap();
                 appVm.mapMenu.hide();
+                Map.updateObservationsInMap();               
             },
             viewObservations: function () {
                 appVm.mapMenu.hide();
