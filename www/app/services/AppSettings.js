@@ -21,19 +21,6 @@ angular
             'test regObs': 'http://tst-h-web03.nve.no/regobswebapi'
         };
 
-        if(!ionic.Platform.isWebView()){
-            baseUrls.proxy = '/api';
-            baseUrls.prodproxy = '/prodapi';
-            baseUrls.testproxy = '/testapi';
-        }
-
-        var serviceUrls = {
-            'regObs':'https://api.nve.no/hydrology/regobs/v1.0.0/',
-            'demo regObs':'http://stg-h-web03.nve.no/RegObsServices/',
-            'test regObs':'http://tst-h-web03.nve.no/regobsservices_test/',
-            'proxy':'http://stg-h-web03.nve.no/RegObsServices/'
-        };
-
         $http.get('app/json/secret.json')
             .then(function (response) {
                 var headers = {
@@ -91,7 +78,7 @@ angular
                 getLocationName: baseUrls[settings.data.env] + '/Location/GetName', //?latitude=11.11&longitude=11.11&geoHazardId=15
                 postRegistration: baseUrls[settings.data.env] + '/registration', //Headers: regObs_apptoken, ApiJsonVersion
                 trip: baseUrls[settings.data.env] + '/trip', //POST= Start, PUT= Stop(object with DeviceGuid), Headers: regObs_apptoken, ApiJsonVersion
-                services: serviceUrls[settings.data.env]
+                services: baseUrls[settings.data.env]
             };
         };
 
