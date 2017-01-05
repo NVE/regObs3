@@ -24,7 +24,13 @@
             <div class="item" ng-click="vm.openSelectedItem()" on-swipe-up="vm.openSelectedItem()">
                 <!--<img src="mcfly.jpg">-->
                 <h2>{{vm.mapSelectedItem.header}}</h2>
-                <p>{{vm.mapSelectedItem.description}}</p>
+                <p>
+                    <span ng-bind-html="vm.mapSelectedItem.description"></span>
+                    <span class="map-selected-info-distance" ng-if="vm.mapSelectedItem.distance">{{vm.mapSelectedItem.distance}} {{'AWAY'|translate}}</span>
+                </p>            
+            </div>
+            <div class="map-selected-info-image-wrapper">
+                <img class="map-selected-info-image" ng-src="{{vm.mapSelectedItem.image}}"/>
             </div>
         </div>
         <ion-content scroll="false">

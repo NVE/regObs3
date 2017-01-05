@@ -166,6 +166,15 @@
             return baseUrl + 'flom-og-jordskredvarsling';
         };
 
+        /**
+         * Registrations that is images
+         */
+        settings.imageRegistrationTids = [12, 23];
+
+        settings.isObsImage = function(registrationTid) {
+            return settings.imageRegistrationTids.filter(function (item) { return item === registrationTid }).length > 0;
+        };
+
 
         settings.getAppMode = function () {
             return settings.data.appmode;

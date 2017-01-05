@@ -1,6 +1,6 @@
 ﻿angular
     .module('RegObs')
-    .factory('Map', function (AppSettings, AppLogging, ObsLocation, Observations, Utility, $state, Registration, $ionicPlatform, $rootScope, $q, $timeout, $ionicPopup, $interval, RegobsPopup) {
+    .factory('Map', function (AppSettings, AppLogging, ObsLocation, Observations, Utility, $state, Registration, $ionicPlatform, $rootScope, $q, $timeout, $ionicPopup, $interval, RegobsPopup, PresistentStorage) {
         var service = this;
         var map, //Leaflet map
             layerGroups, //Layer groups object
@@ -32,6 +32,10 @@
          */
         service._setSelectedItem = function (item) {
             service._selectedItem = item;
+            if (item && item.latlng) {
+                map.panTo(item.latlng);
+            }
+
             $rootScope.$broadcast('$regObs:mapItemSelected', item);
         };
 
@@ -61,24 +65,55 @@
             observationInfo.setText(text);
         };
 
+        service._getObservationPinHtml = function (selected) {
+            var geoHazardType = AppSettings.getAppMode();
+            return '<div class="observation-pin ' +(selected ? 'selected ' : '') +geoHazardType +'"><i class="icon ion-flag observation-pin-icon"></div>';
+        };
+
+        service._getObservationPinIcon = function (selected) {
+            return L.divIcon({
+                className: 'my-div',
+                html: service._getObservationPinHtml(selected)
+            });
+        };
+
+        /**
+         * Unselect all observation pin markers
+         * @returns {} 
+         */
+        service._unselectAllObservationIcons = function() {
+            layerGroups.observations.getLayers()
+                .forEach(function(item) {
+                    if (item instanceof L.Marker) {
+                        item.setIcon(service._getObservationPinIcon(false));
+                    }
+                });
+        };
+
+        /**
+         * Unselect all markers
+         * @returns {} 
+         */
+        service._unselectAllMarkers = function() {
+            service._unselectAllObservationIcons();
+            service._unselectAllLocationIcons();
+        };
+
         var drawObservations = function () {
             layerGroups.observations.clearLayers();
             Observations.getStoredObservations(Utility.getCurrentGeoHazardTid()).then(function(result) {
                 result.forEach(function(obs) {
                     var latlng = new L.LatLng(obs.LatLngObject.Latitude, obs.LatLngObject.Longitude);
-                    var geoHazardType = AppSettings.getAppMode();
-                    var myIcon = L.divIcon({
-                        className: 'my-div',
-                        html: '<div class="observation-pin ' +geoHazardType +'"><i class="icon ion-flag observation-pin-icon"></div>'
-                    });
-                    var m = L.marker(latlng, { icon: myIcon });
+                    var m = L.marker(latlng, { icon: service._getObservationPinIcon() });
                     m.on('click',
-                        function() {
-                            var distance = service
-                                .getUserDistanceFrom(obs.LatLngObject.Latitude, obs.LatLngObject.Longitude);
-                            var registrations = obs.Registrations.length;
-                            var description = registrations + ' registreringer ' + distance.description + ' unna'; //TODO: translate text
-                            service._setSelectedItem({ header: obs.LocationName, description: description, item: obs });
+                        function () {
+                            service._unselectAllMarkers(); //unselect all other markers
+                            m.setIcon(service._getObservationPinIcon(true));
+                            var distance = service.getUserDistanceFrom(obs.LatLngObject.Latitude, obs.LatLngObject.Longitude);
+                            var obsObject = RegObs.observationFromJson(obs, AppSettings);
+                            service._setSelectedItem
+                                ({ header: obs.LocationName, description: obsObject.shortDescriptionHtml(), distance: distance.distance ? distance.description : '', item: obsObject, image: obsObject.getFirstImage(), latlng: latlng });
+
                         });
                     m.addTo(layerGroups.observations);
                 });
@@ -89,6 +124,20 @@
             layerGroups.observations.clearLayers();
         };
 
+        service._getStoredLocationIcon = function (selected) {
+            var geoHazardType = AppSettings.getAppMode();
+            return L.divIcon({ className: 'nearby-location-marker', html: '<div class="nearby-location-marker ' + (selected ? 'selected ' : '') + geoHazardType + '"><div class="nearby-location-marker-inner"></div></div>' });
+        };
+
+        service._unselectAllLocationIcons = function () {
+            layerGroups.locations.getLayers()
+                .forEach(function (item) {
+                    if (item instanceof L.Marker) {
+                        item.setIcon(service._getStoredLocationIcon(false));
+                    }
+                });
+        };
+
         var drawStoredLocations = function () {
             layerGroups.locations.clearLayers();
 
@@ -96,12 +145,11 @@
             var storedLocations = Observations.getLocations(geoHazardTid);
             storedLocations.forEach(function (loc) {
                 var latlng = new L.LatLng(loc.LatLngObject.Latitude, loc.LatLngObject.Longitude);
-                var geoHazardType = Utility.getGeoHazardType(loc.geoHazardId);
-                var myIcon = L.divIcon({ className: 'my-div-icon', html: '<div class="nearby-location-marker ' + geoHazardType + '"><div class="nearby-location-marker-inner"></div></div>' });
-                var m = L.marker(latlng, { icon: myIcon });
+                var m = L.marker(latlng, { icon: service._getStoredLocationIcon() });
                 m.on('click', function() {
-                    //$state.go('locationdetails', { location: loc })
                     var distance = service.getUserDistanceFrom(loc.LatLngObject.Latitude, loc.LatLngObject.Longitude);
+                    service._unselectAllMarkers();
+                    m.setIcon(service._getStoredLocationIcon(true));
                     service._setSelectedItem({header: loc.Name, description:distance.description});
                 });
                 m.addTo(layerGroups.locations);
@@ -191,6 +239,7 @@
             if (obsLocationMarker) {
                 var latlng = obsLocationMarker.getLatLng();
                 var distance = service.getUserDistanceFrom(latlng.lat, latlng.lng);
+                service._unselectAllMarkers();
                 service._setSelectedItem({ header: 'Ny snøobservasjon', description: distance.description +' unna' });
             }
         };
@@ -438,6 +487,7 @@
             map.on('click', function (e) {
                 //TODO: hide menus
                 AppLogging.log('Click in map - hide floating menu');
+                service._unselectAllMarkers();
                 service._setSelectedItem(null);
             });
 
