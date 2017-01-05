@@ -165,14 +165,18 @@
     top: 5px;
 }
 
+.selected .nearby-location-marker-inner {
+    border: 6px solid black;
+}
+
 .nearby-location-marker-inner-cluster {
     border: 2px solid brown;
     text-align: center;
 }
 
 .observation-pin {
-    width:30px;
-    height:30px;
+    width: 30px;
+    height: 30px;
     border-radius: 50% 50% 50% 0;
     transform: rotate(-45deg);
     margin-left: -10px;
@@ -180,12 +184,26 @@
     border: 2px solid brown;
 }
 
+.observation-pin.selected {
+    border: 3px solid black;
+}
+
 .observation-pin-icon {
     transform: rotate(45deg);
     display: block;
     position: relative;
-    left: 6px;
-    top: 12px;
+    left: 3px;
+    top: 4px;
+    width: 20px;
+    text-align: center;
+}
+
+.selected .observation-pin-icon {
+    margin: -1px;
+}
+
+i.observation-pin-icon {
+    padding-left: 3px;
 }
 
 .map-help-pin {
@@ -194,9 +212,9 @@
 }
 
 .map-help-pin-text {
-    position: absolute; 
-    left: 5px; 
-    top:-2px
+    position: absolute;
+    left: 5px;
+    top: -2px;
 }
 
 .map-selected-info {
@@ -207,8 +225,25 @@
     background-color: white;
     z-index: 999;
     margin: 0px !important;
+    overflow: visible;
 }
 
 .hasFooter .map-selected-info {
     bottom: 44px;
+}
+
+.map-selected-info-distance {
+    position: absolute;
+    right: 5px;
+}
+
+.map-selected-info-image-wrapper {
+    position: absolute;
+    top: -91px;
+    width: 100px;
+    left: 5px;
+}
+
+.map-selected-info-image {
+    width: 100%;
 }

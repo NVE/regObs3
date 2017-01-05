@@ -29,7 +29,7 @@
         };
 
         var baseUrls = {
-            'regObs': 'https://api.nve.no/hydrology/regobs/webapi_latest',
+            'regObs': 'https://api.nve.no/hydrology/regobs/webapi_v3.0.6',
             'demo regObs': 'https://api.nve.no/hydrology/demo/regobs/webapi',
             'test regObs': 'http://tst-h-web03.nve.no/regobswebapi'
         };
@@ -40,12 +40,12 @@
             baseUrls.testproxy = '/testapi';
         }
 
-        var serviceUrls = {
-            'regObs': 'https://api.nve.no/hydrology/regobs/v1.0.0/',
-            'demo regObs': 'http://stg-h-web03.nve.no/RegObsServices/',
-            'test regObs': 'http://tst-h-web03.nve.no/regobsservices_test/',
-            'proxy': 'http://stg-h-web03.nve.no/RegObsServices/'
-        };
+        //var serviceUrls = {
+        //    'regObs': 'https://api.nve.no/hydrology/regobs/v1.0.0/',
+        //    'demo regObs': 'http://stg-h-web03.nve.no/RegObsServices/',
+        //    'test regObs': 'http://tst-h-web03.nve.no/regobsservices_test/',
+        //    'proxy': 'http://stg-h-web03.nve.no/RegObsServices/'
+        //};
 
         $http.get('app/json/secret.json')
             .then(function (response) {
@@ -132,7 +132,7 @@
                 postRegistration: baseUrls[settings.data.env] + '/registration', //Headers: regObs_apptoken, ApiJsonVersion
                 getRegistration: baseUrls[settings.data.env] + '/search/avalanche',
                 trip: baseUrls[settings.data.env] + '/trip', //POST= Start, PUT= Stop(object with DeviceGuid), Headers: regObs_apptoken, ApiJsonVersion
-                services: serviceUrls[settings.data.env]
+                services: baseUrls[settings.data.env]
             };
         };
 
@@ -171,6 +171,15 @@
                     return baseUrl + 'isvarsling';
             }
             return baseUrl + 'flom-og-jordskredvarsling';
+        };
+
+        /**
+         * Registrations that is images
+         */
+        settings.imageRegistrationTids = [12, 23];
+
+        settings.isObsImage = function(registrationTid) {
+            return settings.imageRegistrationTids.filter(function (item) { return item === registrationTid }).length > 0;
         };
 
 
