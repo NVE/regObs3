@@ -7,62 +7,52 @@
     </ion-header-bar>
     <ion-content>
         <ion-list>
-            <ion-checkbox ng-model="noActivity.val" ng-change="toggleNoActivity()">Ingen skredaktivitet observert
+            <ion-checkbox ng-model="noActivity.val" ng-change="toggleNoActivity()">
+                Ingen skredaktivitet observert
             </ion-checkbox>
-
             <div ng-hide="noActivity.val">
-
                 <label class="item item-input item-stacked-label item-select">
                     <span class="input-label">
                         Dato
                     </span>
                     <input type="date" ng-model="dates.DtStart" ng-change="dateChanged()">
                 </label>
-
                 <label class="item item-input item-stacked-label item-select">
                     <span class="input-label">
                         Antatt tidsrom
                     </span>
                     <select ng-model="dates.timeFrame"
                             ng-options="tf as tf.text for tf in dates.timeFrames track by tf.id"
-                            ng-change="dateChanged()">
-                    </select>
+                            ng-change="dateChanged()"></select>
                 </label>
-
-
                 <label class="item item-input item-stacked-label item-select">
                     <span class="input-label">
                         Hvor mange skred er det snakk om?
                     </span>
                     <select ng-model="obs.EstimatedNumTID"
                             ng-options="estimatedNum.Id as estimatedNum.Name for estimatedNum in estimatedNumKdvArray"
-                            ng-change="estimatedNumChanged()">
-                    </select>
+                            ng-change="estimatedNumChanged()"></select>
                 </label>
 
-                <kdv-dropdown
-                        title="Angi skredtype"
-                        model="obs.AvalancheExtTID"
-                        kdv-key="Snow_AvalancheExtKDV">
+                <kdv-dropdown title="Angi skredtype"
+                              model="obs.AvalancheExtTID"
+                              kdv-key="Snow_AvalancheExtKDV">
                 </kdv-dropdown>
 
-                <kdv-dropdown
-                        title="Skredutløser"
-                        model="obs.AvalTriggerSimpleTID"
-                        kdv-key="Snow_AvalTriggerSimpleKDV">
+                <kdv-dropdown title="Skredutløser"
+                              model="obs.AvalTriggerSimpleTID"
+                              kdv-key="Snow_AvalTriggerSimpleKDV">
                 </kdv-dropdown>
 
 
-                <kdv-dropdown
-                        title="Størrelse"
-                        model="obs.DestructiveSizeTID"
-                        kdv-key="Snow_DestructiveSizeKDV">
+                <kdv-dropdown title="Størrelse"
+                              model="obs.DestructiveSizeTID"
+                              kdv-key="Snow_DestructiveSizeKDV">
                 </kdv-dropdown>
 
-                <kdv-dropdown
-                        title="Skredutbredelse"
-                        model="obs.AvalPropagationTID"
-                        kdv-key="Snow_AvalPropagationKDV">
+                <kdv-dropdown title="Skredutbredelse"
+                              model="obs.AvalPropagationTID"
+                              kdv-key="Snow_AvalPropagationKDV">
                 </kdv-dropdown>
 
                 <!--<kdv-dropdown
@@ -71,94 +61,102 @@
                         kdv-key="Snow_ExposedHeightComboKDV">
                 </kdv-dropdown>-->
                 <div class="item item-input item-stacked-label">
-                <span class="input-label">
-                    Utsatt høyde
-                </span>
+                    <span class="input-label">
+                        Utsatt høyde
+                    </span>
 
                     <button class="button button-block exposedTop" ng-click="exposedHeight('top')"
-                            ng-class="{'button-positive':obs.exposedHeight.top}">Øverst
+                            ng-class="{'button-positive':obs.exposedHeight.top}">
+                        Øverst
                     </button>
                     <button class="button button-block exposedMid" ng-click="exposedHeight('mid')"
-                            ng-class="{'button-positive':obs.exposedHeight.mid}">I midten
+                            ng-class="{'button-positive':obs.exposedHeight.mid}">
+                        I midten
                     </button>
                     <button class="button button-block exposedBot" ng-click="exposedHeight('bot')"
-                            ng-class="{'button-positive':obs.exposedHeight.bot}">Nederst
+                            ng-class="{'button-positive':obs.exposedHeight.bot}">
+                        Nederst
                     </button>
 
                 </div>
 
                 <label class="item item-input item-stacked-label item-select" ng-show="obs.ExposedHeightComboTID">
-                <span class="input-label">
-                    Høyde
-                </span>
+                    <span class="input-label">
+                        Høyde
+                    </span>
                     <select ng-model="obs.ExposedHeight1"
-                            ng-options="height for height in heightArray">
-
-                    </select>
+                            ng-options="height for height in heightArray"></select>
                 </label>
                 <label class="item item-input item-stacked-label item-select"
                        ng-show="obs.ExposedHeightComboTID === 4 || obs.ExposedHeightComboTID === 3">
-                <span class="input-label">
-                    Nedre høyde
-                </span>
+                    <span class="input-label">
+                        Nedre høyde
+                    </span>
                     <select ng-model="obs.ExposedHeight2"
-                            ng-options="height for height in heightArray">
-
-                    </select>
+                            ng-options="height for height in heightArray"></select>
                 </label>
 
                 <div class="item item-input item-stacked-label">
-                <span class="input-label">
-                    Eksposisjon
-                </span>
+                    <span class="input-label">
+                        Eksposisjon
+                    </span>
                     <div class="button-bar">
                         <button class="button" ng-click="toggleExposition(7)"
-                                ng-class="{'button-positive':exposition[7]}">NV
+                                ng-class="{'button-positive':exposition[7]}">
+                            NV
                         </button>
                         <button class="button" ng-click="toggleExposition(0)"
-                                ng-class="{'button-positive':exposition[0]}">N
+                                ng-class="{'button-positive':exposition[0]}">
+                            N
                         </button>
                         <button class="button" ng-click="toggleExposition(1)"
-                                ng-class="{'button-positive':exposition[1]}">NØ
+                                ng-class="{'button-positive':exposition[1]}">
+                            NØ
                         </button>
                     </div>
                     <div class="button-bar">
                         <button class="button" ng-click="toggleExposition(6)"
-                                ng-class="{'button-positive':exposition[6]}">V
+                                ng-class="{'button-positive':exposition[6]}">
+                            V
                         </button>
                         <button class="button" ng-click="toggleAllExpositions()"
-                                ng-class="{'button-positive':allExpositionsToggled}">Alle
+                                ng-class="{'button-positive':allExpositionsToggled}">
+                            Alle
                         </button>
                         <button class="button" ng-click="toggleExposition(2)"
-                                ng-class="{'button-positive':exposition[2]}">Ø
+                                ng-class="{'button-positive':exposition[2]}">
+                            Ø
                         </button>
                     </div>
                     <div class="button-bar">
                         <button class="button" ng-click="toggleExposition(5)"
-                                ng-class="{'button-positive':exposition[5]}">SV
+                                ng-class="{'button-positive':exposition[5]}">
+                            SV
                         </button>
                         <button class="button" ng-click="toggleExposition(4)"
-                                ng-class="{'button-positive':exposition[4]}">S
+                                ng-class="{'button-positive':exposition[4]}">
+                            S
                         </button>
                         <button class="button" ng-click="toggleExposition(3)"
-                                ng-class="{'button-positive':exposition[3]}">Sø
+                                ng-class="{'button-positive':exposition[3]}">
+                            Sø
                         </button>
                     </div>
                 </div>
             </div>
 
-            <regobs-comment
-                    placeholder="Ytterligere kommentar"
-                    model="obs.Comment"
-            ></regobs-comment>
+            <regobs-comment placeholder="Ytterligere kommentar"
+                            model="obs.Comment"></regobs-comment>
         </ion-list>
         <div class="padding">
             <button class="button button-block button-calm"
-                    ng-click="add()">Lagre
+                    ng-click="add()">
+                Lagre
             </button>
             <button class="button button-block button-assertive button-clear"
                     ng-click="delete()"
-                    ng-show="editing">Slett
+                    ng-show="editing">
+                Slett
             </button>
         </div>
 

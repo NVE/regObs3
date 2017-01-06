@@ -32,7 +32,7 @@ angular
                             id: 1,
                             start: {h:0, m:0},
                             end: {h:23, m:59},
-                            text: 'Ukjent når på dagen'
+                            text: 'I løpet av dagen'
                         },
                         {
                             id: 2,

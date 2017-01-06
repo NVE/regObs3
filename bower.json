@@ -54,8 +54,8 @@
   },
   "resolutions": {
     "angular-ui-router": "0.3.2",
-    "angular": "1.5.8",
     "angular-animate": "1.5.8",
+    "angular": "^1.0.8",
     "angular-sanitize": "1.5.8"
   }
 }

@@ -24,21 +24,29 @@
                         kdv-key="Dirt_LandSlideSizeKDV">
                 </kdv-dropdown>
                 <kdv-dropdown
-                        title="Skredutløser"
-                        model="vm.reg.LandSlideObs.LandSlideTriggerTID"
-                        kdv-key="Dirt_LandSlideTriggerKDV">
+                    title="Skredutløser"
+                    model="vm.reg.LandSlideObs.LandSlideTriggerTID"
+                    kdv-key="Dirt_LandSlideTriggerKDV">
+                </kdv-dropdown>
+                <kdv-dropdown title="Hva ble påvirket?"
+                              model="vm.reg.LandSlideObs.ActivityInfluencedTID"
+                              kdv-key="Dirt_ActivityInfluencedKDV">
                 </kdv-dropdown>
                 <kdv-dropdown
-                        title="Skadeomfang"
-                        model="vm.reg.LandSlideObs.DamageExtentTID"
-                        kdv-key="DamageExtentKDV">
+                    title="Skadeomfang"
+                    model="vm.reg.LandSlideObs.DamageExtentTID"
+                    kdv-key="DamageExtentKDV">
+                </kdv-dropdown>
+                <kdv-dropdown title="Stemte varslet?"
+                              model="vm.reg.LandSlideObs.ForecastAccurateTID"
+                              kdv-key="ForecastAccurateKDV">
                 </kdv-dropdown>
 
                 <regobs-comment
                         placeholder="Ytterligere kommentarer"
                         model="vm.reg.LandSlideObs.Comment"
                 ></regobs-comment>
-
+                <regobs-url model="vm.reg.LandSlideObs" property="Urls" ></regobs-url>
             </ion-list>
             <regobs-image-list></regobs-image-list>
         </form>

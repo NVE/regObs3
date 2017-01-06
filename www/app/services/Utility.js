@@ -3,7 +3,7 @@
  */
 angular
     .module('RegObs')
-    .factory('Utility', function Utility($http, $q, $rootScope, AppSettings, User, LocalStorage, AppLogging) {
+    .factory('Utility', function Utility($http, $q, $rootScope, AppSettings, User, LocalStorage, AppLogging, $cordovaGeolocation) {
         var service = this;
 
         var canvas;
@@ -55,7 +55,7 @@ angular
                 name: "Snøprofil",
                 RegistrationTID: "23"
             },
-            StabilityTest: {
+            CompressionTest: {
                 name: "Stabilitetstest",
                 RegistrationTID: "25"
             },
@@ -116,7 +116,7 @@ angular
             var deferred = $q.defer();
             var kdvFromStorage = LocalStorage.getObject('kdvDropdowns');
             if (kdvFromStorage && kdvFromStorage.KdvRepositories) {
-                deferred.resolve({data: kdvFromStorage});
+                deferred.resolve({ data: kdvFromStorage });
                 return deferred.promise;
 
             } else {
@@ -147,12 +147,49 @@ angular
 
                     if (res.data && res.data.Data) {
                         var newDate = Date.now();
-                        LocalStorage.set('kdvDropdowns', res.data.Data);
-                        LocalStorage.set('kdvUpdated', newDate);
-                        $rootScope.$broadcast('kdvUpdated', newDate);
+                        var newKdvElements = JSON.parse(res.data.Data);
+                        service.getKdvElements().then(function (response) { //Getting old values to update
+                            var oldKdvElements = response.data;
+                            var prop;
+                            for (prop in oldKdvElements.KdvRepositories) {
+                                if (oldKdvElements.KdvRepositories.hasOwnProperty(prop)) {
+                                    if (newKdvElements.KdvRepositories[prop]) { //Key exists in updated values
+                                        AppLogging.debug('Updating existing KdvRepository: ' + prop);
+                                        oldKdvElements.KdvRepositories[prop] = newKdvElements.KdvRepositories[prop];
+                                    } else {
+                                        AppLogging.warn('Existing Kdv-key not found in updated data: ' + prop + '. Keeping existing data for this key');
+                                    }
+                                }
+                            }
+                            for (prop in newKdvElements.KdvRepositories) {
+                                if (newKdvElements.KdvRepositories.hasOwnProperty(prop) && !oldKdvElements.KdvRepositories.hasOwnProperty(prop)) {
+                                    AppLogging.debug('New KdvRepository not found in existing Repository: ' + prop);
+                                    oldKdvElements.KdvRepositories[prop] = newKdvElements.KdvRepositories[prop]; //New key exists in updated data
+                                }
+                            }
+
+                            for (prop in oldKdvElements.ViewRepositories) {
+                                if (oldKdvElements.ViewRepositories.hasOwnProperty(prop)) {
+                                    if (newKdvElements.ViewRepositories[prop]) { //Key exists in updated values
+                                        AppLogging.debug('Updating existing ViewRepository: ' + prop);
+                                        oldKdvElements.ViewRepositories[prop] = newKdvElements.ViewRepositories[prop];
+                                    }
+                                }
+                            }
+                            for (prop in newKdvElements.ViewRepositories) {
+                                if (newKdvElements.ViewRepositories.hasOwnProperty(prop) && !oldKdvElements.ViewRepositories.hasOwnProperty(prop)) {
+                                    AppLogging.debug('New ViewRepository not found in existing Repository: ' + prop);
+                                    oldKdvElements.ViewRepositories[prop] = newKdvElements.ViewRepositories[prop]; //New key exists in updated data
+                                }
+                            }
+
+
+                            LocalStorage.set('kdvDropdowns', JSON.stringify(oldKdvElements));
+                            LocalStorage.set('kdvUpdated', newDate);
+                            $rootScope.$broadcast('kdvUpdated', newDate);
+                        });
                     }
                 });
-
         };
 
         service.getKdvRepositories = function () {
@@ -185,7 +222,7 @@ angular
 
         service.nDecimal = function (num, n) {
             AppLogging.log(num);
-            return parseFloat(num.toFixed(n))
+            return parseFloat(num.toFixed(n));
         };
 
         service.isEmpty = function (obj) {
@@ -195,14 +232,25 @@ angular
 
             // Assume if it has a length property with a non-zero value
             // that that property is correct.
-            if (obj.length > 0)    return false;
-            if (obj.length === 0)  return true;
+            if (obj.hasOwnProperty('length')) {
+                if (obj.length > 0) return false;
+                if (obj.length === 0) return true;
+            }
 
             // Otherwise, does it have any properties of its own?
             // Note that this doesn't handle
             // toString and valueOf enumeration bugs in IE < 9
             for (var key in obj) {
-                if (obj[key] || obj[key] === 0) return false;
+                if (typeof obj[key] === "object" && obj.hasOwnProperty(key)) {
+                    //if (obj[key] || obj[key] === 0) return false;
+                    if (!service.isEmpty(obj[key])) {
+                        return false;
+                    }
+                } else {
+                    if (obj[key] !== undefined && obj[key] !== null && obj[key] !== "") {
+                        return false;
+                    }
+                }
             }
 
             return true;
@@ -279,6 +327,56 @@ angular
         function S4() {
             return (((1 + Math.random()) * 0x10000) | 0).toString(16).substring(1);
         }
+
+        service.getAccurateCurrentPosition = function (options) {
+            return $q(function (resolve, reject) {
+                var watchId, timerId;
+                var lastposition;
+
+                options = options || {};
+
+                var foundPosition = function (position) {
+                    resolve(position);
+                };
+
+                var checkLocation = function (position) {
+                    lastposition = position;
+                    if (position && position.coords.accuracy <= options.desiredAccuracy) {
+                        clearTimeout(timerId);
+                        navigator.geolocation.clearWatch(watchId);
+                        foundPosition(position);
+                    }
+                };
+
+                var stopTrying = function () {
+                    navigator.geolocation.clearWatch(watchId);
+                    setTimeout(function () {
+                        if (lastposition) {
+                            foundPosition(lastposition);
+                        } else {
+                            reject({ code: 3, message: 'timout reached' });
+                        }
+                    }, 200);
+                };
+
+                var onError = function (error) {
+                    clearTimeout(timerId);
+                    navigator.geolocation.clearWatch(watchId);
+                    reject(error);
+                };
+
+                var appSettingsTimeout = parseInt(AppSettings.data.gpsTimeout);
+                if (!options.maxWait) options.maxWait = appSettingsTimeout ? (appSettingsTimeout * 1000) : 10000; // Default 10 seconds
+                if (!options.desiredAccuracy) options.desiredAccuracy = 100; // Try ti get at least 100 meters accuracy
+                if (!options.timeout) options.timeout = options.maxWait; // Default to maxWait
+
+                options.maximumAge = 0; // Try to get new position
+                options.enableHighAccuracy = true;
+
+                watchId = navigator.geolocation.watchPosition(checkLocation, onError, options);
+                timerId = setTimeout(stopTrying, options.maxWait); // Set a timeout that will abandon the location loop
+            });
+        };
 
         return service;
 

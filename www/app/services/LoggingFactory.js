@@ -14,27 +14,27 @@
 
         logging.debug = function () {
             if (isTest())
-                origDebug.apply(null, arguments)
+                origDebug.apply(null, arguments);
         };
 
         logging.log = function () {
             if (isTest())
-                origLog.apply(null, arguments)
+                origLog.apply(null, arguments);
         };
 
         logging.error = function () {
             if (isTest())
-                origError.apply(null, arguments)
+                origError.apply(null, arguments);
         };
 
         logging.warn = function () {
             if (isTest())
-                origWarn.apply(null, arguments)
+                origWarn.apply(null, arguments);
         };
 
         logging.info = function () {
             if (isTest())
-                origInfo.apply(null, arguments)
+                origInfo.apply(null, arguments);
         };
 
         return logging;

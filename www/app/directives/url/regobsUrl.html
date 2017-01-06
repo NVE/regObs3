@@ -1,0 +1,17 @@
+
+<div class="padding">
+    <button  ng-click="newUrl()" class="button button-block button-balanced icon-left ion-plus">
+        Legg til weblenke
+    </button>
+</div>
+<ion-list can-swipe="true">
+    <ion-item class="item-icon-right"
+              ng-repeat="url in urls track by $index"
+              ng-click="editUrl(url, $index)">
+        <ion-option-button class="button-assertive"
+                           ng-click="urls.splice($index, 1)">
+            Slett
+        </ion-option-button>
+        {{url.UrlDescription || url.UrlLine}}
+    </ion-item>
+</ion-list>

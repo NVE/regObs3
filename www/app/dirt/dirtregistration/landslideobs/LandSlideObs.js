@@ -1,8 +1,13 @@
 angular
     .module('RegObs')
-    .controller('LandSlideObsCtrl', function ($scope, $state,$ionicModal, Registration) {
+    .controller('LandSlideObsCtrl', function ($scope, $state, $ionicModal, Registration, Utility) {
         var vm = this;
 
+        var init = function() {
+            vm.reg = Registration.initPropertyAsObject($state.current.data.registrationProp);
+        };
+
+        init();
 
         var loadModal = function () {
             var url = 'app/dirt/dirtregistration/landslideobs/landslideMapModal.html';
@@ -29,9 +34,7 @@ angular
         };
 
 
-        $scope.$on('$ionicView.loaded', function(){
-            var start,end,dt;
-            vm.reg = Registration.initPropertyAsObject($state.current.data.registrationProp);
-
+        $scope.$on('$ionicView.loaded', function() {
+            init();
         });
     });

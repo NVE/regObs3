@@ -4,9 +4,10 @@
         bindings: {
             placeholder: '@',
             labelText: '@',
-            model: '='
+            model: '=',
+            required:'@'
         },
-        controller: function($timeout, $rootScope, Utility){
+        controller: function ($timeout, $rootScope, Utility) {
             'ngInject';
             var ctrl = this;
             var element;
@@ -30,8 +31,8 @@
         },
         template: [
             '<label class="item item-input item-stacked-label">',
-                '<span class="input-label" ng-bind="$ctrl.labelText"></span>',
-                '<textarea id="{{$ctrl.textareaId}}" placeholder="{{$ctrl.placeholder}}" name="comment" cols="30" rows="auto" maxlength="1024" ng-model="$ctrl.model" ng-change="$ctrl.updateTextareaSize()"></textarea>',
+                '<span class="input-label" ng-bind="$ctrl.labelText" ng-class="{assertive:$ctrl.required && !$ctrl.model.length}"></span>',
+                '<textarea id="{{$ctrl.textareaId}}" placeholder="{{$ctrl.placeholder}}" name="comment" cols="30" rows="auto" maxlength="1024" ng-model="$ctrl.model" ng-change="$ctrl.updateTextareaSize()" ng-required="$ctrl.required"></textarea>',
             '</label>'
         ].join('')
     };
