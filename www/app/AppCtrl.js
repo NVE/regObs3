@@ -50,7 +50,12 @@ angular.module('RegObs')
         $scope.$on('$stateChangeStart', function () {
             AppLogging.log(Registration.data);
             var currentProp = ($state.current.data || {}).registrationProp;
-            if(currentProp) {
+            if (currentProp) {
+                if (currentProp === 'SnowProfile' && Registration.hasImageForRegistration(currentProp)) {
+                    var reg = Registration.initPropertyAsObject(currentProp);
+                    reg.SnowProfile.Comment = 'Snøprofil fra app';
+                }
+
                 if(!Registration.propertyExists(currentProp)){
                     AppLogging.log('DELETE ' + currentProp);
                     delete Registration.data[currentProp];

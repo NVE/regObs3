@@ -24,7 +24,7 @@ angular
 
             var map = L.map(elem[0], {
                 center: center,
-                zoom: 9,
+                zoom: 12,
                 zoomControl: false,
                 attributionControl: false
             });

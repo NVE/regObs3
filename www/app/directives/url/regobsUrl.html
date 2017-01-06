@@ -1,6 +1,6 @@
 
 <div class="padding">
-    <button  ng-click="newUrl()" class="button button-block button-balanced icon-left ion-plus">
+    <button ng-click="newUrl()" class="button button-block button-balanced icon-left ion-plus">
         Legg til weblenke
     </button>
 </div>
@@ -12,6 +12,12 @@
                            ng-click="urls.splice($index, 1)">
             Slett
         </ion-option-button>
-        {{url.UrlDescription || url.UrlLine}}
+        <div ng-if="url.UrlDescription">
+            <div>{{url.UrlDescription | limitTo: 40 }}</div>
+            <div style="float:left" class="item-note">{{url.UrlLine | limitTo: 40}}</div>
+        </div>
+        <div ng-if="!url.UrlDescription">
+            {{url.UrlLine | limitTo: 40}}
+        </div>      
     </ion-item>
 </ion-list>

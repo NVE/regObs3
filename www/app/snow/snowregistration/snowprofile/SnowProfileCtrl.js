@@ -4,12 +4,7 @@ angular
 
         var vm = this;
 
-        $scope.$on('$ionicView.loaded', function(){
-            vm.reg = Registration.initPropertyAsObject($state.current.data.registrationProp);
-
-        });
-        $scope.$on('$ionicView.afterEnter', function(){
-            vm.reg.SnowProfile.Comment = 'Snøprofil fra app';
-
+        $scope.$on('$ionicView.loaded', function () {
+            
         });
     });

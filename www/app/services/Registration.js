@@ -192,6 +192,11 @@ angular
             return !Utility.isEmpty(Registration.data[prop]);
         };
 
+        Registration.hasImageForRegistration = function (prop) {
+            var registrationTid = Utility.registrationTid(prop);
+            return Registration.data.Picture && Registration.data.Picture.filter(function(item) { return item.RegistrationTID === registrationTid }).length > 0;
+        };
+
         /*Registration.propertyArrayExists = function (prop) {
          return Registration.data[prop] && Registration.data[prop].length;
          };*/
