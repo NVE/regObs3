@@ -33,7 +33,7 @@
         service._setSelectedItem = function (item) {
             service._selectedItem = item;
             if (item && item.latlng) {
-                map.panTo(item.latlng);
+                map.panTo(item.latlng); //pan map to selected item
             }
 
             $rootScope.$broadcast('$regObs:mapItemSelected', item);
