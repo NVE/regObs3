@@ -7,8 +7,8 @@
         service.getStoredObservations = function (geoHazardId) {
             return service._getRegistrationsFromPresistantStorage().then(function (result) {
                 if (geoHazardId) {
-                    result = result.filter(function (item) {
-                        return item.Registrations.filter(function (reg) { return reg.GeoHazardTid === geoHazardId }).length > 0;
+                    result = result.filter(function (reg) {
+                        return reg.GeoHazardTid === geoHazardId;
                     });
                 }
                 return result;
@@ -222,33 +222,34 @@
 
         var getRegistrationsWithinRadius = function (latitude, longitude, range, geohazardId, progress, onProgress, cancel) {
             return $q(function (resolve, reject) {
-                var httpConfig = AppSettings.httpConfig;
-                httpConfig.timeout = cancel ? cancel.promise : AppSettings.httpConfig.timeout;
+                resolve(JSON.parse('[\r\n  {\r\n    "RegId": 101818,\r\n    "DtObsTime": "2016-12-07T15:34:16.757",\r\n    "DtRegTime": "2016-12-07T15:34:24.1",\r\n    "DtChangeTime": "2016-12-07T15:43:23.233",\r\n    "MunicipalNo": "0301",\r\n    "MunicipalName": "OSLO",\r\n    "ForecastRegionTid": 3045,\r\n    "ForecastRegionName": "Oslo",\r\n    "LocationId": 46366,\r\n    "LocationName": null,\r\n    "ObserverGroupId": 146,\r\n    "ObserverGroupName": "Web Test av versjon 3.0.6",\r\n    "NickName": "awa@nve.no",\r\n    "ObserverId": 2,\r\n    "CompetenceLevelTid": 110,\r\n    "CompetenceLevelName": "*",\r\n    "SourceTid": 0,\r\n    "SourceName": "Ikke gitt",\r\n    "GeoHazardTid": 10,\r\n    "GeoHazardName": "Snø",\r\n    "UtmZone": 33,\r\n    "UtmEast": 257526,\r\n    "UtmNorth": 6658994,\r\n    "LangKey": 1,\r\n    "Registrations": [\r\n      {\r\n        "RegistrationTid": 12,\r\n        "RegistrationName": "Skredhendelse",\r\n        "TypicalValue1": null,\r\n        "TypicalValue2": "38342"\r\n      },\r\n      {\r\n        "RegistrationTid": 26,\r\n        "RegistrationName": "Skredhendelse",\r\n        "TypicalValue1": "3 - Middels",\r\n        "TypicalValue2": "Tørt løssnøskred"\r\n      }\r\n    ],\r\n    "RegistrationCount": 2,\r\n    "PictureCount": 1,\r\n    "FirstPicture": {\r\n      "RegistrationTid": 26,\r\n      "RegistrationName": "Skredhendelse",\r\n      "TypicalValue1": null,\r\n      "TypicalValue2": "38342"\r\n    },\r\n    "Latitude": 59.955843579840064,\r\n    "Longitude": 10.724058837892315\r\n  },\r\n  {\r\n    "RegId": 100742,\r\n    "DtObsTime": "2016-11-28T10:31:05.217",\r\n    "DtRegTime": "2016-11-28T10:31:13.47",\r\n    "DtChangeTime": "2016-11-28T10:31:54.837",\r\n    "MunicipalNo": "0301",\r\n    "MunicipalName": "OSLO",\r\n    "ForecastRegionTid": 3045,\r\n    "ForecastRegionName": "Oslo",\r\n    "LocationId": 45289,\r\n    "LocationName": null,\r\n    "ObserverGroupId": 127,\r\n    "ObserverGroupName": "Test av regObs",\r\n    "NickName": "awa@nve.no",\r\n    "ObserverId": 2,\r\n    "CompetenceLevelTid": 110,\r\n    "CompetenceLevelName": "*",\r\n    "SourceTid": 0,\r\n    "SourceName": "Ikke gitt",\r\n    "GeoHazardTid": 10,\r\n    "GeoHazardName": "Snø",\r\n    "UtmZone": 33,\r\n    "UtmEast": 257526,\r\n    "UtmNorth": 6654930,\r\n    "LangKey": 1,\r\n    "Registrations": [\r\n      {\r\n        "RegistrationTid": 33,\r\n        "RegistrationName": "Skredaktivtet",\r\n        "TypicalValue1": "Ingen skredaktivitet Ikke gitt",\r\n        "TypicalValue2": "Ikke gitt "\r\n      }\r\n    ],\r\n    "RegistrationCount": 1,\r\n    "PictureCount": 0,\r\n    "FirstPicture": null,\r\n    "Latitude": 59.92695339658731,\r\n    "Longitude": 10.778990478517649\r\n  },\r\n  {\r\n    "RegId": 100480,\r\n    "DtObsTime": "2016-11-15T16:56:21.333",\r\n    "DtRegTime": "2016-11-15T16:56:29.94",\r\n    "DtChangeTime": "2016-11-15T16:57:05.55",\r\n    "MunicipalNo": "0301",\r\n    "MunicipalName": "OSLO",\r\n    "ForecastRegionTid": 3045,\r\n    "ForecastRegionName": "Oslo",\r\n    "LocationId": 45107,\r\n    "LocationName": null,\r\n    "ObserverGroupId": 127,\r\n    "ObserverGroupName": "Test av regObs",\r\n    "NickName": "awa@nve.no",\r\n    "ObserverId": 2,\r\n    "CompetenceLevelTid": 110,\r\n    "CompetenceLevelName": "*",\r\n    "SourceTid": 0,\r\n    "SourceName": "Ikke gitt",\r\n    "GeoHazardTid": 10,\r\n    "GeoHazardName": "Snø",\r\n    "UtmZone": 33,\r\n    "UtmEast": 264300,\r\n    "UtmNorth": 6656284,\r\n    "LangKey": 1,\r\n    "Registrations": [\r\n      {\r\n        "RegistrationTid": 13,\r\n        "RegistrationName": "Faretegn",\r\n        "TypicalValue1": "Ferske sprekker ",\r\n        "TypicalValue2": "denne er ikke 4"\r\n      }\r\n    ],\r\n    "RegistrationCount": 1,\r\n    "PictureCount": 0,\r\n    "FirstPicture": null,\r\n    "Latitude": 59.945528546783976,\r\n    "Longitude": 10.764570922853276\r\n  },\r\n  {\r\n    "RegId": 57660,\r\n    "DtObsTime": "2015-03-25T13:16:27.16",\r\n    "DtRegTime": "2015-03-25T13:17:12.68",\r\n    "DtChangeTime": "2015-03-25T13:17:12.68",\r\n    "MunicipalNo": "0301",\r\n    "MunicipalName": "OSLO",\r\n    "ForecastRegionTid": 3045,\r\n    "ForecastRegionName": "Oslo",\r\n    "LocationId": 24494,\r\n    "LocationName": null,\r\n    "ObserverGroupId": 0,\r\n    "ObserverGroupName": null,\r\n    "NickName": "Ragnar@NVE",\r\n    "ObserverId": 6,\r\n    "CompetenceLevelTid": 150,\r\n    "CompetenceLevelName": "*****",\r\n    "SourceTid": 0,\r\n    "SourceName": "Ikke gitt",\r\n    "GeoHazardTid": 10,\r\n    "GeoHazardName": "Snø",\r\n    "UtmZone": 33,\r\n    "UtmEast": 262403,\r\n    "UtmNorth": 6656039,\r\n    "LangKey": 1,\r\n    "Registrations": [\r\n      {\r\n        "RegistrationTid": 21,\r\n        "RegistrationName": "Vær",\r\n        "TypicalValue1": "Snø",\r\n        "TypicalValue2": "0,0 grader"\r\n      }\r\n    ],\r\n    "RegistrationCount": 1,\r\n    "PictureCount": 0,\r\n    "FirstPicture": null,\r\n    "Latitude": 59.97286856421243,\r\n    "Longitude": 10.764570922853276\r\n  },\r\n  {\r\n    "RegId": 37260,\r\n    "DtObsTime": "2013-06-26T08:26:11.977",\r\n    "DtRegTime": "2014-06-26T08:26:32.22",\r\n    "DtChangeTime": "2014-06-26T08:26:32.22",\r\n    "MunicipalNo": "0301",\r\n    "MunicipalName": "OSLO",\r\n    "ForecastRegionTid": 3045,\r\n    "ForecastRegionName": "Oslo",\r\n    "LocationId": 16058,\r\n    "LocationName": null,\r\n    "ObserverGroupId": 0,\r\n    "ObserverGroupName": null,\r\n    "NickName": "sjokko",\r\n    "ObserverId": 221,\r\n    "CompetenceLevelTid": 0,\r\n    "CompetenceLevelName": "",\r\n    "SourceTid": 0,\r\n    "SourceName": "Ikke gitt",\r\n    "GeoHazardTid": 10,\r\n    "GeoHazardName": "Snø",\r\n    "UtmZone": 33,\r\n    "UtmEast": 263742,\r\n    "UtmNorth": 6659482,\r\n    "LangKey": 1,\r\n    "Registrations": [\r\n      {\r\n        "RegistrationTid": 21,\r\n        "RegistrationName": "Vær",\r\n        "TypicalValue1": "Underkjølt regn",\r\n        "TypicalValue2": "-49,9 grader"\r\n      }\r\n    ],\r\n    "RegistrationCount": 1,\r\n    "PictureCount": 0,\r\n    "FirstPicture": null,\r\n    "Latitude": 59.96443698879757,\r\n    "Longitude": 10.72199890136909\r\n  }\r\n]'));
+                //var httpConfig = AppSettings.httpConfig;
+                //httpConfig.timeout = cancel ? cancel.promise : AppSettings.httpConfig.timeout;
 
-                $http.post(
-                        AppSettings.getEndPoints().getRegistrationsWithinRadius,
-                        {
-                            GeoHazardId: Utility.getCurrentGeoHazardTid(),
-                            Latitude: latitude,
-                            Longtitude: longitude,
-                            Radius: range,
-                            FromDate: AppSettings.getObservationsFromDateISOString()
-                        },
-                        httpConfig)
-                    .then(function (result) {
-                        if (result.data) {
-                            resolve(result.data);
-                        } else {
-                            reject(new Error('Could not find json result data'));
-                        }
-                    })
-                    .catch(reject);
+                //$http.post(
+                //        AppSettings.getEndPoints().getRegistrationsWithinRadius,
+                //        {
+                //            GeoHazardId: Utility.getCurrentGeoHazardTid(),
+                //            Latitude: latitude,
+                //            Longitude: longitude,
+                //            Radius: range,
+                //            FromDate: AppSettings.getObservationsFromDateISOString()
+                //        },
+                //        httpConfig)
+                //    .then(function (result) {
+                //        if (result.data) {
+                //            resolve(result.data);
+                //        } else {
+                //            reject(new Error('Could not find json result data'));
+                //        }
+                //    })
+                //    .catch(reject);
             });
         };
 
         service._mergeRegistrations = function (destArr, arr) {
-            var updateRegistrations = function(existingLocation, newLocation) {
-                newLocation.Registrations.forEach(function(reg) {
+            var updateRegistrations = function (existingLocation, newLocation) {
+                newLocation.Registrations.forEach(function (reg) {
                     var existingRegistration = existingLocation.Registrations
                         .filter(function (item) { return item.RegId === reg.RegID });
                     if (existingRegistration.length <= 0) {
@@ -287,60 +288,53 @@
             return service._getRegistrationsFromPresistantStorage().then(mergeExistingRegistrations);
         };
 
+        ///**
+        // * Helper method to cleanup empty registrations
+        // * @param {} registrations 
+        // * @returns {} 
+        // */
+        //service._cleanupRegistrations = function (registrations) {
+        //    var ret = [];
+        //    registrations.forEach(function (item) {
+        //        var add = false;
+        //        if (item.PictureCount > 0 || item.RegistrationCount > 0) {
+        //            add = true;
+        //        }
+        //        if (add) {
+        //            ret.push(item);
+        //        }
+        //    });
+        //    return ret;
+        //};
+
+
         /**
-         * Helper method to cleanup empty registrations
-         * @param {} registrations 
+         * Update observations within radius
+         * @param {} latitude 
+         * @param {} longitude 
+         * @param {} range 
+         * @param {} geohazardId 
+         * @param {} progress 
+         * @param {} onProgress 
+         * @param {} cancel 
          * @returns {} 
          */
-        service._cleanupRegistrations = function(registrations) {
-            var loc = [];
-            registrations.forEach(function (item) {
-                var add = false;
-                item.Registrations.forEach(function (reg) {
-                    if (reg.PictureCount > 0 || reg.RegistrationCount > 0) {
-                        add = true;
-                    }
-                });
-                if (add) {
-                    loc.push(item);
-                }
-            });
-            return loc;
-        };
-
-
-       /**
-        * Update observations within radius
-        * @param {} latitude 
-        * @param {} longitude 
-        * @param {} range 
-        * @param {} geohazardId 
-        * @param {} progress 
-        * @param {} onProgress 
-        * @param {} cancel 
-        * @returns {} 
-        */
         service.updateObservationsWithinRadius = function (latitude, longitude, range, geohazardId, progress, onProgress, cancel) {
 
-            var downloadAllRegistrations = function (locations) {
-                locations = service._cleanupRegistrations(locations);
+            var downloadAllRegistrations = function (registrations) {
 
                 var total = 0;
-                locations.forEach(function (item) {
-                    item.Registrations.forEach(function (reg) {
-                        total += reg.PictureCount; //Download pictures
-                    });
+                registrations.forEach(function (item) {
+                    total += item.PictureCount; //Download pictures
                 });
                 progress.setTotal(total);
                 onProgress(progress);
 
-                return service._saveNewRegistrationsToPresistantStorage(locations)
+                return service._saveNewRegistrationsToPresistantStorage(registrations)
                     .then(function () {
                         var tasks = [];
-                        locations.forEach(function (item) {
-                            item.Registrations.forEach(function (registration) {
-                                tasks.push(saveRegistrationPictures(registration, progress, onProgress, cancel));
-                            });
+                        registrations.forEach(function (item) {
+                            tasks.push(saveRegistrationPictures(item, progress, onProgress, cancel));
                         });
 
                         return $q.all(tasks);

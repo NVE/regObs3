@@ -1,25 +1,18 @@
 ﻿angular.module('RegObs')
-    .controller('MapStartCtrl', function ($scope, $rootScope, $state, $ionicHistory, Map, AppSettings, Registration, AppLogging, Utility, $timeout, $ionicPopover, $cordovaInAppBrowser) {
+    .controller('MapStartCtrl', function ($scope, $rootScope, $state, $ionicHistory, Map, AppSettings, Registration, AppLogging, Utility, $timeout, $ionicPopover, $cordovaInAppBrowser, ObsLocation) {
         var appVm = this;
 
         appVm.gotoState = $state.go;
         appVm.newRegistration = Registration.createAndGoToNewRegistration;
-        //appVm.getNewObservationText = Utility.getNewObservationText;
         appVm.gpsCenterClick = Map.centerMapToUser;
-        //appVm.updateObservationsInMap = Map.updateObservationsInMap;
         appVm.openSelectedItem = function () {
             if (appVm.mapSelectedItem && appVm.mapSelectedItem.item) {
                 $state.go('observationdetails', { observation: appVm.mapSelectedItem.item });
             }
         };
-
-        //appVm.showTrip = function () {
-        //    return AppSettings.getAppMode() === 'snow';
-        //}
-
-        //appVm.showEditRegistration = function () {
-        //    return !Registration.isEmpty();
-        //}
+        appVm.removePosition = function() {
+            Map.clearObsLocation();
+        };
 
         appVm.hasRegistration = function () {
             return !(Registration.isEmpty() && !Registration.unsent.length);

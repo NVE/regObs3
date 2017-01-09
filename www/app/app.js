@@ -496,9 +496,11 @@
 
             if (window.StatusBar) {
                 StatusBar.styleLightContent();
-            }
+            }           
+        });
 
-            Registration.setBadge(); //Update badge on startup
+        $ionicPlatform.on('resume', function () {
+            Registration.setBadge(); //Update badge on app resume
         });
     }
 })();

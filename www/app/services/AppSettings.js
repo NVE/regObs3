@@ -172,7 +172,7 @@
         settings.imageRegistrationTids = [12, 23];
 
         settings.isObsImage = function(registrationTid) {
-            return settings.imageRegistrationTids.filter(function (item) { return item === registrationTid }).length > 0;
+            return settings.imageRegistrationTids.filter(function (item) { return item === registrationTid; }).length > 0;
         };
 
 

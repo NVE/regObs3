@@ -27,7 +27,7 @@ angular
 
             $scope.addStabilityTest = function () {
                 setFractureDepth($scope.stabilityTest);
-                if (!$scope.editing) {                   
+                if (!$scope.editing && $scope.reg.CompressionTest) {
                     $scope.reg.CompressionTest.push($scope.stabilityTest);
                 }
                 $scope.modal.hide();

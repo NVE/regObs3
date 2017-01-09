@@ -34,13 +34,15 @@
             ctrl.registration.Registrations.forEach(function(item) {
                 if (Utility.isObsImage(item)) {
                     var pictureId = item.TypicalValue2;
-                    var path = AppSettings.getImageRelativePath(pictureId);
-                    var uri = PresistentStorage.getUri(path);
-                    ctrl.images.push({ id: pictureId, url: uri, description: '' });
+                    //var path = AppSettings.getImageRelativePath(pictureId);
+                    //var uri = PresistentStorage.getUri(path);
+                    //ctrl.images.push({ id: pictureId, url: 'http://api.nve.no/hydrology/regobs/v3.0.6/Image/orginal/41369', description: '' });
                 } else {
                     ctrl.descriptions.push({ name: (item.RegistrationName || '').trim(), description: getObsDescription(item) });
                 }
             });
+
+            ctrl.images.push({ id: 41369, url: 'http://api.nve.no/hydrology/regobs/v3.0.6/Image/orginal/41369', description: 'Biltetekst' });
         };
 
         init();

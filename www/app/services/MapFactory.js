@@ -1,14 +1,12 @@
 ﻿angular
     .module('RegObs')
-    .factory('Map', function (AppSettings, AppLogging, ObsLocation, Observations, Utility, $state, Registration, $ionicPlatform, $rootScope, $q, $timeout, $ionicPopup, $interval, RegobsPopup, PresistentStorage) {
+    .factory('Map', function (AppSettings, AppLogging, ObsLocation, Observations, Utility, $state, Registration, $ionicPlatform, $rootScope, $q, $timeout, $ionicPopup, $interval, RegobsPopup, PresistentStorage, $translate) {
         var service = this;
         var map, //Leaflet map
             layerGroups, //Layer groups object
             obsLocationMarker, //Leaflet marker for current obs location
             userMarker, //Leaflet marker for user position
             pathLine, //Leaflet (dotted) path between user position and current obs location
-            markerMenu, //Obs location marker menu
-            closeMarkerMenuTimer, //Timer for automatically closing marker menu
             observationInfo, //Obs location information. Displayed on top right corner
             isDragging = false, //is user currently dragging map?
             tiles = [], //Map tiles
@@ -32,8 +30,12 @@
          */
         service._setSelectedItem = function (item) {
             service._selectedItem = item;
-            if (item && item.latlng) {
-                map.panTo(item.latlng); //pan map to selected item
+            if (item && item.setViewOnSelect) {
+                var pos = item.getPosition();
+                if (pos) {
+                    service._disableFollowMode();
+                    map.panTo(pos); //pan map to selected item
+                }
             }
 
             $rootScope.$broadcast('$regObs:mapItemSelected', item);
@@ -59,7 +61,7 @@
             } else if (userMarker && !latlng) {
                 text = '0m';
             } else if (!ObsLocation.isSet()) {
-                text = 'Ikke satt';
+                text = $translate.instant('NOT_SET');
             }
 
             observationInfo.setText(text);
@@ -67,7 +69,7 @@
 
         service._getObservationPinHtml = function (selected) {
             var geoHazardType = AppSettings.getAppMode();
-            return '<div class="observation-pin ' +(selected ? 'selected ' : '') +geoHazardType +'"><i class="icon ion-flag observation-pin-icon"></div>';
+            return '<div class="observation-pin ' + (selected ? 'selected ' : '') + geoHazardType + '"><i class="icon ion-flag observation-pin-icon"></div>';
         };
 
         service._getObservationPinIcon = function (selected) {
@@ -81,9 +83,9 @@
          * Unselect all observation pin markers
          * @returns {} 
          */
-        service._unselectAllObservationIcons = function() {
+        service._unselectAllObservationIcons = function () {
             layerGroups.observations.getLayers()
-                .forEach(function(item) {
+                .forEach(function (item) {
                     if (item instanceof L.Marker) {
                         item.setIcon(service._getObservationPinIcon(false));
                     }
@@ -94,26 +96,29 @@
          * Unselect all markers
          * @returns {} 
          */
-        service._unselectAllMarkers = function() {
+        service._unselectAllMarkers = function () {
             service._unselectAllObservationIcons();
             service._unselectAllLocationIcons();
         };
 
         var drawObservations = function () {
             layerGroups.observations.clearLayers();
-            Observations.getStoredObservations(Utility.getCurrentGeoHazardTid()).then(function(result) {
-                result.forEach(function(obs) {
-                    var latlng = new L.LatLng(obs.LatLngObject.Latitude, obs.LatLngObject.Longitude);
+            Observations.getStoredObservations(Utility.getCurrentGeoHazardTid()).then(function (result) {
+                result.forEach(function (obs) {
+                    var latlng = new L.LatLng(obs.Latitude, obs.Longitude);
                     var m = L.marker(latlng, { icon: service._getObservationPinIcon() });
                     m.on('click',
                         function () {
                             service._unselectAllMarkers(); //unselect all other markers
                             m.setIcon(service._getObservationPinIcon(true));
-                            var distance = service.getUserDistanceFrom(obs.LatLngObject.Latitude, obs.LatLngObject.Longitude);
+                            
                             var obsObject = RegObs.observationFromJson(obs, AppSettings);
-                            service._setSelectedItem
-                                ({ header: obs.LocationName, description: obsObject.shortDescriptionHtml(), distance: distance.distance ? distance.description : '', item: obsObject, image: obsObject.getFirstImage(), latlng: latlng });
-
+                            obsObject.setPosition(latlng);
+                            if (userMarker) {
+                                var distance = service.getUserDistanceFrom(obs.Latitude, obs.Longitude);
+                                obsObject.setDistance(distance);
+                            }
+                            service._setSelectedItem(obsObject);
                         });
                     m.addTo(layerGroups.observations);
                 });
@@ -146,11 +151,21 @@
             storedLocations.forEach(function (loc) {
                 var latlng = new L.LatLng(loc.LatLngObject.Latitude, loc.LatLngObject.Longitude);
                 var m = L.marker(latlng, { icon: service._getStoredLocationIcon() });
-                m.on('click', function() {
-                    var distance = service.getUserDistanceFrom(loc.LatLngObject.Latitude, loc.LatLngObject.Longitude);
+                m.on('click', function () {
+                    
                     service._unselectAllMarkers();
                     m.setIcon(service._getStoredLocationIcon(true));
-                    service._setSelectedItem({header: loc.Name, description:distance.description});
+
+                    var item = new RegObs.MapSelectableItem();
+                    if (userMarker) {
+                        var distance = service.getUserDistanceFrom(loc.LatLngObject.Latitude, loc.LatLngObject.Longitude);
+                        item.setDistance(distance);
+                    }
+                    item.setPosition(latlng);
+                    item.setHeader(loc.Name);
+                    item.setType($translate.instant('STORED_LOCATION'));
+
+                    service._setSelectedItem(item);
                 });
                 m.addTo(layerGroups.locations);
             });
@@ -160,97 +175,49 @@
             layerGroups.locations.clearLayers();
         };
 
-        var startTrip = function () {
-            if (AppSettings.getAppMode() === 'snow') {
-                $state.go('snowtrip');
-            }
-        };
-
-        var removeMarkerMenu = function () {
-            if (obsLocationMarker) {
-                obsLocationMarker.removeMenu();
-            }
-        };
-
-        var clearObsLocation = function () {
+        service.clearObsLocation = function () {
             ObsLocation.remove();
             if (userMarker) {
                 drawObsLocation();
                 updateDistanceLine(false);
             }
-            removeMarkerMenu();
             if (obsLocationMarker) {
                 obsLocationMarker.setIcon(icon);
             }
-
-            //observationInfo.update();
             service._updateObsInfoText();
+            service.clearSelectedMarkers();
         }
 
-        var getMarkerMenuItems = function () {
-            var mode = AppSettings.getAppMode();
-            var items = [];
-            items.push({
-                title: Utility.getNewObservationText(),
-                click: function () { // callback function fired on click. this points to item
-                    Registration.createAndGoToNewRegistration();
-                },
-                menuIcon: "ion-plus"
-            });
-            if (mode === 'snow') {
-                items.push({
-                    title: 'Meld fra om tur',
-                    click: function () {
-                        startTrip();
-                    },
-                    menuIcon: "ion-android-walk"
-                });
-            }
-            items.push({
-                title: 'Fjern markering',
-                className: "red-circle",
-                click: function () {
-                    clearObsLocation();
-                },
-                menuIcon: "ion-close"
-            });
-
-            return items;
+        service._isObsLocSetManually = function () {
+            var obsLoc = ObsLocation.get();
+            return obsLoc.UTMSourceTID === ObsLocation.source.clickedInMap;
         };
 
-        var createMarkerMenu = function () {
-            if (obsLocationMarker) {
-                if (!markerMenu) {
-                    markerMenu = L.markerMenu({
-                        radius: 55, // radius of the circle,
-                        size: [38, 38], // menu items width and height
-                        offset: [0, 20],
-                        items: getMarkerMenuItems()
-                    });
+        service._setLocationSelected = function () {
+            service._unselectAllMarkers();
+            var item = new RegObs.MapSelectableItem();
+            item.setViewOnSelect = false;
+            if (service._isObsLocSetManually()) {
+                if (obsLocationMarker) {
+                    var latlng = obsLocationMarker.getLatLng();
+                    if (userMarker) {
+                        var distance = service.getUserDistanceFrom(latlng.lat, latlng.lng);
+                        item.setDistance(distance);
+                    }
+                    item.setDescription($translate.instant('MARKED_POSITION'));
+                    item.setPosition(latlng);
+                    item.showDeletePosition = true;
+                    service._setSelectedItem(item);
                 }
-                if (obsLocationMarker.getMenu() !== markerMenu) {
-                    AppLogging.log('setting new marker menu');
-                    obsLocationMarker.setMenu(markerMenu);
-                }
+            } else {
+                item.setHeader($translate.instant('YOUR_GPS_POSITION'));
+                item.setDescription($translate.instant('SET_POSITION_HELP_TEXT'));
             }
-        };
-
-        service._setLocationSelected = function() {
-            if (obsLocationMarker) {
-                var latlng = obsLocationMarker.getLatLng();
-                var distance = service.getUserDistanceFrom(latlng.lat, latlng.lng);
-                service._unselectAllMarkers();
-                service._setSelectedItem({ header: 'Ny snøobservasjon', description: distance.description +' unna' });
-            }
+            service._setSelectedItem(item);
         };
 
         var setObsLocation = function (latlng) {
             if (obsLocationMarker && latlng) {
-
-                //if (closeMarkerMenuTimer) {
-                //    $timeout.cancel(closeMarkerMenuTimer);
-                //}
-
                 obsLocationMarker.setLatLng(latlng);
 
                 if (obsLocationMarker.options.icon !== iconSet) {
@@ -265,11 +232,6 @@
                 ObsLocation.set(obsLoc);
                 updateDistanceLine(true);
                 service._updateObsInfoText();
-                //createMarkerMenu();
-                //obsLocationMarker.openMenu();
-                //closeMarkerMenuTimer = $timeout(function () {
-                //    obsLocationMarker.closeMenu();
-                //}, 3000);
                 service._setLocationSelected();
             }
         };
@@ -321,8 +283,6 @@
                     if (obsLocationMarker.options.icon !== iconSet) {
                         obsLocationMarker.setIcon(iconSet);
                     }
-                    //obsLocationMarker.unbindPopup();
-                    //createMarkerMenu();
                     updateDistanceLine(true);
                     service._updateObsInfoText();
                 }
@@ -415,7 +375,7 @@
             }
         };
 
-        var disableFollowMode = function () {
+        service._disableFollowMode = function () {
             followMode = false;
         };
 
@@ -487,14 +447,13 @@
             map.on('click', function (e) {
                 //TODO: hide menus
                 AppLogging.log('Click in map - hide floating menu');
-                service._unselectAllMarkers();
-                service._setSelectedItem(null);
+                service.clearSelectedMarkers();
             });
 
-            map.on('dragstart', disableFollowMode);
+            map.on('dragstart', service._disableFollowMode);
             map.on('zoomstart', function () {
                 if (!isProgramaticZoom) {
-                    disableFollowMode();
+                    service._disableFollowMode();
                 }
             });
 
@@ -507,6 +466,11 @@
             }
 
             return map;
+        };
+
+        service.clearSelectedMarkers = function () {
+            service._unselectAllMarkers();
+            service._setSelectedItem(null);
         };
 
         service.setView = function (latlng, zoom) {
@@ -548,9 +512,6 @@
         };
 
         service.changeAppMode = function () {
-            removeMarkerMenu();
-            markerMenu = null;
-            createMarkerMenu();
             service.updateMapFromSettings();
         };
 
@@ -575,10 +536,10 @@
                 RegobsPopup.downloadProgress('Oppdaterer kartet med det siste fra regObs',
                     workFunc,
                     { longTimoutMessageDelay: 10, closeOnComplete: true })
-                .then(function() {
+                .then(function () {
                     AppLogging.log('progress completed');
                 })
-                .catch(function() {
+                .catch(function () {
                     AppLogging.log('progress cancelled');
                 })
                 .finally(service.updateMapFromSettings);
@@ -632,7 +593,7 @@
                 AppLogging.log('Stop watching gps location');
                 map.stopLocate();
             }
-        }
+        };
 
         service.invalidateSize = function () {
             if (map) {

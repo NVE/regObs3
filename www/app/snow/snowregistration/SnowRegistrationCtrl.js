@@ -1,6 +1,6 @@
 angular
     .module('RegObs')
-    .controller('SnowRegistrationCtrl', function SnowRegistrationCtrl($scope, Registration, $ionicHistory) {
+    .controller('SnowRegistrationCtrl', function SnowRegistrationCtrl($scope, Registration, $ionicHistory, $state) {
 
         var vm = this;
 
@@ -9,6 +9,8 @@ angular
             $ionicHistory.clearHistory();
             vm.reg = Registration.data;
         });
+
+        $scope.$on('$regobs.appModeChanged', Registration.createAndGoToNewRegistration);
 
     });
 

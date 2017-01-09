@@ -39,22 +39,38 @@ angular
 
         Registration.createAndGoToNewRegistration = function () {
             var appMode = AppSettings.getAppMode();
+            var navigate = function () {
+                if (appMode === 'snow') {
+                    $state.go('snowregistrationNew');
+                } else if (appMode === 'dirt') {
+                    $state.go('dirtregistrationNew');
+                } else if (appMode === 'water') {
+                    $state.go('waterregistrationNew');
+                } else if (appMode === 'ice') {
+                    $state.go('iceregistrationNew');
+                }
+            };
+            
             if (Registration.isEmpty()) {
                 Registration.createNew(Utility.geoHazardTid(appMode));
-            }
-            if (appMode === 'snow') {
-                $state.go('snowregistrationNew');
-            } else if (appMode === 'dirt') {
-                $state.go('dirtregistrationNew');
-            } else if (appMode === 'water') {
-                $state.go('waterregistrationNew');
-            } else if (appMode === 'ice') {
-                $state.go('iceregistrationNew');
-            }
+                navigate();
+            } else if (Registration.data.GeoHazardTID !== Utility.geoHazardTid(appMode)) {
+                RegobsPopup.delete('Slett registrering',
+                        'Du har en påbegynt ' +
+                        Utility.geoHazardNames(Registration.data.GeoHazardTID) +
+                        '-registrering, dersom du går videre blir denne slettet. Vil du slette for å gå videre?')
+                    .then(function(response) {
+                        if (response) {
+                            Registration.createNew(Utility.geoHazardTid(appMode));
+                            navigate();
+                        }
+                    });
+            } else {
+                navigate();
+            }           
         };
 
         function resetRegistration() {
-
             //return Registration.createNew(Registration.data.GeoHazardTID);
             Registration.data = {};
             Registration.save();

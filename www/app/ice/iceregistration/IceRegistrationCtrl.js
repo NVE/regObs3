@@ -8,4 +8,5 @@ angular
             vm.reg = Registration.data;
         });
 
+        $scope.$on('$regobs.appModeChanged', Registration.createAndGoToNewRegistration);
     });

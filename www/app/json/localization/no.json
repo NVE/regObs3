@@ -19,5 +19,10 @@
   "OBSERVATIONS": "Observasjoner",
   "PREVIOUS_USED_PLACES": "Tidligere brukte steder",
   "OBS_HELP_TEXT": "Fargene er snø, jord, vann og is respektivt. Observasjoner hentes fra regobs.no. Uten nettverk kan det hende at observasjoner ikke vises. Dersom det er flere observasjoner innen et område på kartet vises antall i markøren",
-  "PREVIOUS_USED_PLACES_HELP_TEXT": "Fargene er snø, jord, vann og is respektivt. Noen av stedene som er lagret i regObs kan brukes til å gjøre nye registreringer. Steder tilhører en bestemt naturfare. Egne steder oppretter du ved at de gir dem navn. Steder deles ved at du bruker i registreringer som deles med grupper. Noen steder har varslingsgruppene etablert og kan brukes av alle. Dersom det er flere steder innen et område på kartet vises antallet i markøren."
+  "PREVIOUS_USED_PLACES_HELP_TEXT": "Fargene er snø, jord, vann og is respektivt. Noen av stedene som er lagret i regObs kan brukes til å gjøre nye registreringer. Steder tilhører en bestemt naturfare. Egne steder oppretter du ved at de gir dem navn. Steder deles ved at du bruker i registreringer som deles med grupper. Noen steder har varslingsgruppene etablert og kan brukes av alle. Dersom det er flere steder innen et område på kartet vises antallet i markøren.",
+  "MARKED_POSITION": "Markert posisjon",
+  "YOUR_GPS_POSITION": "Din GPS posisjon",
+  "SET_POSITION_HELP_TEXT": "Dra markør for å sette manuell posisjon",
+  "NOT_SET": "Ikke satt",
+  "STORED_LOCATION": "Lagret sted"
 }
