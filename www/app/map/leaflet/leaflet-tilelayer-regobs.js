@@ -52,48 +52,9 @@ L.TileLayer.RegObs = L.TileLayer.extend({
 
         myself._url_online = myself._url; // Do this early, so it's done before the time-intensive filesystem activity starts.
         myself._url_offline = myself._url; //Fallback to online map if no device storage present.
-        //       if (!window.requestFileSystem && this.options.debug) console.log("L.TileLayer.RegObs: device does not support requestFileSystem");
-        //       if (!window.requestFileSystem) throw "L.TileLayer.RegObs: device does not support requestFileSystem";
-        //myself.debug("Opening filesystem");
         try {
         document.addEventListener("deviceready",
             function () {
-                //window.requestFileSystem(
-                //    LocalFileSystem.PERSISTENT,
-                //    0,
-                //    function (fshandle) {
-                //        myself.debug("requestFileSystem OK " + options.folder);
-                //        myself.fshandle = fshandle;
-                //        myself.fshandle.root.getDirectory(
-                //            options.folder,
-                //            { create: true, exclusive: false },
-                //            function (dirhandle) {
-                //                myself.debug("getDirectory OK " + options.folder);
-                //                myself.dirhandle = dirhandle;
-                //                myself.dirhandle.setMetadata(null, null, { "com.apple.MobileBackup": 1 });
-
-                //                // Android's toURL() has a trailing / but iOS does not; better to have 2 than to have 0 !
-                //                myself._url_offline = dirhandle.toURL() +
-                //                    '/' +
-                //                    [myself.options.name, '{z}', '{x}', '{y}'].join('-') +
-                //                    '.png';
-                //                myself._url = myself._url_offline; //setting default url to offline url
-                //                if (success_callback) success_callback();
-                //            },
-                //            function (error) {
-                //                myself.debug("getDirectory failed (code " + error.code + ")" + options.folder);
-                //                //throw "L.TileLayer.Cordova: " +
-                //                //    options.name +
-                //                //    ": getDirectory failed with code " +
-                //                //    error.code;
-                //            }
-                //        );
-                //    },
-                //    function (error) {
-                //        myself.debug("requestFileSystem failed (code " + error.code + ")" + options.folder);
-                //        //throw "L.TileLayer.Cordova: " + options.name + ": requestFileSystem failed with code " + error.code;
-                //    }
-                //);
                 myself._url_offline = cordova.file.dataDirectory + myself.options.folder + '/' + [myself.options.name, '{z}', '{x}', '{y}'].join('-') + '.png';
                 if (!myself._url_offline.startsWith('file://tmp/ripple')) {
                     myself._url = myself._url_offline; //only offer offline mode when not emulating
@@ -111,7 +72,7 @@ L.TileLayer.RegObs = L.TileLayer.extend({
     debug: function (message) {
         var tile = this;
         if (tile.options.debugFunc) {
-            //tile.options.debugFunc(message);
+            tile.options.debugFunc(message);
         }
     },
 
@@ -156,16 +117,8 @@ L.TileLayer.RegObs = L.TileLayer.extend({
     },
 
     _createCurrentCoords: function (originalCoords) {
-        this.debug('Create current coords');
-        this.debug('Original coords:' + JSON.stringify(originalCoords));
-
         var currentCoords = this._wrapCoords(originalCoords);
-
         currentCoords.fallback = true;
-
-
-        this.debug('New current coords:' + JSON.stringify(currentCoords));
-
         return currentCoords;
     },
 
@@ -385,180 +338,5 @@ L.TileLayer.RegObs = L.TileLayer.extend({
 
     getMapFilename: function (x, y, z) {
         return [this.options.name, z, x, y].join('-') + '.png';
-    },
-
-    /*
-     *
-     * Other maintenance functions, e.g. count up the cache's usage, and empty the cache
-     *
-     */
-
-    //getDiskUsage: function (callback) {
-    //    var myself = this;
-    //    if (!myself.dirhandle) {
-    //        if (callback) callback(0, 0);
-    //        return;
-    //    }
-
-    //    var dirReader = myself.dirhandle.createReader();
-    //    dirReader.readEntries(function (entries) {
-    //        // a mix of files & directories. In our case we know it's all files and all cached tiles, so just add up the filesize
-    //        var files = 0;
-    //        var bytes = 0;
-
-    //        function processFileEntry(index) {
-    //            if (index >= entries.length) {
-    //                if (callback) callback(files, bytes);
-    //                return;
-    //            }
-
-    //            // if (myself.options.debug) console.log( entries[index] );
-    //            entries[index].file(
-    //                function (fileinfo) {
-    //                    bytes += fileinfo.size;
-    //                    files++;
-    //                    processFileEntry(index + 1);
-    //                },
-    //                function () {
-    //                    // failed to get file info? impossible, but if it somehow happens just skip on to the next file
-    //                    processFileEntry(index + 1);
-    //                }
-    //            );
-    //        }
-    //        processFileEntry(0);
-    //    }, function () {
-    //        throw "L.TileLayer.RegObs: getDiskUsage: Failed to read directory";
-    //    });
-    //},
-
-    //getDiskUsageForXyzList: function (xyzList, callback) {
-    //    var myself = this;
-    //    if (!myself.dirhandle) {
-    //        if (callback) callback(0, 0);
-    //        return;
-    //    }
-
-    //    var dirReader = myself.dirhandle.createReader();
-    //    dirReader.readEntries(function (entries) {
-    //        // a mix of files & directories. In our case we know it's all files and all cached tiles, so just add up the filesize
-    //        var files = 0;
-    //        var bytes = 0;
-
-    //        var fileExistsInXyzList = function (name) {
-    //            var found = false;
-    //            xyzList.forEach(function (item) {
-    //                var mapname = myself.getMapFilename(item.x, item.y, item.z);
-    //                if (mapname === name) {
-    //                    found = true;
-    //                    return;
-    //                }
-    //            });
-    //            return found;
-    //        };
-
-    //        function processFileEntry(index) {
-    //            if (index >= entries.length) {
-    //                if (callback) callback(files, bytes);
-    //                return;
-    //            }
-
-    //            // if (myself.options.debug) console.log( entries[index] );
-    //            entries[index].file(
-    //                function (fileinfo) {
-    //                    myself.debug('File:' + JSON.stringify(fileinfo));
-    //                    if (fileExistsInXyzList(fileinfo.name)) {
-    //                        bytes += fileinfo.size;
-    //                        files++;
-    //                    }
-    //                    processFileEntry(index + 1);
-    //                },
-    //                function () {
-    //                    // failed to get file info? impossible, but if it somehow happens just skip on to the next file
-    //                    processFileEntry(index + 1);
-    //                }
-    //            );
-    //        }
-    //        processFileEntry(0);
-    //    }, function () {
-    //        throw "L.TileLayer.RegObs: getDiskUsage: Failed to read directory";
-    //    });
-    //}
-
-    //emptyCache: function (callback) {
-    //    var myself = this;
-    //    if (myself.dirhandle) {
-    //        var dirReader = myself.dirhandle.createReader();
-    //        dirReader.readEntries(function (entries) {
-    //            var success = 0;
-    //            var failed = 0;
-
-    //            function processFileEntry(index) {
-    //                if (index >= entries.length) {
-    //                    if (callback) callback(success, failed);
-    //                    return;
-    //                }
-
-    //                // if (myself.options.debug) console.log( entries[index] );
-    //                entries[index].remove(
-    //                    function () {
-    //                        success++;
-    //                        processFileEntry(index + 1);
-    //                    },
-    //                    function () {
-    //                        failed++;
-    //                        processFileEntry(index + 1);
-    //                    }
-    //                );
-    //            }
-
-    //            processFileEntry(0);
-    //        },
-    //            function () {
-    //                throw "L.TileLayer.RegObs: emptyCache: Failed to read directory";
-    //            });
-    //    } else {
-    //        if (callback) callback(0, 0);
-    //    }
-    //},
-
-    //getCacheContents: function (done_callback) {
-    //    var myself = this;
-    //    var dirReader = myself.dirhandle.createReader();
-    //    dirReader.readEntries(function (entries) {
-
-    //        var retval = [];
-    //        for (var i = 0; i < entries.length; i++) {
-    //            var e = entries[i];
-    //            if (e.isFile) {
-
-    //                var myEntry = {
-    //                    name: e.name,
-    //                    fullPath: e.fullPath,
-    //                    nativeURL: e.nativeURL
-    //                };
-
-    //                // Extract the x,y,z pieces from the filename.
-    //                var parts_outer = e.name.split(".");
-    //                if (parts_outer.length >= 1) {
-    //                    var parts = parts_outer[0].split('-');
-    //                    if (parts.length >= 4) {
-    //                        myEntry['z'] = parts[1];
-    //                        myEntry['x'] = parts[2];
-    //                        myEntry['y'] = parts[3];
-    //                        myEntry['lat'] = myself.getLat(myEntry.y, myEntry.z);
-    //                        myEntry['lng'] = myself.getLng(myEntry.x, myEntry.z);
-    //                    }
-    //                }
-
-    //                retval.push(myEntry);
-    //            }
-    //        }
-
-    //        if (done_callback) done_callback(retval);
-
-    //    }, function () {
-    //        throw "L.TileLayer.RegObs: getCacheContents: Failed to read directory";
-    //    });
-    //}
-
+    }
 }); // end of L.TileLayer.RegObs class

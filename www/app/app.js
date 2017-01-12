@@ -120,18 +120,6 @@
                 }
             })
 
-            .state('locationdetails', {
-                url: '/locationdetails',
-                templateUrl: 'app/map/location/locationdetails.html',
-                controller: 'LocationDetailsCtrl as vm',
-                params: { location: null },
-                data: {
-                    defaultBack: {
-                        state: 'start'
-                    }
-                }
-            })
-
             //SNØ
             //.state('snow', {
             //    url: '/snow',

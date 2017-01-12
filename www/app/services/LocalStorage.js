@@ -34,6 +34,9 @@ angular
                     return defaultValue;
                 }
             },
+            remove: function(key) {
+                $window.localStorage.removeItem(key);
+            },
             clear: function(){
                 $window.localStorage.clear();
             }

@@ -239,11 +239,12 @@ i.observation-pin-icon {
 
 .map-selected-info-image-wrapper {
     position: absolute;
-    top: -91px;
-    width: 100px;
+    top: -76px;
     left: 5px;
 }
 
 .map-selected-info-image {
-    width: 100%;
+    width: auto;
+    height: 70px;
+    max-width: 140px;
 }

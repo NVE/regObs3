@@ -20,24 +20,24 @@
     </h1>
     <div class='clearfix'>
       <div class='fl pad1y space-right2'>
-        <span class="strong">3.57% </span>
+        <span class="strong">2.82% </span>
         <span class="quiet">Statements</span>
-        <span class='fraction'>2/56</span>
+        <span class='fraction'>2/71</span>
       </div>
       <div class='fl pad1y space-right2'>
         <span class="strong">0% </span>
         <span class="quiet">Branches</span>
-        <span class='fraction'>0/40</span>
+        <span class='fraction'>0/43</span>
       </div>
       <div class='fl pad1y space-right2'>
         <span class="strong">0% </span>
         <span class="quiet">Functions</span>
-        <span class='fraction'>0/18</span>
+        <span class='fraction'>0/22</span>
       </div>
       <div class='fl pad1y space-right2'>
-        <span class="strong">3.57% </span>
+        <span class="strong">2.82% </span>
         <span class="quiet">Lines</span>
-        <span class='fraction'>2/56</span>
+        <span class='fraction'>2/71</span>
       </div>
     </div>
   </div>
@@ -161,7 +161,31 @@
 116
 117
 118
-119</td><td class="line-coverage quiet"><span class="cline-any cline-yes">1×</span>
+119
+120
+121
+122
+123
+124
+125
+126
+127
+128
+129
+130
+131
+132
+133
+134
+135
+136
+137
+138
+139
+140
+141
+142
+143</td><td class="line-coverage quiet"><span class="cline-any cline-yes">1×</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -200,6 +224,10 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -236,6 +264,21 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -249,6 +292,11 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -280,7 +328,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">angular.module('RegObs')
-    .controller('AppCtrl', <span class="fstat-no" title="function not covered" >function ($scope, $state, $ionicHistory, AppSettings, Registration, Property, Trip, User, RegobsPopup, HeaderColor, AppLogging, $ionicSideMenuDelegate) {</span>
+    .controller('AppCtrl', <span class="fstat-no" title="function not covered" >function ($scope, $rootScope, $state, $ionicHistory, AppSettings, Registration, Property, Trip, User, RegobsPopup, HeaderColor, AppLogging, $ionicSideMenuDelegate, $ionicPopover) {</span>
 <span class="cstat-no" title="statement not covered" >        var appVm = this;</span>
 &nbsp;
 <span class="cstat-no" title="statement not covered" >        appVm.registration = Registration;</span>
@@ -313,6 +361,10 @@
 &nbsp;
 <span class="cstat-no" title="statement not covered" >        appVm.propertyExists = <span class="fstat-no" title="function not covered" >function(prop){</span></span>
 <span class="cstat-no" title="statement not covered" >            return Property.exists(prop);</span>
+        };
+&nbsp;
+<span class="cstat-no" title="statement not covered" >        appVm.openTopPopover = <span class="fstat-no" title="function not covered" >function ($event) {</span></span>
+<span class="cstat-no" title="statement not covered" >            appVm.topPopover.show($event);</span>
         };
 &nbsp;
 <span class="cstat-no" title="statement not covered" >        appVm.resetProperty = <span class="fstat-no" title="function not covered" >function () {</span></span>
@@ -352,11 +404,26 @@
 <span class="cstat-no" title="statement not covered" >            return $state.current &amp;&amp; $state.current.data &amp;&amp; $state.current.data.showMapToggle;</span>
         };
 &nbsp;
+<span class="cstat-no" title="statement not covered" >        var popoverScope = $rootScope.$new();</span>
+<span class="cstat-no" title="statement not covered" >        popoverScope.currentAppMode = AppSettings.getAppMode();</span>
+<span class="cstat-no" title="statement not covered" >        popoverScope.goToSettings = <span class="fstat-no" title="function not covered" >function() {</span></span>
+<span class="cstat-no" title="statement not covered" >            appVm.topPopover.hide();</span>
+<span class="cstat-no" title="statement not covered" >            $state.go('settings');</span>
+        };
+<span class="cstat-no" title="statement not covered" >        popoverScope.changeAppMode = <span class="fstat-no" title="function not covered" >function (mode) {</span></span>
+<span class="cstat-no" title="statement not covered" >            appVm.topPopover.hide();</span>
+<span class="cstat-no" title="statement not covered" >            AppSettings.setAppMode(mode);</span>
+        };
+        
+<span class="cstat-no" title="statement not covered" >        $ionicPopover.fromTemplateUrl('app/menus/topPopover.html', { scope: popoverScope }).then(<span class="fstat-no" title="function not covered" >function (popover) {</span></span>
+<span class="cstat-no" title="statement not covered" >            appVm.topPopover = popover;</span>
+        });
+&nbsp;
 <span class="cstat-no" title="statement not covered" >        appVm.showFooter = <span class="fstat-no" title="function not covered" >function () {</span></span>
 <span class="cstat-no" title="statement not covered" >            return appVm.showTripFooter() ||</span>
                 appVm.showFormFooter() ||
-                appVm.showRegistrationFooter() ||
-                appVm.showGeoModeToggle();
+                appVm.showRegistrationFooter();
+                // || appVm.showGeoModeToggle();
         };
 &nbsp;
 <span class="cstat-no" title="statement not covered" >        $scope.$on('$ionicView.loaded', <span class="fstat-no" title="function not covered" >function () {</span></span>
@@ -366,7 +433,12 @@
 <span class="cstat-no" title="statement not covered" >        $scope.$on('$stateChangeStart', <span class="fstat-no" title="function not covered" >function () {</span></span>
 <span class="cstat-no" title="statement not covered" >            AppLogging.log(Registration.data);</span>
 <span class="cstat-no" title="statement not covered" >            var currentProp = ($state.current.data || {}).registrationProp;</span>
-<span class="cstat-no" title="statement not covered" >            if(currentProp) {</span>
+<span class="cstat-no" title="statement not covered" >            if (currentProp) {</span>
+<span class="cstat-no" title="statement not covered" >                if (currentProp === 'SnowProfile' &amp;&amp; Registration.hasImageForRegistration(currentProp)) {</span>
+<span class="cstat-no" title="statement not covered" >                    var reg = Registration.initPropertyAsObject(currentProp);</span>
+<span class="cstat-no" title="statement not covered" >                    reg.SnowProfile.Comment = 'Snøprofil fra app';</span>
+                }
+&nbsp;
 <span class="cstat-no" title="statement not covered" >                if(!Registration.propertyExists(currentProp)){</span>
 <span class="cstat-no" title="statement not covered" >                    AppLogging.log('DELETE ' + currentProp);</span>
 <span class="cstat-no" title="statement not covered" >                    delete Registration.data[currentProp];</span>
@@ -403,7 +475,7 @@
 </div><!-- /wrapper -->
 <div class='footer quiet pad2 space-top1 center small'>
   Code coverage
-  generated by <a href="http://istanbul-js.org/" target="_blank">istanbul</a> at Wed Dec 21 2016 14:59:53 GMT+0100 (W. Europe Standard Time)
+  generated by <a href="http://istanbul-js.org/" target="_blank">istanbul</a> at Tue Jan 10 2017 16:08:19 GMT+0100 (W. Europe Standard Time)
 </div>
 </div>
 <script src="../prettify.js"></script>

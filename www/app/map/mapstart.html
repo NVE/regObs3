@@ -7,25 +7,29 @@
             </ion-floating-button>
         </div>
         <div ng-if="vm.mapSelectedItem">
-            <ion-floating-button ng-if="vm.mapSelectedItem.canStartTrip" class="regobs-button-item-selected regobs-button-tour" click="vm.gotoState('snowtrip')" button-color="#fff" icon-color="#444" icon="ion-android-walk">
+            <!--<ion-floating-button ng-if="vm.mapSelectedItem.options.canStartTrip" class="regobs-button-item-selected regobs-button-tour" click="vm.gotoState('snowtrip')" button-color="#fff" icon-color="#444" icon="ion-android-walk">
             </ion-floating-button>
-            <ion-floating-button ng-if="vm.mapSelectedItem.canStartObservation" class="regobs-button-item-selected regobs-button-add" click="vm.newRegistration()" button-color="#33cd5f" icon-color="#fff" icon="ion-plus">
+            <ion-floating-button ng-if="vm.mapSelectedItem.options.canStartObservation" class="regobs-button-item-selected regobs-button-add" click="vm.newRegistration()" button-color="#33cd5f" icon-color="#fff" icon="ion-plus">
             </ion-floating-button>
-            <ion-floating-button ng-if="!vm.mapSelectedItem.canStartObservation && !vm.mapSelectedItem.canStartTrip" class="regobs-button-item-selected regobs-button-add" click="vm.openSelectedItem()" button-color="#fff" icon-color="#444" icon="ion-eye">
+            <ion-floating-button ng-if="!vm.mapSelectedItem.options.canStartObservation && !vm.mapSelectedItem.options.canStartTrip" class="regobs-button-item-selected regobs-button-add" click="vm.openSelectedItem()" button-color="#fff" icon-color="#444" icon="ion-eye">
             </ion-floating-button>
-            <ion-floating-button ng-if="vm.mapSelectedItem.showDeletePosition" class="regobs-button-item-selected regobs-button-delete" click="vm.removePosition()" button-color="#D21523" icon-color="#fff" icon="ion-close">
-            </ion-floating-button>
+            <ion-floating-button ng-if="vm.mapSelectedItem.options.showDeletePosition" class="regobs-button-item-selected regobs-button-delete" click="vm.removePosition()" button-color="#D21523" icon-color="#fff" icon="ion-close">
+            </ion-floating-button>-->
+            <div ng-repeat="button in vm.mapSelectedItem.getActionButtons()">
+                <ion-floating-button class="regobs-button-item-selected {{button.extraClasses}}" click="button.onClick()" button-color="{{button.buttonColor}}" icon-color="{{button.iconColor}}" icon="{{button.icon}}">
+                </ion-floating-button>
+            </div>
         </div>
         <div class="map-selected-info list card" ng-show="vm.mapSelectedItem">
             <div class="item" ng-click="vm.openSelectedItem()" on-swipe-up="vm.openSelectedItem()">
                 <h2 ng-bind-html="vm.mapSelectedItem.getHeader() || '&nbsp;'"></h2>
                 <p>
                     <span ng-bind-html="vm.mapSelectedItem.getDescription()"></span>
-                    <span class="map-selected-info-distance"><span>{{vm.mapSelectedItem.getType()}}</span>&nbsp;<span ng-if="vm.mapSelectedItem.getDistance()">{{vm.mapSelectedItem.getDistance().description}} {{'AWAY'|translate}}</span></span>
+                    <span class="map-selected-info-distance"><span>{{vm.mapSelectedItem.getTypeDescription()}}</span>&nbsp;<span ng-if="vm.mapSelectedItem.hasDistance()">{{vm.mapSelectedItem.getDistanceText()}} {{'AWAY'|translate}}</span></span>
                 </p>            
             </div>
-            <div class="map-selected-info-image-wrapper" ng-if="vm.mapSelectedItem.hasImages()">
-                <img class="map-selected-info-image" ng-src="{{vm.mapSelectedItem.getFirstImage()}}"/>
+            <div class="map-selected-info-image-wrapper" ng-if="vm.mapSelectedItem.hasImages()" ng-click="vm.openSelectedItem()">
+                <img class="map-selected-info-image" ng-src="{{vm.mapSelectedItem.getFirstImage().url}}"/>
             </div>
         </div>
         <ion-content scroll="false">

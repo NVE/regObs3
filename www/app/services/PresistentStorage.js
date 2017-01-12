@@ -130,6 +130,13 @@ angular.module('RegObs').factory('PresistentStorage', function (AppSettings, $co
         });
     };
 
+    service._emulateRemove = function (path) {
+        return $q(function (resolve) {
+            LocalStorage.remove(path);
+            resolve();
+        });
+    };
+
     /**
      * Store file to presistant storage
      * @param {} directory 
@@ -189,6 +196,14 @@ angular.module('RegObs').factory('PresistentStorage', function (AppSettings, $co
             return service._emulateClear();
         } else {
             return $cordovaFile.removeRecursively(cordova.file.dataDirectory, folder);
+        }
+    };
+
+    service.removeFile = function(path) {
+        if (Utility.isRippleEmulator()) {
+            return service._emulateRemove(path);
+        } else {
+            return $cordovaFile.removeFile(cordova.file.dataDirectory, path);
         }
     };
 

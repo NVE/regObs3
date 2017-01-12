@@ -20,9 +20,9 @@
     </h1>
     <div class='clearfix'>
       <div class='fl pad1y space-right2'>
-        <span class="strong">4.55% </span>
+        <span class="strong">3.85% </span>
         <span class="quiet">Statements</span>
-        <span class='fraction'>2/44</span>
+        <span class='fraction'>2/52</span>
       </div>
       <div class='fl pad1y space-right2'>
         <span class="strong">0% </span>
@@ -32,12 +32,12 @@
       <div class='fl pad1y space-right2'>
         <span class="strong">0% </span>
         <span class="quiet">Functions</span>
-        <span class='fraction'>0/14</span>
+        <span class='fraction'>0/20</span>
       </div>
       <div class='fl pad1y space-right2'>
-        <span class="strong">4.55% </span>
+        <span class="strong">3.85% </span>
         <span class="quiet">Lines</span>
-        <span class='fraction'>2/44</span>
+        <span class='fraction'>2/52</span>
       </div>
     </div>
   </div>
@@ -125,7 +125,25 @@
 80
 81
 82
-83</td><td class="line-coverage quiet"><span class="cline-any cline-yes">1×</span>
+83
+84
+85
+86
+87
+88
+89
+90
+91
+92
+93
+94
+95
+96
+97
+98
+99
+100
+101</td><td class="line-coverage quiet"><span class="cline-any cline-yes">1×</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -172,6 +190,22 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -179,6 +213,8 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -209,7 +245,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">angular
     .module('RegObs')
-    .controller('SettingsViewCtrl', <span class="fstat-no" title="function not covered" >function ($scope, $rootScope, $http, $state, $cordovaInAppBrowser, AppSettings, LocalStorage, ObsLocation, Registration, User, Utility, HeaderColor, RegobsPopup, AppLogging) {</span>
+    .controller('SettingsViewCtrl', <span class="fstat-no" title="function not covered" >function ($scope, $rootScope, $http, $state, $cordovaInAppBrowser, $ionicLoading, AppSettings, LocalStorage, ObsLocation, Registration, User, Utility, HeaderColor, RegobsPopup, AppLogging, PresistentStorage, OfflineMap) {</span>
 <span class="cstat-no" title="statement not covered" >        var vm = this;</span>
 &nbsp;
 <span class="cstat-no" title="statement not covered" >        vm.settings = AppSettings;</span>
@@ -218,16 +254,16 @@
 <span class="cstat-no" title="statement not covered" >        vm.kdvUpdated = kdvUpdatedTime(null, LocalStorage.get('kdvUpdated'));</span>
 &nbsp;
 <span class="cstat-no" title="statement not covered" >        $http.get('app/json/version.json')</span>
-            .then(<span class="fstat-no" title="function not covered" >function(res){</span>
+            .then(<span class="fstat-no" title="function not covered" >function (res) {</span>
 <span class="cstat-no" title="statement not covered" >                AppLogging.log(res);</span>
 <span class="cstat-no" title="statement not covered" >                vm.version = res.data;</span>
             });
 &nbsp;
 <span class="cstat-no" title="statement not covered" >        $scope.$on('kdvUpdated', kdvUpdatedTime);</span>
 &nbsp;
-<span class="fstat-no" title="function not covered" >        function kdvUpdatedTime(event, newDate){</span>
-<span class="cstat-no" title="statement not covered" >            $scope.$applyAsync(<span class="fstat-no" title="function not covered" >function() {</span></span>
-<span class="cstat-no" title="statement not covered" >                vm.kdvUpdated =  moment(parseInt(newDate)).format('DD.MM, [kl.] HH:mm');</span>
+<span class="fstat-no" title="function not covered" >        function kdvUpdatedTime(event, newDate) {</span>
+<span class="cstat-no" title="statement not covered" >            $scope.$applyAsync(<span class="fstat-no" title="function not covered" >function () {</span></span>
+<span class="cstat-no" title="statement not covered" >                vm.kdvUpdated = moment(parseInt(newDate)).format('DD.MM, [kl.] HH:mm');</span>
             });
 &nbsp;
 <span class="cstat-no" title="statement not covered" >            AppLogging.log('KDV UPDATE', newDate);</span>
@@ -246,21 +282,39 @@
 &nbsp;
 <span class="cstat-no" title="statement not covered" >        vm.openUrl = <span class="fstat-no" title="function not covered" >function (relUrl) {</span></span>
 <span class="cstat-no" title="statement not covered" >            var base = AppSettings.getEndPoints().services;</span>
-<span class="cstat-no" title="statement not covered" >            $cordovaInAppBrowser.open(base+relUrl, '_system' );</span>
+<span class="cstat-no" title="statement not covered" >            $cordovaInAppBrowser.open(base + relUrl, '_system');</span>
         };
 &nbsp;
 <span class="cstat-no" title="statement not covered" >        vm.clearAppStorage = <span class="fstat-no" title="function not covered" >function () {</span></span>
 <span class="cstat-no" title="statement not covered" >            RegobsPopup.delete('Nullstill app?', 'Vil du slette lokalt lagret data og nullstille appen?', 'Nullstill').then(</span>
-<span class="fstat-no" title="function not covered" >                function(res) {</span>
-<span class="cstat-no" title="statement not covered" >                    if(res) {</span>
+<span class="fstat-no" title="function not covered" >                function (res) {</span>
+<span class="cstat-no" title="statement not covered" >                    if (res) {</span>
+<span class="cstat-no" title="statement not covered" >                        $ionicLoading.show();</span>
 <span class="cstat-no" title="statement not covered" >                        LocalStorage.clear();</span>
-                        //Registration.load();
-<span class="cstat-no" title="statement not covered" >                        AppSettings.load();</span>
-<span class="cstat-no" title="statement not covered" >                        User.load();</span>
-<span class="cstat-no" title="statement not covered" >                        HeaderColor.init();</span>
-<span class="cstat-no" title="statement not covered" >                        vm.username = '';</span>
-<span class="cstat-no" title="statement not covered" >                        vm.password = '';</span>
-<span class="cstat-no" title="statement not covered" >                        $state.go('wizard');</span>
+<span class="cstat-no" title="statement not covered" >                        PresistentStorage.removeRecursively(AppSettings.imageRootFolder)</span>
+                        .catch(<span class="fstat-no" title="function not covered" >function (error) {</span>
+<span class="cstat-no" title="statement not covered" >                            AppLogging.log('Could not clear presistant storage for folder: ' + AppSettings.imageRootFolder +' ' + JSON.stringify(error));</span>
+                        })
+                        .then(<span class="fstat-no" title="function not covered" >function () {</span>
+<span class="cstat-no" title="statement not covered" >                            return PresistentStorage.removeRecursively(AppSettings.registrationRootFolder);</span>
+                        }).catch(<span class="fstat-no" title="function not covered" >function (error) {</span>
+<span class="cstat-no" title="statement not covered" >                            AppLogging.log('Could not clear presistant storage for folder: ' + AppSettings.registrationRootFolder + ' ' + JSON.stringify(error));</span>
+                        })
+                        .then(<span class="fstat-no" title="function not covered" >function () {</span>
+<span class="cstat-no" title="statement not covered" >                            return OfflineMap.deleteAllOfflineAreas();</span>
+                        })
+                        .catch(<span class="fstat-no" title="function not covered" >function (error) {</span>
+<span class="cstat-no" title="statement not covered" >                            AppLogging.log('Could not delete offline areas. ' + JSON.stringify(error));</span>
+                        })
+                        .then(<span class="fstat-no" title="function not covered" >function () {</span>
+<span class="cstat-no" title="statement not covered" >                            AppSettings.load();</span>
+<span class="cstat-no" title="statement not covered" >                            User.load();</span>
+<span class="cstat-no" title="statement not covered" >                            HeaderColor.init();</span>
+<span class="cstat-no" title="statement not covered" >                            vm.username = '';</span>
+<span class="cstat-no" title="statement not covered" >                            vm.password = '';</span>
+<span class="cstat-no" title="statement not covered" >                            $ionicLoading.hide();</span>
+<span class="cstat-no" title="statement not covered" >                            $state.go('wizard');</span>
+                        });
                     }
                 });
         };
@@ -268,13 +322,13 @@
 <span class="cstat-no" title="statement not covered" >        vm.refreshKdvElements = <span class="fstat-no" title="function not covered" >function () {</span></span>
 <span class="cstat-no" title="statement not covered" >            vm.refreshingKdv = true;</span>
 <span class="cstat-no" title="statement not covered" >            Utility.refreshKdvElements()</span>
-                .then(<span class="fstat-no" title="function not covered" >function(){</span>
+                .then(<span class="fstat-no" title="function not covered" >function () {</span>
 <span class="cstat-no" title="statement not covered" >                    RegobsPopup.alert('Suksess!', 'Nedtrekkslister har blitt oppdatert.')</span>
                 })
-                .catch(<span class="fstat-no" title="function not covered" >function(){</span>
+                .catch(<span class="fstat-no" title="function not covered" >function () {</span>
 <span class="cstat-no" title="statement not covered" >                    RegobsPopup.alert('Det oppsto en feil', 'Det oppsto en feil ved oppdatering av nedtrekksmenyer. Vennligst prøv igjen senere');</span>
                 })
-                .finally(<span class="fstat-no" title="function not covered" >function(){</span>
+                .finally(<span class="fstat-no" title="function not covered" >function () {</span>
 <span class="cstat-no" title="statement not covered" >                    vm.refreshingKdv = false;</span>
 <span class="cstat-no" title="statement not covered" >                    vm.kdvUpdated = new Date(parseInt(LocalStorage.get('kdvUpdated')));</span>
 <span class="cstat-no" title="statement not covered" >                    AppLogging.log(vm.kdvUpdated);</span>
@@ -295,7 +349,7 @@
 </div><!-- /wrapper -->
 <div class='footer quiet pad2 space-top1 center small'>
   Code coverage
-  generated by <a href="http://istanbul-js.org/" target="_blank">istanbul</a> at Wed Dec 21 2016 14:59:53 GMT+0100 (W. Europe Standard Time)
+  generated by <a href="http://istanbul-js.org/" target="_blank">istanbul</a> at Tue Jan 10 2017 16:08:19 GMT+0100 (W. Europe Standard Time)
 </div>
 </div>
 <script src="../../prettify.js"></script>

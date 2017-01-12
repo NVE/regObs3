@@ -20,24 +20,24 @@
     </h1>
     <div class='clearfix'>
       <div class='fl pad1y space-right2'>
-        <span class="strong">3.03% </span>
+        <span class="strong">2.6% </span>
         <span class="quiet">Statements</span>
-        <span class='fraction'>2/66</span>
+        <span class='fraction'>2/77</span>
       </div>
       <div class='fl pad1y space-right2'>
         <span class="strong">0% </span>
         <span class="quiet">Branches</span>
-        <span class='fraction'>0/20</span>
+        <span class='fraction'>0/36</span>
       </div>
       <div class='fl pad1y space-right2'>
         <span class="strong">0% </span>
         <span class="quiet">Functions</span>
-        <span class='fraction'>0/20</span>
+        <span class='fraction'>0/24</span>
       </div>
       <div class='fl pad1y space-right2'>
-        <span class="strong">3.03% </span>
+        <span class="strong">2.6% </span>
         <span class="quiet">Lines</span>
-        <span class='fraction'>2/66</span>
+        <span class='fraction'>2/77</span>
       </div>
     </div>
   </div>
@@ -171,7 +171,32 @@
 126
 127
 128
-129</td><td class="line-coverage quiet"><span class="cline-any cline-yes">1×</span>
+129
+130
+131
+132
+133
+134
+135
+136
+137
+138
+139
+140
+141
+142
+143
+144
+145
+146
+147
+148
+149
+150
+151
+152
+153
+154</td><td class="line-coverage quiet"><span class="cline-any cline-yes">1×</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -228,6 +253,31 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -328,7 +378,7 @@
 &nbsp;
 <span class="cstat-no" title="statement not covered" >            $scope.addStabilityTest = <span class="fstat-no" title="function not covered" >function () {</span></span>
 <span class="cstat-no" title="statement not covered" >                setFractureDepth($scope.stabilityTest);</span>
-<span class="cstat-no" title="statement not covered" >                if (!$scope.editing) {                   </span>
+<span class="cstat-no" title="statement not covered" >                if (!$scope.editing &amp;&amp; $scope.reg.CompressionTest) {</span>
 <span class="cstat-no" title="statement not covered" >                    $scope.reg.CompressionTest.push($scope.stabilityTest);</span>
                 }
 <span class="cstat-no" title="statement not covered" >                $scope.modal.hide();</span>
@@ -356,6 +406,31 @@
 <span class="cstat-no" title="statement not covered" >                            indexEditing = -1;</span>
                         }
                     });
+            };
+&nbsp;
+<span class="cstat-no" title="statement not covered" >            $scope.changeTestType = <span class="fstat-no" title="function not covered" >function() {</span></span>
+<span class="cstat-no" title="statement not covered" >                if ($scope.isCTNorECTXorCTVorECTV()) {</span>
+<span class="cstat-no" title="statement not covered" >                    $scope.stabilityTest.TapsFracture = null;</span>
+                }
+<span class="cstat-no" title="statement not covered" >                if ($scope.isCTNorECTX()) {</span>
+<span class="cstat-no" title="statement not covered" >                    $scope.stabilityTest.ComprTestFractureTID = null;</span>
+                }
+            };
+&nbsp;
+<span class="cstat-no" title="statement not covered" >            $scope.isCTNorECTX = <span class="fstat-no" title="function not covered" >function() {</span></span>
+<span class="cstat-no" title="statement not covered" >                return $scope.stabilityTest &amp;&amp;</span>
+                    $scope.stabilityTest.PropagationTID &amp;&amp;
+                    ($scope.stabilityTest.PropagationTID === 15 || $scope.stabilityTest.PropagationTID === 24);
+            };
+&nbsp;
+<span class="cstat-no" title="statement not covered" >            $scope.isCTVorECTV = <span class="fstat-no" title="function not covered" >function () {</span></span>
+<span class="cstat-no" title="statement not covered" >                return $scope.stabilityTest &amp;&amp;</span>
+                    $scope.stabilityTest.PropagationTID &amp;&amp;
+                    ($scope.stabilityTest.PropagationTID === 11 || $scope.stabilityTest.PropagationTID === 21);
+            };
+&nbsp;
+<span class="cstat-no" title="statement not covered" >            $scope.isCTNorECTXorCTVorECTV = <span class="fstat-no" title="function not covered" >function() {</span></span>
+<span class="cstat-no" title="statement not covered" >                return $scope.isCTNorECTX() || $scope.isCTVorECTV();</span>
             };
 &nbsp;
 <span class="cstat-no" title="statement not covered" >            var loadSnowPropagationKdvArray = <span class="fstat-no" title="function not covered" >function () {</span></span>
@@ -433,7 +508,7 @@
 </div><!-- /wrapper -->
 <div class='footer quiet pad2 space-top1 center small'>
   Code coverage
-  generated by <a href="http://istanbul-js.org/" target="_blank">istanbul</a> at Wed Dec 21 2016 14:59:53 GMT+0100 (W. Europe Standard Time)
+  generated by <a href="http://istanbul-js.org/" target="_blank">istanbul</a> at Tue Jan 10 2017 16:08:19 GMT+0100 (W. Europe Standard Time)
 </div>
 </div>
 <script src="../../../prettify.js"></script>

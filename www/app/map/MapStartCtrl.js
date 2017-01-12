@@ -1,13 +1,13 @@
 ﻿angular.module('RegObs')
-    .controller('MapStartCtrl', function ($scope, $rootScope, $state, $ionicHistory, Map, AppSettings, Registration, AppLogging, Utility, $timeout, $ionicPopover, $cordovaInAppBrowser, ObsLocation) {
+    .controller('MapStartCtrl', function ($scope, $rootScope, $state, $ionicHistory, Map, AppSettings, Registration, AppLogging, Utility, $timeout, $ionicPopover, $cordovaInAppBrowser) {
         var appVm = this;
 
         appVm.gotoState = $state.go;
         appVm.newRegistration = Registration.createAndGoToNewRegistration;
         appVm.gpsCenterClick = Map.centerMapToUser;
         appVm.openSelectedItem = function () {
-            if (appVm.mapSelectedItem && appVm.mapSelectedItem.item) {
-                $state.go('observationdetails', { observation: appVm.mapSelectedItem.item });
+            if (appVm.mapSelectedItem && appVm.mapSelectedItem.isClickable()) {
+                appVm.mapSelectedItem.onClick();
             }
         };
         appVm.removePosition = function() {
