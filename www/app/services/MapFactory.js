@@ -119,7 +119,7 @@
             Observations.getStoredObservations(Utility.getCurrentGeoHazardTid()).then(function (result) {
                 result.forEach(function (obsJson) {
                     var m = new RegObsClasses.ObservationMarker(obsJson);
-                    m.on('selected', service._setSelectedItem);
+                    m.on('selected', function (event) { service._setSelectedItem(event.target); });
                     m.addTo(layerGroups.observations);
                 });
             });
@@ -141,7 +141,7 @@
             service._clearAllStoredLocations();
             Observations.getLocations(Utility.getCurrentGeoHazardTid()).forEach(function (loc) {
                 var m = new RegObsClasses.StoredLocationMarker(loc);
-                m.on('selected', service._setSelectedItem);
+                m.on('selected', function (event) { service._setSelectedItem(event.target); });
                 m.addTo(layerGroups.locations);
             });
         };
@@ -329,8 +329,6 @@
             });
 
             map.on('click', function (e) {
-                //TODO: hide menus
-                AppLogging.log('Click in map - hide floating menu');
                 service.clearSelectedMarkers();
             });
 
@@ -342,7 +340,7 @@
             });
 
             obsLocationMarker = new RegObsClasses.CurrentObsLocationMarker(center);
-            obsLocationMarker.on('selected', service._setSelectedItem);
+            obsLocationMarker.on('selected', function (event) { service._setSelectedItem(event.target); });
             obsLocationMarker.on('obsLocationChange', service._onObsLocationChange);
             obsLocationMarker.on('obsLocationCleared', service._onObsLocationCleared);
             obsLocationMarker.addTo(layerGroups.user);

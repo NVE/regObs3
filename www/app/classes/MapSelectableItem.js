@@ -52,7 +52,7 @@ angular.module('RegObs')
                     }
                     self.options.isSelected = true;
 
-                    self.fire('selected', self);
+                    self.fire('selected');
                 }
             },
 
