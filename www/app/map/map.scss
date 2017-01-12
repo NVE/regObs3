@@ -192,18 +192,14 @@
     transform: rotate(45deg);
     display: block;
     position: relative;
-    left: 3px;
-    top: 4px;
-    width: 20px;
+    left: -1px;
+    top: 6px;
+    width: 26px;
     text-align: center;
 }
 
 .selected .observation-pin-icon {
     margin: -1px;
-}
-
-i.observation-pin-icon {
-    padding-left: 3px;
 }
 
 .map-help-pin {
@@ -226,6 +222,10 @@ i.observation-pin-icon {
     z-index: 999;
     margin: 0px !important;
     overflow: visible;
+}
+
+.map-selected-info .item {
+    height: 100%;
 }
 
 .hasFooter .map-selected-info {

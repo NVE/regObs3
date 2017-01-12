@@ -27,14 +27,13 @@
          * @returns {} 
          */
         service._setSelectedItem = function (item) {
+            service._unselectAllMarkers(item);
             service._selectedItem = item;
             if (item) {
-                if (item.setViewOnSelect) {
-                    var pos = item.getPosition();
-                    if (pos) {
-                        service._disableFollowMode();
-                        map.panTo(pos); //pan map to selected item
-                    }
+                if (item.options.setViewOnSelect) {
+                    var pos = item.getLatLng();
+                    service._disableFollowMode();
+                    map.panTo(pos); //pan map to selected item
                 }
                 service._updateSelectedItemDistance();
             }
@@ -47,14 +46,13 @@
          * @returns {} 
          */
         service._updateSelectedItemDistance = function () {
-            if (service._selectedItem && userMarker) {
-                var latlng = service._selectedItem.getLatLng();
-                var distance = service.getUserDistanceFrom(latlng);
-
-                $timeout(function () { //using timout to apply changes to ui
+            $timeout(function () { //using timout to apply changes to ui
+                if (service._selectedItem && userMarker) {
+                    var latlng = service._selectedItem.getLatLng();
+                    var distance = service.getUserDistanceFrom(latlng);
                     service._selectedItem.setDistance(distance);
-                });
-            }
+                }
+            });
         };
 
         /**
@@ -91,23 +89,19 @@
          * Unselect all markers
          * @returns {} 
          */
-        service._unselectAllMarkers = function () {
-            layerGroups.observations.getLayers()
-                .forEach(function (item) {
-                    if (item.setUnselected) {
-                        item.setUnselected();
+        service._unselectAllMarkers = function (exept) {
+            var unselectFunc = function (arr) {
+                arr.forEach(function (item) {
+                    if (item !== exept) {
+                        if (item.setUnselected) {
+                            item.setUnselected();
+                        }
                     }
                 });
-            layerGroups.locations.getLayers()
-                .forEach(function (item) {
-                    if (item.setUnselected) {
-                        item.setUnselected();
-                    }
-                });
-
-            if (obsLocationMarker) {
-                obsLocationMarker.setUnselected();
-            }
+            };
+            unselectFunc(layerGroups.observations.getLayers());
+            unselectFunc(layerGroups.locations.getLayers());
+            unselectFunc([obsLocationMarker]);
         };
 
         /**
@@ -174,7 +168,7 @@
          * @returns {} 
          */
         service._updateDistanceLineLatLng = function (latlng) {
-            if (userMarker && latlng) { //TODO: remove path when obslocation is not set?
+            if (userMarker && latlng) {
                 var path = [latlng, userMarker.getLatLng()];
                 if (!pathLine) {
                     pathLine = L.polyline(path, { color: 'black', weight: 6, opacity: .5, dashArray: "10,10" })
@@ -243,6 +237,10 @@
             }
         };
 
+        /**
+         * Disable center position to user on updated location
+         * @returns {} 
+         */
         service._disableFollowMode = function () {
             followMode = false;
         };
@@ -259,6 +257,10 @@
             service._updateSelectedItemDistance();
         };
 
+        /**
+         * Event that runs when obsLocation is cleared
+         * @returns {} 
+         */
         service._onObsLocationCleared = function () {
             service.clearSelectedMarkers();
             if (pathLine) {
@@ -266,8 +268,6 @@
                 pathLine = null;
             }
         };
-
-
 
         /**
          * Main method for creating map
@@ -293,14 +293,16 @@
                 locations: L.markerClusterGroup({
                     showCoverageOnHover: false,
                     iconCreateFunction: function (cluster) {
-                        var innerDiv = '<div class="nearby-location-marker-inner nearby-location-marker-inner-cluster">' + cluster.getChildCount() + '</div>';
-                        return L.divIcon({ html: innerDiv, className: 'nearby-location-marker obs-marker-cluster snow', iconSize: L.point(30, 30) });
+                        var appMode = AppSettings.getAppMode();
+                        var innerDiv = '<div class="observation-pin obs-marker-cluster ' + appMode + '"><div class="observation-pin-icon"><i class="ion ion-pin"></i> ' + cluster.getChildCount() + '</div>';
+                        return L.divIcon({ html: innerDiv, className: 'observation-pin-cluster', iconSize: L.point(30, 30) });
                     }
                 }).addTo(map),
                 observations: L.markerClusterGroup({
                     showCoverageOnHover: false,
                     iconCreateFunction: function (cluster) {
-                        var innerDiv = '<div class="observation-pin obs-marker-cluster snow"><div class="observation-pin-icon">' + cluster.getChildCount() + '</div></div>';
+                        var appMode = AppSettings.getAppMode();
+                        var innerDiv = '<div class="observation-pin obs-marker-cluster ' + appMode + '"><div class="observation-pin-icon"><i class="ion ion-eye"></i>' + cluster.getChildCount() + '</div></div>';
                         return L.divIcon({ html: innerDiv, className: 'observation-pin-cluster', iconSize: L.point(30, 30) });
                     }
                 }).addTo(map),
@@ -345,7 +347,7 @@
             obsLocationMarker.on('obsLocationCleared', service._onObsLocationCleared);
             obsLocationMarker.addTo(layerGroups.user);
 
-            service.updateMapFromSettings();
+            service.refresh();
 
             if (ObsLocation.isSet()) {
                 service.setView(L.latLng(ObsLocation.get().Latitude, ObsLocation.get().Longitude));
@@ -394,20 +396,23 @@
             return { distance: null, description: 'Ikke kjent' };
         };
 
+        /**
+         * Set follow mode and center map to user position
+         * @returns {} 
+         */
         service.centerMapToUser = function () {
             followMode = true;
             if (userMarker) {
-                AppLogging.log('Center map to user marker');
                 if (map) {
                     map.panTo(userMarker.getLatLng());
                 }
             }
         };
 
-        service.changeAppMode = function () {
-            service.updateMapFromSettings();
-        };
-
+        /**
+         * Update observation tat is stored in presistant storage
+         * @returns {} 
+         */
         service.updateObservationsInMap = function () {
             if (map) {
                 var center = map.getCenter();
@@ -435,12 +440,15 @@
                 .catch(function () {
                     AppLogging.log('progress cancelled');
                 })
-                .finally(service.updateMapFromSettings);
+                .finally(service.refresh);
             }
         };
 
-        //TODO: Move/Rename this to map.refresh() or something
-        service.updateMapFromSettings = function () {
+        /**
+         * Refresh map an redraw layers and markers as set in settings
+         * @returns {} 
+         */
+        service.refresh = function () {
             hideAllTiles();
             var geoId = Utility.getCurrentGeoHazardTid();
             AppSettings.data.maps.forEach(function (mapSetting) {
@@ -467,6 +475,10 @@
             service.invalidateSize();
         };
 
+        /**
+         * Start watching gps position
+         * @returns {} 
+         */
         service.startWatch = function () {
             if (map) {
                 AppLogging.log('Start watching gps location');
@@ -478,6 +490,10 @@
             }
         };
 
+        /**
+         * Clear gps position watch
+         * @returns {} 
+         */
         service.clearWatch = function () {
             if (map) {
                 AppLogging.log('Stop watching gps location');
@@ -485,6 +501,10 @@
             }
         };
 
+        /**
+         * Invalidate map size (redraws map)
+         * @returns {} 
+         */
         service.invalidateSize = function () {
             if (map) {
                 map.invalidateSize();

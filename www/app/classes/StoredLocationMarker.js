@@ -11,14 +11,16 @@
             typeDescription: $translate.instant('STORED_LOCATION')
         },
 
-        _getIcon: function (selected) {
+        _getObservationPinHtml: function (selected) {
             var geoHazardType = Utility.getGeoHazardType(this.storedLocation.geoHazardId);
+            return '<div class="observation-pin ' + (selected ? 'selected ' : '') + geoHazardType + '"><i class="icon ion-pin observation-pin-icon"></div>';
+        },
+
+        _getIcon: function (selected) {
+            var self = this;
             return L.divIcon({
-                className: 'nearby-location-marker',
-                html: '<div class="nearby-location-marker ' +
-                    (selected ? 'selected ' : '') +
-                    geoHazardType +
-                    '"><div class="nearby-location-marker-inner"></div></div>'
+                className: 'my-div',
+                html: self._getObservationPinHtml(selected)
             });
         },
 

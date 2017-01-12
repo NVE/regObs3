@@ -13,7 +13,7 @@
 
         _getObservationPinHtml: function (selected) {
             var geoHazardType = Utility.getGeoHazardType(this.observation.GeoHazardTid);
-            return '<div class="observation-pin ' + (selected ? 'selected ' : '') + geoHazardType + '"><i class="icon ion-flag observation-pin-icon"></div>';
+            return '<div class="observation-pin ' + (selected ? 'selected ' : '') + geoHazardType + '"><i class="icon ion-eye observation-pin-icon"></div>';
         },
 
         _getIcon: function (selected) {
@@ -40,7 +40,9 @@
                     buttonColor: '#fff',
                     iconColor: '#444',
                     icon: 'ion-eye',
-                    onClick: self.onClick
+                    onClick: function() {
+                        self.onClick();
+                    }
                 }
             ];
 

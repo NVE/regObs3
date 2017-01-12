@@ -59,13 +59,13 @@
 
         $scope.$on('$ionicView.enter', function () {
             $ionicHistory.clearHistory();
-            Map.updateMapFromSettings();
+            Map.refresh();
             Map.startWatch();
         });
 
         $scope.$on('$ionicView.leave', Map.clearWatch);
-        $scope.$on('$regObs:appSettingsChanged', Map.updateMapFromSettings);
-        $scope.$on('$regObs:registrationSaved', Map.updateMapFromSettings);
+        $scope.$on('$regObs:appSettingsChanged', Map.refresh);
+        $scope.$on('$regObs:registrationSaved', Map.refresh);
 
         $scope.$on('$regObs:mapItemSelected', function (event, item) {
             $timeout(function () {
