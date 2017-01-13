@@ -182,6 +182,8 @@
     margin-left: -10px;
     margin-top: -23px;
     border: 2px solid brown;
+    font-size: 12px;
+    line-height: 1.5;
 }
 
 .observation-pin.selected {
@@ -198,8 +200,22 @@
     text-align: center;
 }
 
+.observation-pin-icon.large-icon {
+    font-size: 16px;
+    left: -2px;
+    top: 3px;
+}
+
 .selected .observation-pin-icon {
     margin: -1px;
+}
+
+.menu-observation-pin {
+    display: inline-block;
+    margin-left: 0px;
+    margin-top: 0px;
+    position: relative;
+    top: -5px;
 }
 
 .map-help-pin {
@@ -224,8 +240,9 @@
     overflow: visible;
 }
 
-.map-selected-info .item {
-    height: 100%;
+.map-selected-info-inner {
+    padding-bottom: 5px;
+    height: 70px;
 }
 
 .hasFooter .map-selected-info {

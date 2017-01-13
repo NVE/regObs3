@@ -6,7 +6,6 @@
   "DIRT": "Jord",
   "WATER": "Vann",
   "BACK": "Tilbake",
-  "PREVIOUS_USED_PLACE_FOR": "Tidligere brukt sted for",
   "AWAY": "unna",
   "START_NEW_REGISTRATION_ON": "Start ny registrering på",
   "SLOW_DOWNLOAD_MESSAGE": "Tjenesten bruker for mye tid. Det kan være dårlig internett der du er eller at regObs av andre grunner er utilgjengelig. Du kan vente eller avbryte og prøve igjen senere",
@@ -24,5 +23,10 @@
   "YOUR_GPS_POSITION": "Din GPS posisjon",
   "SET_POSITION_HELP_TEXT": "Dra markør for å sette manuell posisjon",
   "NOT_SET": "Ikke satt",
-  "STORED_LOCATION": "Lagret sted"
+  "PREVIOUS_USED_PLACE": "Tidligere brukt sted",
+  "UPDATE_OBSERVATIONS_IN_MAP": "Oppdater observasjoner i kartet",
+  "UPDATE_OBSERVATIONS_IN_MAP_HELP_TEXT": "Det er lenge siden observasjoner har blitt oppdatert i kartet. Vil du oppdatere nå?",
+  "LOGIN": "Logg inn",
+  "LOGOUT": "Logg ut",
+  "SETTINGS": "Innstillinger"   
 }

@@ -67,10 +67,6 @@ angular.module('RegObs')
             return $state.current && $state.current.data && $state.current.data.showRegistrationFooter && appVm.hasRegistration();
         };
 
-        appVm.showGeoModeToggle = function () {
-            return $state.current && $state.current.data && $state.current.data.showGeoModeToggle && !appVm.hasRegistration();
-        };
-
         appVm.showMapToggle = function () {
             return $state.current && $state.current.data && $state.current.data.showMapToggle;
         };
@@ -85,6 +81,9 @@ angular.module('RegObs')
             appVm.topPopover.hide();
             AppSettings.setAppMode(mode);
         };
+        popoverScope.isLoggedIn = function() {
+            return !User.getUser().anonymous;
+        };
         
         $ionicPopover.fromTemplateUrl('app/menus/topPopover.html', { scope: popoverScope }).then(function (popover) {
             appVm.topPopover = popover;
@@ -94,7 +93,6 @@ angular.module('RegObs')
             return appVm.showTripFooter() ||
                 appVm.showFormFooter() ||
                 appVm.showRegistrationFooter();
-                // || appVm.showGeoModeToggle();
         };
 
         $scope.$on('$ionicView.loaded', function () {
@@ -123,20 +121,6 @@ angular.module('RegObs')
             appVm.currentState = $state.current;
             AppLogging.log(appVm.currentState);
             ga_storage._trackPageview(appVm.currentState.name);
-            //appVm.showTripFooter = $state.current.data.showTripFooter;
-            //appVm.showFormFooter = $state.current.data.showFormFooter;
-            //appVm.showRegistrationFooter = $state.current.data.showRegistrationFooter;
-            //appVm.showMapToggle = $state.current.data.showMapToggle;
-
             $ionicSideMenuDelegate.edgeDragThreshold(25);
         });
-
-        //$scope.$on('$ionicView.beforeEnter', function () {
-
-        //    appVm.showTripFooter = $state.current.data.showTripFooter;
-        //    appVm.showFormFooter = $state.current.data.showFormFooter;
-        //    appVm.showRegistrationFooter = $state.current.data.showRegistrationFooter;
-        //    appVm.showMapToggle = $state.current.data.showMapToggle;
-        //    appVm.showGeoModeToggle = $state.current.data.showGeoModeToggle;
-        //});
     });

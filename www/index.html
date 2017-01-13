@@ -71,10 +71,10 @@
                     <button ng-show="appVm.trip.model.started && !appVm.userService.getUser().anonymous" class="button button-balanced button-clear button-icon" ng-class="{'ion-android-walk':!appVm.trip.sending}" ng-click="appVm.stopTrip()">
                         <ion-spinner ng-if="appVm.trip.sending" class="spinner-light"></ion-spinner>
                     </button>
-                    <!--<button class="button button-clear" ng-class="{'ion-locked': !appVm.userService.getUser().anonymous}" ng-show="appVm.currentState.name !== 'settings' && appVm.currentState.name !== 'help' && !appVm.userService.loggingIn" ng-bind="!appVm.userService.getUser().anonymous ? '' : 'Logg inn'" ui-sref="settings"></button>
-                    <ion-spinner class="spinner-fix" ng-if="appVm.userService.loggingIn && appVm.currentState.name !== 'settings'"></ion-spinner>
-                    <button class="button button-icon button-clear ion-gear-a" ui-sref="settings" ng-show="appVm.currentState.name !== 'settings' && appVm.currentState.name !== 'help'"></button>-->
-                    <button class="button button-icon ion-more" ng-click="appVm.openTopPopover($event)"></button>
+                    <div ng-if="appVm.currentState.name !== 'settings' && appVm.currentState.name !== 'help'">
+                        <button class="button button-clear ion-locked" ng-show="!appVm.userService.getUser().anonymous" ui-sref="settings"></button>
+                        <button class="button button-icon ion-more" ng-click="appVm.openTopPopover($event)"></button>
+                    </div>
                 </ion-nav-buttons>
             </ion-nav-bar>
             <ion-nav-view></ion-nav-view>
@@ -126,14 +126,6 @@
                         </button>
                     </div>
                 </div>
-                <!--<div ng-if="appVm.showGeoModeToggle()" class="row row-no-padding">
-                    <div class="button-bar">
-                        <a class="button" ng-class="{'active':appVm.getAppMode() === 'snow'}" ng-click="appVm.setAppMode('snow')">Snø</a>
-                        <a class="button" ng-class="{'active':appVm.getAppMode() === 'dirt'}" ng-click="appVm.setAppMode('dirt')">Jord</a>
-                        <a class="button" ng-class="{'active':appVm.getAppMode() === 'water'}" ng-click="appVm.setAppMode('water')">Vann</a>
-                        <a class="button" ng-class="{'active':appVm.getAppMode() === 'ice'}" ng-click="appVm.setAppMode('ice')">Is</a>
-                    </div>
-                </div>-->
             </ion-footer-bar>
         </ion-side-menu-content>
     </ion-side-menus>

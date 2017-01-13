@@ -1,7 +1,7 @@
 ﻿/**
  * Class for Observation object
  */
-angular.module('RegObs').factory('Observation', function (MapSelectableItem, AppSettings, PresistentStorage, $state) {
+angular.module('RegObs').factory('Observation', function (MapSelectableItem, AppSettings, PresistentStorage, UserLocation) {
 
     /**
      * Constructor for Observation
@@ -16,14 +16,7 @@ angular.module('RegObs').factory('Observation', function (MapSelectableItem, App
         this.init();
     };
 
-    ///**
-    // * On user click, navigate to observation details
-    // * @returns {} 
-    // */
-    //Observation.prototype.onClick = function () {
-    //    var self = this;
-    //    $state.go('observationdetails', { observation: self });
-    //};
+    
 
     /**
      * Static helper method
@@ -77,6 +70,28 @@ angular.module('RegObs').factory('Observation', function (MapSelectableItem, App
     };
 
     /**
+     * Get location name or municipal name
+     * @returns {} 
+     */
+    Observation.prototype.getBestLocationName = function () {
+        return this.LocationName || this.MunicipalName || '';
+    };
+
+    /**
+     * Get observation types description. For example Faretegn,Skredfarevudering,Ullykke/Hendelse
+     * @returns {} 
+     */
+    Observation.prototype.getObservationTypeDescription = function () {
+        var arr = [];
+        this._registrations.forEach(function (item) {
+            if (arr.indexOf(item.name) < 0) { //Do not add duplicated values
+                arr.push(item.name);
+            }
+        });
+        return arr.join(', ');
+    };
+
+    /**
      * Does observation contain any images?
      * @returns {} 
      */
@@ -124,29 +139,17 @@ angular.module('RegObs').factory('Observation', function (MapSelectableItem, App
         return this._images;
     };
 
-    ///**
-    // * Get header html
-    // * @returns {} 
-    // */
-    //Observation.prototype.getHeader = function () {
-    //    return '<i class="icon ion-eye"></i> ' + this._registrations.length + ' &bull; ' + this.NickName;
-    //};
+    Observation.prototype.getUserDistance = function () {
+        return UserLocation.getUserDistanceFrom(this.Latitude, this.Longitude);
+    };
 
-    ///**
-    // * Get detscription html
-    // * @returns {} 
-    // */
-    //Observation.prototype.getDescription = function () {
-    //    return moment(this.DtObsTime).format('DD.MM, [kl.] HH:mm');
-    //};
-
-    ///**
-    // * Get type of observation
-    // * @returns {} 
-    // */
-    //Observation.prototype.getType = function () {
-    //    return 'Snøobservasjon';
-    //};
+    Observation.prototype.getUserDistanceText = function () {
+        var distance = UserLocation.getUserDistanceFrom(this.Latitude, this.Longitude);
+        if (distance.valid) {
+            return distance.description;
+        }
+        return '';
+    };
 
     /**
      * Factory for creating new Observation from json

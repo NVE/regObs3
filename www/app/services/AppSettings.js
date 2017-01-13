@@ -11,7 +11,7 @@
             emailReceipt: false,
             compass: false,
             gpsTimeout: 10,
-            searchRange: 5000,
+            searchRange: 50000,
             locale: 'nb',
             appmode: undefined,
             obsvalidtime: 7 * 24 * 60 * 60,
@@ -62,8 +62,8 @@
             });
 
         settings.maxMapZoomLevel = 17;
-
         settings.mapFolder = 'maps';
+        settings.debugTiles = false; //Turn on to debug offline/fallback/tiles
 
         settings.tiles = [
             { name: 'topo', description: 'Topografisk kart', maxDownloadLimit: 10000, url: 'http://opencache.statkart.no/gatekeeper/gk/gk.open_gmaps?layers=matrikkel_bakgrunn&zoom={z}&x={x}&y={y}&format=image/jpeg', maxLimitMessage: 'Statens Kartverk har en grense på 10 000 kartblad per bruker per døgn.' },
@@ -132,27 +132,6 @@
         settings.getWebRoot = function () {
             var base = settings.data.env === 'regObs' ? 'www' : settings.data.env.replace(' regObs', '');
             return 'http://' + base + '.regobs.no/';
-        };
-
-        settings.getObservationsUrl = function (type) {
-            if (!type) {
-                switch (settings.data.appmode) {
-                    case 'dirt':
-                        type = 'LandSlide';
-                        break;
-                    case 'ice':
-                        type = 'Ice';
-                        break;
-                    case 'water':
-                        type = 'Flood';
-                        break;
-                    default:
-                        type = 'Avalanche';
-                        break;
-                }
-            }
-
-            return settings.getWebRoot() + type + '/Observations';
         };
 
         settings.getWarningUrl = function () {

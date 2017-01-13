@@ -1,6 +1,6 @@
 ﻿angular
     .module('RegObs')
-    .factory('Map', function (AppSettings, AppLogging, ObsLocation, Observations, Utility, $state, Registration, $ionicPlatform, $rootScope, $q, $timeout, $ionicPopup, $interval, RegobsPopup, PresistentStorage, $translate, RegObsClasses) {
+    .factory('Map', function (AppSettings, AppLogging, ObsLocation, Observations, Utility, $state, Registration, $ionicPlatform, $rootScope, $q, $timeout, $ionicPopup, $interval, RegobsPopup, PresistentStorage, $translate, RegObsClasses, UserLocation) {
         var service = this;
 
         var map, //Leaflet map
@@ -9,22 +9,27 @@
             userMarker, //Leaflet marker for user position
             pathLine, //Leaflet (dotted) path between user position and current obs location
             observationInfo, //Obs location information. Displayed on top right corner
-            tiles = [], //Map tiles
-            isProgramaticZoom = false, //Is currently programatic zoom
-            followMode = true, //Follow user position, or has user manually dragged or zoomed map?
-            center = [62.5, 10]; //default map center when no observation or user location
+            tiles = []; //Map tiles      
 
+        service._isInitialized = false; //Is map initialized. Map should allways be initialized on startup, else you will get NotInitialized error for alot of methods
+        service._isProgramaticZoom = false, //Is currently programatic zoom
+        service._zoomToViewOnFirstLocation = 13; //Zoom to this level when first location is found
+        service._selectedItem = null; //Map selected item, this could be observations, nearby places or location marker
+        service._defaultCenter = [62.5, 10]; //default map center when no observation or user location
+        service._followMode = true; //Follow user position, or has user manually dragged or zoomed map?
 
         /**
-         * Map selected item, this could be observations, nearby places or location marker
+         * Check if map is initialized, else throw error
+         * @throws {Error} when not initialized
          */
-        service._selectedItem = null;
+        service._checkIfInitialized = function() {
+            if (!service._isInitialized)
+                throw Error('Map is not initialized! Please call createMap functon on map element...');
+        };
 
         /**
          * Set selected item
-         * @param {} header 
-         * @param {} description 
-         * @returns {} 
+         * @param {MapSelectableItem} item Item to set as selected
          */
         service._setSelectedItem = function (item) {
             service._unselectAllMarkers(item);
@@ -43,13 +48,12 @@
 
         /**
          * Update selected item with distance to user position
-         * @returns {} 
          */
         service._updateSelectedItemDistance = function () {
             $timeout(function () { //using timout to apply changes to ui
-                if (service._selectedItem && userMarker) {
+                if (service._selectedItem && UserLocation.hasUserLocation()) {
                     var latlng = service._selectedItem.getLatLng();
-                    var distance = service.getUserDistanceFrom(latlng);
+                    var distance = UserLocation.getUserDistanceFrom(latlng.lat, latlng.lng);
                     service._selectedItem.setDistance(distance);
                 }
             });
@@ -57,27 +61,27 @@
 
         /**
          * Update info text with distance from user to observation
-         * @param {} latlng 
-         * @returns {} 
+         * @param {L.LatLng} latlng Position to update distence to from user
          */
         service._updateObsInfoText = function (latlng) {
+            service._checkIfInitialized();
             var text = '';
-            if (latlng && userMarker) {
-                var distance = userMarker.getLatLng().distanceTo(latlng).toFixed(0);
-                text = Utility.getDistanceText(distance);
-            } else if (userMarker && !latlng) {
+            if (latlng && UserLocation.hasUserLocation()) {
+                var distance = UserLocation.getUserDistanceFrom(latlng.lat, latlng.lng);
+                if (distance.valid) {
+                    text = distance.description;
+                }
+            } else if (UserLocation.hasUserLocation() && !latlng) {
                 text = '0m';
             } else if (!ObsLocation.isSet()) {
                 text = $translate.instant('NOT_SET');
             }
-
             observationInfo.setText(text);
         };
 
         /**
          * On obs location changed
-         * @param {} latlng 
-         * @returns {} 
+         * @param {L.LatLng} latlng Obs location changed to this position
          */
         service._onObsLocationChange = function (latlng) {
             service._updateObsInfoText(latlng);
@@ -87,12 +91,12 @@
 
         /**
          * Unselect all markers
-         * @returns {} 
+         * @param {MapSelectableItem} exept Unselect all except this item
          */
-        service._unselectAllMarkers = function (exept) {
+        service._unselectAllMarkers = function (except) {
             var unselectFunc = function (arr) {
                 arr.forEach(function (item) {
-                    if (item !== exept) {
+                    if (item !== except) {
                         if (item.setUnselected) {
                             item.setUnselected();
                         }
@@ -106,7 +110,6 @@
 
         /**
          * Draw observations stored in presistant storage
-         * @returns {} 
          */
         service._drawObservations = function () {
             layerGroups.observations.clearLayers();
@@ -121,9 +124,9 @@
 
         /**
          * Remove all observations in map
-         * @returns {} 
          */
         service._removeObservations = function () {
+            service._checkIfInitialized();
             layerGroups.observations.clearLayers();
         };
 
@@ -132,6 +135,7 @@
          * @returns {} 
          */
         service._drawStoredLocations = function () {
+            service._checkIfInitialized();
             service._clearAllStoredLocations();
             Observations.getLocations(Utility.getCurrentGeoHazardTid()).forEach(function (loc) {
                 var m = new RegObsClasses.StoredLocationMarker(loc);
@@ -145,9 +149,9 @@
          * @returns {} 
          */
         service._clearAllStoredLocations = function () {
+            service._checkIfInitialized();
             layerGroups.locations.clearLayers();
         };
-
 
 
         /**
@@ -156,6 +160,7 @@
          * @returns {} 
          */
         service._setObsLocation = function (latlng) {
+            service._checkIfInitialized();
             if (latlng) {
                 obsLocationMarker.setObsLocationManually(latlng);
                 obsLocationMarker.setSelected();
@@ -186,30 +191,41 @@
          */
         service._refreshUserMarker = function (position) {
             if (position) {
+                service._checkIfInitialized();
                 var latlng = new L.LatLng(position.latitude, position.longitude);
 
                 if (!userMarker) {
                     userMarker = L.userMarker(latlng,
                         { pulsing: true, accuracy: position.accuracy, smallIcon: true, zIndexOffset: 1000 });
                     userMarker.addTo(layerGroups.user);
+                     service.setView(latlng);
                 } else {
                     userMarker.setLatLng(latlng);
                     userMarker.setAccuracy(position.accuracy);
-                }
-
-                if (followMode) {
-                    map.panTo(latlng);
+                    if (service._followMode) {
+                        map.panTo(latlng);
+                    }
                 }
             }
         };
 
-        var hideAllTiles = function () {
+        /**
+         * Remove all tile layers
+         * @returns {} 
+         */
+        service._removeAllTiles = function () {
+            service._checkIfInitialized();
             for (var i = 1; i < tiles.length; i++) {
                 layerGroups.tiles.removeLayer(tiles[i]);
             }
         };
 
-        var getTileIndex = function (name) {
+        /**
+         * Get tile index for tile name
+         * @param {} name 
+         * @returns {} 
+         */
+        service._getTileIndex = function (name) {
             for (var i = 0; i < AppSettings.tiles.length; i++) {
                 if (AppSettings.tiles[i].name === name) {
                     return i;
@@ -218,16 +234,25 @@
             return -1;
         };
 
-        var getTileByName = function (name) {
-            var index = getTileIndex(name);
+        /**
+         * Get tile by name
+         * @param {} name 
+         * @returns {} 
+         */
+        service.getTileByName = function (name) {
+            var index = service._getTileIndex(name);
             return tiles[index];
         };
 
-        service.getTileByName = getTileByName;
-
-        var showTile = function (name, opacity) {
+        /**
+         * Add tile to map
+         * @param {} name 
+         * @param {} opacity 
+         * @returns {} 
+         */
+        service._addTile = function (name, opacity) {
             if (layerGroups.tiles) {
-                var t = getTileByName(name);
+                var t = service.getTileByName(name);
                 if (t) {
                     if (opacity) {
                         t.setOpacity(opacity);
@@ -242,7 +267,7 @@
          * @returns {} 
          */
         service._disableFollowMode = function () {
-            followMode = false;
+            service._followMode = false;
         };
 
         /**
@@ -251,6 +276,7 @@
          * @returns {} 
          */
         service._onPositionUpdate = function (position) {
+            UserLocation.setLastUserLocation(position);
             service._refreshUserMarker(position);
             var latlng = new L.LatLng(position.latitude, position.longitude);
             obsLocationMarker.setUserPosition(latlng);
@@ -270,11 +296,25 @@
         };
 
         /**
+         * Create layer groups
+         * @returns {} 
+         */
+        service._createLayerGroups = function() {
+            layerGroups = { //Layers are added in order
+                tiles: L.layerGroup().addTo(map),
+                locations: new RegObsClasses.MarkerClusterGroup({ icon: 'ion-pin' }).addTo(map),
+                observations: new RegObsClasses.MarkerClusterGroup({ icon: 'ion-eye' }).addTo(map),
+                user: L.layerGroup().addTo(map)
+            };
+        };
+
+        /**
          * Main method for creating map
          * @param {} elem 
          * @returns {} 
          */
         service.createMap = function (elem) {
+            var center = service._defaultCenter;
             if (ObsLocation.isSet()) {
                 var currentPosition = ObsLocation.get();
                 center = [currentPosition.Latitude, currentPosition.Longitude];
@@ -288,31 +328,12 @@
                 attributionControl: false
             });
 
-            layerGroups = { //Layers are added in order
-                tiles: L.layerGroup().addTo(map),
-                locations: L.markerClusterGroup({
-                    showCoverageOnHover: false,
-                    iconCreateFunction: function (cluster) {
-                        var appMode = AppSettings.getAppMode();
-                        var innerDiv = '<div class="observation-pin obs-marker-cluster ' + appMode + '"><div class="observation-pin-icon"><i class="ion ion-pin"></i> ' + cluster.getChildCount() + '</div>';
-                        return L.divIcon({ html: innerDiv, className: 'observation-pin-cluster', iconSize: L.point(30, 30) });
-                    }
-                }).addTo(map),
-                observations: L.markerClusterGroup({
-                    showCoverageOnHover: false,
-                    iconCreateFunction: function (cluster) {
-                        var appMode = AppSettings.getAppMode();
-                        var innerDiv = '<div class="observation-pin obs-marker-cluster ' + appMode + '"><div class="observation-pin-icon"><i class="ion ion-eye"></i>' + cluster.getChildCount() + '</div></div>';
-                        return L.divIcon({ html: innerDiv, className: 'observation-pin-cluster', iconSize: L.point(30, 30) });
-                    }
-                }).addTo(map),
-                user: L.layerGroup().addTo(map)
-            };
+            service._createLayerGroups();
 
             tiles = [];
 
             AppSettings.tiles.forEach(function (tile) {
-                var t = L.tileLayerRegObs(tile.url, { folder: AppSettings.mapFolder, name: tile.name, debugFunc: AppLogging.log });
+                var t = L.tileLayerRegObs(tile.url, { folder: AppSettings.mapFolder, name: tile.name, debugFunc: AppSettings.debugTiles ?  AppLogging.debug : null });
                 tiles.push(t);
             });
             tiles[0].addTo(layerGroups.tiles);
@@ -327,16 +348,20 @@
                 });
 
             map.on('contextmenu', function (e) {
-                service._setObsLocation(e.latlng);
+                service._setObsLocation(e.latlng); //Set location manually on right klick / long press in map
             });
 
             map.on('click', function (e) {
                 service.clearSelectedMarkers();
             });
 
-            map.on('dragstart', service._disableFollowMode);
+            map.on('dragstart', function() {
+                if (userMarker) { //Only disable follow mode on map drag if first location has been set (userMarker exists)
+                    service._disableFollowMode();
+                }
+            });
             map.on('zoomstart', function () {
-                if (!isProgramaticZoom) {
+                if (!service._isProgramaticZoom && userMarker) {
                     service._disableFollowMode();
                 }
             });
@@ -346,6 +371,8 @@
             obsLocationMarker.on('obsLocationChange', service._onObsLocationChange);
             obsLocationMarker.on('obsLocationCleared', service._onObsLocationCleared);
             obsLocationMarker.addTo(layerGroups.user);
+
+            service._isInitialized = true; //map is created!
 
             service.refresh();
 
@@ -364,36 +391,49 @@
             obsLocationMarker.clear();
         };
 
+        /**
+         * Clear selected marker
+         * @returns {} 
+         */
         service.clearSelectedMarkers = function () {
             service._unselectAllMarkers();
             service._setSelectedItem(null);
         };
 
+        /**
+         * Set view and zoom to level
+         * @param {} latlng 
+         * @param {} zoom 
+         * @returns {} 
+         */
         service.setView = function (latlng, zoom) {
-            isProgramaticZoom = true;
-            map.setView(latlng, zoom || 9);
-            isProgramaticZoom = false;
+            service._isProgramaticZoom = true;
+            map.setView(latlng, zoom || service._zoomToViewOnFirstLocation);
+            service._isProgramaticZoom = false;
         };
 
+        /**
+         * Get center of map
+         * @returns {} 
+         */
         service.getCenter = function () {
             return map.getCenter();
         };
 
+        /**
+         * Get map zoom
+         * @returns {} 
+         */
         service.getZoom = function () {
             return map.getZoom();
         };
 
+        /**
+         * Get all tiles
+         * @returns {} 
+         */
         service.getTiles = function () {
             return tiles;
-        };
-
-        service.getUserDistanceFrom = function (latlng) {
-            if (userMarker) {
-                var distance = userMarker.getLatLng().distanceTo(latlng).toFixed(0);
-                var description = Utility.getDistanceText(distance);
-                return { distance: distance, description: description };
-            }
-            return { distance: null, description: 'Ikke kjent' };
         };
 
         /**
@@ -401,7 +441,7 @@
          * @returns {} 
          */
         service.centerMapToUser = function () {
-            followMode = true;
+            service._followMode = true;
             if (userMarker) {
                 if (map) {
                     map.panTo(userMarker.getLatLng());
@@ -445,27 +485,37 @@
         };
 
         /**
-         * Refresh map an redraw layers and markers as set in settings
+         * Redraw map with tiles only visible for current geohazard
          * @returns {} 
          */
-        service.refresh = function () {
-            hideAllTiles();
+        service._redrawTilesForThisGeoHazard = function () {
+            service._removeAllTiles();
+
             var geoId = Utility.getCurrentGeoHazardTid();
             AppSettings.data.maps.forEach(function (mapSetting) {
                 if (mapSetting.geoHazardTid === geoId) {
                     if (mapSetting.tiles) {
                         mapSetting.tiles.forEach(function (tileSetting) {
                             if (tileSetting.visible) {
-                                showTile(tileSetting.name, tileSetting.opacity);
+                                service._addTile(tileSetting.name, tileSetting.opacity);
                             }
                         });
                     }
                 }
             });
+        };
+
+        /**
+         * Refresh map an redraw layers and markers as set in settings
+         * @returns {} 
+         */
+        service.refresh = function () {
+            service._redrawTilesForThisGeoHazard();
+            
             if (AppSettings.data.showPreviouslyUsedPlaces) {
                 service._drawStoredLocations();
             } else {
-                service._clearAllStoredLocationsations();
+                service._clearAllStoredLocations();
             }
             if (AppSettings.data.showObservations) {
                 service._drawObservations();
@@ -482,11 +532,15 @@
         service.startWatch = function () {
             if (map) {
                 AppLogging.log('Start watching gps location');
-                document.addEventListener("deviceready",
-                    function () {
-                        map.locate({ watch: true, enableHighAccuracy: true });
-                    },
-                    false);
+                $ionicPlatform.ready(function() {
+                    map.locate({ watch: true, enableHighAccuracy: true });
+                });
+
+                //document.addEventListener("deviceready",
+                //    function () {
+                //        map.locate({ watch: true, enableHighAccuracy: true });
+                //    },
+                //    false);
             }
         };
 
@@ -511,11 +565,25 @@
             }
         };
 
+        /**
+         * Calculate list of xyz map pieces that is needed for current bounds
+         * @param {} bounds 
+         * @param {} zoomMin 
+         * @param {} zoomMax 
+         * @returns {} 
+         */
         service.calculateXYZListFromBounds = function (bounds, zoomMin, zoomMax) {
             if (!tiles) return [];
             return tiles[0].calculateXYZListFromBounds(bounds, zoomMin, zoomMax);
         };
 
+        /**
+         * Calculate size of all map pieces that is needed for current bounds
+         * @param {} bounds 
+         * @param {} zoomMin 
+         * @param {} zoomMax 
+         * @returns {} 
+         */
         service.calculateXYZSizeFromBounds = function (bounds, zoomMin, zoomMax) {
             if (!map || !tiles) return 0;
             return tiles[0].calculateXYZSizeFromBounds(bounds, zoomMin, zoomMax);

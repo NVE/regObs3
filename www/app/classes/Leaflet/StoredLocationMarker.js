@@ -8,12 +8,12 @@
     var StoredLocationMarker = MapSelectableItem.extend({
 
         options: {
-            typeDescription: $translate.instant('STORED_LOCATION')
+            typeDescription: $translate.instant('PREVIOUS_USED_PLACE')
         },
 
         _getObservationPinHtml: function (selected) {
             var geoHazardType = Utility.getGeoHazardType(this.storedLocation.geoHazardId);
-            return '<div class="observation-pin ' + (selected ? 'selected ' : '') + geoHazardType + '"><i class="icon ion-pin observation-pin-icon"></div>';
+            return '<div class="observation-pin ' + (selected ? 'selected ' : '') + geoHazardType + '"><i class="icon ion-pin observation-pin-icon"></i></div>';
         },
 
         _getIcon: function (selected) {

@@ -1,8 +1,9 @@
 ﻿angular
     .module('RegObs')
-    .factory('Observations', function ($http, AppSettings, LocalStorage, AppLogging, Utility, $q, PresistentStorage) {
+    .factory('Observations', function ($http, AppSettings, LocalStorage, AppLogging, Utility, $q, PresistentStorage, $ionicPlatform, moment) {
         var service = this;
         var locationsStorageKey = 'regObsLocations';
+        var observationUpdatedStorageKey = 'LastObservationUpdate';
 
         service.getStoredObservations = function (geoHazardId) {
             return service._getRegistrationsFromPresistantStorage().then(function (result) {
@@ -17,21 +18,23 @@
 
         service._getRegistrationsFromPresistantStorage = function () {
             return $q(function (resolve) {
-                var path = AppSettings.getRegistrationRelativePath();
-                var readRegistrations = function () {
-                    PresistentStorage.readAsText(path)
-                        .then(function (text) {
-                            resolve(JSON.parse(text));
-                        }).catch(function (error) {
-                            AppLogging.error('Could not read registrations from file: ' + path + '. ' + JSON.stringify(error));
+                $ionicPlatform.ready(function () {
+                    var path = AppSettings.getRegistrationRelativePath();
+                    var readRegistrations = function () {
+                        PresistentStorage.readAsText(path)
+                            .then(function (text) {
+                                resolve(JSON.parse(text));
+                            }).catch(function (error) {
+                                AppLogging.error('Could not read registrations from file: ' + path + '. ' + JSON.stringify(error));
+                                resolve([]);
+                            });
+                    };
+                    PresistentStorage.checkIfFileExsists(path)
+                        .then(readRegistrations) //progress if image allready exists
+                        .catch(function () {
                             resolve([]);
                         });
-                };
-                PresistentStorage.checkIfFileExsists(path)
-                    .then(readRegistrations) //progress if image allready exists
-                    .catch(function () {
-                        resolve([]);
-                    });
+                });
             });
         };
 
@@ -181,7 +184,7 @@
             });
         };
 
-        service._storeRegistrations = function(registrations) {
+        service._storeRegistrations = function (registrations) {
             var path = AppSettings.getRegistrationRelativePath();
             return PresistentStorage.storeFile(path, JSON.stringify(service._cleanupRegistrations(registrations)));
         };
@@ -253,21 +256,23 @@
          * @param {} registration 
          * @returns {} 
          */
-        service._deleteAllImagesForRegistration = function(registration) {
+        service._deleteAllImagesForRegistration = function (registration) {
             var tasks = [];
             registration.Registrations.forEach(function (item) {
                 if (Utility.isObsImage(item)) {
                     var pictureId = item.TypicalValue2;
                     var path = AppSettings.getImageRelativePath(pictureId);
 
-                    var task = function() {
-                        return $q(function(resolve) {
-                            PresistentStorage.checkIfFileExsists(path)
-                                .then(function() {
-                                    return PresistentStorage.removeFile(path);
-                                })
-                                .then(resolve) //deleted complete, resolve
-                                .catch(resolve); //file does not exist or could not be deleted, resolve
+                    var task = function () {
+                        return $q(function (resolve) {
+                            $ionicPlatform.ready(function () {
+                                PresistentStorage.checkIfFileExsists(path)
+                               .then(function () {
+                                   return PresistentStorage.removeFile(path);
+                               })
+                               .then(resolve) //deleted complete, resolve
+                               .catch(resolve); //file does not exist or could not be deleted, resolve
+                            });
                         });
                     };
 
@@ -282,7 +287,7 @@
          * @param {} registrations 
          * @returns {} 
          */
-        service._deleteAllInvalidRegistrationImages = function(registrations) {
+        service._deleteAllInvalidRegistrationImages = function (registrations) {
             var tasks = [];
             registrations.forEach(function (item) {
                 if (!service._validateRegistrationDate(item.DtObsTime)) {
@@ -298,9 +303,9 @@
          */
         service.removeOldObservationsFromPresistantStorage = function () {
             return service._getRegistrationsFromPresistantStorage()
-                .then(function(registrations) {
+                .then(function (registrations) {
                     return service._deleteAllInvalidRegistrationImages(registrations)
-                        .then(function() {
+                        .then(function () {
                             return service._storeRegistrations(registrations);
                         });
                 });
@@ -340,7 +345,7 @@
             };
 
             return service.updateNearbyLocations(latitude, longitude, range, geohazardId, cancel)
-            .then(service._removeOldObservationsFromPresistantStorage)
+            .then(service.removeOldObservationsFromPresistantStorage)
             .then(function () {
                 return service._getRegistrationsWithinRadius(latitude,
                     longitude,
@@ -349,7 +354,26 @@
                     progress,
                     onProgress,
                     cancel);
-            }).then(downloadAllRegistrations);
+            }).then(downloadAllRegistrations)
+            .finally(function () {
+                LocalStorage.set(observationUpdatedStorageKey, moment().toISOString());
+            });
+        };
+
+        /**
+         * Check if observations should be updated
+         * @returns {} 
+         */
+        service.checkIfObservationsShouldBeUpdated = function () {
+            var lastRun = LocalStorage.get(observationUpdatedStorageKey);
+            var warnIfOlderThanDaysBack = 3;
+            if (!lastRun) return true;
+            var lastRunMoment = moment(lastRun);
+            var diff = lastRunMoment.diff(moment());
+            if (diff > warnIfOlderThanDaysBack) {
+                return true;
+            }
+            return false;
         };
 
         return service;

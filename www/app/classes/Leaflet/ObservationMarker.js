@@ -13,7 +13,7 @@
 
         _getObservationPinHtml: function (selected) {
             var geoHazardType = Utility.getGeoHazardType(this.observation.GeoHazardTid);
-            return '<div class="observation-pin ' + (selected ? 'selected ' : '') + geoHazardType + '"><i class="icon ion-eye observation-pin-icon"></div>';
+            return '<div class="observation-pin ' + (selected ? 'selected ' : '') + geoHazardType + '"><i class="icon ion-eye observation-pin-icon"></i></div>';
         },
 
         _getIcon: function (selected) {
@@ -51,7 +51,11 @@
         },
 
         getHeader: function () {
-            return '<i class="icon ion-eye"></i> ' + this.observation.getRegistrationCount() + ' &bull; ' + this.observation.NickName;
+            return this.observation.getObservationTypeDescription();
+        },
+
+        getDescription: function () {
+            return this.observation.NickName || '';
         },
 
         hasImages: function () {

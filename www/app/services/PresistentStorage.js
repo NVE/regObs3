@@ -24,11 +24,15 @@ angular.module('RegObs').factory('PresistentStorage', function (AppSettings, $co
      * @returns {} promise
      */
     service._createDirRecursively = function (directory) {
-        return $q(function (resolve, reject) {
+        return $q(function (resolve) {
             var directories = directory.split('/');
             var i = 0;
-
             var createDirFragment = function () {
+                var progress = function () {
+                    i++;
+                    createDirFragment();
+                };
+
                 if (i < directories.length) {
                     var dir = directories[0];
                     for (var j = 1; j <= i; j++) {
@@ -36,10 +40,11 @@ angular.module('RegObs').factory('PresistentStorage', function (AppSettings, $co
                     }
                     AppLogging.log('Checking directory ' + dir);
                     service._createDir(dir)
-                        .then(function () {
-                            i++;
-                            createDirFragment();
-                        }).catch(reject);
+                        .then(progress)
+                        .catch(function (error) {
+                            AppLogging.error('Could not create directory ' + dir + '. Returning. Error: ' + JSON.stringify(error));
+                            resolve();
+                        });
                 } else {
                     resolve();
                 }

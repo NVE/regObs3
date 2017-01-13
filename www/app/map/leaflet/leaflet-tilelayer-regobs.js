@@ -151,12 +151,12 @@ L.TileLayer.RegObs = L.TileLayer.extend({
         // Generate new src path.
         newUrl = layer.getTileScaledUrl(currentCoords);
 
-        layer.debug('Fallback to next zoom level: ' + fallbackZoom
-            + ' for zoom: ' + originalCoords.z + 'new x: '
-            + currentCoords.x + ' y: ' + currentCoords.y
-            + ' original coordinates x: '
-            + originalCoords.x + ' y: ' + originalCoords.y
-            + ' minNativeZoom:' + layer.options.minNativeZoom);
+        //layer.debug('Fallback to next zoom level: ' + fallbackZoom
+        //    + ' for zoom: ' + originalCoords.z + 'new x: '
+        //    + currentCoords.x + ' y: ' + currentCoords.y
+        //    + ' original coordinates x: '
+        //    + originalCoords.x + ' y: ' + originalCoords.y
+        //    + ' minNativeZoom:' + layer.options.minNativeZoom);
 
         // Zoom replacement img.
         style.width = (tileSize.x * scale) + 'px';

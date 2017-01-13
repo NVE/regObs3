@@ -1,10 +1,10 @@
 ﻿<ion-content>
     <ion-list>
-        <div class="item item-divider">
+        <ion-item class="item item-divider">
             Kartvalg
-        </div>
-        <ion-toggle toggle-class="toggle-calm" ng-model="$ctrl.settings.showObservations" ng-change="$ctrl.onSettingsChanged()">
-            Vis observasjoner
+        </ion-item>
+        <ion-toggle class="item-icon-left" toggle-class="toggle-calm" ng-model="$ctrl.settings.showObservations" ng-change="$ctrl.onSettingsChanged()">
+            <div class="icon"><div class="menu-observation-pin observation-pin {{$ctrl.settings.appmode}}"><i class="icon ion-eye observation-pin-icon large-icon"></i></div></div> Vis observasjoner
         </ion-toggle>
         <label class="item item-input item-select item-stacked-label" ng-show="$ctrl.settings.showObservations">
             <span class="input-label">
@@ -13,8 +13,8 @@
             <select ng-model="$ctrl.settings.showObservationsDaysBack"
                     ng-options="option.value as option.name for option in $ctrl.daysBackArray" ng-change="$ctrl.onSettingsChanged()"></select>
         </label>
-        <ion-toggle toggle-class="toggle-calm" ng-model="$ctrl.settings.showPreviouslyUsedPlaces" ng-change="$ctrl.onSettingsChanged()">
-            Vis tidligere brukte steder
+        <ion-toggle class="item-icon-left" toggle-class="toggle-calm" ng-model="$ctrl.settings.showPreviouslyUsedPlaces" ng-change="$ctrl.onSettingsChanged()">
+            <div class="icon"><div class="menu-observation-pin observation-pin {{$ctrl.settings.appmode}}"><i class="icon ion-pin observation-pin-icon large-icon"></i></div></div> Vis tidligere <br />brukte steder
         </ion-toggle>
         <ion-item class="item-icon-left item-icon-right item-text-wrap" ng-click="$ctrl.downloadMap()" menu-close>
             <i class="icon ion-ios-bolt-outline"></i> Offline kart
@@ -51,39 +51,15 @@
                 </ion-item>
             </div>
         </div>
-        <div ng-show="$ctrl.settings.appmode === 'dirt'">
+        <!--<div ng-show="$ctrl.settings.appmode === 'dirt'">
             <div class="item item-divider">
                 Kartvalg for jord
             </div>
-            <!--<ion-toggle toggle-class="toggle-calm" ng-model="$ctrl.settings.showSteepnessMap" ng-change="$ctrl.onSettingsChanged()">
-                Vis kvikkleirekart
-            </ion-toggle>
-            <div ng-show="$ctrl.settings.showSteepnessMap">
-                <label class="item item-input item-select item-stacked-label">
-                    <span class="input-label">
-                        Gjennomsiktighet
-                    </span>
-                    <select ng-model="$ctrl.settings.steepnessMapOpacity"
-                            ng-options="option.value as option.name for option in $ctrl.opacityArray" ng-change="$ctrl.onSettingsChanged()"></select>
-                </label>
-            </div>-->
-        </div>
+        </div>-->
         <div ng-show="$ctrl.settings.appmode === 'ice'">
             <div class="item item-divider">
                 Kartvalg for is
             </div>
-            <!--<ion-toggle toggle-class="toggle-calm" ng-model="$ctrl.settings.showSteepnessMap" ng-change="$ctrl.onSettingsChanged()">
-                Vis svekket is kart
-            </ion-toggle>
-            <div ng-show="$ctrl.settings.showSteepnessMap">
-                <label class="item item-input item-select item-stacked-label">
-                    <span class="input-label">
-                    Gjennomsiktighet
-                </span>
-                    <select ng-model="$ctrl.settings.steepnessMapOpacity"
-                            ng-options="option.value as option.name for option in $ctrl.opacityArray" ng-change="$ctrl.onSettingsChanged()"></select>
-                </label>
-            </div>-->
             <ion-toggle toggle-class="toggle-calm" ng-model="$ctrl.settings.maps[1].tiles[0].visible" ng-change="$ctrl.onSettingsChanged()">
                 Vis svekket is
             </ion-toggle>
@@ -97,23 +73,11 @@
                 </label>
             </div>
         </div>
-        <div ng-show="$ctrl.settings.appmode === 'water'">
+        <!--<div ng-show="$ctrl.settings.appmode === 'water'">
             <div class="item item-divider">
                 Kartvalg for vann
             </div>
-            <!--<ion-toggle toggle-class="toggle-calm" ng-model="$ctrl.settings.showSteepnessMap" ng-change="$ctrl.onSettingsChanged()">
-            Vis svekket is kart
-        </ion-toggle>
-        <div ng-show="$ctrl.settings.showSteepnessMap">
-            <label class="item item-input item-select item-stacked-label">
-                <span class="input-label">
-                    Gjennomsiktighet
-                </span>
-                <select ng-model="$ctrl.settings.steepnessMapOpacity"
-                        ng-options="option.value as option.name for option in $ctrl.opacityArray" ng-change="$ctrl.onSettingsChanged()"></select>
-            </label>
         </div>-->
-        </div>
         <ion-item class="item-text-wrap">
             <button class="button button-positive button-block button-clear" ui-sref="help({page:'maphelp'})" menu-close>
                 {{'HELP'|translate}}

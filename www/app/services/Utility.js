@@ -394,7 +394,7 @@ angular
             if (distance > 1000) {
                 dText = (distance / 1000).toFixed(1) + ' km';
             } else {
-                dText = (distance || 0) + ' m';
+                dText = (distance || 0).toFixed(0) + ' m';
             }
             return dText;
         };

@@ -60,8 +60,7 @@
                 controller: 'MapStartCtrl as vm',
                 data: {
                     showMapToggle: true,
-                    showRegistrationFooter: true,
-                    showGeoModeToggle: true
+                    showRegistrationFooter: true
                 }
             })
             .state('settings', {
@@ -110,9 +109,20 @@
 
             .state('observationdetails',{
                 url: '/observationdetails',
-                templateUrl: 'app/map/observations/observationdetails.html',
+                templateUrl: 'app/observations/details/observationdetails.html',
                 controller: 'ObservationDetailsCtrl as vm',
                 params: { observation: null },
+                data: {
+                    defaultBack: {
+                        state: 'start'
+                    }
+                }
+            })
+
+            .state('observationlist', {
+                url: '/observationlist',
+                templateUrl: 'app/observations/list/observationlist.html',
+                controller: 'ObservationListCtrl as vm',
                 data: {
                     defaultBack: {
                         state: 'start'
@@ -465,7 +475,7 @@
             });
     }
 
-    function setup($ionicPlatform, Utility, AppLogging, Registration) {
+    function setup($ionicPlatform, Utility, AppLogging, Registration, Observations) {
         'ngInject';
 
         if (Utility.shouldUpdateKdvElements()) {
@@ -484,7 +494,9 @@
 
             if (window.StatusBar) {
                 StatusBar.styleLightContent();
-            }           
+            }
+
+            //Observations.removeOldObservationsFromPresistantStorage(); //cleanup old observations on startup
         });
 
         $ionicPlatform.on('resume', function () {

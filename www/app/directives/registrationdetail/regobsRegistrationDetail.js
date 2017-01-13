@@ -1,48 +1,19 @@
 ﻿angular.module('RegObs').component('registrationDetail', {
     templateUrl: 'app/directives/registrationdetail/registrationDetail.html',
-    controller: function (AppSettings, PresistentStorage, AppLogging, Utility, $cordovaInAppBrowser) {
+    controller: function (AppSettings, $cordovaInAppBrowser) {
         var ctrl = this;
-
-        //ctrl.images = [];
-        //ctrl.descriptions = [];
-
-        //ctrl.observationCount = function() {
-        //    return ctrl.registration.Registrations.filter(function(item) {
-        //        return !Utility.isObsImage(item);
-        //    }).length;
-        //};
-
-
-        //var getObsDescription = function(item) {
-        //    var result = [];
-        //    if (item.TypicalValue2) {
-        //        result.push(item.TypicalValue2);
-        //    }
-        //    if (item.TypicalValue1) {
-        //        result.push(item.TypicalValue1);
-        //    }
-        //    return result;
-        //};
 
         ctrl.onViewWebRegistrationClick = function () {
             var url = AppSettings.getWebRoot() + '/Registration/' + ctrl.registration.RegId;
             $cordovaInAppBrowser.open(url, '_system');
         };
 
-        //var init = function () {
-        //    ctrl.registration.Registrations.forEach(function(item) {
-        //        if (Utility.isObsImage(item)) {
-        //            var pictureId = item.TypicalValue2;
-        //            var path = AppSettings.getImageRelativePath(pictureId);
-        //            var uri = PresistentStorage.getUri(path);
-        //            ctrl.images.push({ id: pictureId, url: uri, description: '' });
-        //        } else {
-        //            ctrl.descriptions.push({ name: (item.RegistrationName || '').trim(), description: getObsDescription(item) });
-        //        }
-        //    });
-        //};
+        var hasMoreThanOneImage = ctrl.registration.getImageCount() > 1;
 
-        //init();
+        ctrl.options = {
+            loop: false,
+            pagination: hasMoreThanOneImage //there is an issue with showing pagination when using ng-repeat
+        };    
     },
     bindings: {
         registration: '='

@@ -1,0 +1,16 @@
+﻿<ion-view>
+    <ion-content>
+        <ion-list>
+            <div ng-repeat="obs in vm.observations | orderBy:'-DtObsTime'">
+                <ion-item class="item-icon-right" ui-sref="observationdetails({observation:obs})">
+                    <h2>{{obs.DtObsTime | date:'dd.MM.yyyy HH:mm:ss'}} &bull; {{obs.NickName}}</h2>
+                    <span style="font-size: 14px">{{obs.getObservationTypeDescription() | limitTo: 30}}</span>
+                    <span class="item-note">
+                        {{obs.getUserDistanceText()}}
+                    </span>
+                    <i class="icon icon-accessory ion-chevron-right"></i>
+                </ion-item>
+            </div>
+        </ion-list>
+    </ion-content>
+</ion-view>
