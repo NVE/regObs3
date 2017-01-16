@@ -15,6 +15,7 @@
   "VIEW_WEB_REGISTRATION": "Se registrering på web",
   "HELP": "Hjelp",
   "MAP_BY": "Topografisk kart levert av",
+  "OBSERVATION": "Observasjon",
   "OBSERVATIONS": "Observasjoner",
   "PREVIOUS_USED_PLACES": "Tidligere brukte steder",
   "OBS_HELP_TEXT": "Fargene er snø, jord, vann og is respektivt. Observasjoner hentes fra regobs.no. Uten nettverk kan det hende at observasjoner ikke vises. Dersom det er flere observasjoner innen et område på kartet vises antall i markøren",
@@ -28,5 +29,15 @@
   "UPDATE_OBSERVATIONS_IN_MAP_HELP_TEXT": "Det er lenge siden observasjoner har blitt oppdatert i kartet. Vil du oppdatere nå?",
   "LOGIN": "Logg inn",
   "LOGOUT": "Logg ut",
-  "SETTINGS": "Innstillinger"   
+  "SETTINGS": "Innstillinger",
+  "NEW": "Ny",
+  "EDIT": "Endre",
+  "START_TRIP": "Start tur",
+  "END_TRIP": "Avslutt tur",
+  "VIEW_WARNINGS": "Se varsel på varsom.no",
+  "VIEW_OBSERVATIONS_IN_TABLE": "Se observasjoner i tabell",
+  "UPDATE_DATA_IN_MAP": "Oppdater observasjoner i kartet",
+  "CLEAR": "Nullstill",
+  "DELETE": "Slett",
+  "SEND": "Send" 
 }

@@ -22,7 +22,7 @@
          * Check if map is initialized, else throw error
          * @throws {Error} when not initialized
          */
-        service._checkIfInitialized = function() {
+        service._checkIfInitialized = function () {
             if (!service._isInitialized)
                 throw Error('Map is not initialized! Please call createMap functon on map element...');
         };
@@ -191,14 +191,12 @@
          */
         service._refreshUserMarker = function (position) {
             if (position) {
-                service._checkIfInitialized();
                 var latlng = new L.LatLng(position.latitude, position.longitude);
-
                 if (!userMarker) {
                     userMarker = L.userMarker(latlng,
                         { pulsing: true, accuracy: position.accuracy, smallIcon: true, zIndexOffset: 1000 });
                     userMarker.addTo(layerGroups.user);
-                     service.setView(latlng);
+                    service.setView(latlng);
                 } else {
                     userMarker.setLatLng(latlng);
                     userMarker.setAccuracy(position.accuracy);
@@ -281,6 +279,11 @@
             var latlng = new L.LatLng(position.latitude, position.longitude);
             obsLocationMarker.setUserPosition(latlng);
             service._updateSelectedItemDistance();
+            if (ObsLocation.isSet()) {
+                var obslatlng = new L.LatLng(ObsLocation.get().Latitude, ObsLocation.get().Longitude);
+                service._updateObsInfoText(obslatlng);
+                service._updateDistanceLineLatLng(obslatlng);
+            }
         };
 
         /**
@@ -299,7 +302,7 @@
          * Create layer groups
          * @returns {} 
          */
-        service._createLayerGroups = function() {
+        service._createLayerGroups = function () {
             layerGroups = { //Layers are added in order
                 tiles: L.layerGroup().addTo(map),
                 locations: new RegObsClasses.MarkerClusterGroup({ icon: 'ion-pin' }).addTo(map),
@@ -309,17 +312,28 @@
         };
 
         /**
+         * Calculate where to center map on startup
+         * @returns {} 
+         */
+        service._calculateMapStartCenter = function () {
+            if (ObsLocation.isSet()) {
+                var currentPosition = ObsLocation.get();
+                return [currentPosition.Latitude, currentPosition.Longitude];
+            }
+            if (UserLocation.hasUserLocation()) {
+                var userPosition = UserLocation.getLastUserLocation();
+                return [userPosition.latitude, userPosition.longitude];
+            }
+            return service._defaultCenter;
+        };
+
+        /**
          * Main method for creating map
          * @param {} elem 
          * @returns {} 
          */
         service.createMap = function (elem) {
-            var center = service._defaultCenter;
-            if (ObsLocation.isSet()) {
-                var currentPosition = ObsLocation.get();
-                center = [currentPosition.Latitude, currentPosition.Longitude];
-            }
-
+            var center = service._calculateMapStartCenter();
             map = L.map(elem, {
                 center: center,
                 zoom: 5,
@@ -333,7 +347,7 @@
             tiles = [];
 
             AppSettings.tiles.forEach(function (tile) {
-                var t = L.tileLayerRegObs(tile.url, { folder: AppSettings.mapFolder, name: tile.name, debugFunc: AppSettings.debugTiles ?  AppLogging.debug : null });
+                var t = L.tileLayerRegObs(tile.url, { folder: AppSettings.mapFolder, name: tile.name, debugFunc: AppSettings.debugTiles ? AppLogging.debug : null });
                 tiles.push(t);
             });
             tiles[0].addTo(layerGroups.tiles);
@@ -351,11 +365,9 @@
                 service._setObsLocation(e.latlng); //Set location manually on right klick / long press in map
             });
 
-            map.on('click', function (e) {
-                service.clearSelectedMarkers();
-            });
+            map.on('click', service.clearSelectedMarkers);
 
-            map.on('dragstart', function() {
+            map.on('dragstart', function () {
                 if (userMarker) { //Only disable follow mode on map drag if first location has been set (userMarker exists)
                     service._disableFollowMode();
                 }
@@ -369,6 +381,10 @@
             obsLocationMarker = new RegObsClasses.CurrentObsLocationMarker(center);
             obsLocationMarker.on('selected', function (event) { service._setSelectedItem(event.target); });
             obsLocationMarker.on('obsLocationChange', service._onObsLocationChange);
+            obsLocationMarker.on('drag', function (event) {
+                service._onObsLocationChange(event.latlng);
+            });
+
             obsLocationMarker.on('obsLocationCleared', service._onObsLocationCleared);
             obsLocationMarker.addTo(layerGroups.user);
 
@@ -376,7 +392,9 @@
 
             service.refresh();
 
-            if (ObsLocation.isSet()) {
+            if (UserLocation.hasUserLocation()) {
+                service._onPositionUpdate(UserLocation.getLastUserLocation());
+            }else if (ObsLocation.isSet()) {
                 service.setView(L.latLng(ObsLocation.get().Latitude, ObsLocation.get().Longitude));
             }
 
@@ -450,14 +468,27 @@
         };
 
         /**
+         * Get map search observations radius
+         * @returns {} 
+         */
+        service._getObservationSearchRadius = function () {
+            var bounds = map.getBounds();
+            var radius = parseInt((bounds.getNorthWest().distanceTo(bounds.getSouthEast()) / 2).toFixed(0));
+            var settingsRaduis = AppSettings.data.searchRange;
+            if (settingsRaduis > radius) {
+                radius = settingsRaduis;
+            }
+            return radius;
+        };
+
+        /**
          * Update observation tat is stored in presistant storage
          * @returns {} 
          */
         service.updateObservationsInMap = function () {
             if (map) {
                 var center = map.getCenter();
-                var bounds = map.getBounds();
-                var radius = parseInt((bounds.getNorthWest().distanceTo(bounds.getSouthEast()) / 2).toFixed(0));
+                var radius = service._getObservationSearchRadius();
                 var geoHazardTid = Utility.getCurrentGeoHazardTid();
 
                 var workFunc = function (onProgress, cancel) {
@@ -511,7 +542,7 @@
          */
         service.refresh = function () {
             service._redrawTilesForThisGeoHazard();
-            
+
             if (AppSettings.data.showPreviouslyUsedPlaces) {
                 service._drawStoredLocations();
             } else {
@@ -532,7 +563,7 @@
         service.startWatch = function () {
             if (map) {
                 AppLogging.log('Start watching gps location');
-                $ionicPlatform.ready(function() {
+                $ionicPlatform.ready(function () {
                     map.locate({ watch: true, enableHighAccuracy: true });
                 });
 

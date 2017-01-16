@@ -20,9 +20,9 @@
     </h1>
     <div class='clearfix'>
       <div class='fl pad1y space-right2'>
-        <span class="strong">36.72% </span>
+        <span class="strong">35.09% </span>
         <span class="quiet">Statements</span>
-        <span class='fraction'>65/177</span>
+        <span class='fraction'>60/171</span>
       </div>
       <div class='fl pad1y space-right2'>
         <span class="strong">13.51% </span>
@@ -35,9 +35,9 @@
         <span class='fraction'>7/34</span>
       </div>
       <div class='fl pad1y space-right2'>
-        <span class="strong">36.42% </span>
+        <span class="strong">34.73% </span>
         <span class="quiet">Lines</span>
-        <span class='fraction'>63/173</span>
+        <span class='fraction'>58/167</span>
       </div>
     </div>
   </div>
@@ -440,13 +440,7 @@
 395
 396
 397
-398
-399
-400
-401
-402
-403
-404</td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+398</td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1×</span>
@@ -463,11 +457,6 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">20×</span>
-<span class="cline-any cline-yes">20×</span>
-<span class="cline-any cline-yes">20×</span>
-<span class="cline-any cline-yes">20×</span>
-<span class="cline-any cline-yes">20×</span>
-<span class="cline-any cline-yes">20×</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">20×</span>
 <span class="cline-any cline-yes">20×</span>
@@ -580,7 +569,6 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">20×</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -854,7 +842,7 @@
  */
 angular
     .module('RegObs')
-    .factory('Utility', function Utility($http, $q, $rootScope, AppSettings, User, LocalStorage, AppLogging) {
+    .factory('Utility', function Utility($http, $q, $rootScope, AppSettings, User, LocalStorage, AppLogging, $translate) {
         var service = this;
 &nbsp;
         var canvas;
@@ -866,11 +854,6 @@ angular
             ice: 70
         };
         var DAYS_BEFORE_KDV_UPDATE = 7;
-        var geoHazardNames = {};
-        geoHazardNames[geoHazardTid.snow] = 'snø';
-        geoHazardNames[geoHazardTid.dirt] = 'jord';
-        geoHazardNames[geoHazardTid.ice] = 'is';
-        geoHazardNames[geoHazardTid.water] = 'vann';
 &nbsp;
         var geoHazardColors = {};
         geoHazardColors[geoHazardTid.snow] = '#F2F2F2';
@@ -955,7 +938,7 @@ angular
         };
 &nbsp;
         service.geoHazardNames = <span class="fstat-no" title="function not covered" >function (tid) {</span>
-<span class="cstat-no" title="statement not covered" >            return geoHazardNames[tid];</span>
+<span class="cstat-no" title="statement not covered" >            return $translate.instant(service.getGeoHazardType(tid).toUpperCase());</span>
         };
 &nbsp;
         service.geoHazardColor = <span class="fstat-no" title="function not covered" >function (tid) {</span>
@@ -982,10 +965,9 @@ angular
 <span class="cstat-no" title="statement not covered" >            return geoHazardTid[mode];</span>
         };
 &nbsp;
-        service.getNewObservationText = <span class="fstat-no" title="function not covered" >function () {</span>
-<span class="cstat-no" title="statement not covered" >            var name = geoHazardNames[service.getCurrentGeoHazardTid()];</span>
-<span class="cstat-no" title="statement not covered" >            return 'Ny ' +name +'observasjon';</span>
-        };  
+        service.getCurrentGeoHazardName = <span class="fstat-no" title="function not covered" >function() {</span>
+<span class="cstat-no" title="statement not covered" >            return $translate.instant(AppSettings.getAppMode().toUpperCase());</span>
+        };
 &nbsp;
         //Antall tegn: 8-4-4-12
         //Format: xxxxxxxx-xxxx-4xxx-xxxx-xxxxxxxxxxxx
@@ -1245,7 +1227,7 @@ angular
 <span class="cstat-no" title="statement not covered" >            if (distance &gt; 1000) {</span>
 <span class="cstat-no" title="statement not covered" >                dText = (distance / 1000).toFixed(1) + ' km';</span>
             } else {
-<span class="cstat-no" title="statement not covered" >                dText = (distance || 0) + ' m';</span>
+<span class="cstat-no" title="statement not covered" >                dText = (distance || 0).toFixed(0) + ' m';</span>
             }
 <span class="cstat-no" title="statement not covered" >            return dText;</span>
         };
@@ -1258,7 +1240,7 @@ angular
 </div><!-- /wrapper -->
 <div class='footer quiet pad2 space-top1 center small'>
   Code coverage
-  generated by <a href="http://istanbul-js.org/" target="_blank">istanbul</a> at Tue Jan 10 2017 16:08:19 GMT+0100 (W. Europe Standard Time)
+  generated by <a href="http://istanbul-js.org/" target="_blank">istanbul</a> at Mon Jan 16 2017 12:12:19 GMT+0100 (W. Europe Standard Time)
 </div>
 </div>
 <script src="../../prettify.js"></script>

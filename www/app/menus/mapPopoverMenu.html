@@ -2,22 +2,27 @@
     <ion-content>
         <ion-list class="smaller-list-items">
             <ion-item class="item-icon-left item-text-wrap" ng-if="!showEditRegistration()" ng-click="newRegistration()">
-                <i class="icon ion-plus"></i> Ny snøobservasjon
+                <i class="icon ion-plus"></i> {{'NEW' | translate}} {{getCurrentGeoHazardName() | lowercase }}{{'OBSERVATION' | translate | lowercase}}
             </ion-item>
             <ion-item class="item-icon-left item-text-wrap" ng-if="showEditRegistration()" ng-click="newRegistration()">
-                <i class="icon ion-edit"></i> Endre snøobservasjon
+                <i class="icon ion-edit"></i> {{'EDIT' | translate}} {{getCurrentGeoHazardName() | lowercase }}{{'OBSERVATION' | translate | lowercase}}
             </ion-item>
-            <ion-item class="item-icon-left item-text-wrap" ng-if="showTrip()" ng-click="newTrip()">
-                <i class="icon ion-android-walk"></i> Meld fra om tur
-            </ion-item>
+            <div ng-if="showTrip()">
+                <ion-item class="item-icon-left item-text-wrap" ng-if="!tripStarted()" ng-click="newTrip()">
+                    <i class="icon ion-android-walk"></i> {{'START_TRIP' | translate}}
+                </ion-item>
+                <ion-item class="item-icon-left item-text-wrap" ng-if="tripStarted()" ng-click="stopTrip()">
+                    <i class="icon ion-android-walk"></i> {{'END_TRIP' | translate}}
+                </ion-item>
+            </div>
             <ion-item class="item-icon-left item-text-wrap" ng-click="openWebWarning()">
-                <i class="icon ion-alert-circled"></i> Se varsel på varsom.no
+                <i class="icon ion-alert-circled"></i> {{'VIEW_WARNINGS' | translate}}
             </ion-item>
             <ion-item class="item-icon-left item-text-wrap" ng-click="viewObservations()">
-                <i class="icon ion-ios-list"></i> Se observasjoner i tabell
+                <i class="icon ion-ios-list"></i> {{'VIEW_OBSERVATIONS_IN_TABLE' | translate}}
             </ion-item>
             <ion-item class="item-icon-left item-text-wrap" ng-click="updateObservationsInMap()">
-                <i class="icon ion-loop"></i> Oppdater observasjoner i kartet
+                <i class="icon ion-loop"></i> {{'UPDATE_DATA_IN_MAP' | translate}}
             </ion-item>
         </ion-list>
     </ion-content>

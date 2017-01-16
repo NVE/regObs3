@@ -27,7 +27,7 @@
       <div class='fl pad1y space-right2'>
         <span class="strong">0% </span>
         <span class="quiet">Branches</span>
-        <span class='fraction'>0/43</span>
+        <span class='fraction'>0/39</span>
       </div>
       <div class='fl pad1y space-right2'>
         <span class="strong">0% </span>
@@ -169,23 +169,7 @@
 124
 125
 126
-127
-128
-129
-130
-131
-132
-133
-134
-135
-136
-137
-138
-139
-140
-141
-142
-143</td><td class="line-coverage quiet"><span class="cline-any cline-yes">1×</span>
+127</td><td class="line-coverage quiet"><span class="cline-any cline-yes">1×</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -260,10 +244,6 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -271,7 +251,6 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -281,6 +260,9 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -310,21 +292,7 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">angular.module('RegObs')
@@ -396,10 +364,6 @@
 <span class="cstat-no" title="statement not covered" >            return $state.current &amp;&amp; $state.current.data &amp;&amp; $state.current.data.showRegistrationFooter &amp;&amp; appVm.hasRegistration();</span>
         };
 &nbsp;
-<span class="cstat-no" title="statement not covered" >        appVm.showGeoModeToggle = <span class="fstat-no" title="function not covered" >function () {</span></span>
-<span class="cstat-no" title="statement not covered" >            return $state.current &amp;&amp; $state.current.data &amp;&amp; $state.current.data.showGeoModeToggle &amp;&amp; !appVm.hasRegistration();</span>
-        };
-&nbsp;
 <span class="cstat-no" title="statement not covered" >        appVm.showMapToggle = <span class="fstat-no" title="function not covered" >function () {</span></span>
 <span class="cstat-no" title="statement not covered" >            return $state.current &amp;&amp; $state.current.data &amp;&amp; $state.current.data.showMapToggle;</span>
         };
@@ -414,6 +378,9 @@
 <span class="cstat-no" title="statement not covered" >            appVm.topPopover.hide();</span>
 <span class="cstat-no" title="statement not covered" >            AppSettings.setAppMode(mode);</span>
         };
+<span class="cstat-no" title="statement not covered" >        popoverScope.isLoggedIn = <span class="fstat-no" title="function not covered" >function() {</span></span>
+<span class="cstat-no" title="statement not covered" >            return !User.getUser().anonymous;</span>
+        };
         
 <span class="cstat-no" title="statement not covered" >        $ionicPopover.fromTemplateUrl('app/menus/topPopover.html', { scope: popoverScope }).then(<span class="fstat-no" title="function not covered" >function (popover) {</span></span>
 <span class="cstat-no" title="statement not covered" >            appVm.topPopover = popover;</span>
@@ -423,7 +390,6 @@
 <span class="cstat-no" title="statement not covered" >            return appVm.showTripFooter() ||</span>
                 appVm.showFormFooter() ||
                 appVm.showRegistrationFooter();
-                // || appVm.showGeoModeToggle();
         };
 &nbsp;
 <span class="cstat-no" title="statement not covered" >        $scope.$on('$ionicView.loaded', <span class="fstat-no" title="function not covered" >function () {</span></span>
@@ -452,22 +418,8 @@
 <span class="cstat-no" title="statement not covered" >            appVm.currentState = $state.current;</span>
 <span class="cstat-no" title="statement not covered" >            AppLogging.log(appVm.currentState);</span>
 <span class="cstat-no" title="statement not covered" >            ga_storage._trackPageview(appVm.currentState.name);</span>
-            //appVm.showTripFooter = $state.current.data.showTripFooter;
-            //appVm.showFormFooter = $state.current.data.showFormFooter;
-            //appVm.showRegistrationFooter = $state.current.data.showRegistrationFooter;
-            //appVm.showMapToggle = $state.current.data.showMapToggle;
-&nbsp;
 <span class="cstat-no" title="statement not covered" >            $ionicSideMenuDelegate.edgeDragThreshold(25);</span>
         });
-&nbsp;
-        //$scope.$on('$ionicView.beforeEnter', function () {
-&nbsp;
-        //    appVm.showTripFooter = $state.current.data.showTripFooter;
-        //    appVm.showFormFooter = $state.current.data.showFormFooter;
-        //    appVm.showRegistrationFooter = $state.current.data.showRegistrationFooter;
-        //    appVm.showMapToggle = $state.current.data.showMapToggle;
-        //    appVm.showGeoModeToggle = $state.current.data.showGeoModeToggle;
-        //});
     });
 &nbsp;</pre></td></tr>
 </table></pre>
@@ -475,7 +427,7 @@
 </div><!-- /wrapper -->
 <div class='footer quiet pad2 space-top1 center small'>
   Code coverage
-  generated by <a href="http://istanbul-js.org/" target="_blank">istanbul</a> at Tue Jan 10 2017 16:08:19 GMT+0100 (W. Europe Standard Time)
+  generated by <a href="http://istanbul-js.org/" target="_blank">istanbul</a> at Mon Jan 16 2017 12:12:19 GMT+0100 (W. Europe Standard Time)
 </div>
 </div>
 <script src="../prettify.js"></script>

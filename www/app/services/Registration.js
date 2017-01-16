@@ -57,7 +57,7 @@ angular
             } else if (Registration.data.GeoHazardTID !== Utility.geoHazardTid(appMode)) {
                 RegobsPopup.delete('Slett registrering',
                         'Du har en påbegynt ' +
-                        Utility.geoHazardNames(Registration.data.GeoHazardTID) +
+                        Utility.geoHazardNames(Registration.data.GeoHazardTID).toLowerCase() +
                         '-registrering, dersom du går videre blir denne slettet. Vil du slette for å gå videre?')
                     .then(function(response) {
                         if (response) {

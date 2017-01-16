@@ -1,4 +1,4 @@
-﻿angular.module('RegObs').factory('CurrentObsLocationMarker', function (MapSelectableItem, Observation, $translate, Utility, $state, ObsLocation) {
+﻿angular.module('RegObs').factory('CurrentObsLocationMarker', function (MapSelectableItem, Observation, $translate, Utility, $state, ObsLocation, Registration, AppSettings, Trip) {
 
     /**
      * Stored location marker
@@ -8,7 +8,47 @@
     var CurrentObsLocationMarker = MapSelectableItem.extend({
         options: {
             draggable: true,
-            zIndexOffset: 1000
+            zIndexOffset: 1000,
+            actionButtons: [
+                {
+                    extraClasses: 'regobs-button-tour',
+                    buttonColor: '#fff',
+                    iconColor: '#444',
+                    icon: 'ion-android-walk',
+                    isVisible: function () {
+                        return AppSettings.getAppMode() === 'snow';
+                    },
+                    onClick: function () {
+                        if (Trip.model.started) {
+                            Trip.stop();
+                        } else {
+                            $state.go('snowtrip');
+                        }
+                    }
+                },
+                {
+                    extraClasses: 'regobs-button-add',
+                    buttonColor: '#33cd5f',
+                    iconColor: '#fff',
+                    icon: 'ion-plus',
+                    onClick: Registration.createAndGoToNewRegistration,
+                    isVisible: Registration.isEmpty
+                },
+                {
+                    extraClasses: 'regobs-button-add',
+                    buttonColor: '#fff',
+                    iconColor: '#444',
+                    icon: 'ion-edit',
+                    onClick: Registration.createAndGoToNewRegistration,
+                    isVisible: function () { return !Registration.isEmpty() }
+                },
+                {
+                    extraClasses: 'regobs-button-delete',
+                    buttonColor: '#D21523',
+                    iconColor: '#fff',
+                    icon: 'ion-close',
+                    isVisible: ObsLocation.isSet
+                }]
         },
 
         _getIcon: function (isSet) {
@@ -23,20 +63,11 @@
         initialize: function (latlng, options) {
             var self = this;
             L.Util.setOptions(self, options);
-
             this.options.icon = this._getIcon(ObsLocation.isSet());
 
-            self.options.actionButtonsOnNotSet = angular.copy(self.options.actionButtons);
-            self.options.actionButtonsOnSet = angular.copy(self.options.actionButtons);
-            self.options.actionButtonsOnSet.push({
-                extraClasses: 'regobs-button-delete',
-                buttonColor: '#D21523',
-                iconColor: '#fff',
-                icon: 'ion-close',
-                onClick: function() {
-                    self.clear();
-                }
-            });
+            this.options.actionButtons[3].onClick = function() {
+                self.clear();
+            };
 
             // call super
             MapSelectableItem.prototype.initialize.call(self, latlng, self.options);
@@ -47,12 +78,11 @@
                 self.isDragging = false;
                 self._setCurrentPositionAsObsLocation();
             });
-            self.on('drag', self._fireChange);
 
             self.refresh();
         },
 
-        clear: function() {
+        clear: function () {
             ObsLocation.remove();
             this.refresh();
             this.fire('obsLocationCleared');
@@ -68,8 +98,11 @@
         },
 
         setUserPosition: function (latlng) {
+            var self = this;
             this.options.userPosition = latlng;
-            this.refresh();
+            if (!self.isDragging) {
+                this.refresh();
+            }
         },
 
         setObsLocationManually: function (latlng) {
@@ -85,7 +118,7 @@
             this.refresh();
         },
 
-        _fireChange: function() {
+        _fireChange: function () {
             this.fire('obsLocationChange', this.getLatLng());
         },
 
@@ -110,14 +143,6 @@
                 }
             }
             self.setIcon(self._getIcon(ObsLocation.isSet()));
-            
-            if (self.options.isSelected) {
-                if (ObsLocation.isSet()) {
-                    self.options.actionButtons = self.options.actionButtonsOnSet;
-                } else {
-                    self.options.actionButtons = self.options.actionButtonsOnNotSet;
-                }
-            }
         },
 
         getHeader: function () {
@@ -131,14 +156,16 @@
         },
 
         getDescription: function () {
-            if (this._isObsLocSetManually()) {
-                return $translate.instant('MARKED_POSITION');
-            } else {
+            if (!this._isObsLocSetManually()) {
                 return $translate.instant('SET_POSITION_HELP_TEXT');
             }
+            return '';
         },
 
         getTypeDescription: function () {
+            if (this._isObsLocSetManually()) {
+                return $translate.instant('MARKED_POSITION');
+            }
             return '';
         }
     });

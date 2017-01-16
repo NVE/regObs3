@@ -8,7 +8,7 @@
         </div>
         <div ng-if="vm.mapSelectedItem">
             <div ng-repeat="button in vm.mapSelectedItem.getActionButtons()">
-                <ion-floating-button class="regobs-button-item-selected {{button.extraClasses}}" click="button.onClick()" button-color="{{button.buttonColor}}" icon-color="{{button.iconColor}}" icon="{{button.icon}}">
+                <ion-floating-button ng-if="button.isVisible()" class="regobs-button-item-selected {{button.extraClasses}}" click="button.onClick()" button-color="{{button.buttonColor}}" icon-color="{{button.iconColor}}" icon="{{button.icon}}">
                 </ion-floating-button>
             </div>
         </div>

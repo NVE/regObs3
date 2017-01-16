@@ -82,20 +82,20 @@
                 <div ng-if="appVm.showTripFooter()" class="row row-no-padding">
                     <div class="col col-center">
                         <button class="button button-block button-clear" ng-click="appVm.resetTrip()" ng-hide="appVm.trip.model.started">
-                            <i class="icon stable ion-android-close"></i> Nullstill
+                            <i class="icon stable ion-android-close"></i> {{'CLEAR'|translate}}
                         </button>
                     </div>
                     <div class="col col-center">
                         <button class="button  button-block button-clear" ng-click="appVm.startTrip(appVm.tripId, appVm.tripMinutes, appVm.tripComment)" ng-hide="appVm.trip.model.started">
                             <ion-spinner class="spinner-light" ng-show="appVm.trip.sending"></ion-spinner>
                             <span ng-hide="appVm.trip.sending">
-                                <i class="icon calm ion-android-walk"></i> Start tur
+                                <i class="icon stable ion-android-walk"></i> {{'START_TRIP' | translate}}
                             </span>
                         </button>
                         <button class="button  button-block button-clear" ng-click="appVm.stopTrip()" ng-show="appVm.trip.model.started">
                             <ion-spinner class="spinner-light" ng-show="appVm.trip.sending"></ion-spinner>
                             <span ng-hide="appVm.trip.sending">
-                                <i class="icon balanced ion-android-walk"></i> Avslutt tur
+                                <i class="icon balanced ion-android-walk"></i> {{'END_TRIP' | translate}}
                             </span>
                         </button>
                     </div>
@@ -103,7 +103,7 @@
                 <div ng-if="appVm.showFormFooter()" class="row row-no-padding">
                     <div class="col col-center">
                         <button class="button button-block  button-clear" ng-click="appVm.resetProperty()">
-                            <i class="icon stable ion-android-close"></i> Nullstill
+                            <i class="icon stable ion-android-close"></i> {{'CLEAR'|translate}}
                         </button>
                     </div>
                     <div class="col col-center">
@@ -116,13 +116,13 @@
                 <div ng-if="appVm.showRegistrationFooter()" class="row row-no-padding">
                     <div class="col col-center">
                         <button class="button  button-block button-clear" ng-click="appVm.registration.remove()">
-                            <i class="icon stable ion-trash-a"></i> Slett
+                            <i class="icon stable ion-trash-a"></i> {{'DELETE'|translate}}
                         </button>
                     </div>
                     <div class="col col-center">
                         <ion-spinner class="spinner-light" ng-if="appVm.registration.sending"></ion-spinner>
                         <button ng-hide="appVm.registration.sending" class="button  button-block button-clear" ng-click="appVm.registration.send()">
-                            <i class="icon stable ion-upload"></i> Send <span class="badge badge-balanced" ng-show="!appVm.registration.isEmpty()" ng-bind="appVm.registration.getSendText()" ></span> <span class="badge badge-assertive" ng-show="appVm.registration.unsent.length" ng-bind="appVm.registration.unsent.length"></span>
+                            <i class="icon stable ion-upload"></i> {{'SEND'|translate}} <span class="badge badge-balanced" ng-show="!appVm.registration.isEmpty()" ng-bind="appVm.registration.getSendText()" ></span> <span class="badge badge-assertive" ng-show="appVm.registration.unsent.length" ng-bind="appVm.registration.unsent.length"></span>
                         </button>
                     </div>
                 </div>

@@ -42,6 +42,9 @@
                     icon: 'ion-eye',
                     onClick: function() {
                         self.onClick();
+                    },
+                    isVisible: function() {
+                        return true;
                     }
                 }
             ];
@@ -66,7 +69,7 @@
             return this.observation.getFirstImage();
         },
         getTypeDescription: function () {
-            return 'Snøobservasjon'; //TODO: check type and translate
+            return Utility.geoHazardNames(this.observation.GeoHazardTid) + $translate.instant('OBSERVATION').toLowerCase();
         },
         onClick: function () {
             var self = this;

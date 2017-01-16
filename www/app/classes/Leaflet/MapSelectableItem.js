@@ -2,12 +2,10 @@
  * Selectable map item
  */
 angular.module('RegObs')
-    .factory('MapSelectableItem', function ($state, Registration, Utility) {
+    .factory('MapSelectableItem', function ($state, Registration, Utility, Trip, AppSettings) {
 
         var MapSelectableItem = L.Marker.extend({
             options: {
-                canStartTrip: true, //Can start trip from this selectable item?
-                canStartObservation: true, //Can this selectable item start observation?
                 setViewOnSelect: true, //Move map to this item on select?
                 header: '',
                 description: '',
@@ -19,8 +17,15 @@ angular.module('RegObs')
                     buttonColor: '#fff',
                     iconColor: '#444',
                     icon: 'ion-android-walk',
+                    isVisible: function() {
+                        return AppSettings.getAppMode() === 'snow';
+                    },
                     onClick: function () {
-                        $state.go('snowtrip');
+                        if (Trip.model.started) {
+                            Trip.stop();
+                        } else {
+                            $state.go('snowtrip');
+                        }
                     }
                 },
                 {
@@ -28,7 +33,10 @@ angular.module('RegObs')
                     buttonColor: '#33cd5f',
                     iconColor: '#fff',
                     icon: 'ion-plus',
-                    onClick: Registration.createAndGoToNewRegistration
+                    onClick: Registration.createAndGoToNewRegistration,
+                    isVisible: function () {
+                        return true;
+                    }
                 }]
             },
 

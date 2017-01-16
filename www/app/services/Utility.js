@@ -3,7 +3,7 @@
  */
 angular
     .module('RegObs')
-    .factory('Utility', function Utility($http, $q, $rootScope, AppSettings, User, LocalStorage, AppLogging) {
+    .factory('Utility', function Utility($http, $q, $rootScope, AppSettings, User, LocalStorage, AppLogging, $translate) {
         var service = this;
 
         var canvas;
@@ -15,11 +15,6 @@ angular
             ice: 70
         };
         var DAYS_BEFORE_KDV_UPDATE = 7;
-        var geoHazardNames = {};
-        geoHazardNames[geoHazardTid.snow] = 'snø';
-        geoHazardNames[geoHazardTid.dirt] = 'jord';
-        geoHazardNames[geoHazardTid.ice] = 'is';
-        geoHazardNames[geoHazardTid.water] = 'vann';
 
         var geoHazardColors = {};
         geoHazardColors[geoHazardTid.snow] = '#F2F2F2';
@@ -104,7 +99,7 @@ angular
         };
 
         service.geoHazardNames = function (tid) {
-            return geoHazardNames[tid];
+            return $translate.instant(service.getGeoHazardType(tid).toUpperCase());
         };
 
         service.geoHazardColor = function (tid) {
@@ -131,10 +126,9 @@ angular
             return geoHazardTid[mode];
         };
 
-        service.getNewObservationText = function () {
-            var name = geoHazardNames[service.getCurrentGeoHazardTid()];
-            return 'Ny ' +name +'observasjon';
-        };  
+        service.getCurrentGeoHazardName = function() {
+            return $translate.instant(AppSettings.getAppMode().toUpperCase());
+        };
 
         //Antall tegn: 8-4-4-12
         //Format: xxxxxxxx-xxxx-4xxx-xxxx-xxxxxxxxxxxx

@@ -1,5 +1,5 @@
 ﻿angular.module('RegObs')
-    .controller('MapStartCtrl', function ($scope, $rootScope, $state, $ionicHistory, Map, AppSettings, Registration, AppLogging, Utility, $timeout, $ionicPopover, $cordovaInAppBrowser, Observations, RegobsPopup, UserLocation, $translate) {
+    .controller('MapStartCtrl', function ($scope, $rootScope, $state, $ionicHistory, Map, AppSettings, Registration, AppLogging, Utility, $timeout, $ionicPopover, $cordovaInAppBrowser, Observations, RegobsPopup, UserLocation, $translate, Trip) {
         var appVm = this;
 
         appVm.gpsCenterClick = Map.centerMapToUser;
@@ -27,6 +27,9 @@
                 var url = AppSettings.getWarningUrl();
                 $cordovaInAppBrowser.open(url, '_system');
             },
+            getCurrentGeoHazardName: function() {
+                return Utility.getCurrentGeoHazardName();
+            },
             newRegistration: function () {
                 appVm.mapMenu.hide();
                 Registration.createAndGoToNewRegistration();
@@ -37,9 +40,16 @@
             showTrip: function () {
                 return AppSettings.getAppMode() === 'snow';
             },
+            tripStarted: function () {
+                return Trip.model.started;
+            },
             newTrip: function () {
                 appVm.mapMenu.hide();
                 $state.go('snowtrip');
+            },
+            stopTrip: function () {
+                appVm.mapMenu.hide();
+                Trip.stop();
             }
         };
 

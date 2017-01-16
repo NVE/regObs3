@@ -20,24 +20,24 @@
     </h1>
     <div class='clearfix'>
       <div class='fl pad1y space-right2'>
-        <span class="strong">1.82% </span>
+        <span class="strong">1.75% </span>
         <span class="quiet">Statements</span>
-        <span class='fraction'>1/55</span>
+        <span class='fraction'>1/57</span>
       </div>
       <div class='fl pad1y space-right2'>
         <span class="strong">0% </span>
         <span class="quiet">Branches</span>
-        <span class='fraction'>0/10</span>
+        <span class='fraction'>0/17</span>
       </div>
       <div class='fl pad1y space-right2'>
         <span class="strong">0% </span>
         <span class="quiet">Functions</span>
-        <span class='fraction'>0/17</span>
+        <span class='fraction'>0/18</span>
       </div>
       <div class='fl pad1y space-right2'>
-        <span class="strong">1.82% </span>
+        <span class="strong">1.75% </span>
         <span class="quiet">Lines</span>
-        <span class='fraction'>1/55</span>
+        <span class='fraction'>1/57</span>
       </div>
     </div>
   </div>
@@ -207,12 +207,7 @@
 162
 163
 164
-165
-166
-167
-168
-169
-170</td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+165</td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1×</span>
@@ -226,25 +221,10 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -312,13 +292,11 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -367,6 +345,18 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -384,7 +374,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">﻿/**
  * Class for Observation object
  */
-angular.module('RegObs').factory('Observation', <span class="fstat-no" title="function not covered" >function (MapSelectableItem, AppSettings, PresistentStorage, $state) {</span>
+angular.module('RegObs').factory('Observation', <span class="fstat-no" title="function not covered" >function (MapSelectableItem, AppSettings, PresistentStorage, UserLocation) {</span>
 &nbsp;
     /**
      * Constructor for Observation
@@ -392,29 +382,14 @@ angular.module('RegObs').factory('Observation', <span class="fstat-no" title="fu
      * @returns {} 
      */
 <span class="cstat-no" title="statement not covered" >    var Observation = <span class="fstat-no" title="function not covered" >function (json) {</span></span>
-<span class="cstat-no" title="statement not covered" >        MapSelectableItem.call(this, json);</span>
-<span class="cstat-no" title="statement not covered" >        this.canStartObservation = false;</span>
-<span class="cstat-no" title="statement not covered" >        this.canStartTrip = false;</span>
-<span class="cstat-no" title="statement not covered" >        this.isClickable = true;</span>
+<span class="cstat-no" title="statement not covered" >        angular.merge(this, json);</span>
 <span class="cstat-no" title="statement not covered" >        this._images = [];</span>
 <span class="cstat-no" title="statement not covered" >        this._registrations = [];</span>
 &nbsp;
 <span class="cstat-no" title="statement not covered" >        this.init();</span>
     };
 &nbsp;
-    /**
-     * inherit from MapSelectableItem
-     */
-<span class="cstat-no" title="statement not covered" >    Observation.prototype = new MapSelectableItem();</span>
-&nbsp;
-    /**
-     * On user click, navigate to observation details
-     * @returns {} 
-     */
-<span class="cstat-no" title="statement not covered" >    Observation.prototype.onClick = <span class="fstat-no" title="function not covered" >function () {</span></span>
-<span class="cstat-no" title="statement not covered" >        var self = this;</span>
-<span class="cstat-no" title="statement not covered" >        $state.go('observationdetails', { observation: self });</span>
-    };
+    
 &nbsp;
     /**
      * Static helper method
@@ -468,6 +443,28 @@ angular.module('RegObs').factory('Observation', <span class="fstat-no" title="fu
     };
 &nbsp;
     /**
+     * Get location name or municipal name
+     * @returns {} 
+     */
+<span class="cstat-no" title="statement not covered" >    Observation.prototype.getBestLocationName = <span class="fstat-no" title="function not covered" >function () {</span></span>
+<span class="cstat-no" title="statement not covered" >        return this.LocationName || this.MunicipalName || '';</span>
+    };
+&nbsp;
+    /**
+     * Get observation types description. For example Faretegn,Skredfarevudering,Ullykke/Hendelse
+     * @returns {} 
+     */
+<span class="cstat-no" title="statement not covered" >    Observation.prototype.getObservationTypeDescription = <span class="fstat-no" title="function not covered" >function () {</span></span>
+<span class="cstat-no" title="statement not covered" >        var arr = [];</span>
+<span class="cstat-no" title="statement not covered" >        this._registrations.forEach(<span class="fstat-no" title="function not covered" >function (item) {</span></span>
+<span class="cstat-no" title="statement not covered" >            if (arr.indexOf(item.name) &lt; 0) { //Do not add duplicated values</span>
+<span class="cstat-no" title="statement not covered" >                arr.push(item.name);</span>
+            }
+        });
+<span class="cstat-no" title="statement not covered" >        return arr.join(', ');</span>
+    };
+&nbsp;
+    /**
      * Does observation contain any images?
      * @returns {} 
      */
@@ -515,28 +512,16 @@ angular.module('RegObs').factory('Observation', <span class="fstat-no" title="fu
 <span class="cstat-no" title="statement not covered" >        return this._images;</span>
     };
 &nbsp;
-    /**
-     * Get header html
-     * @returns {} 
-     */
-<span class="cstat-no" title="statement not covered" >    Observation.prototype.getHeader = <span class="fstat-no" title="function not covered" >function () {</span></span>
-<span class="cstat-no" title="statement not covered" >        return '&lt;i class="icon ion-eye"&gt;&lt;/i&gt; ' + this._registrations.length + ' &amp;bull; ' + this.NickName;</span>
+<span class="cstat-no" title="statement not covered" >    Observation.prototype.getUserDistance = <span class="fstat-no" title="function not covered" >function () {</span></span>
+<span class="cstat-no" title="statement not covered" >        return UserLocation.getUserDistanceFrom(this.Latitude, this.Longitude);</span>
     };
 &nbsp;
-    /**
-     * Get detscription html
-     * @returns {} 
-     */
-<span class="cstat-no" title="statement not covered" >    Observation.prototype.getDescription = <span class="fstat-no" title="function not covered" >function () {</span></span>
-<span class="cstat-no" title="statement not covered" >        return moment(this.DtObsTime).format('DD.MM, [kl.] HH:mm');</span>
-    };
-&nbsp;
-    /**
-     * Get type of observation
-     * @returns {} 
-     */
-<span class="cstat-no" title="statement not covered" >    Observation.prototype.getType = <span class="fstat-no" title="function not covered" >function () {</span></span>
-<span class="cstat-no" title="statement not covered" >        return 'Snøobservasjon';</span>
+<span class="cstat-no" title="statement not covered" >    Observation.prototype.getUserDistanceText = <span class="fstat-no" title="function not covered" >function () {</span></span>
+<span class="cstat-no" title="statement not covered" >        var distance = UserLocation.getUserDistanceFrom(this.Latitude, this.Longitude);</span>
+<span class="cstat-no" title="statement not covered" >        if (distance.valid) {</span>
+<span class="cstat-no" title="statement not covered" >            return distance.description;</span>
+        }
+<span class="cstat-no" title="statement not covered" >        return '';</span>
     };
 &nbsp;
     /**
@@ -556,7 +541,7 @@ angular.module('RegObs').factory('Observation', <span class="fstat-no" title="fu
 </div><!-- /wrapper -->
 <div class='footer quiet pad2 space-top1 center small'>
   Code coverage
-  generated by <a href="http://istanbul-js.org/" target="_blank">istanbul</a> at Tue Jan 10 2017 16:08:19 GMT+0100 (W. Europe Standard Time)
+  generated by <a href="http://istanbul-js.org/" target="_blank">istanbul</a> at Mon Jan 16 2017 12:12:19 GMT+0100 (W. Europe Standard Time)
 </div>
 </div>
 <script src="../../prettify.js"></script>
