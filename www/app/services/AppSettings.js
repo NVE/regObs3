@@ -21,7 +21,8 @@
             iceMapOpacity: 1.0,
             maps: [
                 { geoHazardTid: 10, tiles: [{ name: 'steepness', opacity: 0.5, visible: true }] },
-                { geoHazardTid: 70, tiles: [{ name: 'ice', opacity: 0.5, visible: true }] }
+                { geoHazardTid: 70, tiles: [{ name: 'ice', opacity: 0.5, visible: true }] },
+                { geoHazardTid: 60, tiles: [{ name: 'flood', opacity: 0.5, visible: true }] }
             ],
             showObservations: true,
             showObservationsDaysBack: 3,
@@ -66,9 +67,10 @@
         settings.debugTiles = false; //Turn on to debug offline/fallback/tiles
 
         settings.tiles = [
-            { name: 'topo', description: 'Topografisk kart', maxDownloadLimit: 10000, url: 'http://opencache.statkart.no/gatekeeper/gk/gk.open_gmaps?layers=matrikkel_bakgrunn&zoom={z}&x={x}&y={y}&format=image/jpeg', maxLimitMessage: 'Statens Kartverk har en grense på 10 000 kartblad per bruker per døgn.' },
-            { name: 'steepness', description: 'Bratthetskart', geoHazardTid: 10, url: 'http://test-gisapp.nve.no/arcgis/rest/services/wmts/Bratthet/MapServer/tile/{z}/{y}/{x}' },
-            { name: 'ice', description: 'Svekket iskart', geoHazardTid: 70, url: 'http://test-gisapp.nve.no/arcgis/rest/services/wmts/SvekketIs/MapServer/tile/{z}/{y}/{x}' }
+            { name: 'topo', description: 'Topografisk kart', maxDownloadLimit: 10000, avgTileSize: 19000, url: 'http://opencache.statkart.no/gatekeeper/gk/gk.open_gmaps?layers=matrikkel_bakgrunn&zoom={z}&x={x}&y={y}&format=image/jpeg' },
+            { name: 'steepness', description: 'Bratthetskart', geoHazardTid: 10, avgTileSize: 37693, url: 'http://gis3.nve.no/arcgis/rest/services/wmts/Bratthet/MapServer/tile/{z}/{y}/{x}' },
+            { name: 'ice', description: 'Svekket iskart', geoHazardTid: 70, avgTileSize: 37693, url: 'http://gis3.nve.no/arcgis/rest/services/wmts/SvekketIs/MapServer/tile/{z}/{y}/{x}' },
+            { name: 'flood', description: 'Flomsoner', geoHazardTid: 60, avgTileSize: 37693, url: 'http://gis3.nve.no/arcgis/rest/services/wmts/Flomsoner1/MapServer/tile/{z}/{y}/{x}' }
         ];
 
         settings.mapTileUrl = function () {
@@ -154,9 +156,12 @@
             return settings.imageRegistrationTids.filter(function (item) { return item === registrationTid; }).length > 0;
         };
 
+        settings.hasSetAppMode = function() {
+            return true && settings.data.appmode;
+        };
 
         settings.getAppMode = function () {
-            return settings.data.appmode;
+            return settings.data.appmode || 'snow';
         };
 
         settings.setAppMode = function (mode) {

@@ -87,6 +87,7 @@
             service._updateObsInfoText(latlng);
             service._updateDistanceLineLatLng(latlng);
             service._updateSelectedItemDistance();
+            service._enableOrDisableDraggableLocation();
         };
 
         /**
@@ -328,6 +329,26 @@
         };
 
         /**
+         * Could location be set manually?
+         * @returns {} 
+         */
+        service._isSetLocationManuallyPossible = function() {
+            return Registration.isEmpty() || !ObsLocation.isSet();
+        }
+
+        /**
+         * Enable or disable draggable location marker
+         * @returns {} 
+         */
+        service._enableOrDisableDraggableLocation = function() {
+            if (service._isSetLocationManuallyPossible()) {
+                obsLocationMarker.dragging.enable();
+            } else {
+                obsLocationMarker.dragging.disable();
+            }
+        };
+
+        /**
          * Main method for creating map
          * @param {} elem 
          * @returns {} 
@@ -362,7 +383,9 @@
                 });
 
             map.on('contextmenu', function (e) {
-                service._setObsLocation(e.latlng); //Set location manually on right klick / long press in map
+                if (service._isSetLocationManuallyPossible()) {
+                    service._setObsLocation(e.latlng); //Set location manually on right klick / long press in map if no registration present
+                }
             });
 
             map.on('click', service.clearSelectedMarkers);
@@ -378,7 +401,7 @@
                 }
             });
 
-            obsLocationMarker = new RegObsClasses.CurrentObsLocationMarker(center);
+            obsLocationMarker = new RegObsClasses.CurrentObsLocationMarker(center, { draggable: service._isSetLocationManuallyPossible() });
             obsLocationMarker.on('selected', function (event) { service._setSelectedItem(event.target); });
             obsLocationMarker.on('obsLocationChange', service._onObsLocationChange);
             obsLocationMarker.on('drag', function (event) {
@@ -387,6 +410,11 @@
 
             obsLocationMarker.on('obsLocationCleared', service._onObsLocationCleared);
             obsLocationMarker.addTo(layerGroups.user);
+
+            $rootScope.$on('$regObs:registrationSaved', function() {
+                service._enableOrDisableDraggableLocation();
+                map.invalidateSize(); //Footer bar could have been removed, invalidate map size
+            });
 
             service._isInitialized = true; //map is created!
 

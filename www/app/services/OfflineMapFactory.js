@@ -1,6 +1,6 @@
 ﻿angular
     .module('RegObs')
-    .factory('OfflineMap', function ($ionicPlatform, $window, $q, $cordovaFile, AppSettings, AppLogging, Map) {
+    .factory('OfflineMap', function ($ionicPlatform, $window, $q, AppSettings, AppLogging, Map, PresistentStorage) {
         var service = this;
         var metaFilename = 'offline-meta.json';
         var meta;
@@ -10,7 +10,7 @@
                 if (meta) { //map metadata is loaded, return
                     resolve(meta);
                 } else { //load map metadata from file
-                    $cordovaFile.readAsText(cordova.file.dataDirectory, metaFilename)
+                    PresistentStorage.readAsText(metaFilename)
                         .then(function (success) {
                             // success
                             meta = JSON.parse(success);
@@ -27,14 +27,14 @@
         };
 
         service.saveOfflineAreas = function (metadata) {
-            return $cordovaFile.writeFile(cordova.file.dataDirectory, metaFilename, JSON.stringify(metadata), true).then(function () {
+            return PresistentStorage.storeFile(metaFilename, JSON.stringify(metadata)).then(function () {
                 meta = metadata; //update saved metadata in memory
             });
         };
 
         service.deleteAllOfflineAreas = function () {
             return $q(function (resolve, reject) {
-                $cordovaFile.removeRecursively(cordova.file.dataDirectory, AppSettings.mapFolder)
+                PresistentStorage.removeRecursively(AppSettings.mapFolder)
                     .then(function () {
                         service.saveOfflineAreas([]).then(resolve, reject);
                     },
@@ -112,7 +112,7 @@
                             }
                             var filename = AppSettings.mapFolder + '/' + tile.getMapFilename(xyzCoordinate.x, xyzCoordinate.y, xyzCoordinate.z);
                             AppLogging.log('Deleting file:' + filename);
-                            $cordovaFile.removeFile(cordova.file.dataDirectory, filename).then(callbackSuccess, callbackError);
+                            PresistentStorage.removeFile(filename).then(callbackSuccess, callbackError);
                         }
                     });
                 });
@@ -121,7 +121,7 @@
 
         var downloadAndStoreTile = function (tile, x, y, z, successCallback, errorCallback) {
             var sourceurl = tile._url_online.replace('{z}', z).replace('{x}', x).replace('{y}', y);
-            var filename = cordova.file.dataDirectory + AppSettings.mapFolder + '/' + tile.getMapFilename(x, y, z);
+            var filename = AppSettings.mapFolder + '/' + tile.getMapFilename(x, y, z);
             AppLogging.log("Download " + sourceurl + " => " + filename);
 
             if (tile.options.subdomains) {
@@ -129,32 +129,7 @@
                 var dom = tile.options.subdomains[idx];
                 sourceurl = sourceurl.replace('{s}', dom);
             }
-
-            var transfer = new FileTransfer();
-            transfer.download(
-                sourceurl,
-                filename,
-                function (file) {
-                    // tile downloaded OK; set the iOS "don't back up" flag then move on
-                    file.setMetadata(null, null, { "com.apple.MobileBackup": 1 });
-                    if (successCallback) successCallback();
-                },
-                function (error) {
-                    var errmsg = '';
-                    switch (error.code) {
-                        case FileTransferError.FILE_NOT_FOUND_ERR:
-                            errmsg = "Not found: " + sourceurl;
-                            break;
-                        case FileTransferError.INVALID_URL_ERR:
-                            errmsg = "Invalid URL:" + sourceurl;
-                            break;
-                        case FileTransferError.CONNECTION_ERR:
-                            errmsg = "Connection error at the web server.\n";
-                            break;
-                    }
-                    if (errorCallback) errorCallback(errmsg);
-                }
-            );
+            PresistentStorage.downloadUrl(sourceurl, filename).then(successCallback, errorCallback);
         };
 
         var downloadXyzList = function (tile, xyzlist, overwrite, progressCallback, completeCallback, errorCallback, cancelCallback) {
@@ -183,7 +158,7 @@
                             z,
                             doneWithIt,
                             function (errmsg) {
-                                // an error in downloading, so we bail on the whole process and run the error callback
+                                // an error in downloading
                                 if (cberr) cberr(errmsg);
                                 doneWithIt();
                             }
@@ -196,7 +171,10 @@
 
                 var cancel = false;
                 if (cbcancel) {
-                    cancel = cbcancel();
+                    cbcancel.promise.then(function() {
+                        cancel = true;
+                    });
+                    //cancel = cbcancel();
                 }
 
                 if (cancel) {
@@ -210,11 +188,11 @@
                     } else {
                         try {
                             var filename = tile.getMapFilename(x, y, z);
-                            $cordovaFile.checkFile(cordova.file.dataDirectory, AppSettings.mapFolder + '/' + filename)
-                              .then(function (success) {
+                            PresistentStorage.checkIfFileExsists(AppSettings.mapFolder + '/' + filename)
+                              .then(function () {
                                   AppLogging.log(filename + " exists. Skipping.");
                                   doneWithIt();
-                              }, function (error) {
+                              }, function () {
                                   AppLogging.log(filename + " missing. Fetching.");
                                   yesReally();
                               });
@@ -230,125 +208,83 @@
         };
 
         service.downloadMapFromXyzList = function (name, bounds, xyzList, zoomMin, zoomMax, mapsArray, progressCallback, completeCallback, cancelCallback) {
-            var downloadMapFromXyzListInternal = function () {
-                if (!zoomMin)
-                    throw Error('zoomMin must be set');
-                if (!zoomMax)
-                    throw Error('zoomMax must be set');
-                if (!mapsArray || mapsArray.length <= 0)
-                    throw Error('Maps array must be an array of map names');
-                if (!xyzList)
-                    throw Error('Xyz list must be set!');
+            var downloadMapFromXyzListInternal = function() {
+                return $q(function(resolve, reject) {
+                    if (!zoomMin)
+                        throw Error('zoomMin must be set');
+                    if (!zoomMax)
+                        throw Error('zoomMax must be set');
+                    if (!mapsArray || mapsArray.length <= 0)
+                        throw Error('Maps array must be an array of map names');
+                    if (!xyzList)
+                        throw Error('Xyz list must be set!');
 
-                var boundingBox = [
-                    [bounds.getSouthWest().lat, bounds.getSouthWest().lng],
-                    [bounds.getNorthEast().lat, bounds.getNorthEast().lng]
-                ];
+                    var boundingBox = [
+                        [bounds.getSouthWest().lat, bounds.getSouthWest().lng],
+                        [bounds.getNorthEast().lat, bounds.getNorthEast().lng]
+                    ];
 
-                var area = { name: name, size: 0, bounds: boundingBox, tiles: xyzList.length * mapsArray.length, maps: mapsArray, xyzList: xyzList, zoom: zoomMax };
-                meta.push(area);
-
-                var mapStatus = [];
-
-                AppLogging.log('Download map for xyz list: ' + JSON.stringify(xyzList));
-                var checkProgress = function (tile) {
-                    var hasAnyRunning = false;
-                    var hasAnyError = false;
-                    var total = xyzList.length * mapsArray.length;
-                    var done = 0;
-                    var errors = 0;
-                    mapStatus.forEach(function (item) {
-                        done += item.done;
-                        if (done === total) {
-                            item.complete = true;
-                        }
-
-                        if (!item.complete) {
-                            hasAnyRunning = true;
-                        }
-                        if (item.error > 0) {
-                            errors += item.error;
-                            hasAnyError = true;
-                        }
-                    });
-                    var percent = Math.round(100 * done / total);
-                    if (hasAnyRunning || (mapStatus.length < mapsArray.length)) {
-                        if (progressCallback) {
-                            progressCallback({
-                                complete: false,
-                                total: total,
-                                done: done,
-                                percent: percent,
-                                status: mapStatus,
-                                hasError: hasAnyError
-                            });
-                        }
-                    } else {
-                        service.getDiskUsageForXyzList(mapsArray, xyzList, function (files, bytes) {
-                            area.size = bytes;
-                            area.hasError = hasAnyError;
-                            area.tiles = done - errors;
-                            if (files !== area.tiles) {
-                                AppLogging.warn('Tiles downloaded ' + area.tiles + ' but files from disk usage is ' + files);
-                            }
-
-                            service.saveOfflineAreas(meta)
-                                .finally(function () {
-                                    if (completeCallback) {
-                                        completeCallback({
-                                            complete: true,
-                                            total: total,
-                                            done: done,
-                                            percent: percent,
-                                            status: mapStatus,
-                                            hasError: hasAnyError
-                                        });
-                                    }
-                                });
-                        });
-                    }
-                };
-                mapsArray.forEach(function (item) {
-                    var tile = Map.getTileByName(item);
-                    var description = AppSettings.getTileByName(item).description;
-                    var status = {
-                        name: item,
-                        description: description,
-                        total: xyzList.length,
-                        done: 0,
-                        percent: 0,
-                        complete: false,
-                        error: 0
+                    var area = {
+                        name: name,
+                        size: 0,
+                        bounds: boundingBox,
+                        tiles: xyzList.length * mapsArray.length,
+                        maps: mapsArray,
+                        xyzList: xyzList,
+                        zoom: zoomMax
                     };
-                    mapStatus.push(status);
-                    downloadXyzList(tile, xyzList,
-                        false,
-                        function (done, total) {
-                            status.done = done;
-                            status.total = total;
-                            status.percent = Math.round(100 * done / total);
-                            checkProgress(tile);
-                        },
-                        function () {
-                            status.complete = true;
-                            status.done = status.total;
-                            status.percent = 100;
-                            checkProgress(tile);
-                        },
-                        function (error) {
-                            status.error++;
-                            checkProgress(tile);
-                        },
-                        cancelCallback);
+                    meta.push(area);
+
+                    var progress = new RegObs.ProggressStatus();
+                    var total = xyzList.length * mapsArray.length;
+                    progress.setTotal(total);
+
+                    AppLogging.log('Download map for xyz list: ' + JSON.stringify(xyzList));
+                    var checkProgress = function() {
+                        if (progressCallback) {
+                            progressCallback(progress);
+                        }
+                        if (progress.isDone()) {
+                            service.getDiskUsageForXyzList(mapsArray,
+                                xyzList,
+                                function(files, bytes) {
+                                    area.size = bytes;
+                                    area.hasError = progress.hasError();
+                                    area.tiles = total - progress.getErrors().length;
+                                    if (files !== area.tiles) {
+                                        AppLogging.warn('Tiles downloaded ' +area.tiles +' but files from disk usage is ' +files);
+                                    }
+                                    service.saveOfflineAreas(meta).then(resolve, reject);
+                                });
+                        }
+                    };
+                    mapsArray.forEach(function(item) {
+                        var tile = Map.getTileByName(item);
+                        downloadXyzList(tile,
+                            xyzList,
+                            false,
+                            function onProgress() {
+                                progress.addComplete();
+                                checkProgress();
+                            },
+                            function onComplete() {
+                                checkProgress();
+                            },
+                            function onError(error) {
+                                progress.addError(error);
+                                checkProgress();
+                            },
+                            cancelCallback);
+                    });
                 });
             };
 
-            service.getOfflineAreas().then(downloadMapFromXyzListInternal);
+            return service.getOfflineAreas().then(downloadMapFromXyzListInternal);
         };
 
         service.downloadMapFromBounds = function (name, bounds, zoomMin, zoomMax, mapsArray, progressCallback, completeCallback, cancelCallback) {
             var xyzList = Map.calculateXYZListFromBounds(bounds, zoomMin, zoomMax);
-            service.downloadMapFromXyzList(name, bounds, xyzList,
+            return service.downloadMapFromXyzList(name, bounds, xyzList,
                 zoomMin,
                 zoomMax,
                 mapsArray,
@@ -378,9 +314,9 @@
             var notFound = [];
             var bytes = 0;
 
-            var checkCallback = function() {
+            var checkCallback = function () {
                 if ((found.length + notFound.length) === fileNames.length) {
-                    if(callback){
+                    if (callback) {
                         callback(found.length, bytes);
                     }
                     return;
@@ -388,17 +324,13 @@
             };
 
             fileNames.forEach(function (file) {
-                window.resolveLocalFileSystemURL(cordova.file.dataDirectory + AppSettings.mapFolder + '/' + file,
-                    function (fileEntry) {
-                        fileEntry.file(function (fileInfo) {
-                            bytes += fileInfo.size;
-                            found.push(file);
-                            checkCallback();
-                        }, function(error) {
-                            notFound.push({ name: file, error: error });
-                            checkCallback();
-                        });
-                    }, function(error) {
+                PresistentStorage.getFileSize(AppSettings.mapFolder + '/' + file)
+                    .then(function(result) {
+                        bytes += result;
+                        found.push(file);
+                        checkCallback();
+                    })
+                    .catch(function(error) {
                         notFound.push({ name: file, error: error });
                         checkCallback();
                     });

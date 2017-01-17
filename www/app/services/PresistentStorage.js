@@ -1,7 +1,7 @@
 ﻿/**
  * Service to help writing files to persistant storage. When running in Ripple emulator, files will not be stored.
  */
-angular.module('RegObs').factory('PresistentStorage', function (AppSettings, $cordovaFile, Utility, $q, AppLogging, LocalStorage) {
+angular.module('RegObs').factory('PresistentStorage', function (AppSettings, $cordovaFile, Utility, $q, AppLogging, LocalStorage, $cordovaDevice, $http) {
     var service = this;
 
     /**
@@ -103,7 +103,7 @@ angular.module('RegObs').factory('PresistentStorage', function (AppSettings, $co
             if (storedValue !== null) {
                 resolve(storedValue);
             } else {
-                reject({ code: 0, message: 'File not found' });
+                reject({ code: 1, message: 'File not found' });
             }
         });
     };
@@ -123,14 +123,19 @@ angular.module('RegObs').factory('PresistentStorage', function (AppSettings, $co
             if (storedValue !== null) {
                 resolve();
             } else {
-                reject({ code: 0, message: 'File not found' });
+                reject({ code: 1, message: 'File not found' });
             }
         });
     };
 
-    service._emulateClear = function () {
+    service._removeRecursively = function (folder) {
         return $q(function (resolve) {
-            LocalStorage.clear();
+            var keys = LocalStorage.getKeys();
+            keys.forEach(function (key) {
+                if (key.indexOf(folder) >= 0) {
+                    LocalStorage.remove(key);
+                }
+            });
             resolve();
         });
     };
@@ -139,6 +144,33 @@ angular.module('RegObs').factory('PresistentStorage', function (AppSettings, $co
         return $q(function (resolve) {
             LocalStorage.remove(path);
             resolve();
+        });
+    };
+
+    /**
+     * Emulate free disk space
+     * @returns {} 
+     */
+    service._emulateGetFreeDiskSpace = function () {
+        return $q(function (resolve) {
+            var max = 100 * 1024 * 1024; //100MB
+            var min = 1 * 1024 * 1024; //1MB
+            var randomnumber = Math.floor(Math.random() * (max - min + 1)) + min;
+            resolve(randomnumber);
+        });
+    };
+
+    /**
+     * Emulate get file size
+     * @param {} path 
+     * @returns {} 
+     */
+    service._emulateGetFileSize = function (path) {
+        return $q(function (resolve) {
+            var max = 100 * 1024 * 1024; //100MB
+            var min = 1; //1MB
+            var randomnumber = Math.floor(Math.random() * (max - min + 1)) + min;
+            resolve(randomnumber);
         });
     };
 
@@ -198,17 +230,72 @@ angular.module('RegObs').factory('PresistentStorage', function (AppSettings, $co
 
     service.removeRecursively = function (folder) {
         if (Utility.isRippleEmulator()) {
-            return service._emulateClear();
+            return service._removeRecursively(folder);
         } else {
             return $cordovaFile.removeRecursively(cordova.file.dataDirectory, folder);
         }
     };
 
-    service.removeFile = function(path) {
+    service.removeFile = function (path) {
         if (Utility.isRippleEmulator()) {
             return service._emulateRemove(path);
         } else {
             return $cordovaFile.removeFile(cordova.file.dataDirectory, path);
+        }
+    };
+
+    /**
+     * Get available free diskspace
+     * @returns {} 
+     */
+    service.getFreeDiskSpace = function () {
+        if (Utility.isRippleEmulator()) {
+            return service._emulateGetFreeDiskSpace();
+        } else {
+            return $cordovaFile.getFreeDiskSpace()
+                .then(function (success) {
+                    var ios = $cordovaDevice.getDevice() && $cordovaDevice.getDevice().platform === 'iOS';
+                    return success * (ios ? 1 : 1000); //ios returns result in bytes, and android in kB                             
+                });
+        }
+    };
+
+    /**
+     * Get filesize
+     * @param {} path 
+     * @returns {} file size in bytes
+     */
+    service.getFileSize = function (path) {
+        if (Utility.isRippleEmulator()) {
+            return service._emulateGetFileSize(path);
+        } else {
+            return $q(function (resolve, reject) {
+                window.resolveLocalFileSystemURL(cordova.file.dataDirectory + path,
+                    function (fileEntry) {
+                        fileEntry.file(function (fileInfo) {
+                            resolve(fileInfo.size);
+                        },
+                            reject);
+                    },
+                    reject);
+            });
+        }
+    };
+
+    /**
+     * Download url and store to file
+     * @param {} url 
+     * @param {} path 
+     * @returns {} 
+     */
+    service.downloadUrl = function (url, path) {
+        if (Utility.isRippleEmulator()) {
+            return service.storeFile(path, null, url);
+        } else {
+            return $http.get(url, { responseType: 'arraybuffer' })
+                 .then(function (data) {
+                     return service.storeFile(path, data);
+                 });
         }
     };
 

@@ -122,30 +122,25 @@ angular
                     });
                 };
 
-                var onComplete = function () {
+                var onComplete = function (error) {
                     if (timeout) {
-                        $timeout.cancel(timeout);
+                        $timeout.cancel(timeout); //cancel running timeout
                     }
 
                     scope.complete = true;
 
-                    if (result.closeOnComplete) {
-                        if (scope.downloadStatus && scope.downloadStatus.hasError() && !result.closeOnError) {
-                            return;
-                        } else {
-                            scope.closePopup();
-                        }
+                    if (result.closeOnComplete && !(scope.downloadStatus && (scope.downloadStatus.hasError() && !result.closeOnError))) {
+                       scope.closePopup();
+                    }
+
+                    if (error) {
+                        reject(error); //Cancelled
+                    } else {
+                        resolve(); //All done
                     }
                 };
 
-                workFunction(progressFunc, cancelUpdatePromise)
-                    .then(function() {
-                        onComplete();
-                        resolve(); //All done
-                    }).catch(function(error) {
-                        onComplete();
-                        reject(error); //Cancelled
-                    });
+                workFunction(progressFunc, cancelUpdatePromise).then(onComplete).catch(onComplete);
             });
         };
 

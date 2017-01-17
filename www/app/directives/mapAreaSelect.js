@@ -58,8 +58,8 @@ angular
             });
         },
         bindings: {
-            bounds: '=',
-            zoom: '=',
+            bounds: '=?',
+            zoom: '=?',
             onChange: '&',
             disableUserInteraction: '<'
         }

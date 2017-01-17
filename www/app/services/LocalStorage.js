@@ -39,6 +39,13 @@ angular
             },
             clear: function(){
                 $window.localStorage.clear();
+            },
+            getKeys: function() {
+                var keys = [];
+                for (var key in $window.localStorage) {
+                    keys.push(key);
+                }
+                return keys;
             }
         }
     }]);

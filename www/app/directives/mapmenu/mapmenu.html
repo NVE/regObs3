@@ -73,11 +73,23 @@
                 </label>
             </div>
         </div>
-        <!--<div ng-show="$ctrl.settings.appmode === 'water'">
+        <div ng-show="$ctrl.settings.appmode === 'water'">
             <div class="item item-divider">
                 Kartvalg for vann
             </div>
-        </div>-->
+            <ion-toggle toggle-class="toggle-calm" ng-model="$ctrl.settings.maps[2].tiles[0].visible" ng-change="$ctrl.onSettingsChanged()">
+                Vis flomsoner
+            </ion-toggle>
+            <div ng-show="$ctrl.settings.maps[2].tiles[0].visible">
+                <label class="item item-input item-select item-stacked-label">
+                    <span class="input-label">
+                        Gjennomsiktighet
+                    </span>
+                    <select ng-model="$ctrl.settings.maps[2].tiles[0].opacity"
+                            ng-options="option.value as option.name for option in $ctrl.opacityArray" ng-change="$ctrl.onSettingsChanged()"></select>
+                </label>
+            </div>
+        </div>
         <ion-item class="item-text-wrap">
             <button class="button button-positive button-block button-clear" ui-sref="help({page:'maphelp'})" menu-close>
                 {{'HELP'|translate}}

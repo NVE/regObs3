@@ -42,7 +42,7 @@
         };
 
         var appSettings = AppSettingsProvider.$get();
-        if (!appSettings.getAppMode()) {
+        if (!appSettings.hasSetAppMode()) {
             $urlRouterProvider.otherwise('/wizard');
         } else {
             $urlRouterProvider.otherwise('/start');

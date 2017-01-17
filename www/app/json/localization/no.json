@@ -39,5 +39,7 @@
   "UPDATE_DATA_IN_MAP": "Oppdater observasjoner i kartet",
   "CLEAR": "Nullstill",
   "DELETE": "Slett",
-  "SEND": "Send" 
+  "SEND": "Send",
+  "NONE": "Ingen",
+  "UNKNOWN": "Ukjent" 
 }

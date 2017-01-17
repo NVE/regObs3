@@ -68,6 +68,7 @@ angular
                             vm.username = '';
                             vm.password = '';
                             $ionicLoading.hide();
+                            $rootScope.$broadcast('$regObs:appReset');
                             $state.go('wizard');
                         });
                     }
