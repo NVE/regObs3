@@ -119,7 +119,7 @@
             });
         };
 
-        var downloadAndStoreTile = function (tile, x, y, z, successCallback, errorCallback) {
+        var downloadAndStoreTile = function (tile, x, y, z, successCallback, errorCallback, cancel) {
             var sourceurl = tile._url_online.replace('{z}', z).replace('{x}', x).replace('{y}', y);
             var filename = AppSettings.mapFolder + '/' + tile.getMapFilename(x, y, z);
             AppLogging.log("Download " + sourceurl + " => " + filename);
@@ -129,11 +129,18 @@
                 var dom = tile.options.subdomains[idx];
                 sourceurl = sourceurl.replace('{s}', dom);
             }
-            PresistentStorage.downloadUrl(sourceurl, filename).then(successCallback, errorCallback);
+            PresistentStorage.downloadUrl(sourceurl, filename, cancel).then(successCallback, errorCallback);
         };
 
-        var downloadXyzList = function (tile, xyzlist, overwrite, progressCallback, completeCallback, errorCallback, cancelCallback) {
-            function runThisOneByIndex(xyzs, index, cbprog, cbdone, cberr, cbcancel) {
+        var downloadXyzList = function (tile, xyzlist, overwrite, progressCallback, completeCallback, errorCallback, cancelCallback, cancelPromise) {
+            var cancel = false;
+            if (cancelPromise) {
+                cancelPromise.promise.then(function () {
+                    cancel = true;
+                });
+            }
+
+            function runThisOneByIndex(xyzs, index, cbprog, cbdone, cberr) {
                 var x = xyzs[index].x;
                 var y = xyzs[index].y;
                 var z = xyzs[index].z;
@@ -145,7 +152,7 @@
                     if (cbprog) cbprog(index, xyzs.length);
 
                     if (index + 1 < xyzs.length) {
-                        runThisOneByIndex(xyzs, index + 1, cbprog, cbdone, cberr, cbcancel);
+                        runThisOneByIndex(xyzs, index + 1, cbprog, cbdone, cberr);
                     } else {
                         if (cbdone) cbdone();
                     }
@@ -161,7 +168,8 @@
                                 // an error in downloading
                                 if (cberr) cberr(errmsg);
                                 doneWithIt();
-                            }
+                            },
+                            cancelPromise
                         );
                     } catch (error) {
                         if (cberr) cberr(error.message);
@@ -169,16 +177,10 @@
                     }
                 }
 
-                var cancel = false;
-                if (cbcancel) {
-                    cbcancel.promise.then(function() {
-                        cancel = true;
-                    });
-                    //cancel = cbcancel();
-                }
+                
 
                 if (cancel) {
-                    if (cbdone) cbdone();
+                    if (cancelCallback) cancelCallback();
                 } else {
                     // trick: if 'overwrite' is true we can just go ahead and download
                     // BUT... if overwrite is false, then test that the file doesn't exist first by failing to open it
@@ -204,7 +206,7 @@
                     }
                 }
             }
-            runThisOneByIndex(xyzlist, 0, progressCallback, completeCallback, errorCallback, cancelCallback);
+            runThisOneByIndex(xyzlist, 0, progressCallback, completeCallback, errorCallback);
         };
 
         service.downloadMapFromXyzList = function (name, bounds, xyzList, zoomMin, zoomMax, mapsArray, progressCallback, completeCallback, cancelCallback) {
@@ -272,6 +274,10 @@
                             },
                             function onError(error) {
                                 progress.addError(error);
+                                checkProgress();
+                            },
+                            function onCancel() {
+                                progress.setCancelled(true);
                                 checkProgress();
                             },
                             cancelCallback);

@@ -181,29 +181,32 @@
     transform: rotate(-45deg);
     margin-left: -10px;
     margin-top: -23px;
-    border: 2px solid brown;
+    border: 2px solid grey;
     font-size: 12px;
     line-height: 1.5;
+    opacity: 0.8;
 }
 
 .observation-pin.selected {
     border: 3px solid black;
+    opacity: 1.0;
 }
 
 .observation-pin-icon {
     transform: rotate(45deg);
     display: block;
     position: relative;
-    left: -1px;
+    left: -5px;
     top: 6px;
-    width: 26px;
+    width: 33px;
     text-align: center;
+    opacity: 1.0;
 }
 
 .observation-pin-icon.large-icon {
     font-size: 16px;
-    left: -2px;
-    top: 3px;
+    left: -4px;
+    top: 2px;
 }
 
 .selected .observation-pin-icon {
@@ -238,6 +241,7 @@
     z-index: 999;
     margin: 0px !important;
     overflow: visible;
+    padding: 0px;
 }
 
 .map-selected-info-inner {

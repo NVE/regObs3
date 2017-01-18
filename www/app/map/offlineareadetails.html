@@ -3,16 +3,16 @@
         <map-area-select disable-user-interaction="true" bounds="vm.bounds"></map-area-select>
         <div class="padding">
             <div>
-                {{vm.area.maps.length}} kart.
+                {{vm.area.maps.length}} {{'MAP' | translate | lowercase}}.
             </div>
             <div>
-                {{vm.area.zoom}} zoom nivåer. {{vm.area.tiles}} delkart.
+                {{vm.area.zoom}} {{'ZOOM_LEVELS' | translate | lowercase}}. {{vm.area.tiles}} {{'TILES' | translate | lowercase}}.
             </div>
             <div>
                 {{vm.humanFileSize}}
             </div>
             <button class="button button-block" ng-click="vm.deleteMap()">
-                Slett dette området
+                {{'DELETE_THIS_AREA' | translate}}
             </button>
         </div>
     </ion-content>

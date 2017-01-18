@@ -5,13 +5,17 @@
         var locationsStorageKey = 'regObsLocations';
         var observationUpdatedStorageKey = 'LastObservationUpdate';
 
-        service.getStoredObservations = function (geoHazardId) {
+        service.getStoredObservations = function (geoHazardId, validateObservationDate) {
             return service._getRegistrationsFromPresistantStorage().then(function (result) {
                 if (geoHazardId) {
                     result = result.filter(function (reg) {
                         return reg.GeoHazardTid === geoHazardId;
                     });
                 }
+                if (validateObservationDate) {
+                    result = service._cleanupRegistrations(result);
+                }
+
                 return result;
             });
         };
@@ -161,24 +165,11 @@
             });
         };
 
-        service._mergeRegistrations = function (destArr, arr) {
-            var updateRegistrations = function (existingLocation, newLocation) {
-                newLocation.Registrations.forEach(function (reg) {
-                    var existingRegistration = existingLocation.Registrations
-                        .filter(function (item) { return item.RegId === reg.RegID });
-                    if (existingRegistration.length <= 0) {
-                        existingRegistration.push(reg);
-                    }
-                });
-            };
-
-            arr.forEach(function (item) {
-                var existingLocation = destArr
-                    .filter(function (location) { return location.LocationId === item.LocationId });
-                if (existingLocation.length > 0) {
-                    //Location exists, update registrations
-                    updateRegistrations(existingLocation[0], item);
-                } else {
+        service._mergeRegistrations = function (destArr, existingRegistrations) {
+            existingRegistrations.forEach(function (item) {
+                var newRegistration = destArr.filter(function (reg) { return reg.RegId === item.RegId });
+                if (newRegistration.length < 0) {
+                    //Registration does not exist, push old value to new list
                     destArr.push(item);
                 }
             });

@@ -288,11 +288,16 @@ angular.module('RegObs').factory('PresistentStorage', function (AppSettings, $co
      * @param {} path 
      * @returns {} 
      */
-    service.downloadUrl = function (url, path) {
+    service.downloadUrl = function (url, path, cancel) {
         if (Utility.isRippleEmulator()) {
             return service.storeFile(path, null, url);
         } else {
-            return $http.get(url, { responseType: 'arraybuffer' })
+            var options = { responseType: 'arraybuffer' };
+            if (cancel) {
+                options.timeout = cancel.promise;
+            }
+
+            return $http.get(url, options)
                  .then(function (data) {
                      return service.storeFile(path, data);
                  });

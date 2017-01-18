@@ -122,7 +122,7 @@
                     <div class="col col-center">
                         <ion-spinner class="spinner-light" ng-if="appVm.registration.sending"></ion-spinner>
                         <button ng-hide="appVm.registration.sending" class="button  button-block button-clear" ng-click="appVm.registration.send()">
-                            <i class="icon stable ion-upload"></i> {{'SEND'|translate}} <span class="badge badge-balanced" ng-show="!appVm.registration.isEmpty()" ng-bind="appVm.registration.getSendText()" ></span> <span class="badge badge-assertive" ng-show="appVm.registration.unsent.length" ng-bind="appVm.registration.unsent.length"></span>
+                            <i class="icon stable ion-upload"></i> {{'SEND'|translate}} <span class="badge badge-balanced" ng-show="!appVm.registration.isEmpty()" ng-bind="appVm.registration.getObservationsLength()" ></span> <span class="badge badge-assertive" ng-show="appVm.registration.unsent.length" ng-bind="appVm.registration.unsent.length"></span>
                         </button>
                     </div>
                 </div>

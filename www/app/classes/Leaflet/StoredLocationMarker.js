@@ -1,4 +1,4 @@
-﻿angular.module('RegObs').factory('StoredLocationMarker', function (MapSelectableItem, $translate, Utility, ObsLocation, Registration) {
+﻿angular.module('RegObs').factory('StoredLocationMarker', function (MapSelectableItem, $translate, Utility, ObsLocation, Registration, AppSettings, Trip, $state) {
 
     /**
      * Stored location marker
@@ -26,34 +26,61 @@
 
         initialize: function (storedLocation, options) {
             var self = this;
+            
             L.Util.setOptions(this, options);
-            var latlng = new L.LatLng(storedLocation.LatLngObject.Latitude, storedLocation.LatLngObject.Longitude);
-            this.storedLocation = storedLocation;
-            this.options.selectedIcon = this._getIcon(true);
-            this.options.unselectedIcon = this._getIcon(false);
-            this.options.icon = this._getIcon(false);
-            this.options.actionButtons[1].onClick = function () {
-                ObsLocation.setPreviousUsedPlace(self.storedLocation.LocationId,
-                    self.storedLocation.Name,
-                    {
-                        Latitude: self.storedLocation.LatLngObject.Latitude,
-                        Longitude: self.storedLocation.LatLngObject.Longitude,
-                        Uncertainty: 0,
-                        UTMSourceTID: ObsLocation.source.storedPosition
-                    });
-                Registration.createAndGoToNewRegistration();
-            };
+            self.storedLocation = storedLocation;
+            var latlng = new L.LatLng(self.storedLocation.LatLngObject.Latitude, self.storedLocation.LatLngObject.Longitude);
+
+            self.options.geoHazardId = storedLocation.geoHazardId;
+            self.options.selectedIcon = self._getIcon(true);
+            self.options.unselectedIcon = self._getIcon(false);
+            self.options.icon = this._getIcon(false);
+
+            self.options.actionButtons = [
+                {
+                    extraClasses: 'regobs-button-tour',
+                    buttonColor: '#fff',
+                    iconColor: '#444',
+                    icon: 'ion-android-walk',
+                    isVisible: function() {
+                        return AppSettings.getAppMode() === 'snow';
+                    },
+                    onClick: function() {
+                        if (Trip.model.started) {
+                            Trip.stop();
+                        } else {
+                            $state.go('snowtrip');
+                        }
+                    }
+                },
+                {
+                    extraClasses: 'regobs-button-add',
+                    buttonColor: '#33cd5f',
+                    iconColor: '#fff',
+                    icon: 'ion-plus',
+                    onClick: function() {
+                        ObsLocation.setPreviousUsedPlace(self.storedLocation.LocationId,
+                        self.storedLocation.Name,
+                        {
+                            Latitude: self.storedLocation.LatLngObject.Latitude.toString(),
+                            Longitude: self.storedLocation.LatLngObject.Longitude.toString(),
+                            Uncertainty: '0',
+                            UTMSourceTID: ObsLocation.source.storedPosition
+                        });
+                        Registration.createAndGoToNewRegistration();
+                    },
+                    isVisible: function() {
+                        return true;
+                    }
+                }
+            ];
 
             // call super
-            MapSelectableItem.prototype.initialize.call(this, latlng, this.options);
+            MapSelectableItem.prototype.initialize.call(this, latlng, self.options);
         },
 
-        getHeader: function () {
-            if (this.storedLocation) {
-                return this.storedLocation.Name;
-            } else {
-                return MapSelectableItem.prototype.getHeader.call(this);
-            }
+        getHeader: function () {           
+           return this.storedLocation.Name;         
         }
     });
 

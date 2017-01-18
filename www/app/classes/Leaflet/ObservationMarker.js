@@ -28,6 +28,7 @@
             L.Util.setOptions(this, options);
             var latlng = new L.LatLng(obsjson.Latitude, obsjson.Longitude);
             this.observation = Observation.fromJson(obsjson);
+            this.options.geoHazardId = obsjson.GeoHazardTid;
             this.options.selectedIcon = this._getIcon(true);
             this.options.unselectedIcon = this._getIcon(false);
             this.options.icon = this._getIcon(false);

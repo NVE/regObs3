@@ -114,7 +114,7 @@
          */
         service._drawObservations = function () {
             layerGroups.observations.clearLayers();
-            Observations.getStoredObservations(Utility.getCurrentGeoHazardTid()).then(function (result) {
+            Observations.getStoredObservations(Utility.getCurrentGeoHazardTid(), true).then(function (result) {
                 result.forEach(function (obsJson) {
                     var m = new RegObsClasses.ObservationMarker(obsJson);
                     m.on('selected', function (event) { service._setSelectedItem(event.target); });
@@ -565,10 +565,22 @@
         };
 
         /**
+         * Check if selected marker should med unselected if geohazard settings has been changed
+         * @returns {} 
+         */
+        service._checkSelectedItemGeoHazard = function() {
+            if (service._selectedItem && service._selectedItem.getGeoHazardId() !== Utility.getCurrentGeoHazardTid()) {
+                service.clearSelectedMarkers();
+            }
+        };
+
+        /**
          * Refresh map an redraw layers and markers as set in settings
          * @returns {} 
          */
         service.refresh = function () {
+
+            service._checkSelectedItemGeoHazard();
             service._redrawTilesForThisGeoHazard();
 
             if (AppSettings.data.showPreviouslyUsedPlaces) {
@@ -581,6 +593,7 @@
             } else {
                 service._removeObservations();
             }
+
             service.invalidateSize();
         };
 
@@ -589,17 +602,13 @@
          * @returns {} 
          */
         service.startWatch = function () {
-            if (map) {
-                AppLogging.log('Start watching gps location');
-                $ionicPlatform.ready(function () {
-                    map.locate({ watch: true, enableHighAccuracy: true });
-                });
-
-                //document.addEventListener("deviceready",
-                //    function () {
-                //        map.locate({ watch: true, enableHighAccuracy: true });
-                //    },
-                //    false);
+            if (map) {              
+                document.addEventListener("deviceready",
+                    function () {
+                        AppLogging.log('Start watching gps location');
+                        map.locate({ watch: true, enableHighAccuracy: true });
+                    },
+                    false);
             }
         };
 
@@ -628,7 +637,7 @@
          * Calculate list of xyz map pieces that is needed for current bounds
          * @param {} bounds 
          * @param {} zoomMin 
-         * @param {} zoomMax 
+         * @param {} zoomMax ref
          * @returns {} 
          */
         service.calculateXYZListFromBounds = function (bounds, zoomMin, zoomMax) {

@@ -65,7 +65,7 @@
             L.Util.setOptions(self, options);
             this.options.icon = this._getIcon(ObsLocation.isSet());
 
-            this.options.actionButtons[3].onClick = function() {
+            this.options.actionButtons[3].onClick = function () {
                 self.clear();
             };
 
@@ -95,6 +95,11 @@
         _isObsLocSetManually: function () {
             var obsLoc = ObsLocation.get();
             return obsLoc.UTMSourceTID === ObsLocation.source.clickedInMap;
+        },
+
+        _isObsLocStoredPosition: function () {
+            var obsLoc = ObsLocation.get();
+            return obsLoc.UTMSourceTID === ObsLocation.source.storedPosition;
         },
 
         setUserPosition: function (latlng) {
@@ -148,6 +153,8 @@
         getHeader: function () {
             if (this._isObsLocSetManually()) {
                 return '';
+            } else if (this._isObsLocStoredPosition()) {
+                return ObsLocation.get().Name;
             } else if (this.options.userPosition) {
                 return $translate.instant('YOUR_GPS_POSITION');
             } else {
@@ -156,7 +163,7 @@
         },
 
         getDescription: function () {
-            if (!this._isObsLocSetManually()) {
+            if (!ObsLocation.isSet()) {
                 return $translate.instant('SET_POSITION_HELP_TEXT');
             }
             return '';
@@ -165,6 +172,8 @@
         getTypeDescription: function () {
             if (this._isObsLocSetManually()) {
                 return $translate.instant('MARKED_POSITION');
+            } else if (this._isObsLocStoredPosition()) {
+                return $translate.instant('PREVIOUS_USED_PLACE');
             }
             return '';
         }

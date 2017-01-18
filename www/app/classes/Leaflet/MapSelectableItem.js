@@ -11,6 +11,7 @@ angular.module('RegObs')
                 description: '',
                 typeDescription: '',
                 isSelected: false,
+                geoHazardId: null,
                 actionButtons: [
                 {
                     extraClasses: 'regobs-button-tour',
@@ -121,6 +122,9 @@ angular.module('RegObs')
                 } else {
                     return '';
                 }
+            },
+            getGeoHazardId: function() {
+                return this.options.geoHazardId;
             }
         });
 

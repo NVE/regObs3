@@ -110,6 +110,11 @@ angular
 
                 scope.closePopup = function () {
                     popup.close();
+                    if (scope.error) {
+                        reject(scope.error); //Cancelled
+                    } else {
+                        resolve(); //All done
+                    }
                 };
 
                 var progressFunc = function (status) {
@@ -122,21 +127,17 @@ angular
                     });
                 };
 
+               
+
                 var onComplete = function (error) {
+                    scope.complete = true;
+                    scope.error = error;
+
                     if (timeout) {
                         $timeout.cancel(timeout); //cancel running timeout
                     }
-
-                    scope.complete = true;
-
                     if (result.closeOnComplete && !(scope.downloadStatus && (scope.downloadStatus.hasError() && !result.closeOnError))) {
-                       scope.closePopup();
-                    }
-
-                    if (error) {
-                        reject(error); //Cancelled
-                    } else {
-                        resolve(); //All done
+                        scope.closePopup();
                     }
                 };
 

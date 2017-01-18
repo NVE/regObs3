@@ -6,6 +6,7 @@ RegObs.ProggressStatus = (function () {
         var _total = total || 0;
         var _complete = 0;
         var _errors = [];
+        self._cancelled = false;
 
         self.addComplete = function () {
             if (self.isDone())
@@ -18,8 +19,12 @@ RegObs.ProggressStatus = (function () {
             _total = total;
         };
 
+        self.setCancelled = function (cancelled) {
+            self._cancelled = cancelled;
+        };
+
         self.isDone = function() {
-            return self.getDone() >= _total;
+            return self.getDone() >= _total || self._cancelled;
         };
 
         self.getTotal = function () {

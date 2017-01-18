@@ -97,14 +97,13 @@ angular
 
         ObsLocation.set = function(loc){
             if(loc && loc.Latitude){
-
                 ObsLocation.data = {
                     Latitude: loc.Latitude,
                     Longitude: loc.Longitude,
                     Uncertainty: loc.Uncertainty,
                     UTMSourceTID: loc.UTMSourceTID
                 };
-                AppLogging.log('ObsLocation set to', ObsLocation);
+
                 getLocationName(ObsLocation.data);
                 save();
             }

@@ -38,6 +38,8 @@
 
         vm._calculateDetailLevels = function () {
             vm.extraDetailLevel = angular.copy(vm._baseLevels);
+            var currentSize = vm._getEstimatedSize(vm.currentZoom);
+            vm.extraDetailLevel[0].description = $translate.instant('NONE') +' (' + currentSize.humanSize + ')';
             if (vm.currentZoom) {
                 for (var currentLevel = vm._calculateLevelSteps; vm.currentZoom + currentLevel <= AppSettings.maxMapZoomLevel && currentLevel <= vm._maxCalculateLevels; currentLevel += vm._calculateLevelSteps) {
                     var size = vm._getEstimatedSize(vm.currentZoom + currentLevel);
