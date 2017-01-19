@@ -332,7 +332,7 @@
          * Could location be set manually?
          * @returns {} 
          */
-        service._isSetLocationManuallyPossible = function() {
+        service._isSetLocationManuallyPossible = function () {
             return Registration.isEmpty() || !ObsLocation.isSet();
         }
 
@@ -340,7 +340,7 @@
          * Enable or disable draggable location marker
          * @returns {} 
          */
-        service._enableOrDisableDraggableLocation = function() {
+        service._enableOrDisableDraggableLocation = function () {
             if (service._isSetLocationManuallyPossible()) {
                 obsLocationMarker.dragging.enable();
             } else {
@@ -411,7 +411,9 @@
             obsLocationMarker.on('obsLocationCleared', service._onObsLocationCleared);
             obsLocationMarker.addTo(layerGroups.user);
 
-            $rootScope.$on('$regObs:registrationSaved', function() {
+            L.control.scale({ imperial: false }).addTo(map);
+
+            $rootScope.$on('$regObs:registrationSaved', function () {
                 service._enableOrDisableDraggableLocation();
                 map.invalidateSize(); //Footer bar could have been removed, invalidate map size
             });
@@ -422,7 +424,7 @@
 
             if (UserLocation.hasUserLocation()) {
                 service._onPositionUpdate(UserLocation.getLastUserLocation());
-            }else if (ObsLocation.isSet()) {
+            } else if (ObsLocation.isSet()) {
                 service.setView(L.latLng(ObsLocation.get().Latitude, ObsLocation.get().Longitude));
             }
 
@@ -568,7 +570,7 @@
          * Check if selected marker should med unselected if geohazard settings has been changed
          * @returns {} 
          */
-        service._checkSelectedItemGeoHazard = function() {
+        service._checkSelectedItemGeoHazard = function () {
             if (service._selectedItem && service._selectedItem.getGeoHazardId() !== Utility.getCurrentGeoHazardTid()) {
                 service.clearSelectedMarkers();
             }
@@ -602,7 +604,7 @@
          * @returns {} 
          */
         service.startWatch = function () {
-            if (map) {              
+            if (map) {
                 document.addEventListener("deviceready",
                     function () {
                         AppLogging.log('Start watching gps location');

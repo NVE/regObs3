@@ -39,28 +39,30 @@
             'regObs': 'https://api.nve.no/hydrology/regobs/v3.0.6/',
             'demo regObs' : 'http://stg-h-web03.nve.no/RegObsServices/',
             'test regObs': 'http://tst-h-web03.nve.no/regobsservices_test/'
-            };
+        };
 
-        $http.get('app/json/secret.json')
-            .then(function (response) {
-                var headers = {
-                    regObs_apptoken: response.data.apiKey,
-                    ApiJsonVersion: '3.0.6'
-                };
+        var init = function() {
+            return $http.get('app/json/secret.json')
+                .then(function(response) {
+                    var headers = {
+                        regObs_apptoken: response.data.apiKey,
+                        ApiJsonVersion: '3.0.6'
+                    };
 
-                settings.httpConfig = {
-                    headers: headers,
-                    timeout: 15000
-                };
+                    settings.httpConfig = {
+                        headers: headers,
+                        timeout: 15000
+                    };
 
-                settings.httpConfigRegistrationPost = {
-                    headers: headers,
-                    timeout: 120000
-                };
-            })
-            .catch(function (error) {
-                $log.error('Could not set proper http header settings. Do you have app/json/secret.json with proper app token? ' + JSON.stringify(error));
-            });
+                    settings.httpConfigRegistrationPost = {
+                        headers: headers,
+                        timeout: 120000
+                    };
+                })
+                .catch(function(error) {
+                    $log.error('Could not set proper http header settings. Do you have app/json/secret.json with proper app token? ' + JSON.stringify(error));
+                });
+        };
 
         settings.maxMapZoomLevel = 17;
         settings.mapFolder = 'maps';
@@ -193,8 +195,8 @@
             return 1; //Implement when language support is needed
         };
 
+        init();
         settings.load();
-
 
         return settings;
 

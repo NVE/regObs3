@@ -127,11 +127,8 @@ angular
                     });
                 };
 
-               
-
-                var onComplete = function (error) {
+                var onComplete = function () {
                     scope.complete = true;
-                    scope.error = error;
 
                     if (timeout) {
                         $timeout.cancel(timeout); //cancel running timeout
@@ -141,7 +138,12 @@ angular
                     }
                 };
 
-                workFunction(progressFunc, cancelUpdatePromise).then(onComplete).catch(onComplete);
+                var onError = function(error) {
+                    scope.error = error;
+                    onComplete();
+                };
+
+                workFunction(progressFunc, cancelUpdatePromise).then(onComplete).catch(onError);
             });
         };
 

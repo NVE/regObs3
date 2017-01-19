@@ -20,9 +20,9 @@
     </h1>
     <div class='clearfix'>
       <div class='fl pad1y space-right2'>
-        <span class="strong">78.95% </span>
+        <span class="strong">73.91% </span>
         <span class="quiet">Statements</span>
-        <span class='fraction'>15/19</span>
+        <span class='fraction'>17/23</span>
       </div>
       <div class='fl pad1y space-right2'>
         <span class="strong">100% </span>
@@ -30,14 +30,14 @@
         <span class='fraction'>14/14</span>
       </div>
       <div class='fl pad1y space-right2'>
-        <span class="strong">66.67% </span>
+        <span class="strong">70% </span>
         <span class="quiet">Functions</span>
-        <span class='fraction'>6/9</span>
+        <span class='fraction'>7/10</span>
       </div>
       <div class='fl pad1y space-right2'>
-        <span class="strong">78.95% </span>
+        <span class="strong">73.91% </span>
         <span class="quiet">Lines</span>
-        <span class='fraction'>15/19</span>
+        <span class='fraction'>17/23</span>
       </div>
     </div>
   </div>
@@ -86,38 +86,45 @@
 41
 42
 43
-44</td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+44
+45
+46
+47
+48
+49
+50
+51</td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1×</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">20×</span>
+<span class="cline-any cline-yes">23×</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">22×</span>
+<span class="cline-any cline-yes">4×</span>
+<span class="cline-any cline-yes">4×</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">62×</span>
-<span class="cline-any cline-yes">62×</span>
+<span class="cline-any cline-yes">16×</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">62×</span>
+<span class="cline-any cline-yes">62×</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">82×</span>
-<span class="cline-any cline-yes">82×</span>
+<span class="cline-any cline-yes">62×</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">43×</span>
-<span class="cline-any cline-yes">43×</span>
-<span class="cline-any cline-yes">37×</span>
-<span class="cline-any cline-yes">37×</span>
-<span class="cline-any cline-yes">37×</span>
-<span class="cline-any cline-yes">37×</span>
+<span class="cline-any cline-yes">88×</span>
+<span class="cline-any cline-yes">88×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">40×</span>
+<span class="cline-any cline-yes">40×</span>
+<span class="cline-any cline-yes">34×</span>
+<span class="cline-any cline-yes">34×</span>
+<span class="cline-any cline-yes">34×</span>
+<span class="cline-any cline-yes">34×</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">6×</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -129,6 +136,13 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">/**
  * Created by storskel on 11.06.2015.
  */
@@ -136,9 +150,9 @@ angular
     .module('RegObs')
     .factory('LocalStorage', ['$window', function($window) {
         return {
-            set: <span class="fstat-no" title="function not covered" >function (key, value) {</span>
-<span class="cstat-no" title="statement not covered" >                $window.localStorage.setItem(key, value);</span>
-<span class="cstat-no" title="statement not covered" >                return value;</span>
+            set: function (key, value) {
+                $window.localStorage.setItem(key, value);
+                return value;
             },
             get: function (key, defaultValue) {
                 return $window.localStorage.getItem(key) || defaultValue;
@@ -170,6 +184,13 @@ angular
             },
             clear: <span class="fstat-no" title="function not covered" >function(){</span>
 <span class="cstat-no" title="statement not covered" >                $window.localStorage.clear();</span>
+            },
+            getKeys: <span class="fstat-no" title="function not covered" >function() {</span>
+<span class="cstat-no" title="statement not covered" >                var keys = [];</span>
+<span class="cstat-no" title="statement not covered" >                for (var key in $window.localStorage) {</span>
+<span class="cstat-no" title="statement not covered" >                    keys.push(key);</span>
+                }
+<span class="cstat-no" title="statement not covered" >                return keys;</span>
             }
         }
     }]);</pre></td></tr>
@@ -178,7 +199,7 @@ angular
 </div><!-- /wrapper -->
 <div class='footer quiet pad2 space-top1 center small'>
   Code coverage
-  generated by <a href="http://istanbul-js.org/" target="_blank">istanbul</a> at Mon Jan 16 2017 12:12:19 GMT+0100 (W. Europe Standard Time)
+  generated by <a href="http://istanbul-js.org/" target="_blank">istanbul</a> at Thu Jan 19 2017 13:36:30 GMT+0100 (W. Europe Standard Time)
 </div>
 </div>
 <script src="../../prettify.js"></script>

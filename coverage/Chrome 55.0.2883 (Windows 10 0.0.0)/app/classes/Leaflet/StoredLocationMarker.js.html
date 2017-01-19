@@ -20,9 +20,9 @@
     </h1>
     <div class='clearfix'>
       <div class='fl pad1y space-right2'>
-        <span class="strong">5.88% </span>
+        <span class="strong">4% </span>
         <span class="quiet">Statements</span>
-        <span class='fraction'>1/17</span>
+        <span class='fraction'>1/25</span>
       </div>
       <div class='fl pad1y space-right2'>
         <span class="strong">0% </span>
@@ -32,12 +32,12 @@
       <div class='fl pad1y space-right2'>
         <span class="strong">0% </span>
         <span class="quiet">Functions</span>
-        <span class='fraction'>0/5</span>
+        <span class='fraction'>0/9</span>
       </div>
       <div class='fl pad1y space-right2'>
-        <span class="strong">5.88% </span>
+        <span class="strong">4% </span>
         <span class="quiet">Lines</span>
-        <span class='fraction'>1/17</span>
+        <span class='fraction'>1/25</span>
       </div>
     </div>
   </div>
@@ -90,7 +90,47 @@
 45
 46
 47
-48</td><td class="line-coverage quiet"><span class="cline-any cline-yes">1×</span>
+48
+49
+50
+51
+52
+53
+54
+55
+56
+57
+58
+59
+60
+61
+62
+63
+64
+65
+66
+67
+68
+69
+70
+71
+72
+73
+74
+75
+76
+77
+78
+79
+80
+81
+82
+83
+84
+85
+86
+87
+88</td><td class="line-coverage quiet"><span class="cline-any cline-yes">1×</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -118,7 +158,11 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -128,6 +172,12 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -136,8 +186,38 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">﻿angular.module('RegObs').factory('StoredLocationMarker', <span class="fstat-no" title="function not covered" >function (MapSelectableItem, $translate, Utility) {</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">﻿angular.module('RegObs').factory('StoredLocationMarker', <span class="fstat-no" title="function not covered" >function (MapSelectableItem, $translate, Utility, ObsLocation, Registration, AppSettings, Trip, $state) {</span>
 &nbsp;
     /**
      * Stored location marker
@@ -164,22 +244,62 @@
         },
 &nbsp;
         initialize: <span class="fstat-no" title="function not covered" >function (storedLocation, options) {</span>
+<span class="cstat-no" title="statement not covered" >            var self = this;</span>
+            
 <span class="cstat-no" title="statement not covered" >            L.Util.setOptions(this, options);</span>
-<span class="cstat-no" title="statement not covered" >            var latlng = new L.LatLng(storedLocation.LatLngObject.Latitude, storedLocation.LatLngObject.Longitude);</span>
-<span class="cstat-no" title="statement not covered" >            this.storedLocation = storedLocation;</span>
-<span class="cstat-no" title="statement not covered" >            this.options.selectedIcon = this._getIcon(true);</span>
-<span class="cstat-no" title="statement not covered" >            this.options.unselectedIcon = this._getIcon(false);</span>
-<span class="cstat-no" title="statement not covered" >            this.options.icon = this._getIcon(false);</span>
+<span class="cstat-no" title="statement not covered" >            self.storedLocation = storedLocation;</span>
+<span class="cstat-no" title="statement not covered" >            var latlng = new L.LatLng(self.storedLocation.LatLngObject.Latitude, self.storedLocation.LatLngObject.Longitude);</span>
+&nbsp;
+<span class="cstat-no" title="statement not covered" >            self.options.geoHazardId = storedLocation.geoHazardId;</span>
+<span class="cstat-no" title="statement not covered" >            self.options.selectedIcon = self._getIcon(true);</span>
+<span class="cstat-no" title="statement not covered" >            self.options.unselectedIcon = self._getIcon(false);</span>
+<span class="cstat-no" title="statement not covered" >            self.options.icon = this._getIcon(false);</span>
+&nbsp;
+<span class="cstat-no" title="statement not covered" >            self.options.actionButtons = [</span>
+                {
+                    extraClasses: 'regobs-button-tour',
+                    buttonColor: '#fff',
+                    iconColor: '#444',
+                    icon: 'ion-android-walk',
+                    isVisible: <span class="fstat-no" title="function not covered" >function() {</span>
+<span class="cstat-no" title="statement not covered" >                        return AppSettings.getAppMode() === 'snow';</span>
+                    },
+                    onClick: <span class="fstat-no" title="function not covered" >function() {</span>
+<span class="cstat-no" title="statement not covered" >                        if (Trip.model.started) {</span>
+<span class="cstat-no" title="statement not covered" >                            Trip.stop();</span>
+                        } else {
+<span class="cstat-no" title="statement not covered" >                            $state.go('snowtrip');</span>
+                        }
+                    }
+                },
+                {
+                    extraClasses: 'regobs-button-add',
+                    buttonColor: '#33cd5f',
+                    iconColor: '#fff',
+                    icon: 'ion-plus',
+                    onClick: <span class="fstat-no" title="function not covered" >function() {</span>
+<span class="cstat-no" title="statement not covered" >                        ObsLocation.setPreviousUsedPlace(self.storedLocation.LocationId,</span>
+                        self.storedLocation.Name,
+                        {
+                            Latitude: self.storedLocation.LatLngObject.Latitude.toString(),
+                            Longitude: self.storedLocation.LatLngObject.Longitude.toString(),
+                            Uncertainty: '0',
+                            UTMSourceTID: ObsLocation.source.storedPosition
+                        });
+<span class="cstat-no" title="statement not covered" >                        Registration.createAndGoToNewRegistration();</span>
+                    },
+                    isVisible: <span class="fstat-no" title="function not covered" >function() {</span>
+<span class="cstat-no" title="statement not covered" >                        return true;</span>
+                    }
+                }
+            ];
+&nbsp;
             // call super
-<span class="cstat-no" title="statement not covered" >            MapSelectableItem.prototype.initialize.call(this, latlng, this.options);</span>
+<span class="cstat-no" title="statement not covered" >            MapSelectableItem.prototype.initialize.call(this, latlng, self.options);</span>
         },
 &nbsp;
-        getHeader: <span class="fstat-no" title="function not covered" >function () {</span>
-<span class="cstat-no" title="statement not covered" >            if (this.storedLocation) {</span>
-<span class="cstat-no" title="statement not covered" >                return this.storedLocation.Name;</span>
-            } else {
-<span class="cstat-no" title="statement not covered" >                return MapSelectableItem.prototype.getHeader.call(this);</span>
-            }
+        getHeader: <span class="fstat-no" title="function not covered" >function () {           </span>
+<span class="cstat-no" title="statement not covered" >           return this.storedLocation.Name;         </span>
         }
     });
 &nbsp;
@@ -190,7 +310,7 @@
 </div><!-- /wrapper -->
 <div class='footer quiet pad2 space-top1 center small'>
   Code coverage
-  generated by <a href="http://istanbul-js.org/" target="_blank">istanbul</a> at Mon Jan 16 2017 12:12:19 GMT+0100 (W. Europe Standard Time)
+  generated by <a href="http://istanbul-js.org/" target="_blank">istanbul</a> at Thu Jan 19 2017 13:36:30 GMT+0100 (W. Europe Standard Time)
 </div>
 </div>
 <script src="../../../prettify.js"></script>

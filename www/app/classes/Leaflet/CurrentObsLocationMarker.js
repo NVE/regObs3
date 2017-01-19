@@ -78,7 +78,6 @@
                 self.isDragging = false;
                 self._setCurrentPositionAsObsLocation();
             });
-
             self.refresh();
         },
 

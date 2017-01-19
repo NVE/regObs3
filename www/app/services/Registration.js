@@ -1,6 +1,6 @@
 angular
     .module('RegObs')
-    .factory('Registration', function Registration($rootScope, $ionicPlatform, $http, $state, $ionicPopup, $ionicHistory, $cordovaBadge, LocalStorage, Utility, User, ObsLocation, AppSettings, RegobsPopup, AppLogging) {
+    .factory('Registration', function Registration($rootScope, $ionicPlatform, $http, $state, $ionicPopup, $ionicHistory, $cordovaBadge, LocalStorage, Utility, User, ObsLocation, AppSettings, RegobsPopup, AppLogging, Observations, UserLocation) {
         var Registration = this;
 
         var storageKey = 'regobsRegistrations';
@@ -35,7 +35,28 @@ angular
                  PictureComment: ''
                  }]*/
             };
-        }
+        };
+
+        Registration._checkAndSetObsLocation = function() {
+            if (!ObsLocation.isSet()) {
+                var obsLoc = {
+                    UTMSourceTID: ObsLocation.source.fetchedFromGPS
+                };
+                if (UserLocation.hasUserLocation()) {
+                    var lastPos = UserLocation.getLastUserLocation();
+                    obsLoc.Latitude = lastPos.latitude.toString();
+                    obsLoc.Longitude = lastPos.longitude.toString();
+                    obsLoc.Uncertainty = lastPos.accuracy.toString();
+                    obsLoc.UTMSourceTID = ObsLocation.source.fetchedFromGPS;
+                } else {
+                    obsLoc.Latitude = "62.5"; //Setting to default center when no user location or position set manually
+                    obsLoc.Longitude = "10";  //this should rearly happen. New registration should be disabled when no location found.
+                    obsLoc.Uncertainty = '0';
+                    obsLoc.UTMSourceTID = ObsLocation.source.clickedInMap;
+                }
+                ObsLocation.set(obsLoc);
+            }
+        };
 
         Registration.createAndGoToNewRegistration = function () {
             var appMode = AppSettings.getAppMode();
@@ -50,6 +71,8 @@ angular
                     $state.go('iceregistrationNew');
                 }
             };
+
+            Registration._checkAndSetObsLocation(); //TODO: fjern denne og heller sjekk ved innsending?
             
             if (Registration.isEmpty()) {
                 Registration.createNew(Utility.geoHazardTid(appMode));
@@ -72,6 +95,7 @@ angular
 
         function resetRegistration() {
             //return Registration.createNew(Registration.data.GeoHazardTID);
+            ObsLocation.remove();
             Registration.data = {};
             Registration.save();
         }
@@ -396,6 +420,12 @@ angular
                 );
                 Registration.sending = false;
                 Registration.save();
+
+                Observations.updateObservationsWithinRadius(data.ObsLocation.LatLngObject.Latitude,
+                    data.ObsLocation.LatLngObject.Longitude,
+                    100,
+                    data.GeoHazardTID,
+                    new RegObs.ProggressStatus());
             };
 
             var exception = function (error) {

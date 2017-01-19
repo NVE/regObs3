@@ -1,10 +1,10 @@
 angular
     .module('RegObs')
-    .factory('ObsLocation', function ($http, $ionicPlatform, $cordovaGeolocation, AppSettings, LocalStorage, AppLogging, Utility) {
+    .factory('ObsLocation', function ($http, $ionicPlatform, $cordovaGeolocation, AppSettings, LocalStorage, AppLogging, $rootScope, $timeout) {
         var ObsLocation = this;
         var storageKey = 'regobsLocation';
 
-        function init(){
+        function init() {
             ObsLocation.fetching = false;
             ObsLocation.data = LocalStorage.getObject(storageKey);
             ObsLocation.source = {
@@ -12,14 +12,14 @@ angular
                 fetchedFromGPS: 40,
                 storedPosition: 45
             };
-            if(!ObsLocation.isSet()){
+            if (!ObsLocation.isSet()) {
                 ObsLocation.data = {};
                 save();
             }
             AppLogging.log(ObsLocation.data);
         }
 
-        ObsLocation.isSet = function(){
+        ObsLocation.isSet = function () {
             return ObsLocation.data && (ObsLocation.data.Latitude || ObsLocation.data.ObsLocationId);
         };
 
@@ -78,25 +78,25 @@ angular
         //    }
         //};
 
-        ObsLocation.getObservationsWithinRadius = function(range, geohazardId) {
+        ObsLocation.getObservationsWithinRadius = function (range, geohazardId) {
             return $http.get(
                 AppSettings.getEndPoints().getObservationsWithinRadius, {
                     params: {
-                        latitude:ObsLocation.data.Latitude,
-                        longitude:ObsLocation.data.Longitude,
-                        range:range,
+                        latitude: ObsLocation.data.Latitude,
+                        longitude: ObsLocation.data.Longitude,
+                        range: range,
                         geohazardId: geohazardId
                     },
-                    timeout: AppSettings.data.gpsTimeout*1000
+                    timeout: AppSettings.data.gpsTimeout * 1000
                 });
         };
 
-        ObsLocation.get = function(){
+        ObsLocation.get = function () {
             return ObsLocation.data;
         };
 
-        ObsLocation.set = function(loc){
-            if(loc && loc.Latitude){
+        ObsLocation.set = function (loc) {
+            if (loc && loc.Latitude) {
                 ObsLocation.data = {
                     Latitude: loc.Latitude,
                     Longitude: loc.Longitude,
@@ -106,11 +106,13 @@ angular
 
                 getLocationName(ObsLocation.data);
                 save();
+
+
             }
         };
 
-        ObsLocation.setPreviousUsedPlace = function(id, name, loc){
-            if(id){
+        ObsLocation.setPreviousUsedPlace = function (id, name, loc) {
+            if (id) {
                 ObsLocation.data.ObsLocationId = id;
                 ObsLocation.data.Name = name;
 
@@ -125,26 +127,28 @@ angular
             }
         };
 
-        function getLocationName(loc){
-            if(!loc.Latitude) return;
+        function getLocationName(loc) {
+            if (!loc.Latitude) return;
 
             ObsLocation.data.place = undefined;
 
             $http.get(AppSettings.getEndPoints().getLocationName, {
                 params: {
-                    latitude:loc.Latitude,
-                    longitude:loc.Longitude
+                    latitude: loc.Latitude,
+                    longitude: loc.Longitude
                 },
-                timeout: AppSettings.data.gpsTimeout*1000
-            }).then(function(response){
+                timeout: AppSettings.data.gpsTimeout * 1000
+            }).then(function (response) {
                 AppLogging.log(response);
                 ObsLocation.data.place = response.data.Data;
                 save();
             });
         }
 
-        function save(){
+        function save() {
             LocalStorage.setObject(storageKey, ObsLocation.data);
+            //$rootScope.$broadcast('$regobs:obsLocationSaved');
+            $rootScope.$broadcast('$regObs:obsLocationSaved');
         }
 
         init();

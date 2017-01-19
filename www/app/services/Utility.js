@@ -137,17 +137,14 @@ angular
         };
 
         service.getKdvElements = function () {
+            return service.getAppEmbeddedKdvElements()
+                .then(function (result) {
+                    return { data: angular.merge(result, LocalStorage.getObject('kdvDropdowns')) };
+                });
+        };
 
-            var deferred = $q.defer();
-            var kdvFromStorage = LocalStorage.getObject('kdvDropdowns');
-            if (kdvFromStorage && kdvFromStorage.KdvRepositories) {
-                deferred.resolve({ data: kdvFromStorage });
-                return deferred.promise;
-
-            } else {
-                return $http.get('app/json/kdvElements.json');
-            }
-
+        service.getAppEmbeddedKdvElements = function() {
+            return $http.get('app/json/kdvElements.json');
         };
 
         service.shouldUpdateKdvElements = function () {
@@ -165,56 +162,72 @@ angular
             return diffDays > DAYS_BEFORE_KDV_UPDATE;
         };
 
-        service.refreshKdvElements = function () {
-            User.refreshObserverGroups();
+        service._getDropdownsFromApi = function() {
             return $http.get(AppSettings.getEndPoints().getDropdowns, AppSettings.httpConfig)
-                .then(function (res) {
-
+                .then(function(res) {
                     if (res.data && res.data.Data) {
-                        var newDate = Date.now();
-                        var newKdvElements = JSON.parse(res.data.Data);
-                        service.getKdvElements().then(function (response) { //Getting old values to update
-                            var oldKdvElements = response.data;
-                            var prop;
-                            for (prop in oldKdvElements.KdvRepositories) {
-                                if (oldKdvElements.KdvRepositories.hasOwnProperty(prop)) {
-                                    if (newKdvElements.KdvRepositories[prop]) { //Key exists in updated values
-                                        AppLogging.debug('Updating existing KdvRepository: ' + prop);
-                                        oldKdvElements.KdvRepositories[prop] = newKdvElements.KdvRepositories[prop];
-                                    } else {
-                                        AppLogging.warn('Existing Kdv-key not found in updated data: ' + prop +'. Keeping existing data for this key');
-                                    }
-                                }
-                            }
-                            for (prop in newKdvElements.KdvRepositories) {
-                                if (newKdvElements.KdvRepositories.hasOwnProperty(prop) && !oldKdvElements.KdvRepositories.hasOwnProperty(prop)) {
-                                    AppLogging.debug('New KdvRepository not found in existing Repository: ' + prop);
-                                    oldKdvElements.KdvRepositories[prop] = newKdvElements.KdvRepositories[prop]; //New key exists in updated data
-                                }
-                            }
-
-                            for (prop in oldKdvElements.ViewRepositories) {
-                                if (oldKdvElements.ViewRepositories.hasOwnProperty(prop)) {
-                                    if (newKdvElements.ViewRepositories[prop]) { //Key exists in updated values
-                                        AppLogging.debug('Updating existing ViewRepository: ' + prop);
-                                        oldKdvElements.ViewRepositories[prop] = newKdvElements.ViewRepositories[prop];
-                                    }
-                                }
-                            }
-                            for (prop in newKdvElements.ViewRepositories) {
-                                if (newKdvElements.ViewRepositories.hasOwnProperty(prop) && !oldKdvElements.ViewRepositories.hasOwnProperty(prop)) {
-                                    AppLogging.debug('New ViewRepository not found in existing Repository: ' + prop);
-                                    oldKdvElements.ViewRepositories[prop] = newKdvElements.ViewRepositories[prop]; //New key exists in updated data
-                                }
-                            }
-
-
-                            LocalStorage.set('kdvDropdowns', JSON.stringify(oldKdvElements));
-                            LocalStorage.set('kdvUpdated', newDate);
-                            $rootScope.$broadcast('kdvUpdated', newDate);
-                        });                    
+                        return JSON.parse(res.data.Data);
+                    } else {
+                        throw new Error('Could not get kdv elements from API');
                     }
                 });
+        };
+
+        //service._mergeKdvElements = function (oldKdvElements, newKdvElements) {
+        //    var prop;
+        //    for (prop in oldKdvElements.KdvRepositories) {
+        //        if (oldKdvElements.KdvRepositories.hasOwnProperty(prop)) {
+        //            if (newKdvElements.KdvRepositories[prop]) { //Key exists in updated values
+        //                AppLogging.debug('Updating existing KdvRepository: ' + prop);
+        //                oldKdvElements.KdvRepositories[prop] = newKdvElements.KdvRepositories[prop];
+        //            } else {
+        //                AppLogging.warn('Existing Kdv-key not found in updated data: ' + prop + '. Keeping existing data for this key');
+        //            }
+        //        }
+        //    }
+        //    for (prop in newKdvElements.KdvRepositories) {
+        //        if (newKdvElements.KdvRepositories.hasOwnProperty(prop) && !oldKdvElements.KdvRepositories.hasOwnProperty(prop)) {
+        //            AppLogging.debug('New KdvRepository not found in existing Repository: ' + prop);
+        //            oldKdvElements.KdvRepositories[prop] = newKdvElements.KdvRepositories[prop]; //New key exists in updated data
+        //        }
+        //    }
+
+        //    for (prop in oldKdvElements.ViewRepositories) {
+        //        if (oldKdvElements.ViewRepositories.hasOwnProperty(prop)) {
+        //            if (newKdvElements.ViewRepositories[prop]) { //Key exists in updated values
+        //                AppLogging.debug('Updating existing ViewRepository: ' + prop);
+        //                oldKdvElements.ViewRepositories[prop] = newKdvElements.ViewRepositories[prop];
+        //            }
+        //        }
+        //    }
+        //    for (prop in newKdvElements.ViewRepositories) {
+        //        if (newKdvElements.ViewRepositories.hasOwnProperty(prop) && !oldKdvElements.ViewRepositories.hasOwnProperty(prop)) {
+        //            AppLogging.debug('New ViewRepository not found in existing Repository: ' + prop);
+        //            oldKdvElements.ViewRepositories[prop] = newKdvElements.ViewRepositories[prop]; //New key exists in updated data
+        //        }
+        //    }
+        //};
+
+        service._saveKdvElements = function (elements) {
+            var newDate = Date.now();
+            LocalStorage.set('kdvDropdowns', JSON.stringify(elements));
+            LocalStorage.set('kdvUpdated', newDate);
+            $rootScope.$broadcast('kdvUpdated', newDate);
+        };
+
+        service._refreshKdvElements = function() {
+            return service._getDropdownsFromApi()
+                .then(function (newKdvElements) {
+                    return service.getKdvElements().then(function (response) { //Getting old values to update
+                        var oldKdvElements = response.data;
+                        service._saveKdvElements(angular.merge(oldKdvElements, newKdvElements));
+                    });
+                });
+        };
+
+        service.refreshKdvElements = function () {
+            User.refreshObserverGroups();
+            return service._refreshKdvElements();
         };
 
         service.getKdvRepositories = function () {

@@ -3,45 +3,146 @@
     // a description of the test that's appended to the module name. Because a module name
     // is typically a noun, like the name of the function being tested, the description for
     // an individual test is typically written in an action-data format. 
-    beforeEach(module('RegObs'));
+    var mockedAppService, mockedAppLogging, mockedUserService;
 
-    var utility;
-    // Setup the mock service in an anonymous module.
-    beforeEach(inject(function (Utility) {
-        //$provide.value('oneOfMyOtherServicesStub', {
-        //    someVariable: 1
-        //});
-        utility = Utility;
+    beforeEach(module('RegObs', function ($provide, UtilityProvider) {
+        mockedAppService = {
+            save: jasmine.createSpy()
+        };
+        mockedAppLogging = {
+            log: jasmine.createSpy(),
+            debug: jasmine.createSpy()
+        };
+        mockedUserService = {
+            
+        };
+
+        $provide.value('AppSettings', mockedAppService);
+        $provide.value('User', mockedUserService);
+        $provide.value('AppLogging', mockedAppLogging);
+
+        var utils = UtilityProvider.$get();
+        utils.shouldUpdateKdvElements = function() {
+            return false;
+        };
+        $provide.value('Utility', utils);
     }));
 
+    var store = {};
 
-    it("test isEmpty: undefined object returns true", function () {
-        // Invoke the unit being tested as necessary
-        expect(utility.isEmpty(undefined)).toEqual(true);
+    beforeEach(inject(function ($httpBackend) {
+        spyOn(localStorage, 'getItem').and.callFake(function (key) {
+            return store[key];
+        });
+        spyOn(localStorage, 'setItem').and.callFake(function (key, value) {
+            store[key] = value;
+        });
+        $httpBackend.whenGET(/.*/).respond('');
+    }));
+
+    afterEach(function () {
+        store = {};
     });
 
-    it("test isEmpty: null returnes true", function () {
+
+    it("test isEmpty: undefined object returns true", inject(function (Utility) {
         // Invoke the unit being tested as necessary
-        expect(utility.isEmpty(null)).toEqual(true);
+        expect(Utility.isEmpty(undefined)).toEqual(true);
+    }));
+
+    it("test isEmpty: null returnes true",  inject(function (Utility) {
+        // Invoke the unit being tested as necessary
+        expect(Utility.isEmpty(null)).toEqual(true);
+    }));
+
+    it("test isEmpty: empty array returnes true",  inject(function (Utility) {
+        // Invoke the unit being tested as necessary
+        expect(Utility.isEmpty([])).toEqual(true);
+    }));
+
+    it("test isEmpty: object with no properties returns true",  inject(function (Utility) {
+        // Invoke the unit being tested as necessary
+        expect(Utility.isEmpty({})).toEqual(true);
+    }));
+
+    it("test isEmpty: object with empty properties returns true", inject(function (Utility) {
+        // Invoke the unit being tested as necessary
+        expect(Utility.isEmpty({ prop1: null, prop2: undefined, prop3: [], prop4: '' })).toEqual(true);
+    }));
+
+    it("test isEmpty: nested object with empty properties returns true",  inject(function (Utility) {
+        // Invoke the unit being tested as necessary
+        expect(Utility.isEmpty({ prop1: { prop1: null, prop2: undefined, prop3: [], prop4: '' }, prop2: undefined, prop3: [], prop4: '' })).toEqual(true);
+    }));
+
+    it("test getKdvElements: on app update, when new kdv elements exists, update old values from local storage", function (done) {
+        inject(function (Utility, AppSettings, $rootScope, $q) {
+            store = {
+                'kdvDropdowns': '{"KdvRepositories":{"Dirt_DangerSignKDV":"Some array of old values"}}'
+            };
+
+            Utility.getAppEmbeddedKdvElements = function () {
+                return $q(function (resolve) {
+                    resolve({"KdvRepositories":{"Some_New_App_KDV":"Some array of new values"}});
+                });
+            };
+            Utility.getKdvElements()
+                    .then(function (result) {
+                        expect(result.data.KdvRepositories.Some_New_App_KDV).toEqual("Some array of new values"); //expect new kdv elements to be there
+                        expect(result.data.KdvRepositories.Dirt_DangerSignKDV).toEqual("Some array of old values"); //expect old kdv element to still be present
+                        done();
+                    });
+
+            $rootScope.$apply();
+        });
     });
 
-    it("test isEmpty: empty array returnes true", function () {
-        // Invoke the unit being tested as necessary
-        expect(utility.isEmpty([])).toEqual(true);
+    it("test refreshKdvElements: merges existing values with new values from API and is saved to storage", function (done) {
+        inject(function (Utility, AppSettings, $rootScope, $q) {
+            Utility.getAppEmbeddedKdvElements = function () {
+                return $q(function (resolve) {
+                    resolve({"KdvRepositories": { "Some_Old_KDV": "Some array of old values" }});
+                });
+            };
+            Utility._getDropdownsFromApi = function() {
+                return $q(function (resolve) {
+                    resolve({"KdvRepositories": { "Some_New_API_Kdv": "Some array of new values" }});
+                });
+            };
+
+            Utility._refreshKdvElements()
+                    .then(function () {
+                        var storeObs = JSON.parse(store.kdvDropdowns);
+                        expect(storeObs.KdvRepositories["Some_Old_KDV"]).toEqual("Some array of old values");
+                        expect(storeObs.KdvRepositories["Some_New_API_Kdv"]).toEqual("Some array of new values");
+                        done();
+                    });
+
+            $rootScope.$apply();
+        });
     });
 
-    it("test isEmpty: object with no properties returns true", function () {
-        // Invoke the unit being tested as necessary
-        expect(utility.isEmpty({})).toEqual(true);
-    });
+    it("test refreshKdvElements: new values from API overrites exsting items in storage", function (done) {
+        inject(function (Utility, AppSettings, $rootScope, $q) {
+            Utility.getAppEmbeddedKdvElements = function () {
+                return $q(function (resolve) {
+                    resolve({ "KdvRepositories": { "Some_Existing_Kdv": [1, 2, 3] } });
+                });
+            };
+            Utility._getDropdownsFromApi = function () {
+                return $q(function (resolve) {
+                    resolve({ "KdvRepositories": { "Some_Existing_Kdv": [2,3,4] } });
+                });
+            };
 
-    it("test isEmpty: object with empty properties returns true", function () {
-        // Invoke the unit being tested as necessary
-        expect(utility.isEmpty({prop1:null, prop2:undefined, prop3:[], prop4:''})).toEqual(true);
-    });
+            Utility._refreshKdvElements()
+                    .then(function () {
+                        var storeObs = JSON.parse(store.kdvDropdowns);
+                        expect(storeObs.KdvRepositories["Some_Existing_Kdv"]).toEqual([2, 3, 4]);
+                        done();
+                    });
 
-    it("test isEmpty: nested object with empty properties returns true", function () {
-        // Invoke the unit being tested as necessary
-        expect(utility.isEmpty({ prop1: { prop1: null, prop2: undefined, prop3: [], prop4: '' }, prop2: undefined, prop3: [], prop4: '' })).toEqual(true);
+            $rootScope.$apply();
+        });
     });
 });

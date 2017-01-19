@@ -20,9 +20,9 @@
     </h1>
     <div class='clearfix'>
       <div class='fl pad1y space-right2'>
-        <span class="strong">6.25% </span>
+        <span class="strong">5% </span>
         <span class="quiet">Statements</span>
-        <span class='fraction'>1/16</span>
+        <span class='fraction'>1/20</span>
       </div>
       <div class='fl pad1y space-right2'>
         <span class="strong">0% </span>
@@ -32,12 +32,12 @@
       <div class='fl pad1y space-right2'>
         <span class="strong">0% </span>
         <span class="quiet">Functions</span>
-        <span class='fraction'>0/6</span>
+        <span class='fraction'>0/8</span>
       </div>
       <div class='fl pad1y space-right2'>
-        <span class="strong">6.25% </span>
+        <span class="strong">5% </span>
         <span class="quiet">Lines</span>
-        <span class='fraction'>1/16</span>
+        <span class='fraction'>1/20</span>
       </div>
     </div>
   </div>
@@ -76,7 +76,16 @@
 31
 32
 33
-34</td><td class="line-coverage quiet"><span class="cline-any cline-yes">1×</span>
+34
+35
+36
+37
+38
+39
+40
+41
+42
+43</td><td class="line-coverage quiet"><span class="cline-any cline-yes">1×</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -86,7 +95,6 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -108,18 +116,27 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">﻿angular
     .module('RegObs')
     .component('mapMenu', {
         templateUrl: 'app/directives/mapmenu/mapmenu.html',
-        controller: <span class="fstat-no" title="function not covered" >function (AppSettings, $state, OfflineMap, $cordovaInAppBrowser) {</span>
+        controller: <span class="fstat-no" title="function not covered" >function (AppSettings, $state, OfflineMap, $cordovaInAppBrowser, $scope) {</span>
 <span class="cstat-no" title="statement not covered" >            'ngInject';</span>
 <span class="cstat-no" title="statement not covered" >            var ctrl = this;</span>
-&nbsp;
-<span class="cstat-no" title="statement not covered" >            ctrl.settings = AppSettings.data;</span>
+           
 <span class="cstat-no" title="statement not covered" >            ctrl.opacityArray = [{ name: 'Heldekkende', value: 1.0 }, { name: '75% synlig', value: 0.75 }, { name: '50% synlig', value: 0.50 }, { name: '25% synlig', value: 0.25 }];</span>
-<span class="cstat-no" title="statement not covered" >            ctrl.daysBackArray = [{ name: '1 dag tilbake i tid', value: 1 }, { name: '2 dager tilbake i tid', value: 2 }, { name: '3 dager tilbake i tid', value: 3 }, { name: '4 dager tilbake i tid', value: 4 }, { name: '5 dager tilbake i tid', value: 5 }, { name: '6 dager tilbake i tid', value: 6 }, { name: '7 dager tilbake i tid', value: 7 }];</span>
+<span class="cstat-no" title="statement not covered" >            ctrl.daysBackArray = [{ name: '1 dag tilbake i tid', value: 1 }, { name: '2 dager tilbake i tid', value: 2 }, { name: '3 dager tilbake i tid', value: 3 }, { name: '1 uke tilbake i tid', value: 7 }, { name: '2 uker tilbake i tid', value: 14 }];</span>
 &nbsp;
 <span class="cstat-no" title="statement not covered" >            ctrl.onSettingsChanged = <span class="fstat-no" title="function not covered" >function() {</span></span>
 <span class="cstat-no" title="statement not covered" >                AppSettings.save();</span>
@@ -141,6 +158,16 @@
 <span class="cstat-no" title="statement not covered" >            ctrl.openStatKart = <span class="fstat-no" title="function not covered" >function() {</span></span>
 <span class="cstat-no" title="statement not covered" >                $cordovaInAppBrowser.open('http://kartverket.no/', '_system');</span>
             };
+&nbsp;
+<span class="cstat-no" title="statement not covered" >            ctrl.init = <span class="fstat-no" title="function not covered" >function() {</span></span>
+<span class="cstat-no" title="statement not covered" >                ctrl.settings = AppSettings.data;</span>
+            };
+&nbsp;
+<span class="cstat-no" title="statement not covered" >            $scope.$on('$regObs:appReset', <span class="fstat-no" title="function not covered" >function() {</span></span>
+<span class="cstat-no" title="statement not covered" >                ctrl.init();</span>
+            });
+&nbsp;
+<span class="cstat-no" title="statement not covered" >            ctrl.init();</span>
         }
     });</pre></td></tr>
 </table></pre>
@@ -148,7 +175,7 @@
 </div><!-- /wrapper -->
 <div class='footer quiet pad2 space-top1 center small'>
   Code coverage
-  generated by <a href="http://istanbul-js.org/" target="_blank">istanbul</a> at Mon Jan 16 2017 12:12:19 GMT+0100 (W. Europe Standard Time)
+  generated by <a href="http://istanbul-js.org/" target="_blank">istanbul</a> at Thu Jan 19 2017 13:36:30 GMT+0100 (W. Europe Standard Time)
 </div>
 </div>
 <script src="../../../prettify.js"></script>
