@@ -147,7 +147,6 @@ angular
 
         function save() {
             LocalStorage.setObject(storageKey, ObsLocation.data);
-            //$rootScope.$broadcast('$regobs:obsLocationSaved');
             $rootScope.$broadcast('$regObs:obsLocationSaved');
         }
 

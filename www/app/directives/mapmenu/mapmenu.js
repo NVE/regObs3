@@ -2,7 +2,7 @@
     .module('RegObs')
     .component('mapMenu', {
         templateUrl: 'app/directives/mapmenu/mapmenu.html',
-        controller: function (AppSettings, $state, OfflineMap, $cordovaInAppBrowser, $scope) {
+        controller: function (AppSettings, $state, OfflineMap, $cordovaInAppBrowser, $scope, Utility) {
             'ngInject';
             var ctrl = this;
            
@@ -26,8 +26,34 @@
                });
             };
 
-            ctrl.openStatKart = function() {
-                $cordovaInAppBrowser.open('http://kartverket.no/', '_system');
+            ctrl.openUrl = function (url) {
+                $cordovaInAppBrowser.open(url, '_system');
+            };
+
+            ctrl.getMapsForCurrentAppMode = function() {
+                return ctrl.settings.maps.filter(function(item) {
+                    return item.geoHazardTid === Utility.getCurrentGeoHazardTid();
+                });
+            };
+
+            ctrl.getTileDescription = function(tile) {
+                var t = AppSettings.getTileByName(tile.name);
+                if (t) {
+                    return t.description;
+                }
+                return '';
+            };
+
+            ctrl.getTileLabel = function(tile) {
+                var t = AppSettings.getTileByName(tile.name);
+                if (t) {
+                    return t.labelTemplate;
+                }
+                return null;
+            };
+
+            ctrl.hasTileLabel = function(tile) {
+                return true && ctrl.getTileLabel(tile);
             };
 
             ctrl.init = function() {

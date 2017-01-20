@@ -1,4 +1,4 @@
-﻿angular.module('RegObs').factory('StoredLocationMarker', function (MapSelectableItem, $translate, Utility, ObsLocation, Registration, AppSettings, Trip, $state) {
+﻿angular.module('RegObs').factory('StoredLocationMarker', function (MapSelectableItem, $translate, Utility, ObsLocation, Registration, AppSettings, Trip, $state, $rootScope) {
 
     /**
      * Stored location marker
@@ -67,6 +67,7 @@
                             Uncertainty: '0',
                             UTMSourceTID: ObsLocation.source.storedPosition
                         });
+                        $rootScope.$broadcast('$regObs:nearbyLocationRegistration');
                         Registration.createAndGoToNewRegistration();
                     },
                     isVisible: function() {

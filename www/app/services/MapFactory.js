@@ -415,7 +415,20 @@
 
             $rootScope.$on('$regObs:registrationSaved', function () {
                 service._enableOrDisableDraggableLocation();
-                map.invalidateSize(); //Footer bar could have been removed, invalidate map size
+                $timeout(function () {
+                    map.invalidateSize(); //Footer bar could have been removed, invalidate map size
+                }, 50);
+            });
+
+            $rootScope.$on('$regObs:obsLocationSaved', function () {
+                service._enableOrDisableDraggableLocation();
+                obsLocationMarker.refresh();
+            });
+
+            $rootScope.$on('$regObs:nearbyLocationRegistration', function () {
+                $timeout(function () {
+                    service._setSelectedItem(obsLocationMarker);
+                });
             });
 
             service._isInitialized = true; //map is created!
@@ -516,33 +529,26 @@
          * @returns {} 
          */
         service.updateObservationsInMap = function () {
-            if (map) {
-                var center = map.getCenter();
-                var radius = service._getObservationSearchRadius();
-                var geoHazardTid = Utility.getCurrentGeoHazardTid();
+            if (!map) throw new Error('Map not initialized!');
 
-                var workFunc = function (onProgress, cancel) {
-                    return Observations
-                        .updateObservationsWithinRadius(center.lat,
-                            center.lng,
-                            radius,
-                            geoHazardTid,
-                            new RegObs.ProggressStatus(),
-                            onProgress,
-                            cancel);
-                };
+            var center = map.getCenter();
+            var radius = service._getObservationSearchRadius();
+            var geoHazardTid = Utility.getCurrentGeoHazardTid();
 
-                RegobsPopup.downloadProgress('Oppdaterer kartet med det siste fra regObs',
-                    workFunc,
-                    { longTimoutMessageDelay: 10, closeOnComplete: true })
-                .then(function () {
-                    AppLogging.log('progress completed');
-                })
-                .catch(function () {
-                    AppLogging.log('progress cancelled');
-                })
-                .finally(service.refresh);
-            }
+            var workFunc = function (onProgress, cancel) {
+                return Observations
+                    .updateObservationsWithinRadius(center.lat,
+                        center.lng,
+                        radius,
+                        geoHazardTid,
+                        new RegObs.ProggressStatus(),
+                        onProgress,
+                        cancel);
+            };
+
+            return RegobsPopup.downloadProgress('Oppdaterer data med det siste fra regObs',
+                workFunc,
+                { longTimoutMessageDelay: 10, closeOnComplete: true }).then(service.refresh);
         };
 
         /**
@@ -571,7 +577,7 @@
          * @returns {} 
          */
         service._checkSelectedItemGeoHazard = function () {
-            if (service._selectedItem && service._selectedItem.getGeoHazardId() !== Utility.getCurrentGeoHazardTid()) {
+            if (service._selectedItem && service._selectedItem !== obsLocationMarker && service._selectedItem.getGeoHazardId() !== Utility.getCurrentGeoHazardTid()) {
                 service.clearSelectedMarkers();
             }
         };

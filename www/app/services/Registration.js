@@ -37,26 +37,7 @@ angular
             };
         };
 
-        Registration._checkAndSetObsLocation = function() {
-            if (!ObsLocation.isSet()) {
-                var obsLoc = {
-                    UTMSourceTID: ObsLocation.source.fetchedFromGPS
-                };
-                if (UserLocation.hasUserLocation()) {
-                    var lastPos = UserLocation.getLastUserLocation();
-                    obsLoc.Latitude = lastPos.latitude.toString();
-                    obsLoc.Longitude = lastPos.longitude.toString();
-                    obsLoc.Uncertainty = lastPos.accuracy.toString();
-                    obsLoc.UTMSourceTID = ObsLocation.source.fetchedFromGPS;
-                } else {
-                    obsLoc.Latitude = "62.5"; //Setting to default center when no user location or position set manually
-                    obsLoc.Longitude = "10";  //this should rearly happen. New registration should be disabled when no location found.
-                    obsLoc.Uncertainty = '0';
-                    obsLoc.UTMSourceTID = ObsLocation.source.clickedInMap;
-                }
-                ObsLocation.set(obsLoc);
-            }
-        };
+        
 
         Registration.createAndGoToNewRegistration = function () {
             var appMode = AppSettings.getAppMode();
@@ -72,8 +53,8 @@ angular
                 }
             };
 
-            Registration._checkAndSetObsLocation(); //TODO: fjern denne og heller sjekk ved innsending?
-            
+
+
             if (Registration.isEmpty()) {
                 Registration.createNew(Utility.geoHazardTid(appMode));
                 navigate();
@@ -82,7 +63,7 @@ angular
                         'Du har en påbegynt ' +
                         Utility.geoHazardNames(Registration.data.GeoHazardTID).toLowerCase() +
                         '-registrering, dersom du går videre blir denne slettet. Vil du slette for å gå videre?')
-                    .then(function(response) {
+                    .then(function (response) {
                         if (response) {
                             Registration.createNew(Utility.geoHazardTid(appMode));
                             navigate();
@@ -90,7 +71,7 @@ angular
                     });
             } else {
                 navigate();
-            }           
+            }
         };
 
         function resetRegistration() {
@@ -219,13 +200,26 @@ angular
             return Registration.isOfType(type) && !Registration.isEmpty();
         };
 
+        Registration._setObsLocationToUserPositionIfNotSet = function () {
+            if (!ObsLocation.isSet() && UserLocation.hasUserLocation()) {
+                var lastPos = UserLocation.getLastUserLocation();
+                var obsLoc = {
+                    Latitude: lastPos.latitude.toString(),
+                    Longitude: lastPos.longitude.toString(),
+                    Uncertainty: lastPos.accuracy.toString(),
+                    UTMSourceTID: ObsLocation.source.fetchedFromGPS
+                }
+                ObsLocation.set(obsLoc);
+            }
+        };
+
         Registration.send = function (force) {
             var postUrl = AppSettings.getEndPoints().postRegistration;
             if (!Registration.isEmpty() || Registration.unsent.length) {
+                Registration._setObsLocationToUserPositionIfNotSet();
                 if (!ObsLocation.isSet()) {
-                    return RegobsPopup.alert('Posisjon ikke satt', 'Kan ikke sende inn uten posisjon.');
+                    RegobsPopup.alert('Posisjon ikke satt', 'Kan ikke sende inn uten posisjon. Vennligst sett posisjon i kartet');
                 } else if (!User.getUser().anonymous || force) {
-
                     prepareRegistrationForSending();
 
                     if (Registration.unsent.length) {
@@ -236,8 +230,6 @@ angular
                     }
 
                     Registration.save();
-
-
                 } else {
                     RegobsPopup.confirm('Du er ikke innlogget', 'Vil du logge inn, eller fortsette med anonym innsending?', 'Send', 'Logg inn')
                         .then(function (confirmed) {
@@ -249,9 +241,6 @@ angular
                         });
                 }
             }
-
-
-
         };
 
         Registration.initPropertyAsArray = function (prop) {
@@ -285,7 +274,7 @@ angular
 
         Registration.hasImageForRegistration = function (prop) {
             var registrationTid = Utility.registrationTid(prop);
-            return Registration.data.Picture && Registration.data.Picture.filter(function(item) { return item.RegistrationTID === registrationTid }).length > 0;
+            return Registration.data.Picture && Registration.data.Picture.filter(function (item) { return item.RegistrationTID === registrationTid }).length > 0;
         };
 
         /*Registration.propertyArrayExists = function (prop) {

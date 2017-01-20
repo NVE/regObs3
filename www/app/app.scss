@@ -199,46 +199,6 @@ input:focus, select:focus, textarea:focus {
     }
 }
 
-.steepness-info {
-    padding: 10px;
-    margin-left: 20px;
-    font-size: smaller;
-}
-
-.box {
-    width: 20px;
-    height: 20px;
-    border: 2px solid grey;
-    display: inline-block;
-    position: relative;
-    bottom: -5px;
-    margin-right: 10px;
-}
-
-.box.green {
-    background: #207100;
-}
-
-.box.yellow {
-    background: #FFFF00;
-}
-
-.box.orange {
-    background: #FFB200;
-}
-
-.box.lightred {
-    background: #FF6500;
-}
-
-.box.darkred {
-    background: #E80300;
-}
-
-.box.brownred {
-    background: #840000;
-}
-
 .regobs-menu-text {
     background-color: #444 !important;
     color: #fff !important;
@@ -294,6 +254,10 @@ input:focus, select:focus, textarea:focus {
 
 .smaller-list-items .item-icon-left {
     padding-left: 44px;
+}
+
+.small-text {
+    font-size: small;
 }
 
 
