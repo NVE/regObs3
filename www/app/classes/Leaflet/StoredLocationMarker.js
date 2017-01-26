@@ -82,6 +82,10 @@
 
         getHeader: function () {           
            return this.storedLocation.Name;         
+        },
+
+        getId: function () {
+            return this.storedLocation.LocationId;
         }
     });
 

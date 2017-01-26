@@ -52,13 +52,30 @@
         },
 
         _getIcon: function (isSet) {
-            return L.AwesomeMarkers.icon({
-                icon: isSet ? 'ion-flag' : 'arrow-move',
-                prefix: 'ion',
-                markerColor: isSet ? 'gray' : 'green',
-                extraClasses: 'map-obs-marker' + (isSet ? ' map-obs-marker-set' : '')
-            });
+            //return L.AwesomeMarkers.icon({
+            //    icon: isSet ? 'ion-flag' : 'arrow-move',
+            //    prefix: 'ion',
+            //    markerColor: isSet ? 'gray' : 'green',
+            //    extraClasses: 'map-obs-marker' + (isSet ? ' map-obs-marker-set' : '')
+            //});
+            if (isSet) {
+                return this._iconSet;
+            } else {
+                return this._iconDrag;
+            }
         },
+        _iconSet: L.AwesomeMarkers.icon({
+            icon: 'ion-flag',
+            prefix: 'ion',
+            markerColor: 'gray',
+            extraClasses: 'map-obs-marker map-obs-marker-set'
+        }),
+        _iconDrag: L.AwesomeMarkers.icon({
+            icon: 'arrow-move',
+            prefix: 'ion',
+            markerColor: 'green',
+            extraClasses: 'map-obs-marker'
+        }),
 
         initialize: function (latlng, options) {
             var self = this;
@@ -103,9 +120,9 @@
 
         setUserPosition: function (latlng) {
             var self = this;
-            this.options.userPosition = latlng;
+            self.options.userPosition = latlng;
             if (!self.isDragging) {
-                this.refresh();
+                self.refresh();
             }
         },
 
@@ -146,7 +163,10 @@
                     self._setLatLng(newLatLng);
                 }
             }
-            self.setIcon(self._getIcon(ObsLocation.isSet()));
+            var icon = self._getIcon(ObsLocation.isSet());
+            if (icon !== this.options.icon) {
+                self.setIcon(icon);
+            }
         },
 
         getHeader: function () {
@@ -170,9 +190,9 @@
 
         getTypeDescription: function () {
             if (this._isObsLocSetManually()) {
-                return $translate.instant('MARKED_POSITION');
+                return 'MARKED_POSITION';
             } else if (this._isObsLocStoredPosition()) {
-                return $translate.instant('PREVIOUS_USED_PLACE');
+                return 'PREVIOUS_USED_PLACE';
             }
             return '';
         }

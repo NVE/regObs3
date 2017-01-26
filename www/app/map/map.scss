@@ -151,10 +151,6 @@
     margin-top: -15px;
 }
 
-.obs-marker-cluster {
-    opacity: 0.8 !important;
-}
-
 .nearby-location-marker-inner {
     border: 5px solid brown;
     border-radius: 20px;
@@ -195,12 +191,14 @@
 .observation-pin-icon {
     transform: rotate(45deg);
     display: block;
-    position: relative;
-    left: -5px;
+    position: absolute;
+    left: -10px;
     top: 6px;
-    width: 33px;
+    width: 30px;
+    height: 30px;
     text-align: center;
     opacity: 1.0;
+    line-height: 0.5;
 }
 
 .observation-pin-icon.large-icon {
@@ -211,6 +209,15 @@
 
 .selected .observation-pin-icon {
     margin: -1px;
+}
+
+.obs-marker-cluster {
+    opacity: 0.8 !important;
+}
+
+.obs-marker-cluster-two-line {
+    font-size: 10px;
+    margin-top: -4px;
 }
 
 .menu-observation-pin {
@@ -224,6 +231,7 @@
 .map-help-pin {
     display: inline-block;
     padding: 10px;
+    margin-top: 10px;
 }
 
 .map-help-pin-text {
@@ -233,10 +241,10 @@
 }
 
 .map-selected-info {
-    height: 70px;
+    height: 72px;
     width: 100%;
     position: fixed;
-    bottom: 0px;
+    bottom: -2px;
     background-color: white;
     z-index: 9998;
     margin: 0px !important;
@@ -247,6 +255,7 @@
 .map-selected-info-inner {
     padding-bottom: 5px;
     height: 70px;
+    margin: 0px;
 }
 
 .hasFooter .map-selected-info {

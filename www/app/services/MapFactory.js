@@ -105,20 +105,37 @@
                 });
             };
             unselectFunc(layerGroups.observations.getLayers());
-            unselectFunc(layerGroups.locations.getLayers());
+            //unselectFunc(layerGroups.locations.getLayers());
             unselectFunc([obsLocationMarker]);
+        };
+
+        service._getMarker = function(id) {
+            if (layerGroups && layerGroups.observations) {
+                var existingLayers = layerGroups.observations.getLayers().filter(function (item) {
+                    if (item.getId) {
+                        return item.getId() === id;
+                    } else {
+                        return false;
+                    }
+                });
+                if (existingLayers.length > 0) {
+                    return existingLayers[0];
+                }
+            }
+            return null;
         };
 
         /**
          * Draw observations stored in presistant storage
          */
         service._drawObservations = function () {
-            layerGroups.observations.clearLayers();
             Observations.getStoredObservations(Utility.getCurrentGeoHazardTid(), true).then(function (result) {
                 result.forEach(function (obsJson) {
                     var m = new RegObsClasses.ObservationMarker(obsJson);
-                    m.on('selected', function (event) { service._setSelectedItem(event.target); });
-                    m.addTo(layerGroups.observations);
+                    if (!service._getMarker(m.getId())) {
+                        m.on('selected', function(event) { service._setSelectedItem(event.target); });
+                        m.addTo(layerGroups.observations);
+                    }
                 });
             });
         };
@@ -137,22 +154,22 @@
          */
         service._drawStoredLocations = function () {
             service._checkIfInitialized();
-            service._clearAllStoredLocations();
+            //service._clearAllStoredLocations();
             Observations.getLocations(Utility.getCurrentGeoHazardTid()).forEach(function (loc) {
                 var m = new RegObsClasses.StoredLocationMarker(loc);
                 m.on('selected', function (event) { service._setSelectedItem(event.target); });
-                m.addTo(layerGroups.locations);
+                m.addTo(layerGroups.observations);
             });
         };
 
-        /**
-         * Hide all stored locations
-         * @returns {} 
-         */
-        service._clearAllStoredLocations = function () {
-            service._checkIfInitialized();
-            layerGroups.locations.clearLayers();
-        };
+        ///**
+        // * Hide all stored locations
+        // * @returns {} 
+        // */
+        //service._clearAllStoredLocations = function () {
+        //    service._checkIfInitialized();
+        //    layerGroups.locations.clearLayers();
+        //};
 
 
         /**
@@ -306,7 +323,7 @@
         service._createLayerGroups = function () {
             layerGroups = { //Layers are added in order
                 tiles: L.layerGroup().addTo(map),
-                locations: new RegObsClasses.MarkerClusterGroup({ icon: 'ion-pin' }).addTo(map),
+                //locations: new RegObsClasses.MarkerClusterGroup({ icon: 'ion-pin' }).addTo(map),
                 observations: new RegObsClasses.MarkerClusterGroup({ icon: 'ion-eye' }).addTo(map),
                 user: L.layerGroup().addTo(map)
             };
@@ -368,7 +385,7 @@
             tiles = [];
 
             AppSettings.tiles.forEach(function (tile) {
-                var t = L.tileLayerRegObs(tile.url, { folder: AppSettings.mapFolder, name: tile.name, debugFunc: AppSettings.debugTiles ? AppLogging.debug : null });
+                var t = new RegObsClasses.RegObsTileLayer(tile.url, { reuseTiles: false, folder: AppSettings.mapFolder, name: tile.name, embeddedUrl: tile.embeddedUrl, embeddedMaxZoom: tile.embeddedMaxZoom, debugFunc: AppSettings.debugTiles ? AppLogging.debug : null });
                 tiles.push(t);
             });
             tiles[0].addTo(layerGroups.tiles);
@@ -400,6 +417,12 @@
                     service._disableFollowMode();
                 }
             });
+
+            //map.on('zoomend',
+            //    function() {
+            //        var bounds = service.calculateXYZListFromBounds(map.getBounds(), 1, 9);
+            //        AppLogging.log('Map xyz list: ' + JSON.stringify(bounds));
+            //    });
 
             obsLocationMarker = new RegObsClasses.CurrentObsLocationMarker(center, { draggable: service._isSetLocationManuallyPossible() });
             obsLocationMarker.on('selected', function (event) { service._setSelectedItem(event.target); });
@@ -541,7 +564,6 @@
                         center.lng,
                         radius,
                         geoHazardTid,
-                        new RegObs.ProggressStatus(),
                         onProgress,
                         cancel);
             };
@@ -587,21 +609,16 @@
          * @returns {} 
          */
         service.refresh = function () {
-
             service._checkSelectedItemGeoHazard();
             service._redrawTilesForThisGeoHazard();
 
+            service._removeObservations(); //clear all markers
             if (AppSettings.data.showPreviouslyUsedPlaces) {
                 service._drawStoredLocations();
-            } else {
-                service._clearAllStoredLocations();
-            }
+            } 
             if (AppSettings.data.showObservations) {
                 service._drawObservations();
-            } else {
-                service._removeObservations();
             }
-
             service.invalidateSize();
         };
 

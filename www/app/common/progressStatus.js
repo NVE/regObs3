@@ -15,6 +15,14 @@ RegObs.ProggressStatus = (function () {
             _complete++;
         };
 
+        self.setComplete = function(complete) {
+            _complete = complete;
+        };
+
+        self.setErrors = function(errors) {
+            _errors = errors;
+        };
+
         self.setTotal = function(total) {
             _total = total;
         };

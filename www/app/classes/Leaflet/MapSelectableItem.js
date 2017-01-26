@@ -2,7 +2,7 @@
  * Selectable map item
  */
 angular.module('RegObs')
-    .factory('MapSelectableItem', function ($state, Registration, Utility, Trip, AppSettings) {
+    .factory('MapSelectableItem', function ($state, Registration, Trip, AppSettings) {
 
         var MapSelectableItem = L.Marker.extend({
             options: {

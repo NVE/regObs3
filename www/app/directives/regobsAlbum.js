@@ -9,7 +9,7 @@ angular
             template: [
                 '<div>',
                     '<button class="button button-clear button-block" ng-click="click()" ng-hide="imgLoading">',
-                        '<i class="icon calm ion-images"></i> Album',
+                        '<i class="icon stable ion-images"></i> Album',
                     '</button>',
                     '<ion-spinner class="spinner-light" ng-if="imgLoading"></ion-spinner>',
                 '</div>'

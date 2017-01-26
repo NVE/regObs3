@@ -20,9 +20,9 @@
     </h1>
     <div class='clearfix'>
       <div class='fl pad1y space-right2'>
-        <span class="strong">5.56% </span>
+        <span class="strong">44.44% </span>
         <span class="quiet">Statements</span>
-        <span class='fraction'>1/18</span>
+        <span class='fraction'>8/18</span>
       </div>
       <div class='fl pad1y space-right2'>
         <span class="strong">0% </span>
@@ -30,14 +30,14 @@
         <span class='fraction'>0/4</span>
       </div>
       <div class='fl pad1y space-right2'>
-        <span class="strong">0% </span>
+        <span class="strong">20% </span>
         <span class="quiet">Functions</span>
-        <span class='fraction'>0/5</span>
+        <span class='fraction'>1/5</span>
       </div>
       <div class='fl pad1y space-right2'>
-        <span class="strong">5.56% </span>
+        <span class="strong">44.44% </span>
         <span class="quiet">Lines</span>
-        <span class='fraction'>1/18</span>
+        <span class='fraction'>8/18</span>
       </div>
     </div>
   </div>
@@ -77,54 +77,54 @@
 32</td><td class="line-coverage quiet"><span class="cline-any cline-yes">1×</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">15×</span>
+<span class="cline-any cline-yes">15×</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">15×</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">15×</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">15×</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">15×</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">15×</span>
 <span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">﻿angular
     .module('RegObs')
-    .factory('UserLocation', <span class="fstat-no" title="function not covered" >function (LocalStorage, Utility) {</span>
-<span class="cstat-no" title="statement not covered" >        var key = 'LastUserLocation';</span>
-<span class="cstat-no" title="statement not covered" >        var service = this;</span>
+    .factory('UserLocation', function (LocalStorage, Utility) {
+        var key = 'LastUserLocation';
+        var service = this;
 &nbsp;
-<span class="cstat-no" title="statement not covered" >        service.getLastUserLocation = <span class="fstat-no" title="function not covered" >function() {</span></span>
+        service.getLastUserLocation = <span class="fstat-no" title="function not covered" >function() {</span>
 <span class="cstat-no" title="statement not covered" >            return LocalStorage.getObject(key);</span>
         };
 &nbsp;
-<span class="cstat-no" title="statement not covered" >        service.setLastUserLocation = <span class="fstat-no" title="function not covered" >function(position)</span></span>
+        service.setLastUserLocation = <span class="fstat-no" title="function not covered" >function(position)</span>
         {
 <span class="cstat-no" title="statement not covered" >            return LocalStorage.setObject(key, { latitude:position.latitude, longitude: position.longitude, accuracy: position.accuracy, timestamp: position.timestamp });</span>
         };
 &nbsp;
-<span class="cstat-no" title="statement not covered" >        service.hasUserLocation = <span class="fstat-no" title="function not covered" >function() {</span></span>
+        service.hasUserLocation = <span class="fstat-no" title="function not covered" >function() {</span>
 <span class="cstat-no" title="statement not covered" >            return service.getLastUserLocation() ? true : false;</span>
         }
 &nbsp;
-<span class="cstat-no" title="statement not covered" >        service.getUserDistanceFrom = <span class="fstat-no" title="function not covered" >function (lat, lng) {</span></span>
+        service.getUserDistanceFrom = <span class="fstat-no" title="function not covered" >function (lat, lng) {</span>
 <span class="cstat-no" title="statement not covered" >            var lastUserLoc = service.getLastUserLocation();</span>
 <span class="cstat-no" title="statement not covered" >            var distance = {valid:false};</span>
 <span class="cstat-no" title="statement not covered" >            if (lastUserLoc) {</span>
@@ -135,14 +135,14 @@
 <span class="cstat-no" title="statement not covered" >            return distance;</span>
         };
 &nbsp;
-<span class="cstat-no" title="statement not covered" >        return service;</span>
+        return service;
     });</pre></td></tr>
 </table></pre>
 <div class='push'></div><!-- for sticky footer -->
 </div><!-- /wrapper -->
 <div class='footer quiet pad2 space-top1 center small'>
   Code coverage
-  generated by <a href="http://istanbul-js.org/" target="_blank">istanbul</a> at Thu Jan 19 2017 13:36:30 GMT+0100 (W. Europe Standard Time)
+  generated by <a href="http://istanbul-js.org/" target="_blank">istanbul</a> at Mon Jan 23 2017 11:09:49 GMT+0100 (W. Europe Standard Time)
 </div>
 </div>
 <script src="../../prettify.js"></script>

@@ -20,24 +20,24 @@
     </h1>
     <div class='clearfix'>
       <div class='fl pad1y space-right2'>
-        <span class="strong">0.37% </span>
+        <span class="strong">0.36% </span>
         <span class="quiet">Statements</span>
-        <span class='fraction'>1/270</span>
+        <span class='fraction'>1/277</span>
       </div>
       <div class='fl pad1y space-right2'>
         <span class="strong">0% </span>
         <span class="quiet">Branches</span>
-        <span class='fraction'>0/110</span>
+        <span class='fraction'>0/111</span>
       </div>
       <div class='fl pad1y space-right2'>
         <span class="strong">0% </span>
         <span class="quiet">Functions</span>
-        <span class='fraction'>0/65</span>
+        <span class='fraction'>0/67</span>
       </div>
       <div class='fl pad1y space-right2'>
-        <span class="strong">0.38% </span>
+        <span class="strong">0.37% </span>
         <span class="quiet">Lines</span>
-        <span class='fraction'>1/265</span>
+        <span class='fraction'>1/271</span>
       </div>
     </div>
   </div>
@@ -703,7 +703,15 @@
 658
 659
 660
-661</td><td class="line-coverage quiet"><span class="cline-any cline-yes">1×</span>
+661
+662
+663
+664
+665
+666
+667
+668
+669</td><td class="line-coverage quiet"><span class="cline-any cline-yes">1×</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -1117,8 +1125,23 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -1220,14 +1243,13 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -1235,15 +1257,9 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -1697,7 +1713,7 @@
          * Could location be set manually?
          * @returns {} 
          */
-<span class="cstat-no" title="statement not covered" >        service._isSetLocationManuallyPossible = <span class="fstat-no" title="function not covered" >function() {</span></span>
+<span class="cstat-no" title="statement not covered" >        service._isSetLocationManuallyPossible = <span class="fstat-no" title="function not covered" >function () {</span></span>
 <span class="cstat-no" title="statement not covered" >            return Registration.isEmpty() || !ObsLocation.isSet();</span>
         }
 &nbsp;
@@ -1705,7 +1721,7 @@
          * Enable or disable draggable location marker
          * @returns {} 
          */
-<span class="cstat-no" title="statement not covered" >        service._enableOrDisableDraggableLocation = <span class="fstat-no" title="function not covered" >function() {</span></span>
+<span class="cstat-no" title="statement not covered" >        service._enableOrDisableDraggableLocation = <span class="fstat-no" title="function not covered" >function () {</span></span>
 <span class="cstat-no" title="statement not covered" >            if (service._isSetLocationManuallyPossible()) {</span>
 <span class="cstat-no" title="statement not covered" >                obsLocationMarker.dragging.enable();</span>
             } else {
@@ -1776,9 +1792,24 @@
 <span class="cstat-no" title="statement not covered" >            obsLocationMarker.on('obsLocationCleared', service._onObsLocationCleared);</span>
 <span class="cstat-no" title="statement not covered" >            obsLocationMarker.addTo(layerGroups.user);</span>
 &nbsp;
-<span class="cstat-no" title="statement not covered" >            $rootScope.$on('$regObs:registrationSaved', <span class="fstat-no" title="function not covered" >function() {</span></span>
+<span class="cstat-no" title="statement not covered" >            L.control.scale({ imperial: false }).addTo(map);</span>
+&nbsp;
+<span class="cstat-no" title="statement not covered" >            $rootScope.$on('$regObs:registrationSaved', <span class="fstat-no" title="function not covered" >function () {</span></span>
 <span class="cstat-no" title="statement not covered" >                service._enableOrDisableDraggableLocation();</span>
-<span class="cstat-no" title="statement not covered" >                map.invalidateSize(); </span>//Footer bar could have been removed, invalidate map size
+<span class="cstat-no" title="statement not covered" >                $timeout(<span class="fstat-no" title="function not covered" >function () {</span></span>
+<span class="cstat-no" title="statement not covered" >                    map.invalidateSize(); </span>//Footer bar could have been removed, invalidate map size
+                }, 50);
+            });
+&nbsp;
+<span class="cstat-no" title="statement not covered" >            $rootScope.$on('$regObs:obsLocationSaved', <span class="fstat-no" title="function not covered" >function () {</span></span>
+<span class="cstat-no" title="statement not covered" >                service._enableOrDisableDraggableLocation();</span>
+<span class="cstat-no" title="statement not covered" >                obsLocationMarker.refresh();</span>
+            });
+&nbsp;
+<span class="cstat-no" title="statement not covered" >            $rootScope.$on('$regObs:nearbyLocationRegistration', <span class="fstat-no" title="function not covered" >function () {</span></span>
+<span class="cstat-no" title="statement not covered" >                $timeout(<span class="fstat-no" title="function not covered" >function () {</span></span>
+<span class="cstat-no" title="statement not covered" >                    service._setSelectedItem(obsLocationMarker);</span>
+                });
             });
 &nbsp;
 <span class="cstat-no" title="statement not covered" >            service._isInitialized = true; </span>//map is created!
@@ -1787,7 +1818,7 @@
 &nbsp;
 <span class="cstat-no" title="statement not covered" >            if (UserLocation.hasUserLocation()) {</span>
 <span class="cstat-no" title="statement not covered" >                service._onPositionUpdate(UserLocation.getLastUserLocation());</span>
-            }else <span class="cstat-no" title="statement not covered" >if (ObsLocation.isSet()) {</span>
+            } else <span class="cstat-no" title="statement not covered" >if (ObsLocation.isSet()) {</span>
 <span class="cstat-no" title="statement not covered" >                service.setView(L.latLng(ObsLocation.get().Latitude, ObsLocation.get().Longitude));</span>
             }
 &nbsp;
@@ -1879,33 +1910,26 @@
          * @returns {} 
          */
 <span class="cstat-no" title="statement not covered" >        service.updateObservationsInMap = <span class="fstat-no" title="function not covered" >function () {</span></span>
-<span class="cstat-no" title="statement not covered" >            if (map) {</span>
-<span class="cstat-no" title="statement not covered" >                var center = map.getCenter();</span>
-<span class="cstat-no" title="statement not covered" >                var radius = service._getObservationSearchRadius();</span>
-<span class="cstat-no" title="statement not covered" >                var geoHazardTid = Utility.getCurrentGeoHazardTid();</span>
+<span class="cstat-no" title="statement not covered" >            if (!map) <span class="cstat-no" title="statement not covered" >throw new Error('Map not initialized!');</span></span>
 &nbsp;
-<span class="cstat-no" title="statement not covered" >                var workFunc = <span class="fstat-no" title="function not covered" >function (onProgress, cancel) {</span></span>
-<span class="cstat-no" title="statement not covered" >                    return Observations</span>
-                        .updateObservationsWithinRadius(center.lat,
-                            center.lng,
-                            radius,
-                            geoHazardTid,
-                            new RegObs.ProggressStatus(),
-                            onProgress,
-                            cancel);
-                };
+<span class="cstat-no" title="statement not covered" >            var center = map.getCenter();</span>
+<span class="cstat-no" title="statement not covered" >            var radius = service._getObservationSearchRadius();</span>
+<span class="cstat-no" title="statement not covered" >            var geoHazardTid = Utility.getCurrentGeoHazardTid();</span>
 &nbsp;
-<span class="cstat-no" title="statement not covered" >                RegobsPopup.downloadProgress('Oppdaterer kartet med det siste fra regObs',</span>
-                    workFunc,
-                    { longTimoutMessageDelay: 10, closeOnComplete: true })
-                .then(<span class="fstat-no" title="function not covered" >function () {</span>
-<span class="cstat-no" title="statement not covered" >                    AppLogging.log('progress completed');</span>
-                })
-                .catch(<span class="fstat-no" title="function not covered" >function () {</span>
-<span class="cstat-no" title="statement not covered" >                    AppLogging.log('progress cancelled');</span>
-                })
-                .finally(service.refresh);
-            }
+<span class="cstat-no" title="statement not covered" >            var workFunc = <span class="fstat-no" title="function not covered" >function (onProgress, cancel) {</span></span>
+<span class="cstat-no" title="statement not covered" >                return Observations</span>
+                    .updateObservationsWithinRadius(center.lat,
+                        center.lng,
+                        radius,
+                        geoHazardTid,
+                        new RegObs.ProggressStatus(),
+                        onProgress,
+                        cancel);
+            };
+&nbsp;
+<span class="cstat-no" title="statement not covered" >            return RegobsPopup.downloadProgress('Oppdaterer data med det siste fra regObs',</span>
+                workFunc,
+                { longTimoutMessageDelay: 10, closeOnComplete: true }).then(service.refresh);
         };
 &nbsp;
         /**
@@ -1933,8 +1957,8 @@
          * Check if selected marker should med unselected if geohazard settings has been changed
          * @returns {} 
          */
-<span class="cstat-no" title="statement not covered" >        service._checkSelectedItemGeoHazard = <span class="fstat-no" title="function not covered" >function() {</span></span>
-<span class="cstat-no" title="statement not covered" >            if (service._selectedItem &amp;&amp; service._selectedItem.getGeoHazardId() !== Utility.getCurrentGeoHazardTid()) {</span>
+<span class="cstat-no" title="statement not covered" >        service._checkSelectedItemGeoHazard = <span class="fstat-no" title="function not covered" >function () {</span></span>
+<span class="cstat-no" title="statement not covered" >            if (service._selectedItem &amp;&amp; service._selectedItem !== obsLocationMarker &amp;&amp; service._selectedItem.getGeoHazardId() !== Utility.getCurrentGeoHazardTid()) {</span>
 <span class="cstat-no" title="statement not covered" >                service.clearSelectedMarkers();</span>
             }
         };
@@ -1967,7 +1991,7 @@
          * @returns {} 
          */
 <span class="cstat-no" title="statement not covered" >        service.startWatch = <span class="fstat-no" title="function not covered" >function () {</span></span>
-<span class="cstat-no" title="statement not covered" >            if (map) {              </span>
+<span class="cstat-no" title="statement not covered" >            if (map) {</span>
 <span class="cstat-no" title="statement not covered" >                document.addEventListener("deviceready",</span>
 <span class="fstat-no" title="function not covered" >                    function () {</span>
 <span class="cstat-no" title="statement not covered" >                        AppLogging.log('Start watching gps location');</span>
@@ -2029,7 +2053,7 @@
 </div><!-- /wrapper -->
 <div class='footer quiet pad2 space-top1 center small'>
   Code coverage
-  generated by <a href="http://istanbul-js.org/" target="_blank">istanbul</a> at Thu Jan 19 2017 13:36:30 GMT+0100 (W. Europe Standard Time)
+  generated by <a href="http://istanbul-js.org/" target="_blank">istanbul</a> at Mon Jan 23 2017 11:09:49 GMT+0100 (W. Europe Standard Time)
 </div>
 </div>
 <script src="../../prettify.js"></script>

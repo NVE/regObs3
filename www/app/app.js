@@ -448,7 +448,7 @@
             });
     }
 
-    function setup($ionicPlatform, Utility, AppLogging, Registration, Observations) {
+    function setup($ionicPlatform, Utility, AppLogging, Registration, Observations, OfflineMap) {
         'ngInject';
 
         $ionicPlatform.ready(function () {
@@ -470,6 +470,7 @@
             }
 
             Observations.removeOldObservationsFromPresistantStorage(); //cleanup old observations on startup
+            OfflineMap.checkUncompleteDownloads(); //Check if any uncomplete downloads and continue download progress
         });
 
         $ionicPlatform.on('resume', function () {

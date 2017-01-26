@@ -7,8 +7,8 @@ angular.module('RegObs')
         appVm.registrationIsType = Registration.doesExistUnsent;
         appVm.trip = Trip;
 
-        function resetForm(confirm){
-            if(confirm){
+        function resetForm(confirm) {
+            if (confirm) {
                 appVm.tripId = undefined;
                 appVm.tripMinutes = undefined;
                 appVm.tripComment = undefined;
@@ -16,21 +16,21 @@ angular.module('RegObs')
         }
 
         appVm.resetTrip = function () {
-            if(appVm.tripId || appVm.tripMinutes || appVm.tripComment)
-            RegobsPopup.delete('Nullstill', 'Vil du nullstille skjema?', 'Nullstill')
-                .then(resetForm);
+            if (appVm.tripId || appVm.tripMinutes || appVm.tripComment)
+                RegobsPopup.delete('Nullstill', 'Vil du nullstille skjema?', 'Nullstill')
+                    .then(resetForm);
 
         };
 
         appVm.startTrip = function (id, expectedMinutes, comment) {
-            Trip.start(10,id,expectedMinutes,comment);
+            Trip.start(10, id, expectedMinutes, comment);
         };
 
         appVm.stopTrip = function () {
             Trip.stop().then(resetForm);
         };
 
-        appVm.propertyExists = function(prop){
+        appVm.propertyExists = function (prop) {
             return Property.exists(prop);
         };
 
@@ -44,7 +44,7 @@ angular.module('RegObs')
             Property.reset(prop);
         };
 
-        appVm.hasRegistration = function() {
+        appVm.hasRegistration = function () {
             return !(appVm.registration.isEmpty() && !appVm.registration.unsent.length);
         };
 
@@ -73,7 +73,7 @@ angular.module('RegObs')
 
         var popoverScope = $rootScope.$new();
         popoverScope.currentAppMode = AppSettings.getAppMode();
-        popoverScope.goToSettings = function() {
+        popoverScope.goToSettings = function () {
             appVm.topPopover.hide();
             $state.go('settings');
         };
@@ -81,10 +81,10 @@ angular.module('RegObs')
             appVm.topPopover.hide();
             AppSettings.setAppMode(mode);
         };
-        popoverScope.isLoggedIn = function() {
+        popoverScope.isLoggedIn = function () {
             return !User.getUser().anonymous;
         };
-        
+
         $ionicPopover.fromTemplateUrl('app/menus/topPopover.html', { scope: popoverScope }).then(function (popover) {
             appVm.topPopover = popover;
         });
@@ -100,20 +100,11 @@ angular.module('RegObs')
         });
 
         $scope.$on('$stateChangeStart', function () {
-            AppLogging.log(Registration.data);
             var currentProp = ($state.current.data || {}).registrationProp;
-            if (currentProp) {
-                if (currentProp === 'SnowProfile' && Registration.hasImageForRegistration(currentProp)) {
-                    var reg = Registration.initPropertyAsObject(currentProp);
-                    reg.SnowProfile.Comment = 'Snøprofil fra app';
-                }
-
-                if(!Registration.propertyExists(currentProp)){
-                    AppLogging.log('DELETE ' + currentProp);
-                    delete Registration.data[currentProp];
-                }
+            if (currentProp && !Registration.propertyExists(currentProp)) {
+                AppLogging.log('DELETE empty registration for: ' + currentProp + ' current registration: ' + JSON.stringify(Registration.data));
+                delete Registration.data[currentProp];
             }
-
         });
 
         $scope.$on('$ionicView.enter', function () {

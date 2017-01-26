@@ -66,13 +66,13 @@
 
         settings.maxMapZoomLevel = 17;
         settings.mapFolder = 'maps';
-        settings.debugTiles = false; //Turn on to debug offline/fallback/tiles
+        settings.debugTiles = true; //Turn on to debug offline/fallback/tiles
 
         settings.tiles = [
-            { name: 'topo', description: 'TOPO_MAP_DESCRIPTION', maxDownloadLimit: 10000, avgTileSize: 19000, url: 'http://opencache.statkart.no/gatekeeper/gk/gk.open_gmaps?layers=matrikkel_bakgrunn&zoom={z}&x={x}&y={y}&format=image/jpeg' },
-            { name: 'steepness', description: 'STEEPNESS_MAP_DESCRIPTION', labelTemplate: 'app/map/tilelabels/tilelabelsteepness.html', geoHazardTid: 10, avgTileSize: 37693, url: 'http://gis3.nve.no/arcgis/rest/services/wmts/Bratthet/MapServer/tile/{z}/{y}/{x}' },
-            { name: 'ice', description: 'WEAKENED_ICE_MAP_DESCRIPTION', labelTemplate: 'app/map/tilelabels/tilelabelice.html', geoHazardTid: 70, avgTileSize: 37693, url: 'http://gis3.nve.no/arcgis/rest/services/wmts/SvekketIs/MapServer/tile/{z}/{y}/{x}' },
-            { name: 'flood', description: 'FLOOD_ZONES_MAP_DESCRIPTION', labelTemplate: 'app/map/tilelabels/tilelabelflood.html', geoHazardTid: 60, avgTileSize: 37693, url: 'http://gis3.nve.no/arcgis/rest/services/wmts/Flomsoner1/MapServer/tile/{z}/{y}/{x}' }
+            { name: 'topo', description: 'TOPO_MAP_DESCRIPTION', maxDownloadLimit: 10000, avgTileSize: 17248, url: 'http://opencache.statkart.no/gatekeeper/gk/gk.open_gmaps?layers=matrikkel_bakgrunn&zoom={z}&x={x}&y={y}&format=image/jpeg', embeddedUrl: 'map/topo_{z}_{x}_{y}.jpg', embeddedMaxZoom: 8 },
+            { name: 'steepness', description: 'STEEPNESS_MAP_DESCRIPTION', labelTemplate: 'app/map/tilelabels/tilelabelsteepness.html', geoHazardTid: 10, avgTileSize: 4247, url: 'http://gis3.nve.no/arcgis/rest/services/wmts/Bratthet/MapServer/tile/{z}/{y}/{x}' },
+            { name: 'ice', description: 'WEAKENED_ICE_MAP_DESCRIPTION', labelTemplate: 'app/map/tilelabels/tilelabelice.html', geoHazardTid: 70, avgTileSize: 1477, url: 'http://gis3.nve.no/arcgis/rest/services/wmts/SvekketIs/MapServer/tile/{z}/{y}/{x}' },
+            { name: 'flood', description: 'FLOOD_ZONES_MAP_DESCRIPTION', labelTemplate: 'app/map/tilelabels/tilelabelflood.html', geoHazardTid: 60, avgTileSize: 1230, url: 'http://gis3.nve.no/arcgis/rest/services/wmts/Flomsoner1/MapServer/tile/{z}/{y}/{x}' }
         ];
 
         settings.mapTileUrl = function () {

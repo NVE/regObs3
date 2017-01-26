@@ -6,7 +6,7 @@ angular
     .component('mapAreaSelect',
     {
         template: '<div class="map-area-select" data-tap-disabled="true"></div>',
-        controller: function ($element, Map, $scope, AppSettings, AppLogging, $timeout) {
+        controller: function ($element, Map, $scope, AppSettings, AppLogging, $timeout, RegObsClasses) {
             var ctrl = this;
 
             var changeTimer;
@@ -20,7 +20,7 @@ angular
 
             var tile = AppSettings.tiles[0];
 
-            var layer = L.tileLayerRegObs(tile.url, { folder: AppSettings.mapFolder, name: tile.name, debugFunc: AppLogging.log });
+            var layer = new RegObsClasses.RegObsTileLayer(tile.url, { folder: AppSettings.mapFolder, name: tile.name, debugFunc: AppLogging.log });
             map.addLayer(layer);
 
             if (ctrl.bounds) {

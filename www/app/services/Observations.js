@@ -22,7 +22,7 @@
 
         service._getRegistrationsFromPresistantStorage = function () {
             return $q(function (resolve) {
-                $ionicPlatform.ready(function () {
+                document.addEventListener("deviceready", function () {
                     var path = AppSettings.getRegistrationRelativePath();
                     var readRegistrations = function () {
                         PresistentStorage.readAsText(path)
@@ -94,29 +94,23 @@
 
                 var progressFunc = function () {
                     progress.addComplete();
-                    onProgress(progress);
+                    if (onProgress) {
+                        onProgress(progress);
+                    }
                     resolve();
                 };
 
                 var errorFunc = function (error) {
                     AppLogging.warn('Could download and store picture from url ' + url + ' ' + JSON.stringify(error));
                     progress.addError(error);
-                    onProgress(progress);
+                    if (onProgress) {
+                        onProgress(progress);
+                    }
                     resolve();
                 };
 
-                var getImageFromHttp = function () {
-                    AppLogging.log('Get image from url: ' + url);
-                    return $http.get(url, { responseType: 'arraybuffer', timeout: cancel.promise });
-                };
-
-                var storeImage = function (result) {
-                    return PresistentStorage.storeFile(path, result.data, url);
-                };
-
                 var downloadImage = function () {
-                    getImageFromHttp()
-                        .then(storeImage)
+                    return PresistentStorage.downloadUrl(url, path, cancel)
                         .then(progressFunc)
                         .catch(errorFunc);
                 };
@@ -139,15 +133,16 @@
             return $q.all(tasks);
         };
 
-        service._getRegistrationsWithinRadius = function (latitude, longitude, range, geohazardId, progress, onProgress, cancel) {
+        service._getRegistrationsWithinRadius = function (latitude, longitude, range, geohazardId, cancel) {
             return $q(function (resolve, reject) {
                 var httpConfig = AppSettings.httpConfig;
                 httpConfig.timeout = cancel ? cancel.promise : AppSettings.httpConfig.timeout;
                 $http.post(
                         AppSettings.getEndPoints().getRegistrationsWithinRadius,
                         {
-                            GeoHazards: [Utility.getCurrentGeoHazardTid()],
+                            GeoHazards: [geohazardId],
                             Latitude: latitude,
+                            //Longitude: longitude,
                             Longtitude: longitude,
                             Radius: range,
                             FromDate: AppSettings.getObservationsFromDateISOString(),
@@ -227,16 +222,30 @@
             return true;
         };
 
+        service._isSameRegistration = function(first, second) {
+            return first.RegId === second.RegId;
+        };
+
+        service._isRegistrationEmpty = function (item) {
+            return item.PictureCount === 0 && item.RegistrationCount === 0;
+        };
+
+        service._registrationExistsInArray = function(arr, item) {
+            return arr.filter(function (reg) { return service._isSameRegistration(reg, item) }).length > 0;
+        };
+
         /**
          * Helper method to cleanup empty registrations
          * @param {} registrations 
          * @returns {} only valid registrations
          */
-        service._cleanupRegistrations = function (registrations) {
+        service._cleanupRegistrations = function (registrations, validateRegistrationTime) {
             var ret = [];
             registrations.forEach(function (item) {
-                if ((item.PictureCount > 0 || item.RegistrationCount > 0) && service._validateRegistrationDate(item.DtObsTime)) {
-                    ret.push(item);
+                if (!service._isRegistrationEmpty(item) && !service._registrationExistsInArray(ret, item)) {
+                    if (!validateRegistrationTime || service._validateRegistrationDate(item.DtObsTime)) {
+                        ret.push(item);
+                    }
                 }
             });
             return ret;
@@ -314,15 +323,17 @@
          * @param {} cancel 
          * @returns {} 
          */
-        service.updateObservationsWithinRadius = function (latitude, longitude, range, geohazardId, progress, onProgress, cancel) {
+        service.updateObservationsWithinRadius = function (latitude, longitude, range, geohazardId, onProgress, cancel) {
             var downloadAllRegistrations = function (registrations) {
-
+                var progress = new RegObs.ProggressStatus();
                 var total = 0;
                 registrations.forEach(function (item) {
                     total += item.PictureCount; //Download picture progress
                 });
                 progress.setTotal(total);
-                onProgress(progress);
+                if (onProgress) {
+                    onProgress(progress);
+                }
 
                 return service._saveNewRegistrationsToPresistantStorage(registrations)
                     .then(function () {
@@ -342,8 +353,6 @@
                     longitude,
                     range,
                     geohazardId,
-                    progress,
-                    onProgress,
                     cancel);
             }).then(downloadAllRegistrations)
             .finally(function () {

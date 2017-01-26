@@ -102,6 +102,13 @@ angular
                 };
                 scope.complete = false;
 
+                scope.isRunning = function() {
+                    return !scope.complete && !scope.isProcessing();
+                };
+                scope.isProcessing = function() {
+                    return !scope.complete && (scope.downloadStatus && scope.downloadStatus.isDone());
+                };              
+
                 var popup = $ionicPopup.show({
                     templateUrl: 'app/common/downloadprogress.html',
                     title: title,

@@ -1,7 +1,7 @@
 ﻿/**
  * Service to help writing files to persistant storage. When running in Ripple emulator, files will not be stored.
  */
-angular.module('RegObs').factory('PresistentStorage', function (AppSettings, $cordovaFile, Utility, $q, AppLogging, LocalStorage, $cordovaDevice, $http) {
+angular.module('RegObs').factory('PresistentStorage', function (AppSettings, $cordovaFile, Utility, $q, AppLogging, LocalStorage, $cordovaDevice, $http, $window) {
     var service = this;
 
     /**
@@ -29,6 +29,7 @@ angular.module('RegObs').factory('PresistentStorage', function (AppSettings, $co
             var i = 0;
             var createDirFragment = function () {
                 var progress = function () {
+                    AppLogging.log('Directory created');
                     i++;
                     createDirFragment();
                 };
@@ -54,6 +55,8 @@ angular.module('RegObs').factory('PresistentStorage', function (AppSettings, $co
         });
     };
 
+   
+
     /**
      * Helper method to write file to storage using cordovaFile plugin. Creates directory first if not exist.
      * @param {} path 
@@ -63,14 +66,22 @@ angular.module('RegObs').factory('PresistentStorage', function (AppSettings, $co
      */
     service._writeFile = function (path, content) {
         var writeFile = function () {
+            AppLogging.log('writing file: ' + cordova.file.dataDirectory+path);
             return $cordovaFile.writeFile(cordova.file.dataDirectory, path, content, true);
         };
         if (path.indexOf('/') > 0) {
             var directory = path.substr(0, path.lastIndexOf('/'));
+            AppLogging.log('Creating directories: ' + directory);
             return service._createDirRecursively(directory).then(writeFile);
         } else {
             return writeFile();
         }
+    };
+
+    service._emulateCreateDirRecursively = function(path) {
+        return $q(function(resolve) {
+            resolve();
+        });
     };
 
     /**
@@ -270,12 +281,12 @@ angular.module('RegObs').factory('PresistentStorage', function (AppSettings, $co
             return service._emulateGetFileSize(path);
         } else {
             return $q(function (resolve, reject) {
-                window.resolveLocalFileSystemURL(cordova.file.dataDirectory + path,
+                $window.resolveLocalFileSystemURL(cordova.file.dataDirectory + path,
                     function (fileEntry) {
                         fileEntry.file(function (fileInfo) {
                             resolve(fileInfo.size);
                         },
-                            reject);
+                        reject);
                     },
                     reject);
             });
@@ -292,15 +303,63 @@ angular.module('RegObs').factory('PresistentStorage', function (AppSettings, $co
         if (Utility.isRippleEmulator()) {
             return service.storeFile(path, null, url);
         } else {
-            var options = { responseType: 'arraybuffer' };
-            if (cancel) {
-                options.timeout = cancel.promise;
-            }
+            //var options = { responseType: 'arraybuffer' };
+            //if (cancel) {
+            //    options.timeout = cancel.promise;
+            //}
 
-            return $http.get(url, options)
-                 .then(function (data) {
-                     return service.storeFile(path, data);
-                 });
+            //return $http.get(url, options)
+            //     .then(function (data) {
+            //         var utf8Str = new Uint8Array(data); // Convert to UTF-8...
+            //         var binaryArr = utf8Str.buffer; // Convert to buffer...
+            //         return service.storeFile(path, binaryArr);
+            //     });
+            return $q(function (resolve, reject) {               
+                var transfer = new FileTransfer();
+                var filename = cordova.file.dataDirectory + path;
+                transfer.download(
+                    url,
+                    filename,
+                    function(file) {
+                        // tile downloaded OK; set the iOS "don't back up" flag then move on
+                        file.setMetadata(null, null, { "com.apple.MobileBackup": 1 });
+                        resolve();
+                    },
+                    function(error) {
+                        var errmsg = '';
+                        switch (error.code) {
+                        case FileTransferError.FILE_NOT_FOUND_ERR:
+                            errmsg = "Not found: " + url;
+                            break;
+                        case FileTransferError.INVALID_URL_ERR:
+                            errmsg = "Invalid URL:" + url;
+                            break;
+                        case FileTransferError.CONNECTION_ERR:
+                            errmsg = "Connection error at the web server.\n";
+                            break;
+                        }
+                        reject(errmsg);
+                    }
+                );
+                if (cancel) {
+                    cancel.promise.then(function () {
+                        transfer.abort();
+                    });
+                }
+            });
+        }
+    };
+
+    /**
+     * Create directory
+     * @param {} path 
+     * @returns {} 
+     */
+    service.createDirectory = function(path) {
+        if (Utility.isRippleEmulator()) {
+            return service._emulateCreateDirRecursively(path);
+        } else {
+            return service._createDirRecursively(path);
         }
     };
 

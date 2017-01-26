@@ -134,7 +134,6 @@
                 vm.zoomlevel(),
                 mapsToDownload,
                 onProgress,
-                onProgress,
                 cancel);
         };
 

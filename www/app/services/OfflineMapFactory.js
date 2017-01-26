@@ -1,6 +1,6 @@
 ﻿angular
     .module('RegObs')
-    .factory('OfflineMap', function ($ionicPlatform, $window, $q, AppSettings, AppLogging, Map, PresistentStorage) {
+    .factory('OfflineMap', function ($ionicPlatform, $window, $q, AppSettings, AppLogging, Map, PresistentStorage, RegobsPopup) {
         var service = this;
         var metaFilename = 'offline-meta.json';
         var meta;
@@ -132,7 +132,7 @@
             PresistentStorage.downloadUrl(sourceurl, filename, cancel).then(successCallback, errorCallback);
         };
 
-        var downloadXyzList = function (tile, xyzlist, overwrite, progressCallback, completeCallback, errorCallback, cancelCallback, cancelPromise) {
+        var downloadXyzList = function (tile, xyzlist, completeXyzList, overwrite, progressCallback, completeCallback, errorCallback, cancelCallback, cancelPromise) {
             var cancel = false;
             if (cancelPromise) {
                 cancelPromise.promise.then(function () {
@@ -149,21 +149,21 @@
                 // all we need to do is call it below, depending on the overwrite outcome
                 function doneWithIt() {
                     // the download was skipped and not an error, so call the progress callback; then either move on to the next one, or else call our success callback
-                    if (cbprog) cbprog(index, xyzs.length);
+                    if (cbprog) cbprog(tile, { x: x, y: y, z: z });
+                    continueOnNext();
+                };
 
+                function continueOnNext() {
                     if (index + 1 < xyzs.length) {
                         runThisOneByIndex(xyzs, index + 1, cbprog, cbdone, cberr);
                     } else {
                         if (cbdone) cbdone();
                     }
-                }
+                };
+
                 function yesReally() {
                     try {
-                        downloadAndStoreTile(tile,
-                            x,
-                            y,
-                            z,
-                            doneWithIt,
+                        downloadAndStoreTile(tile, x, y, z, doneWithIt,
                             function (errmsg) {
                                 // an error in downloading
                                 if (cberr) cberr(errmsg);
@@ -176,126 +176,206 @@
                         doneWithIt();
                     }
                 }
-
-                
-
                 if (cancel) {
                     if (cancelCallback) cancelCallback();
                 } else {
-                    // trick: if 'overwrite' is true we can just go ahead and download
-                    // BUT... if overwrite is false, then test that the file doesn't exist first by failing to open it
-                    if (overwrite) {
-                        AppLogging.log("Tile " + z + '/' + x + '/' + y + " -- " + "Overwrite=true so proceeding.");
-                        yesReally();
+                    var filename = tile.getMapFilename(x, y, z);
+                    if (completeXyzList.filter(function (item) { return item === filename }).length > 0) {
+                        continueOnNext(); //this tile has allready been downloaded, skip
                     } else {
-                        try {
-                            var filename = tile.getMapFilename(x, y, z);
-                            PresistentStorage.checkIfFileExsists(AppSettings.mapFolder + '/' + filename)
-                              .then(function () {
-                                  AppLogging.log(filename + " exists. Skipping.");
-                                  doneWithIt();
-                              }, function () {
-                                  AppLogging.log(filename + " missing. Fetching.");
-                                  yesReally();
-                              });
-                        } catch (error) {
-                            if (cberr) cberr(error.message);
-                            doneWithIt();
-                        }
+                        if (overwrite) {
+                            AppLogging.log("Tile " + z + '/' + x + '/' + y + " -- " + "Overwrite=true so proceeding.");
+                            yesReally();
+                        } else {
+                            try {
 
+                                PresistentStorage.checkIfFileExsists(AppSettings.mapFolder + '/' + filename)
+                                    .then(function () {
+                                        AppLogging.log(filename + " exists. Skipping.");
+                                        doneWithIt();
+                                    },
+                                        function () {
+                                            AppLogging.log(filename + " missing. Fetching.");
+                                            yesReally();
+                                        });
+                            } catch (error) {
+                                if (cberr) cberr(error.message);
+                                doneWithIt();
+                            }
+                        }
                     }
                 }
             }
             runThisOneByIndex(xyzlist, 0, progressCallback, completeCallback, errorCallback);
         };
 
-        service.downloadMapFromXyzList = function (name, bounds, xyzList, zoomMin, zoomMax, mapsArray, progressCallback, completeCallback, cancelCallback) {
-            var downloadMapFromXyzListInternal = function() {
-                return $q(function(resolve, reject) {
-                    if (!zoomMin)
-                        throw Error('zoomMin must be set');
-                    if (!zoomMax)
-                        throw Error('zoomMax must be set');
-                    if (!mapsArray || mapsArray.length <= 0)
-                        throw Error('Maps array must be an array of map names');
-                    if (!xyzList)
-                        throw Error('Xyz list must be set!');
-
-                    var boundingBox = [
-                        [bounds.getSouthWest().lat, bounds.getSouthWest().lng],
-                        [bounds.getNorthEast().lat, bounds.getNorthEast().lng]
-                    ];
-
-                    var area = {
-                        name: name,
-                        size: 0,
-                        bounds: boundingBox,
-                        tiles: xyzList.length * mapsArray.length,
-                        maps: mapsArray,
-                        xyzList: xyzList,
-                        zoom: zoomMax
+        /**
+         * Check if any uncomplete downloads, and continue download
+         * @returns {} 
+         */
+        service.checkUncompleteDownloads = function () {
+            service.getUncompletedDownloads().then(function (uncomplete) {
+                if (uncomplete.length > 0) {
+                    var downloadMap = function (onProgress, cancel) {
+                        return service.downloadArea(uncomplete[0],
+                            onProgress,
+                            cancel);
                     };
-                    meta.push(area);
 
-                    var progress = new RegObs.ProggressStatus();
-                    var total = xyzList.length * mapsArray.length;
-                    progress.setTotal(total);
-
-                    AppLogging.log('Download map for xyz list: ' + JSON.stringify(xyzList));
-                    var checkProgress = function() {
-                        if (progressCallback) {
-                            progressCallback(progress);
-                        }
-                        if (progress.isDone()) {
-                            service.getDiskUsageForXyzList(mapsArray,
-                                xyzList,
-                                function(files, bytes) {
-                                    area.size = bytes;
-                                    area.hasError = progress.hasError();
-                                    area.tiles = total - progress.getErrors().length;
-                                    if (files !== area.tiles) {
-                                        AppLogging.warn('Tiles downloaded ' +area.tiles +' but files from disk usage is ' +files);
-                                    }
-                                    service.saveOfflineAreas(meta).then(resolve, reject);
-                                });
-                        }
-                    };
-                    mapsArray.forEach(function(item) {
-                        var tile = Map.getTileByName(item);
-                        downloadXyzList(tile,
-                            xyzList,
-                            false,
-                            function onProgress() {
-                                progress.addComplete();
-                                checkProgress();
-                            },
-                            function onComplete() {
-                                checkProgress();
-                            },
-                            function onError(error) {
-                                progress.addError(error);
-                                checkProgress();
-                            },
-                            function onCancel() {
-                                progress.setCancelled(true);
-                                checkProgress();
-                            },
-                            cancelCallback);
+                    RegobsPopup.downloadProgress('Oppdaterer kartet med det siste fra regObs',
+                        downloadMap,
+                    { closeOnComplete: false })
+                    .then(function () {
+                        //$state.go('start');
+                    })
+                    .catch(function () {
+                        AppLogging.log('progress cancelled');
+                        //$state.go('start');
                     });
-                });
+                }
+            });
+        };
+
+        /**
+         * Check if any maps is not completed downloaded
+         * @returns {} 
+         */
+        service.getUncompletedDownloads = function () {
+            return service.getOfflineAreas().then(function (result) {
+                return result.filter(function (item) { return item.complete.length < item.tiles });
+            });
+        };
+
+        /**
+         * Download map area
+         * @param {} area 
+         * @param {} progressCallback 
+         * @param {} cancelCallback 
+         * @returns {} 
+         */
+        service.downloadArea = function (area, progressCallback, cancelCallback) {
+            return $q(function (resolve) {
+                var progress = new RegObs.ProggressStatus();
+                var mapsComplete = [];
+                var total = area.tiles;
+                progress.setTotal(total);
+                progress.setComplete(area.complete.length);
+                progress.setErrors(area.errors);
+
+                var updateAreaFromProgress = function () {
+                    area.errors = progress.getErrors();
+                    area.hasError = progress.hasError();
+                };
+
+                var progressFunc = function () {
+                    updateAreaFromProgress();
+                    service.saveOfflineAreas(meta).then(function () {
+                        progressCallback(progress);
+                    });
+                };
+
+                var doneFunc = function (map) {
+                    mapsComplete.push(map);
+                    if (mapsComplete.length === area.maps.length) {
+                        updateAreaFromProgress();
+                        service.saveOfflineAreas(meta)
+                            .then(function () {
+                                if (progress.isDone()) {
+                                    service.getDiskUsageForXyzList(area.maps,
+                                        area.xyzList,
+                                        function (files, bytes) {
+                                            area.size = bytes;
+                                            area.tiles = total - progress.getErrors().length;
+                                            if (files !== area.tiles) {
+                                                AppLogging
+                                                    .warn('Tiles downloaded ' +
+                                                        area.tiles +
+                                                        ' but files from disk usage is ' +
+                                                        files);
+                                            }
+                                            service.saveOfflineAreas(meta).then(resolve);
+                                        });
+                                }
+                            });
+                    }
+                };
+
+                PresistentStorage.createDirectory(AppSettings.mapFolder)
+                    .then(function () {
+                        area.maps.forEach(function (item) {
+                            var tile = Map.getTileByName(item);
+                            downloadXyzList(tile,
+                                area.xyzList,
+                                area.complete,
+                                false,
+                                function onProgress(tile, xyz) {
+                                    var filename = tile.getMapFilename(xyz.x, xyz.y, xyz.z);
+                                    area.complete.push(filename);
+                                    progress.addComplete();
+                                    progressFunc();
+                                },
+                                function onComplete() {
+                                    doneFunc(item);
+                                },
+                                function onError(error) {
+                                    progress.addError(error);
+                                    AppLogging.warn('Could not download map tile: ' + JSON.stringify(error));
+                                },
+                                function onCancel() {
+                                    progress.setCancelled(true);
+                                    doneFunc(item);
+                                },
+                                cancelCallback);
+                        });
+                    });
+            });
+        };
+
+
+        service.downloadMapFromXyzList = function (name, bounds, xyzList, zoomMin, zoomMax, mapsArray, progressCallback, cancelCallback) {
+            var downloadMapFromXyzListInternal = function () {
+                if (!zoomMin)
+                    throw Error('zoomMin must be set');
+                if (!zoomMax)
+                    throw Error('zoomMax must be set');
+                if (!mapsArray || mapsArray.length <= 0)
+                    throw Error('Maps array must be an array of map names');
+                if (!xyzList)
+                    throw Error('Xyz list must be set!');
+
+                var boundingBox = [
+                    [bounds.getSouthWest().lat, bounds.getSouthWest().lng],
+                    [bounds.getNorthEast().lat, bounds.getNorthEast().lng]
+                ];
+
+                var area = {
+                    name: name,
+                    size: 0,
+                    bounds: boundingBox,
+                    tiles: xyzList.length * mapsArray.length,
+                    maps: mapsArray,
+                    xyzList: xyzList,
+                    zoom: zoomMax,
+                    complete: [],
+                    errors: []
+                };
+                meta.push(area);
+                return service.saveOfflineAreas(meta)
+                    .then(function () {
+                        return service.downloadArea(area, progressCallback, cancelCallback);
+                    });
             };
 
             return service.getOfflineAreas().then(downloadMapFromXyzListInternal);
         };
 
-        service.downloadMapFromBounds = function (name, bounds, zoomMin, zoomMax, mapsArray, progressCallback, completeCallback, cancelCallback) {
+        service.downloadMapFromBounds = function (name, bounds, zoomMin, zoomMax, mapsArray, progressCallback, cancelCallback) {
             var xyzList = Map.calculateXYZListFromBounds(bounds, zoomMin, zoomMax);
             return service.downloadMapFromXyzList(name, bounds, xyzList,
                 zoomMin,
                 zoomMax,
                 mapsArray,
                 progressCallback,
-                completeCallback,
                 cancelCallback);
         };
 
@@ -330,13 +410,16 @@
             };
 
             fileNames.forEach(function (file) {
-                PresistentStorage.getFileSize(AppSettings.mapFolder + '/' + file)
-                    .then(function(result) {
+                var relativePath = AppSettings.mapFolder + '/' + file;
+                PresistentStorage.getFileSize(relativePath)
+                    .then(function (result) {
+                        AppLogging.log('file: ' + relativePath + ' is ' +result +' bytes');
                         bytes += result;
                         found.push(file);
                         checkCallback();
                     })
-                    .catch(function(error) {
+                    .catch(function (error) {
+                        AppLogging.log('file not found: ' + relativePath +'. 0 bytes returned');
                         notFound.push({ name: file, error: error });
                         checkCallback();
                     });

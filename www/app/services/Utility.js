@@ -139,7 +139,9 @@ angular
         service.getKdvElements = function () {
             return service.getAppEmbeddedKdvElements()
                 .then(function (result) {
-                    return { data: angular.merge(result, LocalStorage.getObject('kdvDropdowns')) };
+                    var embeddedElements = LocalStorage.getObject('kdvDropdowns');
+                    var mergedElements = angular.merge(angular.copy(result), embeddedElements);
+                    return { data: mergedElements };
                 });
         };
 
@@ -266,26 +268,39 @@ angular
         service.isEmpty = function (obj) {
 
             // null and undefined are "empty"
-            if (obj === null || obj === undefined) return true;
+            if (obj === null || obj === undefined || obj === '') return true;
 
-            // Assume if it has a length property with a non-zero value
-            // that that property is correct.
-            if (obj.length > 0) return false;
-            if (obj.length === 0) return true;
+            //if object is string/boolena/number and not null, undefined or '' return false
+            if (typeof obj === 'string' || typeof obj === 'boolean' || typeof obj === 'number') {
+                return false;
+            }
 
-            // Otherwise, does it have any properties of its own?
-            // Note that this doesn't handle
-            // toString and valueOf enumeration bugs in IE < 9
+            //if object is array, check array length
+            if (angular.isArray(obj)) {
+                if (obj.length === 0) {
+                    return true;
+                } else {
+                    return false;
+                }
+            }
+
+
+            var props = [];
+            //if object has properties, check if any has value
             for (var key in obj) {
-                if (obj.hasOwnProperty(key)) {
-                    //if (obj[key] || obj[key] === 0) return false;
+                if (Object.prototype.hasOwnProperty.call(obj, key)) {
+                    props.push(key);
                     if (!service.isEmpty(obj[key])) {
                         return false;
                     }
                 }
             }
 
-            return true;
+            if (props.length > 0) {
+                return true; //object has properties, but all is empty
+            } else {
+                return JSON.stringify(obj) === JSON.stringify({}); //final check to see if object is empty
+            }
         };
 
         service.resizeImage = function resizeImage(longSideMax, url, callback) {

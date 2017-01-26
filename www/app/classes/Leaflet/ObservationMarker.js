@@ -6,17 +6,19 @@
      * @returns {} 
      */
     var ObservationMarker = MapSelectableItem.extend({
-
         options: {
-            
+        
         },
 
-        _getObservationPinHtml: function (selected) {
+        _getObservationPinHtml: function(selected) {
             var geoHazardType = Utility.getGeoHazardType(this.observation.GeoHazardTid);
-            return '<div class="observation-pin ' + (selected ? 'selected ' : '') + geoHazardType + '"><i class="icon ion-eye observation-pin-icon"></i></div>';
+            return '<div class="observation-pin ' +
+                (selected ? 'selected ' : '') +
+                geoHazardType +
+                '"><i class="icon ion-eye observation-pin-icon"></i></div>';
         },
 
-        _getIcon: function (selected) {
+        _getIcon: function(selected) {
             var self = this;
             return L.divIcon({
                 className: 'my-div',
@@ -24,7 +26,7 @@
             });
         },
 
-        initialize: function (obsjson, options) {
+        initialize: function(obsjson, options) {
             L.Util.setOptions(this, options);
             var latlng = new L.LatLng(obsjson.Latitude, obsjson.Longitude);
             this.observation = Observation.fromJson(obsjson);
@@ -54,23 +56,27 @@
             MapSelectableItem.prototype.initialize.call(this, latlng, this.options);
         },
 
-        getHeader: function () {
+        getHeader: function() {
             return this.observation.getObservationTypeDescription();
         },
 
-        getDescription: function () {
+        getDescription: function() {
             return this.observation.NickName || '';
         },
 
-        hasImages: function () {
+        hasImages: function() {
             return this.observation.hasImages();
         },
 
-        getFirstImage: function () {
+        getFirstImage: function() {
             return this.observation.getFirstImage();
         },
-        getTypeDescription: function () {
-            return Utility.geoHazardNames(this.observation.GeoHazardTid) + $translate.instant('OBSERVATION').toLowerCase();
+        getTypeDescription: function() {
+            return Utility.geoHazardNames(this.observation.GeoHazardTid) +
+                $translate.instant('OBSERVATION').toLowerCase();
+        },
+        getId: function() {
+            return this.observation.RegId;
         },
         onClick: function () {
             var self = this;

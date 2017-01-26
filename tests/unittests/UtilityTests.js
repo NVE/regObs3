@@ -70,6 +70,16 @@
         expect(Utility.isEmpty({ prop1: null, prop2: undefined, prop3: [], prop4: '' })).toEqual(true);
     }));
 
+    it("test isEmpty: number returns false", inject(function (Utility) {
+        // Invoke the unit being tested as necessary
+        expect(Utility.isEmpty(2)).toEqual(false);
+    }));
+
+    it("test isEmpty: object with string property returns false", inject(function (Utility) {
+        // Invoke the unit being tested as necessary
+        expect(Utility.isEmpty({testprop:"This is a test"})).toEqual(false);
+    }));
+
     it("test isEmpty: nested object with empty properties returns true",  inject(function (Utility) {
         // Invoke the unit being tested as necessary
         expect(Utility.isEmpty({ prop1: { prop1: null, prop2: undefined, prop3: [], prop4: '' }, prop2: undefined, prop3: [], prop4: '' })).toEqual(true);

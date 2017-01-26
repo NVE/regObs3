@@ -17,7 +17,7 @@
                 <h2 ng-bind-html="vm.mapSelectedItem.getHeader() || '&nbsp;'"></h2>
                 <p>
                     <span ng-bind-html="vm.mapSelectedItem.getDescription()"></span>
-                    <span class="map-selected-info-distance"><span>{{vm.mapSelectedItem.getTypeDescription()}}</span>&nbsp;<span ng-if="vm.mapSelectedItem.hasDistance()">{{vm.mapSelectedItem.getDistanceText()}} {{'AWAY'|translate}}</span></span>
+                    <span class="map-selected-info-distance"><span>{{vm.mapSelectedItem.getTypeDescription() | translate}}</span>&nbsp;<span ng-if="vm.mapSelectedItem.hasDistance()">{{vm.mapSelectedItem.getDistanceText()}} {{'AWAY'|translate}}</span></span>
                 </p>            
             </div>
             <div class="map-selected-info-image-wrapper" ng-if="vm.mapSelectedItem.hasImages()" ng-click="vm.openSelectedItem()">

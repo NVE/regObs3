@@ -1,6 +1,6 @@
 angular
     .module('RegObs')
-    .factory('Registration', function Registration($rootScope, $ionicPlatform, $http, $state, $ionicPopup, $ionicHistory, $cordovaBadge, LocalStorage, Utility, User, ObsLocation, AppSettings, RegobsPopup, AppLogging, Observations, UserLocation) {
+    .factory('Registration', function Registration($rootScope, $ionicPlatform, $http, $state, $ionicPopup, $ionicHistory, $cordovaBadge, LocalStorage, Utility, User, ObsLocation, AppSettings, RegobsPopup, AppLogging, Observations, UserLocation, $q) {
         var Registration = this;
 
         var storageKey = 'regobsRegistrations';
@@ -217,16 +217,32 @@ angular
             var postUrl = AppSettings.getEndPoints().postRegistration;
             if (!Registration.isEmpty() || Registration.unsent.length) {
                 Registration._setObsLocationToUserPositionIfNotSet();
-                if (!ObsLocation.isSet()) {
+                if (!Registration.isEmpty() && !ObsLocation.isSet()) {
                     RegobsPopup.alert('Posisjon ikke satt', 'Kan ikke sende inn uten posisjon. Vennligst sett posisjon i kartet');
                 } else if (!User.getUser().anonymous || force) {
+                    var currentLocation = null;
+                    if (!Registration.isEmpty()) {
+                        currentLocation = {
+                            Latitude: ObsLocation.data.Latitude,
+                            Longitude: ObsLocation.data.Longitude,
+                            GeoHazardTID: Registration.data.GeoHazardTID
+                        };
+                    };
                     prepareRegistrationForSending();
 
                     if (Registration.unsent.length) {
                         Registration.sending = true;
-                        doPost(postUrl, { Registrations: Registration.unsent });
-                        Registration.unsent = [];
-                        resetRegistration();
+                        doPost(postUrl, { Registrations: Registration.unsent })
+                            .then(function () {
+                                Registration.unsent = [];
+                                resetRegistration();
+                                if (currentLocation) {
+                                    Observations.updateObservationsWithinRadius(currentLocation.Latitude,
+                                        currentLocation.Longitude,
+                                        100,
+                                        currentLocation.GeoHazardTID);
+                                }
+                            });                  
                     }
 
                     Registration.save();
@@ -399,72 +415,77 @@ angular
 
         function doPost(postUrl, dataToSend) {
 
-            var data = angular.copy(dataToSend);
+            return $q(function(resolve, reject) {
 
-            var success = function () {
+                var data = angular.copy(dataToSend);
 
-                RegobsPopup.alert(
-                    'Suksess!',
-                    'Observasjon registrert!'
-                );
-                Registration.sending = false;
-                Registration.save();
+                var success = function() {
 
-                Observations.updateObservationsWithinRadius(data.ObsLocation.LatLngObject.Latitude,
-                    data.ObsLocation.LatLngObject.Longitude,
-                    100,
-                    data.GeoHazardTID,
-                    new RegObs.ProggressStatus());
-            };
+                    RegobsPopup.alert(
+                        'Suksess!',
+                        'Observasjon registrert!'
+                    );
+                    Registration.sending = false;
+                    Registration.save();
 
-            var exception = function (error) {
-                AppLogging.error('Failed to send registration: ' + error.statusText, error);
-
-                Registration.sending = false;
-                var title = getRandomMessage();
-                var body = 'Melding fra server: ' + error.statusText + '. Lagring av registreringen blir forsinket eller den feilet. Du kan lagre og sende inn senere, eller prøve igjen. Gi beskjed til regObs-teamet dersom problemet vedvarer. Beklager ulempen :(';
-
-                var handleUserAction = function (confirmed) {
-                    if (confirmed) {
-                        AppLogging.log('Confirmed sending again!');
-                        post();
-                    } else {
-                        AppLogging.log('Avbryter sending');
-
-                        RegobsPopup.alert(
-                            'Lagret',
-                            'Dataene dine er lagret. ' +
-                            'Du kan prøve å sende inn på nytt ved et senere tidspunkt.'
-                        );
-                        saveToUnsent(dataToSend);
-                    }
+                    resolve();
                 };
 
-                if (error.status <= 0) {
-                    RegobsPopup.confirm(title, 'Fikk ikke kontakt med regObs-serveren. Dette kan skyldes manglende nettilgang, eller at serveren er midlertidig utilgjengelig. Du kan prøve på nytt, eller du kan lagre registrering for å sende inn senere.', 'Prøv igjen', 'Lagre')
-                        .then(handleUserAction);
-                } else if (error.status === 422) {
-                    RegobsPopup.alert('Format stemmer ikke', 'Det oppsto et problem ved at innsendingen ikke samstemmer med forventet format. Beklager ulempen:( Melding fra server: ' + error.statusText);
-                } else {
-                    RegobsPopup.confirm(title, body, 'Prøv igjen', 'Lagre')
-                        .then(handleUserAction);
-                }
+                var exception = function(error) {
+                    AppLogging.error('Failed to send registration: ' + error.statusText, error);
 
-            };
+                    Registration.sending = false;
+                    var title = getRandomMessage();
+                    var body = 'Melding fra server: ' +
+                        error.statusText +
+                        '. Lagring av registreringen blir forsinket eller den feilet. Du kan lagre og sende inn senere, eller prøve igjen. Gi beskjed til regObs-teamet dersom problemet vedvarer. Beklager ulempen :(';
 
-            var post = function () {
-                return $http.post(postUrl, data, AppSettings.httpConfigRegistrationPost)
-                    .then(success)
-                    .catch(exception);
-            };
+                    var handleUserAction = function(confirmed) {
+                        if (confirmed) {
+                            AppLogging.log('Confirmed sending again!');
+                            post();
+                        } else {
+                            AppLogging.log('Avbryter sending');
 
-            //Convert to base64 strings and resize
-            Utility.resizeAllImages(data)
-                .then(function (processedData) {
-                    data = processedData;
-                    post();
-                });
+                            RegobsPopup.alert(
+                                'Lagret',
+                                'Dataene dine er lagret. ' +
+                                'Du kan prøve å sende inn på nytt ved et senere tidspunkt.'
+                            );
+                            saveToUnsent(dataToSend);
+                            reject();
+                        }
+                    };
 
+                    if (error.status <= 0) {
+                        RegobsPopup.confirm(title,
+                                'Fikk ikke kontakt med regObs-serveren. Dette kan skyldes manglende nettilgang, eller at serveren er midlertidig utilgjengelig. Du kan prøve på nytt, eller du kan lagre registrering for å sende inn senere.',
+                                'Prøv igjen',
+                                'Lagre')
+                            .then(handleUserAction);
+                    } else if (error.status === 422) {
+                        RegobsPopup.alert('Format stemmer ikke',
+                            'Det oppsto et problem ved at innsendingen ikke samstemmer med forventet format. Beklager ulempen:( Melding fra server: ' + error.statusText);
+                    } else {
+                        RegobsPopup.confirm(title, body, 'Prøv igjen', 'Lagre')
+                            .then(handleUserAction);
+                    }
+
+                };
+
+                var post = function() {
+                    return $http.post(postUrl, data, AppSettings.httpConfigRegistrationPost)
+                        .then(success)
+                        .catch(exception);
+                };
+
+                //Convert to base64 strings and resize
+                Utility.resizeAllImages(data)
+                    .then(function(processedData) {
+                        data = processedData;
+                        post();
+                    });
+            });
         }
 
         function getRandomMessage() {
