@@ -12,10 +12,11 @@
 
         _getObservationPinHtml: function(selected) {
             var geoHazardType = Utility.getGeoHazardType(this.observation.GeoHazardTid);
-            return '<div class="observation-pin ' +
-                (selected ? 'selected ' : '') +
-                geoHazardType +
-                '"><i class="icon ion-eye observation-pin-icon"></i></div>';
+            var expiery = this.observation.getDaysUntilExpiery();
+            return '<div class="observation-pin' +
+                (selected ? ' selected ' : ' ') +
+                geoHazardType + (expiery >= 0 ? ' expiery-' + expiery : '')
+                +'"><i class="icon ion-eye observation-pin-icon ' +'"></i></div>';
         },
 
         _getIcon: function(selected) {

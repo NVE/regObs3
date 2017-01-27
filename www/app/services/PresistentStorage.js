@@ -55,7 +55,7 @@ angular.module('RegObs').factory('PresistentStorage', function (AppSettings, $co
         });
     };
 
-   
+
 
     /**
      * Helper method to write file to storage using cordovaFile plugin. Creates directory first if not exist.
@@ -66,7 +66,7 @@ angular.module('RegObs').factory('PresistentStorage', function (AppSettings, $co
      */
     service._writeFile = function (path, content) {
         var writeFile = function () {
-            AppLogging.log('writing file: ' + cordova.file.dataDirectory+path);
+            AppLogging.log('writing file: ' + cordova.file.dataDirectory + path);
             return $cordovaFile.writeFile(cordova.file.dataDirectory, path, content, true);
         };
         if (path.indexOf('/') > 0) {
@@ -78,8 +78,8 @@ angular.module('RegObs').factory('PresistentStorage', function (AppSettings, $co
         }
     };
 
-    service._emulateCreateDirRecursively = function(path) {
-        return $q(function(resolve) {
+    service._emulateCreateDirRecursively = function (path) {
+        return $q(function (resolve) {
             resolve();
         });
     };
@@ -200,6 +200,7 @@ angular.module('RegObs').factory('PresistentStorage', function (AppSettings, $co
         }
     };
 
+
     /**
      * Read stored content as text
      * @param {} fullpath 
@@ -266,7 +267,8 @@ angular.module('RegObs').factory('PresistentStorage', function (AppSettings, $co
             return $cordovaFile.getFreeDiskSpace()
                 .then(function (success) {
                     var ios = $cordovaDevice.getDevice() && $cordovaDevice.getDevice().platform === 'iOS';
-                    return success * (ios ? 1 : 1000); //ios returns result in bytes, and android in kB                             
+                    return success * (ios ? 1 : 1000);
+                    //ios returns result in bytes, and android in kB                             
                 });
         }
     };
@@ -286,7 +288,7 @@ angular.module('RegObs').factory('PresistentStorage', function (AppSettings, $co
                         fileEntry.file(function (fileInfo) {
                             resolve(fileInfo.size);
                         },
-                        reject);
+                            reject);
                     },
                     reject);
             });
@@ -314,29 +316,29 @@ angular.module('RegObs').factory('PresistentStorage', function (AppSettings, $co
             //         var binaryArr = utf8Str.buffer; // Convert to buffer...
             //         return service.storeFile(path, binaryArr);
             //     });
-            return $q(function (resolve, reject) {               
+            return $q(function (resolve, reject) {
                 var transfer = new FileTransfer();
                 var filename = cordova.file.dataDirectory + path;
                 transfer.download(
                     url,
                     filename,
-                    function(file) {
+                    function (file) {
                         // tile downloaded OK; set the iOS "don't back up" flag then move on
                         file.setMetadata(null, null, { "com.apple.MobileBackup": 1 });
                         resolve();
                     },
-                    function(error) {
+                    function (error) {
                         var errmsg = '';
                         switch (error.code) {
-                        case FileTransferError.FILE_NOT_FOUND_ERR:
-                            errmsg = "Not found: " + url;
-                            break;
-                        case FileTransferError.INVALID_URL_ERR:
-                            errmsg = "Invalid URL:" + url;
-                            break;
-                        case FileTransferError.CONNECTION_ERR:
-                            errmsg = "Connection error at the web server.\n";
-                            break;
+                            case FileTransferError.FILE_NOT_FOUND_ERR:
+                                errmsg = "Not found: " + url;
+                                break;
+                            case FileTransferError.INVALID_URL_ERR:
+                                errmsg = "Invalid URL:" + url;
+                                break;
+                            case FileTransferError.CONNECTION_ERR:
+                                errmsg = "Connection error at the web server.\n";
+                                break;
                         }
                         reject(errmsg);
                     }
@@ -355,7 +357,7 @@ angular.module('RegObs').factory('PresistentStorage', function (AppSettings, $co
      * @param {} path 
      * @returns {} 
      */
-    service.createDirectory = function(path) {
+    service.createDirectory = function (path) {
         if (Utility.isRippleEmulator()) {
             return service._emulateCreateDirRecursively(path);
         } else {

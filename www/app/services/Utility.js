@@ -402,10 +402,6 @@ angular
             return typeof obj === 'string' || obj instanceof String;
         };
 
-        service.isObsImage = function(registration) {
-            return registration.RegistrationTid === 12 || registration.RegistrationTid === 23;
-        };
-
         /**
          * Get distance text formatted in km or meter depending on how large the distance value is
          * @param {} distance in meter

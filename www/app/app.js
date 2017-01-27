@@ -105,7 +105,7 @@
                 }
             })
 
-            .state('observationdetails',{
+            .state('observationdetails', {
                 url: '/observationdetails',
                 templateUrl: 'app/observations/details/observationdetails.html',
                 controller: 'ObservationDetailsCtrl as vm',
@@ -469,8 +469,10 @@
                 StatusBar.styleLightContent();
             }
 
-            Observations.removeOldObservationsFromPresistantStorage(); //cleanup old observations on startup
-            OfflineMap.checkUncompleteDownloads(); //Check if any uncomplete downloads and continue download progress
+            document.addEventListener("deviceready", function () {
+                Observations.removeOldObservationsFromPresistantStorage(); //cleanup old observations on startup
+                OfflineMap.checkUncompleteDownloads(); //Check if any uncomplete downloads and continue download progress
+            });        
         });
 
         $ionicPlatform.on('resume', function () {

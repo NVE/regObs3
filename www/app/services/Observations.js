@@ -123,12 +123,9 @@
 
         var saveRegistrationPictures = function (registration, progress, onProgress, cancel) {
             var tasks = [];
-            AppLogging.log('Saving pictures for registration ' + registration.RegId);
-            registration.Registrations.forEach(function (item) {
-                if (Utility.isObsImage(item)) {
-                    var pictureId = item.TypicalValue2;
-                    tasks.push(downloadPicture(pictureId, progress, onProgress, cancel));
-                }
+            registration.Pictures.forEach(function (item) {
+                var pictureId = item.TypicalValue2;
+                tasks.push(downloadPicture(pictureId, progress, onProgress, cancel));
             });
             return $q.all(tasks);
         };
@@ -142,8 +139,7 @@
                         {
                             GeoHazards: [geohazardId],
                             Latitude: latitude,
-                            //Longitude: longitude,
-                            Longtitude: longitude,
+                            Longitude: longitude,
                             Radius: range,
                             FromDate: AppSettings.getObservationsFromDateISOString(),
                             LangKey: AppSettings.getCurrentLangKey()
@@ -222,7 +218,7 @@
             return true;
         };
 
-        service._isSameRegistration = function(first, second) {
+        service._isSameRegistration = function (first, second) {
             return first.RegId === second.RegId;
         };
 
@@ -230,7 +226,7 @@
             return item.PictureCount === 0 && item.RegistrationCount === 0;
         };
 
-        service._registrationExistsInArray = function(arr, item) {
+        service._registrationExistsInArray = function (arr, item) {
             return arr.filter(function (reg) { return service._isSameRegistration(reg, item) }).length > 0;
         };
 
@@ -258,26 +254,21 @@
          */
         service._deleteAllImagesForRegistration = function (registration) {
             var tasks = [];
-            registration.Registrations.forEach(function (item) {
-                if (Utility.isObsImage(item)) {
-                    var pictureId = item.TypicalValue2;
-                    var path = AppSettings.getImageRelativePath(pictureId);
+            registration.Pictures.forEach(function (item) {
+                var pictureId = item.TypicalValue2;
+                var path = AppSettings.getImageRelativePath(pictureId);
 
-                    var task = function () {
-                        return $q(function (resolve) {
-                            $ionicPlatform.ready(function () {
-                                PresistentStorage.checkIfFileExsists(path)
-                               .then(function () {
-                                   return PresistentStorage.removeFile(path);
-                               })
-                               .then(resolve) //deleted complete, resolve
-                               .catch(resolve); //file does not exist or could not be deleted, resolve
-                            });
-                        });
-                    };
-
-                    tasks.push(task);
-                }
+                var task = function () {
+                    return $q(function (resolve) {
+                        PresistentStorage.checkIfFileExsists(path)
+                       .then(function () {
+                           return PresistentStorage.removeFile(path);
+                       })
+                       .then(resolve) //deleted complete, resolve
+                       .catch(resolve); //file does not exist or could not be deleted, resolve
+                    });
+                };
+                tasks.push(task);
             });
             return $q.all(tasks);
         };
@@ -328,7 +319,7 @@
                 var progress = new RegObs.ProggressStatus();
                 var total = 0;
                 registrations.forEach(function (item) {
-                    total += item.PictureCount; //Download picture progress
+                    total += item.Pictures.length; //Download picture progress
                 });
                 progress.setTotal(total);
                 if (onProgress) {

@@ -1,6 +1,6 @@
 angular
     .module('RegObs')
-    .factory('RegobsPopup', function ($ionicPopup, $rootScope, $q, $pbService, $timeout, $translate) {
+    .factory('RegobsPopup', function ($ionicPopup, $rootScope, $q, $pbService, $timeout, AppLogging) {
         var RegobsPopup = this;
 
         RegobsPopup.delete = function (title, text, confirmText) {

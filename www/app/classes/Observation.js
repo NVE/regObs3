@@ -1,7 +1,7 @@
 ﻿/**
  * Class for Observation object
  */
-angular.module('RegObs').factory('Observation', function (MapSelectableItem, AppSettings, PresistentStorage, UserLocation) {
+angular.module('RegObs').factory('Observation', function (MapSelectableItem, AppSettings, PresistentStorage, UserLocation, DateHelpers, moment) {
 
     /**
      * Constructor for Observation
@@ -9,6 +9,10 @@ angular.module('RegObs').factory('Observation', function (MapSelectableItem, App
      * @returns {} 
      */
     var Observation = function (json) {
+        if (!json || typeof json !== 'object' || !json.RegId) {
+            throw new Error('Could not create Observation. Invalid json!');
+        }
+
         angular.merge(this, json);
         this._images = [];
         this._registrations = [];
@@ -16,7 +20,7 @@ angular.module('RegObs').factory('Observation', function (MapSelectableItem, App
         this.init();
     };
 
-    
+
 
     /**
      * Static helper method
@@ -35,15 +39,6 @@ angular.module('RegObs').factory('Observation', function (MapSelectableItem, App
     };
 
     /**
-     * Static helper method to check if registration is image
-     * @param {} registration 
-     * @returns {} 
-     */
-    Observation.isRegistrationImage = function(registration) {
-        return AppSettings.isObsImage(registration.RegistrationTid);
-    };
-
-    /**
      * Load json data to initialize object
      * @param {} json 
      * @returns {} 
@@ -53,18 +48,19 @@ angular.module('RegObs').factory('Observation', function (MapSelectableItem, App
         self._images = [];
         self._registrations = [];
         if (self.Registrations) {
-            self.Registrations.forEach(function(item) {
-                if (Observation.isRegistrationImage(item)) {
-                    var pictureId = item.TypicalValue2;
-                    var path = AppSettings.getImageRelativePath(pictureId);
-                    var uri = PresistentStorage.getUri(path);
-                    self._images.push({ id: pictureId, url: uri, description: item.TypicalValue1 });
-                } else {
-                    self._registrations.push({
-                        name: (item.RegistrationName || '').trim(),
-                        description: Observation.getObsDescription(item)
-                    });
-                }
+            self.Registrations.forEach(function (item) {
+                self._registrations.push({
+                    name: (item.RegistrationName || '').trim(),
+                    description: Observation.getObsDescription(item)
+                });
+            });
+        }
+        if (self.Pictures) {
+            self.Pictures.forEach(function (item) {
+                var pictureId = item.TypicalValue2;
+                var path = AppSettings.getImageRelativePath(pictureId);
+                var uri = PresistentStorage.getUri(path);
+                self._images.push({ id: pictureId, url: uri, description: item.TypicalValue1 });
             });
         }
     };
@@ -152,11 +148,21 @@ angular.module('RegObs').factory('Observation', function (MapSelectableItem, App
     };
 
     /**
+     * Get days until expiery of this observation. For example if days back is 3 days, the observation expires 3 days back from now
+     * @returns {} 
+     */
+    Observation.prototype.getDaysUntilExpiery = function () {
+        var date = moment(this.DtObsTime, moment.ISO_8601); //strict parsing
+        var fromNow = DateHelpers.now().diff(date, 'days');
+        return AppSettings.getObservationsDaysBack() - fromNow;
+    };
+
+    /**
      * Factory for creating new Observation from json
      * @param {} json 
      * @returns {} 
      */
-    Observation.fromJson = function(json) {
+    Observation.fromJson = function (json) {
         return new Observation(json);
     };
 

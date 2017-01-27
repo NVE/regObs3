@@ -559,8 +559,7 @@
             var geoHazardTid = Utility.getCurrentGeoHazardTid();
 
             var workFunc = function (onProgress, cancel) {
-                return Observations
-                    .updateObservationsWithinRadius(center.lat,
+                return Observations.updateObservationsWithinRadius(center.lat,
                         center.lng,
                         radius,
                         geoHazardTid,
@@ -568,9 +567,7 @@
                         cancel);
             };
 
-            return RegobsPopup.downloadProgress('Oppdaterer data med det siste fra regObs',
-                workFunc,
-                { longTimoutMessageDelay: 10, closeOnComplete: true }).then(service.refresh);
+            return RegobsPopup.downloadProgress('Oppdaterer data med det siste fra regObs',workFunc,{ longTimoutMessageDelay: 10, closeOnComplete: true }).then(service.refresh);
         };
 
         /**
