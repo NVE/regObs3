@@ -88,6 +88,7 @@
     "angular": "^1.0.8",
     "angular-sanitize": "1.5.8",
     "progressbar.js": "^1.0.1",
-    "angular-translate": "~2.13.1"
+    "angular-translate": "~2.13.1",
+    "leaflet": ">= 1.0.3"
   }
 }
