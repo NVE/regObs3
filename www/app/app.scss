@@ -260,4 +260,24 @@ input:focus, select:focus, textarea:focus {
     font-size: small;
 }
 
+ion-popover-view.fit {
+    height: auto;
 
+    ion-content {
+        position: relative;
+    }
+}
+
+ion-popover-view.wider {
+    width: 250px;
+}
+
+.platform-ios ion-popover-view.fit {
+    .item:first-child {
+        @include border-top-radius($popover-border-radius-ios);
+    }
+
+    .item:last-child {
+        @include border-bottom-radius($popover-border-radius-ios);
+    }
+}

@@ -1,9 +1,9 @@
 <ion-modal-view>
     <ion-header-bar>
-        <button class="button button-clear button-calm" ng-click="modal.hide()">Avbryt</button>
+        <button type="button" class="button button-clear button-calm" ng-click="modal.hide()">Avbryt</button>
         <h1 class="title" ng-hide="editing">Ny stabilitetstest</h1>
         <h1 class="title" ng-show="editing">Rediger stabilitetstest</h1>
-        <button class="button button-clear button-calm" ng-click="addStabilityTest()">OK</button>
+        <button type="button" class="button button-clear button-calm" ng-click="addStabilityTest()">OK</button>
     </ion-header-bar>
     <ion-content>
         <form name="newStabilityTestForm" novalidate>
@@ -44,7 +44,7 @@
             <div class="padding">
                 <regobs-save-button ng-click="addStabilityTest()" save-action=""></regobs-save-button>
 
-                <button class="button button-block button-assertive button-clear"
+                <button type="button" class="button button-block button-assertive button-clear"
                         ng-click="deleteStabilityTest()"
                         ng-show="editing">
                     Slett

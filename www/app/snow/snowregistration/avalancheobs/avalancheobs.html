@@ -1,7 +1,7 @@
 <ion-view view-title="Skred">
     <ion-content>
         <div class="padding">
-            <button class="button button-block icon-left ion-pin" ng-click="vm.openLandslideInMap()"
+            <button type="button" class="button button-block icon-left ion-pin" ng-click="vm.openLandslideInMap()"
                     ng-class="{'button-balanced':vm.reg.AvalancheObs.StartLat}">
                 Sett skredposisjon i kart
             </button>
@@ -96,7 +96,7 @@
 
             <regobs-image-list></regobs-image-list>
         </form>
-        <button ui-sref="help({page:'snowincident'})" class="button button-positive button-block button-clear">
+        <button type="button" ui-sref="help({page:'snowincident'})" class="button button-positive button-block button-clear">
             Hjelp
         </button>
 

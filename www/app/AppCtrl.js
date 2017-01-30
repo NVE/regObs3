@@ -95,6 +95,10 @@ angular.module('RegObs')
                 appVm.showRegistrationFooter();
         };
 
+        $scope.$on('$regobs.appModeChanged', function () {
+            popoverScope.currentAppMode = AppSettings.getAppMode();
+        });
+
         $scope.$on('$ionicView.loaded', function () {
             HeaderColor.init();
         });

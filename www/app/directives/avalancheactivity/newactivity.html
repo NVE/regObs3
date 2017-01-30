@@ -1,9 +1,9 @@
 <ion-modal-view>
     <ion-header-bar>
-        <button class="button button-clear button-calm" ng-click="modal.hide()">Avbryt</button>
+        <button type="button" class="button button-clear button-calm" ng-click="modal.hide()">Avbryt</button>
         <h1 class="title" ng-hide="editing">Nytt skredaktivitet</h1>
         <h1 class="title" ng-show="editing">Rediger skredaktivitet</h1>
-        <button class="button button-clear button-calm" ng-click="add()">OK</button>
+        <button type="button" class="button button-clear button-calm" ng-click="add()">OK</button>
     </ion-header-bar>
     <ion-content>
         <ion-list>
@@ -65,15 +65,15 @@
                         Utsatt høyde
                     </span>
 
-                    <button class="button button-block exposedTop" ng-click="exposedHeight('top')"
+                    <button type="button" class="button button-block exposedTop" ng-click="exposedHeight('top')"
                             ng-class="{'button-positive':obs.exposedHeight.top}">
                         Øverst
                     </button>
-                    <button class="button button-block exposedMid" ng-click="exposedHeight('mid')"
+                    <button type="button" class="button button-block exposedMid" ng-click="exposedHeight('mid')"
                             ng-class="{'button-positive':obs.exposedHeight.mid}">
                         I midten
                     </button>
-                    <button class="button button-block exposedBot" ng-click="exposedHeight('bot')"
+                    <button type="button" class="button button-block exposedBot" ng-click="exposedHeight('bot')"
                             ng-class="{'button-positive':obs.exposedHeight.bot}">
                         Nederst
                     </button>
@@ -101,43 +101,43 @@
                         Eksposisjon
                     </span>
                     <div class="button-bar">
-                        <button class="button" ng-click="toggleExposition(7)"
+                        <button type="button" class="button" ng-click="toggleExposition(7)"
                                 ng-class="{'button-positive':exposition[7]}">
                             NV
                         </button>
-                        <button class="button" ng-click="toggleExposition(0)"
+                        <button type="button" class="button" ng-click="toggleExposition(0)"
                                 ng-class="{'button-positive':exposition[0]}">
                             N
                         </button>
-                        <button class="button" ng-click="toggleExposition(1)"
+                        <button type="button" class="button" ng-click="toggleExposition(1)"
                                 ng-class="{'button-positive':exposition[1]}">
                             NØ
                         </button>
                     </div>
                     <div class="button-bar">
-                        <button class="button" ng-click="toggleExposition(6)"
+                        <button type="button" class="button" ng-click="toggleExposition(6)"
                                 ng-class="{'button-positive':exposition[6]}">
                             V
                         </button>
-                        <button class="button" ng-click="toggleAllExpositions()"
+                        <button type="button" class="button" ng-click="toggleAllExpositions()"
                                 ng-class="{'button-positive':allExpositionsToggled}">
                             Alle
                         </button>
-                        <button class="button" ng-click="toggleExposition(2)"
+                        <button type="button" class="button" ng-click="toggleExposition(2)"
                                 ng-class="{'button-positive':exposition[2]}">
                             Ø
                         </button>
                     </div>
                     <div class="button-bar">
-                        <button class="button" ng-click="toggleExposition(5)"
+                        <button type="button" class="button" ng-click="toggleExposition(5)"
                                 ng-class="{'button-positive':exposition[5]}">
                             SV
                         </button>
-                        <button class="button" ng-click="toggleExposition(4)"
+                        <button type="button" class="button" ng-click="toggleExposition(4)"
                                 ng-class="{'button-positive':exposition[4]}">
                             S
                         </button>
-                        <button class="button" ng-click="toggleExposition(3)"
+                        <button type="button" class="button" ng-click="toggleExposition(3)"
                                 ng-class="{'button-positive':exposition[3]}">
                             Sø
                         </button>
@@ -149,11 +149,11 @@
                             model="obs.Comment"></regobs-comment>
         </ion-list>
         <div class="padding">
-            <button class="button button-block button-calm"
+            <button type="button" class="button button-block button-calm"
                     ng-click="add()">
                 Lagre
             </button>
-            <button class="button button-block button-assertive button-clear"
+            <button type="button" class="button button-block button-assertive button-clear"
                     ng-click="delete()"
                     ng-show="editing">
                 Slett

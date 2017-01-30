@@ -8,7 +8,7 @@ angular
             replace: true,
             template: [
                 '<div>',
-                    '<button class="button button-clear button-block" ng-click="click()" ng-hide="imgLoading">',
+                    '<button type="button" class="button button-clear button-block" ng-click="click()" ng-hide="imgLoading">',
                         '<i class="icon stable ion-images"></i> Album',
                     '</button>',
                     '<ion-spinner class="spinner-light" ng-if="imgLoading"></ion-spinner>',

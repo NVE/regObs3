@@ -79,14 +79,22 @@ angular
                     AppLogging.log($scope.dates.timeFrame);
 
                     var start = new Date($scope.dates.DtStart);
-                    start.setHours($scope.dates.timeFrame.start.h);
-                    start.setMinutes($scope.dates.timeFrame.start.m);
+                    if ($scope.dates.timeFrame.start && $scope.dates.timeFrame.start.h) {
+                        start.setHours($scope.dates.timeFrame.start.h);
+                    }
+                    if ($scope.dates.timeFrame.start && $scope.dates.timeFrame.start.m) {
+                        start.setMinutes($scope.dates.timeFrame.start.m);
+                    }
                     start.setSeconds(0);
                     start.setMilliseconds(0);
 
                     var end = new Date($scope.dates.DtStart);
-                    end.setHours($scope.dates.timeFrame.end.h);
-                    end.setMinutes($scope.dates.timeFrame.end.m);
+                    if ($scope.dates.timeFrame.end && $scope.dates.timeFrame.end.h) {
+                        end.setHours($scope.dates.timeFrame.end.h);
+                    }
+                    if ($scope.dates.timeFrame.end && $scope.dates.timeFrame.end.m) {
+                        end.setMinutes($scope.dates.timeFrame.end.m);
+                    }
                     end.setSeconds(0);
                     end.setMilliseconds(0);
 

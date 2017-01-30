@@ -16,7 +16,7 @@
             </div>
             <div class="item" ng-if="!vm.isLoading && vm.observations.length === 0">
                 <p>{{'NO_OBSERVATIONS'|translate}}</p>
-                <button class="button button-block button-calm" ng-click="vm.updateFromButton()">
+                <button type="button" class="button button-block button-calm" ng-click="vm.updateFromButton()">
                     <span>Oppdater observasjoner</span>
                 </button>
             </div>

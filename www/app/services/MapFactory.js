@@ -109,6 +109,11 @@
             unselectFunc([obsLocationMarker]);
         };
 
+        /**
+         * Get Marker by id
+         * @param {} id 
+         * @returns {} 
+         */
         service._getMarker = function(id) {
             if (layerGroups && layerGroups.observations) {
                 var existingLayers = layerGroups.observations.getLayers().filter(function (item) {
@@ -567,7 +572,15 @@
                         cancel);
             };
 
-            return RegobsPopup.downloadProgress('Oppdaterer data med det siste fra regObs',workFunc,{ longTimoutMessageDelay: 10, closeOnComplete: true }).then(service.refresh);
+            return RegobsPopup.downloadProgress('UPDATE_DATA_MESSAGE', workFunc, { longTimoutMessageDelay: 10, closeOnComplete: true }).then(function () {
+                //Turn on observations and nearby places when updated from map (youtrack: rOa-40)
+                if (!AppSettings.data.showObservations || !AppSettings.data.showPreviouslyUsedPlaces) {
+                    AppSettings.data.showObservations = true;
+                    AppSettings.data.showPreviouslyUsedPlaces = true;
+                    AppSettings.save();
+                }
+                service.refresh();
+            });
         };
 
         /**

@@ -100,7 +100,7 @@
             </label>
 
             <ion-item class="text-center">
-                <button ng-click="vm.refreshKdvElements()" class="button button-block icon-left ion-refresh">
+                <button type="button" ng-click="vm.refreshKdvElements()" class="button button-block icon-left ion-refresh">
                     Oppdater nedtrekksmenyer  <ion-spinner class="spinner spinner-fix" ng-if="vm.refreshingKdv"></ion-spinner>
                 </button>
 
@@ -108,10 +108,10 @@
             </ion-item>
 
             <ion-item class="item-borderless">
-                <button ng-click="vm.clearAppStorage()" class="button button-block icon-left ion-medkit">
+                <button type="button" ng-click="vm.clearAppStorage()" class="button button-block icon-left ion-medkit">
                     Nullstill app
                 </button>
-                <button ui-sref="help({page:'settings'})" class="button button-positive button-block button-clear">
+                <button type="button" ui-sref="help({page:'settings'})" class="button button-positive button-block button-clear">
                     Hjelp
                 </button>
 

@@ -1,4 +1,4 @@
-﻿<ion-popover-view>
+﻿<ion-popover-view class="fit wider">
     <ion-content>
         <ion-list class="smaller-list-items">
             <ion-item class="item-icon-left item-text-wrap" ng-if="!showEditRegistration()" ng-click="newRegistration()">
@@ -7,14 +7,12 @@
             <ion-item class="item-icon-left item-text-wrap" ng-if="showEditRegistration()" ng-click="newRegistration()">
                 <i class="icon ion-edit"></i> {{'EDIT' | translate}} {{getCurrentGeoHazardName() | lowercase }}{{'OBSERVATION' | translate | lowercase}}
             </ion-item>
-            <div ng-if="showTrip()">
-                <ion-item class="item-icon-left item-text-wrap" ng-if="!tripStarted()" ng-click="newTrip()">
-                    <i class="icon ion-android-walk"></i> {{'START_TRIP' | translate}}
-                </ion-item>
-                <ion-item class="item-icon-left item-text-wrap" ng-if="tripStarted()" ng-click="stopTrip()">
-                    <i class="icon ion-android-walk"></i> {{'END_TRIP' | translate}}
-                </ion-item>
-            </div>
+            <ion-item class="item-icon-left item-text-wrap" ng-if="showTrip() && !tripStarted()" ng-click="newTrip()">
+                <i class="icon ion-android-walk"></i> {{'START_TRIP' | translate}}
+            </ion-item>
+            <ion-item class="item-icon-left item-text-wrap" ng-if="showTrip() && tripStarted()" ng-click="stopTrip()">
+                <i class="icon ion-android-walk"></i> {{'END_TRIP' | translate}}
+            </ion-item>
             <ion-item class="item-icon-left item-text-wrap" ng-click="openWebWarning()">
                 <i class="icon ion-alert-circled"></i> {{'VIEW_WARNINGS' | translate}}
             </ion-item>

@@ -95,6 +95,9 @@ angular
         };
 
         service.registrationTid = function (prop) {
+            var obs = OBSERVATIONS[prop];
+            if (!obs) throw Error(prop +' not found in observations!');
+
             return OBSERVATIONS[prop].RegistrationTID;
         };
 

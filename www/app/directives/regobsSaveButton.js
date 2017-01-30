@@ -9,7 +9,7 @@
         require: {
             formCtrl: '?^form'
         },
-        template: '<button class="button button-block button-calm" ng-click="$ctrl.save()">Lagre</button>',
+        template: '<button type="button" class="button button-block button-calm" ng-click="$ctrl.save()">Lagre</button>',
         controller: function ($scope, $state, $ionicPlatform, $ionicHistory, Property, RegobsPopup, AppLogging) {
             'ngInject';
             var ctrl = this;
