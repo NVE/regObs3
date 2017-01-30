@@ -135,6 +135,15 @@ angular.module('RegObs').factory('Observation', function (MapSelectableItem, App
         return this._images;
     };
 
+    /**
+     * Get competnece level
+     * @returns {} 
+     */
+    Observation.prototype.getObservationCompetenceLevel = function() {
+        return this.CompetenceLevelName && this.CompetenceLevelName !== 'Ukjent' ? this.CompetenceLevelName : '';
+    };
+
+
     Observation.prototype.getUserDistance = function () {
         return UserLocation.getUserDistanceFrom(this.Latitude, this.Longitude);
     };

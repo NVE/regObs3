@@ -27,4 +27,12 @@ angular.module('RegObs')
                 vm.swiper.slideTo(0, 0);
             }
         });
+
+        $scope.$on('$ionicView.beforeEnter', function () {
+            ionic.Platform.showStatusBar(false);
+        });
+
+        $scope.$on('$ionicView.afterLeave', function () {
+            ionic.Platform.showStatusBar(true);
+        });
     });

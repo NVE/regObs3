@@ -3,7 +3,8 @@
         <strong>{{$ctrl.registration.MunicipalName}}</strong> &bull; {{$ctrl.registration.DtObsTime | date:'dd.MM.yyyy HH:mm:ss'}} &bull; {{$ctrl.registration.getRegistrationCount()}} <i class="icon ion-eye"></i>
     </div>
     <div>
-        {{$ctrl.registration.NickName}} <span ng-if="$ctrl.registration.CompetenceLevelName">(<i ng-repeat="star in $ctrl.registration.CompetenceLevelName track by $index" class="icon ion-ios-star-outline"></i>)</span>
+        {{$ctrl.registration.NickName}} <span ng-if="$ctrl.registration.getObservationCompetenceLevel()">(<i ng-repeat="star in $ctrl.registration.getObservationCompetenceLevel() track by $index" class="icon ion-ios-star-outline"></i>)</span>
+        <span ng-if="!$ctrl.registration.getObservationCompetenceLevel()">({{'UNKNOWN_COMPETENCE'|translate}})</span>
     </div>
 </div>
 <div class="observation-slides" ng-if="$ctrl.registration.hasImages()">
