@@ -96,5 +96,6 @@
   "FLOOD_LEGEND_TEXT_YEAR": "Flomutsatt lavpunkt ved",
   "NO_OBSERVATIONS": "Det finnes ingen nedlastede observasjoner",
   "PULL_TO_REFRESH": "Trekk ned for å oppdatere",
+  "UPDATE_OBSERVATIONS": "Oppdater observasjoner",
   "UPDATE_DATA_MESSAGE": "Oppdaterer data med det siste fra regObs"
 }
