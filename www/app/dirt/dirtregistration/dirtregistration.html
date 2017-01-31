@@ -1,24 +1,25 @@
 <ion-view view-title="Jordobservasjon">
     <ion-content>
         <ion-list>
+            <regobs-position></regobs-position>
             <regobs-time reg-object="vm.reg" reg-prop="DtObsTime"></regobs-time>
             <regobs-menu-item
-                    title="Faretegn"
-                    condition="appVm.propertyExists('DangerObs')"
-                    state="dirtdangerobs"
-                    badge-text="vm.reg.DangerObs.length">
+                title="Faretegn"
+                condition="appVm.propertyExists('DangerObs')"
+                state="dirtdangerobs"
+                badge-text="vm.reg.DangerObs.length">
             </regobs-menu-item>
 
             <regobs-menu-item
-                    title="Skredhendelse"
-                    condition="appVm.propertyExists('LandSlideObs')"
-                    state="landslideobs">
+                title="Skredhendelse"
+                condition="appVm.propertyExists('LandSlideObs')"
+                state="landslideobs">
             </regobs-menu-item>
 
             <regobs-menu-item
-                    title="Fritekst"
-                    condition="appVm.propertyExists('GeneralObservation')"
-                    state="generalobs">
+                title="Fritekst"
+                condition="appVm.propertyExists('GeneralObservation')"
+                state="generalobs">
             </regobs-menu-item>
 
         </ion-list>

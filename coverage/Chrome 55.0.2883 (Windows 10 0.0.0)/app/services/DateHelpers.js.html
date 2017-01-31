@@ -1,7 +1,7 @@
 <!doctype html>
 <html lang="en">
 <head>
-    <title>Code coverage report for app\generalobs\GeneralObsCtrl.js</title>
+    <title>Code coverage report for app\services\DateHelpers.js</title>
     <meta charset="utf-8" />
     <link rel="stylesheet" href="../../prettify.css" />
     <link rel="stylesheet" href="../../base.css" />
@@ -16,13 +16,13 @@
 <div class='wrapper'>
   <div class='pad1'>
     <h1>
-      <a href="../../index.html">all files</a> / <a href="index.html">app/generalobs/</a> GeneralObsCtrl.js
+      <a href="../../index.html">all files</a> / <a href="index.html">app/services/</a> DateHelpers.js
     </h1>
     <div class='clearfix'>
       <div class='fl pad1y space-right2'>
-        <span class="strong">40% </span>
+        <span class="strong">80% </span>
         <span class="quiet">Statements</span>
-        <span class='fraction'>2/5</span>
+        <span class='fraction'>4/5</span>
       </div>
       <div class='fl pad1y space-right2'>
         <span class="strong">100% </span>
@@ -30,18 +30,18 @@
         <span class='fraction'>0/0</span>
       </div>
       <div class='fl pad1y space-right2'>
-        <span class="strong">0% </span>
+        <span class="strong">50% </span>
         <span class="quiet">Functions</span>
-        <span class='fraction'>0/2</span>
+        <span class='fraction'>1/2</span>
       </div>
       <div class='fl pad1y space-right2'>
-        <span class="strong">40% </span>
+        <span class="strong">80% </span>
         <span class="quiet">Lines</span>
-        <span class='fraction'>2/5</span>
+        <span class='fraction'>4/5</span>
       </div>
     </div>
   </div>
-  <div class='status-line low'></div>
+  <div class='status-line high'></div>
 <pre><table class="coverage">
 <tr><td class="line-count quiet">1
 2
@@ -51,29 +51,23 @@
 6
 7
 8
-9
-10
-11</td><td class="line-coverage quiet"><span class="cline-any cline-yes">1×</span>
+9</td><td class="line-coverage quiet"><span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">30×</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">1×</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">30×</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">angular
-    .module('RegObs')
-    .controller('GeneralObsCtrl', <span class="fstat-no" title="function not covered" >function ($scope, $state, Registration) {</span>
-<span class="fstat-no" title="function not covered" >        function init() {</span>
-<span class="cstat-no" title="statement not covered" >            var vm = this;</span>
-<span class="cstat-no" title="statement not covered" >            vm.reg = Registration.initPropertyAsObject($state.current.data.registrationProp);</span>
-        }
+<span class="cline-any cline-yes">30×</span>
+<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">﻿angular.module('RegObs').factory('DateHelpers', function (moment) {
+    var service = this;
 &nbsp;
-<span class="cstat-no" title="statement not covered" >        $scope.$on('$ionicView.loaded', init.bind(this));</span>
-    });
-&nbsp;</pre></td></tr>
+    service.now = <span class="fstat-no" title="function not covered" >function () {</span>
+<span class="cstat-no" title="statement not covered" >        return moment();</span>
+    };
+&nbsp;
+    return service;
+});</pre></td></tr>
 </table></pre>
 <div class='push'></div><!-- for sticky footer -->
 </div><!-- /wrapper -->

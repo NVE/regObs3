@@ -70,6 +70,9 @@ angular
                         }
                     });
             } else {
+                if (!ObsLocation.isSet()) {
+                    ObsLocation.setPositionToCurrentUserPosition();
+                }
                 navigate();
             }
         };
@@ -123,9 +126,12 @@ angular
 
         Registration.createNew = function (type) {
             Registration.data = createRegistration(type);
+            if (!ObsLocation.isSet()) {
+                ObsLocation.setPositionToCurrentUserPosition();
+            }
             //ObsLocation.fetchAndSetPosition();
             //AppLogging.log(Registration.data);
-            $rootScope.$broadcast('$ionicView.loaded');
+            //$rootScope.$broadcast('$ionicView.loaded');
 
             return Registration.data;
         };

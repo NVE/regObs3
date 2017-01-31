@@ -1,6 +1,6 @@
 angular
     .module('RegObs')
-    .factory('ObsLocation', function ($http, $ionicPlatform, $cordovaGeolocation, AppSettings, LocalStorage, AppLogging, $rootScope, $timeout) {
+    .factory('ObsLocation', function ($http, $ionicPlatform, $cordovaGeolocation, AppSettings, LocalStorage, AppLogging, $rootScope, UserLocation) {
         var ObsLocation = this;
         var storageKey = 'regobsLocation';
 
@@ -78,18 +78,18 @@ angular
         //    }
         //};
 
-        ObsLocation.getObservationsWithinRadius = function (range, geohazardId) {
-            return $http.get(
-                AppSettings.getEndPoints().getObservationsWithinRadius, {
-                    params: {
-                        latitude: ObsLocation.data.Latitude,
-                        longitude: ObsLocation.data.Longitude,
-                        range: range,
-                        geohazardId: geohazardId
-                    },
-                    timeout: AppSettings.data.gpsTimeout * 1000
-                });
-        };
+        //ObsLocation.getObservationsWithinRadius = function (range, geohazardId) {
+        //    return $http.get(
+        //        AppSettings.getEndPoints().getObservationsWithinRadius, {
+        //            params: {
+        //                latitude: ObsLocation.data.Latitude,
+        //                longitude: ObsLocation.data.Longitude,
+        //                range: range,
+        //                geohazardId: geohazardId
+        //            },
+        //            timeout: AppSettings.data.gpsTimeout * 1000
+        //        });
+        //};
 
         ObsLocation.get = function () {
             return ObsLocation.data;
@@ -124,6 +124,13 @@ angular
                 }
 
                 save();
+            }
+        };
+
+        ObsLocation.setPositionToCurrentUserPosition = function() {
+            if (UserLocation.hasUserLocation()) {
+                var loc = UserLocation.getLastUserLocation();
+                ObsLocation.set({ Latitude: loc.latitude, Longitude: loc.longitude, Uncertainty: loc.accuracy, UTMSourceTID: ObsLocation.source.fetchedFromGPS });
             }
         };
 

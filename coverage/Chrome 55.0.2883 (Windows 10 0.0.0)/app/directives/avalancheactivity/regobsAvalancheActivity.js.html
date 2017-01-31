@@ -20,14 +20,14 @@
     </h1>
     <div class='clearfix'>
       <div class='fl pad1y space-right2'>
-        <span class="strong">1.71% </span>
+        <span class="strong">1.65% </span>
         <span class="quiet">Statements</span>
-        <span class='fraction'>2/117</span>
+        <span class='fraction'>2/121</span>
       </div>
       <div class='fl pad1y space-right2'>
         <span class="strong">0% </span>
         <span class="quiet">Branches</span>
-        <span class='fraction'>0/33</span>
+        <span class='fraction'>0/49</span>
       </div>
       <div class='fl pad1y space-right2'>
         <span class="strong">0% </span>
@@ -35,9 +35,9 @@
         <span class='fraction'>0/24</span>
       </div>
       <div class='fl pad1y space-right2'>
-        <span class="strong">1.71% </span>
+        <span class="strong">1.65% </span>
         <span class="quiet">Lines</span>
-        <span class='fraction'>2/117</span>
+        <span class='fraction'>2/121</span>
       </div>
     </div>
   </div>
@@ -297,7 +297,15 @@
 252
 253
 254
-255</td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+255
+256
+257
+258
+259
+260
+261
+262
+263</td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1×</span>
@@ -380,12 +388,20 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -632,14 +648,22 @@ angular
 <span class="cstat-no" title="statement not covered" >                    AppLogging.log($scope.dates.timeFrame);</span>
 &nbsp;
 <span class="cstat-no" title="statement not covered" >                    var start = new Date($scope.dates.DtStart);</span>
-<span class="cstat-no" title="statement not covered" >                    start.setHours($scope.dates.timeFrame.start.h);</span>
-<span class="cstat-no" title="statement not covered" >                    start.setMinutes($scope.dates.timeFrame.start.m);</span>
+<span class="cstat-no" title="statement not covered" >                    if ($scope.dates.timeFrame.start &amp;&amp; $scope.dates.timeFrame.start.h) {</span>
+<span class="cstat-no" title="statement not covered" >                        start.setHours($scope.dates.timeFrame.start.h);</span>
+                    }
+<span class="cstat-no" title="statement not covered" >                    if ($scope.dates.timeFrame.start &amp;&amp; $scope.dates.timeFrame.start.m) {</span>
+<span class="cstat-no" title="statement not covered" >                        start.setMinutes($scope.dates.timeFrame.start.m);</span>
+                    }
 <span class="cstat-no" title="statement not covered" >                    start.setSeconds(0);</span>
 <span class="cstat-no" title="statement not covered" >                    start.setMilliseconds(0);</span>
 &nbsp;
 <span class="cstat-no" title="statement not covered" >                    var end = new Date($scope.dates.DtStart);</span>
-<span class="cstat-no" title="statement not covered" >                    end.setHours($scope.dates.timeFrame.end.h);</span>
-<span class="cstat-no" title="statement not covered" >                    end.setMinutes($scope.dates.timeFrame.end.m);</span>
+<span class="cstat-no" title="statement not covered" >                    if ($scope.dates.timeFrame.end &amp;&amp; $scope.dates.timeFrame.end.h) {</span>
+<span class="cstat-no" title="statement not covered" >                        end.setHours($scope.dates.timeFrame.end.h);</span>
+                    }
+<span class="cstat-no" title="statement not covered" >                    if ($scope.dates.timeFrame.end &amp;&amp; $scope.dates.timeFrame.end.m) {</span>
+<span class="cstat-no" title="statement not covered" >                        end.setMinutes($scope.dates.timeFrame.end.m);</span>
+                    }
 <span class="cstat-no" title="statement not covered" >                    end.setSeconds(0);</span>
 <span class="cstat-no" title="statement not covered" >                    end.setMilliseconds(0);</span>
 &nbsp;
@@ -811,7 +835,7 @@ angular
 </div><!-- /wrapper -->
 <div class='footer quiet pad2 space-top1 center small'>
   Code coverage
-  generated by <a href="http://istanbul-js.org/" target="_blank">istanbul</a> at Mon Jan 23 2017 11:09:49 GMT+0100 (W. Europe Standard Time)
+  generated by <a href="http://istanbul-js.org/" target="_blank">istanbul</a> at Tue Jan 31 2017 08:30:40 GMT+0100 (W. Europe Standard Time)
 </div>
 </div>
 <script src="../../../prettify.js"></script>

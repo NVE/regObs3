@@ -20,24 +20,24 @@
     </h1>
     <div class='clearfix'>
       <div class='fl pad1y space-right2'>
-        <span class="strong">2.82% </span>
+        <span class="strong">2.94% </span>
         <span class="quiet">Statements</span>
-        <span class='fraction'>2/71</span>
+        <span class='fraction'>2/68</span>
       </div>
       <div class='fl pad1y space-right2'>
         <span class="strong">0% </span>
         <span class="quiet">Branches</span>
-        <span class='fraction'>0/39</span>
+        <span class='fraction'>0/35</span>
       </div>
       <div class='fl pad1y space-right2'>
         <span class="strong">0% </span>
         <span class="quiet">Functions</span>
-        <span class='fraction'>0/22</span>
+        <span class='fraction'>0/23</span>
       </div>
       <div class='fl pad1y space-right2'>
-        <span class="strong">2.82% </span>
+        <span class="strong">2.94% </span>
         <span class="quiet">Lines</span>
-        <span class='fraction'>2/71</span>
+        <span class='fraction'>2/68</span>
       </div>
     </div>
   </div>
@@ -164,12 +164,7 @@
 119
 120
 121
-122
-123
-124
-125
-126
-127</td><td class="line-coverage quiet"><span class="cline-any cline-yes">1×</span>
+122</td><td class="line-coverage quiet"><span class="cline-any cline-yes">1×</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -272,18 +267,13 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -304,8 +294,8 @@
 <span class="cstat-no" title="statement not covered" >        appVm.registrationIsType = Registration.doesExistUnsent;</span>
 <span class="cstat-no" title="statement not covered" >        appVm.trip = Trip;</span>
 &nbsp;
-<span class="fstat-no" title="function not covered" >        function resetForm(confirm){</span>
-<span class="cstat-no" title="statement not covered" >            if(confirm){</span>
+<span class="fstat-no" title="function not covered" >        function resetForm(confirm) {</span>
+<span class="cstat-no" title="statement not covered" >            if (confirm) {</span>
 <span class="cstat-no" title="statement not covered" >                appVm.tripId = undefined;</span>
 <span class="cstat-no" title="statement not covered" >                appVm.tripMinutes = undefined;</span>
 <span class="cstat-no" title="statement not covered" >                appVm.tripComment = undefined;</span>
@@ -313,21 +303,21 @@
         }
 &nbsp;
 <span class="cstat-no" title="statement not covered" >        appVm.resetTrip = <span class="fstat-no" title="function not covered" >function () {</span></span>
-<span class="cstat-no" title="statement not covered" >            if(appVm.tripId || appVm.tripMinutes || appVm.tripComment)</span>
-<span class="cstat-no" title="statement not covered" >            RegobsPopup.delete('Nullstill', 'Vil du nullstille skjema?', 'Nullstill')</span>
-                .then(resetForm);
+<span class="cstat-no" title="statement not covered" >            if (appVm.tripId || appVm.tripMinutes || appVm.tripComment)</span>
+<span class="cstat-no" title="statement not covered" >                RegobsPopup.delete('Nullstill', 'Vil du nullstille skjema?', 'Nullstill')</span>
+                    .then(resetForm);
 &nbsp;
         };
 &nbsp;
 <span class="cstat-no" title="statement not covered" >        appVm.startTrip = <span class="fstat-no" title="function not covered" >function (id, expectedMinutes, comment) {</span></span>
-<span class="cstat-no" title="statement not covered" >            Trip.start(10,id,expectedMinutes,comment);</span>
+<span class="cstat-no" title="statement not covered" >            Trip.start(10, id, expectedMinutes, comment);</span>
         };
 &nbsp;
 <span class="cstat-no" title="statement not covered" >        appVm.stopTrip = <span class="fstat-no" title="function not covered" >function () {</span></span>
 <span class="cstat-no" title="statement not covered" >            Trip.stop().then(resetForm);</span>
         };
 &nbsp;
-<span class="cstat-no" title="statement not covered" >        appVm.propertyExists = <span class="fstat-no" title="function not covered" >function(prop){</span></span>
+<span class="cstat-no" title="statement not covered" >        appVm.propertyExists = <span class="fstat-no" title="function not covered" >function (prop) {</span></span>
 <span class="cstat-no" title="statement not covered" >            return Property.exists(prop);</span>
         };
 &nbsp;
@@ -341,7 +331,7 @@
 <span class="cstat-no" title="statement not covered" >            Property.reset(prop);</span>
         };
 &nbsp;
-<span class="cstat-no" title="statement not covered" >        appVm.hasRegistration = <span class="fstat-no" title="function not covered" >function() {</span></span>
+<span class="cstat-no" title="statement not covered" >        appVm.hasRegistration = <span class="fstat-no" title="function not covered" >function () {</span></span>
 <span class="cstat-no" title="statement not covered" >            return !(appVm.registration.isEmpty() &amp;&amp; !appVm.registration.unsent.length);</span>
         };
 &nbsp;
@@ -370,7 +360,7 @@
 &nbsp;
 <span class="cstat-no" title="statement not covered" >        var popoverScope = $rootScope.$new();</span>
 <span class="cstat-no" title="statement not covered" >        popoverScope.currentAppMode = AppSettings.getAppMode();</span>
-<span class="cstat-no" title="statement not covered" >        popoverScope.goToSettings = <span class="fstat-no" title="function not covered" >function() {</span></span>
+<span class="cstat-no" title="statement not covered" >        popoverScope.goToSettings = <span class="fstat-no" title="function not covered" >function () {</span></span>
 <span class="cstat-no" title="statement not covered" >            appVm.topPopover.hide();</span>
 <span class="cstat-no" title="statement not covered" >            $state.go('settings');</span>
         };
@@ -378,10 +368,10 @@
 <span class="cstat-no" title="statement not covered" >            appVm.topPopover.hide();</span>
 <span class="cstat-no" title="statement not covered" >            AppSettings.setAppMode(mode);</span>
         };
-<span class="cstat-no" title="statement not covered" >        popoverScope.isLoggedIn = <span class="fstat-no" title="function not covered" >function() {</span></span>
+<span class="cstat-no" title="statement not covered" >        popoverScope.isLoggedIn = <span class="fstat-no" title="function not covered" >function () {</span></span>
 <span class="cstat-no" title="statement not covered" >            return !User.getUser().anonymous;</span>
         };
-        
+&nbsp;
 <span class="cstat-no" title="statement not covered" >        $ionicPopover.fromTemplateUrl('app/menus/topPopover.html', { scope: popoverScope }).then(<span class="fstat-no" title="function not covered" >function (popover) {</span></span>
 <span class="cstat-no" title="statement not covered" >            appVm.topPopover = popover;</span>
         });
@@ -392,25 +382,20 @@
                 appVm.showRegistrationFooter();
         };
 &nbsp;
+<span class="cstat-no" title="statement not covered" >        $scope.$on('$regobs.appModeChanged', <span class="fstat-no" title="function not covered" >function () {</span></span>
+<span class="cstat-no" title="statement not covered" >            popoverScope.currentAppMode = AppSettings.getAppMode();</span>
+        });
+&nbsp;
 <span class="cstat-no" title="statement not covered" >        $scope.$on('$ionicView.loaded', <span class="fstat-no" title="function not covered" >function () {</span></span>
 <span class="cstat-no" title="statement not covered" >            HeaderColor.init();</span>
         });
 &nbsp;
 <span class="cstat-no" title="statement not covered" >        $scope.$on('$stateChangeStart', <span class="fstat-no" title="function not covered" >function () {</span></span>
-<span class="cstat-no" title="statement not covered" >            AppLogging.log(Registration.data);</span>
 <span class="cstat-no" title="statement not covered" >            var currentProp = ($state.current.data || {}).registrationProp;</span>
-<span class="cstat-no" title="statement not covered" >            if (currentProp) {</span>
-<span class="cstat-no" title="statement not covered" >                if (currentProp === 'SnowProfile' &amp;&amp; Registration.hasImageForRegistration(currentProp)) {</span>
-<span class="cstat-no" title="statement not covered" >                    var reg = Registration.initPropertyAsObject(currentProp);</span>
-<span class="cstat-no" title="statement not covered" >                    reg.SnowProfile.Comment = 'Snøprofil fra app';</span>
-                }
-&nbsp;
-<span class="cstat-no" title="statement not covered" >                if(!Registration.propertyExists(currentProp)){</span>
-<span class="cstat-no" title="statement not covered" >                    AppLogging.log('DELETE ' + currentProp);</span>
-<span class="cstat-no" title="statement not covered" >                    delete Registration.data[currentProp];</span>
-                }
+<span class="cstat-no" title="statement not covered" >            if (currentProp &amp;&amp; !Registration.propertyExists(currentProp)) {</span>
+<span class="cstat-no" title="statement not covered" >                AppLogging.log('DELETE empty registration for: ' + currentProp + ' current registration: ' + JSON.stringify(Registration.data));</span>
+<span class="cstat-no" title="statement not covered" >                delete Registration.data[currentProp];</span>
             }
-&nbsp;
         });
 &nbsp;
 <span class="cstat-no" title="statement not covered" >        $scope.$on('$ionicView.enter', <span class="fstat-no" title="function not covered" >function () {</span></span>
@@ -427,7 +412,7 @@
 </div><!-- /wrapper -->
 <div class='footer quiet pad2 space-top1 center small'>
   Code coverage
-  generated by <a href="http://istanbul-js.org/" target="_blank">istanbul</a> at Mon Jan 23 2017 11:09:49 GMT+0100 (W. Europe Standard Time)
+  generated by <a href="http://istanbul-js.org/" target="_blank">istanbul</a> at Tue Jan 31 2017 08:30:40 GMT+0100 (W. Europe Standard Time)
 </div>
 </div>
 <script src="../prettify.js"></script>

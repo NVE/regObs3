@@ -27,7 +27,7 @@
       <div class='fl pad1y space-right2'>
         <span class="strong">0% </span>
         <span class="quiet">Branches</span>
-        <span class='fraction'>0/26</span>
+        <span class='fraction'>0/28</span>
       </div>
       <div class='fl pad1y space-right2'>
         <span class="strong">0% </span>
@@ -284,8 +284,8 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -407,7 +407,7 @@ angular
                     thickness: 0
                 };
 &nbsp;
-<span class="cstat-no" title="statement not covered" >                $scope.iceThicknessSum = Utility.nDecimal($scope.obsObject.IceThicknessSum*100,3);</span>
+<span class="cstat-no" title="statement not covered" >                $scope.iceThicknessSum = Utility.nDecimal($scope.obsObject.IceThicknessSum * 100, 3);</span>
 &nbsp;
 <span class="cstat-no" title="statement not covered" >                $scope.new = <span class="fstat-no" title="function not covered" >function () {</span></span>
 <span class="cstat-no" title="statement not covered" >                    indexEditing = -1;</span>
@@ -434,25 +434,25 @@ angular
 <span class="cstat-no" title="statement not covered" >                    $scope.iceLayer = null;</span>
                 };
 &nbsp;
-<span class="fstat-no" title="function not covered" >                function calcSum(){</span>
-<span class="cstat-no" title="statement not covered" >                  var totalThickness = 0;</span>
-<span class="cstat-no" title="statement not covered" >                  $scope.obsObject.IceThicknessLayer.forEach(<span class="fstat-no" title="function not covered" >function (layer) {</span></span>
-<span class="cstat-no" title="statement not covered" >                      if (layer &amp;&amp; !isNaN(layer.IceLayerThickness))</span>
-<span class="cstat-no" title="statement not covered" >                          totalThickness += layer.IceLayerThickness;</span>
-                  });
-<span class="cstat-no" title="statement not covered" >                  $scope.obsObject.IceThicknessSum = totalThickness;</span>
-<span class="cstat-no" title="statement not covered" >                  AppLogging.log($scope.obsObject);</span>
-<span class="cstat-no" title="statement not covered" >                  $scope.iceThicknessSum =  Utility.nDecimal(totalThickness*100,3);</span>
+<span class="fstat-no" title="function not covered" >                function calcSum() {</span>
+<span class="cstat-no" title="statement not covered" >                    var totalThickness = 0;</span>
+<span class="cstat-no" title="statement not covered" >                    $scope.obsObject.IceThicknessLayer = $scope.obsObject.IceThicknessLayer || [];</span>
+<span class="cstat-no" title="statement not covered" >                    $scope.obsObject.IceThicknessLayer.forEach(<span class="fstat-no" title="function not covered" >function (layer) {</span></span>
+<span class="cstat-no" title="statement not covered" >                        if (layer &amp;&amp; !isNaN(layer.IceLayerThickness))</span>
+<span class="cstat-no" title="statement not covered" >                            totalThickness += layer.IceLayerThickness;</span>
+                    });
+<span class="cstat-no" title="statement not covered" >                    $scope.obsObject.IceThicknessSum = totalThickness;</span>
+<span class="cstat-no" title="statement not covered" >                    $scope.iceThicknessSum = Utility.nDecimal(totalThickness * 100, 3);</span>
                 }
 &nbsp;
-<span class="cstat-no" title="statement not covered" >                $scope.sumChanged = <span class="fstat-no" title="function not covered" >function(){</span></span>
-<span class="cstat-no" title="statement not covered" >                  $timeout(<span class="fstat-no" title="function not covered" >function () {</span></span>
-<span class="cstat-no" title="statement not covered" >                      var num = parseFloat($scope.iceThicknessSum);</span>
-<span class="cstat-no" title="statement not covered" >                      if (!isNaN(num)) {</span>
-<span class="cstat-no" title="statement not covered" >                          $scope.obsObject.IceThicknessSum = Utility.nDecimal(num / 100, 5);</span>
+<span class="cstat-no" title="statement not covered" >                $scope.sumChanged = <span class="fstat-no" title="function not covered" >function () {</span></span>
+<span class="cstat-no" title="statement not covered" >                    $timeout(<span class="fstat-no" title="function not covered" >function () {</span></span>
+<span class="cstat-no" title="statement not covered" >                        var num = parseFloat($scope.iceThicknessSum);</span>
+<span class="cstat-no" title="statement not covered" >                        if (!isNaN(num)) {</span>
+<span class="cstat-no" title="statement not covered" >                            $scope.obsObject.IceThicknessSum = Utility.nDecimal(num / 100, 5);</span>
 &nbsp;
-                      }
-                  })
+                        }
+                    })
 &nbsp;
 &nbsp;
                 }
@@ -466,9 +466,9 @@ angular
                 };
 &nbsp;
 <span class="cstat-no" title="statement not covered" >                $scope.delete = <span class="fstat-no" title="function not covered" >function (index) {</span></span>
-<span class="cstat-no" title="statement not covered" >                  if(index){</span>
-<span class="cstat-no" title="statement not covered" >                    indexEditing = index;</span>
-                  }
+<span class="cstat-no" title="statement not covered" >                    if (index) {</span>
+<span class="cstat-no" title="statement not covered" >                        indexEditing = index;</span>
+                    }
 <span class="cstat-no" title="statement not covered" >                    showConfirm()</span>
                         .then(<span class="fstat-no" title="function not covered" >function (response) {</span>
 <span class="cstat-no" title="statement not covered" >                            if (response) {</span>
@@ -514,7 +514,7 @@ angular
 </div><!-- /wrapper -->
 <div class='footer quiet pad2 space-top1 center small'>
   Code coverage
-  generated by <a href="http://istanbul-js.org/" target="_blank">istanbul</a> at Mon Jan 23 2017 11:09:49 GMT+0100 (W. Europe Standard Time)
+  generated by <a href="http://istanbul-js.org/" target="_blank">istanbul</a> at Tue Jan 31 2017 08:30:40 GMT+0100 (W. Europe Standard Time)
 </div>
 </div>
 <script src="../../../prettify.js"></script>

@@ -98,5 +98,8 @@
   "PULL_TO_REFRESH": "Trekk ned for å oppdatere",
   "UPDATE_OBSERVATIONS": "Oppdater observasjoner",
   "UPDATE_DATA_MESSAGE": "Oppdaterer data med det siste fra regObs",
-  "UNKNOWN_COMPETENCE": "Ukjent kompetanse" 
+  "UNKNOWN_COMPETENCE": "Ukjent kompetanse",
+  "POSITION": "Posisjon",
+  "UNKNOWN_POSITION": "Ukjent posisjon",
+  "UNCERTAINTY": "Usikkerhet" 
 }
