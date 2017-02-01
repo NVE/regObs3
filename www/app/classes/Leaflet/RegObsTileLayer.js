@@ -1,4 +1,4 @@
-﻿angular.module('RegObs').factory('RegObsTileLayer', function (AppSettings) {
+﻿angular.module('RegObs').factory('RegObsTileLayer', function (AppSettings, $cordovaNetwork, Utility) {
     var RegObsTileLayer = L.TileLayer.extend({
         initialize: function (url, options) {
             // check required options or else choke and die
@@ -52,7 +52,7 @@
             }
         },
 
-        _checkEmbeddedTiles: function(tile, coords) {
+        _checkEmbeddedTiles: function (tile, coords) {
             if (this.options.embeddedUrl && coords.z <= this.options.embeddedMaxZoom) {
                 this.debug('Using embedded map for zoom:' + coords.z);
                 tile.isEmbedded = true;
@@ -137,11 +137,19 @@
             tile.src = newUrl;
         },
 
+        _hasMinimumNetwork: function () {
+            if (Utility.isRippleEmulator()) {
+                return true;
+            }
+            var status = $cordovaNetwork.getNetwork();
+            return status !== Connection.NONE && status !== Connection.CELL;
+        },
+
         _tileOnError: function (done, tile, e) {
             var layer = this; // `this` is bound to the Tile Layer in TLproto.createTile.
-               
-            if (!tile.fallbackToOnline) { //Try first to get online tile
-                layer._tileFallbackToOnline(done, tile, e);
+
+            if (!tile.fallbackToOnline && layer._hasMinimumNetwork()) {
+                layer._tileFallbackToOnline(done, tile, e); //Try first to get online tile if user has good enough network connection
             } else {
                 //online tile has been tried, try to scale offline url
                 var originalCoords = tile._originalCoords,
@@ -150,7 +158,7 @@
                 scale = tile._fallbackScale = (tile._fallbackScale || 1) * 2,
                 tileSize = layer.getTileSize(),
                 style = tile.style,
-                newUrl, top, left;             
+                newUrl, top, left;
 
                 // If no lower zoom tiles are available, fallback to errorTile.
                 if (fallbackZoom < 1) {
@@ -168,7 +176,7 @@
                 // Generate new src path.
                 newUrl = layer.getTileOfflineUrl(currentCoords);
 
-                layer.debug('Fallback to next zoom level: ' + fallbackZoom+ ' for zoom: ' + originalCoords.z + ' original: ' + JSON.stringify(originalCoords) + ' new coords: ' + JSON.stringify(currentCoords));
+                layer.debug('Fallback to next zoom level: ' + fallbackZoom + ' for zoom: ' + originalCoords.z + ' original: ' + JSON.stringify(originalCoords) + ' new coords: ' + JSON.stringify(currentCoords));
 
                 // Zoom replacement img.
                 style.width = (tileSize.x * scale) + 'px';
@@ -204,7 +212,7 @@
                     urlFallback: newUrl
                 });
 
-                
+
             }
         },
 

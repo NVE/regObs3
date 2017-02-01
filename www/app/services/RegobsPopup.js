@@ -1,6 +1,6 @@
 angular
     .module('RegObs')
-    .factory('RegobsPopup', function ($ionicPopup, $rootScope, $q, $pbService, $timeout, AppLogging, $translate) {
+    .factory('RegobsPopup', function ($ionicPopup, $rootScope, $q, $pbService, $timeout, AppLogging, Translate) {
         var RegobsPopup = this;
 
         RegobsPopup.delete = function (title, text, confirmText) {
@@ -50,7 +50,7 @@ angular
         };
 
         RegobsPopup.downloadProgress = function (title, workFunction, options) {
-            return $translate(title)
+            return Translate.translateWithFallback(title)
                 .then(function (translatedHeader) {
                     return $q(function (resolve, reject) {
                         var scope = $rootScope.$new(); //Create new scope for popup
