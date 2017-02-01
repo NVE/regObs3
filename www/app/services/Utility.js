@@ -101,6 +101,10 @@ angular
             return OBSERVATIONS[prop].RegistrationTID;
         };
 
+        service.isObservation = function(prop) {
+            return true && OBSERVATIONS[prop];
+        };
+
         service.geoHazardNames = function (tid) {
             return $translate.instant(service.getGeoHazardType(tid).toUpperCase());
         };

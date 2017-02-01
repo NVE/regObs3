@@ -37,7 +37,7 @@ angular
             };
         };
 
-        
+
 
         Registration.createAndGoToNewRegistration = function () {
             var appMode = AppSettings.getAppMode();
@@ -172,31 +172,18 @@ angular
                 return 0;
             } else {
                 var count = 0;
-                var base = Object.keys(createRegistration('snow'));
                 for (var key in Registration.data) {
-                    if (Registration.data.hasOwnProperty(key)) {
-                        if (base.filter(function (item) { return item === key }).length === 0) {
-                            if (Array.isArray(Registration.data[key])) {
-                                count += Registration.data[key].length;
-                            } else {
-                                count++;
-                            }
+                    if (Registration.data.hasOwnProperty(key) && Utility.isObservation(key)) {
+                        if (Array.isArray(Registration.data[key])) {
+                            count += Registration.data[key].length;
+                        } else {
+                            count++;
                         }
                     }
                 }
                 return count;
             }
         }
-
-        Registration.getSendText = function () {
-            if (Registration.isEmpty()) {
-                return '';
-            } else if (Registration.getObservationsLength() === 1) {
-                return '1';
-            } else {
-                return '1 (' + Registration.getObservationsLength() + ')';
-            }
-        };
 
         Registration.isEmpty = function () {
             return Object.keys(Registration.data).length <= baseLength;
@@ -240,15 +227,16 @@ angular
                         Registration.sending = true;
                         doPost(postUrl, { Registrations: Registration.unsent })
                             .then(function () {
-                                Registration.unsent = [];
                                 resetRegistration();
+                                Registration.unsent = [];
                                 if (currentLocation) {
                                     Observations.updateObservationsWithinRadius(currentLocation.Latitude,
                                         currentLocation.Longitude,
                                         100,
                                         currentLocation.GeoHazardTID);
                                 }
-                            });                  
+                                $state.go('start');
+                            });
                     }
 
                     Registration.save();
@@ -324,7 +312,7 @@ angular
 
             var user = User.getUser();
 
-            var data = Registration.data;
+            var data = angular.copy(Registration.data);
             var location = angular.copy(ObsLocation.data);
 
             //Cleanup
@@ -414,18 +402,17 @@ angular
                     Registration.unsent.push(regToSave);
                 }
             });
+            Registration.data = {};
             Registration.save();
-
-
         }
 
         function doPost(postUrl, dataToSend) {
 
-            return $q(function(resolve, reject) {
+            return $q(function (resolve, reject) {
 
                 var data = angular.copy(dataToSend);
 
-                var success = function() {
+                var success = function () {
 
                     RegobsPopup.alert(
                         'Suksess!',
@@ -437,7 +424,7 @@ angular
                     resolve();
                 };
 
-                var exception = function(error) {
+                var exception = function (error) {
                     AppLogging.error('Failed to send registration: ' + error.statusText, error);
 
                     Registration.sending = false;
@@ -446,7 +433,7 @@ angular
                         error.statusText +
                         '. Lagring av registreringen blir forsinket eller den feilet. Du kan lagre og sende inn senere, eller prøve igjen. Gi beskjed til regObs-teamet dersom problemet vedvarer. Beklager ulempen :(';
 
-                    var handleUserAction = function(confirmed) {
+                    var handleUserAction = function (confirmed) {
                         if (confirmed) {
                             AppLogging.log('Confirmed sending again!');
                             post();
@@ -472,6 +459,7 @@ angular
                     } else if (error.status === 422) {
                         RegobsPopup.alert('Format stemmer ikke',
                             'Det oppsto et problem ved at innsendingen ikke samstemmer med forventet format. Beklager ulempen:( Melding fra server: ' + error.statusText);
+                        reject();
                     } else {
                         RegobsPopup.confirm(title, body, 'Prøv igjen', 'Lagre')
                             .then(handleUserAction);
@@ -479,7 +467,7 @@ angular
 
                 };
 
-                var post = function() {
+                var post = function () {
                     return $http.post(postUrl, data, AppSettings.httpConfigRegistrationPost)
                         .then(success)
                         .catch(exception);
@@ -487,7 +475,7 @@ angular
 
                 //Convert to base64 strings and resize
                 Utility.resizeAllImages(data)
-                    .then(function(processedData) {
+                    .then(function (processedData) {
                         data = processedData;
                         post();
                     });

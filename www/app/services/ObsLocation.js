@@ -98,9 +98,9 @@ angular
         ObsLocation.set = function (loc) {
             if (loc && loc.Latitude) {
                 ObsLocation.data = {
-                    Latitude: loc.Latitude,
-                    Longitude: loc.Longitude,
-                    Uncertainty: loc.Uncertainty,
+                    Latitude: loc.Latitude.toString(),
+                    Longitude: loc.Longitude.toString(),
+                    Uncertainty: loc.Uncertainty.toString(),
                     UTMSourceTID: loc.UTMSourceTID
                 };
 
@@ -130,7 +130,7 @@ angular
         ObsLocation.setPositionToCurrentUserPosition = function() {
             if (UserLocation.hasUserLocation()) {
                 var loc = UserLocation.getLastUserLocation();
-                ObsLocation.set({ Latitude: loc.latitude, Longitude: loc.longitude, Uncertainty: loc.accuracy, UTMSourceTID: ObsLocation.source.fetchedFromGPS });
+                ObsLocation.set({ Latitude: loc.latitude.toString(), Longitude: loc.longitude.toString(), Uncertainty: loc.accuracy.toString(), UTMSourceTID: ObsLocation.source.fetchedFromGPS });
             }
         };
 
