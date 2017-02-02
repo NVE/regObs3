@@ -453,7 +453,7 @@
 
         $ionicPlatform.ready(function () {
 
-            if (Utility.shouldUpdateKdvElements()) {
+            if (Utility.hasGoodNetwork() && Utility.shouldUpdateKdvElements()) {
                 Utility.refreshKdvElements();
             }
 

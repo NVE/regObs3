@@ -1,6 +1,6 @@
 ﻿angular
     .module('RegObs')
-    .factory('Observations', function ($http, AppSettings, LocalStorage, AppLogging, Utility, $q, PresistentStorage, $ionicPlatform, moment) {
+    .factory('Observations', function ($http, AppSettings, LocalStorage, AppLogging, Utility, $q, PresistentStorage, $ionicPlatform, moment, $rootScope) {
         var service = this;
         var locationsStorageKey = 'regObsLocations';
         var observationUpdatedStorageKey = 'LastObservationUpdate';
@@ -348,6 +348,7 @@
             }).then(downloadAllRegistrations)
             .finally(function () {
                 LocalStorage.set(observationUpdatedStorageKey, moment().toISOString());
+                $rootScope.$broadcast('$regObs:observationsUpdated');
             });
         };
 

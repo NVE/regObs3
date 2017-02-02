@@ -458,6 +458,10 @@
                     service._setSelectedItem(obsLocationMarker);
                 });
             });
+            
+            $rootScope.$on('$regObs:observationsUpdated', function () {
+                service.refresh();
+            });
 
             service._isInitialized = true; //map is created!
 
@@ -572,15 +576,14 @@
                         cancel);
             };
 
-            return RegobsPopup.downloadProgress('UPDATE_DATA_MESSAGE', workFunc, { longTimoutMessageDelay: 10, closeOnComplete: true }).then(function () {
-                //Turn on observations and nearby places when updated from map (youtrack: rOa-40)
-                if (!AppSettings.data.showObservations || !AppSettings.data.showPreviouslyUsedPlaces) {
-                    AppSettings.data.showObservations = true;
-                    AppSettings.data.showPreviouslyUsedPlaces = true;
-                    AppSettings.save();
-                }
-                service.refresh();
-            });
+            //Turn on observations and nearby places when updated from map (youtrack: rOa-40)
+            if (!AppSettings.data.showObservations || !AppSettings.data.showPreviouslyUsedPlaces) {
+                AppSettings.data.showObservations = true;
+                AppSettings.data.showPreviouslyUsedPlaces = true;
+                AppSettings.save();
+            }
+
+            return RegobsPopup.downloadProgress('UPDATE_DATA_MESSAGE',workFunc, { longTimoutMessageDelay: 15, closeOnComplete: true });
         };
 
         /**

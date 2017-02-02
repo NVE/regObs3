@@ -1,6 +1,6 @@
 angular
     .module('RegObs')
-    .factory('Registration', function Registration($rootScope, $ionicPlatform, $http, $state, $ionicPopup, $ionicHistory, $cordovaBadge, LocalStorage, Utility, User, ObsLocation, AppSettings, RegobsPopup, AppLogging, Observations, UserLocation, $q) {
+    .factory('Registration', function Registration($rootScope, $ionicPlatform, $http, $state, $ionicPopup, $ionicHistory, $cordovaBadge, LocalStorage, Utility, User, ObsLocation, AppSettings, RegobsPopup, AppLogging, Observations, UserLocation, $q, $timeout) {
         var Registration = this;
 
         var storageKey = 'regobsRegistrations';
@@ -230,10 +230,12 @@ angular
                                 resetRegistration();
                                 Registration.unsent = [];
                                 if (currentLocation) {
-                                    Observations.updateObservationsWithinRadius(currentLocation.Latitude,
+                                    $timeout(function () {
+                                        Observations.updateObservationsWithinRadius(currentLocation.Latitude,
                                         currentLocation.Longitude,
                                         100,
                                         currentLocation.GeoHazardTID);
+                                    },1000); //Wait 1 sec to registation has processed trough api queue and try to fetch it again so it's shown in map
                                 }
                                 $state.go('start');
                             });
@@ -294,14 +296,14 @@ angular
         Registration.getExpositionArray = function () {
             return [
                 { "val": null, "name": "Ikke gitt" },
-                { "val": 0, "name": "N - mot nord" },
-                { "val": 45, "name": "NØ - mot nordøst" },
-                { "val": 90, "name": "Ø - mot øst" },
-                { "val": 135, "name": "SØ - mot sørøst" },
-                { "val": 180, "name": "S - mot sør" },
-                { "val": 225, "name": "SV - mot sørvest" },
-                { "val": 270, "name": "V - mot vest" },
-                { "val": 315, "name": "NV - mot nordvest" }
+                { "val": 0, "name": "N - fra nord" },
+                { "val": 45, "name": "NØ - fra nordøst" },
+                { "val": 90, "name": "Ø - fra øst" },
+                { "val": 135, "name": "SØ - fra sørøst" },
+                { "val": 180, "name": "S - fra sør" },
+                { "val": 225, "name": "SV - fra sørvest" },
+                { "val": 270, "name": "V - fra vest" },
+                { "val": 315, "name": "NV - fra nordvest" }
             ];
         };
 
