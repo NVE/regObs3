@@ -102,7 +102,7 @@ angular
         };
 
         service.isObservation = function(prop) {
-            return true && OBSERVATIONS[prop];
+            return true && OBSERVATIONS[prop] && prop !== 'Picture';
         };
 
         service.geoHazardNames = function (tid) {
@@ -411,7 +411,7 @@ angular
 
 
         service.hasMinimumNetwork = function() {
-            if (Utility.isRippleEmulator()) {
+            if (service.isRippleEmulator()) {
                 return true;
             }
             var status = $cordovaNetwork.getNetwork();
@@ -419,7 +419,7 @@ angular
         };
 
         service.hasGoodNetwork = function () {
-            if (Utility.isRippleEmulator()) {
+            if (service.isRippleEmulator()) {
                 return true;
             }
             var status = $cordovaNetwork.getNetwork();

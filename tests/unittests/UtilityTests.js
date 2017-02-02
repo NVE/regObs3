@@ -155,4 +155,9 @@
             $rootScope.$apply();
         });
     });
+
+    it("test isObservation: image is not counted as observation", inject(function (Utility) {
+        // Invoke the unit being tested as necessary
+        expect(Utility.isObservation('Picture')).toEqual(false);
+    }));
 });

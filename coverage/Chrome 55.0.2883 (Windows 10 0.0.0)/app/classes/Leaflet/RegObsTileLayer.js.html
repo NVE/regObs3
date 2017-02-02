@@ -27,7 +27,7 @@
       <div class='fl pad1y space-right2'>
         <span class="strong">0% </span>
         <span class="quiet">Branches</span>
-        <span class='fraction'>0/38</span>
+        <span class='fraction'>0/40</span>
       </div>
       <div class='fl pad1y space-right2'>
         <span class="strong">4.17% </span>
@@ -387,7 +387,7 @@
 342
 343
 344</td><td class="line-coverage quiet"><span class="cline-any cline-yes">1×</span>
-<span class="cline-any cline-yes">30×</span>
+<span class="cline-any cline-yes">35×</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -728,8 +728,8 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">30×</span>
-<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">﻿angular.module('RegObs').factory('RegObsTileLayer', function (AppSettings) {
+<span class="cline-any cline-yes">35×</span>
+<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">﻿angular.module('RegObs').factory('RegObsTileLayer', function (AppSettings, $cordovaNetwork, Utility) {
     var RegObsTileLayer = L.TileLayer.extend({
         initialize: <span class="fstat-no" title="function not covered" >function (url, options) {</span>
             // check required options or else choke and die
@@ -783,7 +783,7 @@
             }
         },
 &nbsp;
-        _checkEmbeddedTiles: <span class="fstat-no" title="function not covered" >function(tile, coords) {</span>
+        _checkEmbeddedTiles: <span class="fstat-no" title="function not covered" >function (tile, coords) {</span>
 <span class="cstat-no" title="statement not covered" >            if (this.options.embeddedUrl &amp;&amp; coords.z &lt;= this.options.embeddedMaxZoom) {</span>
 <span class="cstat-no" title="statement not covered" >                this.debug('Using embedded map for zoom:' + coords.z);</span>
 <span class="cstat-no" title="statement not covered" >                tile.isEmbedded = true;</span>
@@ -870,9 +870,9 @@
 &nbsp;
         _tileOnError: <span class="fstat-no" title="function not covered" >function (done, tile, e) {</span>
 <span class="cstat-no" title="statement not covered" >            var layer = this; </span>// `this` is bound to the Tile Layer in TLproto.createTile.
-               
-<span class="cstat-no" title="statement not covered" >            if (!tile.fallbackToOnline) { //Try first to get online tile</span>
-<span class="cstat-no" title="statement not covered" >                layer._tileFallbackToOnline(done, tile, e);</span>
+&nbsp;
+<span class="cstat-no" title="statement not covered" >            if (!tile.fallbackToOnline &amp;&amp; Utility.hasMinimumNetwork()) {</span>
+<span class="cstat-no" title="statement not covered" >                layer._tileFallbackToOnline(done, tile, e); </span>//Try first to get online tile if user has good enough network connection
             } else {
                 //online tile has been tried, try to scale offline url
 <span class="cstat-no" title="statement not covered" >                var originalCoords = tile._originalCoords,</span>
@@ -881,7 +881,7 @@
                 scale = tile._fallbackScale = (tile._fallbackScale || 1) * 2,
                 tileSize = layer.getTileSize(),
                 style = tile.style,
-                newUrl, top, left;             
+                newUrl, top, left;
 &nbsp;
                 // If no lower zoom tiles are available, fallback to errorTile.
 <span class="cstat-no" title="statement not covered" >                if (fallbackZoom &lt; 1) {</span>
@@ -899,7 +899,7 @@
                 // Generate new src path.
 <span class="cstat-no" title="statement not covered" >                newUrl = layer.getTileOfflineUrl(currentCoords);</span>
 &nbsp;
-<span class="cstat-no" title="statement not covered" >                layer.debug('Fallback to next zoom level: ' + fallbackZoom+ ' for zoom: ' + originalCoords.z + ' original: ' + JSON.stringify(originalCoords) + ' new coords: ' + JSON.stringify(currentCoords));</span>
+<span class="cstat-no" title="statement not covered" >                layer.debug('Fallback to next zoom level: ' + fallbackZoom + ' for zoom: ' + originalCoords.z + ' original: ' + JSON.stringify(originalCoords) + ' new coords: ' + JSON.stringify(currentCoords));</span>
 &nbsp;
                 // Zoom replacement img.
 <span class="cstat-no" title="statement not covered" >                style.width = (tileSize.x * scale) + 'px';</span>
@@ -935,7 +935,7 @@
                     urlFallback: newUrl
                 });
 &nbsp;
-                
+&nbsp;
             }
         },
 &nbsp;
@@ -1078,7 +1078,7 @@
 </div><!-- /wrapper -->
 <div class='footer quiet pad2 space-top1 center small'>
   Code coverage
-  generated by <a href="http://istanbul-js.org/" target="_blank">istanbul</a> at Tue Jan 31 2017 08:30:40 GMT+0100 (W. Europe Standard Time)
+  generated by <a href="http://istanbul-js.org/" target="_blank">istanbul</a> at Thu Feb 02 2017 12:43:22 GMT+0100 (W. Europe Standard Time)
 </div>
 </div>
 <script src="../../../prettify.js"></script>
