@@ -614,11 +614,18 @@
             }
         };
 
+        service._checkIfMarkerShouldBeReset = function () {
+            if (Registration.isEmpty() && ObsLocation.isSet() && ObsLocation.data.UTMSourceTID === ObsLocation.source.fetchedFromGPS) {
+                ObsLocation.remove(); //Remove obs location set in map when registration is empty and position is from GPS
+            }
+        };
+
         /**
          * Refresh map an redraw layers and markers as set in settings
          * @returns {} 
          */
         service.refresh = function () {
+            service._checkIfMarkerShouldBeReset();
             service._checkSelectedItemGeoHazard();
             service._redrawTilesForThisGeoHazard();
 

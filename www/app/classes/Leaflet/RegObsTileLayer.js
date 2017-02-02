@@ -137,18 +137,10 @@
             tile.src = newUrl;
         },
 
-        _hasMinimumNetwork: function () {
-            if (Utility.isRippleEmulator()) {
-                return true;
-            }
-            var status = $cordovaNetwork.getNetwork();
-            return status !== Connection.NONE && status !== Connection.CELL;
-        },
-
         _tileOnError: function (done, tile, e) {
             var layer = this; // `this` is bound to the Tile Layer in TLproto.createTile.
 
-            if (!tile.fallbackToOnline && layer._hasMinimumNetwork()) {
+            if (!tile.fallbackToOnline && Utility.hasMinimumNetwork()) {
                 layer._tileFallbackToOnline(done, tile, e); //Try first to get online tile if user has good enough network connection
             } else {
                 //online tile has been tried, try to scale offline url

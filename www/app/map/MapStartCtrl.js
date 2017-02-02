@@ -61,6 +61,7 @@
             appVm.mapMenu.show($event);
         };
 
+
         $scope.$on('$ionicView.enter', function () {
             $ionicHistory.clearHistory();
             Map.refresh();
@@ -68,7 +69,7 @@
         });
 
         appVm._checkObsWatch = $timeout(function () {
-            if (Observations.checkIfObservationsShouldBeUpdated() && UserLocation.hasUserLocation()) {
+            if (Observations.checkIfObservationsShouldBeUpdated() && UserLocation.hasUserLocation() && Utility.hasGoodNetwork()) {
                 RegobsPopup.confirm($translate.instant('UPDATE_OBSERVATIONS_IN_MAP'), $translate.instant('UPDATE_OBSERVATIONS_IN_MAP_HELP_TEXT'))
                 .then(function (response) {
                     if (response) {

@@ -3,7 +3,7 @@
  */
 angular
     .module('RegObs')
-    .factory('Utility', function Utility($http, $q, $rootScope, AppSettings, User, LocalStorage, AppLogging, $translate) {
+    .factory('Utility', function Utility($http, $q, $rootScope, AppSettings, User, LocalStorage, AppLogging, $translate, $cordovaNetwork) {
         var service = this;
 
         var canvas;
@@ -408,6 +408,24 @@ angular
         service.isString = function(obj) {
             return typeof obj === 'string' || obj instanceof String;
         };
+
+
+        service.hasMinimumNetwork = function() {
+            if (Utility.isRippleEmulator()) {
+                return true;
+            }
+            var status = $cordovaNetwork.getNetwork();
+            return status !== Connection.NONE && status !== Connection.CELL;
+        };
+
+        service.hasGoodNetwork = function () {
+            if (Utility.isRippleEmulator()) {
+                return true;
+            }
+            var status = $cordovaNetwork.getNetwork();
+            return status === Connection.CELL_3G || status === Connection.CELL_4G || status === Connection.WIFI || status === Connection.ETHERNET || status === Connection.UNKNOWN;
+        };
+
 
         /**
          * Get distance text formatted in km or meter depending on how large the distance value is
