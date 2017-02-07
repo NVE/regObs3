@@ -75,8 +75,8 @@
             }, 101);
 
             ctrl.$onInit = function () {
-                backState = $state.current.data.defaultBack.state;
-
+                var defaultBack = $state.current.data.defaultBack;
+                backState = defaultBack ? defaultBack.state : 'start';
             };
 
         }

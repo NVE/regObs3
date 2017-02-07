@@ -129,9 +129,7 @@ angular
             if (!ObsLocation.isSet()) {
                 ObsLocation.setPositionToCurrentUserPosition();
             }
-            //ObsLocation.fetchAndSetPosition();
-            //AppLogging.log(Registration.data);
-            //$rootScope.$broadcast('$ionicView.loaded');
+            Registration.save();
 
             return Registration.data;
         };

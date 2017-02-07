@@ -107,6 +107,27 @@
         });
     });
 
+    it("test getKdvElements: no kdv elements in local storage returns embedded kdv elements", function (done) {
+        inject(function (Utility, AppSettings, $rootScope, $q) {
+            store = {
+                'kdvDropdowns': null
+            };
+
+            Utility.getAppEmbeddedKdvElements = function () {
+                return $q(function (resolve) {
+                    resolve({ "KdvRepositories": { "Embedded_App_KDV": "Some kdv value" } });
+                });
+            };
+            Utility.getKdvElements()
+                    .then(function (result) {
+                        expect(result.data.KdvRepositories.Embedded_App_KDV).toEqual("Some kdv value"); //expect embedded kdv value to exist
+                        done();
+                    });
+
+            $rootScope.$apply();
+        });
+    });
+
     it("test refreshKdvElements: merges existing values with new values from API and is saved to storage", function (done) {
         inject(function (Utility, AppSettings, $rootScope, $q) {
             Utility.getAppEmbeddedKdvElements = function () {

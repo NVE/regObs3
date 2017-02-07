@@ -63,7 +63,6 @@ gulp.task('run-scripts-and-update-config', ['scripts'], function (done) {
             var versionStripped = vfile.version.replace(/\./g, '');
             var buildStripped = vfile.build.replace(/\ /g, '');
             var androidVersion = versionStripped + buildStripped.substring(2, 8);
-            console.log(androidVersion);
             gulp.src('.')
             .pipe(version(vfile.version, { androidVersionCode: androidVersion, iosBundleVersion: buildStripped }))
             .on('end', done);

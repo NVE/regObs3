@@ -146,14 +146,16 @@ angular
         service.getKdvElements = function () {
             return service.getAppEmbeddedKdvElements()
                 .then(function (result) {
-                    var embeddedElements = LocalStorage.getObject('kdvDropdowns');
+                    var embeddedElements = LocalStorage.getObject('kdvDropdowns', {});
                     var mergedElements = angular.merge(angular.copy(result), embeddedElements);
                     return { data: mergedElements };
                 });
         };
 
-        service.getAppEmbeddedKdvElements = function() {
-            return $http.get('app/json/kdvElements.json');
+        service.getAppEmbeddedKdvElements = function () {
+            return $http.get('app/json/kdvElements.json').then(function(result) {
+                return result.data;
+            });
         };
 
         service.shouldUpdateKdvElements = function () {
@@ -411,7 +413,7 @@ angular
 
 
         service.hasMinimumNetwork = function() {
-            if (service.isRippleEmulator()) {
+            if (service.isRippleEmulator() || typeof Connection === 'undefined') {
                 return true;
             }
             var status = $cordovaNetwork.getNetwork();
@@ -419,9 +421,10 @@ angular
         };
 
         service.hasGoodNetwork = function () {
-            if (service.isRippleEmulator()) {
+            if (service.isRippleEmulator() || typeof Connection === 'undefined') {
                 return true;
             }
+
             var status = $cordovaNetwork.getNetwork();
             return status === Connection.CELL_3G || status === Connection.CELL_4G || status === Connection.WIFI || status === Connection.ETHERNET || status === Connection.UNKNOWN;
         };

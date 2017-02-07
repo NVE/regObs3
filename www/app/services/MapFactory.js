@@ -159,22 +159,12 @@
          */
         service._drawStoredLocations = function () {
             service._checkIfInitialized();
-            //service._clearAllStoredLocations();
             Observations.getLocations(Utility.getCurrentGeoHazardTid()).forEach(function (loc) {
                 var m = new RegObsClasses.StoredLocationMarker(loc);
                 m.on('selected', function (event) { service._setSelectedItem(event.target); });
                 m.addTo(layerGroups.observations);
             });
         };
-
-        ///**
-        // * Hide all stored locations
-        // * @returns {} 
-        // */
-        //service._clearAllStoredLocations = function () {
-        //    service._checkIfInitialized();
-        //    layerGroups.locations.clearLayers();
-        //};
 
 
         /**
@@ -325,13 +315,14 @@
          * Create layer groups
          * @returns {} 
          */
-        service._createLayerGroups = function () {
-            layerGroups = { //Layers are added in order
-                tiles: L.layerGroup().addTo(map),
-                //locations: new RegObsClasses.MarkerClusterGroup({ icon: 'ion-pin' }).addTo(map),
-                observations: new RegObsClasses.MarkerClusterGroup({ icon: 'ion-eye' }).addTo(map),
-                user: L.layerGroup().addTo(map)
+        service.createLayerGroups = function (mapToAdd) {
+            var lg = { //Layers are added in order
+                tiles: L.layerGroup().addTo(mapToAdd),
+                observations: new RegObsClasses.MarkerClusterGroup({ icon: 'ion-eye' }).addTo(mapToAdd),
+                user: L.layerGroup().addTo(mapToAdd)
             };
+
+            return lg;
         };
 
         /**
@@ -385,7 +376,7 @@
                 attributionControl: false
             });
 
-            service._createLayerGroups();
+            layerGroups = service.createLayerGroups(map);
 
             tiles = [];
 
@@ -576,12 +567,12 @@
                         cancel);
             };
 
-            //Turn on observations and nearby places when updated from map (youtrack: rOa-40)
-            if (!AppSettings.data.showObservations || !AppSettings.data.showPreviouslyUsedPlaces) {
-                AppSettings.data.showObservations = true;
-                AppSettings.data.showPreviouslyUsedPlaces = true;
-                AppSettings.save();
-            }
+            ////Turn on observations and nearby places when updated from map (youtrack: rOa-40)
+            //if (!AppSettings.data.showObservations || !AppSettings.data.showPreviouslyUsedPlaces) {
+            //    AppSettings.data.showObservations = true;
+            //    AppSettings.data.showPreviouslyUsedPlaces = true;
+            //    AppSettings.save();
+            //}
 
             return RegobsPopup.downloadProgress('UPDATE_DATA_MESSAGE',workFunc, { longTimoutMessageDelay: 15, closeOnComplete: true });
         };
@@ -617,18 +608,18 @@
             }
         };
 
-        service._checkIfMarkerShouldBeReset = function () {
-            if (Registration.isEmpty() && ObsLocation.isSet() && ObsLocation.data.UTMSourceTID === ObsLocation.source.fetchedFromGPS) {
-                ObsLocation.remove(); //Remove obs location set in map when registration is empty and position is from GPS
-            }
-        };
+        //service._checkIfMarkerShouldBeReset = function () {
+        //    if (Registration.isEmpty() && ObsLocation.isSet() && ObsLocation.data.UTMSourceTID === ObsLocation.source.fetchedFromGPS) {
+        //        ObsLocation.remove(); //Remove obs location set in map when registration is empty and position is from GPS
+        //    }
+        //};
 
         /**
          * Refresh map an redraw layers and markers as set in settings
          * @returns {} 
          */
         service.refresh = function () {
-            service._checkIfMarkerShouldBeReset();
+            //service._checkIfMarkerShouldBeReset();
             service._checkSelectedItemGeoHazard();
             service._redrawTilesForThisGeoHazard();
 

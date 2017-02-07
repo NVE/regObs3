@@ -101,5 +101,7 @@
   "UNKNOWN_COMPETENCE": "Ukjent kompetanse",
   "POSITION": "Posisjon",
   "UNKNOWN_POSITION": "Ukjent posisjon",
-  "UNCERTAINTY": "Usikkerhet" 
+  "UNCERTAINTY": "Usikkerhet",
+  "CONFIRM_POSITION": "Bekreft posisjon",
+  "SET_POSITION_INFO": "eller dra kartet for å sette din observasjonsposisjon"
 }

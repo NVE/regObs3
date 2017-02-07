@@ -3,7 +3,7 @@
     .component('regobsPosition',
     {
         templateUrl: 'app/directives/position/regobsposition.html',
-        controller: function ($element, ObsLocation, $state, $filter) {
+        controller: function ($element, ObsLocation, $state, $filter, $ionicPopup, $rootScope, $ionicModal, AppSettings, $scope) {
             var ctrl = this;
             ctrl.location = ObsLocation.get();
 
@@ -37,6 +37,58 @@
             ctrl.goBack = function() {
                 $state.go('start');
             };
+
+           
+            ctrl.showPopup = function () {
+                var popupScope = $rootScope.$new();
+
+                var popup = $ionicPopup.show({
+                    templateUrl: 'app/directives/position/positionpopup.html',
+                    title: 'Oppdater posisjon',
+                    scope: popupScope
+                });
+
+                popupScope.closePopup = function () {
+                    popup.close();
+                };
+
+                popupScope.openMarkPosition = function () {
+                    popup.close();
+                    ctrl._loadModal()
+                        .then(function() {
+                            ctrl.modal.show();
+                        });               
+                };
+            };
+
+            
+            ctrl._loadModal = function () {
+                var mapScope = $rootScope.$new();
+                mapScope.closeModal = function () {
+                    ctrl.modal.hide();
+                    ctrl.modal.remove();
+                };
+                mapScope.getEnvClass = function () {
+                    return AppSettings.data.env === 'regObs' ? 'bar-dark' : (AppSettings.data.env === 'demo regObs' ? 'bar-assertive' : 'bar-calm');
+                };
+                var url = 'app/directives/position/markpositionmodal.html';
+                return $ionicModal
+                    .fromTemplateUrl(url, {
+                        scope: mapScope,
+                        animation: 'slide-in-up'
+                    }).then(function (modal) {
+                        ctrl.modal = modal;
+                        return modal;
+                    });
+            };
+
+            $scope.$on('$destroy', function () {
+                if (ctrl.modal) {
+                    ctrl.modal.remove();
+                }
+            });
+
+            
 
         },
         bindings: {

@@ -1,6 +1,6 @@
 ﻿angular
     .module('RegObs')
-    .factory('AppSettings', function (LocalStorage, $http, $log, $rootScope, moment) {
+    .factory('AppSettings', function (LocalStorage, $http, $log, $rootScope, moment, $ionicHistory) {
 
         var settings = this;
 

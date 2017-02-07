@@ -26,23 +26,27 @@
 
         var defaultBackIceRegistration = {
             state: 'iceregistrationNew',
-            title: 'Isobservasjon'
+            force: true
         };
         var defaultBackSnowRegistration = {
             state: 'snowregistrationNew',
-            title: 'Snøobservasjon'
+            force: true
         };
         var defaultBackDirtRegistration = {
             state: 'dirtregistrationNew',
-            title: 'Jordobservasjon'
+            force: true
         };
         var defaultBackWaterRegistration = {
             state: 'waterregistrationNew',
-            title: 'Vannobservasjon'
+            force: true
         };
         var defaultBackStart = {
             state: 'start',
-            title: 'regObs'
+            title: 'MAP',
+            force: true
+        };
+        var defaultBackHelp = {
+            state: 'start'
         };
 
         var appSettings = AppSettingsProvider.$get();
@@ -72,7 +76,7 @@
                 templateUrl: 'app/settings/settingsview.html',
                 controller: 'SettingsViewCtrl as vm',
                 data: {
-                    defaultBack: defaultBackStart
+                    defaultBack: defaultBackHelp
                 }
             })
             .state('offlinemapoverview', {
@@ -431,7 +435,6 @@
                 templateUrl: 'app/generalobs/generalobs.html',
                 controller: 'GeneralObsCtrl as vm',
                 data: {
-                    defaultBack: defaultBackStart,
                     showFormFooter: true,
                     registrationProp: 'GeneralObservation'
                 }
@@ -443,7 +446,7 @@
                 },
                 controller: 'HelpCtrl as vm',
                 data: {
-                    defaultBack: defaultBackStart
+                    defaultBack: defaultBackHelp
                 }
             });
     }

@@ -1,0 +1,9 @@
+<ion-modal-view>
+    <ion-header-bar ng-class="getEnvClass()">
+        <button type="button" class="button button-clear" ng-click="closeModal()">{{'CANCEL'|translate}}</button>
+        <h1 class="title"><i class="icon ion-location"></i> {{'POSITION'|translate}}</h1>
+    </ion-header-bar>
+    <ion-content scroll="false">
+        <set-position-in-map on-save="closeModal()"></set-position-in-map>
+    </ion-content>
+</ion-modal-view>

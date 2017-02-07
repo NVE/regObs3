@@ -111,7 +111,7 @@ angular
 
             function createPopup(latlng, text, icon){
                 /*var p = new L.circle(new L.LatLng(center[0], center[1]), 1)                */
-                var p = new L.marker(latlng, {icon: icon, draggable: true})
+                var p = L.marker(latlng, {icon: icon, draggable: true})
                     .bindPopup(text, {
                         closeButton: false,
                         closeOnClick: false
