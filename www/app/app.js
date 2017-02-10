@@ -105,6 +105,7 @@
                 url: '/offlineareadetails',
                 templateUrl: 'app/map/offlineareadetails.html',
                 controller: 'OfflineAreaDetailsCtrl as vm',
+                cache: false,
                 params: { area: null },
                 data: {
                     defaultBack: {
@@ -118,6 +119,7 @@
                 url: '/observationdetails',
                 templateUrl: 'app/observations/details/observationdetails.html',
                 controller: 'ObservationDetailsCtrl as vm',
+                cache: false,
                 params: { observation: null },
                 data: {
                     defaultBack: defaultBackHelp

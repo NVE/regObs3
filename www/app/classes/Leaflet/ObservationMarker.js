@@ -81,7 +81,7 @@
         },
         onClick: function () {
             var self = this;
-            $state.go('observationdetails', { observation: self.observation });
+            $state.go('observationdetails', { observation: angular.copy(self.observation) });
         }
     });
 
