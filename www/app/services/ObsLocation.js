@@ -81,7 +81,7 @@ angular
                     latitude: loc.Latitude,
                     longitude: loc.Longitude
                 },
-                timeout: AppSettings.data.gpsTimeout * 1000
+                timeout: AppSettings.httpConfig.timeout
             }).then(function (response) {
                 AppLogging.log(response);
                 ObsLocation.data.place = response.data.Data;

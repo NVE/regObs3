@@ -134,5 +134,22 @@
   "WIZARD_3_LINE_3": "i regObs!",
   "WIZARD_4_HEADER": "Hva og hvordan?",
   "WIZARD_4_LINE_1": "Hva er viktigst for deg?",
-  "WIZARD_4_LINE_2": "Du velger hva du vil se og dele på regObs!"
+  "WIZARD_4_LINE_2": "Du velger hva du vil se og dele på regObs!",
+  "EMAIL": "E-post",
+  "PASSWORD": "Passord",
+  "FORGOT_PASSWORD": "Glemt passord",
+  "REGISTER": "Lag ny bruker",
+  "LOGGING_IN": "Logger inn...",
+  "LOGGED_IN_AS": "Logget inn som",
+  "GROUP": "Gruppe",
+  "CHOOSE_GROUP": "Velg gruppe...",
+  "SEND_EMAIL_RECIEPT": "Send kvittering på epost?",
+  "ADVANCED_SETTINGS": "Avanserte innstillinger",
+  "HIDE": "Skjul",
+  "ACTIVATE_COMPASS": "Aktiver kompass på bilder?",
+  "APP_MODE": "Appmodus",
+  "UPDATE_KDV_ELEMENTS": "Oppdater nedtrekksmenyer",
+  "UPDATED": "Oppdatert",
+  "RESET_APP": "Nullstill app",
+  "VERSION": "Versjon:"
 }

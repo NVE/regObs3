@@ -5,6 +5,11 @@ angular
 
         vm.settings = AppSettings;
         vm.userService = User;
+        vm.showAdvancedSettings = false;
+
+        vm.toggleAdvancedSettings = function() {
+            vm.showAdvancedSettings = !vm.showAdvancedSettings;
+        };
 
         vm.kdvUpdated = kdvUpdatedTime(null, LocalStorage.get('kdvUpdated'));
 

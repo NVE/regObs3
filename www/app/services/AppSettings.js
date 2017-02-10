@@ -10,7 +10,6 @@
             env: 'regObs',
             emailReceipt: false,
             compass: false,
-            gpsTimeout: 10,
             searchRange: 50000,
             locale: 'nb',
             appmode: undefined,
