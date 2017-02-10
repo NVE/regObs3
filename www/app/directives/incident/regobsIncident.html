@@ -1,16 +1,16 @@
 <ion-list>
     <regobs-comment
-            placeholder="Hvorfor skjedde det? Hvorfor gikk det forhåpentligvis bra? Kunne situasjonen vært unngått?"
+            placeholder="{{'INCIDENT_HELP_TEXT'|translate}}"
             model="reg.Incident.IncidentText"
-            label-text="Beskrivelse" required="required"
+            label-text="{{'DESCRIPTION'|translate}}"
     ></regobs-comment>
     <kdv-dropdown
-            title="Aktivitet"
+            title="{{'ACTIVITY'|translate}}"
             model="reg.Incident.ActivityInfluencedTID"
             kdv-key="{{activityInfluencedKdv}}">
     </kdv-dropdown>
     <kdv-dropdown
-        title="Skadeomfang"
+        title="{{'DAMAGE_EXTENT'|translate}}"
         model="reg.Incident.DamageExtentTID"
         kdv-key="DamageExtentKDV">
     </kdv-dropdown>

@@ -37,7 +37,11 @@
 }
 
 .mark-position-info-bottom {
-    margin-top: -40px;
+    position: fixed;
+    height: 112px;
+    bottom: 0px;
+    left: 0px;
+    right:0px;
 }
 
 .mark-position-info-icon {

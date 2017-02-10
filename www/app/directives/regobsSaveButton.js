@@ -46,7 +46,7 @@
             }
 
             function formIsInvalid() {
-                return ctrl.formCtrl && ctrl.formCtrl.$invalid;
+                return ctrl.formCtrl && ctrl.formCtrl.$invalid && Property.exists($state.current.data.registrationProp);
             }
 
             $scope.$on('$stateChangeStart', function (event, toState, toParams, fromState, fromParams) {

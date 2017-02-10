@@ -38,7 +38,7 @@
                 $state.go('start');
             };
 
-           
+           //TODO: Move popup and modals to own pages instead?
             ctrl.showPopup = function () {
                 var popupScope = $rootScope.$new();
 
@@ -54,42 +54,62 @@
 
                 popupScope.openMarkPosition = function () {
                     popup.close();
-                    ctrl._loadModal()
-                        .then(function() {
-                            ctrl.modal.show();
-                        });               
+                    ctrl._loadMarkPositionModal();          
+                };
+
+                popupScope.openPreviousUsedPlaces = function () {
+                    popup.close();
+                    ctrl._loadPreviousPlacesModal();
                 };
             };
 
+            ctrl.refresh = function() {
+                ctrl.location = ObsLocation.get();
+            };
+
             
-            ctrl._loadModal = function () {
+            ctrl._loadMarkPositionModal = function () {
                 var mapScope = $rootScope.$new();
                 mapScope.closeModal = function () {
-                    ctrl.modal.hide();
-                    ctrl.modal.remove();
+                    ctrl.markPositionModal.hide();
+                    ctrl.markPositionModal.remove();
+                    ctrl.refresh();
                 };
-                mapScope.getEnvClass = function () {
-                    return AppSettings.data.env === 'regObs' ? 'bar-dark' : (AppSettings.data.env === 'demo regObs' ? 'bar-assertive' : 'bar-calm');
-                };
-                var url = 'app/directives/position/markpositionmodal.html';
-                return $ionicModal
-                    .fromTemplateUrl(url, {
+                mapScope.getEnvClass = AppSettings.getEnvClass;
+                $ionicModal.fromTemplateUrl('app/directives/position/markpositionmodal.html', {
                         scope: mapScope,
                         animation: 'slide-in-up'
                     }).then(function (modal) {
-                        ctrl.modal = modal;
-                        return modal;
+                        ctrl.markPositionModal = modal;
+                        modal.show();
                     });
             };
 
+            ctrl._loadPreviousPlacesModal = function () {
+                var mapScope = $rootScope.$new();
+                mapScope.closeModal = function () {
+                    ctrl.previousPlacesModal.hide();
+                    ctrl.previousPlacesModal.remove();
+                    ctrl.refresh();
+                };
+                mapScope.getEnvClass = AppSettings.getEnvClass;
+                $ionicModal.fromTemplateUrl('app/directives/position/placesmodal.html', {
+                    scope: mapScope,
+                    animation: 'slide-in-up'
+                }).then(function (modal) {
+                    ctrl.previousPlacesModal = modal;
+                    modal.show();
+                });
+            };
+
             $scope.$on('$destroy', function () {
-                if (ctrl.modal) {
-                    ctrl.modal.remove();
+                if (ctrl.markPositionModal) {
+                    ctrl.markPositionModal.remove();
+                }
+                if (ctrl.previousPlacesModal) {
+                    ctrl.previousPlacesModal.remove();
                 }
             });
-
-            
-
         },
         bindings: {
 

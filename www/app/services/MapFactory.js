@@ -8,7 +8,7 @@
             obsLocationMarker, //Leaflet marker for current obs location
             userMarker, //Leaflet marker for user position
             pathLine, //Leaflet (dotted) path between user position and current obs location
-            observationInfo, //Obs location information. Displayed on top right corner
+            //observationInfo, //Obs location information. Displayed on top right corner
             tiles = []; //Map tiles      
 
         service._isInitialized = false; //Is map initialized. Map should allways be initialized on startup, else you will get NotInitialized error for alot of methods
@@ -59,35 +59,34 @@
             });
         };
 
-        /**
-         * Update info text with distance from user to observation
-         * @param {L.LatLng} latlng Position to update distence to from user
-         */
-        service._updateObsInfoText = function (latlng) {
-            service._checkIfInitialized();
-            var text = '';
-            if (latlng && UserLocation.hasUserLocation()) {
-                var distance = UserLocation.getUserDistanceFrom(latlng.lat, latlng.lng);
-                if (distance.valid) {
-                    text = distance.description;
-                }
-            } else if (UserLocation.hasUserLocation() && !latlng) {
-                text = '0m';
-            } else if (!ObsLocation.isSet()) {
-                text = $translate.instant('NOT_SET');
-            }
-            observationInfo.setText(text);
-        };
+        ///**
+        // * Update info text with distance from user to observation
+        // * @param {L.LatLng} latlng Position to update distence to from user
+        // */
+        //service._updateObsInfoText = function (latlng) {
+        //    service._checkIfInitialized();
+        //    var text = '';
+        //    if (latlng && UserLocation.hasUserLocation()) {
+        //        var distance = UserLocation.getUserDistanceFrom(latlng.lat, latlng.lng);
+        //        if (distance.valid) {
+        //            text = distance.description;
+        //        }
+        //    } else if (UserLocation.hasUserLocation() && !latlng) {
+        //        text = '0m';
+        //    } else if (!ObsLocation.isSet()) {
+        //        text = $translate.instant('NOT_SET');
+        //    }
+        //    observationInfo.setText(text);
+        //};
 
         /**
          * On obs location changed
          * @param {L.LatLng} latlng Obs location changed to this position
          */
         service._onObsLocationChange = function (latlng) {
-            service._updateObsInfoText(latlng);
+            //service._updateObsInfoText(latlng);
             service._updateDistanceLineLatLng(latlng);
             service._updateSelectedItemDistance();
-            service._enableOrDisableDraggableLocation();
         };
 
         /**
@@ -105,7 +104,6 @@
                 });
             };
             unselectFunc(layerGroups.observations.getLayers());
-            //unselectFunc(layerGroups.locations.getLayers());
             unselectFunc([obsLocationMarker]);
         };
 
@@ -294,7 +292,7 @@
             service._updateSelectedItemDistance();
             if (ObsLocation.isSet()) {
                 var obslatlng = new L.LatLng(ObsLocation.get().Latitude, ObsLocation.get().Longitude);
-                service._updateObsInfoText(obslatlng);
+                //service._updateObsInfoText(obslatlng);
                 service._updateDistanceLineLatLng(obslatlng);
             }
         };
@@ -350,18 +348,6 @@
         }
 
         /**
-         * Enable or disable draggable location marker
-         * @returns {} 
-         */
-        service._enableOrDisableDraggableLocation = function () {
-            if (service._isSetLocationManuallyPossible()) {
-                obsLocationMarker.dragging.enable();
-            } else {
-                obsLocationMarker.dragging.disable();
-            }
-        };
-
-        /**
          * Main method for creating map
          * @param {} elem 
          * @returns {} 
@@ -386,7 +372,7 @@
             });
             tiles[0].addTo(layerGroups.tiles);
 
-            observationInfo = L.obsLocationInfo().addTo(map);
+            //observationInfo = L.obsLocationInfo().addTo(map);
 
             map.on('locationfound', service._onPositionUpdate);
 
@@ -414,18 +400,9 @@
                 }
             });
 
-            //map.on('zoomend',
-            //    function() {
-            //        var bounds = service.calculateXYZListFromBounds(map.getBounds(), 1, 9);
-            //        AppLogging.log('Map xyz list: ' + JSON.stringify(bounds));
-            //    });
-
-            obsLocationMarker = new RegObsClasses.CurrentObsLocationMarker(center, { draggable: service._isSetLocationManuallyPossible() });
+            obsLocationMarker = new RegObsClasses.CurrentObsLocationMarker(center);
             obsLocationMarker.on('selected', function (event) { service._setSelectedItem(event.target); });
             obsLocationMarker.on('obsLocationChange', service._onObsLocationChange);
-            obsLocationMarker.on('drag', function (event) {
-                service._onObsLocationChange(event.latlng);
-            });
 
             obsLocationMarker.on('obsLocationCleared', service._onObsLocationCleared);
             obsLocationMarker.addTo(layerGroups.user);
@@ -433,14 +410,12 @@
             L.control.scale({ imperial: false }).addTo(map);
 
             $rootScope.$on('$regObs:registrationSaved', function () {
-                service._enableOrDisableDraggableLocation();
                 $timeout(function () {
                     map.invalidateSize(); //Footer bar could have been removed, invalidate map size
                 }, 50);
             });
 
             $rootScope.$on('$regObs:obsLocationSaved', function () {
-                service._enableOrDisableDraggableLocation();
                 obsLocationMarker.refresh();
             });
 
@@ -608,18 +583,24 @@
             }
         };
 
-        //service._checkIfMarkerShouldBeReset = function () {
-        //    if (Registration.isEmpty() && ObsLocation.isSet() && ObsLocation.data.UTMSourceTID === ObsLocation.source.fetchedFromGPS) {
-        //        ObsLocation.remove(); //Remove obs location set in map when registration is empty and position is from GPS
-        //    }
-        //};
+        service._checkIfMarkerShouldBeReset = function () {
+            if (Registration.isEmpty() && ObsLocation.isSet() && ObsLocation.data.UTMSourceTID === ObsLocation.source.fetchedFromGPS) {
+                ObsLocation.remove(); //Remove obs location set in map when registration is empty and position is from GPS
+            }
+            
+        };
 
         /**
          * Refresh map an redraw layers and markers as set in settings
          * @returns {} 
          */
         service.refresh = function () {
-            //service._checkIfMarkerShouldBeReset();
+            AppLogging.log('Map refresh');
+
+            if (!ObsLocation.isSet() && service._selectedItem && service._selectedItem === obsLocationMarker) {
+                service.clearSelectedMarkers();
+            }
+            
             service._checkSelectedItemGeoHazard();
             service._redrawTilesForThisGeoHazard();
 
@@ -639,6 +620,7 @@
          */
         service.startWatch = function () {
             if (map) {
+                service._checkIfMarkerShouldBeReset();
                 document.addEventListener("deviceready",
                     function () {
                         AppLogging.log('Start watching gps location');

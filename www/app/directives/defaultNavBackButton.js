@@ -1,7 +1,7 @@
 angular
     .module('RegObs')
     .directive('defaultNavBackButton',
-    function defaultNavBackButton($ionicHistory, $state, $ionicConfig, $ionicViewSwitcher, $ionicPlatform) {
+    function defaultNavBackButton($ionicHistory, $state, $ionicConfig, $ionicViewSwitcher, $ionicPlatform, AppLogging) {
         'ngInject';
         return {
             link: link,
@@ -32,7 +32,7 @@ angular
                 }
             };
             scope.$on('$stateChangeSuccess', function () {
-                element.toggleClass('hide', !getDefaultBack() && !$ionicHistory.backView());
+                element.toggleClass('hide', (!getDefaultBack() && !$ionicHistory.backView()));
             });
 
             $ionicPlatform.registerBackButtonAction(function () {

@@ -20,6 +20,10 @@
             });
         };
 
+        service._getLocationStorageKey = function() {
+            return locationsStorageKey + '_' + AppSettings.data.env.replace(/ /g, '');
+        };
+
         service._getRegistrationsFromPresistantStorage = function () {
             return $q(function (resolve) {
                 document.addEventListener("deviceready", function () {
@@ -43,7 +47,7 @@
         };
 
         service.getLocations = function (geoHazardId) {
-            var locations = LocalStorage.getObject(locationsStorageKey, []);
+            var locations = LocalStorage.getObject(service._getLocationStorageKey(), []);
             if (geoHazardId) {
                 locations = locations.filter(function (item) { return item.geoHazardId === geoHazardId });
             }
@@ -78,7 +82,7 @@
                                     existingLocations.push(location);
                                 }
                             });
-                            LocalStorage.setObject(locationsStorageKey, existingLocations);
+                            LocalStorage.setObject(service._getLocationStorageKey(), existingLocations);
                             resolve();
                         } else {
                             reject('Could not get json result');

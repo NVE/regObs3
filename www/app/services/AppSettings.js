@@ -1,6 +1,6 @@
 ﻿angular
     .module('RegObs')
-    .factory('AppSettings', function (LocalStorage, $http, $log, $rootScope, moment, $ionicHistory) {
+    .factory('AppSettings', function (LocalStorage, $http, $log, $rootScope, moment) {
 
         var settings = this;
 
@@ -30,13 +30,13 @@
         };
 
         var baseUrls = {
-            'regObs': 'https://api.nve.no/hydrology/regobs/webapi_v3.0.6',
+            'regObs': 'https://api.nve.no/hydrology/regobs/webapi_v3.1.0',
             'demo regObs': 'https://api.nve.no/hydrology/demo/regobs/webapi',
             'test regObs': 'http://tst-h-web03.nve.no/regobswebapi'
         };
 
         var serviceUrls = {
-            'regObs': 'https://api.nve.no/hydrology/regobs/v3.0.6/',
+            'regObs': 'https://api.nve.no/hydrology/regobs/v3.1.0/',
             'demo regObs' : 'http://stg-h-web03.nve.no/RegObsServices/',
             'test regObs': 'http://tst-h-web03.nve.no/regobsservices_test/'
         };
@@ -46,7 +46,7 @@
                 .then(function(response) {
                     var headers = {
                         regObs_apptoken: response.data.apiKey,
-                        ApiJsonVersion: '3.0.6'
+                        ApiJsonVersion: '3.1.0'
                     };
 
                     settings.httpConfig = {
@@ -188,6 +188,10 @@
 
         settings.getCurrentLangKey = function() {
             return 1; //Implement when language support is needed
+        };
+
+        settings.getEnvClass = function () {
+            return settings.data.env === 'regObs' ? 'bar-dark' : (settings.data.env === 'demo regObs' ? 'bar-assertive' : 'bar-calm');
         };
 
         init();

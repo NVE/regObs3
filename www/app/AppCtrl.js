@@ -45,13 +45,10 @@ angular.module('RegObs')
         };
 
         appVm.hasRegistration = function () {
-            return !(appVm.registration.isEmpty() && !appVm.registration.unsent.length);
+            return !appVm.registration.isEmpty() || appVm.registration.unsent.length > 0;
         };
 
-        appVm.getEnvClass = function () {
-            return AppSettings.data.env === 'regObs' ? 'bar-dark' : (AppSettings.data.env === 'demo regObs' ? 'bar-assertive' : 'bar-calm');
-        };
-
+        appVm.getEnvClass = AppSettings.getEnvClass;
         appVm.getAppMode = AppSettings.getAppMode;
         appVm.setAppMode = AppSettings.setAppMode;
 
@@ -103,11 +100,19 @@ angular.module('RegObs')
             HeaderColor.init();
         });
 
-        $scope.$on('$stateChangeStart', function () {
+        $scope.$on('$stateChangeStart', function (event, toState, toParams, fromState, fromParams) {
             var currentProp = ($state.current.data || {}).registrationProp;
             if (currentProp && !Registration.propertyExists(currentProp)) {
                 AppLogging.log('DELETE empty registration for: ' + currentProp + ' current registration: ' + JSON.stringify(Registration.data));
                 delete Registration.data[currentProp];
+            }
+            if (toState.data && toState.data.clearHistory) {
+                AppLogging.log('clear navigation history');
+                $ionicHistory.clearHistory();
+                $ionicHistory.nextViewOptions({
+                    disableBack: true,
+                    historyRoot: true
+                });
             }
         });
 

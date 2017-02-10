@@ -19,8 +19,15 @@ angular
             });
 
             var tile = AppSettings.tiles[0];
-
-            var layer = new RegObsClasses.RegObsTileLayer(tile.url, { folder: AppSettings.mapFolder, name: tile.name, debugFunc: AppLogging.log });
+            var layer = new RegObsClasses.RegObsTileLayer(tile.url,
+            {
+                reuseTiles: false,
+                folder: AppSettings.mapFolder,
+                name: tile.name,
+                embeddedUrl: tile.embeddedUrl,
+                embeddedMaxZoom: tile.embeddedMaxZoom,
+                debugFunc: AppSettings.debugTiles ? AppLogging.debug : null
+            });
             map.addLayer(layer);
 
             if (ctrl.bounds) {

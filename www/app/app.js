@@ -68,7 +68,8 @@
                 controller: 'MapStartCtrl as vm',
                 data: {
                     showMapToggle: true,
-                    showRegistrationFooter: true
+                    showRegistrationFooter: true,
+                    clearHistory: true
                 }
             })
             .state('settings', {
@@ -76,7 +77,8 @@
                 templateUrl: 'app/settings/settingsview.html',
                 controller: 'SettingsViewCtrl as vm',
                 data: {
-                    defaultBack: defaultBackHelp
+                    defaultBack: defaultBackHelp,
+                    showSettings: false
                 }
             })
             .state('offlinemapoverview', {
@@ -84,7 +86,8 @@
                 templateUrl: 'app/map/offlinemapoverview.html',
                 controller: 'OfflineMapOverviewCtrl as vm',
                 data: {
-                    defaultBack: defaultBackStart
+                    defaultBack: defaultBackStart,
+                    showSettings: false
                 }
             })
             .state('mapareadownload', {
@@ -94,7 +97,8 @@
                 data: {
                     defaultBack: {
                         state: 'offlinemapoverview'
-                    }
+                    },
+                    showSettings: false
                 }
             })
             .state('offlineareadetails', {
@@ -105,7 +109,8 @@
                 data: {
                     defaultBack: {
                         state: 'offlinemapoverview'
-                    }
+                    },
+                    showSettings: false
                 }
             })
 
@@ -115,7 +120,7 @@
                 controller: 'ObservationDetailsCtrl as vm',
                 params: { observation: null },
                 data: {
-                    defaultBack: defaultBackStart
+                    defaultBack: defaultBackHelp
                 }
             })
 
@@ -446,7 +451,8 @@
                 },
                 controller: 'HelpCtrl as vm',
                 data: {
-                    defaultBack: defaultBackHelp
+                    defaultBack: defaultBackHelp,
+                    showSettings: false
                 }
             });
     }

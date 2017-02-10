@@ -71,7 +71,7 @@
                         Registration.createAndGoToNewRegistration();
                     },
                     isVisible: function() {
-                        return true;
+                        return Registration.isEmpty();
                     }
                 }
             ];
@@ -86,6 +86,10 @@
 
         getId: function () {
             return this.storedLocation.LocationId;
+        },
+
+        getStoredLocation: function() {
+            return this.storedLocation;
         }
     });
 

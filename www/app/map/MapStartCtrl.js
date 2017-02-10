@@ -63,7 +63,7 @@
 
 
         $scope.$on('$ionicView.enter', function () {
-            $ionicHistory.clearHistory();
+            //$ionicHistory.clearHistory();
             Map.refresh();
             Map.startWatch();
         });

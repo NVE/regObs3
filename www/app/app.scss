@@ -6,6 +6,8 @@ $water: #94BFE0;
 //$ice: #C9C9C9;
 $ice: #CDD7D6;
 
+$footerHeight: 65px;
+
 .snow {
     background-color: $snow;
 }
@@ -58,6 +60,14 @@ $ice: #CDD7D6;
     .button.margin-right {
         margin-right: 5px;
     }
+}
+
+.regobs-footer {
+    height: $footerHeight;
+}
+
+.has-footer {
+    bottom: $footerHeight !important;
 }
 
 input:focus, select:focus, textarea:focus {
@@ -152,6 +162,19 @@ input:focus, select:focus, textarea:focus {
     right: 0;
     top: 0;
     z-index: 10;
+}
+
+.regobs-menu-item-icon {
+    right: 26px !important;
+}
+
+.regobs-menu-item-badge {
+    width: 29px;
+    height: 29px;
+    top: 11px !important;
+    right: 28px !important;
+    padding: 6px 10px;
+    border-radius: 50%;
 }
 
 .exposedBot {
@@ -280,4 +303,27 @@ ion-popover-view.wider {
     .item:last-child {
         @include border-bottom-radius($popover-border-radius-ios);
     }
+}
+
+.nve-icon {
+    display: block;
+    padding-left: 38px;
+    height: 40px;
+    background-repeat: no-repeat;
+}
+
+.nve-icon-water {
+    background: url(../img/ikon_flom.svg) left/40px no-repeat;
+}
+
+.nve-icon-ice {
+    background: url(../img/ikon_isvarsler2.svg) left/40px no-repeat;
+}
+
+.nve-icon-dirt {
+    background: url(../img/ikon_jordskred.svg) left/40px no-repeat;
+}
+
+.nve-icon-snow {
+    background: url(../img/ikon_snoskred.svg) left/40px no-repeat;
 }

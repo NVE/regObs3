@@ -7,7 +7,7 @@
      */
     var CurrentObsLocationMarker = MapSelectableItem.extend({
         options: {
-            draggable: true,
+            draggable: false,
             zIndexOffset: 1000,
             actionButtons: [
                 {
@@ -16,7 +16,7 @@
                     iconColor: '#444',
                     icon: 'ion-android-walk',
                     isVisible: function () {
-                        return AppSettings.getAppMode() === 'snow';
+                        return AppSettings.getAppMode() === 'snow' && Registration.isEmpty();
                     },
                     onClick: function () {
                         if (Trip.model.started) {
@@ -47,35 +47,24 @@
                     buttonColor: '#D21523',
                     iconColor: '#fff',
                     icon: 'ion-close',
-                    isVisible: ObsLocation.isSet
+                    isVisible: function() { return ObsLocation.isSet() && Registration.isEmpty() }
                 }]
         },
 
         _getIcon: function (isSet) {
-            //return L.AwesomeMarkers.icon({
-            //    icon: isSet ? 'ion-flag' : 'arrow-move',
-            //    prefix: 'ion',
-            //    markerColor: isSet ? 'gray' : 'green',
-            //    extraClasses: 'map-obs-marker' + (isSet ? ' map-obs-marker-set' : '')
-            //});
             if (isSet) {
-                return this._iconSet;
+                return new L.Icon.Default();
             } else {
                 return this._iconDrag;
             }
         },
-        _iconSet: L.AwesomeMarkers.icon({
-            icon: 'ion-flag',
-            prefix: 'ion',
-            markerColor: 'gray',
-            extraClasses: 'map-obs-marker map-obs-marker-set'
-        }),
-        _iconDrag: L.AwesomeMarkers.icon({
-            icon: 'arrow-move',
-            prefix: 'ion',
-            markerColor: 'green',
-            extraClasses: 'map-obs-marker'
-        }),
+        //_iconSet: L.AwesomeMarkers.icon({
+        //    icon: 'ion-flag',
+        //    prefix: 'ion',
+        //    markerColor: 'gray',
+        //    extraClasses: 'map-obs-marker map-obs-marker-set'
+        //}),
+        _iconDrag: L.divIcon({ html: '', iconSize: L.point(1, 1) }),
 
         initialize: function (latlng, options) {
             var self = this;
@@ -85,16 +74,8 @@
             this.options.actionButtons[3].onClick = function () {
                 self.clear();
             };
-
             // call super
             MapSelectableItem.prototype.initialize.call(self, latlng, self.options);
-            self.on('dragstart', function () {
-                self.isDragging = true;
-            });
-            self.on('dragend', function () {
-                self.isDragging = false;
-                self._setCurrentPositionAsObsLocation();
-            });
             self.refresh();
         },
 
@@ -121,9 +102,7 @@
         setUserPosition: function (latlng) {
             var self = this;
             self.options.userPosition = latlng;
-            if (!self.isDragging) {
-                self.refresh();
-            }
+            self.refresh();
         },
 
         setObsLocationManually: function (latlng) {
@@ -150,19 +129,18 @@
 
         refresh: function () {
             var self = this;
-            if (!self.isDragging) {
-                var newLatLng = null;
-                var currentLatLng = self.getLatLng();
-                if (ObsLocation.isSet()) {
-                    var obsLoc = ObsLocation.get();
-                    newLatLng = new L.LatLng(obsLoc.Latitude, obsLoc.Longitude);
-                } else if (self.options.userPosition) {
-                    newLatLng = self.options.userPosition;
-                }
-                if (newLatLng && (!newLatLng.equals(currentLatLng))) {
-                    self._setLatLng(newLatLng);
-                }
+            var newLatLng = null;
+            var currentLatLng = self.getLatLng();
+            if (ObsLocation.isSet()) {
+                var obsLoc = ObsLocation.get();
+                newLatLng = new L.LatLng(obsLoc.Latitude, obsLoc.Longitude);
+            } else if (self.options.userPosition) {
+                newLatLng = self.options.userPosition;
             }
+            if (newLatLng && (!newLatLng.equals(currentLatLng))) {
+                self._setLatLng(newLatLng);
+            }
+
             var icon = self._getIcon(ObsLocation.isSet());
             if (icon !== this.options.icon) {
                 self.setIcon(icon);
@@ -170,21 +148,17 @@
         },
 
         getHeader: function () {
-            if (this._isObsLocSetManually()) {
-                return '';
-            } else if (this._isObsLocStoredPosition()) {
-                return ObsLocation.get().Name;
-            } else if (this.options.userPosition) {
-                return $translate.instant('YOUR_GPS_POSITION');
+            if (!Registration.isEmpty()) {
+                return 'Pågående registrering';
             } else {
+                if (this._isObsLocStoredPosition()) {
+                    return ObsLocation.get().Name;
+                }
                 return '';
             }
         },
 
         getDescription: function () {
-            if (!ObsLocation.isSet()) {
-                return $translate.instant('SET_POSITION_HELP_TEXT');
-            }
             return '';
         },
 

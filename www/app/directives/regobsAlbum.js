@@ -8,10 +8,10 @@ angular
             replace: true,
             template: [
                 '<div>',
-                    '<button type="button" class="button button-clear button-block" ng-click="click()" ng-hide="imgLoading">',
-                        '<i class="icon stable ion-images"></i> Album',
+                    '<button type="button" class="button button-clear button-block button-dark icon-left ion-images" ng-click="click()" ng-hide="imgLoading">',
+                        'Album',
                     '</button>',
-                    '<ion-spinner class="spinner-light" ng-if="imgLoading"></ion-spinner>',
+                    '<ion-spinner class="spinner-dark" ng-if="imgLoading"></ion-spinner>',
                 '</div>'
             ].join('')
         };

@@ -41,9 +41,7 @@ angular
                     return Map.getCenter();
                 }
             };
-
-            var marker = L.marker(ctrl._getStartPosition()).addTo(map);
-            
+            var marker = L.marker(ctrl._getStartPosition()).addTo(map);         
 
             ctrl.centerMapMarker = function() {
                 var center = map.getCenter();

@@ -1,16 +1,16 @@
 ﻿<ion-modal-view>
     <ion-header-bar>
-        <button type="button" class="button button-clear button-calm" ng-click="modal.hide()">Avbryt</button>
-        <h1 class="title" ng-hide="editing">Ny url</h1>
-        <h1 class="title" ng-show="editing">Rediger url</h1>
-        <button type="button" class="button button-clear button-calm" ng-click="addUrl()">OK</button>
+        <button type="button" class="button button-clear button-calm" ng-click="modal.hide()">{{'CANCEL'|translate}}</button>
+        <h1 class="title" ng-hide="editing">{{'NEW_URL'|translate}}</h1>
+        <h1 class="title" ng-show="editing">{{'EDIT_URL'|translate}}</h1>
+        <button type="button" class="button button-clear button-calm" ng-click="addUrl()">{{'OK'|translate}}</button>
     </ion-header-bar>
     <ion-content>
         <form name="newUrlForm" novalidate>
             <ion-list>
                 <label class="item item-input item-stacked-label">
-                    <span class="input-label">Beskrivelse</span>
-                    <textarea placeholder="Beskrivelse"
+                    <span class="input-label">{{'DESCRIPTION'|translate}}</span>
+                    <textarea placeholder="{{'DESCRIPTION'|translate}}"
                               name="description"
                               id="url_description"
                               cols="30" rows="3"
@@ -18,8 +18,8 @@
                               ng-model="url.UrlDescription"></textarea>
                 </label>
                 <label class="item item-input item-stacked-label">
-                    <span class="input-label">Url</span>
-                    <textarea placeholder="Url" autocapitalize="none"
+                    <span class="input-label">{{'URL'|translate}}</span>
+                    <textarea placeholder="{{'URL'|translate}}" autocapitalize="none"
                               name="url"
                               id="url_line"
                               cols="30" rows="3"
@@ -33,7 +33,7 @@
                 <button type="button" class="button button-block button-assertive button-clear"
                         ng-click="deleteUrl()"
                         ng-show="editing">
-                    Slett
+                    {{'DELETE'|translate}}
                 </button>
             </div>
         </form>

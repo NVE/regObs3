@@ -71,39 +71,38 @@
                     <button ng-show="appVm.trip.model.started && !appVm.userService.getUser().anonymous" class="button button-balanced button-clear button-icon" ng-class="{'ion-android-walk':!appVm.trip.sending}" ng-click="appVm.stopTrip()">
                         <ion-spinner ng-if="appVm.trip.sending" class="spinner-light"></ion-spinner>
                     </button>
-                    <div ng-if="appVm.currentState.name !== 'settings' && appVm.currentState.name !== 'help'">
+                    <div ng-if="appVm.currentState.data && appVm.currentState.data.showSettings !== false">
                         <button class="button button-clear ion-locked" ng-show="!appVm.userService.getUser().anonymous" ui-sref="settings"></button>
                         <button class="button button-icon ion-more" ng-click="appVm.openTopPopover($event)"></button>
                     </div>
                 </ion-nav-buttons>
             </ion-nav-bar>
             <ion-nav-view></ion-nav-view>
-            <ion-footer-bar ng-class="appVm.getEnvClass()" ng-show="appVm.showFooter()">
+            <ion-footer-bar class="regobs-footer" ng-show="appVm.showFooter()">
                 <div ng-if="appVm.showTripFooter()" class="row row-no-padding">
                     <div class="col col-center">
-                        <button class="button button-block button-clear" ng-click="appVm.resetTrip()" ng-hide="appVm.trip.model.started">
-                            <i class="icon stable ion-android-close"></i> {{'CLEAR'|translate}}
-                        </button>
+                        <div class="padding">
+                            <button class="button button-block button-outline button-dark icon-right ion-android-close" ng-click="appVm.resetTrip()" ng-hide="appVm.trip.model.started">
+                                {{'CLEAR'|translate}}
+                            </button>
+                        </div>
                     </div>
                     <div class="col col-center">
-                        <button class="button  button-block button-clear" ng-click="appVm.startTrip(appVm.tripId, appVm.tripMinutes, appVm.tripComment)" ng-hide="appVm.trip.model.started">
-                            <ion-spinner class="spinner-light" ng-show="appVm.trip.sending"></ion-spinner>
-                            <span ng-hide="appVm.trip.sending">
-                                <i class="icon stable ion-android-walk"></i> {{'START_TRIP' | translate}}
-                            </span>
-                        </button>
-                        <button class="button  button-block button-clear" ng-click="appVm.stopTrip()" ng-show="appVm.trip.model.started">
-                            <ion-spinner class="spinner-light" ng-show="appVm.trip.sending"></ion-spinner>
-                            <span ng-hide="appVm.trip.sending">
-                                <i class="icon balanced ion-android-walk"></i> {{'END_TRIP' | translate}}
-                            </span>
-                        </button>
+                        <ion-spinner class="spinner-dark" ng-show="appVm.trip.sending"></ion-spinner>
+                        <div ng-hide="appVm.trip.sending" class="padding">
+                            <button class="button  button-block button-calm icon-right ion-android-walk" ng-click="appVm.startTrip(appVm.tripId, appVm.tripMinutes, appVm.tripComment)" ng-hide="appVm.trip.model.started">
+                                {{'START_TRIP' | translate}}
+                            </button>
+                            <button class="button  button-block button-calm icon-right ion-android-walk" ng-click="appVm.stopTrip()" ng-show="appVm.trip.model.started">
+                                {{'END_TRIP' | translate}}
+                            </button>
+                        </div>
                     </div>
                 </div>
                 <div ng-if="appVm.showFormFooter()" class="row row-no-padding">
                     <div class="col col-center">
-                        <button class="button button-block  button-clear" ng-click="appVm.resetProperty()">
-                            <i class="icon stable ion-android-close"></i> {{'CLEAR'|translate}}
+                        <button class="button button-block button-clear button-dark icon-left ion-android-close" ng-click="appVm.resetProperty()">
+                            {{'CLEAR'|translate}}
                         </button>
                     </div>
                     <div class="col col-center">
@@ -115,15 +114,19 @@
                 </div>
                 <div ng-if="appVm.showRegistrationFooter()" class="row row-no-padding">
                     <div class="col col-center">
-                        <button class="button  button-block button-clear" ng-click="appVm.registration.remove()">
-                            <i class="icon stable ion-trash-a"></i> {{'DELETE'|translate}}
-                        </button>
+                        <div class="padding">
+                            <button class="button  button-block button-outline button-dark icon-right ion-trash-a" ng-click="appVm.registration.remove()">
+                                {{'DELETE'|translate}}
+                            </button>
+                        </div>
                     </div>
                     <div class="col col-center">
-                        <ion-spinner class="spinner-light" ng-if="appVm.registration.sending"></ion-spinner>
-                        <button ng-hide="appVm.registration.sending" class="button  button-block button-clear" ng-click="appVm.registration.send()">
-                            <i class="icon stable ion-upload"></i> {{'SEND'|translate}} <!--<span class="badge badge-balanced" ng-show="!appVm.registration.isEmpty()" ng-bind="appVm.registration.getObservationsLength()" ></span>--><span class="badge badge-assertive" ng-show="appVm.registration.unsent.length" ng-bind="appVm.registration.unsent.length"></span>
-                        </button>
+                        <div class="padding">
+                            <ion-spinner class="spinner-dark" ng-if="appVm.registration.sending"></ion-spinner>
+                            <button ng-hide="appVm.registration.sending" class="button button-block button-calm icon-right ion-android-send" ng-click="appVm.registration.send()">
+                                <span class="badge badge-assertive" ng-show="appVm.registration.unsent.length" ng-bind="appVm.registration.unsent.length"></span> {{'SEND'|translate}} <!--<span class="badge badge-balanced" ng-show="!appVm.registration.isEmpty()" ng-bind="appVm.registration.getObservationsLength()" ></span>-->
+                            </button>
+                        </div>
                     </div>
                 </div>
             </ion-footer-bar>

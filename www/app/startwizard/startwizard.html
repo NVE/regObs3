@@ -6,11 +6,11 @@
                     <img class="info-img" ng-src="img/screenshot1_iphone6.png">
                 </div>
                 <div class="info-cards">
-                    <h3>Vær trygg!</h3>
+                    <h3>{{'WIZARD_1_HEADER'|translate}}</h3>
                     <p>
-                        Les andres observasjoner.<br />
-                        Les varsel.<br />
-                        Planlegg turen med regObs og Varsom!
+                        {{'WIZARD_1_LINE_1'|translate}}<br />
+                        {{'WIZARD_1_LINE_2'|translate}}<br />
+                        {{'WIZARD_1_LINE_3'|translate}}
                     </p>
                 </div>
             </ion-slide-page>
@@ -19,10 +19,10 @@
                     <img class="info-img" ng-src="img/screenshot3_iphone6.png">
                 </div>
                 <div class="info-cards">
-                    <h3>Vær mer trygg!</h3>
+                    <h3>{{'WIZARD_2_HEADER'|translate}}</h3>
                     <p>
-                        Se hvor du er i forhold til farer.<br />
-                        i terrenget. Bruk støttekartene!
+                        {{'WIZARD_2_LINE_1'|translate}}<br />
+                        {{'WIZARD_2_LINE_2'|translate}}
                     </p>
                 </div>
             </ion-slide-page>
@@ -31,11 +31,11 @@
                     <img class="info-img" ng-src="img/screenshot4_iphone6.png">
                 </div>
                 <div class="info-cards">
-                    <h3>Vær en helt!</h3>
+                    <h3>{{'WIZARD_3_HEADER'|translate}}</h3>
                     <p>
-                        Del dine vurderinger med andre. <br />
-                        Hjelp dem ved å registrere dine observasjoner <br />
-                        i regObs!
+                        {{'WIZARD_3_LINE_1'|translate}}<br />
+                        {{'WIZARD_3_LINE_2'|translate}}<br />
+                        {{'WIZARD_3_LINE_3'|translate}}
                     </p>
                 </div>
             </ion-slide-page>
@@ -44,38 +44,41 @@
                     <img class="info-img" ng-src="img/screenshot5_iphone6.png">
                 </div>
                 <div class="info-cards">
-                    <h3>Hva og hvordan?</h3>
+                    <h3>{{'WIZARD_4_HEADER'|translate}}</h3>
                     <p>
-                        Hva er viktigst for deg? <br />
-                        Du velger hva du vil se og dele på regObs!
+                        {{'WIZARD_4_LINE_1'|translate}}<br />
+                        {{'WIZARD_4_LINE_2'|translate}}
                     </p>
                 </div>
             </ion-slide-page>
-            <ion-slide-page>
+            <ion-slide-page>             
                 <div class="wizard-app-mode-select-box">
                     <div>
+                        <div class="text-center">
+                            <h3>{{'CHOOSE_INTEREST'|translate}}</h3>
+                        </div>                  
                         <div class="card item-text-wrapitem-text-wrap" ng-click="vm.setAppMode('snow')">
                             <div class="item item-avatar">
-                                <img src="img/sno.png">
-                                <h2>Ta meg til snøen!</h2>
+                                <i class="nve-icon nve-icon-snow item-image"></i>
+                                <h2>{{'INTEREST_SNOW'|translate}}</h2>
                             </div>
                         </div>
                         <div class="card item-text-wrap" ng-click="vm.setAppMode('dirt')">
                             <div class="item item-avatar">
-                                <img src="img/jord.png">
-                                <h2>Jord til jordskredvarslingen!</h2>
+                                <i class="nve-icon nve-icon-dirt item-image"></i>
+                                <h2>{{'INTEREST_DIRT'|translate}}</h2>
                             </div>
                         </div>
                         <div class="card item-text-wrap" ng-click="vm.setAppMode('water')">
                             <div class="item item-avatar">
-                                <img src="img/vann.png">
-                                <h2>Vannstand, vannføring og flomskader!</h2>
+                                <i class="nve-icon nve-icon-water item-image"></i>
+                                <h2>{{'INTEREST_WATER'|translate}}</h2>
                             </div>
                         </div>
                         <div class="card item-text-wrap" ng-click="vm.setAppMode('ice')">
                             <div class="item item-avatar">
-                                <img src="img/is.png">
-                                <h2>Istykkelse, bæreevne og skøyteforhold!</h2>
+                                <i class="nve-icon nve-icon-ice item-image"></i>
+                                <h2>{{'INTEREST_ICE'|translate}}</h2>
                             </div>
                         </div>
                     </div>
@@ -84,6 +87,6 @@
         </ion-slides>
     </ion-content>
     <div class="bar bar-footer bar-dark" ng-click="vm.setAppMode('snow')">
-        <div class="title start-wizard-footer">Hopp over dette. Begynn å bruk.</div>
+        <div class="title start-wizard-footer">{{'SKIP_START_USE'|translate}}</div>
     </div>
 </ion-view>

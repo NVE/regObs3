@@ -3,7 +3,7 @@
     <div>
         <i class="icon regobs-position-icon ion-pinpoint" ng-if="$ctrl.hasGpsPosition()"></i>
         <i class="icon regobs-position-icon ion-pin" ng-if="$ctrl.isStoredLocation()"></i>
-        <i class="icon regobs-position-icon ion-flag" ng-if="$ctrl.hasMarkedPosition()"></i>
+        <i class="icon regobs-position-icon ion-location" ng-if="$ctrl.hasMarkedPosition()"></i>
 
         {{$ctrl.getDescription() | translate}}
         <span class="item-note">

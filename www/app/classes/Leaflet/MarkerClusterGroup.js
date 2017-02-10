@@ -7,7 +7,6 @@
      */
     var MarkerClusterGroup = L.MarkerClusterGroup.extend({
         options: {
-            icon: 'ion-flag',
             showCoverageOnHover: false,
             iconCreateFunction: function (cluster) {
                 var appMode = AppSettings.getAppMode();
