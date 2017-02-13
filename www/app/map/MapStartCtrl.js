@@ -61,10 +61,12 @@
             appVm.mapMenu.show($event);
         };
 
+        appVm.getCurrentAppMode = function() {
+            return AppSettings.getAppMode();
+        };
+
 
         $scope.$on('$ionicView.enter', function () {
-            //$ionicHistory.clearHistory();
-            Map.refresh();
             Map.startWatch();
         });
 

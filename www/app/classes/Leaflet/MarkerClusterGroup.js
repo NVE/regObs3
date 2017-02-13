@@ -7,7 +7,8 @@
      */
     var MarkerClusterGroup = L.MarkerClusterGroup.extend({
         options: {
-            showCoverageOnHover: false,
+            maxClusterRadius: 30, //default is 80
+            showCoverageOnHover: false, //default is true
             iconCreateFunction: function (cluster) {
                 var appMode = AppSettings.getAppMode();
                 var childPins = cluster.getAllChildMarkers();

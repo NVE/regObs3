@@ -1,7 +1,7 @@
 ﻿/**
  * Class for Observation object
  */
-angular.module('RegObs').factory('Observation', function (MapSelectableItem, AppSettings, PresistentStorage, UserLocation, DateHelpers, moment) {
+angular.module('RegObs').factory('Observation', function (MapSelectableItem, AppSettings, PresistentStorage, UserLocation, DateHelpers, moment, RegObsObservationTypeFactory) {
 
     /**
      * Constructor for Observation
@@ -38,6 +38,9 @@ angular.module('RegObs').factory('Observation', function (MapSelectableItem, App
         return result;
     };
 
+    
+
+
     /**
      * Load json data to initialize object
      * @param {} json 
@@ -49,10 +52,8 @@ angular.module('RegObs').factory('Observation', function (MapSelectableItem, App
         self._registrations = [];
         if (self.Registrations) {
             self.Registrations.forEach(function (item) {
-                self._registrations.push({
-                    name: (item.RegistrationName || '').trim(),
-                    description: Observation.getObsDescription(item)
-                });
+                var observationType = RegObsObservationTypeFactory.getObservationTypeInstance(item);
+                self._registrations.push(observationType);
             });
         }
         if (self.Pictures) {
@@ -80,8 +81,9 @@ angular.module('RegObs').factory('Observation', function (MapSelectableItem, App
     Observation.prototype.getObservationTypeDescription = function () {
         var arr = [];
         this._registrations.forEach(function (item) {
-            if (arr.indexOf(item.name) < 0) { //Do not add duplicated values
-                arr.push(item.name);
+            var name = item.getName();
+            if (arr.indexOf(name) < 0) { //Do not add duplicated values
+                arr.push(name);
             }
         });
         return arr.join(', ');

@@ -6,11 +6,11 @@
         vm.observations = [];
         vm.isLoading = true;
 
-        vm.update = function() {
+        vm.update = function () {
             Map.updateObservationsInMap().then(vm.redraw);
         };
 
-        vm.updateFromButton = function() {
+        vm.updateFromButton = function () {
             vm.update();
         };
 
@@ -20,7 +20,10 @@
             Observations.getStoredObservations(Utility.getCurrentGeoHazardTid())
                 .then(function (result) {
                     result.forEach(function (obsJson) {
-                        vm.observations.push(new RegObsClasses.Observation(obsJson));
+                        var o = new RegObsClasses.Observation(obsJson);
+                        if (Map.isPositionWithinMapBounds(o.Latitude, o.Longitude)) {
+                            vm.observations.push(o);
+                        }
                     });
                 }).finally(function () {
                     // Stop the ion-refresher from spinning
@@ -29,5 +32,10 @@
                 });
         };
 
-        vm.redraw();
+        $scope.$on('$ionicView.enter',
+            function () {
+                vm.redraw();
+            });
+
+
     });

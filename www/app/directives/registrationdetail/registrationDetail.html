@@ -19,7 +19,7 @@
 </div>
 <div class="padding">
     <span ng-repeat="obs in $ctrl.registration.getRegistrations()">
-        <strong>{{obs.name}}:</strong>&nbsp;<span ng-repeat="desc in obs.description track by $index"><span ng-if="$index > 0">&nbsp;&bull;&nbsp;</span>{{desc}}</span>
+        <strong>{{obs.getName()}}:</strong>&nbsp;<span ng-repeat="desc in obs.getValues() track by $index"><span ng-if="$index > 0">&nbsp;&bull;&nbsp;</span>{{desc}}</span>
     </span>
 </div>
 <div class="padding">

@@ -63,7 +63,8 @@
                                 latitude: latitude,
                                 longitude: longitude,
                                 range: range,
-                                geohazardId: geohazardId
+                                geohazardId: geohazardId,
+                                returnCount: AppSettings.maxObservationsToFetch
                             },
                             timeout: canceller ? canceller.promise : AppSettings.httpConfig.timeout
                         })
@@ -74,7 +75,8 @@
                             data.data.forEach(function (location) {
                                 location.geoHazardId = geohazardId; //Setting missing result propery geoHazardId
                                 var existingLocation = existingLocations.filter(function (item) {
-                                    return item.LocationId === location.LocationId;
+                                    var distance = L.latLng(item.LatLngObject.Latitude, item.LatLngObject.Longitude).distanceTo(L.latLng(location.LatLngObject.Latitude, location.LatLngObject.Longitude));
+                                    return item.LocationId === location.LocationId || ((item.Name || '').trim() === (location.Name || '').trim() && distance < 500); //Name is the same and distance is less than 500m
                                 });
                                 if (existingLocation.length > 0) {
                                     existingLocation[0] = location; //Update existing location with latest result
@@ -146,7 +148,8 @@
                             Longitude: longitude,
                             Radius: range,
                             FromDate: AppSettings.getObservationsFromDateISOString(),
-                            LangKey: AppSettings.getCurrentLangKey()
+                            LangKey: AppSettings.getCurrentLangKey(),
+                            ReturnCount: AppSettings.maxObservationsToFetch
                         },
                         httpConfig)
                     .then(function (result) {

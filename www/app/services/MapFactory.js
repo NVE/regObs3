@@ -553,6 +553,19 @@
         };
 
         /**
+         * Is position within map bounds?
+         * @param {} lat 
+         * @param {} lng 
+         * @returns {} 
+         */
+        service.isPositionWithinMapBounds = function(lat, lng) {
+            if (map && lat && lng) {
+                return map.getBounds().contains(L.latLng(lat, lng));
+            }
+            return false;
+        };
+
+        /**
          * Redraw map with tiles only visible for current geohazard
          * @returns {} 
          */

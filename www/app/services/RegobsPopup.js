@@ -92,12 +92,19 @@ angular
 
                         scope.showLongDownloadMessage = false;
                         var timeout;
-                        if (result.longTimoutMessageDelay > 0) {
-                            timeout = $timeout(function () {
-                                scope.showLongDownloadMessage = true;
-                            },
-                                result.longTimoutMessageDelay * 1000);
-                        }
+
+                        var resetTimeout = function () {
+                            if (timeout) {
+                                $timeout.cancel(timeout);
+                            }
+                            if (result.longTimoutMessageDelay > 0) {
+                                timeout = $timeout(function () {
+                                    scope.showLongDownloadMessage = true;
+                                }, result.longTimoutMessageDelay * 1000);
+                            }
+                        };
+
+                        resetTimeout();
 
                         scope.progressOptions = result.progressOptions;
                         scope.cancelDownload = function () {
@@ -130,6 +137,8 @@ angular
                         var progressFunc = function (status) {
                             if (!(status instanceof RegObs.ProggressStatus))
                                 throw new Error('Progress function must return type RegObs.ProggressStatus');
+
+                            resetTimeout();
 
                             $timeout(function () {
                                 scope.downloadStatus = status;

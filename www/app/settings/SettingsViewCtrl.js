@@ -1,6 +1,6 @@
 angular
     .module('RegObs')
-    .controller('SettingsViewCtrl', function ($scope, $rootScope, $http, $state, $cordovaInAppBrowser, $ionicLoading, AppSettings, LocalStorage, ObsLocation, Registration, User, Utility, HeaderColor, RegobsPopup, AppLogging, PresistentStorage, OfflineMap) {
+    .controller('SettingsViewCtrl', function ($scope, $timeout, $rootScope, $http, $state, $cordovaInAppBrowser, $ionicLoading, AppSettings, LocalStorage, ObsLocation, Registration, User, Utility, HeaderColor, RegobsPopup, AppLogging, PresistentStorage, OfflineMap) {
         var vm = this;
 
         vm.settings = AppSettings;
@@ -22,10 +22,13 @@ angular
         $scope.$on('kdvUpdated', kdvUpdatedTime);
 
         function kdvUpdatedTime(event, newDate) {
-            $scope.$applyAsync(function () {
-                vm.kdvUpdated = moment(parseInt(newDate)).format('DD.MM, [kl.] HH:mm');
+            $timeout(function () {
+                if (newDate) {
+                    vm.kdvUpdated = moment(parseInt(newDate)).format('DD.MM, [kl.] HH:mm');
+                } else {
+                    vm.kdvUpdated = '';
+                }
             });
-
             AppLogging.log('KDV UPDATE', newDate);
         }
 
