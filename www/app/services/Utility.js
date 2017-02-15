@@ -34,7 +34,19 @@ angular
             },
             SnowSurfaceObservation: {
                 name: "Snødekke",
-                RegistrationTID: "22"
+                RegistrationTID: "22",
+                geoHazardTid: 10,
+                properties: {
+                    SnowDepth: { displayFormat: { valueFormat: function(item) { return (item * 100) + ' cm' } } },
+                    NewSnowDepth24: { displayFormat: { valueFormat: function (item) { return (item * 100) + ' cm' } } },
+                    NewSnowLine: { displayFormat: { valueFormat: function (item) { return item + ' moh' } } },
+                    Snowline: { displayFormat: { valueFormat: function (item) { return item + ' moh' } } },
+                    HeightLimitLayeredSnow: { displayFormat: { valueFormat: function (item) { return item + ' moh' } } },
+                    SnowDriftTID: { },
+                    SurfaceWaterContentTID: {},
+                    SnowSurfaceTID: {},
+                    Comment: { displayFormat: { hideDescription: true } }
+                }
             },
             AvalancheActivityObs: {
                 name: "Skredaktivitet",
@@ -50,7 +62,16 @@ angular
             },
             WeatherObservation: {
                 name: "Vær",
-                RegistrationTID: "21"
+                RegistrationTID: "21",
+                geoHazardTid: 10,
+                properties: {
+                    PrecipitationTID: {},
+                    AirTemperature: { displayFormat: { valueFormat: function (item) { return item + ' °C' } } },
+                    WindSpeed: { displayFormat: { valueFormat: function (item) { return item + ' m/s' } } },
+                    CloudCover: { displayFormat: { valueFormat: function (item) { return item + '%' } } },
+                    WindDirection: {},
+                    Comment: { displayFormat: { hideDescription: true } }
+                }
             },
             SnowProfile: {
                 name: "Snøprofil",
@@ -62,11 +83,32 @@ angular
             },
             AvalancheEvalProblem2: {
                 name: "Skredproblem",
-                RegistrationTID: "32"
+                RegistrationTID: "32",
+                geoHazardTid: 10,
+                properties: {
+                    AvalancheExtTID: {},
+                    AvalCauseTID: {},
+                    AvalCauseDepthTID: {},
+                    AvalTriggerSimpleTID: {},
+                    AvalProbabilityTID: {},
+                    DestructiveSizeTID: {},
+                    AvalPropagationTID: {},
+                    ExposedHeight1: { displayFormat: { valueFormat: function (item) { return item + ' m' } } },
+                    ExposedHeight2: { displayFormat: { valueFormat: function (item) { return item + ' m' } } },
+                    Comment: { displayFormat: { hideDescription: true } }
+                }
             },
             AvalancheEvaluation3: {
                 name: "Skredfarevurdering",
-                RegistrationTID: "31"
+                RegistrationTID: "31",
+                geoHazardTid: 10,
+                properties: {
+                    AvalancheDangerTID: {},
+                    ForecastCorrectTID: { displayFormat: { hideDescription: true } },
+                    AvalancheEvaluation: {},
+                    AvalancheDevelopment: {},
+                    ForecastComment: { displayFormat: { hideDescription: true } }
+                }
             },
             Picture: {
                 name: "Bilde",
@@ -103,6 +145,22 @@ angular
 
         service.isObservation = function(prop) {
             return true && OBSERVATIONS[prop] && prop !== 'Picture';
+        };
+
+        service.getObservationDefinition = function (registrationTid) {
+            for (var prop in OBSERVATIONS) {
+                if (OBSERVATIONS.hasOwnProperty(prop)) {
+                    var obs = OBSERVATIONS[prop];
+                    if (obs.RegistrationTID === registrationTid.toString()) {
+                        return obs;
+                    }
+                }
+            }
+            return null;
+        };
+
+        service.camelCaseToUnderscore = function(s) {
+            return s.replace(/(?:^|\.?)([A-Z])/g, function (x, y) { return "_" + y.toUpperCase() }).replace(/^_/, "").toUpperCase();
         };
 
         service.geoHazardNames = function (tid) {
@@ -262,6 +320,20 @@ angular
                 .getKdvRepositories()
                 .then(function (KdvRepositories) {
                     return KdvRepositories[key];
+                });
+        };
+
+        service.getKdvValue = function(key, id) {
+            return service.getKdvArray(key)
+                .then(function(arr) {
+                    var result = arr.filter(function(item) {
+                        return item.Id === id;
+                    });
+                    if (result.length > 0) {
+                        return result[0];
+                    } else {
+                        return null;
+                    }
                 });
         };
 

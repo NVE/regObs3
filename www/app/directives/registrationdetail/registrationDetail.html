@@ -18,9 +18,7 @@
     </ion-slides>
 </div>
 <div class="padding">
-    <span ng-repeat="obs in $ctrl.registration.getRegistrations()">
-        <strong>{{obs.getName()}}:</strong>&nbsp;<span ng-repeat="desc in obs.getValues() track by $index"><span ng-if="$index > 0">&nbsp;&bull;&nbsp;</span>{{desc}}</span>
-    </span>
+    <regobs-observation-type-generator registration="obs" ng-repeat="obs in $ctrl.registration.getRegistrations()"></regobs-observation-type-generator>
 </div>
 <div class="padding">
     <button type="button" class="button button-block button-calm" ng-click="$ctrl.onViewWebRegistrationClick()">{{'VIEW_WEB_REGISTRATION'|translate}}</button>

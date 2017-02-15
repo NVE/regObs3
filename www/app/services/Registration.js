@@ -211,14 +211,14 @@ angular
                 if (!Registration.isEmpty() && !ObsLocation.isSet()) {
                     RegobsPopup.alert('Posisjon ikke satt', 'Kan ikke sende inn uten posisjon. Vennligst sett posisjon i kartet');
                 } else if (!User.getUser().anonymous || force) {
-                    var currentLocation = null;
-                    if (!Registration.isEmpty()) {
-                        currentLocation = {
-                            Latitude: ObsLocation.data.Latitude,
-                            Longitude: ObsLocation.data.Longitude,
-                            GeoHazardTID: Registration.data.GeoHazardTID
-                        };
-                    };
+                    //var currentLocation = null;
+                    //if (!Registration.isEmpty()) {
+                    //    currentLocation = {
+                    //        Latitude: ObsLocation.data.Latitude,
+                    //        Longitude: ObsLocation.data.Longitude,
+                    //        GeoHazardTID: Registration.data.GeoHazardTID
+                    //    };
+                    //};
                     prepareRegistrationForSending();
 
                     if (Registration.unsent.length) {
@@ -227,14 +227,17 @@ angular
                             .then(function () {
                                 resetRegistration();
                                 Registration.unsent = [];
-                                if (currentLocation) {
-                                    $timeout(function () {
-                                        Observations.updateObservationsWithinRadius(currentLocation.Latitude,
-                                        currentLocation.Longitude,
-                                        100,
-                                        currentLocation.GeoHazardTID);
-                                    },1000); //Wait 1 sec to registation has processed trough api queue and try to fetch it again so it's shown in map
-                                }
+
+                                //TODO: Ask user if he want to download registration and show in map?
+
+                                //if (currentLocation) {
+                                //    $timeout(function () {
+                                //        Observations.updateObservationsWithinRadius(currentLocation.Latitude,
+                                //        currentLocation.Longitude,
+                                //        100,
+                                //        currentLocation.GeoHazardTID);
+                                //    },1000); //Wait 1 sec to registation has processed trough api queue and try to fetch it again so it's shown in map
+                                //}
                                 $state.go('start');
                             });
                     }

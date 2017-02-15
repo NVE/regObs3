@@ -16,7 +16,7 @@
                         resolve(result);
                     })
                     .catch(function () {
-                        if (fallback) {
+                        if (fallback !== undefined) {
                             resolve(fallback);
                         } else {
                             resolve(key);

@@ -16,7 +16,7 @@
             <div class="item map-selected-info-inner" ng-click="vm.openSelectedItem()" on-swipe-up="vm.openSelectedItem()">
                 <h2 ng-bind-html="vm.mapSelectedItem.getHeader() || '&nbsp;'"></h2>
                 <p>
-                    {{vm.mapSelectedItem.getDescription() | limitTo: 16}}
+                    {{vm.mapSelectedItem.getDescription() | limitTo: 15}}
                     <span class="map-selected-info-distance"><span>{{vm.mapSelectedItem.getTypeDescription() | translate}}</span>&nbsp;<span ng-if="vm.mapSelectedItem.hasDistance()">{{vm.mapSelectedItem.getDistanceText()}} {{'AWAY'|translate}}</span></span>
                 </p>            
             </div>

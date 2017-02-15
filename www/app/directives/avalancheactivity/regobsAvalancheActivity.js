@@ -234,7 +234,7 @@ angular
 
 
                 Utility
-                    .getKdvRepositories('Snow_AvalancheExtKDV')
+                    .getKdvRepositories()
                     .then(function (repos) {
                         //Snow_AvalCauseAttributeFlags
                         $scope.avalancheExtDict = {};

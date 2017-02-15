@@ -164,7 +164,8 @@
         };
 
         settings.getWebImageUrl = function (id) {
-            return settings.getWebRoot() + 'Picture/image/' + id;
+            return settings.getEndPoints().services + 'Image/medium/' + id;
+            //return settings.getWebRoot() + 'Picture/image/' + id;
         };
 
         settings.imageRootFolder = 'picture';
@@ -193,6 +194,7 @@
         settings.getEnvClass = function () {
             return settings.data.env === 'regObs' ? 'bar-dark' : (settings.data.env === 'demo regObs' ? 'bar-assertive' : 'bar-calm');
         };
+
 
         init();
         settings.load();

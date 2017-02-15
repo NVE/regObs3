@@ -1,0 +1,1544 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <title>Code coverage report for app\app.js</title>
+    <meta charset="utf-8" />
+    <link rel="stylesheet" href="../prettify.css" />
+    <link rel="stylesheet" href="../base.css" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <style type='text/css'>
+        .coverage-summary .sorter {
+            background-image: url(../sort-arrow-sprite.png);
+        }
+    </style>
+</head>
+<body>
+<div class='wrapper'>
+  <div class='pad1'>
+    <h1>
+      <a href="../index.html">all files</a> / <a href="index.html">app/</a> app.js
+    </h1>
+    <div class='clearfix'>
+      <div class='fl pad1y space-right2'>
+        <span class="strong">75% </span>
+        <span class="quiet">Statements</span>
+        <span class='fraction'>27/36</span>
+      </div>
+      <div class='fl pad1y space-right2'>
+        <span class="strong">64.29% </span>
+        <span class="quiet">Branches</span>
+        <span class='fraction'>9/14</span>
+      </div>
+      <div class='fl pad1y space-right2'>
+        <span class="strong">57.14% </span>
+        <span class="quiet">Functions</span>
+        <span class='fraction'>4/7</span>
+      </div>
+      <div class='fl pad1y space-right2'>
+        <span class="strong">75% </span>
+        <span class="quiet">Lines</span>
+        <span class='fraction'>27/36</span>
+      </div>
+    </div>
+  </div>
+  <div class='status-line medium'></div>
+<pre><table class="coverage">
+<tr><td class="line-count quiet">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31
+32
+33
+34
+35
+36
+37
+38
+39
+40
+41
+42
+43
+44
+45
+46
+47
+48
+49
+50
+51
+52
+53
+54
+55
+56
+57
+58
+59
+60
+61
+62
+63
+64
+65
+66
+67
+68
+69
+70
+71
+72
+73
+74
+75
+76
+77
+78
+79
+80
+81
+82
+83
+84
+85
+86
+87
+88
+89
+90
+91
+92
+93
+94
+95
+96
+97
+98
+99
+100
+101
+102
+103
+104
+105
+106
+107
+108
+109
+110
+111
+112
+113
+114
+115
+116
+117
+118
+119
+120
+121
+122
+123
+124
+125
+126
+127
+128
+129
+130
+131
+132
+133
+134
+135
+136
+137
+138
+139
+140
+141
+142
+143
+144
+145
+146
+147
+148
+149
+150
+151
+152
+153
+154
+155
+156
+157
+158
+159
+160
+161
+162
+163
+164
+165
+166
+167
+168
+169
+170
+171
+172
+173
+174
+175
+176
+177
+178
+179
+180
+181
+182
+183
+184
+185
+186
+187
+188
+189
+190
+191
+192
+193
+194
+195
+196
+197
+198
+199
+200
+201
+202
+203
+204
+205
+206
+207
+208
+209
+210
+211
+212
+213
+214
+215
+216
+217
+218
+219
+220
+221
+222
+223
+224
+225
+226
+227
+228
+229
+230
+231
+232
+233
+234
+235
+236
+237
+238
+239
+240
+241
+242
+243
+244
+245
+246
+247
+248
+249
+250
+251
+252
+253
+254
+255
+256
+257
+258
+259
+260
+261
+262
+263
+264
+265
+266
+267
+268
+269
+270
+271
+272
+273
+274
+275
+276
+277
+278
+279
+280
+281
+282
+283
+284
+285
+286
+287
+288
+289
+290
+291
+292
+293
+294
+295
+296
+297
+298
+299
+300
+301
+302
+303
+304
+305
+306
+307
+308
+309
+310
+311
+312
+313
+314
+315
+316
+317
+318
+319
+320
+321
+322
+323
+324
+325
+326
+327
+328
+329
+330
+331
+332
+333
+334
+335
+336
+337
+338
+339
+340
+341
+342
+343
+344
+345
+346
+347
+348
+349
+350
+351
+352
+353
+354
+355
+356
+357
+358
+359
+360
+361
+362
+363
+364
+365
+366
+367
+368
+369
+370
+371
+372
+373
+374
+375
+376
+377
+378
+379
+380
+381
+382
+383
+384
+385
+386
+387
+388
+389
+390
+391
+392
+393
+394
+395
+396
+397
+398
+399
+400
+401
+402
+403
+404
+405
+406
+407
+408
+409
+410
+411
+412
+413
+414
+415
+416
+417
+418
+419
+420
+421
+422
+423
+424
+425
+426
+427
+428
+429
+430
+431
+432
+433
+434
+435
+436
+437
+438
+439
+440
+441
+442
+443
+444
+445
+446
+447
+448
+449
+450
+451
+452
+453
+454
+455
+456
+457
+458
+459
+460
+461
+462
+463
+464
+465
+466
+467
+468
+469
+470
+471
+472
+473
+474
+475
+476
+477
+478
+479
+480
+481
+482
+483
+484
+485
+486
+487
+488
+489
+490
+491
+492
+493
+494</td><td class="line-coverage quiet"><span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">36×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">36×</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">36×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">36×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">36×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">36×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">36×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">36×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">36×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">36×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">36×</span>
+<span class="cline-any cline-yes">36×</span>
+<span class="cline-any cline-yes">36×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">36×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">36×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">36×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">36×</span>
+<span class="cline-any cline-yes">23×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">36×</span>
+<span class="cline-any cline-yes">36×</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">36×</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">36×</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">36×</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">(function () {
+    "use strict";
+&nbsp;
+    angular.module('RegObs', ['ionic', 'ngCordova', 'ion-floating-menu', 'angularProgressbar', 'pascalprecht.translate'])
+           .config(providers)
+           .run(setup);
+&nbsp;
+    function providers($stateProvider, $urlRouterProvider, $ionicConfigProvider, AppSettingsProvider, $translateProvider) {
+        'ngInject';
+&nbsp;
+        <span class="missing-if-branch" title="if path not taken" >I</span>if (ionic.Platform.isAndroid()) {
+<span class="cstat-no" title="statement not covered" >            $ionicConfigProvider.scrolling.jsScrolling(false);</span>
+        }
+&nbsp;
+        var langMap = {
+            'nb_NO': 'no'
+        };
+&nbsp;
+        $translateProvider.useSanitizeValueStrategy('escapeParameters')
+        .useStaticFilesLoader({
+            prefix: './app/json/localization/',
+            suffix: '.json'
+        }).registerAvailableLanguageKeys(['no'], langMap)
+            .preferredLanguage('no')
+            .fallbackLanguage(['no']);
+&nbsp;
+        var defaultBackIceRegistration = {
+            state: 'iceregistrationNew',
+            force: true
+        };
+        var defaultBackSnowRegistration = {
+            state: 'snowregistrationNew',
+            force: true
+        };
+        var defaultBackDirtRegistration = {
+            state: 'dirtregistrationNew',
+            force: true
+        };
+        var defaultBackWaterRegistration = {
+            state: 'waterregistrationNew',
+            force: true
+        };
+        var defaultBackStart = {
+            state: 'start',
+            title: 'MAP',
+            force: true
+        };
+        var defaultBackHelp = {
+            state: 'start'
+        };
+&nbsp;
+        var appSettings = AppSettingsProvider.$get();
+        <span class="missing-if-branch" title="else path not taken" >E</span>if (!appSettings.hasSetAppMode()) {
+            $urlRouterProvider.otherwise('/wizard');
+        } else {
+<span class="cstat-no" title="statement not covered" >            $urlRouterProvider.otherwise('/start');</span>
+        }
+&nbsp;
+        $stateProvider
+            .state('wizard', {
+                url: '/wizard',
+                templateUrl: 'app/startwizard/startwizard.html',
+                controller: 'StartWizardCtrl as vm'
+            })
+            .state('start', {
+                url: '/start',
+                templateUrl: 'app/map/mapstart.html',
+                controller: 'MapStartCtrl as vm',
+                data: {
+                    showMapToggle: true,
+                    showRegistrationFooter: true,
+                    clearHistory: true
+                }
+            })
+            .state('settings', {
+                url: '/settings',
+                templateUrl: 'app/settings/settingsview.html',
+                controller: 'SettingsViewCtrl as vm',
+                data: {
+                    defaultBack: defaultBackHelp,
+                    showSettings: false
+                }
+            })
+            .state('offlinemapoverview', {
+                url: '/offlinemapoverview',
+                templateUrl: 'app/map/offlinemapoverview.html',
+                controller: 'OfflineMapOverviewCtrl as vm',
+                data: {
+                    defaultBack: defaultBackStart,
+                    showSettings: false
+                }
+            })
+            .state('mapareadownload', {
+                url: '/mapareadownload',
+                templateUrl: 'app/map/mapareadownload.html',
+                controller: 'MapAreaDownloadCtrl as vm',
+                data: {
+                    defaultBack: {
+                        state: 'offlinemapoverview'
+                    },
+                    showSettings: false
+                }
+            })
+            .state('offlineareadetails', {
+                url: '/offlineareadetails',
+                templateUrl: 'app/map/offlineareadetails.html',
+                controller: 'OfflineAreaDetailsCtrl as vm',
+                cache: false,
+                params: { area: null },
+                data: {
+                    defaultBack: {
+                        state: 'offlinemapoverview'
+                    },
+                    showSettings: false
+                }
+            })
+&nbsp;
+            .state('observationdetails', {
+                url: '/observationdetails',
+                templateUrl: 'app/observations/details/observationdetails.html',
+                controller: 'ObservationDetailsCtrl as vm',
+                cache: false,
+                params: { observation: null },
+                data: {
+                    defaultBack: defaultBackHelp
+                }
+            })
+&nbsp;
+            .state('observationlist', {
+                url: '/observationlist',
+                templateUrl: 'app/observations/list/observationlist.html',
+                controller: 'ObservationListCtrl as vm',
+                data: {
+                    defaultBack: defaultBackStart
+                }
+            })
+&nbsp;
+            //SNØ
+            //.state('snow', {
+            //    url: '/snow',
+            //    templateUrl: 'app/snow/snow.html',
+            //    controller: 'SnowCtrl as vm',
+            //    data: {
+            //        defaultBack: {
+            //            state: 'start',
+            //            title: 'regObs'
+            //        },
+            //        showRegistrationFooter: true
+            //    }
+            //})
+            .state('snowregistrationNew', {
+                url: '/snowregistration',
+                templateUrl: 'app/snow/snowregistration/snowregistration.html',
+                controller: 'SnowRegistrationCtrl as vm',
+                data: {
+                    defaultBack: defaultBackStart,
+                    showRegistrationFooter: true
+                }
+            })
+            .state('snowtrip', {
+                url: '/snowtrip',
+                templateUrl: 'app/snow/trip/trip.html',
+                controller: 'TripCtrl as vm',
+                data: {
+                    defaultBack: defaultBackStart,
+                    showTripFooter: true
+                }
+            })
+            .state('snowdangerobs', {
+                //Faretegn
+                url: '/snowdangerobs',
+                templateUrl: 'app/snow/snowregistration/snowdangerobs/snowdangerobs.html',
+                controller: 'SnowDangerObsCtrl as vm',
+                data: {
+                    defaultBack: defaultBackSnowRegistration,
+                    showFormFooter: true,
+                    registrationProp: 'DangerObs'
+                }
+            })
+            .state('stabilitytest', {
+                //Stabilitetstest
+                url: '/stabilitytest',
+                templateUrl: 'app/snow/snowregistration/stabilitytest/stabilitytest.html',
+                controller: 'SnowStabilityTestCtrl as vm',
+                data: {
+                    defaultBack: defaultBackSnowRegistration,
+                    showFormFooter: true,
+                    registrationProp: 'CompressionTest'
+                }
+            })
+            .state('avalancheobs', {
+                //Skredhendelse
+                url: '/avalancheobs',
+                templateUrl: 'app/snow/snowregistration/avalancheobs/avalancheobs.html',
+                controller: 'AvalancheObsCtrl as vm',
+                data: {
+                    defaultBack: defaultBackSnowRegistration,
+                    showFormFooter: true,
+                    registrationProp: 'AvalancheObs'
+                }
+            })
+            .state('avalancheactivityobs', {
+                //Skredaktivitet
+                url: '/avalancheactivityobs',
+                templateUrl: 'app/snow/snowregistration/avalancheactivityobs/avalancheactivityobs.html',
+                controller: 'AvalancheActivityObsCtrl as vm',
+                data: {
+                    defaultBack: defaultBackSnowRegistration,
+                    showFormFooter: true,
+                    registrationProp: 'AvalancheActivityObs2'
+                }
+            })
+            .state('snowweatherobservation', {
+                //Vær
+                url: '/snowweatherobservation',
+                templateUrl: 'app/snow/snowregistration/snowweatherobservation/snowweatherobservation.html',
+                controller: 'SnowWeatherObservationCtrl as vm',
+                data: {
+                    defaultBack: defaultBackSnowRegistration,
+                    showFormFooter: true,
+                    registrationProp: 'WeatherObservation'
+                }
+            })
+            .state('snowsurfaceobservation', {
+                //Snødekke
+                url: '/snowsurfaceobservation',
+                templateUrl: 'app/snow/snowregistration/snowsurfaceobservation/snowsurfaceobservation.html',
+                controller: 'SnowSurfaceObservationCtrl as vm',
+                data: {
+                    defaultBack: defaultBackSnowRegistration,
+                    showFormFooter: true,
+                    registrationProp: 'SnowSurfaceObservation'
+                }
+            })
+            .state('snowprofile', {
+                //Snøprofil
+                url: '/snowprofile',
+                templateUrl: 'app/snow/snowregistration/snowprofile/snowprofile.html',
+                controller: 'SnowProfileCtrl as vm',
+                data: {
+                    defaultBack: defaultBackSnowRegistration,
+                    showFormFooter: true,
+                    registrationProp: 'SnowProfile'
+                }
+            })
+            .state('avalancheevalproblem', {
+                //Skredproblem
+                url: '/avalancheevalproblem',
+                templateUrl: 'app/snow/snowregistration/avalancheevalproblem/avalancheevalproblem.html',
+                controller: 'AvalancheEvalProblemCtrl as vm',
+                data: {
+                    defaultBack: defaultBackSnowRegistration,
+                    showFormFooter: true,
+                    registrationProp: 'AvalancheEvalProblem2'
+                }
+            })
+            .state('avalancheevaluation', {
+                //Skredfarevurdering
+                url: '/avalancheevaluation',
+                templateUrl: 'app/snow/snowregistration/avalancheevaluation/avalancheevaluation.html',
+                controller: 'AvalancheEvaluationCtrl as vm',
+                data: {
+                    defaultBack: defaultBackSnowRegistration,
+                    showFormFooter: true,
+                    registrationProp: 'AvalancheEvaluation3'
+                }
+            })
+&nbsp;
+            //IS
+            //.state('ice', {
+            //    url: '/ice',
+            //    templateUrl: 'app/ice/ice.html',
+            //    controller: 'IceCtrl as vm',
+            //    data: {
+            //        defaultBack: {
+            //            state: 'start',
+            //            title: 'regObs'
+            //        },
+            //        showRegistrationFooter: true
+            //    }
+            //})
+            .state('iceregistrationNew', {
+                url: '/iceregistration',
+                templateUrl: 'app/ice/iceregistration/iceregistration.html',
+                controller: 'IceRegistrationCtrl as vm',
+                data: {
+                    defaultBack: defaultBackStart,
+                    showRegistrationFooter: true
+                }
+            })
+            .state('icedangerobs', {
+                //Faretegn
+                url: '/icedangerobs',
+                templateUrl: 'app/ice/iceregistration/icedangerobs/icedangerobs.html',
+                controller: 'IceDangerObsCtrl as vm',
+                data: {
+                    defaultBack: defaultBackIceRegistration,
+                    showFormFooter: true,
+                    registrationProp: 'DangerObs'
+                }
+            })
+            .state('icecoverobs', {
+                //Isdekningsgrad
+                url: '/icecoverobs',
+                templateUrl: 'app/ice/iceregistration/icecoverobs/icecoverobs.html',
+                controller: 'IceCoverObsCtrl as vm',
+                data: {
+                    defaultBack: defaultBackIceRegistration,
+                    showFormFooter: true,
+                    registrationProp: 'IceCoverObs'
+                }
+            })
+            .state('icethickness', {
+                //Istykkelse
+                url: '/icethickness',
+                templateUrl: 'app/ice/iceregistration/icethickness/icethickness.html',
+                controller: 'IceThicknessCtrl as vm',
+                data: {
+                    defaultBack: defaultBackIceRegistration,
+                    showFormFooter: true,
+                    registrationProp: 'IceThickness'
+                }
+            })
+            .state('iceincident', {
+                //Ulykke/hendelse
+                url: '/iceincident',
+                templateUrl: 'app/ice/iceregistration/iceincident/iceincident.html',
+                controller: 'IceIncidentCtrl as vm',
+                data: {
+                    defaultBack: defaultBackIceRegistration,
+                    showFormFooter: true,
+                    registrationProp: 'Incident'
+                }
+            })
+&nbsp;
+            //VANN
+            //.state('water', {
+            //    url: '/water',
+            //    templateUrl: 'app/water/water.html',
+            //    controller: 'WaterCtrl as vm',
+            //    data: {
+            //        defaultBack: {
+            //            state: 'start',
+            //            title: 'regObs'
+            //        },
+            //        showRegistrationFooter: true
+            //    }
+&nbsp;
+            //})
+            .state('waterregistrationNew', {
+                url: '/waterregistration',
+                templateUrl: 'app/water/waterregistration/waterregistration.html',
+                controller: 'WaterRegistrationCtrl as vm',
+                data: {
+                    defaultBack: defaultBackStart,
+                    showRegistrationFooter: true
+                }
+            })
+            .state('waterdangerobs', {
+                //Faretegn
+                url: '/waterdangerobs',
+                templateUrl: 'app/water/waterregistration/waterdangerobs/waterdangerobs.html',
+                controller: 'WaterDangerObsCtrl as vm',
+                data: {
+                    defaultBack: defaultBackWaterRegistration,
+                    showFormFooter: true,
+                    registrationProp: 'DangerObs'
+                }
+            })
+            .state('waterlevel', {
+                //Faretegn
+                url: '/waterlevel',
+                templateUrl: 'app/water/waterregistration/waterlevel/waterlevel.html',
+                controller: 'WaterLevelCtrl as vm',
+                data: {
+                    defaultBack: defaultBackWaterRegistration,
+                    showFormFooter: true,
+                    registrationProp: 'WaterLevel'
+                }
+            })
+            .state('waterincident', {
+                //Faretegn
+                url: '/waterincident',
+                templateUrl: 'app/water/waterregistration/waterincident/waterincident.html',
+                controller: 'WaterIncidentCtrl as vm',
+                data: {
+                    defaultBack: defaultBackWaterRegistration,
+                    showFormFooter: true,
+                    registrationProp: 'Incident'
+                }
+            })
+&nbsp;
+            //JORD
+            //.state('dirt', {
+            //    url: '/dirt',
+            //    templateUrl: 'app/dirt/dirt.html',
+            //    controller: 'DirtCtrl as vm',
+            //    data: {
+            //        defaultBack: {
+            //            state: 'start',
+            //            title: 'regObs'
+            //        },
+            //        showRegistrationFooter: true
+            //    }
+            //})
+            .state('dirtregistrationNew', {
+                url: '/dirtregistration',
+                templateUrl: 'app/dirt/dirtregistration/dirtregistration.html',
+                controller: 'DirtRegistrationCtrl as vm',
+                data: {
+                    defaultBack: defaultBackStart,
+                    showRegistrationFooter: true
+                }
+            })
+            .state('dirtdangerobs', {
+                //Faretegn
+                url: '/dirtdangerobs',
+                templateUrl: 'app/dirt/dirtregistration/dirtdangerobs/dirtdangerobs.html',
+                controller: 'DirtDangerObsCtrl as vm',
+                data: {
+                    defaultBack: defaultBackDirtRegistration,
+                    showFormFooter: true,
+                    registrationProp: 'DangerObs'
+                }
+            })
+            .state('landslideobs', {
+                //Skredhendelse
+                url: '/landslideobs',
+                templateUrl: 'app/dirt/dirtregistration/landslideobs/landslideobs.html',
+                controller: 'LandSlideObsCtrl as vm',
+                data: {
+                    defaultBack: defaultBackDirtRegistration,
+                    showFormFooter: true,
+                    registrationProp: 'LandSlideObs'
+                }
+            })
+&nbsp;
+            //Felles
+            .state('generalobs', {
+                //Fritekst
+                url: '/generalobs',
+                templateUrl: 'app/generalobs/generalobs.html',
+                controller: 'GeneralObsCtrl as vm',
+                data: {
+                    showFormFooter: true,
+                    registrationProp: 'GeneralObservation'
+                }
+            })
+            .state('help', {
+                url: '/help/:page',
+                templateUrl: <span class="fstat-no" title="function not covered" >function (stateParams) {</span>
+<span class="cstat-no" title="statement not covered" >                    return 'app/help/' + stateParams.page + '.html';</span>
+                },
+                controller: 'HelpCtrl as vm',
+                data: {
+                    defaultBack: defaultBackHelp,
+                    showSettings: false
+                }
+            });
+    }
+&nbsp;
+    function setup($ionicPlatform, Utility, AppLogging, Registration, Observations, OfflineMap) {
+        'ngInject';
+&nbsp;
+        $ionicPlatform.ready(function () {
+&nbsp;
+            if (Utility.hasGoodNetwork() &amp;&amp; Utility.shouldUpdateKdvElements()) {
+                Utility.refreshKdvElements();
+            }
+&nbsp;
+            // Hide the accessory bar by default (remove this to show the accessory bar above the keyboard
+            // for form inputs)*/
+            AppLogging.debug('Ionic platform ready');
+            <span class="missing-if-branch" title="if path not taken" >I</span>if (window.cordova &amp;&amp; <span class="branch-1 cbranch-no" title="branch not covered" >window.cordova.plugins.Keyboard)</span> {
+<span class="cstat-no" title="statement not covered" >                cordova.plugins.Keyboard.hideKeyboardAccessoryBar(false);</span>
+<span class="cstat-no" title="statement not covered" >                cordova.plugins.Keyboard.disableScroll(true);</span>
+            }
+&nbsp;
+            <span class="missing-if-branch" title="if path not taken" >I</span>if (window.StatusBar) {
+<span class="cstat-no" title="statement not covered" >                StatusBar.styleLightContent();</span>
+            }
+&nbsp;
+            document.addEventListener("deviceready", <span class="fstat-no" title="function not covered" >function () {</span>
+<span class="cstat-no" title="statement not covered" >                Observations.removeOldObservationsFromPresistantStorage(); </span>//cleanup old observations on startup
+<span class="cstat-no" title="statement not covered" >                OfflineMap.checkUncompleteDownloads(); </span>//Check if any uncomplete downloads and continue download progress
+            });        
+        });
+&nbsp;
+        $ionicPlatform.on('resume', <span class="fstat-no" title="function not covered" >function () {</span>
+<span class="cstat-no" title="statement not covered" >            Registration.setBadge(); </span>//Update badge on app resume
+        });
+    }
+})();
+&nbsp;</pre></td></tr>
+</table></pre>
+<div class='push'></div><!-- for sticky footer -->
+</div><!-- /wrapper -->
+<div class='footer quiet pad2 space-top1 center small'>
+  Code coverage
+  generated by <a href="http://istanbul-js.org/" target="_blank">istanbul</a> at Mon Feb 13 2017 14:41:14 GMT+0100 (W. Europe Standard Time)
+</div>
+</div>
+<script src="../prettify.js"></script>
+<script>
+window.onload = function () {
+        if (typeof prettyPrint === 'function') {
+            prettyPrint();
+        }
+};
+</script>
+<script src="../sorter.js"></script>
+</body>
+</html>

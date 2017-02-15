@@ -66,6 +66,10 @@ $footerHeight: 65px;
     height: $footerHeight;
 }
 
+.footer-button-wrapper {
+    margin-top: 8px;
+}
+
 .has-footer {
     bottom: $footerHeight !important;
 }

@@ -16,6 +16,6 @@
         };    
     },
     bindings: {
-        registration: '='
+        registration: '<'
     }
 });

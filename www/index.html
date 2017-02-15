@@ -114,14 +114,14 @@
                 </div>
                 <div ng-if="appVm.showRegistrationFooter()" class="row row-no-padding">
                     <div class="col col-center">
-                        <div class="padding">
+                        <div class="padding footer-button-wrapper">
                             <button class="button  button-block button-outline button-dark icon-right ion-trash-a" ng-click="appVm.registration.remove()">
                                 {{'DELETE'|translate}}
                             </button>
                         </div>
                     </div>
                     <div class="col col-center">
-                        <div class="padding">
+                        <div class="padding footer-button-wrapper">
                             <ion-spinner class="spinner-dark" ng-if="appVm.registration.sending"></ion-spinner>
                             <button ng-hide="appVm.registration.sending" class="button button-block button-calm icon-right ion-android-send" ng-click="appVm.registration.send()">
                                 <span class="badge badge-assertive" ng-show="appVm.registration.unsent.length" ng-bind="appVm.registration.unsent.length"></span> {{'SEND'|translate}} <!--<span class="badge badge-balanced" ng-show="!appVm.registration.isEmpty()" ng-bind="appVm.registration.getObservationsLength()" ></span>-->

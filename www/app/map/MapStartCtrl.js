@@ -67,6 +67,7 @@
 
 
         $scope.$on('$ionicView.enter', function () {
+            Map.invalidateSize();
             Map.startWatch();
         });
 

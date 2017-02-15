@@ -1,7 +1,7 @@
 ﻿/**
  * Class for Observation object
  */
-angular.module('RegObs').factory('Observation', function (MapSelectableItem, AppSettings, PresistentStorage, UserLocation, DateHelpers, moment, RegObsObservationTypeFactory) {
+angular.module('RegObs').factory('Observation', function (MapSelectableItem, AppSettings, PresistentStorage, UserLocation, DateHelpers, moment, ObservationType) {
 
     /**
      * Constructor for Observation
@@ -18,27 +18,7 @@ angular.module('RegObs').factory('Observation', function (MapSelectableItem, App
         this._registrations = [];
 
         this.init();
-    };
-
-
-
-    /**
-     * Static helper method
-     * @param {} item 
-     * @returns {} 
-     */
-    Observation.getObsDescription = function (item) {
-        var result = [];
-        if (item.TypicalValue2) {
-            result.push(item.TypicalValue2);
-        }
-        if (item.TypicalValue1) {
-            result.push(item.TypicalValue1);
-        }
-        return result;
-    };
-
-    
+    };  
 
 
     /**
@@ -52,7 +32,7 @@ angular.module('RegObs').factory('Observation', function (MapSelectableItem, App
         self._registrations = [];
         if (self.Registrations) {
             self.Registrations.forEach(function (item) {
-                var observationType = RegObsObservationTypeFactory.getObservationTypeInstance(item);
+                var observationType = new ObservationType(item);
                 self._registrations.push(observationType);
             });
         }
