@@ -26,10 +26,6 @@
                });
             };
 
-            ctrl.openUrl = function (url) {
-                $cordovaInAppBrowser.open(url, '_system');
-            };
-
             ctrl.getMapsForCurrentAppMode = function() {
                 return ctrl.settings.maps.filter(function(item) {
                     return item.geoHazardTid === Utility.getCurrentGeoHazardTid();

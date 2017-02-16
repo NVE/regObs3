@@ -32,7 +32,7 @@ angular.module('RegObs').factory('Observation', function (MapSelectableItem, App
         self._registrations = [];
         if (self.Registrations) {
             self.Registrations.forEach(function (item) {
-                var observationType = new ObservationType(item);
+                var observationType = new ObservationType(self.GeoHazardTid, item);
                 self._registrations.push(observationType);
             });
         }

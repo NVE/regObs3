@@ -4,31 +4,31 @@
             <ion-list>
 
                 <kdv-dropdown
-                        title="Isdekning*"
+                        title="{{'ICE_COVER'|translate}}*"
                         model="vm.reg.IceCoverObs.IceCoverTID"
                         kdv-key="Ice_IceCoverKDV">
                 </kdv-dropdown>
 
                 <kdv-dropdown
-                        title="Isdekning før observasjon"
+                        title="{{'ICE_COVER_BEFORE'|translate}}"
                         model="vm.reg.IceCoverObs.IceCoverBeforeTID"
                         kdv-key="Ice_IceCoverBeforeKDV">
                 </kdv-dropdown>
 
                 <kdv-dropdown
-                        title="Bæreevne"
+                        title="{{'ICE_CAPACITY'|translate}}"
                         model="vm.reg.IceCoverObs.IceCapacityTID"
                         kdv-key="Ice_IceCapacityKDV">
                 </kdv-dropdown>
 
                 <kdv-dropdown
-                        title="Skøytbarhet"
+                        title="{{'ICE_SKATEABILITY'|translate}}"
                         model="vm.reg.IceCoverObs.IceSkateabilityTID"
                         kdv-key="Ice_IceSkateabilityKDV">
                 </kdv-dropdown>
 
                 <regobs-comment
-                        placeholder="Ytterligere beskrivelse"
+                        placeholder="{{'ADDITIONAL_COMMENT'|translate}}"
                         model="vm.reg.IceCoverObs.Comment"
                 ></regobs-comment>
 
@@ -36,9 +36,7 @@
             <regobs-image-list></regobs-image-list>
         </form>
         <button type="button" ui-sref="help({page:'icecoverobs'})" class="button button-positive button-block button-clear">
-            Hjelp
+            {{'HELP'|translate}}
         </button>
-
     </ion-content>
-
 </ion-view>

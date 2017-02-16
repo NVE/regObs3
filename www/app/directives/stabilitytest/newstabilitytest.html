@@ -15,7 +15,7 @@
                 </label> 
                
                 <label ng-hide="isCTNorECTXorCTVorECTV()" class="item item-input item-select item-stacked-label">
-                    <span class="input-label">Antall Slag</span>
+                    <span class="input-label">{{'TAPS_FRACTURE'|translate}}</span>
                     <select ng-model="stabilityTest.TapsFracture"
                             ng-options="n as n for n in [1,2,3,4,5,6,7,8,9,10,11,12,13,14,16,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30]"></select>
                 </label>
@@ -30,12 +30,12 @@
                                    pattern="[0-9]*"></regobs-number>
                 
                 <label ng-hide="isCTNorECTX()" class="item item-input item-select item-stacked-label">
-                    <span class="input-label">Bruddtype</span>
+                    <span class="input-label">{{'COMPR_TEST_FRACTURE'|translate}}</span>
                     <select ng-model="stabilityTest.ComprTestFractureTID"
                             ng-options="kdv.Id as kdv.Name for kdv in snowComprTestFractureKdvArray"></select>
                 </label> 
 
-                <kdv-dropdown title="Stabilitet"
+                <kdv-dropdown title="{{'STABILITY_EVAL'|translate}}"
                               model="stabilityTest.StabilityEvalTID"
                               kdv-key="Snow_StabilityEvalKDV">
                 </kdv-dropdown>

@@ -45,6 +45,17 @@
     <script src="cordova.js"></script>
     <!-- your app's js -->
     <script src="dist/app.js"></script>
+    <script>
+            document.onclick = function (e) {
+                e = e ||  window.event;
+                var element = e.target || e.srcElement;
+
+                if (element.tagName === 'A' && element.target === '_system') {
+                    window.open(element.href, "_system");
+                    return false; // prevent default action and stop event propagation. This will cause inappbrowser to be used
+                }
+            };
+    </script>
     <script type="text/javascript">
 
         ga_storage._setAccount('UA-32394009-4');

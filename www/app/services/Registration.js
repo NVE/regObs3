@@ -82,6 +82,8 @@ angular
             ObsLocation.remove();
             Registration.data = {};
             Registration.save();
+
+            $rootScope.$broadcast('$regObs:registrationReset');
         }
 
         Registration.load = function () {
@@ -227,8 +229,9 @@ angular
                             .then(function () {
                                 resetRegistration();
                                 Registration.unsent = [];
+                                Registration.save();
 
-                                //TODO: Ask user if he want to download registration and show in map?
+                                //TODO: Show registration in map
 
                                 //if (currentLocation) {
                                 //    $timeout(function () {
@@ -288,24 +291,6 @@ angular
         Registration.hasImageForRegistration = function (prop) {
             var registrationTid = Utility.registrationTid(prop);
             return Registration.data.Picture && Registration.data.Picture.filter(function (item) { return item.RegistrationTID === registrationTid }).length > 0;
-        };
-
-        /*Registration.propertyArrayExists = function (prop) {
-         return Registration.data[prop] && Registration.data[prop].length;
-         };*/
-
-        Registration.getExpositionArray = function () {
-            return [
-                { "val": null, "name": "Ikke gitt" },
-                { "val": 0, "name": "N - fra nord" },
-                { "val": 45, "name": "NØ - fra nordøst" },
-                { "val": 90, "name": "Ø - fra øst" },
-                { "val": 135, "name": "SØ - fra sørøst" },
-                { "val": 180, "name": "S - fra sør" },
-                { "val": 225, "name": "SV - fra sørvest" },
-                { "val": 270, "name": "V - fra vest" },
-                { "val": 315, "name": "NV - fra nordvest" }
-            ];
         };
 
         function prepareRegistrationForSending() {

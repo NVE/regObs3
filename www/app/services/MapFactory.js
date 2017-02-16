@@ -415,6 +415,12 @@
                 }, 50);
             });
 
+            $rootScope.$on('$regObs:registrationReset', function () {
+                $timeout(function () {
+                    service.clearSelectedMarkers();
+                });
+            });
+
             $rootScope.$on('$regObs:obsLocationSaved', function () {
                 obsLocationMarker.refresh();
             });

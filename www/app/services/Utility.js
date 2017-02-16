@@ -3,7 +3,7 @@
  */
 angular
     .module('RegObs')
-    .factory('Utility', function Utility($http, $q, $rootScope, AppSettings, User, LocalStorage, AppLogging, $translate, $cordovaNetwork) {
+    .factory('Utility', function Utility($http, $q, $rootScope, AppSettings, User, LocalStorage, AppLogging, $translate, $cordovaNetwork, moment) {
         var service = this;
 
         var canvas;
@@ -22,27 +22,100 @@ angular
         geoHazardColors[geoHazardTid.ice] = '#C9C9C9';
         geoHazardColors[geoHazardTid.water] = '#9DC3E6';
 
+        service.getExpositionArray = function () {
+            return [
+                { "val": null, "name": "Ikke gitt" },
+                { "val": 0, "name": "N - fra nord", "shortName":"N" },
+                { "val": 45, "name": "NØ - fra nordøst", "shortName": "NØ" },
+                { "val": 90, "name": "Ø - fra øst", "shortName": "Ø" },
+                { "val": 135, "name": "SØ - fra sørøst", "shortName": "SØ" },
+                { "val": 180, "name": "S - fra sør", "shortName": "S" },
+                { "val": 225, "name": "SV - fra sørvest", "shortName": "SV" },
+                { "val": 270, "name": "V - fra vest", "shortName": "V" },
+                { "val": 315, "name": "NV - fra nordvest", "shortName": "NV" }
+            ];
+        };
+
+        service.getWindDirectionText = function (direction, useShortName) {
+            var filteredResult = service.getExpositionArray().filter(function (item) {
+                return item.val === direction;
+            });
+            if (filteredResult.length > 0) {
+                return useShortName ? filteredResult[0].shortName : filteredResult[0].name;
+            }
+            return '';
+        };
+
+        service.getWindDirectionTextShort = function (direction) {
+            return service.getWindDirectionText(direction, true);
+        };
+
+        /**
+         * Get description from exposition bit order, for example 00011001
+         * @param {} expositionBitOrder 
+         * @returns {} 
+         */
+        service.getExpositonDescriptionFromBitOrder = function (expositionBitOrder) {
+            if (expositionBitOrder === '11111111') {
+                return $translate.instant('ALL');
+            }
+
+            var arr = service.getExpositionArray().filter(function (item) { return item.val !== null });
+            var result = [];          
+            if (expositionBitOrder && expositionBitOrder.length > 0 && arr.length === expositionBitOrder.length) {
+                for (var i = 0; i < expositionBitOrder.length; i++) {
+                    var b = expositionBitOrder[i];
+                    if (b === '1') {
+                        var item = arr[i];
+                        if (item && item.shortName) {
+                            result.push(item.shortName);
+                        }
+                    }
+                }
+            }
+            return result.join(', ');
+        }
+
+        service.formatUrls = function(arr) {
+            var result = [];
+            arr.forEach(function (url) {
+                var urlDesc = url.UrlDescription || url.UrlLine;
+                result.push('<a target="_system" href="' + url.UrlLine + '">' + urlDesc + '</a>');
+            });
+            return result.join(', ');
+        };
+
         //Brukt der det er bilder (RegistrationTID)
         var OBSERVATIONS = {
             Incident: {
                 name: "Ulykke/Hendelse",
-                RegistrationTID: "11"
+                RegistrationTID: "11",
+                properties: {
+                    IncidentText: { displayFormat: { hideDescription: true } },
+                    ActivityInfluencedTID: {},
+                    DamageExtentTID: { kdvKey: 'DamageExtentKDV' },                 
+                    Comment: { displayFormat: { hideDescription: true } },
+                    Urls: { displayFormat: { valueFormat: service.formatUrls } }
+                }
             },
             DangerObs: {
                 name: "Faretegn",
-                RegistrationTID: "13"
+                RegistrationTID: "13",
+                properties: {
+                    DangerSignTID: { displayFormat: { hideDescription: true } },
+                    Comment: { displayFormat: { hideDescription: true } }
+                }
             },
             SnowSurfaceObservation: {
                 name: "Snødekke",
                 RegistrationTID: "22",
-                geoHazardTid: 10,
                 properties: {
                     SnowDepth: { displayFormat: { valueFormat: function(item) { return (item * 100) + ' cm' } } },
                     NewSnowDepth24: { displayFormat: { valueFormat: function (item) { return (item * 100) + ' cm' } } },
                     NewSnowLine: { displayFormat: { valueFormat: function (item) { return item + ' moh' } } },
                     Snowline: { displayFormat: { valueFormat: function (item) { return item + ' moh' } } },
                     HeightLimitLayeredSnow: { displayFormat: { valueFormat: function (item) { return item + ' moh' } } },
-                    SnowDriftTID: { },
+                    SnowDriftTID: { displayFormat: { hideDescription: true } },
                     SurfaceWaterContentTID: {},
                     SnowSurfaceTID: {},
                     Comment: { displayFormat: { hideDescription: true } }
@@ -54,22 +127,50 @@ angular
             },
             AvalancheActivityObs2: {
                 name: "Skredaktivitet",
-                RegistrationTID: "33"
+                RegistrationTID: "33",
+                properties: {
+                    DtStart: { displayFormat: { hideDescription: true, valueFormat: function (item) { return moment(item).format('DD.MM.YYYY') } } },
+                    DtEnd: { displayFormat: { condition: function (item, fullObject) { return item && fullObject.DtStart }, valueFormat: function (item, fullObject) { return moment(fullObject.DtStart).format('H') + ' - ' + moment(item).format('H') } } },
+                    EstimatedNumTID: {},
+                    AvalancheExtTID: {},
+                    AvalTriggerSimpleTID: {},
+                    DestructiveSizeTID: {},
+                    AvalPropagationTID: {},
+                    ExposedHeightComboTID: {},
+                    ExposedHeight1: { displayFormat: { valueFormat: function (item) { return item +  ' m' } } },
+                    ExposedHeight2: { displayFormat: { valueFormat: function (item) { return item + ' m' } } },
+                    ValidExposition: { displayFormat: { valueFormat: service.getExpositonDescriptionFromBitOrder } },
+                    Comment: { displayFormat: { hideDescription: true } }
+                }
             },
             AvalancheObs: {
                 name: "Snøskred",
-                RegistrationTID: "26"
+                RegistrationTID: "26",
+                properties: {
+                    DtAvalancheTime: { displayFormat: { hideDescription: true, valueFormat: function (item) { return moment(item).format('DD.MM.YYYY HH:mm') } } },
+                    AvalancheTID: { displayFormat: { hideDescription: true } },
+                    DestructiveSizeTID: {},
+                    AvalancheTriggerTID: {},
+                    ValidExposition: { displayFormat: { valueFormat: service.getExpositonDescriptionFromBitOrder } },
+                    HeigthStartZone: {},
+                    TerrainStartZoneTID: {},
+                    HeigthStopZone: {},
+                    AvalCauseTID: {},
+                    FractureHeigth: { displayFormat: { valueFormat: function (item) { return item + ' cm' } } },
+                    FractureWidth: { displayFormat: { valueFormat: function (item) { return item + ' m' } } },
+                    Trajectory: {},
+                    Comment: { displayFormat: { hideDescription: true } }
+                }
             },
             WeatherObservation: {
                 name: "Vær",
                 RegistrationTID: "21",
-                geoHazardTid: 10,
                 properties: {
-                    PrecipitationTID: {},
-                    AirTemperature: { displayFormat: { valueFormat: function (item) { return item + ' °C' } } },
+                    PrecipitationTID: { displayFormat: { hideDescription: true } },
+                    AirTemperature: { displayFormat: { hideDescription: true, valueFormat: function (item) { return item + ' °C' } } },
                     WindSpeed: { displayFormat: { valueFormat: function (item) { return item + ' m/s' } } },
                     CloudCover: { displayFormat: { valueFormat: function (item) { return item + '%' } } },
-                    WindDirection: {},
+                    WindDirection: { displayFormat: { valueFormat: service.getWindDirectionTextShort } },
                     Comment: { displayFormat: { hideDescription: true } }
                 }
             },
@@ -79,12 +180,19 @@ angular
             },
             CompressionTest: {
                 name: "Stabilitetstest",
-                RegistrationTID: "25"
+                RegistrationTID: "25",
+                properties: {
+                    PropagationTID: { displayFormat: { hideDescription: true } },
+                    TapsFracture: {},
+                    FractureDepth: { displayFormat: { valueFormat: function (item) { return item * 100 + ' cm' } } },
+                    ComprTestFractureTID: {},
+                    StabilityEvalTID: {},
+                    Comment: { displayFormat: { hideDescription: true } }
+                }
             },
             AvalancheEvalProblem2: {
                 name: "Skredproblem",
                 RegistrationTID: "32",
-                geoHazardTid: 10,
                 properties: {
                     AvalancheExtTID: {},
                     AvalCauseTID: {},
@@ -101,7 +209,6 @@ angular
             AvalancheEvaluation3: {
                 name: "Skredfarevurdering",
                 RegistrationTID: "31",
-                geoHazardTid: 10,
                 properties: {
                     AvalancheDangerTID: {},
                     ForecastCorrectTID: { displayFormat: { hideDescription: true } },
@@ -116,25 +223,66 @@ angular
             },
             IceCoverObs: {
                 name: "Isdekningsgrad",
-                RegistrationTID: "51"
+                RegistrationTID: "51",
+                properties: {
+                    IceCoverTID: { displayFormat: { hideDescription: true } },
+                    IceCoverBeforeTID: {},
+                    IceCapacityTID: {},
+                    IceSkateabilityTID: {},
+                    Comment: { displayFormat: { hideDescription: true } }
+                }
             },
             IceThickness: {
                 name: "Snø og istykkelse",
-                RegistrationTID: "50"
+                RegistrationTID: "50",
+                properties: {
+                    SnowDepth: { displayFormat: { valueFormat: function (item) { return item * 100 + ' cm' } } },
+                    SlushSnow: { displayFormat: { valueFormat: function (item) { return item * 100 + ' cm' } } },
+                    IceThicknessLayers: { displayFormat: { valueFormat: function(item) {
+                            var result = [];
+                            item.forEach(function(layer) {
+                                result.push(((layer.IceLayerThickness || 0) * 100) + ' cm ' + layer.IceLayerTName);
+                            });
+                            return result.join(', ');
+                        }}
+                    },
+                    IceThicknessSum: { displayFormat: { valueFormat: function (item) { return item * 100 + ' cm' } }},
+                    Comment: { displayFormat: { hideDescription: true } }
+                }
             },
             WaterLevel: {
                 name: "Vannstand",
-                RegistrationTID: "61"
+                RegistrationTID: "61",
+                properties: {
+                    WaterLevelValue: { displayFormat: { hideDescription: true, valueFormat: function (item) { return item + ' m' } } },
+                    WaterLevelRefTID: {},
+                    MeasuredDischarge: { displayFormat: { valueFormat: function (item) { return item + ' m³' } } },
+                    Comment: { displayFormat: { hideDescription: true } }
+                }
             },
             LandSlideObs: {
                 name: "Skredhendelse",
-                RegistrationTID: "71"
+                RegistrationTID: "71",
+                properties: {
+                    LandSlideTID: { displayFormat: { hideDescription: true } },
+                    DtLandSlideTime: { displayFormat: { valueFormat: function (item) { return moment(item).format('DD.MM.YYYY HH:mm') } } },
+                    DtLandSlideTimeEnd: { displayFormat: { valueFormat: function (item) { return moment(item).format('DD.MM.YYYY HH:mm') } } },
+                    LandSlideSizeTID: {},
+                    LandSlideTriggerTID: {},
+                    ActivityInfluencedTID: {},
+                    DamageExtentTID: { kdvKey: 'DamageExtentKDV' },
+                    ForecastAccurateTID: { kdvKey: 'ForecastAccurateKDV' },
+                    Comment: { displayFormat: { hideDescription: true } },
+                    Urls: { displayFormat: { valueFormat: service.formatUrls } }
+                }
             },
             GeneralObservation: {
                 name: "Fritekst",
                 RegistrationTID: "10"
             }
         };
+
+        
 
         service.registrationTid = function (prop) {
             var obs = OBSERVATIONS[prop];
