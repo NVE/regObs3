@@ -5,6 +5,7 @@ angular
 
         var storageKey = 'regobsRegistrations';
         var unsentStorageKey = 'regobsUnsentRegistrations';
+        var newStorageKey = 'regobsNewRegistration';
 
         //var httpConfig = AppSettings.httpConfigRegistrationPost;
         var baseLength = Object.keys(createRegistration('snow')).length;
@@ -37,7 +38,10 @@ angular
             };
         };
 
-
+        Registration.getNewRegistrations = function () {
+            var json = LocalStorage.getObject(newStorageKey, []);
+            return json;
+        };
 
         Registration.createAndGoToNewRegistration = function () {
             var appMode = AppSettings.getAppMode();
@@ -394,6 +398,7 @@ angular
             Registration.save();
         }
 
+
         function doPost(postUrl, dataToSend) {
 
             return $q(function (resolve, reject) {
@@ -401,6 +406,8 @@ angular
                 var data = angular.copy(dataToSend);
 
                 var success = function () {
+
+                    LocalStorage.setObject(newStorageKey, data.Registrations);
 
                     RegobsPopup.alert(
                         'Suksess!',
@@ -485,6 +492,29 @@ angular
                 });
         }
 
+        Registration.clearNewRegistrationsWithinRange = function () {
+            return Observations.getStoredObservations(Utility.getCurrentGeoHazardTid())
+                .then(function(storedObservations) {
+                    var newRegistrations = Registration.getNewRegistrations();
+                    var arr = [];
+                    newRegistrations.forEach(function (reg) {
+                        var regLatLng = L.latLng(reg.ObsLocation.Latitude, reg.ObsLocation.Longitude);
+                        var keep = true;
+                        storedObservations.forEach(function(obs) {
+                            var obsLatLng = L.latLng(obs.Latitude, obs.Longitude);
+                            
+                            if (regLatLng.distanceTo(obsLatLng) < 100) { //TODO: Removing observations that is nearby. A better way is to check ID, but we don't get ID of new registration form API as of now
+                                keep = false;
+                            }
+                        });
+                        if (keep) {
+                            arr.push(reg);
+                        }
+                    });
+                    LocalStorage.setObject(newStorageKey, arr);
+                });           
+        };
+
         //Her sjekkes det om man har prøver å starte en ny registrering (ved at man går inn på en *registrationNew state)
         //Dersom det finnes en registrering fra før av spørres brukeren om den skal slettes
         $rootScope.$on('$stateChangeStart', function (event, toState, toParams, fromState, fromParams) {
@@ -500,6 +530,8 @@ angular
 
             }
         });
+
+
 
         //$ionicPlatform.on('resume', function (event) {
         //    if (Registration.isEmpty()) {

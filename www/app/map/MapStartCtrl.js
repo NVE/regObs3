@@ -34,8 +34,8 @@
                 appVm.mapMenu.hide();
                 Registration.createAndGoToNewRegistration();
             },
-            showEditRegistration: function () {
-                return !Registration.isEmpty();
+            showNewRegistration: function () {
+                return Registration.isEmpty();
             },
             showTrip: function () {
                 return AppSettings.getAppMode() === 'snow';
@@ -86,10 +86,6 @@
             Map.clearWatch();
             $timeout.cancel(appVm._checkObsWatch);
         });
-
-
-        $scope.$on('$regObs:appSettingsChanged', Map.refresh);
-        $scope.$on('$regObs:registrationSaved', Map.refresh);
 
         $scope.$on('$regObs:mapItemSelected', function (event, item) {
             $timeout(function () {

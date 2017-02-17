@@ -97,6 +97,11 @@ angular.module('RegObs')
             getDescription: function () {
                 return this.options.description || '';
             },
+
+            getDate: function () {
+                return this.options.date;
+            },
+
             setDescription: function (value) {
                 this.options.description = value;
             },

@@ -1,11 +1,7 @@
 ﻿<div class="padding">
-    <div>
-        <strong>{{$ctrl.registration.MunicipalName}}</strong> &bull; {{$ctrl.registration.DtObsTime | date:'dd.MM.yyyy HH:mm:ss'}} &bull; {{$ctrl.registration.getRegistrationCount()}} <i class="icon ion-eye"></i>
-    </div>
-    <div>
-        {{$ctrl.registration.NickName}} <span ng-if="$ctrl.registration.getObservationCompetenceLevel()">(<i ng-repeat="star in $ctrl.registration.getObservationCompetenceLevel() track by $index" class="icon ion-ios-star-outline"></i>)</span>
-        <span ng-if="!$ctrl.registration.getObservationCompetenceLevel()">({{'UNKNOWN_COMPETENCE'|translate}})</span>
-    </div>
+    <strong><span ng-if="$ctrl.registration.LocationName">{{$ctrl.registration.LocationName}} - </span>{{$ctrl.registration.MunicipalName}}, {{$ctrl.registration.ForecastRegionName}}</strong> &bull; {{$ctrl.registration.DtObsTime | date:'d/M HH:mm'}} &bull; 
+    {{$ctrl.registration.NickName}} <span ng-if="$ctrl.registration.getObservationCompetenceLevel()">(<i ng-repeat="star in $ctrl.registration.getObservationCompetenceLevel() track by $index" class="icon ion-ios-star-outline"></i>)</span>
+    <span ng-if="!$ctrl.registration.getObservationCompetenceLevel()">({{'UNKNOWN_COMPETENCE'|translate}})</span>
 </div>
 <div class="observation-slides" ng-if="$ctrl.registration.hasImages()">
     <ion-slides slider="data.slider" options="$ctrl.options">

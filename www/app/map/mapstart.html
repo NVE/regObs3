@@ -14,11 +14,12 @@
         </div>
         <div class="map-selected-info list card" ng-show="vm.mapSelectedItem">
             <div class="item map-selected-info-inner" ng-click="vm.openSelectedItem()" on-swipe-up="vm.openSelectedItem()">
-                <h2 ng-bind-html="vm.mapSelectedItem.getHeader() || '&nbsp;'"></h2>
-                <p>
+                <div class="map-selected-info-date">{{vm.mapSelectedItem.getDate() | date:'d/M HH:mm'}}</div>
+                <h2 class="map-selected-info-header" ng-bind-html="vm.mapSelectedItem.getHeader() || '&nbsp;'"></h2>
+                <p class="map-selected-info-bottom">
                     {{vm.mapSelectedItem.getDescription() | limitTo: 15}}
                     <span class="map-selected-info-distance"><span>{{vm.mapSelectedItem.getTypeDescription() | translate}}</span>&nbsp;<span ng-if="vm.mapSelectedItem.hasDistance()">{{vm.mapSelectedItem.getDistanceText()}} {{'AWAY'|translate}}</span></span>
-                </p>            
+                </p>
             </div>
             <div class="map-selected-info-image-wrapper" ng-if="vm.mapSelectedItem.hasImages()" ng-click="vm.openSelectedItem()">
                 <img class="map-selected-info-image" ng-src="{{vm.mapSelectedItem.getFirstImage().url}}"/>

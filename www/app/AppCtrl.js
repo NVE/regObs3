@@ -48,6 +48,10 @@ angular.module('RegObs')
             return !appVm.registration.isEmpty() || appVm.registration.unsent.length > 0;
         };
 
+        appVm.gotoRegistration = function() {
+            Registration.createAndGoToNewRegistration();
+        };
+
         appVm.getEnvClass = AppSettings.getEnvClass;
         appVm.getAppMode = AppSettings.getAppMode;
         appVm.setAppMode = AppSettings.setAppMode;
@@ -62,6 +66,10 @@ angular.module('RegObs')
 
         appVm.showRegistrationFooter = function () {
             return $state.current && $state.current.data && $state.current.data.showRegistrationFooter && appVm.hasRegistration();
+        };
+
+        appVm.showEditRegistration = function() {
+            return $state.current && $state.current.data && $state.current.data.showRegistrationFooter && $state.current.name === 'start' && !appVm.registration.isEmpty();
         };
 
         appVm.showMapToggle = function () {

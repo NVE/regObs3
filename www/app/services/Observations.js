@@ -69,10 +69,9 @@
                             timeout: canceller ? canceller.promise : AppSettings.httpConfig.timeout
                         })
                     .then(function (result) {
-                        if (result.data && result.data.Data) {
-                            var data = JSON.parse(result.data.Data);
+                        if (result.data) {
                             var existingLocations = service.getLocations();
-                            data.data.forEach(function (location) {
+                            result.data.forEach(function (location) {
                                 location.geoHazardId = geohazardId; //Setting missing result propery geoHazardId
                                 var existingLocation = existingLocations.filter(function (item) {
                                     var distance = L.latLng(item.LatLngObject.Latitude, item.LatLngObject.Longitude).distanceTo(L.latLng(location.LatLngObject.Latitude, location.LatLngObject.Longitude));
@@ -178,7 +177,7 @@
             return PresistentStorage.storeFile(path, JSON.stringify(service._cleanupRegistrations(registrations)));
         };
 
-        service._saveNewRegistrationsToPresistantStorage = function (registrations) {
+        service.saveNewRegistrationsToPresistantStorage = function (registrations) {
             var mergeExistingRegistrations = function (existingRegistrations) {
                 service._mergeRegistrations(registrations, existingRegistrations);
                 return service._storeRegistrations(registrations);
@@ -309,6 +308,8 @@
                 });
         };
 
+       
+
 
         /**
          * Update observations within radius
@@ -333,7 +334,7 @@
                     onProgress(progress);
                 }
 
-                return service._saveNewRegistrationsToPresistantStorage(registrations)
+                return service.saveNewRegistrationsToPresistantStorage(registrations)
                     .then(function () {
                         var tasks = [];
                         registrations.forEach(function (item) {

@@ -1,6 +1,6 @@
 angular
     .module('RegObs')
-    .controller('SettingsViewCtrl', function ($scope, $timeout, $rootScope, $http, $state, $cordovaInAppBrowser, $ionicLoading, AppSettings, LocalStorage, ObsLocation, Registration, User, Utility, HeaderColor, RegobsPopup, AppLogging, PresistentStorage, OfflineMap) {
+    .controller('SettingsViewCtrl', function ($scope, $timeout, $rootScope, $http, $state, $cordovaInAppBrowser, $ionicLoading, AppSettings, LocalStorage, ObsLocation, Registration, User, Utility, HeaderColor, RegobsPopup, AppLogging, PresistentStorage, OfflineMap, Map) {
         var vm = this;
 
         vm.settings = AppSettings;
@@ -73,6 +73,7 @@ angular
                             AppSettings.load();
                             User.load();
                             HeaderColor.init();
+                            Map.refresh();
                             vm.username = '';
                             vm.password = '';
                             $ionicLoading.hide();
@@ -87,7 +88,7 @@ angular
             vm.refreshingKdv = true;
             Utility.refreshKdvElements()
                 .then(function () {
-                    RegobsPopup.alert('Suksess!', 'Nedtrekkslister har blitt oppdatert.')
+                    RegobsPopup.alert('Suksess!', 'Nedtrekkslister har blitt oppdatert.');
                 })
                 .catch(function () {
                     RegobsPopup.alert('Det oppsto en feil', 'Det oppsto en feil ved oppdatering av nedtrekksmenyer. Vennligst prøv igjen senere');
@@ -104,6 +105,8 @@ angular
             vm.logOut();
             AppSettings.save();
             HeaderColor.init();
+            Map.refresh();
+            $rootScope.$broadcast('$regObs:appEnvChanged');
         };
 
     });

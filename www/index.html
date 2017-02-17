@@ -46,15 +46,15 @@
     <!-- your app's js -->
     <script src="dist/app.js"></script>
     <script>
-            document.onclick = function (e) {
-                e = e ||  window.event;
-                var element = e.target || e.srcElement;
+        document.onclick = function (e) {
+            e = e || window.event;
+            var element = e.target || e.srcElement;
 
-                if (element.tagName === 'A' && element.target === '_system') {
-                    window.open(element.href, "_system");
-                    return false; // prevent default action and stop event propagation. This will cause inappbrowser to be used
-                }
-            };
+            if (element.tagName === 'A' && element.target === '_system') {
+                window.open(element.href, "_system");
+                return false; // prevent default action and stop event propagation. This will cause inappbrowser to be used
+            }
+        };
     </script>
     <script type="text/javascript">
 
@@ -123,7 +123,7 @@
                         <regobs-camera></regobs-camera>
                     </div>
                 </div>
-                <div ng-if="appVm.showRegistrationFooter()" class="row row-no-padding">
+                <div ng-if="appVm.showRegistrationFooter() && !appVm.showEditRegistration()" class="row row-no-padding">
                     <div class="col col-center">
                         <div class="padding footer-button-wrapper">
                             <button class="button  button-block button-outline button-dark icon-right ion-trash-a" ng-click="appVm.registration.remove()">
@@ -136,6 +136,15 @@
                             <ion-spinner class="spinner-dark" ng-if="appVm.registration.sending"></ion-spinner>
                             <button ng-hide="appVm.registration.sending" class="button button-block button-calm icon-right ion-android-send" ng-click="appVm.registration.send()">
                                 <span class="badge badge-assertive" ng-show="appVm.registration.unsent.length" ng-bind="appVm.registration.unsent.length"></span> {{'SEND'|translate}} <!--<span class="badge badge-balanced" ng-show="!appVm.registration.isEmpty()" ng-bind="appVm.registration.getObservationsLength()" ></span>-->
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                <div ng-if="appVm.showRegistrationFooter() && appVm.showEditRegistration()" class="row row-no-padding">
+                    <div class="col col-center">
+                        <div class="padding footer-button-wrapper">
+                            <button class="button  button-block button-calm icon-right ion-edit" ng-click="appVm.gotoRegistration()">
+                                {{'CONTINUE_REGISTRATION'|translate}}&nbsp;
                             </button>
                         </div>
                     </div>

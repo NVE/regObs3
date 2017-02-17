@@ -17,18 +17,22 @@
         return $q(function (resolve) {
             if (propName.indexOf('TID') !== -1) {
                 var id = self.data.FullObject[propName];
-                var kdvProp = prop.kdvKey;
-                if (!prop.kdvKey) {
-                    kdvProp = propName.replace('TID', 'KDV');
-                    var prefix = Utility.getGeoHazardType(self.geoHazardTid);
-                    prefix = prefix.charAt(0).toUpperCase() + prefix.slice(1);
-                    kdvProp = prefix + "_" + kdvProp;
-                }
+                if (!id) {
+                    resolve({ value: null, property: propName });
+                } else {
+                    var kdvProp = prop.kdvKey;
+                    if (!prop.kdvKey) {
+                        kdvProp = propName.replace('TID', 'KDV');
+                        var prefix = Utility.getGeoHazardType(self.geoHazardTid);
+                        prefix = prefix.charAt(0).toUpperCase() + prefix.slice(1);
+                        kdvProp = prefix + "_" + kdvProp;
+                    }
 
-                Utility.getKdvValue(kdvProp, id)
-                    .then(function (result) {
-                        resolve({ value: result.Name.trim(), property: propName });
-                    });
+                    Utility.getKdvValue(kdvProp, id)
+                        .then(function(result) {
+                            resolve({ value: result.Name.trim(), property: propName });
+                        });
+                }
             } else {
                 resolve({ value: self.data.FullObject[propName], property: propName });
             }
@@ -43,6 +47,10 @@
                     .then(function (result) {
                         var displayFormat = properties[result.property].displayFormat || {};
                         var hasValue = !Utility.isEmpty(self.data.FullObject[result.property]);
+                        if (result.property.indexOf('TID') !== -1) {
+                            hasValue = self.data.FullObject[result.property] > 0;
+                        }
+
                         var valueText = '';
                         if (hasValue && (!displayFormat.condition || displayFormat.condition(result.value, self.data.FullObject))) {
                             valueText = (displayFormat.valueFormat ? displayFormat.valueFormat(result.value, self.data.FullObject) : result.value).toString().trim();

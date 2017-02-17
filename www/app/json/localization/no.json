@@ -217,5 +217,7 @@
   "LAND_SLIDE_TRIGGER": "Trigger",
   "FORECAST_ACCURATE": "Stemte varsel på varsom.no?",
   "WATER_LEVEL_REF": "Referansenivå",
-  "MEASURED_DISCHARGE": "Målt vannføring"
+  "MEASURED_DISCHARGE": "Målt vannføring",
+  "LOADING": "Laster...",
+  "CONTINUE_REGISTRATION": "Fortsett på registreringen"
 }

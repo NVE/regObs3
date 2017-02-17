@@ -665,6 +665,16 @@ angular
             return dText;
         };
 
+        service.getSearchRadius = function (map) {
+            var bounds = map.getBounds();
+            var radius = parseInt((bounds.getNorthWest().distanceTo(bounds.getSouthEast()) / 2).toFixed(0));
+            var settingsRaduis = AppSettings.data.searchRange;
+            if (settingsRaduis > radius) {
+                radius = settingsRaduis;
+            }
+            return radius;
+        };
+
         return service;
 
     });

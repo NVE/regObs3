@@ -65,6 +65,10 @@
             return this.observation.NickName || '';
         },
 
+        getDate: function () {
+            return this.observation.DtObsTime;
+        },
+
         hasImages: function() {
             return this.observation.hasImages();
         },

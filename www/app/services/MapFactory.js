@@ -141,6 +141,14 @@
                     }
                 });
             });
+            Registration.getNewRegistrations()
+                .forEach(function(reg) {
+                    var m = new RegObsClasses.NewRegistrationMarker(reg);
+                    if (!service._getMarker(m.getId())) {
+                        m.on('selected', function (event) { service._setSelectedItem(event.target); });
+                        m.addTo(layerGroups.observations);
+                    }
+                });
         };
 
         /**
@@ -410,10 +418,13 @@
             L.control.scale({ imperial: false }).addTo(map);
 
             $rootScope.$on('$regObs:registrationSaved', function () {
+                service.refresh();
                 $timeout(function () {
                     map.invalidateSize(); //Footer bar could have been removed, invalidate map size
                 }, 50);
             });
+
+            $rootScope.$on('$regObs:appSettingsChanged', service.refresh);
 
             $rootScope.$on('$regObs:registrationReset', function () {
                 $timeout(function () {
@@ -515,20 +526,6 @@
         };
 
         /**
-         * Get map search observations radius
-         * @returns {} 
-         */
-        service._getObservationSearchRadius = function () {
-            var bounds = map.getBounds();
-            var radius = parseInt((bounds.getNorthWest().distanceTo(bounds.getSouthEast()) / 2).toFixed(0));
-            var settingsRaduis = AppSettings.data.searchRange;
-            if (settingsRaduis > radius) {
-                radius = settingsRaduis;
-            }
-            return radius;
-        };
-
-        /**
          * Update observation tat is stored in presistant storage
          * @returns {} 
          */
@@ -536,7 +533,7 @@
             if (!map) throw new Error('Map not initialized!');
 
             var center = map.getCenter();
-            var radius = service._getObservationSearchRadius();
+            var radius = Utility.getSearchRadius(map);
             var geoHazardTid = Utility.getCurrentGeoHazardTid();
 
             var workFunc = function (onProgress, cancel) {
@@ -623,14 +620,17 @@
             service._checkSelectedItemGeoHazard();
             service._redrawTilesForThisGeoHazard();
 
-            service._removeObservations(); //clear all markers
-            if (AppSettings.data.showPreviouslyUsedPlaces) {
-                service._drawStoredLocations();
-            } 
-            if (AppSettings.data.showObservations) {
-                service._drawObservations();
-            }
-            service.invalidateSize();
+            Registration.clearNewRegistrationsWithinRange()
+                .then(function() {
+                    service._removeObservations(); //clear all markers
+                    if (AppSettings.data.showPreviouslyUsedPlaces) {
+                        service._drawStoredLocations();
+                    }
+                    if (AppSettings.data.showObservations) {
+                        service._drawObservations();
+                    }
+                    service.invalidateSize();
+                });
         };
 
         /**

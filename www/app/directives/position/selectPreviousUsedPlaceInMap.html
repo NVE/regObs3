@@ -11,6 +11,7 @@
             <div class="mark-position-info-icon"><i class="icon ion-pin"></i></div>
             <div class="mark-position-info-text"><span ng-show="!$ctrl.place">{{'CHOOSE_PREVIOUS_USED_PLACE'|translate}}</span><span ng-if="$ctrl.place">{{$ctrl.place.getHeader()}}</span></div>
             <div class="mark-position-info-distance small-text" ng-show="$ctrl.place">{{$ctrl.distanceText}} {{'AWAY' | translate}}</div>
+            <div class="mark-position-info-loading" ng-show="$ctrl.loadingLocations"><ion-spinner class="spinner-dark spinner-small"></ion-spinner> {{'LOADING'|translate}}</div>
         </div>
         
     </div>
