@@ -82,7 +82,7 @@
                     <button ng-show="appVm.trip.model.started && !appVm.userService.getUser().anonymous" class="button button-balanced button-clear button-icon" ng-class="{'ion-android-walk':!appVm.trip.sending}" ng-click="appVm.stopTrip()">
                         <ion-spinner ng-if="appVm.trip.sending" class="spinner-light"></ion-spinner>
                     </button>
-                    <div ng-if="appVm.currentState.data && appVm.currentState.data.showSettings !== false">
+                    <div ng-show="(appVm.currentState.data && appVm.currentState.data.showSettings !== false) && !appVm.showFormFooter()">
                         <button class="button button-clear ion-locked" ng-show="!appVm.userService.getUser().anonymous" ui-sref="settings"></button>
                         <button class="button button-icon ion-more" ng-click="appVm.openTopPopover($event)"></button>
                     </div>

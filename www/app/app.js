@@ -60,7 +60,8 @@
             .state('wizard', {
                 url: '/wizard',
                 templateUrl: 'app/startwizard/startwizard.html',
-                controller: 'StartWizardCtrl as vm'
+                controller: 'StartWizardCtrl as vm',
+                cache: false
             })
             .state('start', {
                 url: '/start',
@@ -122,7 +123,8 @@
                 cache: false,
                 params: { observation: null },
                 data: {
-                    defaultBack: defaultBackHelp
+                    defaultBack: defaultBackHelp,
+                    showSettings: false
                 }
             })
 
