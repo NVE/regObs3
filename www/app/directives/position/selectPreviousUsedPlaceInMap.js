@@ -67,16 +67,18 @@ angular
                 var radius = parseInt((bounds.getNorthWest().distanceTo(bounds.getSouthEast()) / 2).toFixed(0));
                 var geoHazardTid = Utility.getCurrentGeoHazardTid();
 
-                if (!ctrl._lastCenter || ctrl._lastCenter.distanceTo(center) > (AppSettings.data.searchRange / 2)) {
+                if (!ctrl._lastCenter || (ctrl._lastCenter.distanceTo(center) > (AppSettings.data.searchRange / 2))) {
                     ctrl._lastCenter = center;
                     ctrl.loadingLocations = true;
                     Observations.updateNearbyLocations(center.lat, center.lng, radius, geoHazardTid, ctrl._httpTimeout)
-                        .then(function () {
-                            $timeout(function () {
-                                ctrl.loadingLocations = false;
+                        .then(function() {
+                            $timeout(function() {
+                               ctrl.loadingLocations = false;                                  
                             });
-                            ctrl.loadPlaces();                     
+                            ctrl.loadPlaces();
                         });
+                } else {
+                    ctrl.loadPlaces();
                 }
             };
 
@@ -95,7 +97,7 @@ angular
             map.on('locationfound', ctrl._updateUserPosition);
             map.on('moveend', ctrl._refreshLocationsWithTimeout);
             map.on('zoomend', function () {
-                if (!ctrl.isProgramaticZoom) {
+                if (!ctrl.isProgramaticZoom && map.getZoom() > 9) {
                     ctrl._refreshLocationsWithTimeout();
                 }
             });
@@ -155,8 +157,8 @@ angular
                 unselectFunc(ctrl._clusteredGroup.getLayers());
             };
 
-            ctrl._setSelectedItem = function(item) {
-                $timeout(function() {
+            ctrl._setSelectedItem = function (item) {
+                $timeout(function () {
                     ctrl._unselectAllMarkers(item);
                     ctrl.place = item;
                     ctrl._updateDistance();
@@ -181,7 +183,7 @@ angular
 
 
             ctrl.loadPlaces = function () {
-                Observations.getLocations(Utility.getCurrentGeoHazardTid()).forEach(function (loc) {
+                Observations.getLocations(Utility.getCurrentGeoHazardTid(), map.getBounds()).forEach(function (loc) {
                     var m = new RegObsClasses.StoredLocationMarker(loc);
 
                     if (!ctrl._getMarker(m.getId())) {
@@ -202,6 +204,17 @@ angular
                 });
             };
 
+            ctrl.hasAnyVisibleMarkers = function() {
+                var found = false;
+                ctrl._clusteredGroup.getLayers()
+                    .forEach(function(item) {
+                        if (map.getBounds().contains(item.getLatLng())) {
+                            found = true;
+                        }
+                    });
+                return found;
+            };
+
             ctrl.init = function () {
                 if (UserLocation.hasUserLocation()) {
                     ctrl._updateUserPosition(UserLocation.getLastUserLocation());
@@ -211,14 +224,9 @@ angular
                     map.locate({ watch: true, enableHighAccuracy: true });
                 }, false);
 
-                
-
-                if (Utility.hasMinimumNetwork()) {
+                ctrl.loadPlaces();
+                if (!ctrl.hasAnyVisibleMarkers() && Utility.hasMinimumNetwork()) {
                     ctrl._refreshLocationsWithTimeout();
-                } else {
-                    $timeout(function() {
-                        ctrl.loadPlaces();
-                    }, 100);
                 }
             };
 

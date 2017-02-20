@@ -3,7 +3,7 @@
  */
 angular
     .module('RegObs')
-    .factory('Utility', function Utility($http, $q, $rootScope, AppSettings, User, LocalStorage, AppLogging, $translate, $cordovaNetwork, moment) {
+    .factory('Utility', function Utility($http, $q, $rootScope, AppSettings, User, LocalStorage, AppLogging, $translate, $cordovaNetwork, moment, $filter) {
         var service = this;
 
         var canvas;
@@ -111,7 +111,7 @@ angular
                 RegistrationTID: "22",
                 properties: {
                     SnowDepth: { displayFormat: { valueFormat: function(item) { return (item * 100) + ' cm' } } },
-                    NewSnowDepth24: { displayFormat: { valueFormat: function (item) { return (item * 100) + ' cm' } } },
+                    NewSnowDepth24: { displayFormat: { valueFormat: function (item) { return $filter('number')(item * 100,0) + ' cm' } } },
                     NewSnowLine: { displayFormat: { valueFormat: function (item) { return item + ' moh' } } },
                     Snowline: { displayFormat: { valueFormat: function (item) { return item + ' moh' } } },
                     HeightLimitLayeredSnow: { displayFormat: { valueFormat: function (item) { return item + ' moh' } } },
@@ -184,7 +184,7 @@ angular
                 properties: {
                     PropagationTID: { displayFormat: { hideDescription: true } },
                     TapsFracture: {},
-                    FractureDepth: { displayFormat: { valueFormat: function (item) { return item * 100 + ' cm' } } },
+                    FractureDepth: { displayFormat: { valueFormat: function (item) { return $filter('number')(item * 100,0) + ' cm' } } },
                     ComprTestFractureTID: {},
                     StabilityEvalTID: {},
                     Comment: { displayFormat: { hideDescription: true } }

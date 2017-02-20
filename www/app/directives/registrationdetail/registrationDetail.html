@@ -1,5 +1,5 @@
 ﻿<div class="padding">
-    <strong><span ng-if="$ctrl.registration.LocationName">{{$ctrl.registration.LocationName}} - </span>{{$ctrl.registration.MunicipalName}}, {{$ctrl.registration.ForecastRegionName}}</strong> &bull; {{$ctrl.registration.DtObsTime | date:'d/M HH:mm'}} &bull; 
+    <strong><span ng-if="$ctrl.registration.LocationName">{{$ctrl.registration.LocationName}} - </span>{{$ctrl.registration.MunicipalName}}, {{$ctrl.registration.ForecastRegionName}}</strong> &bull; {{$ctrl.registration.DtObsTime | date:'d/M HH:mm'}}<br/>
     {{$ctrl.registration.NickName}} <span ng-if="$ctrl.registration.getObservationCompetenceLevel()">(<i ng-repeat="star in $ctrl.registration.getObservationCompetenceLevel() track by $index" class="icon ion-ios-star-outline"></i>)</span>
     <span ng-if="!$ctrl.registration.getObservationCompetenceLevel()">({{'UNKNOWN_COMPETENCE'|translate}})</span>
 </div>

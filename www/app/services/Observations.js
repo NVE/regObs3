@@ -46,10 +46,13 @@
             });
         };
 
-        service.getLocations = function (geoHazardId) {
+        service.getLocations = function (geoHazardId, withinBounds) {
             var locations = LocalStorage.getObject(service._getLocationStorageKey(), []);
             if (geoHazardId) {
                 locations = locations.filter(function (item) { return item.geoHazardId === geoHazardId });
+            }
+            if (withinBounds) {
+                locations = locations.filter(function (item) { return withinBounds.contains(L.latLng(item.LatLngObject.Latitude, item.LatLngObject.Longitude))});
             }
             return locations;
         };
