@@ -142,11 +142,13 @@
                 });
             });
             Registration.getNewRegistrations()
-                .forEach(function(reg) {
-                    var m = new RegObsClasses.NewRegistrationMarker(reg);
-                    if (!service._getMarker(m.getId())) {
-                        m.on('selected', function (event) { service._setSelectedItem(event.target); });
-                        m.addTo(layerGroups.observations);
+                .forEach(function (reg) {
+                    if (reg && reg.ObsLocation && reg.ObsLocation.Latitude && reg.ObsLocation.Longitude) {
+                        var m = new RegObsClasses.NewRegistrationMarker(reg);
+                        if (!service._getMarker(m.getId())) {
+                            m.on('selected', function(event) { service._setSelectedItem(event.target); });
+                            m.addTo(layerGroups.observations);
+                        }
                     }
                 });
         };
@@ -446,6 +448,10 @@
                 service.refresh();
             });
 
+            $rootScope.$on('$regObs:updateObservations', function () {
+                service.updateObservationsInMap();
+            });
+
             service._isInitialized = true; //map is created!
 
             service.refresh();
@@ -536,6 +542,7 @@
             var radius = Utility.getSearchRadius(map);
             var geoHazardTid = Utility.getCurrentGeoHazardTid();
 
+            service.clearSelectedMarkers();
             var workFunc = function (onProgress, cancel) {
                 return Observations.updateObservationsWithinRadius(center.lat,
                         center.lng,

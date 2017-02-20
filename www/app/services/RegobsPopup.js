@@ -1,6 +1,6 @@
 angular
     .module('RegObs')
-    .factory('RegobsPopup', function ($ionicPopup, $rootScope, $q, $pbService, $timeout, AppLogging, Translate) {
+    .factory('RegobsPopup', function ($ionicPopup, $rootScope, $q, $pbService, $timeout, AppLogging, Translate, moment, $interval) {
         var RegobsPopup = this;
 
         RegobsPopup.delete = function (title, text, confirmText) {
@@ -90,21 +90,14 @@ angular
 
                         var result = angular.extend({}, defaultOptions, options);
 
+                        var lastProgress = moment();
                         scope.showLongDownloadMessage = false;
-                        var timeout;
 
-                        var resetTimeout = function () {
-                            if (timeout) {
-                                $timeout.cancel(timeout);
-                            }
-                            if (result.longTimoutMessageDelay > 0) {
-                                timeout = $timeout(function () {
-                                    scope.showLongDownloadMessage = true;
-                                }, result.longTimoutMessageDelay * 1000);
-                            }
-                        };
-
-                        resetTimeout();
+                        var checkProgress = $interval(function() {
+                                var diff = moment().diff(lastProgress, 'seconds');
+                                AppLogging.log('progressdiff: ' + diff);
+                                scope.showLongDownloadMessage = diff > result.longTimoutMessageDelay;
+                            }, 1000);
 
                         scope.progressOptions = result.progressOptions;
                         scope.cancelDownload = function () {
@@ -126,6 +119,7 @@ angular
                         });
 
                         scope.closePopup = function () {
+                            $interval.cancel(checkProgress);
                             popup.close();
                             if (scope.error) {
                                 reject(scope.error); //Cancelled
@@ -138,20 +132,16 @@ angular
                             if (!(status instanceof RegObs.ProggressStatus))
                                 throw new Error('Progress function must return type RegObs.ProggressStatus');
 
-                            resetTimeout();
-
                             $timeout(function () {
+                                lastProgress = moment();
                                 scope.downloadStatus = status;
                                 $pbService.animate(scope.progressName, status.getPercent());
                             });
                         };
 
                         var onComplete = function () {
+                            $interval.cancel(checkProgress);
                             scope.complete = true;
-
-                            if (timeout) {
-                                $timeout.cancel(timeout); //cancel running timeout
-                            }
                             if (result.closeOnComplete &&
                                 !(scope.downloadStatus && (scope.downloadStatus.hasError() && !result.closeOnError))) {
                                 scope.closePopup();

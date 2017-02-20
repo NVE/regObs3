@@ -10,7 +10,7 @@
 <div class="item-text-wrap text-center" ng-if="showLongDownloadMessage && !complete">{{"SLOW_DOWNLOAD_MESSAGE" | translate}}</div>
 <div class="popup-buttons">
     <button type="button" class="button button-dark" ng-show="isRunning()" ng-click="cancelDownload()">{{"CANCEL" | translate}}</button>
-    <div ng-if="isProcessing()" class="text-center">
+    <div ng-show="isProcessing()" class="text-center">
         <ion-spinner></ion-spinner>
     </div>
     <button type="button" class="button button-calm" ng-show="complete" ng-click="closePopup()">{{"OK" | translate}}</button>

@@ -40,7 +40,7 @@ angular
             };
 
             $scope.dangerSignChanged = function () {
-                $scope.noDangerSign.val = $scope.dangerObs.DangerSignTID === $scope.dangerSignKdvArray[1].Id;
+                $scope.noDangerSign.val = $scope.dangerObs.DangerSignTID === $scope.dangerSignKdvArray[0].Id;
             };
 
             $scope.addDangerObs = function () {
@@ -54,7 +54,7 @@ angular
             $scope.newDangerObs = function () {
                 $scope.editing = false;
                 $scope.dangerObs = {
-                    DangerSignTID: $scope.dangerSignKdvArray[0].Id,
+                    DangerSignTID: null,
                     tempArea: $scope.areaArray[0]
                 };
                 $scope.dangerSignChanged();
@@ -84,9 +84,9 @@ angular
 
                 if ($scope.noDangerSign.val) {
                     AppLogging.log('toggle');
-                    $scope.dangerObs.DangerSignTID = $scope.dangerSignKdvArray[1].Id;
-                } else {
                     $scope.dangerObs.DangerSignTID = $scope.dangerSignKdvArray[0].Id;
+                } else {
+                    $scope.dangerObs.DangerSignTID = null;
                 }
             };
 
@@ -94,7 +94,7 @@ angular
                 if(angular.isArray($scope.dangerSignKdvArray)){
                     for (var i = 0; i < $scope.dangerSignKdvArray.length; i++) {
                         var dangerSignKdv = $scope.dangerSignKdvArray[i];
-                        if(dangerSignKdv.Id == tid){
+                        if(dangerSignKdv.Id === tid){
                             return dangerSignKdv.Name;
                         }
                     }

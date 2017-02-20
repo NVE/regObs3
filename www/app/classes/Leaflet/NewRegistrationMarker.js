@@ -1,4 +1,4 @@
-﻿angular.module('RegObs').factory('NewRegistrationMarker', function (MapSelectableItem, Utility, $state, Observation, Observations) {
+﻿angular.module('RegObs').factory('NewRegistrationMarker', function (MapSelectableItem, Utility, $rootScope) {
 
     /**
      * Stored location marker
@@ -7,7 +7,6 @@
      */
     var NewRegistrationMarker = MapSelectableItem.extend({
         options: {
-
         },
 
         _getObservationPinHtml: function (selected) {
@@ -26,6 +25,14 @@
         },
        
         initialize: function (registration, options) {
+            if (!registration ||
+                !registration.Id ||
+                !registration.ObsLocation ||
+                !registration.ObsLocation.Latitude ||
+                !registration.ObsLocation.Longitude) {
+                throw new Error('Invalid registration object!');
+            }
+
             L.Util.setOptions(this, options);
             var latlng = new L.LatLng(registration.ObsLocation.Latitude, registration.ObsLocation.Longitude);
             this.registration = registration;
@@ -63,39 +70,12 @@
             return 'Ny registrering';
         },
 
-        getDescription: function() {
-            if (self.loading) {
-                return 'Laster...'
-            } else {
-                return '';
-            }
-        },
+        //getDescription: function() {
+        //    return 'Klikk for å laste ned';
+        //},
 
         onClick: function () {
-            var self = this;
-            var latLng = self.getLatLng();
-            self.loading = true;
-            Observations.updateObservationsWithinRadius(latLng.lat,
-                    latLng.lng,
-                    10,
-                    self.options.geoHazardId)
-                .then(function() {
-                    return Observations.getStoredObservations(self.options.geoHazardId);
-                 })
-                .then(function (observations) {
-                    var currentObs = null;
-                    observations.forEach(function(obs) {
-                        var obsLatLng = L.latLng(obs.Latitude, obs.Longitude);
-                        if (latLng.distanceTo(obsLatLng) < 10) {
-                            currentObs = obs;
-                        }
-                    });
-                    self.loading = false;
-                    if (currentObs) {
-                        var obsObject = Observation.fromJson(currentObs);
-                        $state.go('observationdetails', { observation: obsObject });
-                    }
-                });
+            $rootScope.$broadcast('$regObs:updateObservations');
         }
     });
 

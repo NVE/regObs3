@@ -183,18 +183,21 @@
     opacity: 0.8;
 }
 
-.observation-pin.selected {
-    border: 3px solid black;
-    opacity: 1.0;
-}
-
-
 .observation-pin.expiery-1 {
     opacity: 0.7;
 }
 
-.observation-pin.expiery-0 {
+.observation-pin.expiery-2 {
     opacity: 0.6;
+}
+
+.observation-pin.expiery-3 {
+    opacity: 0.5;
+}
+
+.observation-pin.selected {
+    border: 3px solid black;
+    opacity: 1.0;
 }
 
 .observation-pin-icon {
@@ -288,9 +291,17 @@
     bottom: $footerHeight;
 }
 
+.map-selected-info-bottom-description {
+    display: inline-block;
+    max-width: 45%;
+    overflow:hidden;
+    text-overflow: ellipsis;
+}
+
 .map-selected-info-distance {
     position: absolute;
     right: 0px;
+    max-width: 55%;
 }
 
 .map-selected-info-date {

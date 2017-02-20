@@ -62,6 +62,25 @@ angular
             ctrl.loadingLocations = false;
 
             ctrl._refreshLocations = function () {
+                var center = map.getCenter();
+                var bounds = map.getBounds();
+                var radius = parseInt((bounds.getNorthWest().distanceTo(bounds.getSouthEast()) / 2).toFixed(0));
+                var geoHazardTid = Utility.getCurrentGeoHazardTid();
+
+                if (!ctrl._lastCenter || ctrl._lastCenter.distanceTo(center) > (AppSettings.data.searchRange / 2)) {
+                    ctrl._lastCenter = center;
+                    ctrl.loadingLocations = true;
+                    Observations.updateNearbyLocations(center.lat, center.lng, radius, geoHazardTid, ctrl._httpTimeout)
+                        .then(function () {
+                            $timeout(function () {
+                                ctrl.loadingLocations = false;
+                            });
+                            ctrl.loadPlaces();                     
+                        });
+                }
+            };
+
+            ctrl._refreshLocationsWithTimeout = function () {
                 if (ctrl._refreshLocationTimeout) {
                     $timeout.cancel(ctrl._refreshLocationTimeout);
                 }
@@ -70,25 +89,16 @@ angular
                 }
 
                 ctrl._httpTimeout = $q.defer();
-
-                ctrl._refreshLocationTimeout = $timeout(function () {
-                    var center = map.getCenter();
-                    var bounds = map.getBounds();
-                    var radius = parseInt((bounds.getNorthWest().distanceTo(bounds.getSouthEast()) / 2).toFixed(0));
-                    var geoHazardTid = Utility.getCurrentGeoHazardTid();
-                    ctrl.loadingLocations = true;
-                    Observations.updateNearbyLocations(center.lat, center.lng, radius, geoHazardTid, ctrl._httpTimeout)
-                        .then(function () {
-                            ctrl.loadPlaces();
-                        }).finally(function () {
-                            ctrl.loadingLocations = false;
-                        });
-                }, 500);
+                ctrl._refreshLocationTimeout = $timeout(ctrl._refreshLocations, 500);
             };
 
             map.on('locationfound', ctrl._updateUserPosition);
-            map.on('moveend', ctrl._refreshLocations);
-            map.on('zoomend', ctrl._refreshLocations);
+            map.on('moveend', ctrl._refreshLocationsWithTimeout);
+            map.on('zoomend', function () {
+                if (!ctrl.isProgramaticZoom) {
+                    ctrl._refreshLocationsWithTimeout();
+                }
+            });
 
             ctrl.distanceText = '';
 
@@ -116,7 +126,9 @@ angular
                 }
             };
 
+            ctrl.isProgramaticZoom = true;
             map.setView(Map.getCenter(), Map.getZoom());
+            ctrl.isProgramaticZoom = false;
 
             $scope.$on('$destroy', function () {
                 AppLogging.log('Stop watching gps position and destroy map');
@@ -143,14 +155,14 @@ angular
                 unselectFunc(ctrl._clusteredGroup.getLayers());
             };
 
-            ctrl._setSelectedItem = function (item) {
-                $timeout(function () {
+            ctrl._setSelectedItem = function(item) {
+                $timeout(function() {
                     ctrl._unselectAllMarkers(item);
                     ctrl.place = item;
                     ctrl._updateDistance();
                     map.panTo(item.getLatLng());
                 });
-            }
+            };
 
             ctrl._getMarker = function (id) {
                 var existingLayers = ctrl._clusteredGroup.getLayers().filter(function (item) {
@@ -199,10 +211,14 @@ angular
                     map.locate({ watch: true, enableHighAccuracy: true });
                 }, false);
 
-                ctrl.loadPlaces();
+                
 
                 if (Utility.hasMinimumNetwork()) {
-                    ctrl._refreshLocations();
+                    ctrl._refreshLocationsWithTimeout();
+                } else {
+                    $timeout(function() {
+                        ctrl.loadPlaces();
+                    }, 100);
                 }
             };
 

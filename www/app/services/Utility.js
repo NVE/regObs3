@@ -463,11 +463,12 @@ angular
                 });
         };
 
-        service.getKdvArray = function (key) {
+        service.getKdvArray = function (key, keepZero) {
             return service
                 .getKdvRepositories()
                 .then(function (KdvRepositories) {
-                    return KdvRepositories[key];
+                    var arr = KdvRepositories[key];
+                    return keepZero ? arr : arr.filter(function (item) { return item.Id !== 0 });
                 });
         };
 

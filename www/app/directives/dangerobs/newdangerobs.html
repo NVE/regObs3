@@ -18,6 +18,7 @@
                     <select ng-model="dangerObs.DangerSignTID"
                             ng-options="sign.Id as sign.Name for sign in dangerSignKdvArray"
                             ng-change="dangerSignChanged()">
+                        <option value=""></option>
                     </select>
                 </label>
 

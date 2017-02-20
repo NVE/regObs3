@@ -1,4 +1,4 @@
-﻿angular.module('RegObs').factory('ObservationMarker', function (MapSelectableItem, Observation, $translate, Utility, $state) {
+﻿angular.module('RegObs').factory('ObservationMarker', function (MapSelectableItem, Observation, $translate, Utility, $state, moment, DateHelpers) {
 
     /**
      * Stored location marker
@@ -12,10 +12,13 @@
 
         _getObservationPinHtml: function(selected) {
             var geoHazardType = Utility.getGeoHazardType(this.observation.GeoHazardTid);
-            var expiery = this.observation.getDaysUntilExpiery();
+            //var expiery = this.observation.getDaysUntilExpiery();
+            var date = moment(this.observation.DtObsTime, moment.ISO_8601); //strict parsing
+            var diff = DateHelpers.now().diff(date, 'days');
+            diff = Math.min(3, diff);
             return '<div class="observation-pin' +
                 (selected ? ' selected ' : ' ') +
-                geoHazardType + (expiery >= 0 ? ' expiery-' + expiery : '')
+                geoHazardType + (diff >= 0 ? ' expiery-' + diff : '')
                 +'"><i class="icon ion-eye observation-pin-icon ' +'"></i></div>';
         },
 

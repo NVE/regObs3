@@ -56,6 +56,7 @@
 
         service.updateNearbyLocations = function (latitude, longitude, range, geohazardId, canceller) {
             return $q(function (resolve, reject) {
+                AppLogging.log('updateNearbyLocations calling api');
                 $http.get(
                         AppSettings.getEndPoints().getObservationsWithinRadius,
                         {
@@ -70,6 +71,7 @@
                         })
                     .then(function (result) {
                         if (result.data) {
+                            AppLogging.log('updateNearbyLocations got result, processing data');
                             var existingLocations = service.getLocations();
                             result.data.forEach(function (location) {
                                 location.geoHazardId = geohazardId; //Setting missing result propery geoHazardId
@@ -80,10 +82,13 @@
                                 if (existingLocation.length > 0) {
                                     existingLocation[0] = location; //Update existing location with latest result
                                 } else {
-                                    existingLocations.push(location);
+                                    if (location.Name) { //Only add locations with name
+                                        existingLocations.push(location);
+                                    }
                                 }
                             });
                             LocalStorage.setObject(service._getLocationStorageKey(), existingLocations);
+                            AppLogging.log('updateNearbyLocations complete');
                             resolve();
                         } else {
                             reject('Could not get json result');

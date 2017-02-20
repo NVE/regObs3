@@ -11,7 +11,9 @@
                 <label class="item item-input item-select item-stacked-label">
                     <span class="input-label">Test Type</span>
                     <select ng-model="stabilityTest.PropagationTID" ng-change="changeTestType()"
-                            ng-options="kdv.Id as kdv.Name for kdv in snowPropagationKdvArray"></select>
+                            ng-options="kdv.Id as kdv.Name for kdv in snowPropagationKdvArray">
+                        <option value=""></option>
+                    </select>
                 </label> 
                
                 <label ng-hide="isCTNorECTXorCTVorECTV()" class="item item-input item-select item-stacked-label">
@@ -32,7 +34,9 @@
                 <label ng-hide="isCTNorECTX()" class="item item-input item-select item-stacked-label">
                     <span class="input-label">{{'COMPR_TEST_FRACTURE'|translate}}</span>
                     <select ng-model="stabilityTest.ComprTestFractureTID"
-                            ng-options="kdv.Id as kdv.Name for kdv in snowComprTestFractureKdvArray"></select>
+                            ng-options="kdv.Id as kdv.Name for kdv in snowComprTestFractureKdvArray">
+                        <option value=""></option>
+                    </select>
                 </label> 
 
                 <kdv-dropdown title="{{'STABILITY_EVAL'|translate}}"

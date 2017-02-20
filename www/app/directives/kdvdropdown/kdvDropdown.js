@@ -5,9 +5,8 @@ angular
 
         var link = function (scope) {
             Utility
-                .getKdvRepositories()
-                .then(function (KdvRepos) {
-                    var kdvRepo = KdvRepos[scope.kdvKey];
+                .getKdvArray(scope.kdvKey, scope.showZero)
+                .then(function (kdvRepo) {
                     var i;
                     var endIndex = -1;
                     var startIndex = -1;
@@ -35,10 +34,6 @@ angular
                         scope.kdvArray  = kdvRepo;
                     }
 
-                    /*if(!scope.model) {
-                        scope.model = scope.kdvArray[0].Id;
-                    }*/
-
                 });
         };
 
@@ -48,7 +43,8 @@ angular
                 model: '=',
                 kdvKey: '@',
                 after: '=',
-                before: '='
+                before: '=',
+                showZero: '<'
             },
             link: link,
             templateUrl: 'app/directives/kdvdropdown/kdvDropdown.html',
