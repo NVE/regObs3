@@ -1,6 +1,6 @@
 angular
     .module('RegObs')
-    .controller('SettingsViewCtrl', function ($scope, $timeout, $rootScope, $http, $state, $cordovaInAppBrowser, $ionicLoading, AppSettings, LocalStorage, ObsLocation, Registration, User, Utility, HeaderColor, RegobsPopup, AppLogging, PresistentStorage, OfflineMap, Map) {
+    .controller('SettingsViewCtrl', function ($scope, $timeout, $rootScope, $http, $state, $cordovaInAppBrowser, $ionicLoading, AppSettings, LocalStorage, ObsLocation, Registration, User, Utility, HeaderColor, RegobsPopup, AppLogging, PresistentStorage, OfflineMap, Map, $ionicScrollDelegate) {
         var vm = this;
 
         vm.settings = AppSettings;
@@ -9,6 +9,7 @@ angular
 
         vm.toggleAdvancedSettings = function() {
             vm.showAdvancedSettings = !vm.showAdvancedSettings;
+            $ionicScrollDelegate.resize();
         };
 
         vm.kdvUpdated = kdvUpdatedTime(null, LocalStorage.get('kdvUpdated'));
