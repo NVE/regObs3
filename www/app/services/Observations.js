@@ -1,6 +1,6 @@
 ﻿angular
     .module('RegObs')
-    .factory('Observations', function ($http, AppSettings, LocalStorage, AppLogging, Utility, $q, PresistentStorage, $ionicPlatform, moment, $rootScope) {
+    .factory('Observations', function ($http, AppSettings, LocalStorage, AppLogging, Utility, $q, PresistentStorage, $ionicPlatform, moment, $rootScope, Webworker, $filter) {
         var service = this;
         var locationsStorageKey = 'regObsLocations';
         var observationUpdatedStorageKey = 'LastObservationUpdate';
@@ -57,6 +57,9 @@
             return locations;
         };
 
+        
+
+
         service.updateNearbyLocations = function (latitude, longitude, range, geohazardId, canceller) {
             return $q(function (resolve, reject) {
                 AppLogging.log('updateNearbyLocations calling api');
@@ -75,24 +78,43 @@
                     .then(function (result) {
                         if (result.data) {
                             AppLogging.log('updateNearbyLocations got result, processing data');
-                            var existingLocations = service.getLocations();
                             result.data.forEach(function (location) {
                                 location.geoHazardId = geohazardId; //Setting missing result propery geoHazardId
-                                var existingLocation = existingLocations.filter(function (item) {
-                                    var distance = L.latLng(item.LatLngObject.Latitude, item.LatLngObject.Longitude).distanceTo(L.latLng(location.LatLngObject.Latitude, location.LatLngObject.Longitude));
-                                    return item.LocationId === location.LocationId || ((item.Name || '').trim() === (location.Name || '').trim() && distance < 500); //Name is the same and distance is less than 500m
-                                });
-                                if (existingLocation.length > 0) {
-                                    existingLocation[0] = location; //Update existing location with latest result
-                                } else {
-                                    if (location.Name) { //Only add locations with name
-                                        existingLocations.push(location);
+                            });  
+                            var existingLocations = service.getLocations();
+
+                            var mergeExistingLocations = function (data) {
+                                data.newLocations.forEach(function (location) {
+                                    var existingLocation = data.existingLocations.filter(function (item) {
+                                        return item.LocationId === location.LocationId || ((item.Name || '').trim() === (location.Name || '').trim());
+                                    });
+                                    if (existingLocation.length > 0) {
+                                        existingLocation[0] = location; //Update existing location with latest result
+                                    } else {
+                                        if (location.Name) { //Only add locations with name
+                                            data.existingLocations.push(location);
+                                        }
                                     }
-                                }
-                            });
-                            LocalStorage.setObject(service._getLocationStorageKey(), existingLocations);
-                            AppLogging.log('updateNearbyLocations complete');
-                            resolve();
+                                });
+                                return data.existingLocations;
+                            };
+
+                            var myWorker = Webworker.create(mergeExistingLocations);
+                            AppLogging.log('updateNearbyLocations starting web worker');
+                            myWorker.run({ newLocations: result.data, existingLocations: existingLocations })
+                                .then(function (mergedLocations) {
+                                    var latLng = L.latLng(latitude, longitude);
+                                    mergedLocations = $filter('orderBy')(mergedLocations,
+                                        function(item) {
+                                            return latLng.distanceTo(L.latLng(item.LatLngObject.Latitude, item.LatLngObject.Longitude));
+                                        });
+                                    mergedLocations = mergedLocations.slice(0,1000); //Keep only closest 1000
+
+                                    AppLogging.log('updateNearbyLocations process complete. Storing values.');
+                                    LocalStorage.setObject(service._getLocationStorageKey(), mergedLocations);
+                                    AppLogging.log('updateNearbyLocations complete');
+                                    resolve();
+                                }).catch(reject);
                         } else {
                             reject('Could not get json result');
                         }

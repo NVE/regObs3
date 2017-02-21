@@ -17,6 +17,8 @@
         service._selectedItem = null; //Map selected item, this could be observations, nearby places or location marker
         service._defaultCenter = [62.5, 10]; //default map center when no observation or user location
         service._followMode = true; //Follow user position, or has user manually dragged or zoomed map?
+        service._lastViewBounds = null;
+
 
         /**
          * Check if map is initialized, else throw error
@@ -357,6 +359,10 @@
             return Registration.isEmpty() || !ObsLocation.isSet();
         }
 
+        service._updateViewBounds = function() {
+            service._lastViewBounds = map.getBounds();
+        };
+
         /**
          * Main method for creating map
          * @param {} elem 
@@ -410,6 +416,10 @@
                 }
             });
 
+            map.on('dragend', service._updateViewBounds);
+            map.on('zoomend', service._updateViewBounds);
+
+
             obsLocationMarker = new RegObsClasses.CurrentObsLocationMarker(center);
             obsLocationMarker.on('selected', function (event) { service._setSelectedItem(event.target); });
             obsLocationMarker.on('obsLocationChange', service._onObsLocationChange);
@@ -454,6 +464,7 @@
 
             service._isInitialized = true; //map is created!
 
+            service._updateViewBounds();
             service.refresh();
 
             if (UserLocation.hasUserLocation()) {
@@ -569,8 +580,9 @@
          * @returns {} 
          */
         service.isPositionWithinMapBounds = function(lat, lng) {
-            if (map && lat && lng) {
-                return map.getBounds().contains(L.latLng(lat, lng));
+            if (service._lastViewBounds && lat && lng) {
+                var latLng = L.latLng(lat, lng);
+                return service._lastViewBounds.contains(latLng);
             }
             return false;
         };
@@ -699,6 +711,25 @@
         service.calculateXYZSizeFromBounds = function (bounds, zoomMin, zoomMax) {
             if (!map || !tiles) return 0;
             return tiles[0].calculateXYZSizeFromBounds(bounds, zoomMin, zoomMax);
+        };
+
+
+        /**
+         * Get all observations that is within view bounds of map
+         * @returns {} 
+         */
+        service.getObservationsWithinViewBounds = function() {
+            return Observations.getStoredObservations(Utility.getCurrentGeoHazardTid())
+                .then(function (result) {
+                    var items = [];
+                    result.forEach(function (obsJson) {
+                        var o = new RegObsClasses.Observation(obsJson);
+                        if (service.isPositionWithinMapBounds(o.Latitude, o.Longitude)) {
+                            items.push(o);
+                        }
+                    });
+                    return items;
+                });
         };
 
         return service;

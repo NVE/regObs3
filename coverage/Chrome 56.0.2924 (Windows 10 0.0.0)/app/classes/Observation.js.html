@@ -20,24 +20,24 @@
     </h1>
     <div class='clearfix'>
       <div class='fl pad1y space-right2'>
-        <span class="strong">54.55% </span>
+        <span class="strong">59.32% </span>
         <span class="quiet">Statements</span>
-        <span class='fraction'>36/66</span>
+        <span class='fraction'>35/59</span>
       </div>
       <div class='fl pad1y space-right2'>
-        <span class="strong">29.17% </span>
+        <span class="strong">35% </span>
         <span class="quiet">Branches</span>
-        <span class='fraction'>7/24</span>
+        <span class='fraction'>7/20</span>
       </div>
       <div class='fl pad1y space-right2'>
-        <span class="strong">30% </span>
+        <span class="strong">31.58% </span>
         <span class="quiet">Functions</span>
-        <span class='fraction'>6/20</span>
+        <span class='fraction'>6/19</span>
       </div>
       <div class='fl pad1y space-right2'>
-        <span class="strong">54.55% </span>
+        <span class="strong">59.32% </span>
         <span class="quiet">Lines</span>
-        <span class='fraction'>36/66</span>
+        <span class='fraction'>35/59</span>
       </div>
     </div>
   </div>
@@ -204,27 +204,7 @@
 159
 160
 161
-162
-163
-164
-165
-166
-167
-168
-169
-170
-171
-172
-173
-174
-175
-176
-177
-178
-179
-180
-181
-182</td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+162</td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1×</span>
@@ -244,26 +224,6 @@
 <span class="cline-any cline-yes">3×</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">3×</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">36×</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -408,7 +368,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">﻿/**
  * Class for Observation object
  */
-angular.module('RegObs').factory('Observation', function (MapSelectableItem, AppSettings, PresistentStorage, UserLocation, DateHelpers, moment, RegObsObservationTypeFactory) {
+angular.module('RegObs').factory('Observation', function (MapSelectableItem, AppSettings, PresistentStorage, UserLocation, DateHelpers, moment, ObservationType) {
 &nbsp;
     /**
      * Constructor for Observation
@@ -425,27 +385,7 @@ angular.module('RegObs').factory('Observation', function (MapSelectableItem, App
         this._registrations = [];
 &nbsp;
         this.init();
-    };
-&nbsp;
-&nbsp;
-&nbsp;
-    /**
-     * Static helper method
-     * @param {} item 
-     * @returns {} 
-     */
-    Observation.getObsDescription = <span class="fstat-no" title="function not covered" >function (item) {</span>
-<span class="cstat-no" title="statement not covered" >        var result = [];</span>
-<span class="cstat-no" title="statement not covered" >        if (item.TypicalValue2) {</span>
-<span class="cstat-no" title="statement not covered" >            result.push(item.TypicalValue2);</span>
-        }
-<span class="cstat-no" title="statement not covered" >        if (item.TypicalValue1) {</span>
-<span class="cstat-no" title="statement not covered" >            result.push(item.TypicalValue1);</span>
-        }
-<span class="cstat-no" title="statement not covered" >        return result;</span>
-    };
-&nbsp;
-    
+    };  
 &nbsp;
 &nbsp;
     /**
@@ -459,7 +399,7 @@ angular.module('RegObs').factory('Observation', function (MapSelectableItem, App
         self._registrations = [];
         <span class="missing-if-branch" title="else path not taken" >E</span>if (self.Registrations) {
             self.Registrations.forEach(function (item) {
-                var observationType = RegObsObservationTypeFactory.getObservationTypeInstance(item);
+                var observationType = new ObservationType(self.GeoHazardTid, item);
                 self._registrations.push(observationType);
             });
         }
@@ -592,7 +532,7 @@ angular.module('RegObs').factory('Observation', function (MapSelectableItem, App
 </div><!-- /wrapper -->
 <div class='footer quiet pad2 space-top1 center small'>
   Code coverage
-  generated by <a href="http://istanbul-js.org/" target="_blank">istanbul</a> at Mon Feb 13 2017 14:41:14 GMT+0100 (W. Europe Standard Time)
+  generated by <a href="http://istanbul-js.org/" target="_blank">istanbul</a> at Tue Feb 21 2017 10:40:04 GMT+0100 (W. Europe Standard Time)
 </div>
 </div>
 <script src="../../prettify.js"></script>

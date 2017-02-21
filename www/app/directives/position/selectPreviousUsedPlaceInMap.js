@@ -64,11 +64,13 @@ angular
             ctrl._refreshLocations = function () {
                 var center = map.getCenter();
                 var bounds = map.getBounds();
+                var zoom = map.getZoom();
                 var radius = parseInt((bounds.getNorthWest().distanceTo(bounds.getSouthEast()) / 2).toFixed(0));
                 var geoHazardTid = Utility.getCurrentGeoHazardTid();
 
-                if (!ctrl._lastCenter || (ctrl._lastCenter.distanceTo(center) > (AppSettings.data.searchRange / 2))) {
+                if (!ctrl._lastCenter || (ctrl._lastCenter.distanceTo(center) > (AppSettings.data.searchRange / 2)) || ctrl._lastZoom !== zoom) {
                     ctrl._lastCenter = center;
+                    ctrl._lastZoom = zoom;
                     ctrl.loadingLocations = true;
                     Observations.updateNearbyLocations(center.lat, center.lng, radius, geoHazardTid, ctrl._httpTimeout)
                         .then(function() {
@@ -97,7 +99,7 @@ angular
             map.on('locationfound', ctrl._updateUserPosition);
             map.on('moveend', ctrl._refreshLocationsWithTimeout);
             map.on('zoomend', function () {
-                if (!ctrl.isProgramaticZoom && map.getZoom() > 9) {
+                if (!ctrl.isProgramaticZoom) {
                     ctrl._refreshLocationsWithTimeout();
                 }
             });
@@ -204,17 +206,6 @@ angular
                 });
             };
 
-            ctrl.hasAnyVisibleMarkers = function() {
-                var found = false;
-                ctrl._clusteredGroup.getLayers()
-                    .forEach(function(item) {
-                        if (map.getBounds().contains(item.getLatLng())) {
-                            found = true;
-                        }
-                    });
-                return found;
-            };
-
             ctrl.init = function () {
                 if (UserLocation.hasUserLocation()) {
                     ctrl._updateUserPosition(UserLocation.getLastUserLocation());
@@ -225,7 +216,7 @@ angular
                 }, false);
 
                 ctrl.loadPlaces();
-                if (!ctrl.hasAnyVisibleMarkers() && Utility.hasMinimumNetwork()) {
+                if (Utility.hasMinimumNetwork()) {
                     ctrl._refreshLocationsWithTimeout();
                 }
             };

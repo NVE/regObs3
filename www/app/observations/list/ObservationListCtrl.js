@@ -17,14 +17,9 @@
         vm.redraw = function () {
             vm.isLoading = true;
             vm.observations = [];
-            Observations.getStoredObservations(Utility.getCurrentGeoHazardTid())
+            Map.getObservationsWithinViewBounds()
                 .then(function (result) {
-                    result.forEach(function (obsJson) {
-                        var o = new RegObsClasses.Observation(obsJson);
-                        if (Map.isPositionWithinMapBounds(o.Latitude, o.Longitude)) {
-                            vm.observations.push(o);
-                        }
-                    });
+                    vm.observations = result;
                 }).finally(function () {
                     // Stop the ion-refresher from spinning
                     $scope.$broadcast('scroll.refreshComplete');

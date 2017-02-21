@@ -67,6 +67,9 @@
     ],
     "progressbar.js": [
       "dist/*.min.*"
+    ],
+    "ng-webworker": [
+      "src/*.min.*"
     ]
   },
   "dependencies": {
@@ -80,7 +83,8 @@
     "angular-progressbar": "^0.1.0",
     "angular-translate": "2.11.0",
     "angular-translate-loader-static-files": "^2.13.1",
-    "leaflet.markercluster": "^1.0.0"
+    "leaflet.markercluster": "^1.0.0",
+    "ng-webworker": "^0.2.3"
   },
   "resolutions": {
     "angular-ui-router": "0.3.2",
