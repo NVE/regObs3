@@ -97,7 +97,7 @@ angular
 
             ctrl.showGpsReset = function() {
                 return userMarker && !ctrl.updateMarkerToGpsLocation && ctrl.hasMoved;
-            }
+            };
 
 
             ctrl._updateDistance = function () {

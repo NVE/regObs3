@@ -3,7 +3,8 @@
 var fs = require('fs');     // nodejs.org/api/fs.html
 var plist = require('plist');  // www.npmjs.com/package/plist
 
-var FILEPATH = 'platforms/ios/regObs/regObs-Info.plist';
+var FILEPATH = 'platforms/ios/.../...-Info.plist';
+//var FILEPATH = 'platforms/ios/***/***-Info.plist';
 
 module.exports = function (context) {
 

@@ -130,7 +130,16 @@ angular
                 RegistrationTID: "33",
                 properties: {
                     DtStart: { displayFormat: { hideDescription: true, valueFormat: function (item) { return moment(item).format('DD.MM.YYYY') } } },
-                    DtEnd: { displayFormat: { condition: function (item, fullObject) { return item && fullObject.DtStart }, valueFormat: function (item, fullObject) { return moment(fullObject.DtStart).format('H') + ' - ' + moment(item).format('H') } } },
+                    DtEnd: {
+                        displayFormat: {
+                            condition: function (item, data) { return item && data.FullObject.DtStart },
+                            valueFormat: function (item, data) {
+                                var end = moment(item).format('H');
+                                if (end === '23') return $translate.instant('DURING_THE_DAY');
+                                return moment(data.FullObject.DtStart).format('H') + ' - ' + moment(item).format('H');
+                            }
+                        }
+                    },
                     EstimatedNumTID: {},
                     AvalancheExtTID: {},
                     AvalTriggerSimpleTID: {},
@@ -139,7 +148,7 @@ angular
                     ExposedHeightComboTID: {},
                     ExposedHeight1: { displayFormat: { valueFormat: function (item) { return item +  ' m' } } },
                     ExposedHeight2: { displayFormat: { valueFormat: function (item) { return item + ' m' } } },
-                    ValidExposition: { displayFormat: { valueFormat: service.getExpositonDescriptionFromBitOrder } },
+                    ValidExposition: { displayFormat: { condition: function(item) { return item !== '00000000' }, valueFormat: service.getExpositonDescriptionFromBitOrder } },
                     Comment: { displayFormat: { hideDescription: true } }
                 }
             },
@@ -170,7 +179,7 @@ angular
                     AirTemperature: { displayFormat: { hideDescription: true, valueFormat: function (item) { return item + ' °C' } } },
                     WindSpeed: { displayFormat: { valueFormat: function (item) { return item + ' m/s' } } },
                     CloudCover: { displayFormat: { valueFormat: function (item) { return item + '%' } } },
-                    WindDirection: { displayFormat: { valueFormat: service.getWindDirectionTextShort } },
+                    WindDirection: { displayFormat: { valueFormat: function(item) { return service.getWindDirectionText(item); } } },
                     Comment: { displayFormat: { hideDescription: true } }
                 }
             },
@@ -182,10 +191,7 @@ angular
                 name: "Stabilitetstest",
                 RegistrationTID: "25",
                 properties: {
-                    PropagationTID: { displayFormat: { hideDescription: true } },
-                    TapsFracture: {},
-                    FractureDepth: { displayFormat: { valueFormat: function (item) { return $filter('number')(item * 100,0) + ' cm' } } },
-                    ComprTestFractureTID: {},
+                    PropagationTID: { displayFormat: { hideDescription: true, valueFormat: function(item, data) { return data.TypicalValue2; } } },
                     StabilityEvalTID: {},
                     Comment: { displayFormat: { hideDescription: true } }
                 }

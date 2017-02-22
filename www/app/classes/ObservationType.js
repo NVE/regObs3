@@ -52,9 +52,10 @@
                         }
 
                         var valueText = '';
-                        if (hasValue && (!displayFormat.condition || displayFormat.condition(result.value, self.data.FullObject))) {
-                            valueText = (displayFormat.valueFormat ? displayFormat.valueFormat(result.value, self.data.FullObject) : result.value).toString().trim();
+                        if (hasValue && (!displayFormat.condition || displayFormat.condition(result.value, self.data))) {
+                            valueText = (displayFormat.valueFormat ? displayFormat.valueFormat(result.value, self.data) : result.value).toString().trim();                           
                         }
+                        hasValue = true && valueText;
                         callback(result.property, hasValue, result.value, valueText, displayFormat);
                     });
             }

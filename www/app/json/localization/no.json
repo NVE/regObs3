@@ -219,5 +219,6 @@
   "WATER_LEVEL_REF": "Referansenivå",
   "MEASURED_DISCHARGE": "Målt vannføring",
   "LOADING": "Laster...",
-  "CONTINUE_REGISTRATION": "Fortsett på registreringen"
+  "CONTINUE_REGISTRATION": "Fortsett på registreringen",
+  "DURING_THE_DAY": "I løpet av dagen"
 }

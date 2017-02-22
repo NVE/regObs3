@@ -111,8 +111,8 @@
 
         /**
          * Get Marker by id
-         * @param {} id 
-         * @returns {} 
+         * @param {String} id 
+         * @returns {MapSelectableItem} marker
          */
         service._getMarker = function(id) {
             if (layerGroups && layerGroups.observations) {
@@ -165,7 +165,6 @@
 
         /**
          * Draw locations stored in presistant storage as stored location markers
-         * @returns {} 
          */
         service._drawStoredLocations = function () {
             service._checkIfInitialized();
@@ -179,8 +178,7 @@
 
         /**
          * Set obs location
-         * @param {} latlng 
-         * @returns {} 
+         * @param {L.LatLng} latlng
          */
         service._setObsLocation = function (latlng) {
             service._checkIfInitialized();
@@ -192,8 +190,7 @@
 
         /**
          * Update distance path line
-         * @param {} latlng 
-         * @returns {} 
+         * @param {L.LatLng} latlng
          */
         service._updateDistanceLineLatLng = function (latlng) {
             if (userMarker && latlng) {
@@ -355,9 +352,9 @@
          * Could location be set manually?
          * @returns {} 
          */
-        service._isSetLocationManuallyPossible = function () {
+        service._isSetLocationManuallyPossible = function() {
             return Registration.isEmpty() || !ObsLocation.isSet();
-        }
+        };
 
         service._updateViewBounds = function() {
             service._lastViewBounds = map.getBounds();
