@@ -26,6 +26,7 @@
     "karma-chrome-launcher": "^2.0.0",
     "karma-coverage": "^1.1.1",
     "karma-jasmine": "^1.1.0",
+    "plist": "^2.0.1",
     "preen": "^1.2.0",
     "shelljs": "^0.3.0",
     "wd": "^1.0.0",
