@@ -43,7 +43,7 @@ angular
 
             scope.setPlace = function(place) {
                 chosenPlace = place;
-                ObsLocation.setPreviousUsedPlace(place.LocationId,place.Name);
+                ObsLocation.setPreviousUsedPlace(place.Id,place.Name);
                 scope.placesModal.hide();
             };
 

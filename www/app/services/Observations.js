@@ -1,8 +1,8 @@
 ﻿angular
     .module('RegObs')
-    .factory('Observations', function ($http, AppSettings, LocalStorage, AppLogging, Utility, $q, PresistentStorage, $ionicPlatform, moment, $rootScope, Webworker, $filter) {
+    .factory('Observations', function ($http, AppSettings, LocalStorage, AppLogging, Utility, $q, PresistentStorage, $ionicPlatform, moment, $rootScope, Webworker, $filter, User) {
         var service = this;
-        var locationsStorageKey = 'regObsLocations';
+        var locationsStorageKey = 'regObsLocations2'; //added 2 to end because old model wasn't compatible with new models returned from API
         var observationUpdatedStorageKey = 'LastObservationUpdate';
 
         service.getStoredObservations = function (geoHazardId, validateObservationDate) {
@@ -49,7 +49,7 @@
         service.getLocations = function (geoHazardId, withinBounds) {
             var locations = LocalStorage.getObject(service._getLocationStorageKey(), []);
             if (geoHazardId) {
-                locations = locations.filter(function (item) { return item.geoHazardId === geoHazardId });
+                locations = locations.filter(function (item) { return item.GeoHazardId === geoHazardId });
             }
             if (withinBounds) {
                 locations = locations.filter(function (item) { return withinBounds.contains(L.latLng(item.LatLngObject.Latitude, item.LatLngObject.Longitude))});
@@ -62,31 +62,46 @@
 
         service.updateNearbyLocations = function (latitude, longitude, range, geohazardId, canceller) {
             return $q(function (resolve, reject) {
-                AppLogging.log('updateNearbyLocations calling api');
-                $http.get(
-                        AppSettings.getEndPoints().getObservationsWithinRadius,
+                    var user = User.getUser();
+                    AppLogging.log('updateNearbyLocations calling api');
+                    $http.get(
+                        AppSettings.getEndPoints().getLocationsWithinRadius,
                         {
                             params: {
                                 latitude: latitude,
                                 longitude: longitude,
-                                range: range,
-                                geohazardId: geohazardId,
+                                radius: range,
+                                geoHazardTypeIds: [geohazardId],
+                                observerId: user && !user.anonymous ? user.Guid : null,
                                 returnCount: AppSettings.maxObservationsToFetch
                             },
                             timeout: canceller ? canceller.promise : AppSettings.httpConfig.timeout
                         })
+                        //AppSettings.getEndPoints().getObservationsWithinRadius,
+                        //                    {
+                        //                        params: {
+                        //                            latitude: latitude,
+                        //                            longitude: longitude,
+                        //                            range: range,
+                        //                            geohazardId: geohazardId,
+                        //                            returnCount: AppSettings.maxObservationsToFetch
+                        //                        },
+                        //                        timeout: canceller ? canceller.promise : AppSettings.httpConfig.timeout
+                        //                    })
                     .then(function (result) {
                         if (result.data) {
                             AppLogging.log('updateNearbyLocations got result, processing data');
                             result.data.forEach(function (location) {
-                                location.geoHazardId = geohazardId; //Setting missing result propery geoHazardId
+                                if (!location.GeoHazardId) {
+                                    location.GeoHazardId = geohazardId; //Setting missing result propery geoHazardId
+                                }
                             });  
                             var existingLocations = service.getLocations();
 
                             var mergeExistingLocations = function (data) {
                                 data.newLocations.forEach(function (location) {
                                     var existingLocation = data.existingLocations.filter(function (item) {
-                                        return item.LocationId === location.LocationId || ((item.Name || '').trim() === (location.Name || '').trim());
+                                        return item.Id === location.Id || ((item.Name || '').trim() === (location.Name || '').trim());
                                     });
                                     if (existingLocation.length > 0) {
                                         existingLocation[0] = location; //Update existing location with latest result

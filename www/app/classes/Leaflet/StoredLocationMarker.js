@@ -12,7 +12,7 @@
         },
 
         _getObservationPinHtml: function (selected) {
-            var geoHazardType = Utility.getGeoHazardType(this.storedLocation.geoHazardId);
+            var geoHazardType = Utility.getGeoHazardType(this.options.geoHazardId);
             return '<div class="observation-pin ' + (selected ? 'selected ' : '') + geoHazardType + '"><i class="icon ion-pin observation-pin-icon"></i></div>';
         },
 
@@ -31,7 +31,7 @@
             self.storedLocation = storedLocation;
             var latlng = new L.LatLng(self.storedLocation.LatLngObject.Latitude, self.storedLocation.LatLngObject.Longitude);
 
-            self.options.geoHazardId = storedLocation.geoHazardId;
+            self.options.geoHazardId = storedLocation.GeoHazardId;
             self.options.selectedIcon = self._getIcon(true);
             self.options.unselectedIcon = self._getIcon(false);
             self.options.icon = this._getIcon(false);
@@ -59,7 +59,7 @@
                     iconColor: '#fff',
                     icon: 'ion-plus',
                     onClick: function() {
-                        ObsLocation.setPreviousUsedPlace(self.storedLocation.LocationId,
+                        ObsLocation.setPreviousUsedPlace(self.storedLocation.Id,
                         self.storedLocation.Name,
                         {
                             Latitude: self.storedLocation.LatLngObject.Latitude.toString(),
@@ -85,7 +85,7 @@
         },
 
         getId: function () {
-            return this.storedLocation.LocationId;
+            return this.storedLocation.Id;
         },
 
         getStoredLocation: function() {

@@ -123,6 +123,7 @@
                 getObserver: baseUrls[settings.data.env] + '/Account/GetObserver', //Header Authorization: Basic btoa('user':'pass')
                 getObserverGroups: baseUrls[settings.data.env] + '/Account/GetObserverGroups', //?guid=xxxxxxxx-xxxx-4xxx-xxxxx-xxxxxxxxxxxx,
                 getObservationsWithinRadius: baseUrls[settings.data.env] + '/Observations/GetObservationsWithinRadius',
+                getLocationsWithinRadius: baseUrls[settings.data.env] + '/Location/WithinRadius',
                 getRegistrationsWithinRadius: baseUrls[settings.data.env] + '/Search/WithinRadius', //POST json {"GeoHazards": [10],"LangKey" : 1,"FromDate": "2013-01-03","ToDate": "2017-01-03","Latitude": 59.927032,"Longtitude": 10.710034,"Radius": 40000,"ReturnCount": 100}
                 getDropdowns: baseUrls[settings.data.env] + '/kdvelements',
                 getLocationName: baseUrls[settings.data.env] + '/Location/GetName', //?latitude=11.11&longitude=11.11&geoHazardId=15

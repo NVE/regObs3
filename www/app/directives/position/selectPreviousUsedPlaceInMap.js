@@ -117,7 +117,7 @@ angular
                 if (ctrl.place) {
                     var storedLocation = ctrl.place.getStoredLocation();
 
-                    ObsLocation.setPreviousUsedPlace(storedLocation.LocationId,
+                    ObsLocation.setPreviousUsedPlace(storedLocation.Id,
                         storedLocation.Name,
                         {
                             Latitude: storedLocation.LatLngObject.Latitude.toString(),
