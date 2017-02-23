@@ -6,7 +6,7 @@ angular
     .component('mapAreaSelect',
     {
         template: '<div class="map-area-select" data-tap-disabled="true"></div>',
-        controller: function ($element, Map, $scope, AppSettings, AppLogging, $timeout, RegObsClasses) {
+        controller: function ($element, Map, $scope, AppSettings, AppLogging, $timeout, RegObsClasses, $rootScope) {
             var ctrl = this;
 
             var changeTimer;
@@ -62,6 +62,10 @@ angular
                     $timeout.cancel(changeTimer);
                 }
                 map.remove();
+            });
+
+            $rootScope.$on('$ionicView.enter', function () {
+                map.invalidateSize();
             });
         },
         bindings: {
