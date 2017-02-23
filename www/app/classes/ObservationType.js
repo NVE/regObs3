@@ -55,7 +55,7 @@
                         if (hasValue && (!displayFormat.condition || displayFormat.condition(result.value, self.data))) {
                             valueText = (displayFormat.valueFormat ? displayFormat.valueFormat(result.value, self.data) : result.value).toString().trim();                           
                         }
-                        hasValue = true && valueText;
+                        hasValue = !Utility.isEmpty(valueText);
                         callback(result.property, hasValue, result.value, valueText, displayFormat);
                     });
             }
@@ -85,7 +85,12 @@
             };
             self._forEachProperty(properties,
                 function (prop, hasValue, value, valueText, displayFormat) {
-                    if (displayFormat.hideDescription) {
+                    var hideDescription = angular.copy(displayFormat.hideDescription);
+                    if (angular.isFunction(hideDescription)) {
+                        hideDescription = hideDescription(self.data.FullObject[prop], self.data);
+                    }
+
+                    if (hideDescription) {
                         result.push({ prop: prop, hasValue: hasValue, value: valueText, order: Object.keys(properties).indexOf(prop) });
                         checkCallback();
                     } else {

@@ -140,7 +140,7 @@ angular
                             }
                         }
                     },
-                    EstimatedNumTID: {},
+                    EstimatedNumTID: { displayFormat: { hideDescription: function (item) { return item <= 1 } } },
                     AvalancheExtTID: {},
                     AvalTriggerSimpleTID: {},
                     DestructiveSizeTID: {},
