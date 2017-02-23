@@ -584,6 +584,10 @@
             return false;
         };
 
+        service.getLastViewBounds = function() {
+            return service._lastViewBounds;
+        };
+
         /**
          * Redraw map with tiles only visible for current geohazard
          * @returns {} 

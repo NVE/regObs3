@@ -1,7 +1,7 @@
 ﻿<div ng-if="downloadStatus">
     <div class="downloadprogress" pb-circle progress-key="{{progressName}}" options="progressOptions"></div>    
-    <div ng-show="downloadStatus.hasError()" class="item-text-wrap assertive text-center">
-        <i class="icon ion-alert-circled"></i> <span ng-bind="downloadStatus.getErrors().length"></span>/<span ng-bind="downloadStatus.getTotal()"></span> {{"FAILED" | translate | lowercase}}
+    <div ng-show="downloadStatus.hasError()" class="item-text-wrap text-center">
+        <span ng-bind="downloadStatus.getErrors().length"></span>/<span ng-bind="downloadStatus.getTotal()"></span> {{"FAILED" | translate | lowercase}}
     </div>
 </div>
 <div ng-if="!downloadStatus && !complete" class="text-center">

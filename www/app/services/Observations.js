@@ -396,11 +396,11 @@
          */
         service.checkIfObservationsShouldBeUpdated = function () {
             var lastRun = LocalStorage.get(observationUpdatedStorageKey);
-            var warnIfOlderThanDaysBack = 3;
+            var warnIfOlderThanHoursBack = 12;
             if (!lastRun) return true;
             var lastRunMoment = moment(lastRun);
-            var diff = lastRunMoment.diff(moment());
-            if (diff > warnIfOlderThanDaysBack) {
+            var diff = lastRunMoment.diff(moment(), 'hours');
+            if (diff > warnIfOlderThanHoursBack) {
                 return true;
             }
             return false;

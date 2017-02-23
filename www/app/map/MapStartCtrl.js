@@ -73,13 +73,13 @@
 
         appVm._checkObsWatch = $timeout(function () {
             if (Observations.checkIfObservationsShouldBeUpdated() && UserLocation.hasUserLocation() && Utility.hasGoodNetwork()) {
-                RegobsPopup.confirm($translate.instant('UPDATE_OBSERVATIONS_IN_MAP'), $translate.instant('UPDATE_OBSERVATIONS_IN_MAP_HELP_TEXT'))
+                RegobsPopup.confirm($translate.instant('UPDATE_OBSERVATIONS_IN_MAP'), '<div class="text-center popup-icon"><i class="icon ion-loop"></i></div><p>' + $translate.instant('UPDATE_OBSERVATIONS_IN_MAP_HELP_TEXT') + '</p><p>' + $translate.instant('UPDATE_OBSERVATIONS_IN_MAP_HELP_TEXT_2') +'</p>')
                 .then(function (response) {
                     if (response) {
                         Map.updateObservationsInMap();
                     }
                 });
-            }
+           }
         }, 10000);
 
         $scope.$on('$ionicView.leave', function () {

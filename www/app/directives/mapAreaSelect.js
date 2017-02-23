@@ -33,7 +33,7 @@ angular
             if (ctrl.bounds) {
                 map.fitBounds(ctrl.bounds);
             } else {
-                map.setView(Map.getCenter(), Map.getZoom());
+                map.fitBounds(Map.getLastViewBounds());
             }
 
             if (ctrl.disableUserInteraction) {

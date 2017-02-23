@@ -3,8 +3,7 @@
 var fs = require('fs');     // nodejs.org/api/fs.html
 var plist = require('plist');  // www.npmjs.com/package/plist
 
-var FILEPATH = 'platforms/ios/.../...-Info.plist';
-//var FILEPATH = 'platforms/ios/***/***-Info.plist';
+var FILEPATH = 'platforms/ios/***/***-Info.plist';
 
 module.exports = function (context) {
 
@@ -16,7 +15,12 @@ module.exports = function (context) {
     var obj = plist.parse(xml);
 
     obj.ITSAppUsesNonExemptEncryption = false;
-    obj.CFBundleShortVersionString = obj.CFBundleShortVersionString.replace(/\./g, '');
+
+    console.log('Got plist CFBundleShortVersionString: ' +obj.CFBundleShortVersionString);
+    var trimmedVersion = obj.CFBundleShortVersionString.replace(/\./g, '');
+    console.log('Setting new CFBundleShortVersionString: ' +trimmedVersion);
+
+    obj.CFBundleShortVersionString = trimmedVersion;
 
     xml = plist.build(obj);
     fs.writeFileSync(FILEPATH, xml, { encoding: 'utf8' });

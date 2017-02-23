@@ -43,14 +43,12 @@
             if (vm.currentZoom) {
                 for (var currentLevel = vm._calculateLevelSteps; vm.currentZoom + currentLevel <= AppSettings.maxMapZoomLevel && currentLevel <= vm._maxCalculateLevels; currentLevel += vm._calculateLevelSteps) {
                     var size = vm._getEstimatedSize(vm.currentZoom + currentLevel);
-                    if (size.bytes < vm.availableDiskspaceBytes) {
+                    var mapFragmentCount = size.tiles;
+                    if ((size.bytes < vm.availableDiskspaceBytes) && (mapFragmentCount < vm.maps[0].maxDownloadLimit)) {
                         vm.extraDetailLevel.push({
                             extraLevels: currentLevel,
                             description: '+' + currentLevel + ' (' + size.humanSize + ')'
                         });
-                    } else {
-                        AppLogging.log('Detail size ' + currentLevel + ' ' + size.humanSize + ' is larger than available ' + vm.availableDiskspace);
-                        break;
                     }
                 }
             }

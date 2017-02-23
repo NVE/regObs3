@@ -93,11 +93,14 @@ angular
                         var lastProgress = moment();
                         scope.showLongDownloadMessage = false;
 
-                        var checkProgress = $interval(function() {
-                                var diff = moment().diff(lastProgress, 'seconds');
-                                AppLogging.log('progressdiff: ' + diff);
-                                scope.showLongDownloadMessage = diff > result.longTimoutMessageDelay;
-                            }, 1000);
+                        var checkProgress = null;
+                        if (result.longTimoutMessageDelay > 0) {
+                            checkProgress = $interval(function() {
+                                    var diff = moment().diff(lastProgress, 'seconds');
+                                    AppLogging.log('progressdiff: ' + diff);
+                                    scope.showLongDownloadMessage = diff > result.longTimoutMessageDelay;
+                                }, 1000);
+                        }
 
                         scope.progressOptions = result.progressOptions;
                         scope.cancelDownload = function () {
@@ -119,7 +122,9 @@ angular
                         });
 
                         scope.closePopup = function () {
-                            $interval.cancel(checkProgress);
+                            if (checkProgress) {
+                                $interval.cancel(checkProgress);
+                            }
                             popup.close();
                             if (scope.error) {
                                 reject(scope.error); //Cancelled
@@ -140,7 +145,9 @@ angular
                         };
 
                         var onComplete = function () {
-                            $interval.cancel(checkProgress);
+                            if (checkProgress) {
+                                $interval.cancel(checkProgress);
+                            }
                             scope.complete = true;
                             if (result.closeOnComplete &&
                                 !(scope.downloadStatus && (scope.downloadStatus.hasError() && !result.closeOnError))) {
