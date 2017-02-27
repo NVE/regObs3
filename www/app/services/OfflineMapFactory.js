@@ -1,6 +1,6 @@
-﻿angular
+angular
     .module('RegObs')
-    .factory('OfflineMap', function ($ionicPlatform, $window, $q, AppSettings, AppLogging, Map, PresistentStorage, RegobsPopup) {
+    .factory('OfflineMap', function ($ionicPlatform, $window, $q, AppSettings, AppLogging, Map, PresistentStorage, RegobsPopup, $translate) {
         var service = this;
         var metaFilename = 'offline-meta.json';
         var meta;
@@ -12,9 +12,16 @@
                 } else { //load map metadata from file
                     PresistentStorage.readAsText(metaFilename)
                         .then(function (success) {
-                            // success
-                            meta = JSON.parse(success);
-                            resolve(meta);
+
+                            try {
+                                // success
+                                meta = JSON.parse(success);
+                                resolve(meta);
+                            }catch(e)
+                            {
+                                //json not parsed correctly, probably force quit app when storing to file
+                                service.saveOfflineAreas([]).then(resolve([]));
+                            }
                         }, function (error) {
                             if (error.code === 1) { //file does not exist
                                 service.saveOfflineAreas([]).then(resolve([]));
@@ -222,16 +229,9 @@
                             cancel);
                     };
 
-                    RegobsPopup.downloadProgress('Oppdaterer kartet med det siste fra regObs',
+                    RegobsPopup.downloadProgress($translate.instant('UPDATE_MAP_OBSERVATIONS'),
                         downloadMap,
-                    { closeOnComplete: false })
-                    .then(function () {
-                        //$state.go('start');
-                    })
-                    .catch(function () {
-                        AppLogging.log('progress cancelled');
-                        //$state.go('start');
-                    });
+                    { closeOnComplete: false });
                 }
             });
         };
@@ -242,7 +242,7 @@
          */
         service.getUncompletedDownloads = function () {
             return service.getOfflineAreas().then(function (result) {
-                return result.filter(function (item) { return item.complete.length < item.tiles });
+                return result.filter(function (item) { return !item.cancelled && item.complete.length  < item.tiles });
             });
         };
 
@@ -310,7 +310,9 @@
                                 false,
                                 function onProgress(tile, xyz) {
                                     var filename = tile.getMapFilename(xyz.x, xyz.y, xyz.z);
-                                    area.complete.push(filename);
+                                    if (!progress.isCancelled()) {
+                                        area.complete.push(filename);
+                                    }
                                     progress.addComplete();
                                     progressFunc();
                                 },
@@ -322,6 +324,7 @@
                                     AppLogging.warn('Could not download map tile: ' + JSON.stringify(error));
                                 },
                                 function onCancel() {
+                                    area.cancelled = true;
                                     progress.setCancelled(true);
                                     doneFunc(item);
                                 },
@@ -356,6 +359,7 @@
                     maps: mapsArray,
                     xyzList: xyzList,
                     zoom: zoomMax,
+                    cancelled: false,
                     complete: [],
                     errors: []
                 };

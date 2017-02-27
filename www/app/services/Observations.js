@@ -1,4 +1,4 @@
-﻿angular
+angular
     .module('RegObs')
     .factory('Observations', function ($http, AppSettings, LocalStorage, AppLogging, Utility, $q, PresistentStorage, $ionicPlatform, moment, $rootScope, Webworker, $filter, User) {
         var service = this;
@@ -20,7 +20,7 @@
             });
         };
 
-        service._getLocationStorageKey = function() {
+        service._getLocationStorageKey = function () {
             return locationsStorageKey + '_' + AppSettings.data.env.replace(/ /g, '');
         };
 
@@ -52,29 +52,32 @@
                 locations = locations.filter(function (item) { return item.GeoHazardId === geoHazardId });
             }
             if (withinBounds) {
-                locations = locations.filter(function (item) { return withinBounds.contains(L.latLng(item.LatLngObject.Latitude, item.LatLngObject.Longitude))});
+                locations = locations.filter(function (item) { return withinBounds.contains(L.latLng(item.LatLngObject.Latitude, item.LatLngObject.Longitude)) });
             }
             return locations;
         };
 
-        
+
 
 
         service.updateNearbyLocations = function (latitude, longitude, range, geohazardId, canceller) {
             return $q(function (resolve, reject) {
-                    var user = User.getUser();
-                    AppLogging.log('updateNearbyLocations calling api');
-                    $http.get(
+                var user = User.getUser();
+                AppLogging.log('updateNearbyLocations calling api');
+
+                var params = {
+                    latitude: latitude,
+                    longitude: longitude,
+                    radius: range,
+                    geoHazardTypeIds: [geohazardId],
+                    returnCount: AppSettings.maxObservationsToFetch,
+                    observerGuid: (user && !user.anonymous) ? user.Guid : null
+                };
+
+                $http.get(
                         AppSettings.getEndPoints().getLocationsWithinRadius,
                         {
-                            params: {
-                                latitude: latitude,
-                                longitude: longitude,
-                                radius: range,
-                                geoHazardTypeIds: [geohazardId],
-                                observerId: user && !user.anonymous ? user.Guid : null,
-                                returnCount: AppSettings.maxObservationsToFetch
-                            },
+                            params: params,
                             timeout: canceller ? canceller.promise : AppSettings.httpConfig.timeout
                         })
                         //AppSettings.getEndPoints().getObservationsWithinRadius,
@@ -95,7 +98,7 @@
                                 if (!location.GeoHazardId) {
                                     location.GeoHazardId = geohazardId; //Setting missing result propery geoHazardId
                                 }
-                            });  
+                            });
                             var existingLocations = service.getLocations();
 
                             var mergeExistingLocations = function (data) {
@@ -120,10 +123,10 @@
                                 .then(function (mergedLocations) {
                                     var latLng = L.latLng(latitude, longitude);
                                     mergedLocations = $filter('orderBy')(mergedLocations,
-                                        function(item) {
+                                        function (item) {
                                             return latLng.distanceTo(L.latLng(item.LatLngObject.Latitude, item.LatLngObject.Longitude));
                                         });
-                                    mergedLocations = mergedLocations.slice(0,1000); //Keep only closest 1000
+                                    mergedLocations = mergedLocations.slice(0, 1000); //Keep only closest 1000
 
                                     AppLogging.log('updateNearbyLocations process complete. Storing values.');
                                     LocalStorage.setObject(service._getLocationStorageKey(), mergedLocations);
@@ -353,7 +356,7 @@
                 });
         };
 
-       
+
 
 
         /**

@@ -1,6 +1,6 @@
 ﻿<div ng-if="downloadStatus">
     <div class="downloadprogress" pb-circle progress-key="{{progressName}}" options="progressOptions"></div>    
-    <div ng-show="downloadStatus.hasError()" class="item-text-wrap text-center">
+    <div ng-show="downloadStatus.hasError() && !downloadStatus.isCancelled()" class="item-text-wrap text-center">
         <span ng-bind="downloadStatus.getErrors().length"></span>/<span ng-bind="downloadStatus.getTotal()"></span> {{"FAILED" | translate | lowercase}}
     </div>
 </div>

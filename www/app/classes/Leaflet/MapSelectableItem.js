@@ -119,7 +119,7 @@ angular.module('RegObs')
             },
 
             hasDistance: function () {
-                return this.options.distance && this.options.distance.distance;
+                return this.options.distance && this.options.distance.distance >= 0;
             },
             getDistanceText: function () {
                 if (this.hasDistance()) {

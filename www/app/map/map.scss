@@ -285,6 +285,7 @@
     left: 8px;
     right: 8px;
     height: 20px;
+    display: flex;
 }
 
 .hasFooter .map-selected-info {
@@ -292,16 +293,18 @@
 }
 
 .map-selected-info-bottom-description {
-    display: inline-block;
-    max-width: 45%;
+    display:block;
     overflow:hidden;
     text-overflow: ellipsis;
+    white-space: nowrap;
+    min-width: 0;
 }
 
 .map-selected-info-distance {
-    position: absolute;
-    right: 0px;
-    max-width: 55%;
+    margin-left: auto;
+    display: block;
+    white-space: nowrap;
+    padding-left: 5px;
 }
 
 .map-selected-info-date {

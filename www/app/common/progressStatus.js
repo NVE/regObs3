@@ -31,6 +31,10 @@ RegObs.ProggressStatus = (function () {
             self._cancelled = cancelled;
         };
 
+        self.isCancelled = function() {
+            return self._cancelled;
+        };
+
         self.isDone = function() {
             return self.getDone() >= _total || self._cancelled;
         };

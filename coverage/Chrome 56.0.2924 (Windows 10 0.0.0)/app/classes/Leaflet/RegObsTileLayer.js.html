@@ -20,24 +20,24 @@
     </h1>
     <div class='clearfix'>
       <div class='fl pad1y space-right2'>
-        <span class="strong">2.59% </span>
+        <span class="strong">12.93% </span>
         <span class="quiet">Statements</span>
-        <span class='fraction'>3/116</span>
+        <span class='fraction'>15/116</span>
       </div>
       <div class='fl pad1y space-right2'>
-        <span class="strong">0% </span>
+        <span class="strong">5% </span>
         <span class="quiet">Branches</span>
-        <span class='fraction'>0/40</span>
+        <span class='fraction'>2/40</span>
       </div>
       <div class='fl pad1y space-right2'>
-        <span class="strong">4.17% </span>
+        <span class="strong">12.5% </span>
         <span class="quiet">Functions</span>
-        <span class='fraction'>1/24</span>
+        <span class='fraction'>3/24</span>
       </div>
       <div class='fl pad1y space-right2'>
-        <span class="strong">2.63% </span>
+        <span class="strong">13.16% </span>
         <span class="quiet">Lines</span>
-        <span class='fraction'>3/114</span>
+        <span class='fraction'>15/114</span>
       </div>
     </div>
   </div>
@@ -387,10 +387,10 @@
 342
 343
 344</td><td class="line-coverage quiet"><span class="cline-any cline-yes">1×</span>
-<span class="cline-any cline-yes">36×</span>
+<span class="cline-any cline-yes">38×</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -398,10 +398,10 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -412,12 +412,12 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -430,7 +430,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -725,15 +725,15 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">6×</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">36×</span>
+<span class="cline-any cline-yes">38×</span>
 <span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">﻿angular.module('RegObs').factory('RegObsTileLayer', function (AppSettings, $cordovaNetwork, Utility) {
     var RegObsTileLayer = L.TileLayer.extend({
-        initialize: <span class="fstat-no" title="function not covered" >function (url, options) {</span>
+        initialize: function (url, options) {
             // check required options or else choke and die
-<span class="cstat-no" title="statement not covered" >            options = L.extend({</span>
+            options = L.extend({
                 folder: null,
                 name: null,
                 autocache: false,
@@ -741,10 +741,10 @@
                 fallbackToZoomLevel: true,
                 minNativeZoom: 0
             }, options);
-<span class="cstat-no" title="statement not covered" >            if (!options.folder) <span class="cstat-no" title="statement not covered" >throw "L.TileLayer.Cordova: missing required option: folder";</span></span>
-<span class="cstat-no" title="statement not covered" >            if (!options.name) <span class="cstat-no" title="statement not covered" >throw "L.TileLayer.Cordova: missing required option: name";</span></span>
-<span class="cstat-no" title="statement not covered" >            L.TileLayer.prototype.initialize.call(this, url, options);</span>
-<span class="cstat-no" title="statement not covered" >            L.setOptions(this, options);</span>
+            <span class="missing-if-branch" title="if path not taken" >I</span>if (!options.folder) <span class="cstat-no" title="statement not covered" >throw "L.TileLayer.Cordova: missing required option: folder";</span>
+            <span class="missing-if-branch" title="if path not taken" >I</span>if (!options.name) <span class="cstat-no" title="statement not covered" >throw "L.TileLayer.Cordova: missing required option: name";</span>
+            L.TileLayer.prototype.initialize.call(this, url, options);
+            L.setOptions(this, options);
 &nbsp;
             // connect to the filesystem or else die loudly
             // save a handle to the filesystem, and also use it to open a directory handle to our stated folder
@@ -755,12 +755,12 @@
             // online is the HTTP one we were given as the 'url' parameter here to initialize()
             // offline is underneath the local filesystem: /path/to/sdcard/FOLDER/name-z-x-y.png
             // tip: the file extension isn't really relevant; using .png works fine without juggling file extensions from their URL templates
-<span class="cstat-no" title="statement not covered" >            var myself = this;</span>
+            var myself = this;
 &nbsp;
-<span class="cstat-no" title="statement not covered" >            myself._url_online = myself._url; </span>// Do this early, so it's done before the time-intensive filesystem activity starts.
-<span class="cstat-no" title="statement not covered" >            myself._url_offline = myself._url; </span>//Fallback to online map if no device storage present.
-<span class="cstat-no" title="statement not covered" >            try {</span>
-<span class="cstat-no" title="statement not covered" >                document.addEventListener("deviceready",</span>
+            myself._url_online = myself._url; // Do this early, so it's done before the time-intensive filesystem activity starts.
+            myself._url_offline = myself._url; //Fallback to online map if no device storage present.
+            try {
+                document.addEventListener("deviceready",
 <span class="fstat-no" title="function not covered" >                    function () {</span>
 <span class="cstat-no" title="statement not covered" >                        myself._url_offline = cordova.file.dataDirectory + myself.options.folder + '/' + [myself.options.name, '{z}', '{x}', '{y}'].join('-') + '.png';</span>
 <span class="cstat-no" title="statement not covered" >                        if (!myself._url_offline.startsWith('file://tmp/ripple')) {</span>
@@ -773,7 +773,7 @@
             }
 &nbsp;
             // done, return ourselves because method chaining is cool
-<span class="cstat-no" title="statement not covered" >            return this;</span>
+            return this;
         },
 &nbsp;
         debug: <span class="fstat-no" title="function not covered" >function (message) {</span>
@@ -1067,8 +1067,8 @@
 <span class="cstat-no" title="statement not covered" >            return (180 / Math.PI * Math.atan(0.5 * (Math.exp(n) - Math.exp(-n))));</span>
         },
 &nbsp;
-        getMapFilename: <span class="fstat-no" title="function not covered" >function (x, y, z) {</span>
-<span class="cstat-no" title="statement not covered" >            return [this.options.name, z, x, y].join('-') + '.png';</span>
+        getMapFilename: function (x, y, z) {
+            return [this.options.name, z, x, y].join('-') + '.png';
         }
     });
     return RegObsTileLayer;
@@ -1078,7 +1078,7 @@
 </div><!-- /wrapper -->
 <div class='footer quiet pad2 space-top1 center small'>
   Code coverage
-  generated by <a href="http://istanbul-js.org/" target="_blank">istanbul</a> at Tue Feb 21 2017 10:40:04 GMT+0100 (W. Europe Standard Time)
+  generated by <a href="http://istanbul-js.org/" target="_blank">istanbul</a> at Mon Feb 27 2017 10:08:00 GMT+0100 (W. Europe Standard Time)
 </div>
 </div>
 <script src="../../../prettify.js"></script>

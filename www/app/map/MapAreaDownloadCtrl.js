@@ -136,7 +136,7 @@
         };
 
         vm.download = function () {
-            RegobsPopup.downloadProgress('Oppdaterer kartet med det siste fra regObs',
+            RegobsPopup.downloadProgress($translate.instant('UPDATE_MAP_OBSERVATIONS'),
                 downloadMap,
                 { closeOnComplete: false })
             .then(function () {

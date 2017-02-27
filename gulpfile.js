@@ -89,7 +89,7 @@ gulp.task('scripts', function (done) {
         .pipe(rename({ suffix: '.min' }))
         //.pipe(stripDebug())
         .pipe(ngAnnotate())
-        .pipe(uglify())
+        .pipe(uglify().on('error', gutil.log))
         .pipe(gulp.dest(paths.dist))
         .on('end', done);
 });

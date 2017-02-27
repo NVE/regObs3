@@ -41,6 +41,7 @@
   "CLEAR": "Nullstill",
   "DELETE": "Slett",
   "SEND": "Send inn",
+  "SENDING": "Sender inn...",
   "NONE": "Ingen",
   "UNKNOWN": "Ukjent",
   "DELETE_THIS_AREA": "Slett dette området",
@@ -219,5 +220,7 @@
   "MEASURED_DISCHARGE": "Målt vannføring",
   "LOADING": "Laster...",
   "CONTINUE_REGISTRATION": "Fortsett på registreringen",
-  "DURING_THE_DAY": "I løpet av dagen"
+  "DURING_THE_DAY": "I løpet av dagen",
+  "MAP_DOWNLOAD_CANCELLED": "Nedlastingen av dette området ble avbrutt, så det er kun delvis lastet ned",
+  "UPDATE_MAP_OBSERVATIONS": "Oppdaterer kartet med det siste fra regObs"
 }
