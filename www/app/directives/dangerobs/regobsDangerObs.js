@@ -1,6 +1,6 @@
 angular
     .module('RegObs')
-    .directive('regobsDangerObs', function ($ionicModal, Registration, RegobsPopup, Utility, AppLogging) {
+    .directive('regobsDangerObs', function ($ionicModal, Registration, RegobsPopup, Utility, AppLogging, $translate) {
         'ngInject';
         return {
             link: link,
@@ -12,11 +12,11 @@ angular
             restrict: 'EA'
         };
 
-        function link($scope){
+        function link($scope) {
             var indexEditing = -1;
             var showConfirm = function () {
-                return RegobsPopup.delete('Slett observasjoner',
-                    'Er du sikker på at du vil slette dette faretegnet?');
+                return RegobsPopup.delete($translate.instant('DELETE_DANGER_OBS'),
+                    $translate.instant('DELETE_DANGER_OBS_CONFIRM'));
             };
 
             $scope.reg = Registration.initPropertyAsArray('DangerObs');
@@ -27,16 +27,12 @@ angular
             var textArea;
 
             $scope.commentChanged = function () {
-              if(!textArea){
-                textArea = document.getElementById('dangerobs_text');
-              }
-
-              textArea.style.height = textArea.scrollHeight + "px";
-                if($scope.dangerObs.tempArea && $scope.dangerObs.tempComment){
-                    $scope.dangerObs.Comment = 'Område: ' + $scope.dangerObs.tempArea + '. Beskrivelse: ' + $scope.dangerObs.tempComment;
-                } else {
-                    $scope.dangerObs.Comment = $scope.dangerObs.tempComment;
+                if (!textArea) {
+                    textArea = document.getElementById('dangerobs_text');
                 }
+
+                textArea.style.height = textArea.scrollHeight + "px";
+                $scope.dangerObs.Comment = ($scope.dangerObs.tempArea ? 'Område: ' + $scope.dangerObs.tempArea + '. Beskrivelse: ' : '') + ($scope.dangerObs.tempComment || '');
             };
 
             $scope.dangerSignChanged = function () {
@@ -45,7 +41,7 @@ angular
 
             $scope.addDangerObs = function () {
                 $scope.commentChanged();
-                if(!$scope.editing){
+                if (!$scope.editing && !Utility.isEmpty($scope.dangerObs)) {
                     $scope.reg.DangerObs.push($scope.dangerObs);
                 }
                 $scope.modal.hide();
@@ -55,7 +51,7 @@ angular
                 $scope.editing = false;
                 $scope.dangerObs = {
                     DangerSignTID: null,
-                    tempArea: $scope.areaArray[0]
+                    tempArea: ''
                 };
                 $scope.dangerSignChanged();
                 $scope.modal.show();
@@ -83,7 +79,6 @@ angular
             $scope.toggleNoDangerSign = function () {
 
                 if ($scope.noDangerSign.val) {
-                    AppLogging.log('toggle');
                     $scope.dangerObs.DangerSignTID = $scope.dangerSignKdvArray[0].Id;
                 } else {
                     $scope.dangerObs.DangerSignTID = null;
@@ -91,10 +86,10 @@ angular
             };
 
             $scope.getDangerSignName = function (tid) {
-                if(angular.isArray($scope.dangerSignKdvArray)){
+                if (angular.isArray($scope.dangerSignKdvArray)) {
                     for (var i = 0; i < $scope.dangerSignKdvArray.length; i++) {
                         var dangerSignKdv = $scope.dangerSignKdvArray[i];
-                        if(dangerSignKdv.Id === tid){
+                        if (dangerSignKdv.Id === tid) {
                             return dangerSignKdv.Name;
                         }
                     }
@@ -130,7 +125,7 @@ angular
                 $scope.modal.hide();
             });
 
-            $scope.$on('$destroy', function() {
+            $scope.$on('$destroy', function () {
                 $scope.modal.remove();
             });
         }

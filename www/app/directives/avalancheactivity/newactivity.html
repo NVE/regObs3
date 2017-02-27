@@ -1,25 +1,25 @@
 <ion-modal-view>
     <ion-header-bar>
-        <button type="button" class="button button-clear button-calm" ng-click="modal.hide()">Avbryt</button>
-        <h1 class="title" ng-hide="editing">Nytt skredaktivitet</h1>
-        <h1 class="title" ng-show="editing">Rediger skredaktivitet</h1>
-        <button type="button" class="button button-clear button-calm" ng-click="add()">OK</button>
+        <button type="button" class="button button-clear button-calm" ng-click="modal.hide()">{{'CANCEL'|translate}}</button>
+        <h1 class="title" ng-hide="editing">{{'NEW_AVALANCHE_ACTIVITY'|translate}}</h1>
+        <h1 class="title" ng-show="editing">{{'EDIT_AVALANCHE_ACTIVITY'|translate}}</h1>
+        <button type="button" class="button button-clear button-calm" ng-click="add()">{{'OK'|translate}}</button>
     </ion-header-bar>
     <ion-content>
         <ion-list>
             <ion-checkbox ng-model="noActivity.val" ng-change="toggleNoActivity()">
-                Ingen skredaktivitet observert
+                {{'NO_AVALANCHE_ACTIVITY'|translate}}
             </ion-checkbox>
             <div ng-hide="noActivity.val">
                 <label class="item item-input item-stacked-label item-select">
                     <span class="input-label">
-                        Dato
+                        {{'DATE'|translate}}
                     </span>
                     <input type="date" ng-model="dates.DtStart" ng-change="dateChanged()">
                 </label>
                 <label class="item item-input item-stacked-label item-select">
                     <span class="input-label">
-                        Antatt tidsrom
+                        {{'ESTIMATED_TIME'|translate}}
                     </span>
                     <select ng-model="dates.timeFrame"
                             ng-options="tf as tf.text for tf in dates.timeFrames track by tf.id"
@@ -27,30 +27,30 @@
                 </label>
                 <label class="item item-input item-stacked-label item-select">
                     <span class="input-label">
-                        Hvor mange skred er det snakk om?
+                        {{'HOW_MANY_AVALANCHES'|translate}}
                     </span>
                     <select ng-model="obs.EstimatedNumTID"
                             ng-options="estimatedNum.Id as estimatedNum.Name for estimatedNum in estimatedNumKdvArray"
                             ng-change="estimatedNumChanged()"></select>
                 </label>
 
-                <kdv-dropdown title="Angi skredtype"
+                <kdv-dropdown title="{{'PROVIDE_AVALANCHE_TYPE'|translate}}"
                               model="obs.AvalancheExtTID"
                               kdv-key="Snow_AvalancheExtKDV">
                 </kdv-dropdown>
 
-                <kdv-dropdown title="Skredutløser"
+                <kdv-dropdown title="{{'AVALANCHE_TRIGGER'|translate}}"
                               model="obs.AvalTriggerSimpleTID"
                               kdv-key="Snow_AvalTriggerSimpleKDV">
                 </kdv-dropdown>
 
 
-                <kdv-dropdown title="Størrelse"
+                <kdv-dropdown title="{{'DESTRUCTIVE_SIZE'|translate}}"
                               model="obs.DestructiveSizeTID"
                               kdv-key="Snow_DestructiveSizeKDV">
                 </kdv-dropdown>
 
-                <kdv-dropdown title="Skredutbredelse"
+                <kdv-dropdown title="{{'AVALANCHE_PROPAGATION'|translate}}"
                               model="obs.AvalPropagationTID"
                               kdv-key="Snow_AvalPropagationKDV">
                 </kdv-dropdown>
@@ -62,27 +62,27 @@
                 </kdv-dropdown>-->
                 <div class="item item-input item-stacked-label">
                     <span class="input-label">
-                        Utsatt høyde
+                        {{'EXPOSED_HEIGHT_COMBO'|translate}}
                     </span>
 
                     <button type="button" class="button button-block exposedTop" ng-click="exposedHeight('top')"
                             ng-class="{'button-positive':obs.exposedHeight.top}">
-                        Øverst
+                        {{'ON_TOP'|translate}}
                     </button>
                     <button type="button" class="button button-block exposedMid" ng-click="exposedHeight('mid')"
                             ng-class="{'button-positive':obs.exposedHeight.mid}">
-                        I midten
+                        {{'IN_MIDDLE'|translate}}
                     </button>
                     <button type="button" class="button button-block exposedBot" ng-click="exposedHeight('bot')"
                             ng-class="{'button-positive':obs.exposedHeight.bot}">
-                        Nederst
+                        {{'ON_BOTTOM'|translate}}
                     </button>
 
                 </div>
 
                 <label class="item item-input item-stacked-label item-select" ng-show="obs.ExposedHeightComboTID">
                     <span class="input-label">
-                        Høyde
+                        {{'EXPOSED_HEIGHT1'|translate}}
                     </span>
                     <select ng-model="obs.ExposedHeight1"
                             ng-options="height for height in heightArray"></select>
@@ -90,7 +90,7 @@
                 <label class="item item-input item-stacked-label item-select"
                        ng-show="obs.ExposedHeightComboTID === 4 || obs.ExposedHeightComboTID === 3">
                     <span class="input-label">
-                        Nedre høyde
+                        {{'EXPOSED_HEIGHT2'|translate}}
                     </span>
                     <select ng-model="obs.ExposedHeight2"
                             ng-options="height for height in heightArray"></select>
@@ -98,67 +98,66 @@
 
                 <div class="item item-input item-stacked-label">
                     <span class="input-label">
-                        Eksposisjon
+                        {{'VALID_EXPOSITION'|translate}}
                     </span>
                     <div class="button-bar">
                         <button type="button" class="button" ng-click="toggleExposition(7)"
                                 ng-class="{'button-positive':exposition[7]}">
-                            NV
+                            {{'NORTH_WEST_SHORT'|translate}}
                         </button>
                         <button type="button" class="button" ng-click="toggleExposition(0)"
                                 ng-class="{'button-positive':exposition[0]}">
-                            N
+                            {{'NORTH_SHORT'|translate}}
                         </button>
                         <button type="button" class="button" ng-click="toggleExposition(1)"
                                 ng-class="{'button-positive':exposition[1]}">
-                            NØ
+                            {{'NORTH_EAST_SHORT'|translate}}
                         </button>
                     </div>
                     <div class="button-bar">
                         <button type="button" class="button" ng-click="toggleExposition(6)"
                                 ng-class="{'button-positive':exposition[6]}">
-                            V
+                            {{'WEST_SHORT'|translate}}
                         </button>
                         <button type="button" class="button" ng-click="toggleAllExpositions()"
                                 ng-class="{'button-positive':allExpositionsToggled}">
-                            Alle
+                            {{'ALL'|translate}}
                         </button>
                         <button type="button" class="button" ng-click="toggleExposition(2)"
                                 ng-class="{'button-positive':exposition[2]}">
-                            Ø
+                            {{'EAST_SHORT'|translate}}
                         </button>
                     </div>
                     <div class="button-bar">
                         <button type="button" class="button" ng-click="toggleExposition(5)"
                                 ng-class="{'button-positive':exposition[5]}">
-                            SV
+                            {{'SOUTH_WEST_SHORT'|translate}}
                         </button>
                         <button type="button" class="button" ng-click="toggleExposition(4)"
                                 ng-class="{'button-positive':exposition[4]}">
-                            S
+                            {{'SOUTH_SHORT'|translate}}
                         </button>
                         <button type="button" class="button" ng-click="toggleExposition(3)"
                                 ng-class="{'button-positive':exposition[3]}">
-                            Sø
+                            {{'SOUTH_EAST_SHORT'|translate}}
                         </button>
                     </div>
                 </div>
             </div>
 
-            <regobs-comment placeholder="Ytterligere kommentar"
+            <regobs-comment placeholder="{{'ADDITIONAL_COMMENT_2'|translate}}"
                             model="obs.Comment"></regobs-comment>
         </ion-list>
         <div class="padding">
             <button type="button" class="button button-block button-calm"
                     ng-click="add()">
-                Lagre
+                {{'SAVE'|translate}}
             </button>
             <button type="button" class="button button-block button-assertive button-clear"
                     ng-click="delete()"
                     ng-show="editing">
-                Slett
+                {{'DELETE'|translate}}
             </button>
         </div>
-
     </ion-content>
 </ion-modal-view>

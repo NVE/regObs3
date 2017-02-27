@@ -4,7 +4,7 @@
 angular
     .module('RegObs')
     .directive('regobsAvalancheActivity',
-        function regobsAvalancheActivity($filter, $ionicModal, RegobsPopup, Registration, Utility, AppLogging) {
+        function regobsAvalancheActivity($filter, $ionicModal, RegobsPopup, Registration, Utility, AppLogging, $translate) {
             'ngInject';
             return {
                 link: link,
@@ -32,7 +32,7 @@ angular
                             id: 1,
                             start: {h:0, m:0},
                             end: {h:23, m:59},
-                            text: 'I løpet av dagen'
+                            text: $translate.instant('DURING_THE_DAY')
                         },
                         {
                             id: 2,
@@ -62,8 +62,8 @@ angular
                 };
 
                 var showConfirm = function () {
-                    return RegobsPopup.confirm('Slett skredproblem',
-                        'Er du sikker på at du vil slette dette skredproblemet?');
+                    return RegobsPopup.confirm($translate.instant('DELETE_AVALANCHE_ACTIVITY'),
+                        $translate.instant('DELETE_AVALANCHE_ACTIVITY_CONFIRM'));
                 };
 
                 $scope.estimatedNumChanged = function () {
@@ -71,13 +71,6 @@ angular
                 };
 
                 $scope.dateChanged = function(){
-                    var now = new Date();
-
-                    /*if($scope.dates.DtStart > now){
-                        $scope.dates.DtStart = now;
-                    }*/
-                    AppLogging.log($scope.dates.timeFrame);
-
                     var start = new Date($scope.dates.DtStart);
                     if ($scope.dates.timeFrame.start && $scope.dates.timeFrame.start.h) {
                         start.setHours($scope.dates.timeFrame.start.h);
@@ -100,7 +93,6 @@ angular
 
                     $scope.obs.DtStart = start.toISOString();
                     $scope.obs.DtEnd = end.toISOString();
-                    AppLogging.log($scope.obs);
                 };
 
                 $scope.exposedHeight = function (where) {
@@ -152,8 +144,9 @@ angular
                         if(!$scope.reg.AvalancheActivityObs2){
                             $scope.reg.AvalancheActivityObs2 = [];
                         }
-                        AppLogging.log($scope.reg);
-                        $scope.reg.AvalancheActivityObs2.push($scope.obs);
+                        if (!Utility.isEmpty($scope.obs)) {
+                            $scope.reg.AvalancheActivityObs2.push($scope.obs);
+                        }
                     }
                     $scope.modal.hide();
                 };
@@ -179,7 +172,6 @@ angular
 
                 $scope.toggleNoActivity = function(){
                     if ($scope.noActivity.val) {
-                        AppLogging.log('toggle');
                         $scope.obs.EstimatedNumTID = $scope.estimatedNumKdvArray[1].Id;
                     } else {
                         $scope.obs.EstimatedNumTID = $scope.estimatedNumKdvArray[0].Id;

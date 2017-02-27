@@ -1,15 +1,15 @@
 <ion-modal-view>
     <ion-header-bar>
-        <button type="button" class="button button-clear button-calm" ng-click="modal.hide()">Avbryt</button>
-        <h1 class="title" ng-hide="editing">Ny stabilitetstest</h1>
-        <h1 class="title" ng-show="editing">Rediger stabilitetstest</h1>
-        <button type="button" class="button button-clear button-calm" ng-click="addStabilityTest()">OK</button>
+        <button type="button" class="button button-clear button-calm" ng-click="modal.hide()">{{'CANCEL'|translate}}</button>
+        <h1 class="title" ng-hide="editing">{{'NEW_STABILITY_TEST'|translate}}</h1>
+        <h1 class="title" ng-show="editing">{{'EDIT_STABILITY_TEST'|translate}}</h1>
+        <button type="button" class="button button-clear button-calm" ng-click="addStabilityTest()">{{'OK'|translate}}</button>
     </ion-header-bar>
     <ion-content>
         <form name="newStabilityTestForm" novalidate>
             <ion-list>
                 <label class="item item-input item-select item-stacked-label">
-                    <span class="input-label">Test Type</span>
+                    <span class="input-label">{{'TEST_TYPE'|translate}}</span>
                     <select ng-model="stabilityTest.PropagationTID" ng-change="changeTestType()"
                             ng-options="kdv.Id as kdv.Name for kdv in snowPropagationKdvArray">
                         <option value=""></option>
@@ -19,12 +19,12 @@
                 <label ng-hide="isCTNorECTXorCTVorECTV()" class="item item-input item-select item-stacked-label">
                     <span class="input-label">{{'TAPS_FRACTURE'|translate}}</span>
                     <select ng-model="stabilityTest.TapsFracture"
-                            ng-options="n as n for n in [1,2,3,4,5,6,7,8,9,10,11,12,13,14,16,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30]"></select>
+                            ng-options="n as n for n in [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30]"></select>
                 </label>
 
                 <regobs-number ng-hide="isCTNorECTX()" field-name="fractureDepth"
-                                   label="Avstand fra toppen (cm)"
-                                   help-text="I hele centimeter"
+                                   label="{{'DISTANCE_FROM_TOP'|translate}}"
+                                   help-text="{{'IN_WHOLE_CM'|translate}}"
                                    model="stabilityTest.tempFractureDepth"
                                    min="0"
                                    max="10000"
@@ -51,7 +51,7 @@
                 <button type="button" class="button button-block button-assertive button-clear"
                         ng-click="deleteStabilityTest()"
                         ng-show="editing">
-                    Slett
+                    {{'DELETE'|translate}}
                 </button>
             </div>
         </form>

@@ -5,14 +5,13 @@
               ng-click="edit(obs, $index)">
         <ion-option-button class="button-assertive"
                            ng-click="reg.AvalancheEvalProblem2.splice($index, 1)">
-            Slett
+            {{'DELETE'|translate}}
         </ion-option-button>
         {{getDisplayName(obs)}}
-
     </ion-item>
 </ion-list>
 <div class="padding">
     <button type="button" class="button button-block button-balanced icon-left ion-plus"
-            ng-click="new()">Legg til nytt skredproblem</button>
+            ng-click="new()">{{'ADD_AVALANCHE_PROBLEM'|translate}}</button>
 
 </div>

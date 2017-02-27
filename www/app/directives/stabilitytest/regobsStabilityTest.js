@@ -36,7 +36,9 @@ angular
                 setFractureDepth($scope.stabilityTest);
                 if (!$scope.editing) {
                     checkAndCreateCompressionTestArray();
-                    $scope.reg.CompressionTest.push($scope.stabilityTest);
+                    if (!Utility.isEmpty($scope.stabilityTest)) {
+                        $scope.reg.CompressionTest.push($scope.stabilityTest);
+                    }
                 }
                 $scope.modal.hide();
             };
