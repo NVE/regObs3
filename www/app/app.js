@@ -138,18 +138,6 @@
             })
 
             //SNØ
-            //.state('snow', {
-            //    url: '/snow',
-            //    templateUrl: 'app/snow/snow.html',
-            //    controller: 'SnowCtrl as vm',
-            //    data: {
-            //        defaultBack: {
-            //            state: 'start',
-            //            title: 'regObs'
-            //        },
-            //        showRegistrationFooter: true
-            //    }
-            //})
             .state('snowregistrationNew', {
                 url: '/snowregistration',
                 templateUrl: 'app/snow/snowregistration/snowregistration.html',
@@ -269,18 +257,6 @@
             })
 
             //IS
-            //.state('ice', {
-            //    url: '/ice',
-            //    templateUrl: 'app/ice/ice.html',
-            //    controller: 'IceCtrl as vm',
-            //    data: {
-            //        defaultBack: {
-            //            state: 'start',
-            //            title: 'regObs'
-            //        },
-            //        showRegistrationFooter: true
-            //    }
-            //})
             .state('iceregistrationNew', {
                 url: '/iceregistration',
                 templateUrl: 'app/ice/iceregistration/iceregistration.html',
@@ -336,19 +312,6 @@
             })
 
             //VANN
-            //.state('water', {
-            //    url: '/water',
-            //    templateUrl: 'app/water/water.html',
-            //    controller: 'WaterCtrl as vm',
-            //    data: {
-            //        defaultBack: {
-            //            state: 'start',
-            //            title: 'regObs'
-            //        },
-            //        showRegistrationFooter: true
-            //    }
-
-            //})
             .state('waterregistrationNew', {
                 url: '/waterregistration',
                 templateUrl: 'app/water/waterregistration/waterregistration.html',
@@ -393,18 +356,6 @@
             })
 
             //JORD
-            //.state('dirt', {
-            //    url: '/dirt',
-            //    templateUrl: 'app/dirt/dirt.html',
-            //    controller: 'DirtCtrl as vm',
-            //    data: {
-            //        defaultBack: {
-            //            state: 'start',
-            //            title: 'regObs'
-            //        },
-            //        showRegistrationFooter: true
-            //    }
-            //})
             .state('dirtregistrationNew', {
                 url: '/dirtregistration',
                 templateUrl: 'app/dirt/dirtregistration/dirtregistration.html',

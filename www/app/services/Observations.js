@@ -70,9 +70,12 @@ angular
                     longitude: longitude,
                     radius: range,
                     geoHazardTypeIds: [geohazardId],
-                    returnCount: AppSettings.maxObservationsToFetch,
-                    observerGuid: (user && !user.anonymous) ? user.Guid : null
+                    returnCount: AppSettings.maxObservationsToFetch
                 };
+
+                if (geohazardId !== 70) { //give all locations if geoHazard is ice
+                    params.observerGuid = (user && !user.anonymous) ? user.Guid : null;
+                }
 
                 $http.get(
                         AppSettings.getEndPoints().getLocationsWithinRadius,
@@ -393,7 +396,17 @@ angular
                     });
             };
 
-            return service.updateNearbyLocations(latitude, longitude, range, geohazardId, cancel)
+            var testAndUpdateNearbyLocations = function() {
+                if (AppSettings.data.showPreviouslyUsedPlaces) {
+                    return service.updateNearbyLocations(latitude, longitude, range, geohazardId, cancel);
+                } else {
+                    return $q(function(resolve) {
+                        resolve();
+                    });
+                }
+            };
+
+            return testAndUpdateNearbyLocations()
             .then(service.removeOldObservationsFromPresistantStorage)
             .then(function () {
                 return service._getRegistrationsWithinRadius(latitude,
@@ -401,8 +414,7 @@ angular
                     range,
                     geohazardId,
                     cancel);
-            }).then(downloadAllRegistrations)
-            .finally(function () {
+            }).then(downloadAllRegistrations).finally(function () {
                 LocalStorage.set(observationUpdatedStorageKey, moment().toISOString());
                 $rootScope.$broadcast('$regObs:observationsUpdated');
             });
