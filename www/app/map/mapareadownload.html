@@ -35,6 +35,9 @@
                 <div ng-repeat="tile in vm.mapsWithLimitReached()">
                     <span ng-if="tile.maxLimitMessage">{{tile.maxLimitMessage}}</span><span ng-if="!tile.maxLimitMessage">{{'MAX_LIMIT_FOR_TILE_DOWNLOAD_REACHED'|translate}}</span>                   
                 </div>
+                <div class="assertive" ng-show="vm.zoomlevel() < 14">
+                    Kartet du laster ned vil ikke være godt nok for turbruk. Velg flere zoomnivå eller zoom kartet til mindre utsnitt.
+                </div>
             </div>
             <div class="padding">
                 <button type="button" class="button button-block button-calm" ng-disabled="vm.downloadDisabled()" ng-click="vm.download()">

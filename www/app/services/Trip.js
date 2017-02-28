@@ -12,7 +12,7 @@
         "Lng": "10,7080138"
     };*/
 
-    function Trip($http, AppSettings, Utility, User, ObsLocation, RegobsPopup, LocalStorage, UserLocation) {
+    function Trip($http, AppSettings, Utility, User, ObsLocation, RegobsPopup, LocalStorage, UserLocation, $state, $rootScope) {
         'ngInject';
 
         var Trip = this;
@@ -72,9 +72,15 @@
                     })
                     .then(function (http) {
                         if (http) {
-                            RegobsPopup.alert('Tur startet', 'Tur startet!');
+                            
                             Trip.model.started = true;
                             save();
+                            $rootScope.$broadcast('$regobs.tripStarted');
+                            RegobsPopup.alert('Tur startet', 'Tur startet!')
+                                .then(function() {
+                                    $state.go('start');
+                                });
+                            
                         }
                     })
                     .catch(function () {

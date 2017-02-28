@@ -26,7 +26,7 @@
 
         initialize: function (storedLocation, options) {
             var self = this;
-            
+
             L.Util.setOptions(this, options);
             self.storedLocation = storedLocation;
             var latlng = new L.LatLng(self.storedLocation.LatLngObject.Latitude, self.storedLocation.LatLngObject.Longitude);
@@ -42,15 +42,11 @@
                     buttonColor: '#fff',
                     iconColor: '#444',
                     icon: 'ion-android-walk',
-                    isVisible: function() {
-                        return AppSettings.getAppMode() === 'snow';
+                    isVisible: function () {
+                        return AppSettings.getAppMode() === 'snow' && !Trip.model.started;
                     },
-                    onClick: function() {
-                        if (Trip.model.started) {
-                            Trip.stop();
-                        } else {
-                            $state.go('snowtrip');
-                        }
+                    onClick: function () {
+                        $state.go('snowtrip');
                     }
                 },
                 {
@@ -58,7 +54,7 @@
                     buttonColor: '#33cd5f',
                     iconColor: '#fff',
                     icon: 'ion-plus',
-                    onClick: function() {
+                    onClick: function () {
                         ObsLocation.setPreviousUsedPlace(self.storedLocation.Id,
                         self.storedLocation.Name,
                         {
@@ -70,7 +66,7 @@
                         $rootScope.$broadcast('$regObs:nearbyLocationRegistration');
                         Registration.createAndGoToNewRegistration();
                     },
-                    isVisible: function() {
+                    isVisible: function () {
                         return Registration.isEmpty();
                     }
                 }
@@ -80,15 +76,15 @@
             MapSelectableItem.prototype.initialize.call(this, latlng, self.options);
         },
 
-        getHeader: function () {           
-           return this.storedLocation.Name;         
+        getHeader: function () {
+            return this.storedLocation.Name;
         },
 
         getId: function () {
             return this.storedLocation.Id;
         },
 
-        getStoredLocation: function() {
+        getStoredLocation: function () {
             return this.storedLocation;
         }
     });

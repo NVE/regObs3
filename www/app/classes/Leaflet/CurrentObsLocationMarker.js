@@ -16,14 +16,10 @@
                     iconColor: '#444',
                     icon: 'ion-android-walk',
                     isVisible: function () {
-                        return AppSettings.getAppMode() === 'snow' && Registration.isEmpty();
+                        return AppSettings.getAppMode() === 'snow' && Registration.isEmpty() && !Trip.model.started;
                     },
                     onClick: function () {
-                        if (Trip.model.started) {
-                            Trip.stop();
-                        } else {
-                            $state.go('snowtrip');
-                        }
+                        $state.go('snowtrip');
                     }
                 },
                 {
@@ -47,7 +43,7 @@
                     buttonColor: '#D21523',
                     iconColor: '#fff',
                     icon: 'ion-close',
-                    isVisible: function() { return ObsLocation.isSet() && Registration.isEmpty() }
+                    isVisible: function () { return ObsLocation.isSet() && Registration.isEmpty() }
                 }]
         },
 

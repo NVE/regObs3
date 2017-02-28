@@ -104,6 +104,10 @@ angular.module('RegObs')
             popoverScope.currentAppMode = AppSettings.getAppMode();
         });
 
+        $scope.$on('$regobs.tripStarted', function () {
+            resetForm(true);
+        });
+
         $scope.$on('$ionicView.loaded', function () {
             HeaderColor.init();
         });
