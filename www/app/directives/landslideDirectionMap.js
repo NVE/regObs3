@@ -50,7 +50,7 @@ angular
 
             scope.$on('openLandslideInMap', function () {
                 map.invalidateSize();
-                var landSlideObs = Registration.data[scope.landslideDirectionMap];
+                var landSlideObs = Registration.initPropertyAsObject(scope.landslideDirectionMap)[scope.landslideDirectionMap];
                 if(!start){
                     var obsLoc = Object.create(ObsLocation.get());
                     drawUserLocation(obsLoc);
@@ -83,7 +83,7 @@ angular
             });
 
             scope.$on('setLandslideInMap', function () {
-                var landSlideObs = Registration.data[scope.landslideDirectionMap];
+                var landSlideObs = Registration.initPropertyAsObject(scope.landslideDirectionMap)[scope.landslideDirectionMap];
                 if(start){
                     var startLatLng = start.getLatLng();
                     landSlideObs.StartLat = startLatLng.lat.toString();

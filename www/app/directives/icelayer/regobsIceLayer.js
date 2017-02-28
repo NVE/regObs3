@@ -80,6 +80,10 @@ angular
                 };
 
                 function calcSum() {
+                    if (!$scope.obsObject) {
+                        return;
+                    }
+
                     var totalThickness = 0;
                     $scope.obsObject.IceThicknessLayer = $scope.obsObject.IceThicknessLayer || [];
                     $scope.obsObject.IceThicknessLayer.forEach(function (layer) {

@@ -294,7 +294,7 @@ angular
             var obs = OBSERVATIONS[prop];
             if (!obs) throw Error(prop +' not found in observations!');
 
-            return OBSERVATIONS[prop].RegistrationTID;
+            return obs.RegistrationTID;
         };
 
         service.isObservation = function(prop) {
