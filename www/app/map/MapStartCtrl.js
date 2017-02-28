@@ -27,7 +27,7 @@
                 var url = AppSettings.getWarningUrl();
                 $cordovaInAppBrowser.open(url, '_system');
             },
-            getCurrentGeoHazardName: function() {
+            getCurrentGeoHazardName: function () {
                 return Utility.getCurrentGeoHazardName();
             },
             newRegistration: function () {
@@ -61,7 +61,7 @@
             appVm.mapMenu.show($event);
         };
 
-        appVm.getCurrentAppMode = function() {
+        appVm.getCurrentAppMode = function () {
             return AppSettings.getAppMode();
         };
 
@@ -73,18 +73,29 @@
 
         appVm._checkObsWatch = $timeout(function () {
             if (Observations.checkIfObservationsShouldBeUpdated() && UserLocation.hasUserLocation() && Utility.hasGoodNetwork()) {
-                RegobsPopup.confirm($translate.instant('UPDATE_OBSERVATIONS_IN_MAP'), '<div class="text-center popup-icon"><i class="icon ion-loop"></i></div><p>' + $translate.instant('UPDATE_OBSERVATIONS_IN_MAP_HELP_TEXT') + '</p><p>' + $translate.instant('UPDATE_OBSERVATIONS_IN_MAP_HELP_TEXT_2') +'</p>')
-                .then(function (response) {
-                    if (response) {
-                        Map.updateObservationsInMap();
-                    }
-                });
-           }
+                appVm._updateObservationsPopup = RegobsPopup
+                    .confirm($translate.instant('UPDATE_OBSERVATIONS_IN_MAP'),
+                        '<div class="text-center popup-icon"><i class="icon ion-loop"></i></div><p>' +
+                        $translate.instant('UPDATE_OBSERVATIONS_IN_MAP_HELP_TEXT') +
+                        '</p><p>' +
+                        $translate.instant('UPDATE_OBSERVATIONS_IN_MAP_HELP_TEXT_2') +
+                        '</p>');
+
+                appVm._updateObservationsPopup.then(function (response) {
+                        if (response) {
+                            Map.updateObservationsInMap();
+                        }
+                    });
+            }
         }, 10000);
 
-        $scope.$on('$ionicView.leave', function () {
+
+        $scope.$on('$ionicView.beforeLeave', function () {
             Map.clearWatch();
             $timeout.cancel(appVm._checkObsWatch);
+            if (appVm._updateObservationsPopup) {
+                appVm._updateObservationsPopup.close();
+            }
         });
 
         $scope.$on('$regObs:mapItemSelected', function (event, item) {
