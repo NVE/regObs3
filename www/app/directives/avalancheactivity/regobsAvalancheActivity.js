@@ -72,10 +72,10 @@ angular
 
                 $scope.dateChanged = function(){
                     var start = new Date($scope.dates.DtStart);
-                    if ($scope.dates.timeFrame.start && $scope.dates.timeFrame.start.h) {
+                    if ($scope.dates.timeFrame.start) {
                         start.setHours($scope.dates.timeFrame.start.h);
                     }
-                    if ($scope.dates.timeFrame.start && $scope.dates.timeFrame.start.m) {
+                    if ($scope.dates.timeFrame.start) {
                         start.setMinutes($scope.dates.timeFrame.start.m);
                     }
                     start.setSeconds(0);
@@ -151,10 +151,39 @@ angular
                     $scope.modal.hide();
                 };
 
+                $scope._setTimeFrameFromObsEndTime = function() {
+                    if ($scope.obs.DtEnd) {
+                        var end = new Date($scope.obs.DtEnd);
+                        var endHour = end.getHours();
+                        var startHour = $scope.dates.DtStart.getHours();
+                        for (var i = 0; i < $scope.dates.timeFrames.length; i++) {
+                            if ($scope.dates.timeFrames[i].start.h === startHour && $scope.dates.timeFrames[i].end.h === endHour) {
+                                $scope.dates.timeFrame = $scope.dates.timeFrames[i];
+                            }
+                        }
+                    }
+                };
+
+                $scope._loadValidExposition = function () {
+                    $scope.allExpositionsToggled = $scope.obs.ValidExposition === '11111111';
+                    if ($scope.obs.ValidExposition) {
+                        $scope.exposition = $scope.obs.ValidExposition.split('')
+                            .map(function (val) {
+                                return parseInt(val);
+                            });
+                    } else {
+                        $scope.exposition = [0, 0, 0, 0, 0, 0, 0, 0];
+                    }
+                };
+
+
                 $scope.edit = function (obs, index) {
                     indexEditing = index;
                     $scope.obs = obs;
-                    loadValidExposition();
+                    $scope.dates.DtStart = new Date($scope.obs.DtStart);
+                    $scope._setTimeFrameFromObsEndTime();
+                    $scope._loadValidExposition();
+                    $scope.estimatedNumChanged();
                     $scope.editing = true;
                     $scope.modal.show();
                 };
@@ -210,20 +239,7 @@ angular
                     $scope.obs.ValidExposition = $scope.exposition.join('');
                 };
 
-                var loadValidExposition = function () {
-
-                    $scope.allExpositionsToggled = $scope.obs.ValidExposition === '11111111';
-
-                    if($scope.obs.ValidExposition){
-                        $scope.exposition = $scope.obs.ValidExposition.split('')
-                            .map(function (val) {
-                                return parseInt(val);
-                            });
-                    } else {
-                        $scope.exposition = [0,0,0,0,0,0,0,0];
-                    }
-                };
-
+                
 
                 Utility
                     .getKdvRepositories()

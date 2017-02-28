@@ -22,7 +22,7 @@
                         {{'ESTIMATED_TIME'|translate}}
                     </span>
                     <select ng-model="dates.timeFrame"
-                            ng-options="tf as tf.text for tf in dates.timeFrames track by tf.id"
+                            ng-options="tf as tf.text for tf in ::dates.timeFrames track by tf.id"
                             ng-change="dateChanged()"></select>
                 </label>
                 <label class="item item-input item-stacked-label item-select">
@@ -57,11 +57,6 @@
                               kdv-key="Snow_AvalPropagationKDV">
                 </kdv-dropdown>
 
-                <!--<kdv-dropdown
-                        title="Utsatt høyde"
-                        model="obs.ExposedHeightComboTID"
-                        kdv-key="Snow_ExposedHeightComboKDV">
-                </kdv-dropdown>-->
                 <div class="item item-input item-stacked-label">
                     <span class="input-label">
                         {{'EXPOSED_HEIGHT_COMBO'|translate}}
