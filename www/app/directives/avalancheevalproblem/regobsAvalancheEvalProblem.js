@@ -85,6 +85,7 @@ angular
                     $scope.obs = obs;
                     loadValidExposition();
                     loadAttributeValues();
+                    $scope.setAvalancheExtArray();
                     $scope.editing = true;
                     $scope.modal.show();
                 };
@@ -123,7 +124,7 @@ angular
                 };
 
                 $scope.setAvalancheExtArray = function () {
-                    var filteredViewArray = $filter('filter')(viewArray, {AvalCauseTID: $scope.obs.AvalCauseTID}, true);
+                    var filteredViewArray = $filter('filter')(viewArray, { AvalCauseTID: $scope.obs.AvalCauseTID }, true).filter(function (item) { return item.AvalancheExtTID > 0 });
                     AppLogging.log(filteredViewArray);
                     $scope.avalancheExtArray = filteredViewArray.map(function (val) {
                         return {
@@ -134,9 +135,12 @@ angular
                     AppLogging.log($scope.avalancheExtArray);
                 };
 
-                $scope.getDisplayName = function(obs){
+                $scope.getDisplayName = function (obs) {
+                    if (!avalancheExtDict || !avalCauseDict) //dictionaries not loaded
+                        return '';
+
                     var seperator = avalancheExtDict[obs.AvalancheExtTID]? ', ' : '';
-                    return (avalancheExtDict[obs.AvalancheExtTID] || '') + seperator + (avalCauseDict[obs.AvalCauseTID] || '');
+                    return (avalancheExtDict[obs.AvalancheExtTID] || '').trim() + seperator + (avalCauseDict[obs.AvalCauseTID] || '');
                 };
 
                 var loadModal = function () {

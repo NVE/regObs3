@@ -469,12 +469,16 @@ angular
                 });
         };
 
+        service._filterZeroKdvElements = function(item) {
+            return item.Id % 100 !== 0;
+        };
+
         service.getKdvArray = function (key, keepZero) {
             return service
                 .getKdvRepositories()
                 .then(function (KdvRepositories) {
                     var arr = KdvRepositories[key];
-                    return keepZero ? arr : arr.filter(function (item) { return item.Id !== 0 });
+                    return keepZero ? arr : arr.filter(service._filterZeroKdvElements);
                 });
         };
 

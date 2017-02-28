@@ -112,7 +112,6 @@ angular
                 return Utility
                     .getKdvArray($scope.dangerSignKdv)
                     .then(function (response) {
-                        AppLogging.log(response);
                         $scope.dangerSignKdvArray = response;
                         return response;
                     });

@@ -31,7 +31,9 @@
                     </span>
                     <select ng-model="obs.EstimatedNumTID"
                             ng-options="estimatedNum.Id as estimatedNum.Name for estimatedNum in estimatedNumKdvArray"
-                            ng-change="estimatedNumChanged()"></select>
+                            ng-change="estimatedNumChanged()">
+                        <option value=""></option>
+                    </select>
                 </label>
 
                 <kdv-dropdown title="{{'PROVIDE_AVALANCHE_TYPE'|translate}}"

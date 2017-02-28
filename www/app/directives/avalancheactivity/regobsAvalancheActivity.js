@@ -67,7 +67,7 @@ angular
                 };
 
                 $scope.estimatedNumChanged = function () {
-                    $scope.noActivity.val = $scope.obs.EstimatedNumTID === $scope.estimatedNumKdvArray[1].Id;
+                    $scope.noActivity.val = $scope.obs.EstimatedNumTID === $scope.estimatedNumKdvArray[0].Id;
                 };
 
                 $scope.dateChanged = function(){
@@ -172,9 +172,9 @@ angular
 
                 $scope.toggleNoActivity = function(){
                     if ($scope.noActivity.val) {
-                        $scope.obs.EstimatedNumTID = $scope.estimatedNumKdvArray[1].Id;
-                    } else {
                         $scope.obs.EstimatedNumTID = $scope.estimatedNumKdvArray[0].Id;
+                    } else {
+                        $scope.obs.EstimatedNumTID = null;
                     }
                 };
 
@@ -234,7 +234,7 @@ angular
                         repos['Snow_AvalancheExtKDV'].forEach(function (val) {
                             $scope.avalancheExtDict[val.Id] = val.Name;
                         });
-                        $scope.estimatedNumKdvArray = repos['Snow_EstimatedNumKDV'];
+                        $scope.estimatedNumKdvArray = repos['Snow_EstimatedNumKDV'].filter(function(item){return item.Id > 0 });
                         $scope.estimatedNumKdvArray.forEach(function (val) {
                             $scope.estimatedNumDict[val.Id] = val.Name;
                         });

@@ -4,7 +4,7 @@
         var ctrl = this;
 
         ctrl.onViewWebRegistrationClick = function () {
-            var url = AppSettings.getWebRoot() + '/Registration/' + ctrl.registration.RegId;
+            var url = AppSettings.getWebRoot() + 'Registration/' + ctrl.registration.RegId;
             $cordovaInAppBrowser.open(url, '_system');
         };
 
