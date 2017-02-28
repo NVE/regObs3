@@ -20,14 +20,14 @@
     </h1>
     <div class='clearfix'>
       <div class='fl pad1y space-right2'>
-        <span class="strong">2.94% </span>
+        <span class="strong">3.13% </span>
         <span class="quiet">Statements</span>
-        <span class='fraction'>2/68</span>
+        <span class='fraction'>2/64</span>
       </div>
       <div class='fl pad1y space-right2'>
         <span class="strong">0% </span>
         <span class="quiet">Branches</span>
-        <span class='fraction'>0/16</span>
+        <span class='fraction'>0/18</span>
       </div>
       <div class='fl pad1y space-right2'>
         <span class="strong">0% </span>
@@ -35,9 +35,9 @@
         <span class='fraction'>0/18</span>
       </div>
       <div class='fl pad1y space-right2'>
-        <span class="strong">2.94% </span>
+        <span class="strong">3.13% </span>
         <span class="quiet">Lines</span>
-        <span class='fraction'>2/68</span>
+        <span class='fraction'>2/64</span>
       </div>
     </div>
   </div>
@@ -174,13 +174,7 @@
 129
 130
 131
-132
-133
-134
-135
-136
-137
-138</td><td class="line-coverage quiet"><span class="cline-any cline-yes">1×</span>
+132</td><td class="line-coverage quiet"><span class="cline-any cline-yes">1×</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -215,10 +209,6 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -266,7 +256,6 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -299,7 +288,6 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -319,7 +307,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">angular
     .module('RegObs')
-    .directive('regobsDangerObs', <span class="fstat-no" title="function not covered" >function ($ionicModal, Registration, RegobsPopup, Utility, AppLogging) {</span>
+    .directive('regobsDangerObs', <span class="fstat-no" title="function not covered" >function ($ionicModal, Registration, RegobsPopup, Utility, AppLogging, $translate) {</span>
 <span class="cstat-no" title="statement not covered" >        'ngInject';</span>
 <span class="cstat-no" title="statement not covered" >        return {</span>
             link: link,
@@ -331,11 +319,11 @@
             restrict: 'EA'
         };
 &nbsp;
-<span class="fstat-no" title="function not covered" >        function link($scope){</span>
+<span class="fstat-no" title="function not covered" >        function link($scope) {</span>
 <span class="cstat-no" title="statement not covered" >            var indexEditing = -1;</span>
 <span class="cstat-no" title="statement not covered" >            var showConfirm = <span class="fstat-no" title="function not covered" >function () {</span></span>
-<span class="cstat-no" title="statement not covered" >                return RegobsPopup.delete('Slett observasjoner',</span>
-                    'Er du sikker på at du vil slette dette faretegnet?');
+<span class="cstat-no" title="statement not covered" >                return RegobsPopup.delete($translate.instant('DELETE_DANGER_OBS'),</span>
+                    $translate.instant('DELETE_DANGER_OBS_CONFIRM'));
             };
 &nbsp;
 <span class="cstat-no" title="statement not covered" >            $scope.reg = Registration.initPropertyAsArray('DangerObs');</span>
@@ -346,16 +334,12 @@
 <span class="cstat-no" title="statement not covered" >            var textArea;</span>
 &nbsp;
 <span class="cstat-no" title="statement not covered" >            $scope.commentChanged = <span class="fstat-no" title="function not covered" >function () {</span></span>
-<span class="cstat-no" title="statement not covered" >              if(!textArea){</span>
-<span class="cstat-no" title="statement not covered" >                textArea = document.getElementById('dangerobs_text');</span>
-              }
-&nbsp;
-<span class="cstat-no" title="statement not covered" >              textArea.style.height = textArea.scrollHeight + "px";</span>
-<span class="cstat-no" title="statement not covered" >                if($scope.dangerObs.tempArea &amp;&amp; $scope.dangerObs.tempComment){</span>
-<span class="cstat-no" title="statement not covered" >                    $scope.dangerObs.Comment = 'Område: ' + $scope.dangerObs.tempArea + '. Beskrivelse: ' + $scope.dangerObs.tempComment;</span>
-                } else {
-<span class="cstat-no" title="statement not covered" >                    $scope.dangerObs.Comment = $scope.dangerObs.tempComment;</span>
+<span class="cstat-no" title="statement not covered" >                if (!textArea) {</span>
+<span class="cstat-no" title="statement not covered" >                    textArea = document.getElementById('dangerobs_text');</span>
                 }
+&nbsp;
+<span class="cstat-no" title="statement not covered" >                textArea.style.height = textArea.scrollHeight + "px";</span>
+<span class="cstat-no" title="statement not covered" >                $scope.dangerObs.Comment = ($scope.dangerObs.tempArea ? 'Område: ' + $scope.dangerObs.tempArea + '. Beskrivelse: ' : '') + ($scope.dangerObs.tempComment || '');</span>
             };
 &nbsp;
 <span class="cstat-no" title="statement not covered" >            $scope.dangerSignChanged = <span class="fstat-no" title="function not covered" >function () {</span></span>
@@ -364,7 +348,7 @@
 &nbsp;
 <span class="cstat-no" title="statement not covered" >            $scope.addDangerObs = <span class="fstat-no" title="function not covered" >function () {</span></span>
 <span class="cstat-no" title="statement not covered" >                $scope.commentChanged();</span>
-<span class="cstat-no" title="statement not covered" >                if(!$scope.editing){</span>
+<span class="cstat-no" title="statement not covered" >                if (!$scope.editing &amp;&amp; !Utility.isEmpty($scope.dangerObs)) {</span>
 <span class="cstat-no" title="statement not covered" >                    $scope.reg.DangerObs.push($scope.dangerObs);</span>
                 }
 <span class="cstat-no" title="statement not covered" >                $scope.modal.hide();</span>
@@ -374,7 +358,7 @@
 <span class="cstat-no" title="statement not covered" >                $scope.editing = false;</span>
 <span class="cstat-no" title="statement not covered" >                $scope.dangerObs = {</span>
                     DangerSignTID: null,
-                    tempArea: $scope.areaArray[0]
+                    tempArea: ''
                 };
 <span class="cstat-no" title="statement not covered" >                $scope.dangerSignChanged();</span>
 <span class="cstat-no" title="statement not covered" >                $scope.modal.show();</span>
@@ -402,7 +386,6 @@
 <span class="cstat-no" title="statement not covered" >            $scope.toggleNoDangerSign = <span class="fstat-no" title="function not covered" >function () {</span></span>
 &nbsp;
 <span class="cstat-no" title="statement not covered" >                if ($scope.noDangerSign.val) {</span>
-<span class="cstat-no" title="statement not covered" >                    AppLogging.log('toggle');</span>
 <span class="cstat-no" title="statement not covered" >                    $scope.dangerObs.DangerSignTID = $scope.dangerSignKdvArray[0].Id;</span>
                 } else {
 <span class="cstat-no" title="statement not covered" >                    $scope.dangerObs.DangerSignTID = null;</span>
@@ -410,10 +393,10 @@
             };
 &nbsp;
 <span class="cstat-no" title="statement not covered" >            $scope.getDangerSignName = <span class="fstat-no" title="function not covered" >function (tid) {</span></span>
-<span class="cstat-no" title="statement not covered" >                if(angular.isArray($scope.dangerSignKdvArray)){</span>
+<span class="cstat-no" title="statement not covered" >                if (angular.isArray($scope.dangerSignKdvArray)) {</span>
 <span class="cstat-no" title="statement not covered" >                    for (var i = 0; i &lt; $scope.dangerSignKdvArray.length; i++) {</span>
 <span class="cstat-no" title="statement not covered" >                        var dangerSignKdv = $scope.dangerSignKdvArray[i];</span>
-<span class="cstat-no" title="statement not covered" >                        if(dangerSignKdv.Id === tid){</span>
+<span class="cstat-no" title="statement not covered" >                        if (dangerSignKdv.Id === tid) {</span>
 <span class="cstat-no" title="statement not covered" >                            return dangerSignKdv.Name;</span>
                         }
                     }
@@ -436,7 +419,6 @@
 <span class="cstat-no" title="statement not covered" >                return Utility</span>
                     .getKdvArray($scope.dangerSignKdv)
                     .then(<span class="fstat-no" title="function not covered" >function (response) {</span>
-<span class="cstat-no" title="statement not covered" >                        AppLogging.log(response);</span>
 <span class="cstat-no" title="statement not covered" >                        $scope.dangerSignKdvArray = response;</span>
 <span class="cstat-no" title="statement not covered" >                        return response;</span>
                     });
@@ -449,7 +431,7 @@
 <span class="cstat-no" title="statement not covered" >                $scope.modal.hide();</span>
             });
 &nbsp;
-<span class="cstat-no" title="statement not covered" >            $scope.$on('$destroy', <span class="fstat-no" title="function not covered" >function() {</span></span>
+<span class="cstat-no" title="statement not covered" >            $scope.$on('$destroy', <span class="fstat-no" title="function not covered" >function () {</span></span>
 <span class="cstat-no" title="statement not covered" >                $scope.modal.remove();</span>
             });
         }
@@ -460,7 +442,7 @@
 </div><!-- /wrapper -->
 <div class='footer quiet pad2 space-top1 center small'>
   Code coverage
-  generated by <a href="http://istanbul-js.org/" target="_blank">istanbul</a> at Mon Feb 27 2017 10:08:00 GMT+0100 (W. Europe Standard Time)
+  generated by <a href="http://istanbul-js.org/" target="_blank">istanbul</a> at Tue Feb 28 2017 09:51:07 GMT+0100 (W. Europe Standard Time)
 </div>
 </div>
 <script src="../../../prettify.js"></script>

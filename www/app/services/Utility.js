@@ -469,8 +469,12 @@ angular
                 });
         };
 
-        service._filterZeroKdvElements = function(item) {
-            return item.Id % 100 !== 0;
+        service._filterZeroKdvElements = function (arr) {
+            if (!angular.isArray(arr)) {
+                return arr;
+            }
+
+            return arr.filter(function(item) { return item.Id > 0 && item.Id % 100 !== 0; });
         };
 
         service.getKdvArray = function (key, keepZero) {
@@ -478,7 +482,7 @@ angular
                 .getKdvRepositories()
                 .then(function (KdvRepositories) {
                     var arr = KdvRepositories[key];
-                    return keepZero ? arr : arr.filter(service._filterZeroKdvElements);
+                    return keepZero ? arr : service._filterZeroKdvElements(arr);
                 });
         };
 

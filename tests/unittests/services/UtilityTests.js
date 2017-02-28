@@ -181,4 +181,18 @@
         // Invoke the unit being tested as necessary
         expect(Utility.isObservation('Picture')).toEqual(false);
     }));
+
+    it("test _filterZeroKdvElements: -1,  0, 100, 200, 300, 400 is filtered", inject(function (Utility) {
+        var arr = [{ Id: -1 }, { Id: 0 }, { Id: 1 }, { Id: 10 }, { Id: 11 }, { Id: 100 }, { Id: 101 }, { Id: 111 }, { Id: 200 }, { Id: 201 }, { Id: 300 }, { Id: 400 }, { Id: 500 }, { Id: 600 }, { Id: 1000 }];
+        var result = Utility._filterZeroKdvElements(arr);
+        var expected = [{ Id: 1 }, { Id: 10 }, { Id: 11 }, { Id: 101 }, { Id: 111 }, { Id: 201 }];
+        var isSame = true;
+
+        for (var i = 0; i < expected.length; i++) {
+            if (result[i].Id !== expected[i].Id) {
+                isSame = false;
+            }
+        }
+        expect(isSame).toEqual(true);
+    }));
 });
