@@ -49,7 +49,7 @@
   "ZOOM_LEVELS": "Zoom nivåer",
   "TILES": "Delkart",
   "NAME": "Navn",
-  "NUMBER_OF_ZOOM_LEVELS": "Antall zoom nivå",
+  "NUMBER_OF_ZOOM_LEVELS": "Zoom nivå",
   "FROM_LEVEL": "Fra nivå",
   "CHOOSE_MAP": "Velg kart",
   "CHOOSE_AREA": "Velg område",
@@ -267,5 +267,9 @@
   "DELETE_AVALANCHE_PROBLEM_CONFIRM": "Er du sikker på at du vil slette dette skredproblemet?",
   "DELETE_DANGER_OBS": "Slett faretegn",
   "DELETE_DANGER_OBS_CONFIRM": "Er du sikker på at du vil slette dette faretegnet?",
-  "AREA": "Område"
+  "AREA": "Område",
+  "WARNING": "Advarsel",
+  "MAP_DETAIL_LOW_WARNING": "Kartet du laster ned vil ikke være godt nok for turbruk. Velg flere zoomnivå eller zoom kartet til et mindre utsnitt",
+  "MAP_DETAIL_LOW_WARNING_OK_BUTTON": "Last ned",
+  "SHOW_MORE_CHOISES": "Vis flere valg"
 }

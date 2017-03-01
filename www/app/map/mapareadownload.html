@@ -1,7 +1,7 @@
 ﻿<ion-view title="{{'CHOOSE_AREA'|translate}}">
     <ion-content>
         <map-area-select on-change="vm.updateCounts()" bounds="vm.bounds" zoom="vm.currentZoom"></map-area-select>
-        <ion-list>       
+        <ion-list>
             <div class="item item-divider">
                 {{'NAME'|translate}}:
             </div>
@@ -9,10 +9,10 @@
                 <input type="text" ng-model="vm.name" />
             </label>
             <div ng-show="vm.extraDetailLevel.length > 1">
-                <div class="item item-divider">
-                    {{'NUMBER_OF_ZOOM_LEVELS'|translate}} ({{'FROM_LEVEL'|translate|lowercase}} {{vm.currentZoom}}):
+                <div class="item item-divider buttons-right">
+                    {{'NUMBER_OF_ZOOM_LEVELS'|translate}} ({{vm.currentZoom}}<span ng-show="vm.zoomlevel() !== vm.currentZoom"> - {{vm.zoomlevel()}}</span>): <button type="button" class="button button-small button-clear button-calm" ng-hide="vm.showMoreZoomLevels" ng-click="vm.toggleShowMoreZoomLevels()">{{'SHOW_MORE_CHOISES'|translate}}</button>
                 </div>
-                <ion-radio ng-repeat="el in vm.extraDetailLevel" ng-change="vm.updateCounts()" ng-value="el.extraLevels" ng-model="vm.selectedDetailLevel">{{el.description}}</ion-radio>
+                <ion-radio ng-repeat="el in vm.extraDetailLevel" ng-change="vm.updateCounts()" ng-value="el.extraLevels" ng-model="vm.selectedDetailLevel" ng-show="vm.showMoreZoomLevels || (vm.selectedDetailLevel === el.extraLevels)">{{el.description}}</ion-radio>
             </div>
             <div class="item item-divider">
                 {{'CHOOSE_MAP'|translate}}:
@@ -33,10 +33,7 @@
                     {{'CA'|translate}} {{vm.size}} {{'OF'|translate|lowercase}} {{vm.availableDiskspace}} {{'AVAILABLE'|translate|lowercase}}.
                 </div>
                 <div ng-repeat="tile in vm.mapsWithLimitReached()">
-                    <span ng-if="tile.maxLimitMessage">{{tile.maxLimitMessage}}</span><span ng-if="!tile.maxLimitMessage">{{'MAX_LIMIT_FOR_TILE_DOWNLOAD_REACHED'|translate}}</span>                   
-                </div>
-                <div class="assertive" ng-show="vm.zoomlevel() < 14">
-                    Kartet du laster ned vil ikke være godt nok for turbruk. Velg flere zoomnivå eller zoom kartet til mindre utsnitt.
+                    <span ng-if="tile.maxLimitMessage">{{tile.maxLimitMessage}}</span><span ng-if="!tile.maxLimitMessage">{{'MAX_LIMIT_FOR_TILE_DOWNLOAD_REACHED'|translate}}</span>
                 </div>
             </div>
             <div class="padding">

@@ -3,7 +3,7 @@
     .controller('MapAreaDownloadCtrl', function ($ionicPlatform, $ionicLoading, $filter, $ionicScrollDelegate, OfflineMap, AppLogging, AppSettings, Map, $cordovaFile, $cordovaDevice, $ionicPopup, $scope, $pbService, $state, $timeout, Utility, $translate, PresistentStorage, RegobsPopup) {
         var vm = this;
         vm._fragmentsFromBaseMap = 0;
-        vm._calculateLevelSteps = 2;
+        vm._calculateLevelSteps = 1;
         vm._maxCalculateLevels = 6;
         vm.size = 0;
         vm.tooBigSize = false;
@@ -15,10 +15,12 @@
         vm.maps.forEach(function (item) {
             item.selected = false;
         });
+        vm.recommendedZoom = 14;
         vm.maps[0].selected = true; //Topo map is selected as default
         vm.isLoading = true;
         vm.name = '';
         vm._baseLevels = [{ extraLevels: 0, description: $translate.instant('NONE') }];
+        vm.showMoreZoomLevels = false;
 
         vm._getEstimatedSize = function (zoomlevel) {
             var fragments = Map.calculateXYZSizeFromBounds(vm.bounds, 1, zoomlevel);
@@ -34,23 +36,33 @@
         };     
 
         vm.extraDetailLevel = angular.copy(vm._baseLevels);
-        vm.selectedDetailLevel = vm._calculateLevelSteps;
+        vm.selectedDetailLevel = null;
 
         vm._calculateDetailLevels = function () {
             vm.extraDetailLevel = angular.copy(vm._baseLevels);
             var currentSize = vm._getEstimatedSize(vm.currentZoom);
             vm.extraDetailLevel[0].description = $translate.instant('NONE') +' (' + currentSize.humanSize + ')';
-            if (vm.currentZoom) {
+            if (vm.currentZoom && vm.selectedMaps() > 0) {
                 for (var currentLevel = vm._calculateLevelSteps; vm.currentZoom + currentLevel <= AppSettings.maxMapZoomLevel && currentLevel <= vm._maxCalculateLevels; currentLevel += vm._calculateLevelSteps) {
-                    var size = vm._getEstimatedSize(vm.currentZoom + currentLevel);
+                    var zoom = vm.currentZoom + currentLevel;
+                    var size = vm._getEstimatedSize(zoom);
                     var mapFragmentCount = size.tiles;
                     if ((size.bytes < vm.availableDiskspaceBytes) && (mapFragmentCount < vm.maps[0].maxDownloadLimit)) {
                         vm.extraDetailLevel.push({
                             extraLevels: currentLevel,
                             description: '+' + currentLevel + ' (' + size.humanSize + ')'
                         });
+                        if (zoom >= vm.recommendedZoom && vm.selectedDetailLevel === null) {
+                            vm.selectedDetailLevel = currentLevel;
+                        }
+                    } else {
+                        AppLogging.log(size.bytes + ' is more than available ' + vm.availableDiskspaceBytes + ' or ' + mapFragmentCount + ' is greater then max limit ' + vm.maps[0].maxDownloadLimit);
                     }
                 }
+            }
+
+            if (vm.selectedDetailLevel === null) {
+                vm.selectedDetailLevel = vm.extraDetailLevel[vm.extraDetailLevel.length - 1].extraLevels;
             }
 
             //Setting selected detail level to one less if levels has changed and selected value is bigger
@@ -59,8 +71,12 @@
             }
         };
 
+        vm.toggleShowMoreZoomLevels = function() {
+            vm.showMoreZoomLevels = !vm.showMoreZoomLevels;
+        };
+
         vm.zoomlevel = function () {
-            return (vm.currentZoom || 0) + vm.selectedDetailLevel;
+            return (vm.currentZoom || 0) + (vm.selectedDetailLevel || 0);
         };
 
         vm.selectedMaps = function () {
@@ -136,21 +152,36 @@
         };
 
         vm.download = function () {
-            RegobsPopup.downloadProgress($translate.instant('UPDATE_MAP_OBSERVATIONS'),
-                downloadMap,
-                { closeOnComplete: false })
-            .then(function () {
-                $state.go('start');
-            })
-            .catch(function () {
-                AppLogging.log('progress cancelled');
-                $state.go('start');
-            });
+            var startDownload = function() {
+                RegobsPopup.downloadProgress($translate.instant('UPDATE_MAP_OBSERVATIONS'),
+                        downloadMap,
+                        { closeOnComplete: false })
+                    .then(function() {
+                        $state.go('start');
+                    })
+                    .catch(function() {
+                        AppLogging.log('progress cancelled');
+                        $state.go('start');
+                    });
+            }
+
+            if (vm.zoomlevel() < vm.recommendedZoom) {
+                RegobsPopup.confirm($translate.instant('WARNING'), $translate.instant('MAP_DETAIL_LOW_WARNING'), $translate.instant('MAP_DETAIL_LOW_WARNING_OK_BUTTON'))
+                    .then(function(result) {
+                        if (result) {
+                            startDownload();
+                        }
+                    });
+            } else {
+                startDownload();
+            }        
         };
 
 
         var init = function () {
             vm.isLoading = true;
+            vm.showMoreZoomLevels = false;
+            vm.selectedDetailLevel = null;
             vm.name = $filter('date')(new Date(), 'yyyy-MM-dd HH:mm:ss');
             $ionicLoading.show();
 

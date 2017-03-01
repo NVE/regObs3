@@ -62,6 +62,15 @@ $footerHeight: 65px;
     }
 }
 
+.item-divider.buttons-right button {
+    float: right;
+}
+
+.item-divider.buttons-right button.button-small {
+    min-height: 24px;
+    line-height: 20px;
+}
+
 .regobs-footer {
     height: $footerHeight;
 }

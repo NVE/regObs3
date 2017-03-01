@@ -7,13 +7,16 @@ angular
 
         service.getStoredObservations = function (geoHazardId, validateObservationDate) {
             return service._getRegistrationsFromPresistantStorage().then(function (result) {
+                AppLogging.log('registrations from presistant storage: ' + result.length);
                 if (geoHazardId) {
                     result = result.filter(function (reg) {
                         return reg.GeoHazardTid === geoHazardId;
                     });
                 }
+                AppLogging.log('registrations after geoHazard filter: ' + result.length);
                 if (validateObservationDate) {
                     result = service._cleanupRegistrations(result);
+                    AppLogging.log('registrations after date cleanup: ' +result.length);
                 }
 
                 return result;
@@ -216,7 +219,7 @@ angular
         service._mergeRegistrations = function (destArr, existingRegistrations) {
             existingRegistrations.forEach(function (item) {
                 var newRegistration = destArr.filter(function (reg) { return reg.RegId === item.RegId });
-                if (newRegistration.length < 0) {
+                if (newRegistration.length === 0) {
                     //Registration does not exist, push old value to new list
                     destArr.push(item);
                 }
@@ -224,13 +227,20 @@ angular
         };
 
         service._storeRegistrations = function (registrations) {
+            AppLogging.log('_storeRegistrations: ' + registrations.length);
             var path = AppSettings.getRegistrationRelativePath();
-            return PresistentStorage.storeFile(path, JSON.stringify(service._cleanupRegistrations(registrations)));
+            service._cleanupRegistrations(registrations);
+            AppLogging.log('_storeRegistrations after cleanup: ' + registrations.length);
+
+            return PresistentStorage.storeFile(path, JSON.stringify(registrations));
         };
 
         service.saveNewRegistrationsToPresistantStorage = function (registrations) {
+            AppLogging.log('saving ' + registrations.length +' new registrations');
             var mergeExistingRegistrations = function (existingRegistrations) {
+                AppLogging.log('merging in ' + existingRegistrations.length + ' existingRegistrations registrations');
                 service._mergeRegistrations(registrations, existingRegistrations);
+                AppLogging.log('save after merge ' + registrations.length + ' registrations');
                 return service._storeRegistrations(registrations);
             };
             return service._getRegistrationsFromPresistantStorage().then(mergeExistingRegistrations);
@@ -266,10 +276,14 @@ angular
          */
         service._validateRegistrationDate = function (dateStringISO) {
             var date = moment(dateStringISO, moment.ISO_8601); //strict parsing
-            if (!date.isValid()) return false; //Invalid date
+            if (!date.isValid()) {
+                AppLogging.log('Invalid date: ' + dateStringISO);
+                return false;
+            }
             var diff = service._diffDays(date, service._now());
             var limit = service._getShowObservationsDaysBack();
             if (diff > limit) {
+                AppLogging.log('Diff: ' + diff + ' is larger than limit: ' + limit);
                 return false;
             }
             return true;
@@ -352,8 +366,10 @@ angular
         service.removeOldObservationsFromPresistantStorage = function () {
             return service._getRegistrationsFromPresistantStorage()
                 .then(function (registrations) {
+                    AppLogging.log('removeOldObservationsFromPresistantStorage before delete: ' + registrations.length);
                     return service._deleteAllInvalidRegistrationImages(registrations)
                         .then(function () {
+                            AppLogging.log('removeOldObservationsFromPresistantStorage store: ' + registrations.length);
                             return service._storeRegistrations(registrations);
                         });
                 });
@@ -415,6 +431,7 @@ angular
                     geohazardId,
                     cancel);
             }).then(downloadAllRegistrations).finally(function () {
+                AppLogging.log('All registrations saved');
                 LocalStorage.set(observationUpdatedStorageKey, moment().toISOString());
                 $rootScope.$broadcast('$regObs:observationsUpdated');
             });
