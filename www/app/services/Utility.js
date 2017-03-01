@@ -247,12 +247,12 @@ angular
                     IceThicknessLayers: { displayFormat: { valueFormat: function(item) {
                             var result = [];
                             item.forEach(function(layer) {
-                                result.push(((layer.IceLayerThickness || 0) * 100) + ' cm ' + layer.IceLayerTName);
+                                result.push($filter('number')((layer.IceLayerThickness || 0) * 100,0) + ' cm ' + layer.IceLayerTName);
                             });
                             return result.join(', ');
                         }}
                     },
-                    IceThicknessSum: { displayFormat: { valueFormat: function (item) { return item * 100 + ' cm' } }},
+                    IceThicknessSum: { displayFormat: { valueFormat: function (item) { return $filter('number')(item * 100,0) + ' cm' } }},
                     Comment: { displayFormat: { hideDescription: true } }
                 }
             },
