@@ -1,6 +1,6 @@
 ﻿angular
     .module('RegObs')
-    .factory('Map', function (AppSettings, AppLogging, ObsLocation, Observations, Utility, $state, Registration, $ionicPlatform, $rootScope, $q, $timeout, $ionicPopup, $interval, RegobsPopup, PresistentStorage, $translate, RegObsClasses, UserLocation) {
+    .factory('Map', function (AppSettings, AppLogging, ObsLocation, Observations, Utility, $state, Registration, $filter, $ionicPlatform, $rootScope, $q, $timeout, $ionicPopup, $interval, RegobsPopup, PresistentStorage, $translate, RegObsClasses, UserLocation) {
         var service = this;
 
         var map, //Leaflet map
@@ -114,7 +114,7 @@
          * @param {String} id 
          * @returns {MapSelectableItem} marker
          */
-        service._getMarker = function(id) {
+        service._getMarker = function (id) {
             if (layerGroups && layerGroups.observations) {
                 var existingLayers = layerGroups.observations.getLayers().filter(function (item) {
                     if (item.getId) {
@@ -138,17 +138,18 @@
                 result.forEach(function (obsJson) {
                     var m = new RegObsClasses.ObservationMarker(obsJson);
                     if (!service._getMarker(m.getId())) {
-                        m.on('selected', function(event) { service._setSelectedItem(event.target); });
+                        m.on('selected', function (event) { service._setSelectedItem(event.target); });
                         m.addTo(layerGroups.observations);
                     }
                 });
             });
             Registration.getNewRegistrations()
                 .forEach(function (reg) {
+                    AppLogging.log(JSON.stringify(reg));
                     if (reg && reg.ObsLocation && reg.ObsLocation.Latitude && reg.ObsLocation.Longitude) {
                         var m = new RegObsClasses.NewRegistrationMarker(reg);
                         if (!service._getMarker(m.getId())) {
-                            m.on('selected', function(event) { service._setSelectedItem(event.target); });
+                            m.on('selected', function (event) { service._setSelectedItem(event.target); });
                             m.addTo(layerGroups.observations);
                         }
                     }
@@ -352,13 +353,41 @@
          * Could location be set manually?
          * @returns {} 
          */
-        service._isSetLocationManuallyPossible = function() {
+        service._isSetLocationManuallyPossible = function () {
             return Registration.isEmpty() || !ObsLocation.isSet();
         };
 
-        service._updateViewBounds = function() {
+        service._updateViewBounds = function () {
             service._lastViewBounds = map.getBounds();
         };
+
+
+        service._goToNewRegistrationDetails = function () {
+            if (service._goToNewRegistrationOnUpdate && service._goToNewRegistrationOnUpdate.ObsLocation) {
+                Observations.getStoredObservations(Utility.getCurrentGeoHazardTid())
+                    .then(function (result) {
+                        var orderedResult = $filter('orderBy')(result, 'DtObsTime');
+                        var navigateTo = null;
+                        orderedResult.forEach(function (obs) {
+                            if (!navigateTo) {
+                                if (obs.LocationId && service._goToNewRegistrationOnUpdate.ObsLocation.ObsLocationId && obs.LocationId === service._goToNewRegistrationOnUpdate.ObsLocation.ObsLocationId) {
+                                    navigateTo = obs;
+                                } else {
+                                    var distance = L.latLng(obs.Latitude, obs.Longitude).distanceTo(L.latLng(service._goToNewRegistrationOnUpdate.ObsLocation.Latitude, service._goToNewRegistrationOnUpdate.ObsLocation.Longitude));
+                                    if (distance < 10) { //TODO: use registration ID instead of distance and location when RegId is returned from new registration POST
+                                        navigateTo = obs;
+                                    }
+                                }
+                            }
+                        });
+                        service._goToNewRegistrationOnUpdate = null;
+                        if (navigateTo != null) {
+                            $state.go('observationdetails', { observation: RegObsClasses.Observation.fromJson(navigateTo) });
+                        }
+                    });
+            }
+        };
+
 
         /**
          * Main method for creating map
@@ -450,12 +479,19 @@
                     service._setSelectedItem(obsLocationMarker);
                 });
             });
-            
+
             $rootScope.$on('$regObs:observationsUpdated', function () {
                 service.refresh();
+
+                if (service._goToNewRegistrationOnUpdate) {
+                    service._goToNewRegistrationDetails();
+                }
             });
 
-            $rootScope.$on('$regObs:updateObservations', function () {
+            $rootScope.$on('$regObs:updateObservations', function (event, item) {
+                if (item) {
+                    service._goToNewRegistrationOnUpdate = item;
+                }
                 service.updateObservationsInMap();
             });
 
@@ -567,7 +603,7 @@
             //    AppSettings.save();
             //}
 
-            return RegobsPopup.downloadProgress('UPDATE_DATA_MESSAGE',workFunc, { longTimoutMessageDelay: 15, closeOnComplete: true });
+            return RegobsPopup.downloadProgress('UPDATE_DATA_MESSAGE', workFunc, { longTimoutMessageDelay: 15, closeOnComplete: true });
         };
 
         /**
@@ -576,7 +612,7 @@
          * @param {} lng 
          * @returns {} 
          */
-        service.isPositionWithinMapBounds = function(lat, lng) {
+        service.isPositionWithinMapBounds = function (lat, lng) {
             if (service._lastViewBounds && lat && lng) {
                 var latLng = L.latLng(lat, lng);
                 return service._lastViewBounds.contains(latLng);
@@ -584,7 +620,7 @@
             return false;
         };
 
-        service.getLastViewBounds = function() {
+        service.getLastViewBounds = function () {
             return service._lastViewBounds;
         };
 
@@ -623,7 +659,7 @@
             if (Registration.isEmpty() && ObsLocation.isSet() && ObsLocation.data.UTMSourceTID === ObsLocation.source.fetchedFromGPS) {
                 ObsLocation.remove(); //Remove obs location set in map when registration is empty and position is from GPS
             }
-            
+
         };
 
         /**
@@ -636,12 +672,12 @@
             if (!ObsLocation.isSet() && service._selectedItem && service._selectedItem === obsLocationMarker) {
                 service.clearSelectedMarkers();
             }
-            
+
             service._checkSelectedItemGeoHazard();
             service._redrawTilesForThisGeoHazard();
 
             Registration.clearNewRegistrationsWithinRange()
-                .then(function() {
+                .then(function () {
                     service._removeObservations(); //clear all markers
                     if (AppSettings.data.showPreviouslyUsedPlaces) {
                         service._drawStoredLocations();
@@ -719,7 +755,7 @@
          * Get all observations that is within view bounds of map
          * @returns {} 
          */
-        service.getObservationsWithinViewBounds = function() {
+        service.getObservationsWithinViewBounds = function () {
             return Observations.getStoredObservations(Utility.getCurrentGeoHazardTid())
                 .then(function (result) {
                     var items = [];

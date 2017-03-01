@@ -389,7 +389,15 @@ angular
 
                 var success = function () {
 
-                    LocalStorage.setObject(newStorageKey, data.Registrations);
+                    var newRegistrations = angular.copy(data.Registrations);
+                    newRegistrations.forEach(function(item) {
+                        if (item.ObsLocation.ObsLocationId === ObsLocation.data.ObsLocationId) {
+                            item.ObsLocation.Latitude = ObsLocation.data.Latitude;
+                            item.ObsLocation.Longitude = ObsLocation.data.Longitude;
+                        }
+                    });
+
+                    LocalStorage.setObject(newStorageKey, newRegistrations);
 
                     RegobsPopup.alert(
                         'Suksess!',

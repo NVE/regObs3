@@ -75,7 +75,7 @@
         //},
 
         onClick: function () {
-            $rootScope.$broadcast('$regObs:updateObservations');
+            $rootScope.$broadcast('$regObs:updateObservations', this.registration);
         }
     });
 
