@@ -95,6 +95,7 @@
                 url: '/mapareadownload',
                 templateUrl: 'app/map/mapareadownload.html',
                 controller: 'MapAreaDownloadCtrl as vm',
+                cache: false,
                 data: {
                     defaultBack: {
                         state: 'offlinemapoverview'

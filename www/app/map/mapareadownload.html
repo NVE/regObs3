@@ -12,7 +12,7 @@
                 <div class="item item-divider buttons-right">
                     {{'NUMBER_OF_ZOOM_LEVELS'|translate}} ({{vm.currentZoom}}<span ng-show="vm.zoomlevel() !== vm.currentZoom"> - {{vm.zoomlevel()}}</span>): <button type="button" class="button button-small button-clear button-calm" ng-hide="vm.showMoreZoomLevels" ng-click="vm.toggleShowMoreZoomLevels()">{{'SHOW_MORE_CHOISES'|translate}}</button>
                 </div>
-                <ion-radio ng-repeat="el in vm.extraDetailLevel" ng-change="vm.updateCounts()" ng-value="el.extraLevels" ng-model="vm.selectedDetailLevel" ng-show="vm.showMoreZoomLevels || (vm.selectedDetailLevel === el.extraLevels)">{{el.description}}</ion-radio>
+                <ion-radio ng-repeat="el in vm.extraDetailLevel" ng-change="vm.zoomLevelChanged()" ng-value="el.extraLevels" ng-model="vm.selectedDetailLevel" ng-show="vm.showMoreZoomLevels || (vm.selectedDetailLevel === el.extraLevels)">{{el.description}}</ion-radio>
             </div>
             <div class="item item-divider">
                 {{'CHOOSE_MAP'|translate}}:

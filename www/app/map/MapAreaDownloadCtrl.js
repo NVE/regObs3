@@ -37,6 +37,7 @@
 
         vm.extraDetailLevel = angular.copy(vm._baseLevels);
         vm.selectedDetailLevel = null;
+        vm.hasChangedZoom = false;
 
         vm._calculateDetailLevels = function () {
             vm.extraDetailLevel = angular.copy(vm._baseLevels);
@@ -52,7 +53,7 @@
                             extraLevels: currentLevel,
                             description: '+' + currentLevel + ' (' + size.humanSize + ')'
                         });
-                        if (zoom >= vm.recommendedZoom && vm.selectedDetailLevel === null) {
+                        if (zoom >= vm.recommendedZoom && !vm.hasChangedZoom) {
                             vm.selectedDetailLevel = currentLevel;
                         }
                     } else {
@@ -105,6 +106,11 @@
                 }
             });
         };
+
+        vm.zoomLevelChanged = function() {
+            vm.hasChangedZoom = true;
+            vm.updateCounts();
+        }
 
         vm.updateCounts = function () {
             if (vm.bounds) {
