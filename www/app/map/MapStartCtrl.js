@@ -1,5 +1,5 @@
 ﻿angular.module('RegObs')
-    .controller('MapStartCtrl', function ($scope, $rootScope, $state, $ionicHistory, Map, AppSettings, Registration, AppLogging, Utility, $timeout, $ionicPopover, $cordovaInAppBrowser, Observations, RegobsPopup, UserLocation, $translate, Trip) {
+    .controller('MapStartCtrl', function ($scope, $rootScope, $state, $ionicHistory, User, Map, AppSettings, Registration, AppLogging, Utility, $timeout, $ionicPopover, $cordovaInAppBrowser, Observations, RegobsPopup, UserLocation, $translate, Trip) {
         var appVm = this;
 
         appVm.gpsCenterClick = Map.centerMapToUser;
@@ -38,7 +38,7 @@
                 return Registration.isEmpty();
             },
             showTrip: function () {
-                return AppSettings.getAppMode() === 'snow';
+                return Trip.canStart();
             },
             tripStarted: function () {
                 return Trip.model.started;
@@ -65,6 +65,7 @@
             return AppSettings.getAppMode();
         };
 
+        appVm.getFollowMode = Map.getFollowMode;
 
         $scope.$on('$ionicView.enter', function () {
             Map.invalidateSize();

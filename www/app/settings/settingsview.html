@@ -52,7 +52,7 @@
             </div>
         </form>
         <ion-list>
-            <label class="item item-input item-select" ng-show="!vm.userService.getUser().anonymous">
+            <label class="item item-input item-select" ng-show="!vm.userService.getUser().anonymous && vm.userService.getUser().ObserverGroup">
                 <div class="input-label">
                     {{'GROUP'|translate}}
                 </div>
@@ -61,6 +61,9 @@
                     <option value="">{{'CHOOSE_GROUP'|translate}}</option>
                 </select>
             </label>
+            <ion-item ng-show="!vm.userService.getUser().anonymous && !vm.userService.getUser().ObserverGroup">
+                {{'NO_GROUPS_INFO'|translate}}
+            </ion-item>
             <ion-toggle ng-model="vm.settings.data.emailReceipt"
                         ng-change="vm.settings.save()"
                         toggle-class="toggle-calm"

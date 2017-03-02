@@ -1,4 +1,4 @@
-﻿angular.module('RegObs').factory('CurrentObsLocationMarker', function (MapSelectableItem, Observation, $translate, Utility, $state, ObsLocation, Registration, AppSettings, Trip) {
+﻿angular.module('RegObs').factory('CurrentObsLocationMarker', function (MapSelectableItem, Observation, $translate, Utility, $state, ObsLocation, Registration, AppSettings, Trip, User) {
 
     /**
      * Stored location marker
@@ -16,7 +16,7 @@
                     iconColor: '#444',
                     icon: 'ion-android-walk',
                     isVisible: function () {
-                        return AppSettings.getAppMode() === 'snow' && Registration.isEmpty() && !Trip.model.started;
+                        return Registration.isEmpty() && Trip.canStart();
                     },
                     onClick: function () {
                         $state.go('snowtrip');

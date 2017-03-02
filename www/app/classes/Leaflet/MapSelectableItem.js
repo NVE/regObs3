@@ -19,7 +19,7 @@ angular.module('RegObs')
                     iconColor: '#444',
                     icon: 'ion-android-walk',
                     isVisible: function() {
-                        return AppSettings.getAppMode() === 'snow';
+                        return Trip.canStart();
                     },
                     onClick: function () {
                         if (Trip.model.started) {

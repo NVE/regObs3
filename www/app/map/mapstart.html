@@ -1,7 +1,9 @@
 ﻿<ion-view view-title="{{'regObs / '}}{{vm.getCurrentAppMode() | uppercase | translate}}">
     <div ng-class="{'hasFooter': vm.hasRegistration()}">
         <div ng-if="!vm.mapSelectedItem">
-            <ion-floating-button class="regobs-gps-center" button-color="#fff" icon-color="#444" icon="ion-pinpoint" click="vm.gpsCenterClick()">
+            <ion-floating-button class="regobs-gps-center" button-color="#fff" icon-color="#444" icon="ion-pinpoint" click="vm.gpsCenterClick()" ng-show="vm.getFollowMode()">
+            </ion-floating-button>
+            <ion-floating-button class="regobs-gps-center" button-color="#D2D4CF" icon-color="#444" icon="ion-pinpoint" click="vm.gpsCenterClick()" ng-hide="vm.getFollowMode()">
             </ion-floating-button>
             <ion-floating-button class="regobs-menu" button-color="#fff" icon-color="#444" icon="ion-chevron-up" ng-click="vm.openMapMenu($event)">
             </ion-floating-button>

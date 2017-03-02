@@ -145,7 +145,8 @@ angular
                 RegobsPopup.delete('Slett registrering', 'Er du sikker på at du vil slette påbegynt registrering?')
                     .then(function (response) {
                         if (response) {
-                            return resetRegistration();
+                            resetRegistration();
+                            $state.go('start');
                         }
                     });
             else if (Registration.unsent.length) {

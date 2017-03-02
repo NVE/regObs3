@@ -271,5 +271,8 @@
   "WARNING": "Advarsel",
   "MAP_DETAIL_LOW_WARNING": "Kartet du laster ned vil ikke være godt nok for turbruk. Velg flere zoomnivå eller zoom kartet til et mindre utsnitt",
   "MAP_DETAIL_LOW_WARNING_OK_BUTTON": "Last ned",
-  "SHOW_MORE_CHOISES": "Vis flere valg"
+  "SHOW_MORE_CHOISES": "Vis flere valg",
+  "NO_GROUPS_INFO": "Du er ikke medlem av noen grupper",
+  "DOWNLOAD_NEW_AREA": "Last ned nytt område",
+  "DELETE_ALL_DOWNLOADED_AREAS": "Slett alle lagrede områder"
 }

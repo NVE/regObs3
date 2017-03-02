@@ -13,7 +13,7 @@
 
         service._isInitialized = false; //Is map initialized. Map should allways be initialized on startup, else you will get NotInitialized error for alot of methods
         service._isProgramaticZoom = false, //Is currently programatic zoom
-        service._zoomToViewOnFirstLocation = 13; //Zoom to this level when first location is found
+        service._zoomToViewOnFirstLocation = 14; //Zoom to this level when first location is found
         service._selectedItem = null; //Map selected item, this could be observations, nearby places or location marker
         service._defaultCenter = [62.5, 10]; //default map center when no observation or user location
         service._followMode = true; //Follow user position, or has user manually dragged or zoomed map?
@@ -286,7 +286,14 @@
          * @returns {} 
          */
         service._disableFollowMode = function () {
-            service._followMode = false;
+            $timeout(function () {
+                service._followMode = false;
+            });
+
+        };
+
+        service.getFollowMode = function () {
+            return service._followMode;
         };
 
         /**
@@ -443,7 +450,10 @@
             });
 
             map.on('dragend', service._updateViewBounds);
-            map.on('zoomend', service._updateViewBounds);
+            map.on('zoomend', function () {
+                service._isProgramaticZoom = false;
+                service._updateViewBounds();
+            });
 
 
             obsLocationMarker = new RegObsClasses.CurrentObsLocationMarker(center);
@@ -535,7 +545,6 @@
         service.setView = function (latlng, zoom) {
             service._isProgramaticZoom = true;
             map.setView(latlng, zoom || service._zoomToViewOnFirstLocation);
-            service._isProgramaticZoom = false;
         };
 
         /**
@@ -568,8 +577,11 @@
          */
         service.centerMapToUser = function () {
             service._followMode = true;
-            if (userMarker) {
-                if (map) {
+            if (userMarker && map) {
+                var currentZoom = service.getZoom();
+                if (currentZoom < service._zoomToViewOnFirstLocation) { //Only zoom in if zoom is less than default user zoom
+                    service.setView(userMarker.getLatLng());
+                } else {
                     map.panTo(userMarker.getLatLng());
                 }
             }

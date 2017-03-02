@@ -1,23 +1,25 @@
-﻿<ion-view>
+﻿<ion-view view-title="{{'OFFLINE_MAP'|translate}}">
     <ion-content>
         <ion-list>
             <div ng-repeat="area in vm.offlineAreas track by $index">
-                <ion-item class="item-icon-left item-icon-right item-text-wrap" ui-sref="offlineareadetails({area:area})" >
-                    <i class="icon ion-map"></i> {{area.name}}
-                    <span class="item-note">
-                        {{vm.humanFileSize(area.size)}}
-                    </span>
+                <ion-item class="item-icon-left item-icon-right" ui-sref="offlineareadetails({area:area})">
+                    <i class="icon ion-map"></i><div class="area-wrapper">
+                        <span class="area-name">{{area.name}}</span>
+                        <span class="item-note">
+                            {{vm.humanFileSize(area.size)}}
+                        </span>
+                    </div>
                     <i class="icon icon-accessory ion-chevron-right"></i>
                 </ion-item>
             </div>
             <div class="padding">
                 <button type="button" class="button button-block button-calm" ui-sref="mapareadownload">
-                    Last ned nytt område
+                    {{'DOWNLOAD_NEW_AREA'|translate}}
                 </button>
             </div>
             <div class="padding" ng-if="vm.offlineAreas.length > 0">
                 <button type="button" class="button button-block" ng-click="vm.deleteMaps()">
-                    Slett alle lagrede områder
+                    {{'DELETE_ALL_DOWNLOADED_AREAS'|translate}}
                 </button>
             </div>
         </ion-list>

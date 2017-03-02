@@ -12,7 +12,7 @@
         "Lng": "10,7080138"
     };*/
 
-    function Trip($http, AppSettings, Utility, User, ObsLocation, RegobsPopup, LocalStorage, UserLocation, $state, $rootScope) {
+    function Trip($http, AppSettings, Utility, User, ObsLocation, RegobsPopup, LocalStorage, UserLocation, $state, $rootScope, Registration) {
         'ngInject';
 
         var Trip = this;
@@ -38,6 +38,11 @@
             }
             return null;
         };
+
+        Trip.canStart = function() {
+            return AppSettings.getAppMode() === 'snow' && !Trip.model.started && !User.getUser().anonymous;
+        };
+
 
         Trip.start = function (type, tripId, expectedMin, comment) {
             if (User.getUser().anonymous) {

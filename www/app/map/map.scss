@@ -323,3 +323,23 @@
     height: 70px;
     max-width: 140px;
 }
+
+.area-wrapper {
+    display: flex;
+    width: 100%;
+}
+
+.area-name {
+    display: block;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    min-width: 0;
+}
+
+.area-wrapper .item-note {
+    display: block;
+    margin-left: auto;
+    padding-left: 5px;
+    white-space: nowrap;
+}

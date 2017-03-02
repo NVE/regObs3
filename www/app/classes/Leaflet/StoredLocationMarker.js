@@ -43,7 +43,7 @@
                     iconColor: '#444',
                     icon: 'ion-android-walk',
                     isVisible: function () {
-                        return AppSettings.getAppMode() === 'snow' && !Trip.model.started;
+                        return Trip.canStart();
                     },
                     onClick: function () {
                         $state.go('snowtrip');
