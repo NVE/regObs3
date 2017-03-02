@@ -44,6 +44,9 @@
             var currentSize = vm._getEstimatedSize(vm.currentZoom);
             vm.extraDetailLevel[0].description = $translate.instant('NONE') +' (' + currentSize.humanSize + ')';
             if (vm.currentZoom && vm.selectedMaps() > 0) {
+                if (!vm.hasChangedZoom) {
+                    vm.selectedDetailLevel = null;
+                }
                 for (var currentLevel = vm._calculateLevelSteps; vm.currentZoom + currentLevel <= AppSettings.maxMapZoomLevel && currentLevel <= vm._maxCalculateLevels; currentLevel += vm._calculateLevelSteps) {
                     var zoom = vm.currentZoom + currentLevel;
                     var size = vm._getEstimatedSize(zoom);
@@ -53,7 +56,7 @@
                             extraLevels: currentLevel,
                             description: '+' + currentLevel + ' (' + size.humanSize + ')'
                         });
-                        if (zoom >= vm.recommendedZoom && !vm.hasChangedZoom) {
+                        if (zoom >= vm.recommendedZoom && !vm.hasChangedZoom && !vm.selectedDetailLevel) {
                             vm.selectedDetailLevel = currentLevel;
                         }
                     } else {
