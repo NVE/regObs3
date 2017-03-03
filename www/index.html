@@ -125,12 +125,8 @@
                     </div>
                 </div>
                 <div ng-if="appVm.showRegistrationFooter() && !appVm.showEditRegistration()" class="row row-no-padding">
-                    <div ng-show="appVm.registration.sending">
-                        <div class="col col-center">
-                            <div class="padding footer-button-wrapper text-center">
-                                <ion-spinner class="spinner-dark" ng-if="appVm.registration.sending"></ion-spinner> {{'SENDING'|translate}}
-                            </div>
-                        </div>
+                    <div ng-show="appVm.registration.sending" class="col col-center text-center">
+                            <ion-spinner class="spinner-dark"></ion-spinner> {{'SENDING'|translate}}
                     </div>
                     <div class="col col-center" ng-hide="appVm.registration.sending">
                         <div class="padding footer-button-wrapper">
@@ -139,7 +135,7 @@
                             </button>
                         </div>
                     </div>
-                    <div class="col col-center" ng-hide="appVm.registration.sending"">
+                    <div class="col col-center" ng-hide="appVm.registration.sending">
                         <div class="padding footer-button-wrapper">
                             <button class="button button-block button-calm icon-right ion-android-send" ng-click="appVm.registration.send()">
                                 <span class="badge badge-assertive" ng-show="appVm.registration.unsent.length" ng-bind="appVm.registration.unsent.length"></span> {{'SEND'|translate}} <!--<span class="badge badge-balanced" ng-show="!appVm.registration.isEmpty()" ng-bind="appVm.registration.getObservationsLength()" ></span>-->
