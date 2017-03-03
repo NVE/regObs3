@@ -3,7 +3,7 @@
 var fs = require('fs');     // nodejs.org/api/fs.html
 var plist = require('plist');  // www.npmjs.com/package/plist
 
-var FILEPATH = 'platforms/ios/***/***-Info.plist';
+var FILEPATH = 'platforms/ios/regObs/regObs-Info.plist';
 
 module.exports = function (context) {
 
@@ -21,6 +21,9 @@ module.exports = function (context) {
     console.log('Setting new CFBundleShortVersionString: ' +trimmedVersion);
 
     obj.CFBundleShortVersionString = trimmedVersion;
+
+    obj.NSMainNibFile = null;
+    obj['NSMainNibFile~ipad'] = null; //fix for some bug in plist node module that wrongly converts this <key> to <string>
 
     xml = plist.build(obj);
     fs.writeFileSync(FILEPATH, xml, { encoding: 'utf8' });

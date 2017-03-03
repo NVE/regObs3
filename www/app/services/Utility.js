@@ -110,7 +110,7 @@ angular
                 name: "Snødekke",
                 RegistrationTID: "22",
                 properties: {
-                    SnowDepth: { displayFormat: { valueFormat: function(item) { return (item * 100) + ' cm' } } },
+                    SnowDepth: { displayFormat: { valueFormat: function(item) { return $filter('number')(item * 100,0) + ' cm' } } },
                     NewSnowDepth24: { displayFormat: { valueFormat: function (item) { return $filter('number')(item * 100,0) + ' cm' } } },
                     NewSnowLine: { displayFormat: { valueFormat: function (item) { return item + ' moh' } } },
                     Snowline: { displayFormat: { valueFormat: function (item) { return item + ' moh' } } },
@@ -242,8 +242,8 @@ angular
                 name: "Snø og istykkelse",
                 RegistrationTID: "50",
                 properties: {
-                    SnowDepth: { displayFormat: { valueFormat: function (item) { return item * 100 + ' cm' } } },
-                    SlushSnow: { displayFormat: { valueFormat: function (item) { return item * 100 + ' cm' } } },
+                    SnowDepth: { displayFormat: { valueFormat: function (item) { return $filter('number')(item * 100,0) + ' cm' } } },
+                    SlushSnow: { displayFormat: { valueFormat: function (item) { return $filter('number')(item * 100,0) + ' cm' } } },
                     IceThicknessLayers: { displayFormat: { valueFormat: function(item) {
                             var result = [];
                             item.forEach(function(layer) {
