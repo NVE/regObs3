@@ -26,5 +26,5 @@ module.exports = function (context) {
     obj['NSMainNibFile~ipad'] = null; //fix for some bug in plist node module that wrongly converts this <key> to <string>
 
     xml = plist.build(obj);
-    fs.writeFileSync(FILEPATH, xml, { encoding: 'utf8' });
+    //fs.writeFileSync(FILEPATH, xml, { encoding: 'utf8' }); //there is some bug in saving plist, so it won't open in XCode
 };

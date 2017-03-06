@@ -25,7 +25,7 @@ angular
         service.getExpositionArray = function () {
             return [
                 { "val": null, "name": "Ikke gitt" },
-                { "val": 0, "name": "N - fra nord", "shortName":"N" },
+                { "val": 0, "name": "N - fra nord", "shortName": "N" },
                 { "val": 45, "name": "NØ - fra nordøst", "shortName": "NØ" },
                 { "val": 90, "name": "Ø - fra øst", "shortName": "Ø" },
                 { "val": 135, "name": "SØ - fra sørøst", "shortName": "SØ" },
@@ -61,7 +61,7 @@ angular
             }
 
             var arr = service.getExpositionArray().filter(function (item) { return item.val !== null });
-            var result = [];          
+            var result = [];
             if (expositionBitOrder && expositionBitOrder.length > 0 && arr.length === expositionBitOrder.length) {
                 for (var i = 0; i < expositionBitOrder.length; i++) {
                     var b = expositionBitOrder[i];
@@ -76,13 +76,31 @@ angular
             return result.join(', ');
         }
 
-        service.formatUrls = function(arr) {
+        service.formatUrls = function (arr) {
             var result = [];
             arr.forEach(function (url) {
                 var urlDesc = url.UrlDescription || url.UrlLine;
                 result.push('<a target="_system" href="' + url.UrlLine + '">' + urlDesc + '</a>');
             });
             return result.join(', ');
+        };
+
+        service.formatStabilityTest = function (fullObject) {
+            var result = fullObject.PropagationTName;
+
+            if (fullObject.TapsFracture > 0) {
+                result += fullObject.TapsFracture;
+            }
+
+            result += '@';
+
+            if (fullObject.FractureDepth) {
+                result += $filter('number')(fullObject.FractureDepth * 100, 0) + 'cm';
+            }
+            if (fullObject.ComprTestFractureTID > 0) {
+                result += fullObject.ComprTestFractureTName;
+            }
+            return result;
         };
 
         //Brukt der det er bilder (RegistrationTID)
@@ -93,7 +111,7 @@ angular
                 properties: {
                     IncidentText: { displayFormat: { hideDescription: true } },
                     ActivityInfluencedTID: {},
-                    DamageExtentTID: { kdvKey: 'DamageExtentKDV' },                 
+                    DamageExtentTID: { kdvKey: 'DamageExtentKDV' },
                     Comment: { displayFormat: { hideDescription: true } },
                     Urls: { displayFormat: { valueFormat: service.formatUrls } }
                 }
@@ -110,8 +128,8 @@ angular
                 name: "Snødekke",
                 RegistrationTID: "22",
                 properties: {
-                    SnowDepth: { displayFormat: { valueFormat: function(item) { return $filter('number')(item * 100,0) + ' cm' } } },
-                    NewSnowDepth24: { displayFormat: { valueFormat: function (item) { return $filter('number')(item * 100,0) + ' cm' } } },
+                    SnowDepth: { displayFormat: { valueFormat: function (item) { return $filter('number')(item * 100, 0) + ' cm' } } },
+                    NewSnowDepth24: { displayFormat: { valueFormat: function (item) { return $filter('number')(item * 100, 0) + ' cm' } } },
                     NewSnowLine: { displayFormat: { valueFormat: function (item) { return item + ' moh' } } },
                     Snowline: { displayFormat: { valueFormat: function (item) { return item + ' moh' } } },
                     HeightLimitLayeredSnow: { displayFormat: { valueFormat: function (item) { return item + ' moh' } } },
@@ -146,9 +164,9 @@ angular
                     DestructiveSizeTID: {},
                     AvalPropagationTID: {},
                     ExposedHeightComboTID: {},
-                    ExposedHeight1: { displayFormat: { valueFormat: function (item) { return item +  ' m' } } },
+                    ExposedHeight1: { displayFormat: { valueFormat: function (item) { return item + ' m' } } },
                     ExposedHeight2: { displayFormat: { valueFormat: function (item) { return item + ' m' } } },
-                    ValidExposition: { displayFormat: { condition: function(item) { return item !== '00000000' }, valueFormat: service.getExpositonDescriptionFromBitOrder } },
+                    ValidExposition: { displayFormat: { condition: function (item) { return item !== '00000000' }, valueFormat: service.getExpositonDescriptionFromBitOrder } },
                     Comment: { displayFormat: { hideDescription: true } }
                 }
             },
@@ -161,7 +179,7 @@ angular
                     DestructiveSizeTID: {},
                     AvalancheTriggerTID: {},
                     ValidExposition: { displayFormat: { valueFormat: service.getExpositonDescriptionFromBitOrder } },
-                    HeigthStartZone: { displayFormat: { condition: function(item) { return item > 0 } } },
+                    HeigthStartZone: { displayFormat: { condition: function (item) { return item > 0 } } },
                     TerrainStartZoneTID: {},
                     HeigthStopZone: { displayFormat: { condition: function (item) { return item > 0 } } },
                     AvalCauseTID: {},
@@ -179,7 +197,7 @@ angular
                     AirTemperature: { displayFormat: { hideDescription: true, valueFormat: function (item) { return item + ' °C' } } },
                     WindSpeed: { displayFormat: { valueFormat: function (item) { return item + ' m/s' } } },
                     CloudCover: { displayFormat: { valueFormat: function (item) { return item + '%' } } },
-                    WindDirection: { displayFormat: { valueFormat: function(item) { return service.getWindDirectionText(item); } } },
+                    WindDirection: { displayFormat: { valueFormat: function (item) { return service.getWindDirectionText(item); } } },
                     Comment: { displayFormat: { hideDescription: true } }
                 }
             },
@@ -191,7 +209,7 @@ angular
                 name: "Stabilitetstest",
                 RegistrationTID: "25",
                 properties: {
-                    PropagationTID: { displayFormat: { hideDescription: true, valueFormat: function(item, data) { return data.TypicalValue2; } } },
+                    PropagationTID: { displayFormat: { hideDescription: true, valueFormat: function(item, data) { return service.formatStabilityTest(data.FullObject) } } },
                     StabilityEvalTID: {},
                     Comment: { displayFormat: { hideDescription: true } }
                 }
@@ -242,17 +260,20 @@ angular
                 name: "Snø og istykkelse",
                 RegistrationTID: "50",
                 properties: {
-                    SnowDepth: { displayFormat: { valueFormat: function (item) { return $filter('number')(item * 100,0) + ' cm' } } },
-                    SlushSnow: { displayFormat: { valueFormat: function (item) { return $filter('number')(item * 100,0) + ' cm' } } },
-                    IceThicknessLayers: { displayFormat: { valueFormat: function(item) {
-                            var result = [];
-                            item.forEach(function(layer) {
-                                result.push($filter('number')((layer.IceLayerThickness || 0) * 100,0) + ' cm ' + layer.IceLayerTName);
-                            });
-                            return result.join(', ');
-                        }}
+                    SnowDepth: { displayFormat: { valueFormat: function (item) { return $filter('number')(item * 100, 0) + ' cm' } } },
+                    SlushSnow: { displayFormat: { valueFormat: function (item) { return $filter('number')(item * 100, 0) + ' cm' } } },
+                    IceThicknessLayers: {
+                        displayFormat: {
+                            valueFormat: function (item) {
+                                var result = [];
+                                item.forEach(function (layer) {
+                                    result.push($filter('number')((layer.IceLayerThickness || 0) * 100, 0) + ' cm ' + layer.IceLayerTName);
+                                });
+                                return result.join(', ');
+                            }
+                        }
                     },
-                    IceThicknessSum: { displayFormat: { valueFormat: function (item) { return $filter('number')(item * 100,0) + ' cm' } }},
+                    IceThicknessSum: { displayFormat: { valueFormat: function (item) { return $filter('number')(item * 100, 0) + ' cm' } } },
                     Comment: { displayFormat: { hideDescription: true } }
                 }
             },
@@ -288,16 +309,16 @@ angular
             }
         };
 
-        
+
 
         service.registrationTid = function (prop) {
             var obs = OBSERVATIONS[prop];
-            if (!obs) throw Error(prop +' not found in observations!');
+            if (!obs) throw Error(prop + ' not found in observations!');
 
             return obs.RegistrationTID;
         };
 
-        service.isObservation = function(prop) {
+        service.isObservation = function (prop) {
             return true && OBSERVATIONS[prop] && prop !== 'Picture';
         };
 
@@ -313,7 +334,7 @@ angular
             return null;
         };
 
-        service.camelCaseToUnderscore = function(s) {
+        service.camelCaseToUnderscore = function (s) {
             return s.replace(/(?:^|\.?)([A-Z])/g, function (x, y) { return "_" + y.toUpperCase() }).replace(/^_/, "").toUpperCase();
         };
 
@@ -345,7 +366,7 @@ angular
             return geoHazardTid[mode];
         };
 
-        service.getCurrentGeoHazardName = function() {
+        service.getCurrentGeoHazardName = function () {
             return $translate.instant(AppSettings.getAppMode().toUpperCase());
         };
 
@@ -365,7 +386,7 @@ angular
         };
 
         service.getAppEmbeddedKdvElements = function () {
-            return $http.get('app/json/kdvElements.json').then(function(result) {
+            return $http.get('app/json/kdvElements.json').then(function (result) {
                 return result.data;
             });
         };
@@ -385,9 +406,9 @@ angular
             return diffDays > DAYS_BEFORE_KDV_UPDATE;
         };
 
-        service._getDropdownsFromApi = function() {
+        service._getDropdownsFromApi = function () {
             return $http.get(AppSettings.getEndPoints().getDropdowns, AppSettings.httpConfig)
-                .then(function(res) {
+                .then(function (res) {
                     if (res.data && res.data.Data) {
                         return JSON.parse(res.data.Data);
                     } else {
@@ -396,41 +417,6 @@ angular
                 });
         };
 
-        //service._mergeKdvElements = function (oldKdvElements, newKdvElements) {
-        //    var prop;
-        //    for (prop in oldKdvElements.KdvRepositories) {
-        //        if (oldKdvElements.KdvRepositories.hasOwnProperty(prop)) {
-        //            if (newKdvElements.KdvRepositories[prop]) { //Key exists in updated values
-        //                AppLogging.debug('Updating existing KdvRepository: ' + prop);
-        //                oldKdvElements.KdvRepositories[prop] = newKdvElements.KdvRepositories[prop];
-        //            } else {
-        //                AppLogging.warn('Existing Kdv-key not found in updated data: ' + prop + '. Keeping existing data for this key');
-        //            }
-        //        }
-        //    }
-        //    for (prop in newKdvElements.KdvRepositories) {
-        //        if (newKdvElements.KdvRepositories.hasOwnProperty(prop) && !oldKdvElements.KdvRepositories.hasOwnProperty(prop)) {
-        //            AppLogging.debug('New KdvRepository not found in existing Repository: ' + prop);
-        //            oldKdvElements.KdvRepositories[prop] = newKdvElements.KdvRepositories[prop]; //New key exists in updated data
-        //        }
-        //    }
-
-        //    for (prop in oldKdvElements.ViewRepositories) {
-        //        if (oldKdvElements.ViewRepositories.hasOwnProperty(prop)) {
-        //            if (newKdvElements.ViewRepositories[prop]) { //Key exists in updated values
-        //                AppLogging.debug('Updating existing ViewRepository: ' + prop);
-        //                oldKdvElements.ViewRepositories[prop] = newKdvElements.ViewRepositories[prop];
-        //            }
-        //        }
-        //    }
-        //    for (prop in newKdvElements.ViewRepositories) {
-        //        if (newKdvElements.ViewRepositories.hasOwnProperty(prop) && !oldKdvElements.ViewRepositories.hasOwnProperty(prop)) {
-        //            AppLogging.debug('New ViewRepository not found in existing Repository: ' + prop);
-        //            oldKdvElements.ViewRepositories[prop] = newKdvElements.ViewRepositories[prop]; //New key exists in updated data
-        //        }
-        //    }
-        //};
-
         service._saveKdvElements = function (elements) {
             var newDate = Date.now();
             LocalStorage.set('kdvDropdowns', JSON.stringify(elements));
@@ -438,7 +424,7 @@ angular
             $rootScope.$broadcast('kdvUpdated', newDate);
         };
 
-        service._refreshKdvElements = function() {
+        service._refreshKdvElements = function () {
             return service._getDropdownsFromApi()
                 .then(function (newKdvElements) {
                     return service.getKdvElements().then(function (response) { //Getting old values to update
@@ -474,7 +460,7 @@ angular
                 return arr;
             }
 
-            return arr.filter(function(item) { return item.Id > 0 && item.Id % 100 !== 0; });
+            return arr.filter(function (item) { return item.Id > 0 && item.Id % 100 !== 0; });
         };
 
         service.getKdvArray = function (key, keepZero) {
@@ -486,17 +472,21 @@ angular
                 });
         };
 
-        service.getKdvValue = function(key, id) {
+        service._getKdvValue = function (id, arr) {
+            var result = arr.filter(function (item) {
+                return item.Id === id;
+            });
+            if (result.length > 0) {
+                return result[0];
+            } else {
+                return null;
+            }
+        };
+
+        service.getKdvValue = function (key, id) {
             return service.getKdvArray(key)
-                .then(function(arr) {
-                    var result = arr.filter(function(item) {
-                        return item.Id === id;
-                    });
-                    if (result.length > 0) {
-                        return result[0];
-                    } else {
-                        return null;
-                    }
+                .then(function (arr) {
+                    return service._getKdvValue(id, arr);
                 });
         };
 
@@ -618,7 +608,7 @@ angular
             return (((1 + Math.random()) * 0x10000) | 0).toString(16).substring(1);
         }
 
-        service.humanFileSize = function(bytes, si) {
+        service.humanFileSize = function (bytes, si) {
             var thresh = si ? 1000 : 1024;
             if (Math.abs(bytes) < thresh) {
                 return bytes + ' B';
@@ -638,16 +628,16 @@ angular
          * Is ripple emulator running?
          * @returns {boolean} - true if ripple emulator is running 
          */
-        service.isRippleEmulator = function() {
+        service.isRippleEmulator = function () {
             return window.parent && window.parent.ripple;
         };
 
-        service.isString = function(obj) {
+        service.isString = function (obj) {
             return typeof obj === 'string' || obj instanceof String;
         };
 
 
-        service.hasMinimumNetwork = function() {
+        service.hasMinimumNetwork = function () {
             if (service.isRippleEmulator() || typeof Connection === 'undefined') {
                 return true;
             }

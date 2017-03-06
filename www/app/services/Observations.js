@@ -15,7 +15,7 @@ angular
                 }
                 AppLogging.log('registrations after geoHazard filter: ' + result.length);
                 if (validateObservationDate) {
-                    result = service._cleanupRegistrations(result);
+                    result = service._cleanupRegistrations(result, true);
                     AppLogging.log('registrations after date cleanup: ' +result.length);
                 }
 
@@ -86,17 +86,6 @@ angular
                             params: params,
                             timeout: canceller ? canceller.promise : AppSettings.httpConfig.timeout
                         })
-                        //AppSettings.getEndPoints().getObservationsWithinRadius,
-                        //                    {
-                        //                        params: {
-                        //                            latitude: latitude,
-                        //                            longitude: longitude,
-                        //                            range: range,
-                        //                            geohazardId: geohazardId,
-                        //                            returnCount: AppSettings.maxObservationsToFetch
-                        //                        },
-                        //                        timeout: canceller ? canceller.promise : AppSettings.httpConfig.timeout
-                        //                    })
                     .then(function (result) {
                         if (result.data) {
                             AppLogging.log('updateNearbyLocations got result, processing data');
@@ -274,14 +263,17 @@ angular
          * @param {} dateStringISO - DtIbsTime, example: 2017-01-10T07:19:57.495Z
          * @returns {} true if within days back limit, else false
          */
-        service._validateRegistrationDate = function (dateStringISO) {
+        service._validateRegistrationDate = function (dateStringISO, daysBack) {
             var date = moment(dateStringISO, moment.ISO_8601); //strict parsing
             if (!date.isValid()) {
                 AppLogging.log('Invalid date: ' + dateStringISO);
                 return false;
             }
             var diff = service._diffDays(date, service._now());
-            var limit = service._getShowObservationsDaysBack();
+            var limit = daysBack || service._getShowObservationsDaysBack();
+
+            AppLogging.log('Diff: ' + diff + ' limit: ' + limit);
+
             if (diff > limit) {
                 AppLogging.log('Diff: ' + diff + ' is larger than limit: ' + limit);
                 return false;
@@ -352,12 +344,31 @@ angular
         service._deleteAllInvalidRegistrationImages = function (registrations) {
             var tasks = [];
             registrations.forEach(function (item) {
-                if (!service._validateRegistrationDate(item.DtObsTime)) {
-                    tasks.push(service._deleteAllImagesForRegistration(item));
-                }
+               tasks.push(service._deleteAllImagesForRegistration(item));
             });
             return $q.all(tasks);
         };
+
+        /**
+         * Find old registrations that is old and should be deleted
+         * @param {} registrations 
+         * @returns {} 
+         */
+        service._findOldItemsToDelete = function(registrations, daysBack) {
+            var keep = [];
+            var old = [];
+
+            registrations.forEach(function (item) {
+                if (service._validateRegistrationDate(item.DtObsTime, daysBack || 15)) { //Remove items older than 15 days, since max show days back is 14 days
+                    keep.push(item);
+                } else {
+                    old.push(item);
+                }
+            });
+
+            return {keep: keep, old: old};
+        }
+
 
         /**
          * Removes all old observation from presistant storage
@@ -367,16 +378,15 @@ angular
             return service._getRegistrationsFromPresistantStorage()
                 .then(function (registrations) {
                     AppLogging.log('removeOldObservationsFromPresistantStorage before delete: ' + registrations.length);
-                    return service._deleteAllInvalidRegistrationImages(registrations)
+                    var filter = service._findOldItemsToDelete(registrations);
+
+                    return service._deleteAllInvalidRegistrationImages(filter.old)
                         .then(function () {
-                            AppLogging.log('removeOldObservationsFromPresistantStorage store: ' + registrations.length);
-                            return service._storeRegistrations(registrations);
+                            AppLogging.log('removeOldObservationsFromPresistantStorage store: ' + filter.keep.length);
+                            return service._storeRegistrations(filter.keep);
                         });
                 });
         };
-
-
-
 
         /**
          * Update observations within radius

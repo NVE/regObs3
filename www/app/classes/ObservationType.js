@@ -53,10 +53,16 @@
 
                         var valueText = '';
                         if (hasValue && (!displayFormat.condition || displayFormat.condition(result.value, self.data))) {
-                            valueText = (displayFormat.valueFormat ? displayFormat.valueFormat(result.value, self.data) : result.value).toString().trim();                           
+                            valueText = (displayFormat.valueFormat ? displayFormat.valueFormat(result.value, self.data) : result.value);                           
                         }
-                        hasValue = !Utility.isEmpty(valueText);
-                        callback(result.property, hasValue, result.value, valueText, displayFormat);
+                        if (valueText && angular.isFunction(valueText.then)) {
+                            valueText.then(function(promiseResult) {
+                                callback(result.property, !Utility.isEmpty(promiseResult), result.value, promiseResult, displayFormat);
+                            });
+                        } else {
+                            valueText = valueText.toString().trim();
+                            callback(result.property, !Utility.isEmpty(valueText), result.value, valueText, displayFormat);
+                        }
                     });
             }
         }

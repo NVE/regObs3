@@ -768,7 +768,7 @@
          * @returns {} 
          */
         service.getObservationsWithinViewBounds = function () {
-            return Observations.getStoredObservations(Utility.getCurrentGeoHazardTid())
+            return Observations.getStoredObservations(Utility.getCurrentGeoHazardTid(), true)
                 .then(function (result) {
                     var items = [];
                     result.forEach(function (obsJson) {
