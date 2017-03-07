@@ -1,0 +1,46 @@
+﻿<ion-view title="{{'CHOOSE_AREA'|translate}}">
+    <ion-content>
+        <map-area-select on-change="vm.updateCounts()" bounds="vm.bounds" zoom="vm.currentZoom"></map-area-select>
+        <ion-list>
+            <div class="item item-divider">
+                {{'NAME'|translate}}:
+            </div>
+            <label class="item item-input">
+                <input type="text" ng-model="vm.name" />
+            </label>
+            <div ng-show="vm.extraDetailLevel.length > 1">
+                <div class="item item-divider buttons-right">
+                    {{'NUMBER_OF_ZOOM_LEVELS'|translate}} ({{vm.currentZoom}}<span ng-show="vm.zoomlevel() !== vm.currentZoom"> - {{vm.zoomlevel()}}</span>): <button type="button" class="button button-small button-clear button-calm" ng-hide="vm.showMoreZoomLevels" ng-click="vm.toggleShowMoreZoomLevels()">{{'SHOW_MORE_CHOISES'|translate}}</button>
+                </div>
+                <ion-radio ng-repeat="el in vm.extraDetailLevel" ng-change="vm.zoomLevelChanged()" ng-value="el.extraLevels" ng-model="vm.selectedDetailLevel" ng-show="vm.showMoreZoomLevels || (vm.selectedDetailLevel === el.extraLevels)">{{el.description}}</ion-radio>
+            </div>
+            <div class="item item-divider">
+                {{'CHOOSE_MAP'|translate}}:
+            </div>
+            <div ng-repeat="tile in vm.maps">
+                <ion-toggle toggle-class="toggle-calm" ng-model="tile.selected" ng-change="vm.updateCounts()">
+                    {{tile.description | translate}}
+                </ion-toggle>
+            </div>
+            <div class="item item-divider">
+                {{'SUMMARY'|translate}}:
+            </div>
+            <div class="item item-input item-stacked-label item-text-wrap" ng-class="{'assertive':vm.downloadDisabled()}">
+                <div>
+                    {{vm.selectedMaps()}} {{'MAP'|translate|lowercase}}. {{'MAX_ZOOM'|translate}} {{vm.zoomlevel()}}. {{vm.mapFragmentCount}} {{'TILES'|translate|lowercase}}.
+                </div>
+                <div>
+                    {{'CA'|translate}} {{vm.size}} {{'OF'|translate|lowercase}} {{vm.availableDiskspace}} {{'AVAILABLE'|translate|lowercase}}.
+                </div>
+                <div ng-repeat="tile in vm.mapsWithLimitReached()">
+                    <span ng-if="tile.maxLimitMessage">{{tile.maxLimitMessage}}</span><span ng-if="!tile.maxLimitMessage">{{'MAX_LIMIT_FOR_TILE_DOWNLOAD_REACHED'|translate}}</span>
+                </div>
+            </div>
+            <div class="padding">
+                <button type="button" class="button button-block button-calm" ng-disabled="vm.downloadDisabled()" ng-click="vm.download()">
+                    {{'DOWNLOAD_THIS_AREA'|translate}}
+                </button>
+            </div>
+        </ion-list>
+    </ion-content>
+</ion-view>

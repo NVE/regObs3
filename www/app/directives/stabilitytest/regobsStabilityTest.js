@@ -17,6 +17,13 @@ angular
 
             $scope.reg = Registration.initPropertyAsArray('CompressionTest');
 
+            var checkAndCreateCompressionTestArray = function() {
+                if (!$scope.reg.CompressionTest || !angular.isArray($scope.reg.CompressionTest)) {
+                    $scope.reg.CompressionTest = [];
+                }
+            };
+
+           
             $scope.save = Registration.save;
 
             var setFractureDepth = function(stest) {
@@ -27,8 +34,11 @@ angular
 
             $scope.addStabilityTest = function () {
                 setFractureDepth($scope.stabilityTest);
-                if (!$scope.editing) {                   
-                    $scope.reg.CompressionTest.push($scope.stabilityTest);
+                if (!$scope.editing) {
+                    checkAndCreateCompressionTestArray();
+                    if (!Utility.isEmpty($scope.stabilityTest)) {
+                        $scope.reg.CompressionTest.push($scope.stabilityTest);
+                    }
                 }
                 $scope.modal.hide();
             };

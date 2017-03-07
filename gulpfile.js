@@ -1,3 +1,4 @@
+/// <binding ProjectOpened='watch' />
 var gulp = require('gulp');
 var gutil = require('gulp-util');
 var bower = require('bower');
@@ -10,6 +11,8 @@ var rename = require('gulp-rename');
 var sh = require('shelljs');
 var preen = require('preen');
 var jsonfile = require('jsonfile');
+var Server = require('karma').Server;
+var version = require('gulp-cordova-version');
 
 var paths = {
     sass: ['./scss/ionic.app.scss', './www/app/**/*.scss'],
@@ -17,10 +20,25 @@ var paths = {
     dist: './www/dist/'
 };
 
-gulp.task('default', ['preen','sass', 'scripts']);
+gulp.task('default', ['preen', 'sass', 'run-scripts-and-update-config']);
 
 gulp.task('preen', function (cb) {
     preen.preen({}, cb);
+});
+
+gulp.task('test', function (done) {
+    new Server({
+        configFile: require('path').resolve('karma.conf.js'),
+        singleRun: true
+    }, function(err){
+        if(err === 0){
+            done();
+        } else {
+            done(new gutil.PluginError('karma', {
+                message: 'Karma Tests failed'
+            }));
+        }
+    }).start();
 });
 
 gulp.task('sass', function(done) {
@@ -38,8 +56,20 @@ gulp.task('sass', function(done) {
         .on('end', done);
 });
 
-gulp.task('scripts', function (done) {
+gulp.task('run-scripts-and-update-config', ['scripts'], function (done) {
+    jsonfile.readFile('./www/app/json/version.json',
+        function (err, obj) {
+            var vfile = obj;
+            var versionStripped = vfile.version.replace(/\./g, '');
+            var buildStripped = vfile.build.replace(/\ /g, '');
+            var androidVersion = versionStripped + buildStripped.substring(2, 8);
+            gulp.src('.')
+            .pipe(version(vfile.version, { androidVersionCode: androidVersion, iosBundleVersion: buildStripped }))
+            .on('end', done);
+        });   
+});
 
+gulp.task('scripts', function (done) {
     jsonfile.readFile('./package.json', function(err, obj) {
 
         var now = new Date();
@@ -51,7 +81,6 @@ gulp.task('scripts', function (done) {
         jsonfile.writeFile('./www/app/json/version.json', vobj, function (err2) {
             console.error(err2);
         });
-        console.log(vobj);
     });
 
     gulp.src(paths.js)
@@ -60,14 +89,14 @@ gulp.task('scripts', function (done) {
         .pipe(rename({ suffix: '.min' }))
         //.pipe(stripDebug())
         .pipe(ngAnnotate())
-        .pipe(uglify())
+        .pipe(uglify().on('error', gutil.log))
         .pipe(gulp.dest(paths.dist))
         .on('end', done);
 });
 
 gulp.task('watch', function() {
     gulp.watch(paths.sass, ['sass']);
-    gulp.watch(paths.js, ['scripts']);
+    gulp.watch(paths.js, ['run-scripts-and-update-config']);
 });
 
 gulp.task('install', ['git-check'], function() {

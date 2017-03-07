@@ -1,43 +1,44 @@
 <ion-view view-title="Snøobservasjon">
     <ion-content>
         <ion-list>
+            <regobs-position></regobs-position>
             <regobs-time reg-object="vm.reg" reg-prop="DtObsTime"></regobs-time>
             <regobs-menu-item
-                    title="Faretegn"
-                    condition="appVm.propertyExists('DangerObs')"
-                    state="snowdangerobs"
-                    badge-text="vm.reg.DangerObs.length">
+                title="Faretegn"
+                condition="appVm.propertyExists('DangerObs')"
+                state="snowdangerobs"
+                badge-text="vm.reg.DangerObs.length">
             </regobs-menu-item>
 
             <regobs-menu-item
-                    title="Skredhendelse"
-                    condition="appVm.propertyExists('AvalancheObs')"
-                    state="avalancheobs">
+                title="Skredhendelse"
+                condition="appVm.propertyExists('AvalancheObs')"
+                state="avalancheobs">
             </regobs-menu-item>
 
             <regobs-menu-item
-                    title="Skredaktivitet"
-                    condition="appVm.propertyExists('AvalancheActivityObs2')"
-                    state="avalancheactivityobs"
-                    badge-text="vm.reg.AvalancheActivityObs2.length">
+                title="Skredaktivitet"
+                condition="appVm.propertyExists('AvalancheActivityObs2')"
+                state="avalancheactivityobs"
+                badge-text="vm.reg.AvalancheActivityObs2.length">
             </regobs-menu-item>
 
             <regobs-menu-item
-                    title="Vær"
-                    condition="appVm.propertyExists('WeatherObservation')"
-                    state="snowweatherobservation">
+                title="Vær"
+                condition="appVm.propertyExists('WeatherObservation')"
+                state="snowweatherobservation">
             </regobs-menu-item>
 
             <regobs-menu-item
-                    title="Snødekke"
-                    condition="appVm.propertyExists('SnowSurfaceObservation')"
-                    state="snowsurfaceobservation">
+                title="Snødekke"
+                condition="appVm.propertyExists('SnowSurfaceObservation')"
+                state="snowsurfaceobservation">
             </regobs-menu-item>
 
             <regobs-menu-item
-                    title="Snøprofil"
-                    condition="appVm.propertyExists('SnowProfile')"
-                    state="snowprofile">
+                title="Snøprofil"
+                condition="appVm.propertyExists('SnowProfile')"
+                state="snowprofile">
             </regobs-menu-item>
 
             <regobs-menu-item title="Stabilitetstest"
@@ -47,27 +48,24 @@
             </regobs-menu-item>
 
             <regobs-menu-item
-                    title="Skredproblem"
-                    condition="appVm.propertyExists('AvalancheEvalProblem2')"
-                    state="avalancheevalproblem"
-                    badge-text="vm.reg.AvalancheEvalProblem2.length">
+                title="Skredproblem"
+                condition="appVm.propertyExists('AvalancheEvalProblem2')"
+                state="avalancheevalproblem"
+                badge-text="vm.reg.AvalancheEvalProblem2.length">
             </regobs-menu-item>
 
             <regobs-menu-item
-                    title="Skredfarevurdering"
-                    condition="appVm.propertyExists('AvalancheEvaluation3')"
-                    state="avalancheevaluation">
+                title="Skredfarevurdering"
+                condition="appVm.propertyExists('AvalancheEvaluation3')"
+                state="avalancheevaluation">
             </regobs-menu-item>
 
             <regobs-menu-item
-                    title="Fritekst"
-                    condition="appVm.propertyExists('GeneralObservation')"
-                    state="generalobs">
+                title="Fritekst"
+                condition="appVm.propertyExists('GeneralObservation')"
+                state="generalobs">
             </regobs-menu-item>
 
         </ion-list>
-        <regobs-registration-tools></regobs-registration-tools>
-
-
     </ion-content>
 </ion-view>

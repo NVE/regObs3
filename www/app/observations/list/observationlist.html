@@ -1,0 +1,25 @@
+﻿<ion-view view-title="{{'OBSERVATIONS'|translate}}">
+    <ion-content>
+        <ion-refresher pulling-text="{{'PULL_TO_REFRESH'|translate}}"
+                       on-refresh="vm.update()">
+        </ion-refresher>
+        <ion-list>
+            <div ng-repeat="obs in vm.observations | orderBy:'-DtObsTime'">
+                <ion-item class="item-icon-right" ui-sref="observationdetails({observation:obs})">
+                    <h2>{{obs.DtObsTime | date:'d/M HH:mm'}} &bull; {{obs.NickName}}</h2>
+                    <span style="font-size: 14px">{{obs.getObservationTypeDescription() | limitTo: 30}}</span>
+                    <span class="item-note">
+                        {{obs.getUserDistanceText()}}
+                    </span>
+                    <i class="icon icon-accessory ion-chevron-right"></i>
+                </ion-item>
+            </div>
+            <div class="item item-text-wrap" ng-if="!vm.isLoading && vm.observations.length === 0">
+                <p>{{'NO_OBSERVATIONS'|translate}}</p>
+                <button type="button" class="button button-block button-calm" ng-click="vm.updateFromButton()">
+                    {{'UPDATE_OBSERVATIONS'|translate}}
+                </button>
+            </div>
+        </ion-list>
+    </ion-content>
+</ion-view>

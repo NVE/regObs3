@@ -4,7 +4,7 @@
 angular
     .module('RegObs')
     .directive('regobsAvalancheEvalProblem',
-        function regobsAvalancheEvalProblem($filter, $ionicModal, RegobsPopup, Registration, Utility, AppLogging) {
+        function regobsAvalancheEvalProblem($filter, $ionicModal, RegobsPopup, Registration, Utility, AppLogging, $translate) {
             'ngInject';
             return {
                 link: link,
@@ -27,8 +27,8 @@ angular
                 ];
 
                 var showConfirm = function () {
-                    return RegobsPopup.confirm('Slett skredproblem',
-                        'Er du sikker på at du vil slette dette skredproblemet?');
+                    return RegobsPopup.confirm($translate.instant('DELETE_AVALANCHE_PROBLEM'),
+                        $translate.instant('DELETE_AVALANCHE_PROBLEM_CONFIRM'));
                 };
 
                 $scope.exposedHeight = function (where) {
@@ -61,7 +61,7 @@ angular
                     $scope.allExpositionsToggled = false;
                     $scope.editing = false;
                     $scope.obs = {
-                        AvalCauseTID: $scope.avalCauseKDV[0].Id,
+                        AvalCauseTID: null,
                         exposedHeight: {
                             'top': false,
                             'mid': false,
@@ -85,6 +85,7 @@ angular
                     $scope.obs = obs;
                     loadValidExposition();
                     loadAttributeValues();
+                    $scope.setAvalancheExtArray();
                     $scope.editing = true;
                     $scope.modal.show();
                 };
@@ -123,7 +124,7 @@ angular
                 };
 
                 $scope.setAvalancheExtArray = function () {
-                    var filteredViewArray = $filter('filter')(viewArray, {AvalCauseTID: $scope.obs.AvalCauseTID}, true);
+                    var filteredViewArray = $filter('filter')(viewArray, { AvalCauseTID: $scope.obs.AvalCauseTID }, true).filter(function (item) { return item.AvalancheExtTID > 0 });
                     AppLogging.log(filteredViewArray);
                     $scope.avalancheExtArray = filteredViewArray.map(function (val) {
                         return {
@@ -134,9 +135,12 @@ angular
                     AppLogging.log($scope.avalancheExtArray);
                 };
 
-                $scope.getDisplayName = function(obs){
+                $scope.getDisplayName = function (obs) {
+                    if (!avalancheExtDict || !avalCauseDict) //dictionaries not loaded
+                        return '';
+
                     var seperator = avalancheExtDict[obs.AvalancheExtTID]? ', ' : '';
-                    return (avalancheExtDict[obs.AvalancheExtTID] || '') + seperator + avalCauseDict[obs.AvalCauseTID];
+                    return (avalancheExtDict[obs.AvalancheExtTID] || '').trim() + seperator + (avalCauseDict[obs.AvalCauseTID] || '');
                 };
 
                 var loadModal = function () {
@@ -193,7 +197,7 @@ angular
                         //Snow_AvalCauseAttributeFlags
                         $scope.avalCauseAttributeFlags = repos['Snow_AvalCauseAttributeFlags'];
 
-                        $scope.avalCauseKDV = repos['Snow_AvalCauseKDV'];
+                        $scope.avalCauseKDV = repos['Snow_AvalCauseKDV'].filter(function(item){ return item.Id > 0 });
 
                         avalancheExtDict = {};
                         avalCauseDict = {};

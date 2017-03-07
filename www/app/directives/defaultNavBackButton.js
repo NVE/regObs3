@@ -1,7 +1,7 @@
 angular
     .module('RegObs')
     .directive('defaultNavBackButton',
-    function defaultNavBackButton($ionicHistory, $state, $ionicConfig, $ionicViewSwitcher, $ionicPlatform) {
+    function defaultNavBackButton($ionicHistory, $state, $ionicConfig, $ionicViewSwitcher, $ionicPlatform, AppLogging) {
         'ngInject';
         return {
             link: link,
@@ -9,27 +9,38 @@ angular
         };
 
         function link(scope, element, attrs) {
-            scope.backTitle = function() {
+            scope.backTitle = function () {
                 var defaultBack = getDefaultBack();
-                if ($ionicConfig.backButton.previousTitleText() && defaultBack) {
-                    return $ionicHistory.backTitle() || defaultBack.title;
-                }
-            };
-            scope.goBack = function() {
-                if ($ionicHistory.backView()) {
-                    $ionicHistory.goBack();
+                //if ($ionicConfig.backButton.previousTitleText() && defaultBack) {
+                //    return $ionicHistory.backTitle() || defaultBack.title || 'BACK';
+                //}
+
+                if (defaultBack && defaultBack.title && (defaultBack.force || !$ionicHistory.backView())) {
+                    return defaultBack.title;
                 } else {
-                    goDefaultBack();
+                    return 'BACK';
                 }
             };
-            scope.$on('$stateChangeSuccess', function() {
-                element.toggleClass('hide', !getDefaultBack());
-            });
-            $ionicPlatform.registerBackButtonAction(function () {
-                if ($ionicHistory.backView()) {
-                    $ionicHistory.goBack();
-                } else if(getDefaultBack()) {
+            scope.goBack = function () {
+                var defaultBack = getDefaultBack();
+                if (defaultBack && (defaultBack.force || !$ionicHistory.backView())){
                     goDefaultBack();
+                } else if ($ionicHistory.backView()) {
+                    $ionicHistory.goBack();
+                }else {
+                    $state.go('start');
+                }
+            };
+            scope.$on('$stateChangeSuccess', function () {
+                element.toggleClass('hide', (!getDefaultBack() && !$ionicHistory.backView()));
+            });
+
+            $ionicPlatform.registerBackButtonAction(function () {
+                var defaultBack = getDefaultBack();
+                if (defaultBack && (defaultBack.force || !$ionicHistory.backView())) {
+                    goDefaultBack();
+                } else if ($ionicHistory.backView()) {
+                    $ionicHistory.goBack();
                 } else {
                     navigator.app.exitApp();
                 }

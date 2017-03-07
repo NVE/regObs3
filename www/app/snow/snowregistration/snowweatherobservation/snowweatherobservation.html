@@ -3,7 +3,7 @@
         <form name="snowWeatherForm" novalidate>
             <ion-list>
                 <kdv-dropdown
-                        title="Nedbørstype"
+                        title="PRECIPITATION"
                         model="vm.reg.WeatherObservation.PrecipitationTID"
                         kdv-key="Snow_PrecipitationKDV">
                 </kdv-dropdown>
@@ -37,6 +37,7 @@
                     </span>
                     <select ng-model="vm.reg.WeatherObservation.WindDirection"
                             ng-options="dir.val as dir.name for dir in vm.windDirectionArray">
+                        <option value=""></option>
                     </select>
                 </label>
 
@@ -48,7 +49,7 @@
             </ion-list>
             <regobs-image-list></regobs-image-list>
         </form>
-        <button ui-sref="help({page:'weatherobs'})" class="button button-positive button-block button-clear">
+        <button type="button" ui-sref="help({page:'weatherobs'})" class="button button-positive button-block button-clear">
             Hjelp
         </button>
     </ion-content>

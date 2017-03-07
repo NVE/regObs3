@@ -1,35 +1,33 @@
 <ion-view view-title="Vannobservasjon">
     <ion-content>
         <ion-list>
+            <regobs-position></regobs-position>
             <regobs-time reg-object="vm.reg" reg-prop="DtObsTime"></regobs-time>
             <regobs-menu-item
-                    title="Faretegn"
-                    condition="appVm.propertyExists('DangerObs')"
-                    state="waterdangerobs"
-                    badge-text="vm.reg.DangerObs.length">
+                title="Faretegn"
+                condition="appVm.propertyExists('DangerObs')"
+                state="waterdangerobs"
+                badge-text="vm.reg.DangerObs.length">
             </regobs-menu-item>
 
             <regobs-menu-item
-                    title="Vannstand"
-                    condition="appVm.propertyExists('WaterLevel')"
-                    state="waterlevel">
+                title="Vannstand"
+                condition="appVm.propertyExists('WaterLevel')"
+                state="waterlevel">
             </regobs-menu-item>
 
             <regobs-menu-item
-                    title="Ulykke/Hendelse"
-                    condition="appVm.propertyExists('Incident')"
-                    state="waterincident">
+                title="Ulykke/Hendelse"
+                condition="appVm.propertyExists('Incident')"
+                state="waterincident">
             </regobs-menu-item>
 
             <regobs-menu-item
-                    title="Fritekst"
-                    condition="appVm.propertyExists('GeneralObservation')"
-                    state="generalobs">
+                title="Fritekst"
+                condition="appVm.propertyExists('GeneralObservation')"
+                state="generalobs">
             </regobs-menu-item>
 
         </ion-list>
-        <regobs-registration-tools></regobs-registration-tools>
-
-
     </ion-content>
 </ion-view>

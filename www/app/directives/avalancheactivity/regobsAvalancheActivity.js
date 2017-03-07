@@ -4,7 +4,7 @@
 angular
     .module('RegObs')
     .directive('regobsAvalancheActivity',
-        function regobsAvalancheActivity($filter, $ionicModal, RegobsPopup, Registration, Utility, AppLogging) {
+        function regobsAvalancheActivity($filter, $ionicModal, RegobsPopup, Registration, Utility, AppLogging, $translate) {
             'ngInject';
             return {
                 link: link,
@@ -32,7 +32,7 @@ angular
                             id: 1,
                             start: {h:0, m:0},
                             end: {h:23, m:59},
-                            text: 'I løpet av dagen'
+                            text: $translate.instant('DURING_THE_DAY')
                         },
                         {
                             id: 2,
@@ -62,37 +62,35 @@ angular
                 };
 
                 var showConfirm = function () {
-                    return RegobsPopup.confirm('Slett skredproblem',
-                        'Er du sikker på at du vil slette dette skredproblemet?');
+                    return RegobsPopup.confirm($translate.instant('DELETE_AVALANCHE_ACTIVITY'),
+                        $translate.instant('DELETE_AVALANCHE_ACTIVITY_CONFIRM'));
                 };
 
                 $scope.estimatedNumChanged = function () {
-                    $scope.noActivity.val = $scope.obs.EstimatedNumTID === $scope.estimatedNumKdvArray[1].Id;
+                    $scope.noActivity.val = $scope.obs.EstimatedNumTID === $scope.estimatedNumKdvArray[0].Id;
                 };
 
-                $scope.dateChanged = function(){
-                    var now = new Date();
+                $scope.dateChanged = function () {
+                    if ($scope.dates.DtStart) {
+                        var start = new Date($scope.dates.DtStart);
+                        if ($scope.dates.timeFrame && $scope.dates.timeFrame.start) {
+                            start.setHours($scope.dates.timeFrame.start.h);
+                            start.setMinutes($scope.dates.timeFrame.start.m);
+                            start.setSeconds(0);
+                            start.setMilliseconds(0);
+                        }                 
 
-                    /*if($scope.dates.DtStart > now){
-                        $scope.dates.DtStart = now;
-                    }*/
-                    AppLogging.log($scope.dates.timeFrame);
+                        var end = new Date($scope.dates.DtStart);
+                        if ($scope.dates.timeFrame && $scope.dates.timeFrame.end) {
+                            end.setHours($scope.dates.timeFrame.end.h);
+                            end.setMinutes($scope.dates.timeFrame.end.m);
+                            end.setSeconds(0);
+                            end.setMilliseconds(0);
+                        }
 
-                    var start = new Date($scope.dates.DtStart);
-                    start.setHours($scope.dates.timeFrame.start.h);
-                    start.setMinutes($scope.dates.timeFrame.start.m);
-                    start.setSeconds(0);
-                    start.setMilliseconds(0);
-
-                    var end = new Date($scope.dates.DtStart);
-                    end.setHours($scope.dates.timeFrame.end.h);
-                    end.setMinutes($scope.dates.timeFrame.end.m);
-                    end.setSeconds(0);
-                    end.setMilliseconds(0);
-
-                    $scope.obs.DtStart = start.toISOString();
-                    $scope.obs.DtEnd = end.toISOString();
-                    AppLogging.log($scope.obs);
+                        $scope.obs.DtStart = start.toISOString();
+                        $scope.obs.DtEnd = end.toISOString();
+                    }
                 };
 
                 $scope.exposedHeight = function (where) {
@@ -144,16 +142,46 @@ angular
                         if(!$scope.reg.AvalancheActivityObs2){
                             $scope.reg.AvalancheActivityObs2 = [];
                         }
-                        AppLogging.log($scope.reg);
-                        $scope.reg.AvalancheActivityObs2.push($scope.obs);
+                        if (!Utility.isEmpty($scope.obs)) {
+                            $scope.reg.AvalancheActivityObs2.push($scope.obs);
+                        }
                     }
                     $scope.modal.hide();
                 };
 
+                $scope._setTimeFrameFromObsEndTime = function() {
+                    if ($scope.obs.DtEnd) {
+                        var end = new Date($scope.obs.DtEnd);
+                        var endHour = end.getHours();
+                        var startHour = $scope.dates.DtStart.getHours();
+                        for (var i = 0; i < $scope.dates.timeFrames.length; i++) {
+                            if ($scope.dates.timeFrames[i].start.h === startHour && $scope.dates.timeFrames[i].end.h === endHour) {
+                                $scope.dates.timeFrame = $scope.dates.timeFrames[i];
+                            }
+                        }
+                    }
+                };
+
+                $scope._loadValidExposition = function () {
+                    $scope.allExpositionsToggled = $scope.obs.ValidExposition === '11111111';
+                    if ($scope.obs.ValidExposition) {
+                        $scope.exposition = $scope.obs.ValidExposition.split('')
+                            .map(function (val) {
+                                return parseInt(val);
+                            });
+                    } else {
+                        $scope.exposition = [0, 0, 0, 0, 0, 0, 0, 0];
+                    }
+                };
+
+
                 $scope.edit = function (obs, index) {
                     indexEditing = index;
                     $scope.obs = obs;
-                    loadValidExposition();
+                    $scope.dates.DtStart = new Date($scope.obs.DtStart);
+                    $scope._setTimeFrameFromObsEndTime();
+                    $scope._loadValidExposition();
+                    $scope.estimatedNumChanged();
                     $scope.editing = true;
                     $scope.modal.show();
                 };
@@ -171,10 +199,9 @@ angular
 
                 $scope.toggleNoActivity = function(){
                     if ($scope.noActivity.val) {
-                        AppLogging.log('toggle');
-                        $scope.obs.EstimatedNumTID = $scope.estimatedNumKdvArray[1].Id;
-                    } else {
                         $scope.obs.EstimatedNumTID = $scope.estimatedNumKdvArray[0].Id;
+                    } else {
+                        $scope.obs.EstimatedNumTID = null;
                     }
                 };
 
@@ -210,23 +237,10 @@ angular
                     $scope.obs.ValidExposition = $scope.exposition.join('');
                 };
 
-                var loadValidExposition = function () {
-
-                    $scope.allExpositionsToggled = $scope.obs.ValidExposition === '11111111';
-
-                    if($scope.obs.ValidExposition){
-                        $scope.exposition = $scope.obs.ValidExposition.split('')
-                            .map(function (val) {
-                                return parseInt(val);
-                            });
-                    } else {
-                        $scope.exposition = [0,0,0,0,0,0,0,0];
-                    }
-                };
-
+                
 
                 Utility
-                    .getKdvRepositories('Snow_AvalancheExtKDV')
+                    .getKdvRepositories()
                     .then(function (repos) {
                         //Snow_AvalCauseAttributeFlags
                         $scope.avalancheExtDict = {};
@@ -234,7 +248,7 @@ angular
                         repos['Snow_AvalancheExtKDV'].forEach(function (val) {
                             $scope.avalancheExtDict[val.Id] = val.Name;
                         });
-                        $scope.estimatedNumKdvArray = repos['Snow_EstimatedNumKDV'];
+                        $scope.estimatedNumKdvArray = repos['Snow_EstimatedNumKDV'].filter(function(item){return item.Id > 0 });
                         $scope.estimatedNumKdvArray.forEach(function (val) {
                             $scope.estimatedNumDict[val.Id] = val.Name;
                         });

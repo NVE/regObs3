@@ -1,0 +1,542 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <title>Code coverage report for app\services\Trip.js</title>
+    <meta charset="utf-8" />
+    <link rel="stylesheet" href="../../prettify.css" />
+    <link rel="stylesheet" href="../../base.css" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <style type='text/css'>
+        .coverage-summary .sorter {
+            background-image: url(../../sort-arrow-sprite.png);
+        }
+    </style>
+</head>
+<body>
+<div class='wrapper'>
+  <div class='pad1'>
+    <h1>
+      <a href="../../index.html">all files</a> / <a href="index.html">app/services/</a> Trip.js
+    </h1>
+    <div class='clearfix'>
+      <div class='fl pad1y space-right2'>
+        <span class="strong">23.53% </span>
+        <span class="quiet">Statements</span>
+        <span class='fraction'>16/68</span>
+      </div>
+      <div class='fl pad1y space-right2'>
+        <span class="strong">0% </span>
+        <span class="quiet">Branches</span>
+        <span class='fraction'>0/29</span>
+      </div>
+      <div class='fl pad1y space-right2'>
+        <span class="strong">11.11% </span>
+        <span class="quiet">Functions</span>
+        <span class='fraction'>2/18</span>
+      </div>
+      <div class='fl pad1y space-right2'>
+        <span class="strong">23.53% </span>
+        <span class="quiet">Lines</span>
+        <span class='fraction'>16/68</span>
+      </div>
+    </div>
+  </div>
+  <div class='status-line low'></div>
+<pre><table class="coverage">
+<tr><td class="line-count quiet">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31
+32
+33
+34
+35
+36
+37
+38
+39
+40
+41
+42
+43
+44
+45
+46
+47
+48
+49
+50
+51
+52
+53
+54
+55
+56
+57
+58
+59
+60
+61
+62
+63
+64
+65
+66
+67
+68
+69
+70
+71
+72
+73
+74
+75
+76
+77
+78
+79
+80
+81
+82
+83
+84
+85
+86
+87
+88
+89
+90
+91
+92
+93
+94
+95
+96
+97
+98
+99
+100
+101
+102
+103
+104
+105
+106
+107
+108
+109
+110
+111
+112
+113
+114
+115
+116
+117
+118
+119
+120
+121
+122
+123
+124
+125
+126
+127
+128
+129
+130
+131
+132
+133
+134
+135
+136
+137
+138
+139
+140
+141
+142
+143
+144
+145
+146
+147
+148
+149
+150
+151
+152
+153
+154
+155
+156
+157
+158
+159
+160</td><td class="line-coverage quiet"><span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">44×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">44×</span>
+<span class="cline-any cline-yes">44×</span>
+<span class="cline-any cline-yes">44×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">44×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">44×</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">44×</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">44×</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">44×</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">44×</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">44×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">(function () {
+    'use strict';
+&nbsp;
+    /*var trip = {
+        "GeoHazardID": 10,
+        "ObserverGuid": "3ec84df5-226f-4578-b28e-39a9773c4af4",
+        "TripTypeID": "30",
+        "ObservationExpectedMinutes": 780,
+        "Comment": "",
+        "DeviceGuid": "24ad5391-9865-4306-0677-5e72c2c31bc5",
+        "Lat": "59,9291293",
+        "Lng": "10,7080138"
+    };*/
+&nbsp;
+    function Trip($http, AppSettings, Utility, User, ObsLocation, RegobsPopup, LocalStorage, UserLocation, $state, $rootScope, Registration) {
+        'ngInject';
+&nbsp;
+        var Trip = this;
+        var storageKey = 'regobsTrip';
+        var defaultModel = {
+            started: false,
+            time: null,
+            data: {}
+        };
+&nbsp;
+        Trip.model = LocalStorage.getAndSetObject(
+            storageKey, 'data', angular.copy(defaultModel)
+        );
+&nbsp;
+        Trip._getTripLocation = <span class="fstat-no" title="function not covered" >function() {</span>
+<span class="cstat-no" title="statement not covered" >            if (ObsLocation.isSet()) {</span>
+<span class="cstat-no" title="statement not covered" >                return {</span>
+                    latitude: ObsLocation.data.Latitude,
+                    longitude: ObsLocation.data.Longitude
+                };
+            } else <span class="cstat-no" title="statement not covered" >if (UserLocation.hasUserLocation()) {</span>
+<span class="cstat-no" title="statement not covered" >                return UserLocation.getLastUserLocation();</span>
+            }
+<span class="cstat-no" title="statement not covered" >            return null;</span>
+        };
+&nbsp;
+        Trip.canStart = <span class="fstat-no" title="function not covered" >function() {</span>
+<span class="cstat-no" title="statement not covered" >            return AppSettings.getAppMode() === 'snow' &amp;&amp; !Trip.model.started &amp;&amp; !User.getUser().anonymous;</span>
+        };
+&nbsp;
+&nbsp;
+        Trip.start = <span class="fstat-no" title="function not covered" >function (type, tripId, expectedMin, comment) {</span>
+<span class="cstat-no" title="statement not covered" >            if (User.getUser().anonymous) {</span>
+<span class="cstat-no" title="statement not covered" >                return RegobsPopup.alert('Ikke innlogget', 'Vennligst logg inn for å melde tur.');</span>
+            }
+<span class="cstat-no" title="statement not covered" >            if (!(tripId &amp;&amp; expectedMin)) {</span>
+<span class="cstat-no" title="statement not covered" >                return RegobsPopup.alert('Vennligst fyll ut felter', 'Både turtype og forventet klokkeslett for innsending av observasjoner må være satt for å melde tur.');</span>
+            }
+<span class="cstat-no" title="statement not covered" >            var loc = Trip._getTripLocation();</span>
+<span class="cstat-no" title="statement not covered" >            if (loc) {</span>
+<span class="cstat-no" title="statement not covered" >                Trip.model.time = new Date();</span>
+<span class="cstat-no" title="statement not covered" >                Trip.model.started = false;</span>
+<span class="cstat-no" title="statement not covered" >                Trip.model.data = {</span>
+                    "GeoHazardID": Utility.geoHazardTid(type),
+                    "ObserverGuid": User.getUser().Guid,
+                    "TripTypeID": tripId,
+                    "ObservationExpectedMinutes": expectedMin,
+                    "Comment": comment,
+                    "DeviceGuid": Utility.createGuid(),
+                    "Lat": loc.latitude,
+                    "Lng": loc.longitude
+                };
+<span class="cstat-no" title="statement not covered" >                save();</span>
+&nbsp;
+&nbsp;
+<span class="cstat-no" title="statement not covered" >                RegobsPopup.confirm('Bekreft innsending', 'Vil du melde inn denne turen?')</span>
+                    .then(<span class="fstat-no" title="function not covered" >function (confirm) {</span>
+<span class="cstat-no" title="statement not covered" >                        if (confirm) {</span>
+<span class="cstat-no" title="statement not covered" >                            Trip.sending = true;</span>
+<span class="cstat-no" title="statement not covered" >                            return $http.post(AppSettings.getEndPoints().trip, Trip.model.data, AppSettings.httpConfig);</span>
+                        }
+                    })
+                    .then(<span class="fstat-no" title="function not covered" >function (http) {</span>
+<span class="cstat-no" title="statement not covered" >                        if (http) {</span>
+                            
+<span class="cstat-no" title="statement not covered" >                            Trip.model.started = true;</span>
+<span class="cstat-no" title="statement not covered" >                            save();</span>
+<span class="cstat-no" title="statement not covered" >                            $rootScope.$broadcast('$regobs.tripStarted');</span>
+<span class="cstat-no" title="statement not covered" >                            RegobsPopup.alert('Tur startet', 'Tur startet!')</span>
+                                .then(<span class="fstat-no" title="function not covered" >function() {</span>
+<span class="cstat-no" title="statement not covered" >                                    $state.go('start');</span>
+                                });
+                            
+                        }
+                    })
+                    .catch(<span class="fstat-no" title="function not covered" >function () {</span>
+<span class="cstat-no" title="statement not covered" >                        RegobsPopup.alert('Feilmelding', 'Klarte ikke starte tur.');</span>
+<span class="cstat-no" title="statement not covered" >                        Trip.model.started = false;</span>
+<span class="cstat-no" title="statement not covered" >                        save();</span>
+                    })
+                    .finally(<span class="fstat-no" title="function not covered" >function () {</span>
+<span class="cstat-no" title="statement not covered" >                        Trip.sending = false;</span>
+                    });
+&nbsp;
+            } else {
+<span class="cstat-no" title="statement not covered" >                RegobsPopup.alert('Posisjon ikke satt', 'Posisjon må være satt for å starte tur');</span>
+            }
+        };
+&nbsp;
+        Trip.stop = <span class="fstat-no" title="function not covered" >function () {</span>
+<span class="cstat-no" title="statement not covered" >            return RegobsPopup.confirm('Bekreft innsending', 'Vil du avslutte denne turen?')</span>
+                .then(<span class="fstat-no" title="function not covered" >function (confirm) {</span>
+<span class="cstat-no" title="statement not covered" >                    if (confirm) {</span>
+<span class="cstat-no" title="statement not covered" >                        Trip.sending = true;</span>
+<span class="cstat-no" title="statement not covered" >                        return $http.put(AppSettings.getEndPoints().trip, Trip.model.data, AppSettings.httpConfig);</span>
+                    }
+                })
+                .then(<span class="fstat-no" title="function not covered" >function (httpPromise) {</span>
+<span class="cstat-no" title="statement not covered" >                    if (httpPromise) {</span>
+<span class="cstat-no" title="statement not covered" >                        stop();</span>
+<span class="cstat-no" title="statement not covered" >                        return RegobsPopup.alert('Tur stoppet', 'Tur avsluttet!');</span>
+                    }
+                })
+                .catch(<span class="fstat-no" title="function not covered" >function () {</span>
+<span class="cstat-no" title="statement not covered" >                    RegobsPopup.alert('Feilmelding', 'Klarte ikke avslutte tur, dette kan skyldes at den allerede har blitt avsluttet på nett, eller på serveren.');</span>
+<span class="cstat-no" title="statement not covered" >                    stop();</span>
+                })
+                .finally(<span class="fstat-no" title="function not covered" >function () {</span>
+<span class="cstat-no" title="statement not covered" >                    Trip.sending = false;</span>
+                });
+&nbsp;
+        };
+&nbsp;
+        Trip.checkIfTripShouldBeAutoStopped = <span class="fstat-no" title="function not covered" >function () {</span>
+<span class="cstat-no" title="statement not covered" >            if (!Trip.model.time) {</span>
+<span class="cstat-no" title="statement not covered" >                return;</span>
+            }
+<span class="cstat-no" title="statement not covered" >            var now = new Date();</span>
+<span class="cstat-no" title="statement not covered" >            var modelTime = new Date(Trip.model.time);</span>
+&nbsp;
+<span class="cstat-no" title="statement not covered" >            if (Trip.model.time &amp;&amp; now.getDay() !== modelTime.getDay()) {</span>
+<span class="cstat-no" title="statement not covered" >                stop();</span>
+<span class="cstat-no" title="statement not covered" >                return RegobsPopup.alert('Tur stoppet', 'Gårsdagens tur har automatisk blitt avsluttet.');</span>
+            }
+        };
+&nbsp;
+<span class="fstat-no" title="function not covered" >        function stop() {</span>
+<span class="cstat-no" title="statement not covered" >            Trip.model = angular.copy(defaultModel);</span>
+<span class="cstat-no" title="statement not covered" >            save();</span>
+<span class="cstat-no" title="statement not covered" >            Trip.sending = false;</span>
+        }
+&nbsp;
+<span class="fstat-no" title="function not covered" >        function save() {</span>
+<span class="cstat-no" title="statement not covered" >            LocalStorage.setObject(storageKey, Trip.model);</span>
+        }
+&nbsp;
+        return Trip;
+&nbsp;
+    }
+&nbsp;
+    angular.module('RegObs')
+        .factory('Trip', Trip);
+&nbsp;
+})();
+&nbsp;</pre></td></tr>
+</table></pre>
+<div class='push'></div><!-- for sticky footer -->
+</div><!-- /wrapper -->
+<div class='footer quiet pad2 space-top1 center small'>
+  Code coverage
+  generated by <a href="http://istanbul-js.org/" target="_blank">istanbul</a> at Tue Mar 07 2017 10:34:51 GMT+0100 (W. Europe Standard Time)
+</div>
+</div>
+<script src="../../prettify.js"></script>
+<script>
+window.onload = function () {
+        if (typeof prettyPrint === 'function') {
+            prettyPrint();
+        }
+};
+</script>
+<script src="../../sorter.js"></script>
+</body>
+</html>

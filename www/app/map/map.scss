@@ -1,0 +1,345 @@
+﻿.regobs-map {
+    height: 100%;
+}
+
+.map-observation-info {
+    padding: 6px 8px;
+    background: white;
+    background: rgba(255,255,255,0.8);
+    box-shadow: 0 0 15px rgba(0,0,0,0.2);
+    border-radius: 5px;
+}
+
+@-moz-keyframes leaflet-usermarker-pulsate {
+    from {
+        -moz-transform: scale(0.5);
+        opacity: 1.0;
+    }
+
+    95% {
+        -moz-transform: scale(1.3);
+        opacity: 0;
+    }
+
+    to {
+        -moz-transform: scale(0.7);
+        opacity: 0;
+    }
+}
+
+@-webkit-keyframes leaflet-usermarker-pulsate {
+    from {
+        -webkit-transform: scale(0.5);
+        opacity: 1.0;
+    }
+
+    95% {
+        -webkit-transform: scale(1.3);
+        opacity: 0;
+    }
+
+    to {
+        -webkit-transform: scale(0.7);
+        opacity: 0;
+    }
+}
+
+@keyframes leaflet-usermarker-pulsate {
+    from {
+        transform: scale(0.5);
+        opacity: 1.0;
+    }
+
+    95% {
+        transform: scale(1.3);
+        opacity: 0;
+    }
+
+    to {
+        transform: scale(0.7);
+        opacity: 0;
+    }
+}
+
+.leaflet-usermarker,
+.leaflet-usermarker-small {
+    width: 34px;
+    height: 34px;
+    background: url(../img/bluedot.png);
+    background-size: 100%;
+}
+
+.leaflet-usermarker-small {
+    width: 17px;
+    height: 17px;
+}
+
+.leaflet-usermarker i.pulse,
+.leaflet-usermarker-small i.pulse {
+    display: block;
+    -moz-animation: leaflet-usermarker-pulsate 1.5s ease-in-out infinite;
+    -webkit-animation: leaflet-usermarker-pulsate 1.5s ease-in-out infinite;
+    animation: leaflet-usermarker-pulsate 1.5s ease-in-out infinite;
+    border: 1pt solid #fff;
+    /* make a circle */
+    -moz-border-radius: 51px;
+    -webkit-border-radius: 51px;
+    border-radius: 51px;
+    /* multiply the shadows, inside and outside the circle */
+    -moz-box-shadow: inset 0 0 5px #06f, inset 0 0 5px #06f, inset 0 0 5px #06f, 0 0 5px #06f, 0 0 5px #06f, 0 0 5px #06f;
+    -webkit-box-shadow: inset 0 0 5px #06f, inset 0 0 5px #06f, inset 0 0 5px #06f, 0 0 5px #06f, 0 0 5px #06f, 0 0 5px #06f;
+    box-shadow: inset 0 0 5px #06f, inset 0 0 5px #06f, inset 0 0 5px #06f, 0 0 5px #06f, 0 0 5px #06f, 0 0 5px #06f;
+    /* set the ring's new dimension and re-center it */
+    height: 61px !important;
+    margin: -14px 0 0 -14px;
+    width: 61px !important;
+}
+
+.leaflet-usermarker-small i.pulse {
+    height: 31px !important;
+    width: 31px !important;
+    margin: -7px 0 0 -7px;
+}
+
+.leaflet-marker-menu-item {
+    background: #fff;
+    border-radius: 22px;
+    box-shadow: 0 2px 10px 0 rgba(0, 0, 0, 0.2), 0 2px 5px 0 rgba(0, 0, 0, 0.2);
+    display: table;
+    font-size: 18px;
+}
+
+.leaflet-marker-menu-item .icon {
+    display: table-cell;
+    vertical-align: middle;
+    text-align: center;
+}
+
+.leaflet-marker-menu-item.red-circle {
+    border-color: #e42112;
+    background-color: #ef473a;
+    color: #fff;
+}
+
+.map-obs-marker {
+    font-size: 18px !important;
+    margin-top: 8px !important;
+}
+
+.map-obs-marker-set {
+    margin-left: 5px !important;
+    margin-top: 10px !important;
+}
+
+.map-obs-marker-observation {
+    margin-left: 8px !important;
+    margin-top: 14px !important;
+}
+
+.map-area-select {
+    min-height: 200px;
+    position: relative;
+    margin: 30px;
+    border: 2px solid red;
+}
+
+.nearby-location-marker {
+    border-radius: 50%;
+    width: 30px;
+    height: 30px;
+    margin-left: -15px;
+    margin-top: -15px;
+}
+
+.nearby-location-marker-inner {
+    border: 5px solid brown;
+    border-radius: 20px;
+    height: 20px;
+    width: 20px;
+    position: relative;
+    left: 5px;
+    top: 5px;
+}
+
+.selected .nearby-location-marker-inner {
+    border: 6px solid black;
+}
+
+.nearby-location-marker-inner-cluster {
+    border: 2px solid brown;
+    text-align: center;
+}
+
+.observation-pin {
+    width: 30px;
+    height: 30px;
+    border-radius: 50% 50% 50% 0;
+    transform: rotate(-45deg);
+    margin-left: -10px;
+    margin-top: -23px;
+    border: 2px solid grey;
+    font-size: 12px;
+    line-height: 1.5;
+    opacity: 0.8;
+}
+
+.observation-pin.expiery-1 {
+    opacity: 0.7;
+}
+
+.observation-pin.expiery-2 {
+    opacity: 0.6;
+}
+
+.observation-pin.expiery-3 {
+    opacity: 0.5;
+}
+
+.observation-pin.selected {
+    border: 3px solid black;
+    opacity: 1.0;
+}
+
+.observation-pin-icon {
+    transform: rotate(45deg);
+    display: block;
+    position: absolute;
+    left: -10px;
+    top: 6px;
+    width: 30px;
+    height: 30px;
+    text-align: center;
+    opacity: 1.0;
+    line-height: 0.5;
+}
+
+.observation-pin-icon.large-icon {
+    font-size: 16px;
+    left: -4px;
+    top: 2px;
+}
+
+.selected .observation-pin-icon {
+    margin: -1px;
+}
+
+.obs-marker-cluster {
+    opacity: 0.8 !important;
+}
+
+.obs-marker-cluster-two-line {
+    font-size: 10px;
+    margin-top: -4px;
+}
+
+.menu-observation-pin {
+    display: inline-block;
+    margin-left: 0px;
+    margin-top: 0px;
+    position: relative;
+    top: -5px;
+}
+
+.map-help-pin {
+    display: inline-block;
+    padding: 10px;
+    margin-top: 10px;
+}
+
+.map-help-pin-text {
+    position: absolute;
+    left: 5px;
+    top: -2px;
+}
+
+.map-selected-info {
+    height: 72px;
+    width: 100%;
+    position: fixed;
+    bottom: -2px;
+    background-color: white;
+    z-index: 9998;
+    margin: 0px !important;
+    overflow: visible;
+    padding: 0px;
+}
+
+.map-selected-info-inner {
+    padding-top: 4px;
+    padding-left: 8px;
+    height: 70px;
+    margin: 0px;
+}
+
+.map-selected-info-header {
+    position: absolute;
+    top: 24px;
+    left: 8px;
+    right: 8px;
+    line-height: 1.3;
+}
+
+.map-selected-info-bottom {
+    position: absolute;
+    bottom: 4px;
+    left: 8px;
+    right: 8px;
+    height: 20px;
+    display: flex;
+}
+
+.hasFooter .map-selected-info {
+    bottom: $footerHeight;
+}
+
+.map-selected-info-bottom-description {
+    display:block;
+    overflow:hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    min-width: 0;
+}
+
+.map-selected-info-distance {
+    margin-left: auto;
+    display: block;
+    white-space: nowrap;
+    padding-left: 5px;
+}
+
+.map-selected-info-date {
+    color: #666;
+    font-size: 14px;
+}
+
+.map-selected-info-image-wrapper {
+    position: absolute;
+    top: -76px;
+    left: 5px;
+}
+
+.map-selected-info-image {
+    width: auto;
+    height: 70px;
+    max-width: 140px;
+}
+
+.area-wrapper {
+    display: flex;
+    width: 100%;
+}
+
+.area-name {
+    display: block;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    min-width: 0;
+}
+
+.area-wrapper .item-note {
+    display: block;
+    margin-left: auto;
+    padding-left: 5px;
+    white-space: nowrap;
+}

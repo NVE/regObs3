@@ -51,7 +51,7 @@
       },
       {
         "Id": 209,
-        "Name": "Ferske jordskred"
+        "Name": "Observert jordskred"
       },
       {
         "Id": 222,
@@ -413,11 +413,11 @@
       },
       {
         "Id": 20,
-        "Name": "Normal fare for å gå gjennom"
+        "Name": "Normal fare for å gå gjennom\r\n"
       },
       {
         "Id": 30,
-        "Name": "Stor fare for å gå gjennom"
+        "Name": "Stor fare for å gå gjennom\r\n"
       },
       {
         "Id": 40,
@@ -431,15 +431,15 @@
       },
       {
         "Id": 10,
-        "Name": "Isgang/ispropp"
+        "Name": "Isgang/ispropp \r\n"
       },
       {
         "Id": 20,
-        "Name": "Kjøving/svelling"
+        "Name": "Kjøving/svelling\r\n"
       },
       {
         "Id": 30,
-        "Name": "Bunnisdam"
+        "Name": "Bunnisdam \r\n"
       },
       {
         "Id": 40,
@@ -809,7 +809,7 @@
       },
       {
         "Id": 6,
-        "Name": "Fuktig helt til bakken"
+        "Name": "Fuktig helt til bakken\r\n"
       },
       {
         "Id": 7,
@@ -1017,7 +1017,7 @@
       },
       {
         "Id": 25,
-        "Name": "Kunstig utl av eksplosiver"
+        "Name": "Utløst med sprengstoff"
       },
       {
         "Id": 99,
@@ -1184,6 +1184,22 @@
         "Name": "Ikke gitt "
       },
       {
+        "Id": 21,
+        "Name": "ECTPV"
+      },
+      {
+        "Id": 22,
+        "Name": "ECTP "
+      },
+      {
+        "Id": 23,
+        "Name": "ECTN "
+      },
+      {
+        "Id": 24,
+        "Name": "ECTX "
+      },
+      {
         "Id": 11,
         "Name": "CTV "
       },
@@ -1202,22 +1218,6 @@
       {
         "Id": 15,
         "Name": "CTN "
-      },
-      {
-        "Id": 21,
-        "Name": "ECTV"
-      },
-      {
-        "Id": 22,
-        "Name": "ECTP "
-      },
-      {
-        "Id": 23,
-        "Name": "ECTN "
-      },
-      {
-        "Id": 24,
-        "Name": "ECTX "
       }
     ],
     "Water_DangerSignKDV": [
@@ -1391,19 +1391,27 @@
     "ForecastAccurateKDV": [
       {
         "Id": 0,
-        "Name": "Ikke gitt"
+        "Name": "Ikke spesifisert"
       },
       {
         "Id": 1,
-        "Name": "Varslet faregrad er riktig"
+        "Name": "Varsel ikke gitt"
       },
       {
         "Id": 2,
-        "Name": "Varslet faregrad er for lav"
+        "Name": "Varsel for lavt"
       },
       {
         "Id": 3,
-        "Name": "Varslet faregrad er for høy"
+        "Name": "Varsel stemte"
+      },
+      {
+        "Id": 4,
+        "Name": "Varsel for høyt"
+      },
+      {
+        "Id": 9,
+        "Name": "Varsel ikke kjent"
       }
     ],
     "DamageExtentKDV": [
@@ -1472,6 +1480,10 @@
       {
         "Id": 150,
         "Name": "*****"
+      },
+      {
+        "Id": 105,
+        "Name": "A"
       },
       {
         "Id": 200,
@@ -1716,6 +1728,10 @@
       {
         "Id": 52,
         "Name": "Slettet av admin"
+      },
+      {
+        "Id": 101,
+        "Name": "Til administrativ bruk"
       }
     ]
   },

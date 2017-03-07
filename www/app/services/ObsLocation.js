@@ -1,10 +1,10 @@
 angular
     .module('RegObs')
-    .factory('ObsLocation', function ($http, $ionicPlatform, $cordovaGeolocation, AppSettings, LocalStorage, AppLogging, Utility) {
+    .factory('ObsLocation', function ($http, $ionicPlatform, $cordovaGeolocation, AppSettings, LocalStorage, AppLogging, $rootScope, UserLocation) {
         var ObsLocation = this;
         var storageKey = 'regobsLocation';
 
-        function init(){
+        function init() {
             ObsLocation.fetching = false;
             ObsLocation.data = LocalStorage.getObject(storageKey);
             ObsLocation.source = {
@@ -12,116 +12,86 @@ angular
                 fetchedFromGPS: 40,
                 storedPosition: 45
             };
-            if(!ObsLocation.isSet()){
+            if (!ObsLocation.isSet()) {
                 ObsLocation.data = {};
                 save();
             }
             AppLogging.log(ObsLocation.data);
         }
 
-        ObsLocation.isSet = function(){
+        ObsLocation.isSet = function () {
             return ObsLocation.data && (ObsLocation.data.Latitude || ObsLocation.data.ObsLocationId);
         };
 
-        ObsLocation.fetchPosition = function () {
-            AppLogging.log('fetchPosition called');
-            ObsLocation.fetching = true;
-            //var timeout = parseInt(AppSettings.data.gpsTimeout);
-
-            return $ionicPlatform.ready(function(){
-                //return $cordovaGeolocation
-                //    .getCurrentPosition({
-                //        timeout: timeout?(timeout*1000):10000,
-                //        enableHighAccuracy: true,
-                //        maximumAge: 3000
-                //    })
-                //    .then(success, error);
-                return Utility.getAccurateCurrentPosition().then(success, error);
-            });
-
-            function success(position) {
-                AppLogging.log('fetch position success');
-                ObsLocation.fetching = false;
-                AppLogging.log('Got accurate position: ' + JSON.stringify(position));
-                ObsLocation.set({
-                    "Latitude": position.coords.latitude.toFixed(4),
-                    "Longitude": position.coords.longitude.toFixed(4),
-                    "Uncertainty": parseInt(position.coords.accuracy).toString(),
-                    "UTMSourceTID": ObsLocation.source.fetchedFromGPS
-                });
-                return true;
-            }
-
-            function error(err) {
-                ObsLocation.fetching = false;
-                // error
-                AppLogging.log('ObsLocation error');
-                if(err)
-                    AppLogging.log(JSON.stringify(err));
-                return err;
-            }
+        ObsLocation.remove = function () {
+            ObsLocation.data = {};
+            save();
         };
 
-        ObsLocation.getObservationsWithinRadius = function(range, geohazardId){
-            return $http.get(
-                AppSettings.getEndPoints().getObservationsWithinRadius, {
-                    params: {
-                        latitude:ObsLocation.data.Latitude,
-                        longitude:ObsLocation.data.Longitude,
-                        range:range,
-                        geohazardId: geohazardId
-                    },
-                    timeout: AppSettings.data.gpsTimeout*1000
-                });
-        };
-
-        ObsLocation.get = function(){
+        ObsLocation.get = function () {
             return ObsLocation.data;
         };
 
-        ObsLocation.set = function(loc){
-            if(loc && loc.Latitude){
-
+        ObsLocation.set = function (loc) {
+            if (loc && loc.Latitude) {
                 ObsLocation.data = {
-                    Latitude: loc.Latitude,
-                    Longitude: loc.Longitude,
-                    Uncertainty: loc.Uncertainty,
+                    Latitude: loc.Latitude.toString(),
+                    Longitude: loc.Longitude.toString(),
+                    Uncertainty: loc.Uncertainty.toString(),
                     UTMSourceTID: loc.UTMSourceTID
                 };
-                AppLogging.log('ObsLocation set to: ' +JSON.stringify(ObsLocation));
+
                 getLocationName(ObsLocation.data);
                 save();
+
+
             }
         };
 
-        ObsLocation.setPreviousUsedPlace = function(id, name){
-            if(id){
+        ObsLocation.setPreviousUsedPlace = function (id, name, loc) {
+            if (id) {
                 ObsLocation.data.ObsLocationId = id;
                 ObsLocation.data.Name = name;
+
+                if (loc) {
+                    ObsLocation.data.Latitude = loc.Latitude;
+                    ObsLocation.data.Longitude = loc.Longitude;
+                    ObsLocation.data.Uncertainty = loc.Uncertainty;
+                    ObsLocation.data.UTMSourceTID = loc.UTMSourceTID;
+                }
+
                 save();
             }
         };
 
-        function getLocationName(loc){
-            if(!loc.Latitude) return;
+        ObsLocation.setPositionToCurrentUserPosition = function() {
+            if (UserLocation.hasUserLocation()) {
+                var loc = UserLocation.getLastUserLocation();
+                ObsLocation.set({ Latitude: loc.latitude.toString(), Longitude: loc.longitude.toString(), Uncertainty: loc.accuracy.toString(), UTMSourceTID: ObsLocation.source.fetchedFromGPS });
+            }
+        };
+
+        function getLocationName(loc) {
+            if (!loc.Latitude) return;
 
             ObsLocation.data.place = undefined;
 
             $http.get(AppSettings.getEndPoints().getLocationName, {
                 params: {
-                    latitude:loc.Latitude,
-                    longitude:loc.Longitude
+                    latitude: loc.Latitude,
+                    longitude: loc.Longitude
                 },
-                timeout: AppSettings.data.gpsTimeout*1000
-            }).then(function(response){
+                timeout: AppSettings.httpConfig.timeout
+            }).then(function (response) {
                 AppLogging.log(response);
                 ObsLocation.data.place = response.data.Data;
                 save();
             });
         }
 
-        function save(){
+        function save() {
             LocalStorage.setObject(storageKey, ObsLocation.data);
+            $rootScope.$broadcast('$regObs:obsLocationSaved');
         }
 
         init();

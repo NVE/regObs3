@@ -31,7 +31,7 @@ angular
 
 
 
-            var layer = L.tileLayer(AppSettings.mapTileUrl);
+            var layer = L.tileLayer(AppSettings.mapTileUrl());
             var markers = new L.FeatureGroup();
             //var layer = L.tileLayer('http://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}@2x.png');
 
@@ -50,7 +50,7 @@ angular
 
             scope.$on('openLandslideInMap', function () {
                 map.invalidateSize();
-                var landSlideObs = Registration.data[scope.landslideDirectionMap];
+                var landSlideObs = Registration.initPropertyAsObject(scope.landslideDirectionMap)[scope.landslideDirectionMap];
                 if(!start){
                     var obsLoc = Object.create(ObsLocation.get());
                     drawUserLocation(obsLoc);
@@ -83,7 +83,7 @@ angular
             });
 
             scope.$on('setLandslideInMap', function () {
-                var landSlideObs = Registration.data[scope.landslideDirectionMap];
+                var landSlideObs = Registration.initPropertyAsObject(scope.landslideDirectionMap)[scope.landslideDirectionMap];
                 if(start){
                     var startLatLng = start.getLatLng();
                     landSlideObs.StartLat = startLatLng.lat.toString();
@@ -111,7 +111,7 @@ angular
 
             function createPopup(latlng, text, icon){
                 /*var p = new L.circle(new L.LatLng(center[0], center[1]), 1)                */
-                var p = new L.marker(latlng, {icon: icon, draggable: true})
+                var p = L.marker(latlng, {icon: icon, draggable: true})
                     .bindPopup(text, {
                         closeButton: false,
                         closeOnClick: false

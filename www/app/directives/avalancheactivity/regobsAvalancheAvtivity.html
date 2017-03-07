@@ -5,14 +5,14 @@
               ng-click="edit(obs, $index)">
         <ion-option-button class="button-assertive"
                            ng-click="reg.AvalancheActivityObs2.splice($index, 1)">
-            Slett
+            {{'DELETE'|translate}}
         </ion-option-button>
         {{estimatedNumDict[obs.EstimatedNumTID]}} {{avalancheExtDict[obs.AvalancheExtTID]}}
 
     </ion-item>
 </ion-list>
 <div class="padding">
-    <button class="button button-block button-balanced icon-left ion-plus"
-            ng-click="new()">Legg til ny skredaktivitet</button>
+    <button type="button" class="button button-block button-balanced icon-left ion-plus"
+            ng-click="new()">{{'ADD_AVALANCHE_ACTIVITY'|translate}}</button>
 
 </div>

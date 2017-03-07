@@ -1,9 +1,9 @@
 <ion-modal-view>
     <ion-header-bar>
-        <button class="button button-clear button-calm" ng-click="modal.hide()">Avbryt</button>
+        <button type="button" class="button button-clear button-calm" ng-click="modal.hide()">Avbryt</button>
         <h1 class="title" ng-hide="editing">Nytt islag</h1>
         <h1 class="title" ng-show="editing">Rediger islag</h1>
-        <button class="button button-clear button-calm" ng-click="add()">OK</button>
+        <button type="button" class="button button-clear button-calm" ng-click="add()">OK</button>
     </ion-header-bar>
     <ion-content>
         <div class="padding">
@@ -34,7 +34,7 @@
             </ion-list>
             <div class="padding">
                 <regobs-save-button ng-click="add()" save-action="modal.hide()"></regobs-save-button>
-                <button class="button button-block button-assertive button-clear"
+                <button type="button" class="button button-block button-assertive button-clear"
                         ng-click="delete()"
                         ng-show="editing">Slett
                 </button>

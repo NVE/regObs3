@@ -5,7 +5,6 @@ angular
         var vm = this;
 
         vm.areaArray = [
-            "Ikke gitt",
             "Akkurat her",
             "På denne siden av vannet",
             "På dette vannet",
