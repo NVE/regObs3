@@ -1,6 +1,6 @@
 angular
     .module('RegObs')
-    .factory('User', function User($http, LocalStorage, AppSettings, RegobsPopup) {
+    .factory('User', function User($http, LocalStorage, AppSettings, RegobsPopup, AppLogging) {
         var service = this;
         var storageKey = 'regobsUser';
         var user;
@@ -15,8 +15,8 @@ angular
                 headers: {
                     Authorization: 'Basic ' + btoa(username + ':' + password)
                 },
-                timeout: AppSettings.httpConfig.timeout,
-                cache: true
+                timeout: AppSettings.httpConfig && AppSettings.httpConfig.timeout ? AppSettings.httpConfig.timeout : 15000,
+                cache: false
             };
             return $http.get(endpoints.getObserver, config).then(function(response) {
                 user = JSON.parse(response.data.Data);
@@ -24,11 +24,11 @@ angular
                 user.chosenObserverGroup = null;
                 user.password = password;
                 service.save();
-                console.log("Logged in user",user);
+                AppLogging.log("Logged in user", user);
                 service.loggingIn = false;
 
             }, function (response) {
-                console.log(response);
+                AppLogging.log(response);
                 var status = '';
                 if(response.status === 401){
                     status = 'Feil brukernavn eller passord. Vennligst fyll inn på nytt og prøv igjen.'

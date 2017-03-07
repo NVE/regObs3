@@ -5,8 +5,20 @@
            .config(providers)
            .run(setup);
 
-    function providers($stateProvider, $urlRouterProvider, $ionicConfigProvider) {
+    function providers($provide, $stateProvider, $urlRouterProvider, $ionicConfigProvider, AppSettingsProvider) {
         'ngInject';
+
+        $provide.decorator('$exceptionHandler', ['$delegate',
+              function ($delegate) {
+                  return function (exception, cause) {
+                      var appSettings = AppSettingsProvider.$get();
+                      if (ga_storage) {
+                          ga_storage._trackEvent('Error ' + appSettings.data.env, (cause || '') + ' ' + exception.message, exception.stack);
+                      }
+                      $delegate(exception, cause);
+                  };
+              }
+        ]);
 
         if (ionic.Platform.isAndroid()) {
             $ionicConfigProvider.scrolling.jsScrolling(false);
@@ -97,6 +109,17 @@
                     defaultBack: defaultBackSnowRegistration,
                     showFormFooter: true,
                     registrationProp: 'DangerObs'
+                }
+            })
+            .state('stabilitytest', {
+                //Stabilitetstest
+                url: '/stabilitytest',
+                templateUrl: 'app/snow/snowregistration/stabilitytest/stabilitytest.html',
+                controller: 'SnowStabilityTestCtrl as vm',
+                data: {
+                    defaultBack: defaultBackSnowRegistration,
+                    showFormFooter: true,
+                    registrationProp: 'CompressionTest'
                 }
             })
             .state('avalancheobs', {
@@ -372,8 +395,8 @@
             })
             .state('help', {
                 url: '/help/:page',
-                templateUrl: function(stateParams){
-                    return 'app/help/'+stateParams.page+'.html';
+                templateUrl: function (stateParams) {
+                    return 'app/help/' + stateParams.page + '.html';
                 },
                 controller: 'HelpCtrl as vm',
                 data: {
@@ -383,13 +406,12 @@
                     }
                 }
             });
-
     }
 
-    function setup($ionicPlatform, Utility) {
+    function setup($ionicPlatform, Utility, AppLogging, Registration) {
         'ngInject';
 
-        if(Utility.shouldUpdateKdvElements()){
+        if (Utility.shouldUpdateKdvElements()) {
             Utility.refreshKdvElements();
         }
 
@@ -397,6 +419,7 @@
 
             // Hide the accessory bar by default (remove this to show the accessory bar above the keyboard
             // for form inputs)*/
+            AppLogging.debug('Ionic platform ready');
             if (window.cordova && window.cordova.plugins.Keyboard) {
                 cordova.plugins.Keyboard.hideKeyboardAccessoryBar(false);
                 cordova.plugins.Keyboard.disableScroll(true);
@@ -405,9 +428,8 @@
             if (window.StatusBar) {
                 StatusBar.styleLightContent();
             }
+
+            Registration.setBadge(); //Update badge on startup
         });
     }
-
-
-
 })();

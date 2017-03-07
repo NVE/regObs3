@@ -3,11 +3,11 @@
  */
 angular
     .module('RegObs')
-    .directive('setPositionMap', function (ObsLocation, AppSettings) {
+    .directive('setPositionMap', function (ObsLocation, AppSettings, AppLogging) {
         'ngInject';
         function link(scope, elem, attrs) {
             var options = scope.leafletMap;
-            console.log(options);
+            AppLogging.log(options);
             elem.css('height', '100%');
 
             var obsLoc;
@@ -40,7 +40,7 @@ angular
             scope.$on('openPositionInMap', function () {
                 map.invalidateSize();
                 obsLoc = Object.create(ObsLocation.data);
-                console.log('Posiition in map!');
+                AppLogging.log('Posiition in map!');
                 drawUserLocation(obsLoc, true);
 
             });
@@ -65,7 +65,7 @@ angular
             });
 
             function drawUserLocation(obsLoc, zoom) {
-                console.log('DRAWUSER');
+                AppLogging.log('DRAWUSER');
                 if (obsLoc.Latitude) {
                     var latlng = new L.LatLng(obsLoc.Latitude, obsLoc.Longitude);
                     map.panTo(latlng);

@@ -1,0 +1,41 @@
+﻿<ion-modal-view>
+    <ion-header-bar>
+        <button class="button button-clear button-calm" ng-click="modal.hide()">Avbryt</button>
+        <h1 class="title" ng-hide="editing">Ny url</h1>
+        <h1 class="title" ng-show="editing">Rediger url</h1>
+        <button class="button button-clear button-calm" ng-click="addUrl()">OK</button>
+    </ion-header-bar>
+    <ion-content>
+        <form name="newUrlForm" novalidate>
+            <ion-list>
+                <label class="item item-input item-stacked-label">
+                    <span class="input-label">Beskrivelse</span>
+                    <textarea placeholder="Beskrivelse"
+                              name="description"
+                              id="url_description"
+                              cols="30" rows="3"
+                              maxlength="1024"
+                              ng-model="url.UrlDescription"></textarea>
+                </label>
+                <label class="item item-input item-stacked-label">
+                    <span class="input-label">Url</span>
+                    <textarea placeholder="Url" autocapitalize="none"
+                              name="url"
+                              id="url_line"
+                              cols="30" rows="3"
+                              maxlength="1024"
+                              ng-model="url.UrlLine"></textarea>
+                </label>
+            </ion-list>
+            <div class="padding">
+                <regobs-save-button ng-click="addUrl()" save-action=""></regobs-save-button>
+
+                <button class="button button-block button-assertive button-clear"
+                        ng-click="deleteUrl()"
+                        ng-show="editing">
+                    Slett
+                </button>
+            </div>
+        </form>
+    </ion-content>
+</ion-modal-view>

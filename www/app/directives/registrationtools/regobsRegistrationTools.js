@@ -1,6 +1,6 @@
 angular
     .module('RegObs')
-    .directive('regobsRegistrationTools', function ($http, $filter, $ionicModal, AppSettings, RegobsPopup, ObsLocation, Registration) {
+    .directive('regobsRegistrationTools', function ($http, $filter, $ionicModal, AppSettings, RegobsPopup, ObsLocation, Registration, AppLogging) {
         'ngInject';
         return {
             link: link,
@@ -53,7 +53,7 @@ angular
                     .getObservationsWithinRadius(AppSettings.data.searchRange, Registration.data.GeoHazardTID)
                     .then(function(res){
                         scope.fetchingPlaces = false;
-                        console.log(res);
+                        AppLogging.log(res);
                         var result = JSON.parse(res.data.Data);
                         if(result.data.length){
                             scope.places = result.data;
@@ -68,7 +68,7 @@ angular
 
                     })
                     .catch(function(err){
-                        console.log('Error fetching places', err);
+                        AppLogging.log('Error fetching places', err);
                         var header = 'Klarte ikke hente målepunkter';
                         var message;
                         if(err.status <= 0){

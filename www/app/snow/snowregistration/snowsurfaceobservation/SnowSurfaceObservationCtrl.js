@@ -1,6 +1,6 @@
 angular
     .module('RegObs')
-    .controller('SnowSurfaceObservationCtrl', function ($scope, $state, $timeout, Utility, Registration) {
+    .controller('SnowSurfaceObservationCtrl', function ($scope, $state, $timeout, Utility, Registration, AppLogging) {
         var vm = this;
         vm.propChanged = function (prop){
           $timeout(function(){
@@ -12,7 +12,7 @@ angular
                 vm.reg.SnowSurfaceObservation[prop] = Utility.nDecimal(num/100, 5);
             }
 
-            console.log(vm.reg.SnowSurfaceObservation);
+            AppLogging.log(vm.reg.SnowSurfaceObservation);
           });
         };
 

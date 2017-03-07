@@ -1,6 +1,6 @@
 angular
     .module('RegObs')
-    .directive('regobsDangerObs', function ($ionicModal, Registration, RegobsPopup, Utility) {
+    .directive('regobsDangerObs', function ($ionicModal, Registration, RegobsPopup, Utility, AppLogging) {
         'ngInject';
         return {
             link: link,
@@ -32,8 +32,8 @@ angular
               }
 
               textArea.style.height = textArea.scrollHeight + "px";
-                if($scope.dangerObs.tempArea && $scope.dangerObs.tempComment){
-                    $scope.dangerObs.Comment = 'Område: ' + $scope.dangerObs.tempArea + '. Beskrivelse: ' + $scope.dangerObs.tempComment;
+              if ($scope.dangerObs.tempArea && $scope.dangerObs.tempArea !== 'Ikke gitt') {
+                  $scope.dangerObs.Comment = 'Område: ' + $scope.dangerObs.tempArea +($scope.dangerObs.tempComment ? '. Beskrivelse: ' + $scope.dangerObs.tempComment : '');
                 } else {
                     $scope.dangerObs.Comment = $scope.dangerObs.tempComment;
                 }
@@ -83,7 +83,7 @@ angular
             $scope.toggleNoDangerSign = function () {
 
                 if ($scope.noDangerSign.val) {
-                    console.log('toggle');
+                    AppLogging.log('toggle');
                     $scope.dangerObs.DangerSignTID = $scope.dangerSignKdvArray[1].Id;
                 } else {
                     $scope.dangerObs.DangerSignTID = $scope.dangerSignKdvArray[0].Id;
@@ -117,7 +117,7 @@ angular
                 return Utility
                     .getKdvArray($scope.dangerSignKdv)
                     .then(function (response) {
-                        console.log(response);
+                        AppLogging.log(response);
                         $scope.dangerSignKdvArray = response;
                         return response;
                     });

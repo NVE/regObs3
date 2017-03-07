@@ -10,7 +10,7 @@
             formCtrl: '?^form'
         },
         template: '<button class="button button-block button-calm" ng-click="$ctrl.save()">Lagre</button>',
-        controller: function ($scope, $state, $ionicPlatform, $ionicHistory, Property, RegobsPopup) {
+        controller: function ($scope, $state, $ionicPlatform, $ionicHistory, Property, RegobsPopup, AppLogging, $document, $element) {
             'ngInject';
             var ctrl = this;
             var backState;
@@ -18,7 +18,7 @@
 
             ctrl.save = function () {
                 confirmed = false;
-                console.log('formCtrl', ctrl.formCtrl);
+                AppLogging.log('formCtrl', ctrl.formCtrl);
                 if (formIsInvalid()) {
                     getUserConfirmation()
                         .then(saveAndGoBack);
@@ -39,7 +39,7 @@
 
             function getUserConfirmation() {
                 return RegobsPopup.delete(
-                    'Skjema har mangler',
+                    'Skjema har feil eller mangler',
                     'Hvis du fortsetter, mister du verdier du har skrevet inn. Aktuelle felter er markert i rødt. Vil du fortsette?',
                     'Fortsett'
                 )
@@ -74,10 +74,22 @@
                 ctrl.save();
             }, 101);
 
+            var stopRKey = function (evt) {
+                var node = (evt.target) ? evt.target :
+                                         ((evt.srcElement) ? evt.srcElement : null);
+                if ((evt.keyCode === 13) && (node.type === "number")) {
+                    evt.preventDefault();
+                }
+            };
+
             ctrl.$onInit = function () {
                 backState = $state.current.data.defaultBack.state;
-
+                $document.on('keydown', stopRKey);
             };
+
+            ctrl.$onDestroy = function () {
+                $document.off('keydown', stopRKey);
+            }
 
         }
     };

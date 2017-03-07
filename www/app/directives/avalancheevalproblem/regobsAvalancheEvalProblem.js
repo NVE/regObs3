@@ -4,7 +4,7 @@
 angular
     .module('RegObs')
     .directive('regobsAvalancheEvalProblem',
-        function regobsAvalancheEvalProblem($filter, $ionicModal, RegobsPopup, Registration, Utility) {
+        function regobsAvalancheEvalProblem($filter, $ionicModal, RegobsPopup, Registration, Utility, AppLogging) {
             'ngInject';
             return {
                 link: link,
@@ -51,7 +51,7 @@ angular
                     } else {
                         $scope.obs.ExposedHeightComboTID = 0;
                     }
-                    console.log($scope.obs);
+                    AppLogging.log($scope.obs);
                     $scope.obs.ExposedHeight2 = 0;
                 };
 
@@ -124,14 +124,14 @@ angular
 
                 $scope.setAvalancheExtArray = function () {
                     var filteredViewArray = $filter('filter')(viewArray, {AvalCauseTID: $scope.obs.AvalCauseTID}, true);
-                    console.log(filteredViewArray);
+                    AppLogging.log(filteredViewArray);
                     $scope.avalancheExtArray = filteredViewArray.map(function (val) {
                         return {
                             Id: val.AvalancheExtTID,
                             Name: avalancheExtDict[val.AvalancheExtTID + '']
                         };
                     });
-                    console.log($scope.avalancheExtArray);
+                    AppLogging.log($scope.avalancheExtArray);
                 };
 
                 $scope.getDisplayName = function(obs){

@@ -23,20 +23,18 @@
             data: {}
         };
 
-        var httpConfig = AppSettings.httpConfig;
-
         Trip.model = LocalStorage.getAndSetObject(
             storageKey, 'data', angular.copy(defaultModel)
         );
 
         Trip.start = function (type, tripId, expectedMin, comment) {
-            if(User.getUser().anonymous){
+            if (User.getUser().anonymous) {
                 return RegobsPopup.alert('Ikke innlogget', 'Vennligst logg inn for å melde tur.');
             }
-            if(!(tripId && expectedMin)){
+            if (!(tripId && expectedMin)) {
                 return RegobsPopup.alert('Vennligst fyll ut felter', 'Både turtype og forventet klokkeslett for innsending av observasjoner må være satt for å melde tur.');
             }
-            if(ObsLocation.isSet()){
+            if (ObsLocation.isSet()) {
 
                 Trip.model.time = new Date();
                 Trip.model.started = false;
@@ -55,13 +53,13 @@
 
                 RegobsPopup.confirm('Bekreft innsending', 'Vil du melde inn denne turen?')
                     .then(function (confirm) {
-                        if(confirm){
+                        if (confirm) {
                             Trip.sending = true;
-                            return $http.post(AppSettings.getEndPoints().trip, Trip.model.data, httpConfig);
+                            return $http.post(AppSettings.getEndPoints().trip, Trip.model.data, AppSettings.httpConfig);
                         }
                     })
-                    .then(function(http){
-                        if(http){
+                    .then(function (http) {
+                        if (http) {
                             RegobsPopup.alert('Tur startet', 'Tur startet!');
                             Trip.model.started = true;
                             save();
@@ -81,16 +79,16 @@
             }
         };
 
-        Trip.stop = function(){
+        Trip.stop = function () {
             return RegobsPopup.confirm('Bekreft innsending', 'Vil du avslutte denne turen?')
                 .then(function (confirm) {
-                    if(confirm){
+                    if (confirm) {
                         Trip.sending = true;
-                        return $http.put(AppSettings.getEndPoints().trip, Trip.model.data, httpConfig)
+                        return $http.put(AppSettings.getEndPoints().trip, Trip.model.data, AppSettings.httpConfig);
                     }
                 })
-                .then(function(httpPromise){
-                    if(httpPromise){
+                .then(function (httpPromise) {
+                    if (httpPromise) {
                         stop();
                         return RegobsPopup.alert('Tur stoppet', 'Tur avsluttet!');
                     }
@@ -105,26 +103,26 @@
 
         };
 
-        Trip.checkIfTripShouldBeAutoStopped = function(){
-            if(!Trip.model.time){
+        Trip.checkIfTripShouldBeAutoStopped = function () {
+            if (!Trip.model.time) {
                 return;
             }
             var now = new Date();
             var modelTime = new Date(Trip.model.time);
 
-            if(Trip.model.time && now.getDay() !== modelTime.getDay()){
+            if (Trip.model.time && now.getDay() !== modelTime.getDay()) {
                 stop();
                 return RegobsPopup.alert('Tur stoppet', 'Gårsdagens tur har automatisk blitt avsluttet.');
             }
         };
 
-        function stop(){
+        function stop() {
             Trip.model = angular.copy(defaultModel);
             save();
             Trip.sending = false;
         }
 
-        function save(){
+        function save() {
             LocalStorage.setObject(storageKey, Trip.model);
         }
 

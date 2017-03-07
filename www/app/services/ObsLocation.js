@@ -1,6 +1,6 @@
 angular
     .module('RegObs')
-    .factory('ObsLocation', function ($http, $ionicPlatform, $cordovaGeolocation, AppSettings, LocalStorage) {
+    .factory('ObsLocation', function ($http, $ionicPlatform, $cordovaGeolocation, AppSettings, LocalStorage, AppLogging, Utility) {
         var ObsLocation = this;
         var storageKey = 'regobsLocation';
 
@@ -16,7 +16,7 @@ angular
                 ObsLocation.data = {};
                 save();
             }
-            console.log(ObsLocation.data);
+            AppLogging.log(ObsLocation.data);
         }
 
         ObsLocation.isSet = function(){
@@ -24,23 +24,25 @@ angular
         };
 
         ObsLocation.fetchPosition = function () {
-            console.log('fetchPosition called');
+            AppLogging.log('fetchPosition called');
             ObsLocation.fetching = true;
-            var timeout = parseInt(AppSettings.data.gpsTimeout);
+            //var timeout = parseInt(AppSettings.data.gpsTimeout);
 
             return $ionicPlatform.ready(function(){
-                return $cordovaGeolocation
-                    .getCurrentPosition({
-                        timeout: timeout?(timeout*1000):10000,
-                        enableHighAccuracy: true,
-                        maximumAge: 3000
-                    })
-                    .then(success, error);
+                //return $cordovaGeolocation
+                //    .getCurrentPosition({
+                //        timeout: timeout?(timeout*1000):10000,
+                //        enableHighAccuracy: true,
+                //        maximumAge: 3000
+                //    })
+                //    .then(success, error);
+                return Utility.getAccurateCurrentPosition().then(success, error);
             });
 
-            function success (position) {
+            function success(position) {
+                AppLogging.log('fetch position success');
                 ObsLocation.fetching = false;
-                console.log('Got position:',position);
+                AppLogging.log('Got accurate position: ' + JSON.stringify(position));
                 ObsLocation.set({
                     "Latitude": position.coords.latitude.toFixed(4),
                     "Longitude": position.coords.longitude.toFixed(4),
@@ -53,7 +55,9 @@ angular
             function error(err) {
                 ObsLocation.fetching = false;
                 // error
-                console.log('ObsLocation error',err);
+                AppLogging.log('ObsLocation error');
+                if(err)
+                    AppLogging.log(JSON.stringify(err));
                 return err;
             }
         };
@@ -84,7 +88,7 @@ angular
                     Uncertainty: loc.Uncertainty,
                     UTMSourceTID: loc.UTMSourceTID
                 };
-                console.log('ObsLocation set to', ObsLocation);
+                AppLogging.log('ObsLocation set to: ' +JSON.stringify(ObsLocation));
                 getLocationName(ObsLocation.data);
                 save();
             }
@@ -110,7 +114,7 @@ angular
                 },
                 timeout: AppSettings.data.gpsTimeout*1000
             }).then(function(response){
-                console.log(response);
+                AppLogging.log(response);
                 ObsLocation.data.place = response.data.Data;
                 save();
             });

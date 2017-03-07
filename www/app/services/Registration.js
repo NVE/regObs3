@@ -1,12 +1,12 @@
 angular
     .module('RegObs')
-    .factory('Registration', function Registration($rootScope, $ionicPlatform, $http, $state, $ionicPopup, $ionicHistory, LocalStorage, Utility, User, ObsLocation, AppSettings, RegobsPopup) {
+    .factory('Registration', function Registration($rootScope, $ionicPlatform, $http, $state, $ionicPopup, $ionicHistory, $cordovaBadge, LocalStorage, Utility, User, ObsLocation, AppSettings, RegobsPopup, AppLogging) {
         var Registration = this;
 
         var storageKey = 'regobsRegistrations';
         var unsentStorageKey = 'regobsUnsentRegistrations';
 
-        var httpConfig = AppSettings.httpConfigRegistrationPost;
+        //var httpConfig = AppSettings.httpConfigRegistrationPost;
         var baseLength = Object.keys(createRegistration('snow')).length;
 
         var messages = [
@@ -55,22 +55,35 @@ angular
             );
         };
 
+        Registration.setBadge = function() {
+            AppLogging.log('setting badge');
+            try {
+                if (window.cordova && window.cordova.plugins.notification.badge) {
+                    if (Registration.unsent.length) {
+                        cordova.plugins.notification.badge.set(Registration.unsent.length);
+                    } else {
+                        cordova.plugins.notification.badge.clear();
+                    }
+                }
+            } catch (ex) {
+                AppLogging.error('Exception on badge set ' + ex.message);
+            }
+        }
+
         Registration.save = function () {
+            AppLogging.log('save start');
             LocalStorage.setObject(storageKey, Registration.data);
             LocalStorage.setObject(unsentStorageKey, Registration.unsent);
-            if(window.cordova && window.cordova.plugins.notification.badge){
-              if(Registration.unsent.length){
-                cordova.plugins.notification.badge.set(Registration.unsent.length);
-              } else {
-                cordova.plugins.notification.badge.clear();
-              }
-            }
+
+            Registration.setBadge();
+
+            AppLogging.log('save complete');
         };
 
         Registration.createNew = function (type) {
             Registration.data = createRegistration(type);
             ObsLocation.fetchPosition();
-            console.log(Registration.data);
+            AppLogging.log(Registration.data);
             $rootScope.$broadcast('$ionicView.loaded');
 
             return Registration.data;
@@ -126,7 +139,7 @@ angular
 
                     if (Registration.unsent.length) {
                         Registration.sending = true;
-                        doPost(postUrl, {Registrations: Registration.unsent});
+                        doPost(postUrl, { Registrations: Registration.unsent });
                         Registration.unsent = [];
                         resetRegistration();
                     }
@@ -179,28 +192,33 @@ angular
             return !Utility.isEmpty(Registration.data[prop]);
         };
 
+        Registration.hasImageForRegistration = function (prop) {
+            var registrationTid = Utility.registrationTid(prop);
+            return Registration.data.Picture && Registration.data.Picture.filter(function(item) { return item.RegistrationTID === registrationTid }).length > 0;
+        };
+
         /*Registration.propertyArrayExists = function (prop) {
          return Registration.data[prop] && Registration.data[prop].length;
          };*/
 
         Registration.getExpositionArray = function () {
             return [
-                {"val": -1, "name": "Ikke gitt"},
-                {"val": 0, "name": "N - nordlig"},
-                {"val": 45, "name": "NØ - nordøstlig"},
-                {"val": 90, "name": "Ø - østlig"},
-                {"val": 135, "name": "SØ - sørøstlig"},
-                {"val": 180, "name": "S - sørlig"},
-                {"val": 225, "name": "SV - sørvestlig"},
-                {"val": 270, "name": "V - vestlig"},
-                {"val": 315, "name": "NV - nordvestlig"}
+                { "val": null, "name": "Ikke gitt" },
+                { "val": 0, "name": "N - mot nord" },
+                { "val": 45, "name": "NØ - mot nordøst" },
+                { "val": 90, "name": "Ø - mot øst" },
+                { "val": 135, "name": "SØ - mot sørøst" },
+                { "val": 180, "name": "S - mot sør" },
+                { "val": 225, "name": "SV - mot sørvest" },
+                { "val": 270, "name": "V - mot vest" },
+                { "val": 315, "name": "NV - mot nordvest" }
             ];
         };
 
         function prepareRegistrationForSending() {
-          if(Registration.isEmpty()){
-            return null;
-          }
+            if (Registration.isEmpty()) {
+                return null;
+            }
 
             var user = User.getUser();
 
@@ -213,6 +231,9 @@ angular
             stripExposedHeight(data.AvalancheActivityObs2);
             cleanupGeneralObservation(data.GeneralObservation);
             cleanupObsLocation(location);
+            cleanupStabilityTest(data.CompressionTest);
+            cleanupIncidenct(data.Incident);
+
             delete data.avalChoice;
             delete data.WaterLevelChoice;
 
@@ -223,10 +244,18 @@ angular
                 "ObsLocation": location
             });
 
-            console.log('User', user);
-            console.log('Sending', data);
+            AppLogging.log('User', user);
+            AppLogging.log('Sending', data);
 
-            saveToUnsent({Registrations: [data]});
+            saveToUnsent({ Registrations: [data] });
+
+            function cleanupStabilityTest(array) {
+                if (angular.isArray(array)) {
+                    array.forEach(function (stest) {
+                        delete stest.tempFractureDepth;
+                    });
+                }
+            }
 
             function cleanupDangerObs(array) {
                 if (angular.isArray(array)) {
@@ -260,6 +289,12 @@ angular
                     delete location.Longitude;
                     delete location.Uncertainty;
                     delete location.UTMSourceTID;
+                }
+            }
+
+            function cleanupIncidenct(incident) {
+                if (incident && !incident.IncidentText) {
+                    incident.IncidentText = '';
                 }
             }
         }
@@ -297,7 +332,7 @@ angular
             };
 
             var exception = function (error) {
-                console.error('Failed to send registration: ' + error.statusText, error);
+                AppLogging.error('Failed to send registration: ' + error.statusText, error);
 
                 Registration.sending = false;
                 var title = getRandomMessage();
@@ -305,10 +340,10 @@ angular
 
                 var handleUserAction = function (confirmed) {
                     if (confirmed) {
-                        console.log('Confirmed sending again!');
+                        AppLogging.log('Confirmed sending again!');
                         post();
                     } else {
-                        console.log('Avbryter sending');
+                        AppLogging.log('Avbryter sending');
 
                         RegobsPopup.alert(
                             'Lagret',
@@ -322,7 +357,7 @@ angular
                 if (error.status <= 0) {
                     RegobsPopup.confirm(title, 'Fikk ikke kontakt med regObs-serveren. Dette kan skyldes manglende nettilgang, eller at serveren er midlertidig utilgjengelig. Du kan prøve på nytt, eller du kan lagre registrering for å sende inn senere.', 'Prøv igjen', 'Lagre')
                         .then(handleUserAction);
-                } else if(error.status === 422) {
+                } else if (error.status === 422) {
                     RegobsPopup.alert('Format stemmer ikke', 'Det oppsto et problem ved at innsendingen ikke samstemmer med forventet format. Beklager ulempen:( Melding fra server: ' + error.statusText);
                 } else {
                     RegobsPopup.confirm(title, body, 'Prøv igjen', 'Lagre')
@@ -332,7 +367,7 @@ angular
             };
 
             var post = function () {
-                return $http.post(postUrl, data, httpConfig)
+                return $http.post(postUrl, data, AppSettings.httpConfigRegistrationPost)
                     .then(success)
                     .catch(exception);
             };
@@ -377,8 +412,8 @@ angular
             }
         });
 
-        $ionicPlatform.on('resume', function(event){
-            if(Registration.isEmpty()){
+        $ionicPlatform.on('resume', function (event) {
+            if (Registration.isEmpty()) {
                 resetRegistration();
             }
         });

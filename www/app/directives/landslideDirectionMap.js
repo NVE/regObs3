@@ -3,7 +3,7 @@
  */
 angular
     .module('RegObs')
-    .directive('landslideDirectionMap', function landslideDirectionMap(AppSettings, Registration, ObsLocation) {
+    .directive('landslideDirectionMap', function landslideDirectionMap(AppSettings, Registration, ObsLocation, AppLogging) {
         'ngInject';
         function link(scope, elem, attrs) {
 
@@ -24,7 +24,7 @@ angular
 
             var map = L.map(elem[0], {
                 center: center,
-                zoom: 9,
+                zoom: 12,
                 zoomControl: false,
                 attributionControl: false
             });
@@ -119,7 +119,7 @@ angular
 
                 p.on('dragend', function(){
                     var position = p.getLatLng();
-                    console.log(position);
+                    AppLogging.log(position);
                     map.panTo(position);
                     p.openPopup();
 
@@ -139,7 +139,7 @@ angular
             }
 
             function drawUserLocation(obsLoc) {
-                console.log('DRAWUSER');
+                AppLogging.log('DRAWUSER');
                 if (obsLoc.Latitude) {
                     var latlng = new L.LatLng(obsLoc.Latitude, obsLoc.Longitude);
                     var p = new L.Marker(latlng);

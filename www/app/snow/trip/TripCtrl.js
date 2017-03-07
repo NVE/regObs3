@@ -15,7 +15,6 @@
                 name:i+':00'
             });
         }
-        console.log('Trip Array', vm.tripMinutesArray);
 
     }
 

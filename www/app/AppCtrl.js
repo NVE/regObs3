@@ -1,5 +1,5 @@
 angular.module('RegObs')
-    .controller('AppCtrl', function ($scope, $state, AppSettings, Registration, Property, Trip, User, RegobsPopup, HeaderColor) {
+    .controller('AppCtrl', function ($scope, $state, AppSettings, Registration, Property, Trip, User, RegobsPopup, HeaderColor, AppLogging) {
         var appVm = this;
 
         appVm.registration = Registration;
@@ -48,11 +48,16 @@ angular.module('RegObs')
         });
 
         $scope.$on('$stateChangeStart', function () {
-            console.log(Registration.data);
+            AppLogging.log(Registration.data);
             var currentProp = ($state.current.data || {}).registrationProp;
-            if(currentProp) {
+            if (currentProp) {
+                if (currentProp === 'SnowProfile' && Registration.hasImageForRegistration(currentProp)) {
+                    var reg = Registration.initPropertyAsObject(currentProp);
+                    reg.SnowProfile.Comment = 'Snøprofil fra app';
+                }
+
                 if(!Registration.propertyExists(currentProp)){
-                    console.log('DELETE ' + currentProp);
+                    AppLogging.log('DELETE ' + currentProp);
                     delete Registration.data[currentProp];
                 }
             }
@@ -62,7 +67,7 @@ angular.module('RegObs')
         $scope.$on('$ionicView.enter', function () {
             Trip.checkIfTripShouldBeAutoStopped();
             appVm.currentState = $state.current;
-            console.log(appVm.currentState);
+            AppLogging.log(appVm.currentState);
             ga_storage._trackPageview(appVm.currentState.name);
             appVm.showTripFooter = $state.current.data.showTripFooter;
             appVm.showFormFooter = $state.current.data.showFormFooter;

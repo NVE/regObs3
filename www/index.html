@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="no">
 <head>
     <meta charset="utf-8">
@@ -37,7 +37,7 @@
     <script src="cordova.js"></script>
 
     <!-- your app's js -->
-    <script src="dist/app.min.js"></script>
+    <script src="dist/app.js"></script>
 
     <script type="text/javascript">
 
@@ -73,17 +73,18 @@
 
         <div class="col col-center">
             <button class="button  button-block button-clear" ng-click="appVm.startTrip(appVm.tripId, appVm.tripMinutes, appVm.tripComment)" ng-hide="appVm.trip.model.started">
-                <span>
+                <ion-spinner class="spinner-light" ng-show="appVm.trip.sending"></ion-spinner>
+                <span ng-hide="appVm.trip.sending">
                     <i class="icon calm ion-android-walk"></i> Start tur
                 </span>
             </button>
             <button class="button  button-block button-clear" ng-click="appVm.stopTrip()" ng-show="appVm.trip.model.started">
-                <span>
+                <ion-spinner class="spinner-light" ng-show="appVm.trip.sending"></ion-spinner>
+                <span ng-hide="appVm.trip.sending">
                     <i class="icon balanced ion-android-walk"></i> Avslutt tur
                 </span>
             </button>
         </div>
-
     </div>
 
     <div ng-if="appVm.showFormFooter" class="row row-no-padding">

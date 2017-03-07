@@ -1,6 +1,6 @@
 angular
     .module('RegObs')
-    .controller('SettingsViewCtrl', function ($scope, $http, $cordovaInAppBrowser, AppSettings, LocalStorage, ObsLocation, Registration, User, Utility, HeaderColor, RegobsPopup) {
+    .controller('SettingsViewCtrl', function ($scope, $http, $cordovaInAppBrowser, AppSettings, LocalStorage, ObsLocation, Registration, User, Utility, HeaderColor, RegobsPopup, AppLogging) {
         var vm = this;
 
         vm.settings = AppSettings;
@@ -10,7 +10,7 @@ angular
 
         $http.get('app/json/version.json')
             .then(function(res){
-                console.log(res);
+                AppLogging.log(res);
                 vm.version = res.data;
             });
 
@@ -21,7 +21,7 @@ angular
                 vm.kdvUpdated =  moment(parseInt(newDate)).format('DD.MM, [kl.] HH:mm');
             });
 
-            console.log('KDV UPDATE', newDate);
+            AppLogging.log('KDV UPDATE', newDate);
         }
 
         vm.logIn = function () {
@@ -58,16 +58,16 @@ angular
         vm.refreshKdvElements = function () {
             vm.refreshingKdv = true;
             Utility.refreshKdvElements()
-                .then(function(){
-                    RegobsPopup.alert('Suksess!', 'Nedtrekkslister har blitt oppdatert.')
+                .then(function() {
+                    RegobsPopup.alert('Suksess!', 'Nedtrekksmenyene har blitt oppdatert.');
                 })
                 .catch(function(){
-                    RegobsPopup.alert('Det oppsto en feil', 'Det oppsto en feil ved oppdatering av nedtrekksmenyer. Vennligst prøv igjen senere');
+                    RegobsPopup.alert('Oisann! Appen klarte ikke oppdatere nedtrekksmenyene', 'Dette kan skyldes manglende nett, eller at serverapplikasjonen må våkne og få seg en dugelig sterk kopp med kaffe først. Gi den noen minutter og prøv igjen.');
                 })
                 .finally(function(){
                     vm.refreshingKdv = false;
                     vm.kdvUpdated = new Date(parseInt(LocalStorage.get('kdvUpdated')));
-                    console.log(vm.kdvUpdated);
+                    AppLogging.log(vm.kdvUpdated);
                 });
 
         };
