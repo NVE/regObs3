@@ -70,9 +70,9 @@
             return 1; //one day back
         };
         obs._now = function () {
-            return moment('2017-01-09T12:00:00.01'); //today at noon
+            return moment('2017-01-09T10:00:00.01'); //today
         }
-        var dateToTest = '2017-01-07T11:00:00.000'; //two days back
+        var dateToTest = '2017-01-07T18:00:00.000'; //two days back
         expect(obs._validateRegistrationDate(dateToTest)).toEqual(false);
     });
 

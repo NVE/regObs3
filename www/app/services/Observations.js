@@ -255,7 +255,7 @@ angular
          * @returns {} 
          */
         service._diffDays = function (fromMoment, toMoment) {
-            return toMoment.diff(fromMoment, 'days');
+            return toMoment.startOf('day').diff(fromMoment.startOf('day'), 'days');
         };
 
         /**
@@ -271,9 +271,6 @@ angular
             }
             var diff = service._diffDays(date, service._now());
             var limit = daysBack || service._getShowObservationsDaysBack();
-
-            AppLogging.log('Diff: ' + diff + ' limit: ' + limit);
-
             if (diff > limit) {
                 AppLogging.log('Diff: ' + diff + ' is larger than limit: ' + limit);
                 return false;

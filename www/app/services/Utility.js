@@ -92,9 +92,8 @@ angular
                 result += fullObject.TapsFracture;
             }
 
-            result += '@';
-
             if (fullObject.FractureDepth) {
+                result += '@';
                 result += $filter('number')(fullObject.FractureDepth * 100, 0) + 'cm';
             }
             if (fullObject.ComprTestFractureTID > 0) {
