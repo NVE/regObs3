@@ -41,7 +41,7 @@ angular.module('RegObs').factory('Observation', function (MapSelectableItem, App
                 var pictureId = item.TypicalValue2;
                 var path = AppSettings.getImageRelativePath(pictureId);
                 var uri = PresistentStorage.getUri(path);
-                self._images.push({ id: pictureId, url: uri, description: item.TypicalValue1 });
+                self._images.push({ id: pictureId, url: uri, description: item.TypicalValue1, registrationTid: item.RegistrationTid, name: item.RegistrationName });
             });
         }
     };
@@ -62,6 +62,12 @@ angular.module('RegObs').factory('Observation', function (MapSelectableItem, App
         var arr = [];
         this._registrations.forEach(function (item) {
             var name = item.getName();
+            if (arr.indexOf(name) < 0) { //Do not add duplicated values
+                arr.push(name);
+            }
+        });
+        this._images.forEach(function (item) {
+            var name = item.name;
             if (arr.indexOf(name) < 0) { //Do not add duplicated values
                 arr.push(name);
             }

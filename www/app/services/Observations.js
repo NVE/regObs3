@@ -27,6 +27,10 @@ angular
             return locationsStorageKey + '_' + AppSettings.data.env.replace(/ /g, '');
         };
 
+
+        /**
+        * Get registratons from presistant storage. TODO: rewrite to SQLLite plugin for better performance?
+        */
         service._getRegistrationsFromPresistantStorage = function () {
             return $q(function (resolve) {
                 document.addEventListener("deviceready", function () {

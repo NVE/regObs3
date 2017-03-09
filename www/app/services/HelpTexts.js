@@ -9,8 +9,12 @@
         });
     };
 
+    service._getLocalStorageHelpTexts = function () {
+        return LocalStorage.getObject(service._localStorageKey + '_' + AppSettings.data.env.replace(/ /g, ''), []);
+    };
+
     service._getHelpTexts = function () {       
-        var updatedElements = LocalStorage.getObject(service._localStorageKey, []);
+        var updatedElements = service._getLocalStorageHelpTexts();
         if (updatedElements.length > 0) {
             return $q(function(resolve) {
                 resolve(updatedElements);
@@ -27,7 +31,7 @@
                     return item.RegistrationTID === tid && item.GeoHazardTID === geoHazardId && item.LangKey === langKey;
                 });
                 if (filtered.length > 0) {
-                    return filtered[0];
+                    return filtered[0].Text || '';
                 } else {
                     return '';
                 }

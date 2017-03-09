@@ -102,6 +102,10 @@ angular
             return result;
         };
 
+        service.showStabilityTest = function (fullObject) {
+            return fullObject.PropagationTID > 0 || fullObject.TapsFracture > 0 || fullObject.FractureDepth > 0 || fullObject.ComprTestFractureTID > 0;
+        };
+
         //Brukt der det er bilder (RegistrationTID)
         var OBSERVATIONS = {
             Incident: {
@@ -208,7 +212,7 @@ angular
                 name: "Stabilitetstest",
                 RegistrationTID: "25",
                 properties: {
-                    PropagationTID: { displayFormat: { hideDescription: true, valueFormat: function(item, data) { return service.formatStabilityTest(data.FullObject) } } },
+                    PropagationTID: { displayFormat: { hideDescription: true, condition: function (item, data) { return service.showStabilityTest(data.FullObject) }, valueFormat: function (item, data) { return service.formatStabilityTest(data.FullObject) } } },
                     StabilityEvalTID: {},
                     Comment: { displayFormat: { hideDescription: true } }
                 }
@@ -628,7 +632,10 @@ angular
          * @returns {boolean} - true if ripple emulator is running 
          */
         service.isRippleEmulator = function () {
-            return window.parent && window.parent.ripple;
+            //return window.parent && window.parent.ripple;
+            return !((window.cordova || window.PhoneGap || window.phonegap)
+                && /^file:\/{3}[^\/]/i.test(window.location.href)
+                && /ios|iphone|ipod|ipad|android/i.test(navigator.userAgent));
         };
 
         service.isString = function (obj) {
