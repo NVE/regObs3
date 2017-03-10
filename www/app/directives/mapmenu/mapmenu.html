@@ -10,7 +10,7 @@
             <span class="input-label">
                 {{'SHOW_OBSERVATIONS'|translate}}
             </span>
-            <select ng-model="$ctrl.settings.showObservationsDaysBack"
+            <select ng-model="$ctrl.settings.showObservationsDaysBack" tabindex="-1"
                     ng-options="option.value as option.name for option in $ctrl.daysBackArray" ng-change="$ctrl.onSettingsChanged()"></select>
         </label>
         <ion-toggle class="item-icon-left" toggle-class="toggle-calm" ng-model="$ctrl.settings.showPreviouslyUsedPlaces" ng-change="$ctrl.onSettingsChanged()">
@@ -33,7 +33,7 @@
                         <span class="input-label">
                             {{'OPACITY'|translate}}
                         </span>
-                        <select ng-model="tile.opacity"
+                        <select ng-model="tile.opacity" tabindex="-1"
                                 ng-options="option.value as option.name for option in $ctrl.opacityArray" ng-change="$ctrl.onSettingsChanged()"></select>
                     </label>
                     <div ng-if="$ctrl.hasTileLabel(tile)">
