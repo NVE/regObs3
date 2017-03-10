@@ -2,11 +2,39 @@
     "use strict";
 
     angular.module('RegObs', ['ionic', 'ngCordova', 'ion-floating-menu', 'angularProgressbar', 'pascalprecht.translate', 'ngWebworker'])
-           .config(providers)
-           .run(setup);
+        .config(providers)
+        .run(setup);
 
-    function providers($stateProvider, $urlRouterProvider, $ionicConfigProvider, AppSettingsProvider, $translateProvider) {
+    function providers($provide, $stateProvider, $urlRouterProvider, $ionicConfigProvider, AppSettingsProvider, $translateProvider, UserProvider) {
         'ngInject';
+
+        $provide.decorator('$exceptionHandler', ['$delegate',
+            function ($delegate) {
+                return function (exception, cause) {
+                    if (ga_storage) {
+                        var userService = UserProvider.$get();
+                        var appSettings = AppSettingsProvider.$get();
+                        var user = userService.getUser();
+                        var userText = 'Anonymous user';
+                        if (!user.anonymous) {
+                            userText = 'User: ' + user.Guid + ' Nick: ' + user.Nick;
+                        }
+
+                        var initInjector = angular.injector(['ng']);
+                        var $http = initInjector.get('$http');
+
+                        $http.get('app/json/version.json').then(function (version) {
+                            var label = 'Error ' + appSettings.data.env + ' ' + version.data.version + ' ' + version.data.build;
+                            var action = ((cause || '') + ' ' + exception.message).trim();
+                            var stack = userText + ' Stack: ' + exception.stack.replace(/(\r\n|\n|\r)/gm, "\n ○ ");
+                            ga_storage._trackEvent(label, action, stack);
+                        });
+                    }
+                    $delegate(exception, cause);
+                };
+            }
+        ]);
+
 
         if (ionic.Platform.isAndroid()) {
             $ionicConfigProvider.scrolling.jsScrolling(false);
@@ -17,10 +45,10 @@
         };
 
         $translateProvider.useSanitizeValueStrategy('escapeParameters')
-        .useStaticFilesLoader({
-            prefix: './app/json/localization/',
-            suffix: '.json'
-        }).registerAvailableLanguageKeys(['no'], langMap)
+            .useStaticFilesLoader({
+                prefix: './app/json/localization/',
+                suffix: '.json'
+            }).registerAvailableLanguageKeys(['no'], langMap)
             .preferredLanguage('no')
             .fallbackLanguage(['no']);
 
@@ -49,8 +77,7 @@
             state: 'start'
         };
 
-        var appSettings = AppSettingsProvider.$get();
-        if (!appSettings.hasSetAppMode()) {
+        if (!AppSettingsProvider.$get().hasSetAppMode()) {
             $urlRouterProvider.otherwise('/wizard');
         } else {
             $urlRouterProvider.otherwise('/start');
@@ -437,7 +464,7 @@
             document.addEventListener("deviceready", function () {
                 Observations.removeOldObservationsFromPresistantStorage(); //cleanup old observations on startup
                 OfflineMap.checkUncompleteDownloads(); //Check if any uncomplete downloads and continue download progress
-            });        
+            });
         });
 
         $ionicPlatform.on('resume', function () {

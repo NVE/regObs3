@@ -12,6 +12,11 @@ angular
             $ionicScrollDelegate.resize();
         };
 
+        vm.hasObserverGroups = function () {
+            var group = User.getUser().ObserverGroup;
+            return group && angular.isArray(group) && group.length > 0;
+        };
+
         vm.kdvUpdated = kdvUpdatedTime(null, LocalStorage.get('kdvUpdated'));
 
         $http.get('app/json/version.json')

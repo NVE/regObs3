@@ -229,7 +229,7 @@ angular
                             cancel);
                     };
 
-                    RegobsPopup.downloadProgress($translate.instant('UPDATE_MAP_OBSERVATIONS'),
+                    RegobsPopup.downloadProgress($translate.instant('UPDATE_OFFLINE_MAP'),
                         downloadMap,
                     { closeOnComplete: false });
                 }

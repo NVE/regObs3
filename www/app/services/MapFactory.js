@@ -615,7 +615,7 @@
             //    AppSettings.save();
             //}
 
-            return RegobsPopup.downloadProgress('UPDATE_DATA_MESSAGE', workFunc, { longTimoutMessageDelay: 15, closeOnComplete: true });
+            return RegobsPopup.downloadProgress('UPDATE_MAP_OBSERVATIONS', workFunc, { longTimoutMessageDelay: 20, closeOnComplete: true });
         };
 
         /**

@@ -162,7 +162,7 @@
 
         vm.download = function () {
             var startDownload = function() {
-                RegobsPopup.downloadProgress($translate.instant('UPDATE_MAP_OBSERVATIONS'),
+                RegobsPopup.downloadProgress($translate.instant('UPDATE_OFFLINE_MAP'),
                         downloadMap,
                         { closeOnComplete: false })
                     .then(function() {
