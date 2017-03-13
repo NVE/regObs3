@@ -45,11 +45,22 @@
                     </div>
                 </div>
             </div>
-        </div>      
+        </div>
+        <ion-item class="item-icon-left item-icon-right item-text-wrap" ui-sref="wizard" menu-close>
+            <i class="icon ion-ios-information-outline"></i> {{'WIZARD'|translate}}
+            <i class="icon icon-accessory ion-chevron-right"></i>
+        </ion-item>
+        <ion-item class="item-icon-left item-icon-right item-text-wrap" ui-sref="help({page:'maphelp'})" menu-close>
+            <i class="icon ion-ios-help-outline"></i> {{'HELP'|translate}}
+            <i class="icon icon-accessory ion-chevron-right"></i>
+        </ion-item>
         <ion-item class="item-text-wrap">
-            <button type="button" class="button button-positive button-block button-clear" ui-sref="help({page:'maphelp'})" menu-close>
-                {{'HELP'|translate}}
+            <!--<button type="button" class="button button-positive button-block button-clear icon-left ion-information-circled" ui-sref="wizard" menu-close>
+                {{'WIZARD'|translate}}
             </button>
+            <button type="button" class="button button-positive button-block button-clear icon-left ion-help-circled" ui-sref="help({page:'maphelp'})" menu-close>
+                {{'HELP'|translate}}
+            </button>-->
             <div class="small-text">{{'MAP_BY'|translate}} <a href="http://kartverket.no/" target="_system" >©Kartverket</a></div>
             <div class="small-text">{{'SUPPORT_MAP_BY'|translate}} <a href="http://www.nve.no/" target="_system">©NVE</a></div>
         </ion-item>

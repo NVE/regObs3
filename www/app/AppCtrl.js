@@ -35,7 +35,9 @@ angular.module('RegObs')
         };
 
         appVm.openTopPopover = function ($event) {
-            appVm.topPopover.show($event);
+            if (appVm.topPopover) {
+                appVm.topPopover.show($event);
+            }
         };
 
         appVm.resetProperty = function () {
@@ -74,35 +76,33 @@ angular.module('RegObs')
 
         appVm.showMapToggle = function () {
             return $state.current && $state.current.data && $state.current.data.showMapToggle;
-        };
+        };    
 
-        var popoverScope = $rootScope.$new();
-        popoverScope.currentAppMode = AppSettings.getAppMode();
-        popoverScope.goToSettings = function () {
-            appVm.topPopover.hide();
-            $state.go('settings');
-        };
-        popoverScope.changeAppMode = function (mode) {
-            appVm.topPopover.hide();
-            AppSettings.setAppMode(mode);
-        };
-        popoverScope.isLoggedIn = function () {
-            return !User.getUser().anonymous;
-        };
+        var initPopover = function () {
+            var popoverScope = $rootScope.$new();
+            popoverScope.currentAppMode = AppSettings.getAppMode();
+            popoverScope.goToSettings = function () {
+                appVm.topPopover.hide();
+                $state.go('settings');
+            };
+            popoverScope.changeAppMode = function (mode) {
+                appVm.topPopover.hide();
+                AppSettings.setAppMode(mode);
+            };
+            popoverScope.isLoggedIn = function () {
+                return !User.getUser().anonymous;
+            };
 
-        $ionicPopover.fromTemplateUrl('app/menus/topPopover.html', { scope: popoverScope }).then(function (popover) {
-            appVm.topPopover = popover;
-        });
+            $ionicPopover.fromTemplateUrl('app/menus/topPopover.html', { scope: popoverScope }).then(function (popover) {
+                appVm.topPopover = popover;
+            });
+        };
 
         appVm.showFooter = function () {
             return appVm.showTripFooter() ||
                 appVm.showFormFooter() ||
                 appVm.showRegistrationFooter();
         };
-
-        $scope.$on('$regobs.appModeChanged', function () {
-            popoverScope.currentAppMode = AppSettings.getAppMode();
-        });
 
         $scope.$on('$regobs.tripStarted', function () {
             resetForm(true);
@@ -129,6 +129,7 @@ angular.module('RegObs')
         });
 
         $scope.$on('$ionicView.enter', function () {
+            initPopover();
             Trip.checkIfTripShouldBeAutoStopped();
             appVm.currentState = $state.current;
             AppLogging.log(appVm.currentState);

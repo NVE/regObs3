@@ -7,13 +7,6 @@
             var ctrl = this;
            
             ctrl.opacityArray = [{ name: 'Heldekkende', value: 1.0 }, { name: '75% synlig', value: 0.75 }, { name: '50% synlig', value: 0.50 }, { name: '25% synlig', value: 0.25 }];
-            //ctrl.daysBackArray = [{ name: '1 dag tilbake i tid', value: 1 }, { name: '2 dager tilbake i tid', value: 2 }, { name: '3 dager tilbake i tid', value: 3 }, { name: '1 uke tilbake i tid', value: 7 }, { name: '2 uker tilbake i tid', value: 14 }];
-
-            //ctrl.getDaysBackArray = function () {
-            //    return AppSettings.getDaysBackArrayForCurrentGeoHazard();
-            //};
-
-            //ctrl.daysBack = AppSettings.getObservationsDaysBack();
 
             ctrl.onSettingsChanged = function () {
                 if (ctrl.daysBack && ctrl.daysBack !== AppSettings.getObservationsDaysBack()) {

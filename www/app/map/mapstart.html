@@ -1,4 +1,4 @@
-﻿<ion-view view-title="{{'regObs / '}}{{vm.getCurrentAppMode() | uppercase | translate}}">
+﻿<ion-view view-title={{vm.viewTitle}}>
     <div ng-class="{'hasFooter': vm.hasRegistration()}">
         <div ng-if="!vm.mapSelectedItem">
             <ion-floating-button class="regobs-gps-center" button-color="#fff" icon-color="#444" icon="ion-pinpoint" click="vm.gpsCenterClick()" ng-show="vm.getFollowMode()">

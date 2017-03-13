@@ -281,5 +281,7 @@
   "ONE_WEEK_BACK": "1 uke tilbake i tid",
   "TWOO_WEEKS_BACK": "2 uker tilbake i tid",
   "FOUR_WEEKS_BACK": "4 uker tilbake i tid",
-  "TWELVE_WEEKS_BACK": "12 uker tilbake i tid"
+  "TWELVE_WEEKS_BACK": "12 uker tilbake i tid",
+  "WIZARD": "Start veiviseren",
+  "ICE_MAP_DESCRIPTION": "Støttekartet viser deler av vassdrag som oppfører seg uforutsigbart gjennom vinteren grunnet reguleringer for kraftproduksjon"
 }

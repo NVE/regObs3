@@ -1,5 +1,5 @@
 ﻿angular.module('RegObs')
-    .controller('MapStartCtrl', function ($scope, $rootScope, $state, $ionicHistory, User, Map, AppSettings, Registration, AppLogging, Utility, $timeout, $ionicPopover, $cordovaInAppBrowser, Observations, RegobsPopup, UserLocation, $translate, Trip) {
+    .controller('MapStartCtrl', function ($scope, $rootScope, $state, $ionicHistory, User, Map, AppSettings, Registration, AppLogging, Utility, $timeout, $ionicPopover, $cordovaInAppBrowser, Observations, RegobsPopup, UserLocation, $translate, Trip, Translate) {
         var appVm = this;
 
         appVm.gpsCenterClick = Map.centerMapToUser;
@@ -65,11 +65,28 @@
             return AppSettings.getAppMode();
         };
 
+
         appVm.getFollowMode = Map.getFollowMode;
 
+        appVm.setViewTitle = function () {
+            var currentAppMode = AppSettings.getAppMode();
+            if (currentAppMode) {
+                Translate.translateWithFallback(currentAppMode.toUpperCase(), '').then(function (result) {
+                    appVm.viewTitle = 'regObs' +(result ? ' / ' + result : '');
+                });
+            } else {
+                appVm.viewTitle = 'regObs';
+            }
+        };
+
         $scope.$on('$ionicView.enter', function () {
+            appVm.setViewTitle();
             Map.invalidateSize();
             Map.startWatch();
+        });
+
+        $scope.$on('$regobs.appModeChanged', function () {
+            appVm.setViewTitle();
         });
 
         appVm._checkObsWatch = $timeout(function () {
