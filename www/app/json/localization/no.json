@@ -274,5 +274,12 @@
   "SHOW_MORE_CHOISES": "Vis flere valg",
   "NO_GROUPS_INFO": "Du er ikke medlem av noen grupper",
   "DOWNLOAD_NEW_AREA": "Last ned nytt område",
-  "DELETE_ALL_DOWNLOADED_AREAS": "Slett alle lagrede områder"
+  "DELETE_ALL_DOWNLOADED_AREAS": "Slett alle lagrede områder",
+  "ONE_DAY_BACK": "1 dag tilbake i tid",
+  "TWO_DAYS_BACK": "2 dager tilbake i tid",
+  "THREE_DAYS_BACK": "3 dager tilbake i tid",
+  "ONE_WEEK_BACK": "1 uke tilbake i tid",
+  "TWOO_WEEKS_BACK": "2 uker tilbake i tid",
+  "FOUR_WEEKS_BACK": "4 uker tilbake i tid",
+  "TWELVE_WEEKS_BACK": "12 uker tilbake i tid"
 }

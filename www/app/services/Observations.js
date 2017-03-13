@@ -241,7 +241,7 @@ angular
 
 
         service._getShowObservationsDaysBack = function () {
-            return AppSettings.data.showObservationsDaysBack;
+            return AppSettings.getObservationsDaysBack();
         };
 
         /**
