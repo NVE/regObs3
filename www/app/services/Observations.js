@@ -423,18 +423,17 @@ angular
                     });
             };
 
-            var testAndUpdateNearbyLocations = function() {
-                if (AppSettings.data.showPreviouslyUsedPlaces) {
-                    return service.updateNearbyLocations(latitude, longitude, range, geohazardId, cancel);
-                } else {
-                    return $q(function(resolve) {
-                        resolve();
-                    });
-                }
-            };
+            //var testAndUpdateNearbyLocations = function() {
+            //    if (AppSettings.data.showPreviouslyUsedPlaces) {
+            //        return service.updateNearbyLocations(latitude, longitude, range, geohazardId, cancel);
+            //    } else {
+            //        return $q(function(resolve) {
+            //            resolve();
+            //        });
+            //    }
+            //};
 
-            return testAndUpdateNearbyLocations()
-            .then(service.removeOldObservationsFromPresistantStorage)
+            return service.removeOldObservationsFromPresistantStorage()
             .then(function () {
                 return service._getRegistrationsWithinRadius(latitude,
                     longitude,

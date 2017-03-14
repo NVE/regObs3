@@ -165,17 +165,17 @@
             layerGroups.observations.clearLayers();
         };
 
-        /**
-         * Draw locations stored in presistant storage as stored location markers
-         */
-        service._drawStoredLocations = function () {
-            service._checkIfInitialized();
-            Observations.getLocations(Utility.getCurrentGeoHazardTid()).forEach(function (loc) {
-                var m = new RegObsClasses.StoredLocationMarker(loc);
-                m.on('selected', function (event) { service._setSelectedItem(event.target); });
-                m.addTo(layerGroups.observations);
-            });
-        };
+        ///**
+        // * Draw locations stored in presistant storage as stored location markers
+        // */
+        //service._drawStoredLocations = function () {
+        //    service._checkIfInitialized();
+        //    Observations.getLocations(Utility.getCurrentGeoHazardTid()).forEach(function (loc) {
+        //        var m = new RegObsClasses.StoredLocationMarker(loc);
+        //        m.on('selected', function (event) { service._setSelectedItem(event.target); });
+        //        m.addTo(layerGroups.observations);
+        //    });
+        //};
 
 
         /**
@@ -711,9 +711,9 @@
             Registration.clearNewRegistrationsWithinRange()
                 .then(function () {
                     service._removeObservations(); //clear all markers
-                    if (AppSettings.data.showPreviouslyUsedPlaces) {
-                        service._drawStoredLocations();
-                    }
+                    //if (AppSettings.data.showPreviouslyUsedPlaces) {
+                    //    service._drawStoredLocations();
+                    //}
                     if (AppSettings.data.showObservations) {
                         service._drawObservations();
                     }

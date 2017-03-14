@@ -346,6 +346,17 @@ ion-popover-view.wider {
   height: 18px;
 }
 
+.center-vertical-horizontal {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.button-spinner {
+    display: flex;
+    margin-left: 5px;
+}
+
 .popup-icon {
     font-size: 28px;
     margin-top: -10px;

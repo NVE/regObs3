@@ -65,7 +65,7 @@ angular
                 var center = map.getCenter();
                 var bounds = map.getBounds();
                 var zoom = map.getZoom();
-                var radius = parseInt((bounds.getNorthWest().distanceTo(bounds.getSouthEast()) / 2).toFixed(0));
+                var radius = Utility.getRadiusFromBounds(bounds);
                 var geoHazardTid = Utility.getCurrentGeoHazardTid();
 
                 if (!ctrl._lastCenter || (ctrl._lastCenter.distanceTo(center) > (AppSettings.data.searchRange / 2)) || ctrl._lastZoom !== zoom) {

@@ -23,8 +23,8 @@
                 { geoHazardTid: 70, tiles: [{ name: 'ice', opacity: 0.5, visible: true }] },
                 { geoHazardTid: 60, tiles: [{ name: 'flood', opacity: 0.5, visible: true }] }
             ],
-            showObservations: true,
-            showPreviouslyUsedPlaces: false
+            showObservations: true
+            //showPreviouslyUsedPlaces: false
         };
 
         var baseUrls = {

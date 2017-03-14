@@ -13,9 +13,6 @@
             <select ng-model="$ctrl.daysBack" tabindex="-1"
                     ng-options="option.value as option.name | translate for option in $ctrl.daysBackArray" ng-change="$ctrl.onSettingsChanged()"></select>
         </label>
-        <ion-toggle class="item-icon-left" toggle-class="toggle-calm" ng-model="$ctrl.settings.showPreviouslyUsedPlaces" ng-change="$ctrl.onSettingsChanged()">
-            <div class="icon"><div class="menu-observation-pin observation-pin {{$ctrl.settings.appmode}}"><i class="icon ion-pin observation-pin-icon large-icon"></i></div></div> {{'SHOW_PREVIOUS'|translate}} <br />{{'USED_LOCATIONS'|translate|lowercase}}
-        </ion-toggle>
         <ion-item class="item-icon-left item-icon-right item-text-wrap" ng-click="$ctrl.downloadMap()" menu-close>
             <i class="icon ion-ios-bolt-outline"></i> {{'OFFLINE_MAP'|translate}}
             <i class="icon icon-accessory ion-chevron-right"></i>
@@ -55,12 +52,6 @@
             <i class="icon icon-accessory ion-chevron-right"></i>
         </ion-item>
         <ion-item class="item-text-wrap">
-            <!--<button type="button" class="button button-positive button-block button-clear icon-left ion-information-circled" ui-sref="wizard" menu-close>
-                {{'WIZARD'|translate}}
-            </button>
-            <button type="button" class="button button-positive button-block button-clear icon-left ion-help-circled" ui-sref="help({page:'maphelp'})" menu-close>
-                {{'HELP'|translate}}
-            </button>-->
             <div class="small-text">{{'MAP_BY'|translate}} <a href="http://kartverket.no/" target="_system" >©Kartverket</a></div>
             <div class="small-text">{{'SUPPORT_MAP_BY'|translate}} <a href="http://www.nve.no/" target="_system">©NVE</a></div>
         </ion-item>
