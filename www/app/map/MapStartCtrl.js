@@ -1,5 +1,5 @@
 ﻿angular.module('RegObs')
-    .controller('MapStartCtrl', function ($scope, $rootScope, $state, $ionicHistory, User, Map, AppSettings, Registration, AppLogging, Utility, $timeout, $ionicPopover, $cordovaInAppBrowser, Observations, RegobsPopup, UserLocation, $translate, Trip, Translate) {
+    .controller('MapStartCtrl', function ($scope, $rootScope, $state, $ionicHistory, User, Map, AppSettings, Registration, AppLogging, Utility, $timeout, $ionicPopover, $cordovaInAppBrowser, Observations, RegobsPopup, UserLocation, $translate, Trip, Translate, OfflineMap) {
         var appVm = this;
 
         appVm.gpsCenterClick = Map.centerMapToUser;
@@ -80,9 +80,12 @@
         };
 
         $scope.$on('$ionicView.enter', function () {
+            OfflineMap.getOfflineAreaBounds().then(function (result) {
+                 Map.setOfflineAreaBounds(result);
+            });
             appVm.setViewTitle();
             Map.invalidateSize();
-            Map.startWatch();
+            Map.startWatch();            
         });
 
         $scope.$on('$regobs.appModeChanged', function () {

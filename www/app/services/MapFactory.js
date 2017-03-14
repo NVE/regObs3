@@ -18,6 +18,7 @@
         service._defaultCenter = [62.5, 10]; //default map center when no observation or user location
         service._followMode = true; //Follow user position, or has user manually dragged or zoomed map?
         service._lastViewBounds = null;
+        service._offlinemaps = [];
 
 
         /**
@@ -309,7 +310,6 @@
             service._updateSelectedItemDistance();
             if (ObsLocation.isSet()) {
                 var obslatlng = new L.LatLng(ObsLocation.get().Latitude, ObsLocation.get().Longitude);
-                //service._updateObsInfoText(obslatlng);
                 service._updateDistanceLineLatLng(obslatlng);
             }
         };
@@ -334,7 +334,8 @@
             var lg = { //Layers are added in order
                 tiles: L.layerGroup().addTo(mapToAdd),
                 observations: new RegObsClasses.MarkerClusterGroup({ icon: 'ion-eye' }).addTo(mapToAdd),
-                user: L.layerGroup().addTo(mapToAdd)
+                offlinemaps: L.layerGroup().addTo(mapToAdd),
+                user: L.layerGroup().addTo(mapToAdd)             
             };
 
             return lg;
@@ -472,7 +473,9 @@
                 }, 50);
             });
 
-            $rootScope.$on('$regObs:appSettingsChanged', service.refresh);
+            $rootScope.$on('$regObs:appSettingsChanged', function () {
+                service.refresh();
+            });
 
             $rootScope.$on('$regObs:registrationReset', function () {
                 $timeout(function () {
@@ -674,6 +677,22 @@
 
         };
 
+        service.setOfflineAreaBounds = function (offlineMapsBoundsArray) {
+            if (!angular.isArray(offlineMapsBoundsArray)) throw Error('offlineMapsBoundsArray must be an array!');
+            service._offlinemaps = offlineMapsBoundsArray;
+            service._redrawOfflineMapLines();
+        };
+
+        service._redrawOfflineMapLines = function () {
+            if (layerGroups.offlinemaps) {
+                layerGroups.offlinemaps.clearLayers();
+                service._offlinemaps.forEach(function (item) {
+                    var bounds = L.latLngBounds(item);
+                    var polygon = L.polygon([bounds.getNorthWest(), bounds.getNorthEast(), bounds.getSouthEast(), bounds.getSouthWest()], { color: "#ff7800", weight: 2, fill: false }).addTo(layerGroups.offlinemaps);
+                });
+            }
+        };
+
         /**
          * Refresh map an redraw layers and markers as set in settings
          * @returns {} 
@@ -687,6 +706,7 @@
 
             service._checkSelectedItemGeoHazard();
             service._redrawTilesForThisGeoHazard();
+            service._redrawOfflineMapLines();
 
             Registration.clearNewRegistrationsWithinRange()
                 .then(function () {

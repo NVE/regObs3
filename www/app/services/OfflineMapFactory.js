@@ -33,6 +33,16 @@ angular
             });
         };
 
+        service.getOfflineAreaBounds = function () {
+            return service.getOfflineAreas().then(function (result) {
+                var arr = [];
+                result.forEach(function (item) {
+                    arr.push(item.bounds);
+                });
+                return arr;
+            });
+        };
+
         service.saveOfflineAreas = function (metadata) {
             return PresistentStorage.storeFile(metaFilename, JSON.stringify(metadata)).then(function () {
                 meta = metadata; //update saved metadata in memory
