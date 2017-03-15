@@ -1,32 +1,49 @@
 <ion-view view-title="Tur">
     <ion-content>
         <ion-list>
-
-            <kdv-dropdown
-                    title="Turtype*"
-                    model="appVm.tripId"
-                    kdv-key="TripTypeKDV">
+            <kdv-dropdown title="Turtype*"
+                          model="vm.tripId"
+                          kdv-key="TripTypeKDV">
             </kdv-dropdown>
-
             <label class="item item-input item-stacked-label item-select">
                 <span class="input-label">
                     Observasjoner ventes før kl*
                 </span>
-                <select ng-model="appVm.tripMinutes"
-                        ng-options="min.val as min.name for min in vm.tripMinutesArray">
-                </select>
+                <select ng-model="vm.tripMinutes"
+                        ng-options="min.val as min.name for min in vm.tripMinutesArray"></select>
             </label>
-
             <label class="item item-input item-stacked-label">
                 <span class="input-label">Kommentar</span>
                 <textarea placeholder="Her kan du skrive inn hvilken obstur du skal på, hva du ser etter, osv."
                           name="comment"
                           cols="30" rows="3"
-                          ng-model="appVm.tripComment"></textarea>
+                          ng-model="vm.tripComment"></textarea>
             </label>
         </ion-list>
         <button type="button" ui-sref="help({page:'snowtrip'})" class="button button-positive button-block button-clear">
-            Hjelp
+            {{'HELP'|translate}}
         </button>
     </ion-content>
+    <ion-footer-bar class="regobs-footer">
+        <div class="row row-no-padding">
+            <div class="col col-center">
+                <div class="padding">
+                    <button class="button button-block button-outline button-dark icon-right ion-android-close" ng-click="vm.resetTrip()" ng-hide="vm.trip.model.started">
+                        {{'CLEAR'|translate}}
+                    </button>
+                </div>
+            </div>
+            <div class="col col-center">
+                <ion-spinner class="spinner-dark" ng-show="appVm.trip.sending"></ion-spinner>
+                <div ng-hide="vm.trip.sending" class="padding">
+                    <button class="button  button-block button-calm icon-right ion-android-walk" ng-click="vm.startTrip(vm.tripId, vm.tripMinutes, vm.tripComment)" ng-hide="vm.trip.model.started">
+                        {{'START_TRIP' | translate}}
+                    </button>
+                    <button class="button  button-block button-calm icon-right ion-android-walk" ng-click="vm.stopTrip()" ng-show="vm.trip.model.started">
+                        {{'END_TRIP' | translate}}
+                    </button>
+                </div>
+            </div>
+        </div>
+    </ion-footer-bar>
 </ion-view>

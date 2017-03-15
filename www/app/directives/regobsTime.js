@@ -1,6 +1,6 @@
 angular
     .module('RegObs')
-    .directive('regobsTime', function ($timeout, AppLogging) {
+    .directive('regobsTime', function ($timeout, AppLogging, Registration) {
         function link(scope, elem, attrs, formCtrl) {
             scope.formCtrl = formCtrl;
 
@@ -21,6 +21,8 @@ angular
                         scope.regObject[scope.regProp] = now.toISOString();
                         scope.DtObsTime = now;
                     }
+
+                    Registration.save();
                 });
             };
 

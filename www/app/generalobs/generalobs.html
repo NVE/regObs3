@@ -1,14 +1,15 @@
 <ion-view view-title="Fritekst">
-    <ion-content>
+    <ion-content class="has-footer">
         <ion-list>
             <regobs-comment
-                    placeholder="Får du ikke formidlet det du vil med de andre skjemaene? bruk dette og skriv i vei!"
+                    placeholder="{{'GENERAL_OBS_HELP_TEXT'|translate}}"
                     model="vm.reg.GeneralObservation.ObsComment"
             ></regobs-comment>
         </ion-list>
         <regobs-image-list></regobs-image-list>
         <button type="button" ui-sref="help({page:'generalobservation'})" class="button button-positive button-block button-clear">
-            Hjelp
+            {{'HELP'|translate}}
         </button>
     </ion-content>
+    <form-footer></form-footer>
 </ion-view>

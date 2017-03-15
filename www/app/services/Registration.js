@@ -64,9 +64,9 @@ angular
                 navigate();
             } else if (Registration.data.GeoHazardTID !== Utility.geoHazardTid(appMode)) {
                 RegobsPopup.delete('Slett registrering',
-                        'Du har en påbegynt ' +
-                        Utility.geoHazardNames(Registration.data.GeoHazardTID).toLowerCase() +
-                        '-registrering, dersom du går videre blir denne slettet. Vil du slette for å gå videre?')
+                    'Du har en påbegynt ' +
+                    Utility.geoHazardNames(Registration.data.GeoHazardTID).toLowerCase() +
+                    '-registrering, dersom du går videre blir denne slettet. Vil du slette for å gå videre?')
                     .then(function (response) {
                         if (response) {
                             Registration.createNew(Utility.geoHazardTid(appMode));
@@ -81,8 +81,14 @@ angular
             }
         };
 
+        //Registration.saveIndicator = false;
+
+
         function resetRegistration() {
             //return Registration.createNew(Registration.data.GeoHazardTID);
+
+
+
             ObsLocation.remove();
             Registration.data = {};
             Registration.save();
@@ -106,7 +112,7 @@ angular
         Registration.setBadge = function () {
             AppLogging.log('setting badge');
             try {
-                if (window.cordova && window.cordova.plugins.notification.badge) {
+                if (window.cordova && window.cordova.plugins && window.cordova.plugins.notification && window.cordova.plugins.notification.badge) {
                     if (Registration.unsent.length) {
                         cordova.plugins.notification.badge.set(Registration.unsent.length);
                     } else {
@@ -120,6 +126,8 @@ angular
 
         Registration.save = function () {
             AppLogging.log('save start');
+            //Registration.saveIndicator = true;
+            //$rootScope.$broadcast('$regObs:saveIndicatorChanged');
             LocalStorage.setObject(storageKey, Registration.data);
             LocalStorage.setObject(unsentStorageKey, Registration.unsent);
 
@@ -128,6 +136,11 @@ angular
             AppLogging.log('save complete');
 
             $rootScope.$broadcast('$regObs:registrationSaved');
+
+            //$timeout(function () {
+            //    Registration.saveIndicator = false;
+            //    $rootScope.$broadcast('$regObs:saveIndicatorChanged');
+            //}, 2000);
         };
 
         Registration.createNew = function (type) {
@@ -196,6 +209,10 @@ angular
 
         Registration.doesExistUnsent = function (type) {
             return Registration.isOfType(type) && !Registration.isEmpty();
+        };
+
+        Registration.showSend = function () {
+            return !(Registration.isEmpty() && !Registration.unsent.length);
         };
 
         Registration._setObsLocationToUserPositionIfNotSet = function () {
@@ -391,7 +408,7 @@ angular
                 var success = function () {
 
                     var newRegistrations = angular.copy(data.Registrations);
-                    newRegistrations.forEach(function(item) {
+                    newRegistrations.forEach(function (item) {
                         if (item.ObsLocation.ObsLocationId === ObsLocation.data.ObsLocationId) {
                             item.ObsLocation.Latitude = ObsLocation.data.Latitude;
                             item.ObsLocation.Longitude = ObsLocation.data.Longitude;
@@ -438,9 +455,9 @@ angular
 
                     if (error.status <= 0) {
                         RegobsPopup.confirm(title,
-                                'Fikk ikke kontakt med regObs-serveren. Dette kan skyldes manglende nettilgang, eller at serveren er midlertidig utilgjengelig. Du kan prøve på nytt, eller du kan lagre registrering for å sende inn senere.',
-                                'Prøv igjen',
-                                'Lagre')
+                            'Fikk ikke kontakt med regObs-serveren. Dette kan skyldes manglende nettilgang, eller at serveren er midlertidig utilgjengelig. Du kan prøve på nytt, eller du kan lagre registrering for å sende inn senere.',
+                            'Prøv igjen',
+                            'Lagre')
                             .then(handleUserAction);
                     } else if (error.status === 422) {
                         RegobsPopup.alert('Format stemmer ikke',

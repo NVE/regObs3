@@ -4,13 +4,13 @@ angular
 
         var vm = this;
 
+        vm.hasFooter = function () {
+            return Registration.showSend();
+        };
 
         $scope.$on('$ionicView.loaded', function () {
-            $ionicHistory.clearHistory();
+            //$ionicHistory.clearHistory();
             vm.reg = Registration.data;
         });
-
-        $scope.$on('$regobs.appModeChanged', Registration.createAndGoToNewRegistration);
-
     });
 

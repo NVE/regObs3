@@ -1,27 +1,25 @@
-<ion-view view-title="Jordobservasjon">
-    <ion-content>
+<ion-view view-title="{{'DIRT_OBSERVATION'|translate}}">
+    <ion-nav-buttons side="right">
+        <nav-saving-indicator></nav-saving-indicator>
+    </ion-nav-buttons>
+    <ion-content ng-class="{'has-footer': vm.hasFooter()}">
         <ion-list>
             <regobs-position></regobs-position>
             <regobs-time reg-object="vm.reg" reg-prop="DtObsTime"></regobs-time>
-            <regobs-menu-item
-                title="Faretegn"
-                condition="appVm.propertyExists('DangerObs')"
-                state="dirtdangerobs"
-                badge-text="vm.reg.DangerObs.length">
+            <regobs-menu-item title="{{'DANGER_OBS'|translate}}"
+                              condition="appVm.propertyExists('DangerObs')"
+                              state="dirtdangerobs"
+                              badge-text="vm.reg.DangerObs.length">
             </regobs-menu-item>
-
-            <regobs-menu-item
-                title="Skredhendelse"
-                condition="appVm.propertyExists('LandSlideObs')"
-                state="landslideobs">
+            <regobs-menu-item title="{{'LAND_SLIDE_OBS'|translate}}"
+                              condition="appVm.propertyExists('LandSlideObs')"
+                              state="landslideobs">
             </regobs-menu-item>
-
-            <regobs-menu-item
-                title="Fritekst"
-                condition="appVm.propertyExists('GeneralObservation')"
-                state="generalobs">
+            <regobs-menu-item title="{{'GENERAL_OBS'|translate}}"
+                              condition="appVm.propertyExists('GeneralObservation')"
+                              state="generalobs">
             </regobs-menu-item>
-
         </ion-list>
     </ion-content>
+    <registration-footer></registration-footer>
 </ion-view>

@@ -9,6 +9,10 @@
             }
         };
 
+        appVm.gotoRegistration = function () {
+            Registration.createAndGoToNewRegistration();
+        };
+
         appVm.hasRegistration = function () {
             return !(Registration.isEmpty() && !Registration.unsent.length);
         };
@@ -68,24 +72,30 @@
 
         appVm.getFollowMode = Map.getFollowMode;
 
+        appVm.viewTitle = 'regObs';
+
         appVm.setViewTitle = function () {
+            appVm.viewTitle = 'regObs';
             var currentAppMode = AppSettings.getAppMode();
-            if (currentAppMode) {
+            if (currentAppMode) { 
                 Translate.translateWithFallback(currentAppMode.toUpperCase(), '').then(function (result) {
-                    appVm.viewTitle = 'regObs' +(result ? ' / ' + result : '');
+                    $timeout(function () {
+                        var title = 'regObs' + (result ? ' / ' + result : '');
+                        appVm.viewTitle = title;
+                    });
                 });
-            } else {
-                appVm.viewTitle = 'regObs';
             }
         };
 
         $scope.$on('$ionicView.enter', function () {
-            OfflineMap.getOfflineAreaBounds().then(function (result) {
-                 Map.setOfflineAreaBounds(result);
-            });
-            appVm.setViewTitle();
+            $ionicHistory.clearHistory();
+
+            appVm.setViewTitle();                 
             Map.invalidateSize();
-            Map.startWatch();            
+            Map.startWatch();
+            OfflineMap.getOfflineAreaBounds().then(function (result) {
+                Map.setOfflineAreaBounds(result);
+            });
         });
 
         $scope.$on('$regobs.appModeChanged', function () {
@@ -124,6 +134,4 @@
                 appVm.mapSelectedItem = item;
             });
         });
-
-
     });

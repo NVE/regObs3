@@ -1,8 +1,7 @@
-<ion-view view-title="Isdekningsgrad">
-    <ion-content>
+<ion-view view-title="{{'ICE_COVER_OBS'|translate}}">
+    <ion-content class="has-footer">
         <form name="iceCoverForm" novalidate>
             <ion-list>
-
                 <kdv-dropdown
                         title="{{'ICE_COVER'|translate}}*"
                         model="vm.reg.IceCoverObs.IceCoverTID"
@@ -39,4 +38,5 @@
             {{'HELP'|translate}}
         </button>
     </ion-content>
+    <form-footer></form-footer>
 </ion-view>

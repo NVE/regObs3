@@ -1,9 +1,10 @@
-<ion-view view-title="Faretegn - Jord">
-    <ion-content>
+<ion-view view-title="{{'DIRT_DANGER_OBS'|translate}}">
+    <ion-content class="has-footer">
         <regobs-danger-obs danger-sign-kdv="Dirt_DangerSignKDV" area-array="vm.areaArray"></regobs-danger-obs>
         <regobs-image-list></regobs-image-list>
         <button type="button" ui-sref="help({page:'dirtdangerobs'})" class="button button-positive button-block button-clear">
-            Hjelp
+            {{'HELP'|translate}}
         </button>
     </ion-content>
+    <form-footer></form-footer>
 </ion-view>

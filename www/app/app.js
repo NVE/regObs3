@@ -52,30 +52,6 @@
             .preferredLanguage('no')
             .fallbackLanguage(['no']);
 
-        var defaultBackIceRegistration = {
-            state: 'iceregistrationNew',
-            force: true
-        };
-        var defaultBackSnowRegistration = {
-            state: 'snowregistrationNew',
-            force: true
-        };
-        var defaultBackDirtRegistration = {
-            state: 'dirtregistrationNew',
-            force: true
-        };
-        var defaultBackWaterRegistration = {
-            state: 'waterregistrationNew',
-            force: true
-        };
-        var defaultBackStart = {
-            state: 'start',
-            title: 'MAP',
-            force: true
-        };
-        var defaultBackHelp = {
-            state: 'start'
-        };
 
         if (!AppSettingsProvider.$get().hasSetAppMode()) {
             $urlRouterProvider.otherwise('/wizard');
@@ -93,55 +69,30 @@
             .state('start', {
                 url: '/start',
                 templateUrl: 'app/map/mapstart.html',
-                controller: 'MapStartCtrl as vm',
-                data: {
-                    showMapToggle: true,
-                    showRegistrationFooter: true,
-                    clearHistory: true
-                }
+                controller: 'MapStartCtrl as vm'
             })
             .state('settings', {
                 url: '/settings',
                 templateUrl: 'app/settings/settingsview.html',
-                controller: 'SettingsViewCtrl as vm',
-                data: {
-                    defaultBack: defaultBackHelp,
-                    showSettings: false
-                }
+                controller: 'SettingsViewCtrl as vm'
             })
             .state('offlinemapoverview', {
                 url: '/offlinemapoverview',
                 templateUrl: 'app/map/offlinemapoverview.html',
-                controller: 'OfflineMapOverviewCtrl as vm',
-                data: {
-                    defaultBack: defaultBackStart,
-                    showSettings: false
-                }
+                controller: 'OfflineMapOverviewCtrl as vm'
             })
             .state('mapareadownload', {
                 url: '/mapareadownload',
                 templateUrl: 'app/map/mapareadownload.html',
                 controller: 'MapAreaDownloadCtrl as vm',
-                cache: false,
-                data: {
-                    defaultBack: {
-                        state: 'offlinemapoverview'
-                    },
-                    showSettings: false
-                }
+                cache: false
             })
             .state('offlineareadetails', {
                 url: '/offlineareadetails',
                 templateUrl: 'app/map/offlineareadetails.html',
                 controller: 'OfflineAreaDetailsCtrl as vm',
                 cache: false,
-                params: { area: null },
-                data: {
-                    defaultBack: {
-                        state: 'offlinemapoverview'
-                    },
-                    showSettings: false
-                }
+                params: { area: null }
             })
 
             .state('observationdetails', {
@@ -149,40 +100,25 @@
                 templateUrl: 'app/observations/details/observationdetails.html',
                 controller: 'ObservationDetailsCtrl as vm',
                 cache: false,
-                params: { observation: null },
-                data: {
-                    defaultBack: defaultBackHelp,
-                    showSettings: false
-                }
+                params: { observation: null }
             })
 
             .state('observationlist', {
                 url: '/observationlist',
                 templateUrl: 'app/observations/list/observationlist.html',
-                controller: 'ObservationListCtrl as vm',
-                data: {
-                    defaultBack: defaultBackStart
-                }
+                controller: 'ObservationListCtrl as vm'
             })
 
             //SNØ
             .state('snowregistrationNew', {
                 url: '/snowregistration',
                 templateUrl: 'app/snow/snowregistration/snowregistration.html',
-                controller: 'SnowRegistrationCtrl as vm',
-                data: {
-                    defaultBack: defaultBackStart,
-                    showRegistrationFooter: true
-                }
+                controller: 'SnowRegistrationCtrl as vm'
             })
             .state('snowtrip', {
                 url: '/snowtrip',
                 templateUrl: 'app/snow/trip/trip.html',
-                controller: 'TripCtrl as vm',
-                data: {
-                    defaultBack: defaultBackStart,
-                    showTripFooter: true
-                }
+                controller: 'TripCtrl as vm'
             })
             .state('snowdangerobs', {
                 //Faretegn
@@ -190,8 +126,6 @@
                 templateUrl: 'app/snow/snowregistration/snowdangerobs/snowdangerobs.html',
                 controller: 'SnowDangerObsCtrl as vm',
                 data: {
-                    defaultBack: defaultBackSnowRegistration,
-                    showFormFooter: true,
                     registrationProp: 'DangerObs'
                 }
             })
@@ -201,8 +135,6 @@
                 templateUrl: 'app/snow/snowregistration/stabilitytest/stabilitytest.html',
                 controller: 'SnowStabilityTestCtrl as vm',
                 data: {
-                    defaultBack: defaultBackSnowRegistration,
-                    showFormFooter: true,
                     registrationProp: 'CompressionTest'
                 }
             })
@@ -212,8 +144,6 @@
                 templateUrl: 'app/snow/snowregistration/avalancheobs/avalancheobs.html',
                 controller: 'AvalancheObsCtrl as vm',
                 data: {
-                    defaultBack: defaultBackSnowRegistration,
-                    showFormFooter: true,
                     registrationProp: 'AvalancheObs'
                 }
             })
@@ -223,8 +153,6 @@
                 templateUrl: 'app/snow/snowregistration/avalancheactivityobs/avalancheactivityobs.html',
                 controller: 'AvalancheActivityObsCtrl as vm',
                 data: {
-                    defaultBack: defaultBackSnowRegistration,
-                    showFormFooter: true,
                     registrationProp: 'AvalancheActivityObs2'
                 }
             })
@@ -234,8 +162,6 @@
                 templateUrl: 'app/snow/snowregistration/snowweatherobservation/snowweatherobservation.html',
                 controller: 'SnowWeatherObservationCtrl as vm',
                 data: {
-                    defaultBack: defaultBackSnowRegistration,
-                    showFormFooter: true,
                     registrationProp: 'WeatherObservation'
                 }
             })
@@ -245,8 +171,6 @@
                 templateUrl: 'app/snow/snowregistration/snowsurfaceobservation/snowsurfaceobservation.html',
                 controller: 'SnowSurfaceObservationCtrl as vm',
                 data: {
-                    defaultBack: defaultBackSnowRegistration,
-                    showFormFooter: true,
                     registrationProp: 'SnowSurfaceObservation'
                 }
             })
@@ -256,8 +180,6 @@
                 templateUrl: 'app/snow/snowregistration/snowprofile/snowprofile.html',
                 controller: 'SnowProfileCtrl as vm',
                 data: {
-                    defaultBack: defaultBackSnowRegistration,
-                    showFormFooter: true,
                     registrationProp: 'SnowProfile'
                 }
             })
@@ -267,8 +189,6 @@
                 templateUrl: 'app/snow/snowregistration/avalancheevalproblem/avalancheevalproblem.html',
                 controller: 'AvalancheEvalProblemCtrl as vm',
                 data: {
-                    defaultBack: defaultBackSnowRegistration,
-                    showFormFooter: true,
                     registrationProp: 'AvalancheEvalProblem2'
                 }
             })
@@ -278,8 +198,6 @@
                 templateUrl: 'app/snow/snowregistration/avalancheevaluation/avalancheevaluation.html',
                 controller: 'AvalancheEvaluationCtrl as vm',
                 data: {
-                    defaultBack: defaultBackSnowRegistration,
-                    showFormFooter: true,
                     registrationProp: 'AvalancheEvaluation3'
                 }
             })
@@ -288,11 +206,7 @@
             .state('iceregistrationNew', {
                 url: '/iceregistration',
                 templateUrl: 'app/ice/iceregistration/iceregistration.html',
-                controller: 'IceRegistrationCtrl as vm',
-                data: {
-                    defaultBack: defaultBackStart,
-                    showRegistrationFooter: true
-                }
+                controller: 'IceRegistrationCtrl as vm'
             })
             .state('icedangerobs', {
                 //Faretegn
@@ -300,8 +214,6 @@
                 templateUrl: 'app/ice/iceregistration/icedangerobs/icedangerobs.html',
                 controller: 'IceDangerObsCtrl as vm',
                 data: {
-                    defaultBack: defaultBackIceRegistration,
-                    showFormFooter: true,
                     registrationProp: 'DangerObs'
                 }
             })
@@ -311,8 +223,6 @@
                 templateUrl: 'app/ice/iceregistration/icecoverobs/icecoverobs.html',
                 controller: 'IceCoverObsCtrl as vm',
                 data: {
-                    defaultBack: defaultBackIceRegistration,
-                    showFormFooter: true,
                     registrationProp: 'IceCoverObs'
                 }
             })
@@ -322,8 +232,6 @@
                 templateUrl: 'app/ice/iceregistration/icethickness/icethickness.html',
                 controller: 'IceThicknessCtrl as vm',
                 data: {
-                    defaultBack: defaultBackIceRegistration,
-                    showFormFooter: true,
                     registrationProp: 'IceThickness'
                 }
             })
@@ -333,8 +241,6 @@
                 templateUrl: 'app/ice/iceregistration/iceincident/iceincident.html',
                 controller: 'IceIncidentCtrl as vm',
                 data: {
-                    defaultBack: defaultBackIceRegistration,
-                    showFormFooter: true,
                     registrationProp: 'Incident'
                 }
             })
@@ -344,10 +250,6 @@
                 url: '/waterregistration',
                 templateUrl: 'app/water/waterregistration/waterregistration.html',
                 controller: 'WaterRegistrationCtrl as vm',
-                data: {
-                    defaultBack: defaultBackStart,
-                    showRegistrationFooter: true
-                }
             })
             .state('waterdangerobs', {
                 //Faretegn
@@ -355,8 +257,6 @@
                 templateUrl: 'app/water/waterregistration/waterdangerobs/waterdangerobs.html',
                 controller: 'WaterDangerObsCtrl as vm',
                 data: {
-                    defaultBack: defaultBackWaterRegistration,
-                    showFormFooter: true,
                     registrationProp: 'DangerObs'
                 }
             })
@@ -366,8 +266,6 @@
                 templateUrl: 'app/water/waterregistration/waterlevel/waterlevel.html',
                 controller: 'WaterLevelCtrl as vm',
                 data: {
-                    defaultBack: defaultBackWaterRegistration,
-                    showFormFooter: true,
                     registrationProp: 'WaterLevel'
                 }
             })
@@ -377,8 +275,6 @@
                 templateUrl: 'app/water/waterregistration/waterincident/waterincident.html',
                 controller: 'WaterIncidentCtrl as vm',
                 data: {
-                    defaultBack: defaultBackWaterRegistration,
-                    showFormFooter: true,
                     registrationProp: 'Incident'
                 }
             })
@@ -387,11 +283,7 @@
             .state('dirtregistrationNew', {
                 url: '/dirtregistration',
                 templateUrl: 'app/dirt/dirtregistration/dirtregistration.html',
-                controller: 'DirtRegistrationCtrl as vm',
-                data: {
-                    defaultBack: defaultBackStart,
-                    showRegistrationFooter: true
-                }
+                controller: 'DirtRegistrationCtrl as vm'
             })
             .state('dirtdangerobs', {
                 //Faretegn
@@ -399,8 +291,6 @@
                 templateUrl: 'app/dirt/dirtregistration/dirtdangerobs/dirtdangerobs.html',
                 controller: 'DirtDangerObsCtrl as vm',
                 data: {
-                    defaultBack: defaultBackDirtRegistration,
-                    showFormFooter: true,
                     registrationProp: 'DangerObs'
                 }
             })
@@ -410,8 +300,6 @@
                 templateUrl: 'app/dirt/dirtregistration/landslideobs/landslideobs.html',
                 controller: 'LandSlideObsCtrl as vm',
                 data: {
-                    defaultBack: defaultBackDirtRegistration,
-                    showFormFooter: true,
                     registrationProp: 'LandSlideObs'
                 }
             })
@@ -423,7 +311,6 @@
                 templateUrl: 'app/generalobs/generalobs.html',
                 controller: 'GeneralObsCtrl as vm',
                 data: {
-                    showFormFooter: true,
                     registrationProp: 'GeneralObservation'
                 }
             })
@@ -432,13 +319,9 @@
                 templateUrl: function (stateParams) {
                     return 'app/help/' + stateParams.page + '.html';
                 },
-                controller: 'HelpCtrl as vm',
-                data: {
-                    defaultBack: defaultBackHelp,
-                    showSettings: false
-                }
+                controller: 'HelpCtrl as vm'
             });
-    }
+    };
 
     function setup($ionicPlatform, Utility, AppLogging, Registration, Observations, OfflineMap) {
         'ngInject';

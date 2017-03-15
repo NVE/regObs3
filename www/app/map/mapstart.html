@@ -1,4 +1,13 @@
 ﻿<ion-view view-title={{vm.viewTitle}}>
+    <ion-nav-buttons side="left">
+        <!-- Toggle left side menu -->
+        <button menu-toggle="left" class="button button-icon icon ion-map"></button>
+    </ion-nav-buttons>
+    <ion-nav-buttons side="right">
+        <nav-trip-button></nav-trip-button>
+        <user-logout-button></user-logout-button>
+        <nav-more-button></nav-more-button>
+    </ion-nav-buttons>
     <div ng-class="{'hasFooter': vm.hasRegistration()}">
         <div ng-if="!vm.mapSelectedItem">
             <ion-floating-button class="regobs-gps-center" button-color="#fff" icon-color="#444" icon="ion-pinpoint" click="vm.gpsCenterClick()" ng-show="vm.getFollowMode()">
@@ -29,8 +38,19 @@
                 <img class="map-selected-info-image" ng-src="{{vm.mapSelectedItem.getFirstImage().url}}" />
             </div>
         </div>
-        <ion-content scroll="false">
+        <ion-content scroll="false" ng-class="{'has-footer': vm.hasRegistration()}">
             <div id="map" data-tap-disabled="true" class="regobs-map" regobs-map></div>
         </ion-content>
     </div>
+    <ion-footer-bar class="regobs-footer" ng-if="vm.hasRegistration()">
+        <div class="row row-no-padding">
+            <div class="col col-center">
+                <div class="padding footer-button-wrapper">
+                    <button class="button  button-block button-calm icon-right ion-edit" ng-click="vm.gotoRegistration()">
+                        {{'CONTINUE_REGISTRATION'|translate}}&nbsp;
+                    </button>
+                </div>
+            </div>
+        </div>
+    </ion-footer-bar>
 </ion-view>
