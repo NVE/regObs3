@@ -59,6 +59,8 @@
             $urlRouterProvider.otherwise('/start');
         }
 
+        $ionicConfigProvider.backButton.previousTitleText(false).text('&emsp;&emsp;'); //Increase the touch target area on back button
+
         $stateProvider
             .state('wizard', {
                 url: '/wizard',

@@ -11,7 +11,7 @@ angular.module('RegObs').directive('defaultNavBackButton',
         function link(scope, element, attrs) {
             scope.backTitle = function () {
                 var defaultBack = getDefaultBack();
-                if ($ionicConfig.backButton.previousTitleText() && defaultBack) {
+                if ($ionicConfig.backButton.previousTitleText() && defaultBack) { //previous title text is turned off in app.js config
                     return $ionicHistory.backTitle() || defaultBack.title || 'BACK';
                 }
             };
@@ -23,7 +23,15 @@ angular.module('RegObs').directive('defaultNavBackButton',
                 }
             };
             scope.$on('$stateChangeSuccess', function () {
-                element.toggleClass('hide', !getDefaultBack());
+                element.toggleClass('hide', (!getDefaultBack() && !$ionicHistory.backView()));
+                //if (!$ionicHistory.backView() && getDefaultBack()){
+                //    $ionicViewSwitcher.nextDirection('back');
+                //    $ionicHistory.nextViewOptions({
+                //        disableBack: true,
+                //        historyRoot: true
+                //    });
+                //}
+
             });
 
             $ionicPlatform.registerBackButtonAction(function () {

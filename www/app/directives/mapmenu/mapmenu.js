@@ -2,7 +2,7 @@
     .module('RegObs')
     .component('mapMenu', {
         templateUrl: 'app/directives/mapmenu/mapmenu.html',
-        controller: function (AppSettings, $state, OfflineMap, $cordovaInAppBrowser, $scope, Utility, $rootScope) {
+        controller: function (AppSettings, $state, OfflineMap, $cordovaInAppBrowser, $scope, Utility, $rootScope, $ionicSideMenuDelegate) {
             'ngInject';
             var ctrl = this;
            
@@ -15,9 +15,9 @@
                 AppSettings.save();
             };
 
-            ctrl.downloadMap = function() {
-                OfflineMap.getOfflineAreas()
-               .then(function (result) {
+            ctrl.downloadMap = function () {
+                $ionicSideMenuDelegate.toggleLeft();
+                OfflineMap.getOfflineAreas().then(function (result) {
                    if (result.length > 0) {
                        $state.go('offlinemapoverview');
                    } else {
@@ -26,6 +26,12 @@
                }, function (error) {
                    $state.go('offlinemapoverview');
                });
+            };
+
+            //Fix because of bug in menu-close and ui-sref on menu item resets back-state and back button is sometimes missing
+            ctrl.navigateTo = function (page, options) {
+                $ionicSideMenuDelegate.toggleLeft(); 
+                $state.go(page, options);
             };
 
             ctrl.getMapsForCurrentAppMode = function() {

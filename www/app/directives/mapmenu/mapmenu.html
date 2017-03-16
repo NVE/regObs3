@@ -13,7 +13,7 @@
             <select ng-model="$ctrl.daysBack" tabindex="-1"
                     ng-options="option.value as option.name | translate for option in $ctrl.daysBackArray" ng-change="$ctrl.onSettingsChanged()"></select>
         </label>
-        <ion-item class="item-icon-left item-icon-right item-text-wrap" ng-click="$ctrl.downloadMap()" menu-close>
+        <ion-item class="item-icon-left item-icon-right item-text-wrap" ng-click="$ctrl.downloadMap()">
             <i class="icon ion-ios-bolt-outline"></i> {{'OFFLINE_MAP'|translate}}
             <i class="icon icon-accessory ion-chevron-right"></i>
         </ion-item>
@@ -43,11 +43,11 @@
                 </div>
             </div>
         </div>
-        <ion-item class="item-icon-left item-icon-right item-text-wrap" ui-sref="wizard" menu-close>
+        <ion-item class="item-icon-left item-icon-right item-text-wrap" ng-click="$ctrl.navigateTo('wizard')">
             <i class="icon ion-ios-information-outline"></i> {{'WIZARD'|translate}}
             <i class="icon icon-accessory ion-chevron-right"></i>
         </ion-item>
-        <ion-item class="item-icon-left item-icon-right item-text-wrap" ui-sref="help({page:'maphelp'})" menu-close>
+        <ion-item class="item-icon-left item-icon-right item-text-wrap" ng-click="$ctrl.navigateTo('help', { page:'maphelp' })">
             <i class="icon ion-ios-help-outline"></i> {{'HELP'|translate}}
             <i class="icon icon-accessory ion-chevron-right"></i>
         </ion-item>
