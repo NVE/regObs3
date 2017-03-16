@@ -2,7 +2,7 @@
     .module('RegObs')
     .component('mapMenu', {
         templateUrl: 'app/directives/mapmenu/mapmenu.html',
-        controller: function (AppSettings, $state, OfflineMap, $cordovaInAppBrowser, $scope, Utility) {
+        controller: function (AppSettings, $state, OfflineMap, $cordovaInAppBrowser, $scope, Utility, $rootScope) {
             'ngInject';
             var ctrl = this;
            

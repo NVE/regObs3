@@ -15,7 +15,6 @@ angular.module('RegObs')
         });
 
         $scope.$on('$ionicView.enter', function () {
-            //initPopover();
             Trip.checkIfTripShouldBeAutoStopped();
             appVm.currentState = $state.current;
             ga_storage._trackPageview(appVm.currentState.name);

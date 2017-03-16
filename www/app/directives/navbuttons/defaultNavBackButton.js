@@ -1,6 +1,6 @@
-angular
-    .module('RegObs')
-    .directive('defaultNavBackButton',
+//Fix for back button due to issue with missing back button from map menu
+//read more: https://github.com/driftyco/ionic/issues/1647
+angular.module('RegObs').directive('defaultNavBackButton',
     function defaultNavBackButton($ionicHistory, $state, $ionicConfig, $ionicViewSwitcher, $ionicPlatform, AppLogging) {
         'ngInject';
         return {
@@ -11,36 +11,26 @@ angular
         function link(scope, element, attrs) {
             scope.backTitle = function () {
                 var defaultBack = getDefaultBack();
-                //if ($ionicConfig.backButton.previousTitleText() && defaultBack) {
-                //    return $ionicHistory.backTitle() || defaultBack.title || 'BACK';
-                //}
-
-                if (defaultBack && defaultBack.title && (defaultBack.force || !$ionicHistory.backView())) {
-                    return defaultBack.title;
-                } else {
-                    return 'BACK';
+                if ($ionicConfig.backButton.previousTitleText() && defaultBack) {
+                    return $ionicHistory.backTitle() || defaultBack.title || 'BACK';
                 }
             };
             scope.goBack = function () {
-                var defaultBack = getDefaultBack();
-                if (defaultBack && (defaultBack.force || !$ionicHistory.backView())){
-                    goDefaultBack();
-                } else if ($ionicHistory.backView()) {
+                if ($ionicHistory.backView()) {
                     $ionicHistory.goBack();
-                }else {
-                    $state.go('start');
+                } else {
+                    goDefaultBack();
                 }
             };
             scope.$on('$stateChangeSuccess', function () {
-                element.toggleClass('hide', (!getDefaultBack() && !$ionicHistory.backView()));
+                element.toggleClass('hide', !getDefaultBack());
             });
 
             $ionicPlatform.registerBackButtonAction(function () {
-                var defaultBack = getDefaultBack();
-                if (defaultBack && (defaultBack.force || !$ionicHistory.backView())) {
-                    goDefaultBack();
-                } else if ($ionicHistory.backView()) {
+                if ($ionicHistory.backView()) {
                     $ionicHistory.goBack();
+                } else if (getDefaultBack()) {
+                    goDefaultBack();
                 } else {
                     navigator.app.exitApp();
                 }
@@ -48,7 +38,11 @@ angular
         }
 
         function getDefaultBack() {
-            return ($state.current.data || {}).defaultBack;
+            var defaultBack = ($state.current.data || {}).defaultBack;
+            if (!defaultBack && $state.current.name !== 'start') {
+                defaultBack = { state: 'start', title: 'MAP' }
+            }
+            return defaultBack;
         }
 
         function goDefaultBack() {

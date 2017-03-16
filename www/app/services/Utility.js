@@ -399,7 +399,12 @@ angular
             var lastUpdate = LocalStorage.get('kdvUpdated', '2016-01-01');
             var now = new Date();
 
-            lastUpdate = new Date(lastUpdate);
+            AppLogging.log('Last update', lastUpdate);
+            if (isNaN(lastUpdate)) {
+                lastUpdate = new Date('2016-01-01');          
+            } else {
+                lastUpdate = new Date(parseInt(lastUpdate));
+            }
             AppLogging.log('Last update', lastUpdate);
 
             timeDiff = Math.abs(now.getTime() - lastUpdate.getTime());

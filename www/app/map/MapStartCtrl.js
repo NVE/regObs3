@@ -90,7 +90,7 @@
         $scope.$on('$ionicView.enter', function () {
             $ionicHistory.clearHistory();
 
-            appVm.setViewTitle();                 
+            appVm.setViewTitle();                
             Map.invalidateSize();
             Map.startWatch();
             OfflineMap.getOfflineAreaBounds().then(function (result) {
