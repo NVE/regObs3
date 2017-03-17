@@ -231,13 +231,4 @@
         })
     });
 
-    it("_getHelpTexts: not found item returns empty text", function (done) {
-        inject(function (HelpTexts, AppSettings, LocalStorage) {
-            AppSettings._defaults = { env: 'testEnv regObs' };
-            AppSettings.load();
-            var result = HelpTexts._getLocalStorageHelpTexts();
-            expect(resultKey).toEqual(HelpTexts._localStorageKey+ '_testEnv_regObs');
-        })
-    });
-
 });

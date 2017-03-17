@@ -210,11 +210,15 @@ angular
         };
 
         service._mergeRegistrations = function (destArr, existingRegistrations) {
+            var keepLimit = moment(AppSettings.getObservationsFromDateISOString(), moment.ISO_8601);
             existingRegistrations.forEach(function (item) {
-                var newRegistration = destArr.filter(function (reg) { return reg.RegId === item.RegId });
-                if (newRegistration.length === 0) {
-                    //Registration does not exist, push old value to new list
-                    destArr.push(item);
+                var date = moment(item.DtObsTime, moment.ISO_8601); //strict parsing
+                if (date.isBefore(keepLimit)) { //only keep old values before new observation time to remove deleted items
+                    var newRegistration = destArr.filter(function (reg) { return reg.RegId === item.RegId });
+                    if (newRegistration.length === 0) {
+                        //Registration does not exist, push old value to new list
+                        destArr.push(item);
+                    }
                 }
             });
         };

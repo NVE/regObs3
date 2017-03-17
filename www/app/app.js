@@ -5,35 +5,38 @@
         .config(providers)
         .run(setup);
 
-    function providers($provide, $stateProvider, $urlRouterProvider, $ionicConfigProvider, AppSettingsProvider, $translateProvider, UserProvider) {
+    function providers($provide, $stateProvider, $urlRouterProvider, $ionicConfigProvider, AppSettingsProvider, $translateProvider, UserProvider, UtilityProvider) {
         'ngInject';
 
-        $provide.decorator('$exceptionHandler', ['$delegate',
-            function ($delegate) {
-                return function (exception, cause) {
-                    if (ga_storage) {
-                        var userService = UserProvider.$get();
-                        var appSettings = AppSettingsProvider.$get();
-                        var user = userService.getUser();
-                        var userText = 'Anonymous user';
-                        if (!user.anonymous) {
-                            userText = 'User: ' + user.Guid + ' Nick: ' + user.Nick;
+        var utils = UtilityProvider.$get();
+        if (!utils.isRippleEmulator()) {
+            $provide.decorator('$exceptionHandler', ['$delegate',
+                function ($delegate) {
+                    return function (exception, cause) {
+                        if (ga_storage) {
+                            var userService = UserProvider.$get();
+                            var appSettings = AppSettingsProvider.$get();
+                            var user = userService.getUser();
+                            var userText = 'Anonymous user';
+                            if (!user.anonymous) {
+                                userText = 'User: ' + user.Guid + ' Nick: ' + user.Nick;
+                            }
+
+                            var initInjector = angular.injector(['ng']);
+                            var $http = initInjector.get('$http');
+
+                            $http.get('app/json/version.json').then(function (version) {
+                                var label = 'Error ' + appSettings.data.env + ' ' + version.data.version + ' ' + version.data.build;
+                                var action = ((cause || '') + ' ' + exception.message).trim();
+                                var stack = userText + ' Stack: ' + exception.stack.replace(/(\r\n|\n|\r)/gm, "\n ○ ");
+                                ga_storage._trackEvent(label, action, stack);
+                            });
                         }
-
-                        var initInjector = angular.injector(['ng']);
-                        var $http = initInjector.get('$http');
-
-                        $http.get('app/json/version.json').then(function (version) {
-                            var label = 'Error ' + appSettings.data.env + ' ' + version.data.version + ' ' + version.data.build;
-                            var action = ((cause || '') + ' ' + exception.message).trim();
-                            var stack = userText + ' Stack: ' + exception.stack.replace(/(\r\n|\n|\r)/gm, "\n ○ ");
-                            ga_storage._trackEvent(label, action, stack);
-                        });
-                    }
-                    $delegate(exception, cause);
-                };
-            }
-        ]);
+                        $delegate(exception, cause);
+                    };
+                }
+            ]);
+        }
 
 
         if (ionic.Platform.isAndroid()) {

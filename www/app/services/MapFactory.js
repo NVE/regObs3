@@ -433,11 +433,11 @@
                     AppLogging.log('GPS error: ' + e.message);
                 });
 
-            map.on('contextmenu', function (e) {
-                if (service._isSetLocationManuallyPossible()) {
-                    service._setObsLocation(e.latlng); //Set location manually on right klick / long press in map if no registration present
-                }
-            });
+            //map.on('contextmenu', function (e) {
+            //    if (service._isSetLocationManuallyPossible()) {
+            //        service._setObsLocation(e.latlng); //Set location manually on right klick / long press in map if no registration present
+            //    }
+            //});
 
             map.on('click', service.clearSelectedMarkers);
 
