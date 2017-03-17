@@ -6,7 +6,7 @@
   </PropertyGroup>
   <PropertyGroup>
     <ReferenceCachePath>C:\Users\ingvar.ljosland\AppData\Local\Temp\regObs3_refcache</ReferenceCachePath>
-    <ShowAllFiles>false</ShowAllFiles>
+    <ShowAllFiles>true</ShowAllFiles>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Android'">
     <DebuggerFlavor>AndroidEmulator</DebuggerFlavor>
