@@ -50,6 +50,31 @@ angular
             return service.getWindDirectionText(direction, true);
         };
 
+        service.getExposionHeightText = function (item, data) {
+            AppLogging.log('data.FullObject.ExposedHeightComboTID: ' + data.FullObject.ExposedHeightComboTID);
+            AppLogging.log('data.FullObject: ' + JSON.stringify(data.FullObject));
+
+            var getValue = function (item) {
+                if (item === undefined || item === null) {
+                    return 'ukjent';
+                }
+                return item;
+            };
+
+            switch (data.FullObject.ExposedHeightComboTID) {
+                case 1:
+                    return 'Over ' + getValue(data.FullObject.ExposedHeight1) + ' moh';
+                case 2:
+                    return 'Under ' + getValue(data.FullObject.ExposedHeight1) + ' moh';
+                case 3:
+                    return 'Ikke mellom ' + getValue(data.FullObject.ExposedHeight1) + ' - ' + getValue(data.FullObject.ExposedHeight2) +' moh';
+                case 4:
+                    return 'Mellom ' + getValue(data.FullObject.ExposedHeight1) + ' - ' + getValue(data.FullObject.ExposedHeight2) +' moh';
+            }
+
+            return getValue(data.FullObject.ExposedHeight1) +' moh';
+        };
+
         /**
          * Get description from exposition bit order, for example 00011001
          * @param {} expositionBitOrder 
@@ -166,9 +191,7 @@ angular
                     AvalTriggerSimpleTID: {},
                     DestructiveSizeTID: {},
                     AvalPropagationTID: {},
-                    ExposedHeightComboTID: {},
-                    ExposedHeight1: { displayFormat: { valueFormat: function (item) { return item + ' m' } } },
-                    ExposedHeight2: { displayFormat: { valueFormat: function (item) { return item + ' m' } } },
+                    ExposedHeightComboTID: { displayFormat: { hideDescription: true, valueFormat: service.getExposionHeightText } },
                     ValidExposition: { displayFormat: { condition: function (item) { return item !== '00000000' }, valueFormat: service.getExpositonDescriptionFromBitOrder } },
                     Comment: { displayFormat: { hideDescription: true } }
                 }
@@ -228,8 +251,7 @@ angular
                     AvalProbabilityTID: {},
                     DestructiveSizeTID: {},
                     AvalPropagationTID: {},
-                    ExposedHeight1: { displayFormat: { valueFormat: function (item) { return item + ' m' } } },
-                    ExposedHeight2: { displayFormat: { valueFormat: function (item) { return item + ' m' } } },
+                    ExposedHeightComboTID: { displayFormat: { hideDescription: true, valueFormat: service.getExposionHeightText } },
                     Comment: { displayFormat: { hideDescription: true } }
                 }
             },

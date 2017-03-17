@@ -9,7 +9,7 @@
             ctrl.opacityArray = [{ name: 'Heldekkende', value: 1.0 }, { name: '75% synlig', value: 0.75 }, { name: '50% synlig', value: 0.50 }, { name: '25% synlig', value: 0.25 }];
 
             ctrl.onSettingsChanged = function () {
-                if (ctrl.daysBack && ctrl.daysBack !== AppSettings.getObservationsDaysBack()) {
+                if (ctrl.daysBack >= 0 && ctrl.daysBack !== AppSettings.getObservationsDaysBack()) {
                     AppSettings.setObservationsDaysBack(ctrl.daysBack)
                 }
                 AppSettings.save();

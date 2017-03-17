@@ -19,6 +19,7 @@
         service._followMode = true; //Follow user position, or has user manually dragged or zoomed map?
         service._lastViewBounds = null;
         service._offlinemaps = [];
+        service._active = false;
 
 
         /**
@@ -144,8 +145,9 @@
                     }
                 });
             });
-            Registration.getNewRegistrations()
-                .forEach(function (reg) {
+            Registration.getNewRegistrations().filter(function (item) {
+                return item.GeoHazardTID === Utility.getCurrentGeoHazardTid();
+            }).forEach(function (reg) {
                     AppLogging.log(JSON.stringify(reg));
                     if (reg && reg.ObsLocation && reg.ObsLocation.Latitude && reg.ObsLocation.Longitude) {
                         var m = new RegObsClasses.NewRegistrationMarker(reg);
@@ -467,10 +469,12 @@
             L.control.scale({ imperial: false }).addTo(map);
 
             $rootScope.$on('$regObs:registrationSaved', function () {
-                service.refresh();
-                $timeout(function () {
-                    map.invalidateSize(); //Footer bar could have been removed, invalidate map size
-                }, 50);
+                //if (service._active) {
+                    service.refresh();
+                    $timeout(function () {
+                        map.invalidateSize(); //Footer bar could have been removed, invalidate map size
+                    }, 50);
+                //}
             });
 
             $rootScope.$on('$regObs:appSettingsChanged', function () {
@@ -734,6 +738,7 @@
                         map.locate({ watch: true, enableHighAccuracy: true });
                     },
                     false);
+                service._active = true;
             }
         };
 
@@ -746,6 +751,7 @@
                 AppLogging.log('Stop watching gps location');
                 map.stopLocate();
             }
+            service._active = false;
         };
 
         /**

@@ -20,24 +20,24 @@
     </h1>
     <div class='clearfix'>
       <div class='fl pad1y space-right2'>
-        <span class="strong">26.7% </span>
-        <span class="quiet">Statements</span>
-        <span class='fraction'>59/221</span>
-      </div>
-      <div class='fl pad1y space-right2'>
-        <span class="strong">14.71% </span>
-        <span class="quiet">Branches</span>
-        <span class='fraction'>10/68</span>
-      </div>
-      <div class='fl pad1y space-right2'>
-        <span class="strong">15.28% </span>
-        <span class="quiet">Functions</span>
-        <span class='fraction'>11/72</span>
-      </div>
-      <div class='fl pad1y space-right2'>
         <span class="strong">27.31% </span>
-        <span class="quiet">Lines</span>
+        <span class="quiet">Statements</span>
         <span class='fraction'>59/216</span>
+      </div>
+      <div class='fl pad1y space-right2'>
+        <span class="strong">15.15% </span>
+        <span class="quiet">Branches</span>
+        <span class='fraction'>10/66</span>
+      </div>
+      <div class='fl pad1y space-right2'>
+        <span class="strong">15.71% </span>
+        <span class="quiet">Functions</span>
+        <span class='fraction'>11/70</span>
+      </div>
+      <div class='fl pad1y space-right2'>
+        <span class="strong">27.96% </span>
+        <span class="quiet">Lines</span>
+        <span class='fraction'>59/211</span>
       </div>
     </div>
   </div>
@@ -506,7 +506,10 @@
 461
 462
 463
-464</td><td class="line-coverage quiet"><span class="cline-any cline-yes">1×</span>
+464
+465
+466
+467</td><td class="line-coverage quiet"><span class="cline-any cline-yes">1×</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">52×</span>
@@ -533,6 +536,10 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">52×</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">52×</span>
@@ -927,18 +934,17 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -998,6 +1004,10 @@
 <span class="cstat-no" title="statement not covered" >            return locationsStorageKey + '_' + AppSettings.data.env.replace(/ /g, '');</span>
         };
 &nbsp;
+&nbsp;
+        /**
+        * Get registratons from presistant storage. TODO: rewrite to SQLLite plugin for better performance?
+        */
         service._getRegistrationsFromPresistantStorage = <span class="fstat-no" title="function not covered" >function () {</span>
 <span class="cstat-no" title="statement not covered" >            return $q(<span class="fstat-no" title="function not covered" >function (resolve) {</span></span>
 <span class="cstat-no" title="statement not covered" >                document.addEventListener("deviceready", <span class="fstat-no" title="function not covered" >function () {</span></span>
@@ -1208,7 +1218,7 @@
 &nbsp;
 &nbsp;
         service._getShowObservationsDaysBack = <span class="fstat-no" title="function not covered" >function () {</span>
-<span class="cstat-no" title="statement not covered" >            return AppSettings.data.showObservationsDaysBack;</span>
+<span class="cstat-no" title="statement not covered" >            return AppSettings.getObservationsDaysBack();</span>
         };
 &nbsp;
         /**
@@ -1390,18 +1400,17 @@
                     });
             };
 &nbsp;
-<span class="cstat-no" title="statement not covered" >            var testAndUpdateNearbyLocations = <span class="fstat-no" title="function not covered" >function() {</span></span>
-<span class="cstat-no" title="statement not covered" >                if (AppSettings.data.showPreviouslyUsedPlaces) {</span>
-<span class="cstat-no" title="statement not covered" >                    return service.updateNearbyLocations(latitude, longitude, range, geohazardId, cancel);</span>
-                } else {
-<span class="cstat-no" title="statement not covered" >                    return $q(<span class="fstat-no" title="function not covered" >function(resolve) {</span></span>
-<span class="cstat-no" title="statement not covered" >                        resolve();</span>
-                    });
-                }
-            };
+            //var testAndUpdateNearbyLocations = function() {
+            //    if (AppSettings.data.showPreviouslyUsedPlaces) {
+            //        return service.updateNearbyLocations(latitude, longitude, range, geohazardId, cancel);
+            //    } else {
+            //        return $q(function(resolve) {
+            //            resolve();
+            //        });
+            //    }
+            //};
 &nbsp;
-<span class="cstat-no" title="statement not covered" >            return testAndUpdateNearbyLocations()</span>
-            .then(service.removeOldObservationsFromPresistantStorage)
+<span class="cstat-no" title="statement not covered" >            return service.removeOldObservationsFromPresistantStorage()</span>
             .then(<span class="fstat-no" title="function not covered" >function () {</span>
 <span class="cstat-no" title="statement not covered" >                return service._getRegistrationsWithinRadius(latitude,</span>
                     longitude,
@@ -1438,7 +1447,7 @@
 </div><!-- /wrapper -->
 <div class='footer quiet pad2 space-top1 center small'>
   Code coverage
-  generated by <a href="http://istanbul-js.org/" target="_blank">istanbul</a> at Wed Mar 08 2017 16:05:51 GMT+0100 (W. Europe Standard Time)
+  generated by <a href="http://istanbul-js.org/" target="_blank">istanbul</a> at Fri Mar 17 2017 12:33:25 GMT+0100 (W. Europe Standard Time)
 </div>
 </div>
 <script src="../../prettify.js"></script>

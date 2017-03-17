@@ -1,6 +1,6 @@
 angular
     .module('RegObs')
-    .directive('regobsTime', function ($timeout, AppLogging, Registration) {
+    .directive('regobsTime', function ($timeout, AppLogging) {
         function link(scope, elem, attrs, formCtrl) {
             scope.formCtrl = formCtrl;
 
@@ -14,15 +14,14 @@ angular
                     var now = new Date();
                     var newTime = new Date(time);
                     if (newTime < now) {
-                        //Registration.data.DtObsTime = newTime.toISOString();
                         scope.regObject[scope.regProp] = newTime.toISOString();
                     } else {
-                        //Registration.data.DtObsTime = now.toISOString();
                         scope.regObject[scope.regProp] = now.toISOString();
                         scope.DtObsTime = now;
                     }
-
-                    Registration.save();
+                    if (scope.onChange && angular.isFunction(scope.onChange)) {
+                        scope.onChange();
+                    }
                 });
             };
 
@@ -44,7 +43,8 @@ angular
             scope: {
                 regObject: '=',
                 regProp: '@',
-                text: '@'
+                text: '@',
+                onChange:'&'
             },
             link: link,
             template: [

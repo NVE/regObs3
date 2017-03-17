@@ -7,7 +7,6 @@ angular
         var unsentStorageKey = 'regobsUnsentRegistrations';
         var newStorageKey = 'regobsNewRegistration';
 
-        //var httpConfig = AppSettings.httpConfigRegistrationPost;
         var baseLength = Object.keys(createRegistration('snow')).length;
 
         var messages = [
@@ -43,24 +42,27 @@ angular
             return json;
         };
 
+        Registration.clearNewRegistrations = function () {
+            LocalStorage.remove(newStorageKey);
+        };
+
         Registration.createAndGoToNewRegistration = function () {
             var appMode = AppSettings.getAppMode();
             var navigate = function () {
-                if (appMode === 'snow') {
-                    $state.go('snowregistrationNew');
-                } else if (appMode === 'dirt') {
-                    $state.go('dirtregistrationNew');
-                } else if (appMode === 'water') {
-                    $state.go('waterregistrationNew');
-                } else if (appMode === 'ice') {
-                    $state.go('iceregistrationNew');
-                }
+                //if (appMode === 'snow') {
+                //    $state.go('snowregistrationNew');
+                //} else if (appMode === 'dirt') {
+                //    $state.go('dirtregistrationNew');
+                //} else if (appMode === 'water') {
+                //    $state.go('waterregistrationNew');
+                //} else if (appMode === 'ice') {
+                //    $state.go('iceregistrationNew');
+                //}
+                $state.go('newregistration');
             };
 
-
-
             if (Registration.isEmpty()) {
-                //Registration.createNew(Utility.geoHazardTid(appMode));
+                Registration.createNew(Utility.geoHazardTid(appMode));
                 navigate();
             } else if (Registration.data.GeoHazardTID !== Utility.geoHazardTid(appMode)) {
                 RegobsPopup.delete('Slett registrering',
@@ -81,13 +83,7 @@ angular
             }
         };
 
-        //Registration.saveIndicator = false;
-
-
         function resetRegistration() {
-            //return Registration.createNew(Registration.data.GeoHazardTID);
-
-
 
             ObsLocation.remove();
             Registration.data = {};
@@ -116,6 +112,7 @@ angular
                     if (Registration.unsent.length) {
                         cordova.plugins.notification.badge.set(Registration.unsent.length);
                     } else {
+                        cordova.plugins.notification.badge.set(0);
                         cordova.plugins.notification.badge.clear();
                     }
                 }
@@ -125,9 +122,6 @@ angular
         };
 
         Registration.save = function () {
-            AppLogging.log('save start');
-            //Registration.saveIndicator = true;
-            //$rootScope.$broadcast('$regObs:saveIndicatorChanged');
             LocalStorage.setObject(storageKey, Registration.data);
             LocalStorage.setObject(unsentStorageKey, Registration.unsent);
 
@@ -136,11 +130,6 @@ angular
             AppLogging.log('save complete');
 
             $rootScope.$broadcast('$regObs:registrationSaved');
-
-            //$timeout(function () {
-            //    Registration.saveIndicator = false;
-            //    $rootScope.$broadcast('$regObs:saveIndicatorChanged');
-            //}, 2000);
         };
 
         Registration.createNew = function (type) {
@@ -489,17 +478,6 @@ angular
             return messages[Math.round(Math.random() * (messages.length - 1))];
         }
 
-        function stopEventAndWarnUser(event, toStateName, type) {
-            event.preventDefault();
-            RegobsPopup.delete('Slett registrering', 'Du har en påbegynt ' + Utility.geoHazardNames(Registration.data.GeoHazardTID) + '-registrering, dersom du går videre blir denne slettet. Vil du slette for å gå videre?')
-                .then(function (response) {
-                    if (response) {
-                        Registration.createNew(type);
-                        $state.go(toStateName);
-                    }
-                });
-        }
-
         Registration.clearNewRegistrationsWithinRange = function () {
             return Observations.getStoredObservations(Utility.getCurrentGeoHazardTid())
                 .then(function (storedObservations) {
@@ -525,30 +503,6 @@ angular
                     LocalStorage.setObject(newStorageKey, arr);
                 });
         };
-
-        //Her sjekkes det om man har prøver å starte en ny registrering (ved at man går inn på en *registrationNew state)
-        //Dersom det finnes en registrering fra før av spørres brukeren om den skal slettes
-        $rootScope.$on('$stateChangeStart', function (event, toState, toParams, fromState, fromParams) {
-            var index = toState.name.indexOf('registrationNew');
-            if (index > 0) {
-                var type = toState.name.substr(0, index); //snow, ice, dirt etc.
-                if (!Registration.isOfType(type) && !Registration.isEmpty()) {
-                    stopEventAndWarnUser(event, toState.name, type);
-
-                } else if (Registration.isEmpty()) {
-                    Registration.createNew(type);
-                }
-
-            }
-        });
-
-
-
-        //$ionicPlatform.on('resume', function (event) {
-        //    if (Registration.isEmpty()) {
-        //        resetRegistration();
-        //    }
-        //});
 
         Registration.load();
 

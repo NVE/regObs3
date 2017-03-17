@@ -111,12 +111,14 @@
                 controller: 'ObservationListCtrl as vm'
             })
 
-            //SNØ
-            .state('snowregistrationNew', {
-                url: '/snowregistration',
-                templateUrl: 'app/snow/snowregistration/snowregistration.html',
-                controller: 'SnowRegistrationCtrl as vm'
+            .state('newregistration', {
+                url: '/newregistration',
+                templateUrl: 'app/registration/registration.html',
+                controller: 'RegistrationCtrl as vm'
             })
+
+
+            //SNØ
             .state('snowtrip', {
                 url: '/snowtrip',
                 templateUrl: 'app/snow/trip/trip.html',
@@ -205,11 +207,6 @@
             })
 
             //IS
-            .state('iceregistrationNew', {
-                url: '/iceregistration',
-                templateUrl: 'app/ice/iceregistration/iceregistration.html',
-                controller: 'IceRegistrationCtrl as vm'
-            })
             .state('icedangerobs', {
                 //Faretegn
                 url: '/icedangerobs',
@@ -248,11 +245,6 @@
             })
 
             //VANN
-            .state('waterregistrationNew', {
-                url: '/waterregistration',
-                templateUrl: 'app/water/waterregistration/waterregistration.html',
-                controller: 'WaterRegistrationCtrl as vm',
-            })
             .state('waterdangerobs', {
                 //Faretegn
                 url: '/waterdangerobs',
@@ -282,11 +274,6 @@
             })
 
             //JORD
-            .state('dirtregistrationNew', {
-                url: '/dirtregistration',
-                templateUrl: 'app/dirt/dirtregistration/dirtregistration.html',
-                controller: 'DirtRegistrationCtrl as vm'
-            })
             .state('dirtdangerobs', {
                 //Faretegn
                 url: '/dirtdangerobs',
@@ -347,6 +334,7 @@
             }
 
             document.addEventListener("deviceready", function () {
+                Registration.clearNewRegistrations();
                 Observations.removeOldObservationsFromPresistantStorage(); //cleanup old observations on startup
                 OfflineMap.checkUncompleteDownloads(); //Check if any uncomplete downloads and continue download progress
             });

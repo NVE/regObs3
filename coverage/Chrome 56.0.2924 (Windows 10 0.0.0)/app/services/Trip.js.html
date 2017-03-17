@@ -20,9 +20,9 @@
     </h1>
     <div class='clearfix'>
       <div class='fl pad1y space-right2'>
-        <span class="strong">23.53% </span>
+        <span class="strong">23.19% </span>
         <span class="quiet">Statements</span>
-        <span class='fraction'>16/68</span>
+        <span class='fraction'>16/69</span>
       </div>
       <div class='fl pad1y space-right2'>
         <span class="strong">0% </span>
@@ -30,14 +30,14 @@
         <span class='fraction'>0/29</span>
       </div>
       <div class='fl pad1y space-right2'>
-        <span class="strong">11.11% </span>
+        <span class="strong">11.76% </span>
         <span class="quiet">Functions</span>
-        <span class='fraction'>2/18</span>
+        <span class='fraction'>2/17</span>
       </div>
       <div class='fl pad1y space-right2'>
-        <span class="strong">23.53% </span>
+        <span class="strong">23.19% </span>
         <span class="quiet">Lines</span>
-        <span class='fraction'>16/68</span>
+        <span class='fraction'>16/69</span>
       </div>
     </div>
   </div>
@@ -277,6 +277,7 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -284,9 +285,6 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -309,6 +307,7 @@
 <span class="cline-any cline-yes">52×</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -344,6 +343,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -435,6 +435,7 @@
                     .then(<span class="fstat-no" title="function not covered" >function (confirm) {</span>
 <span class="cstat-no" title="statement not covered" >                        if (confirm) {</span>
 <span class="cstat-no" title="statement not covered" >                            Trip.sending = true;</span>
+<span class="cstat-no" title="statement not covered" >                            $rootScope.$broadcast('$regobs.tripSending');</span>
 <span class="cstat-no" title="statement not covered" >                            return $http.post(AppSettings.getEndPoints().trip, Trip.model.data, AppSettings.httpConfig);</span>
                         }
                     })
@@ -444,10 +445,7 @@
 <span class="cstat-no" title="statement not covered" >                            Trip.model.started = true;</span>
 <span class="cstat-no" title="statement not covered" >                            save();</span>
 <span class="cstat-no" title="statement not covered" >                            $rootScope.$broadcast('$regobs.tripStarted');</span>
-<span class="cstat-no" title="statement not covered" >                            RegobsPopup.alert('Tur startet', 'Tur startet!')</span>
-                                .then(<span class="fstat-no" title="function not covered" >function() {</span>
-<span class="cstat-no" title="statement not covered" >                                    $state.go('start');</span>
-                                });
+                            
                             
                         }
                     })
@@ -470,6 +468,7 @@
                 .then(<span class="fstat-no" title="function not covered" >function (confirm) {</span>
 <span class="cstat-no" title="statement not covered" >                    if (confirm) {</span>
 <span class="cstat-no" title="statement not covered" >                        Trip.sending = true;</span>
+<span class="cstat-no" title="statement not covered" >                        $rootScope.$broadcast('$regobs.tripSending');</span>
 <span class="cstat-no" title="statement not covered" >                        return $http.put(AppSettings.getEndPoints().trip, Trip.model.data, AppSettings.httpConfig);</span>
                     }
                 })
@@ -506,6 +505,7 @@
 <span class="cstat-no" title="statement not covered" >            Trip.model = angular.copy(defaultModel);</span>
 <span class="cstat-no" title="statement not covered" >            save();</span>
 <span class="cstat-no" title="statement not covered" >            Trip.sending = false;</span>
+<span class="cstat-no" title="statement not covered" >            $rootScope.$broadcast('$regobs.tripStopped');</span>
         }
 &nbsp;
 <span class="fstat-no" title="function not covered" >        function save() {</span>
@@ -526,7 +526,7 @@
 </div><!-- /wrapper -->
 <div class='footer quiet pad2 space-top1 center small'>
   Code coverage
-  generated by <a href="http://istanbul-js.org/" target="_blank">istanbul</a> at Wed Mar 08 2017 16:05:51 GMT+0100 (W. Europe Standard Time)
+  generated by <a href="http://istanbul-js.org/" target="_blank">istanbul</a> at Fri Mar 17 2017 12:33:25 GMT+0100 (W. Europe Standard Time)
 </div>
 </div>
 <script src="../../prettify.js"></script>

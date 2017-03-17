@@ -1,56 +1,40 @@
-<ion-view view-title="{{'SNOW_OBSERVATION'|translate}}">
-    <ion-nav-buttons side="right">
-        <nav-saving-indicator></nav-saving-indicator>
-    </ion-nav-buttons>
-    <ion-content ng-class="{'has-footer': vm.hasFooter()}">
-        <ion-list>
-            <regobs-position></regobs-position>
-            <regobs-time reg-object="vm.reg" reg-prop="DtObsTime"></regobs-time>
-            <regobs-menu-item title="Faretegn"
-                              condition="appVm.propertyExists('DangerObs')"
-                              state="snowdangerobs"
-                              badge-text="vm.reg.DangerObs.length">
-            </regobs-menu-item>
-            <regobs-menu-item title="Skredhendelse"
-                              condition="appVm.propertyExists('AvalancheObs')"
-                              state="avalancheobs">
-            </regobs-menu-item>
-            <regobs-menu-item title="Skredaktivitet"
-                              condition="appVm.propertyExists('AvalancheActivityObs2')"
-                              state="avalancheactivityobs"
-                              badge-text="vm.reg.AvalancheActivityObs2.length">
-            </regobs-menu-item>
-            <regobs-menu-item title="Vær"
-                              condition="appVm.propertyExists('WeatherObservation')"
-                              state="snowweatherobservation">
-            </regobs-menu-item>
-            <regobs-menu-item title="Snødekke"
-                              condition="appVm.propertyExists('SnowSurfaceObservation')"
-                              state="snowsurfaceobservation">
-            </regobs-menu-item>
-            <regobs-menu-item title="Snøprofil"
-                              condition="appVm.propertyExists('SnowProfile')"
-                              state="snowprofile">
-            </regobs-menu-item>
-            <regobs-menu-item title="Stabilitetstest"
-                              condition="appVm.propertyExists('CompressionTest')"
-                              state="stabilitytest"
-                              badge-text="vm.reg.CompressionTest.length">
-            </regobs-menu-item>
-            <regobs-menu-item title="Skredproblem"
-                              condition="appVm.propertyExists('AvalancheEvalProblem2')"
-                              state="avalancheevalproblem"
-                              badge-text="vm.reg.AvalancheEvalProblem2.length">
-            </regobs-menu-item>
-            <regobs-menu-item title="Skredfarevurdering"
-                              condition="appVm.propertyExists('AvalancheEvaluation3')"
-                              state="avalancheevaluation">
-            </regobs-menu-item>
-            <regobs-menu-item title="Fritekst"
-                              condition="appVm.propertyExists('GeneralObservation')"
-                              state="generalobs">
-            </regobs-menu-item>
-        </ion-list>
-    </ion-content>
-    <registration-footer></registration-footer>
-</ion-view>
+<regobs-menu-item title="Faretegn"
+                  condition="vm.propertyExists('DangerObs')"
+                  state="snowdangerobs"
+                  badge-text="vm.reg.DangerObs.length">
+</regobs-menu-item>
+<regobs-menu-item title="Skredhendelse"
+                  condition="vm.propertyExists('AvalancheObs')"
+                  state="avalancheobs">
+</regobs-menu-item>
+<regobs-menu-item title="Skredaktivitet"
+                  condition="vm.propertyExists('AvalancheActivityObs2')"
+                  state="avalancheactivityobs"
+                  badge-text="vm.reg.AvalancheActivityObs2.length">
+</regobs-menu-item>
+<regobs-menu-item title="Vær"
+                  condition="vm.propertyExists('WeatherObservation')"
+                  state="snowweatherobservation">
+</regobs-menu-item>
+<regobs-menu-item title="Snødekke"
+                  condition="vm.propertyExists('SnowSurfaceObservation')"
+                  state="snowsurfaceobservation">
+</regobs-menu-item>
+<regobs-menu-item title="Snøprofil"
+                  condition="vm.propertyExists('SnowProfile')"
+                  state="snowprofile">
+</regobs-menu-item>
+<regobs-menu-item title="Stabilitetstest"
+                  condition="vm.propertyExists('CompressionTest')"
+                  state="stabilitytest"
+                  badge-text="vm.reg.CompressionTest.length">
+</regobs-menu-item>
+<regobs-menu-item title="Skredproblem"
+                  condition="vm.propertyExists('AvalancheEvalProblem2')"
+                  state="avalancheevalproblem"
+                  badge-text="vm.reg.AvalancheEvalProblem2.length">
+</regobs-menu-item>
+<regobs-menu-item title="Skredfarevurdering"
+                  condition="vm.propertyExists('AvalancheEvaluation3')"
+                  state="avalancheevaluation">
+</regobs-menu-item>

@@ -338,5 +338,6 @@
   "LAND_SLIDE_TYPE": "Type skred",
   "DIRT_ACTIVITY_INFLUENCED": "Hva ble påvirket?",
   "DIRT_FORECAST_ACCURATE": "Stemte varslet?",
-  "SNOW_OBSERVATION": "Snøobservasjon"
+  "SNOW_OBSERVATION": "Snøobservasjon",
+  "TODAYS_OBSERATIONS": "Dagens observasjoner"
 }

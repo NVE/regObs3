@@ -1,35 +1,17 @@
-<ion-view view-title="{{'WATER_OBSERVATION'|translate}}">
-    <ion-nav-buttons side="right">
-        <nav-saving-indicator></nav-saving-indicator>
-    </ion-nav-buttons>
-    <ion-content ng-class="{'has-footer': vm.hasFooter()}">
-        <ion-list>
-            <regobs-position></regobs-position>
-            <regobs-time reg-object="vm.reg" reg-prop="DtObsTime"></regobs-time>
-            <regobs-menu-item
-                title="{{'DANGER_OBS'|translate}}"
-                condition="appVm.propertyExists('DangerObs')"
-                state="waterdangerobs"
-                badge-text="vm.reg.DangerObs.length">
-            </regobs-menu-item>
-            <regobs-menu-item
-                title="{{'WATER_LEVEL'|translate}}"
-                condition="appVm.propertyExists('WaterLevel')"
-                state="waterlevel">
-            </regobs-menu-item>
-
-            <regobs-menu-item
-                title="{{'INCIDENT'|translate}}"
-                condition="appVm.propertyExists('Incident')"
-                state="waterincident">
-            </regobs-menu-item>
-
-            <regobs-menu-item
-                title="{{'GENERAL_OBS'|translate}}"
-                condition="appVm.propertyExists('GeneralObservation')"
-                state="generalobs">
-            </regobs-menu-item>
-        </ion-list>
-    </ion-content>
-    <registration-footer></registration-footer>
-</ion-view>
+<regobs-menu-item title="{{'DANGER_OBS'|translate}}"
+                  condition="vm.propertyExists('DangerObs')"
+                  state="waterdangerobs"
+                  badge-text="vm.reg.DangerObs.length">
+</regobs-menu-item>
+<regobs-menu-item title="{{'WATER_LEVEL'|translate}}"
+                  condition="vm.propertyExists('WaterLevel')"
+                  state="waterlevel">
+</regobs-menu-item>
+<regobs-menu-item title="{{'INCIDENT'|translate}}"
+                  condition="vm.propertyExists('Incident')"
+                  state="waterincident">
+</regobs-menu-item>
+<regobs-menu-item title="{{'GENERAL_OBS'|translate}}"
+                  condition="vm.propertyExists('GeneralObservation')"
+                  state="generalobs">
+</regobs-menu-item>

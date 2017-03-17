@@ -188,7 +188,7 @@
             var settingsKey = 'showObservationsDaysBack' + currentAppMode;
 
             //first, check local storage settings for user saved setting
-            if (settings.data[settingsKey] && settings.data[settingsKey] > 0) {
+            if (settings.data[settingsKey] !== undefined && settings.data[settingsKey] >= 0) {
                 return settings.data[settingsKey];
             }
             //else return default days back for current geo hazard
@@ -220,6 +220,7 @@
 
         settings.getDaysBackSettings = function () {
             return {
+                snow: [{ name: 'TODAYS_OBSERATIONS', value: 0 },{ name: 'ONE_DAY_BACK', value: 1 }, { name: 'TWO_DAYS_BACK', value: 2 }, { name: 'THREE_DAYS_BACK', value: 3, default: true }, { name: 'ONE_WEEK_BACK', value: 7 }, { name: 'TWOO_WEEKS_BACK', value: 14 }],
                 ice: [{ name: 'ONE_DAY_BACK', value: 1 }, { name: 'TWO_DAYS_BACK', value: 2 }, { name: 'ONE_WEEK_BACK', value: 7, default:true }, { name: 'FOUR_WEEKS_BACK', value: 28 }, { name: 'TWELVE_WEEKS_BACK', value: 84 }],
                 default: [{ name: 'ONE_DAY_BACK', value: 1 }, { name: 'TWO_DAYS_BACK', value: 2 }, { name: 'THREE_DAYS_BACK', value: 3, default: true }, { name: 'ONE_WEEK_BACK', value: 7 }, { name: 'TWOO_WEEKS_BACK', value: 14 }]
             };
