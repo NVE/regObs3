@@ -14,7 +14,7 @@ angular
 
         vm.hasObserverGroups = function () {
             var group = User.getUser().ObserverGroup;
-            return group && angular.isArray(group) && group.length > 0;
+            return !Utility.isEmpty(group);
         };
 
         vm.kdvUpdated = kdvUpdatedTime(null, LocalStorage.get('kdvUpdated'));

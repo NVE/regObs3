@@ -8,7 +8,7 @@
         var storageKey = 'regobsAppSettings';
         settings._defaults = {
             env: 'regObs',
-            emailReceipt: false,
+            emailReceipt: true,
             compass: false,
             searchRange: 50000,
             locale: 'nb',
@@ -24,7 +24,6 @@
                 { geoHazardTid: 60, tiles: [{ name: 'flood', opacity: 0.5, visible: true }] }
             ],
             showObservations: true
-            //showPreviouslyUsedPlaces: false
         };
 
         var baseUrls = {

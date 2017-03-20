@@ -111,7 +111,7 @@ angular
         };
 
         service.formatStabilityTest = function (fullObject) {
-            var result = fullObject.PropagationTName;
+            var result = fullObject.PropagationTID > 0 ? fullObject.PropagationTName : '';
 
             if (fullObject.TapsFracture > 0) {
                 result += fullObject.TapsFracture;

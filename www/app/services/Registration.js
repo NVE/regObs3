@@ -49,15 +49,6 @@ angular
         Registration.createAndGoToNewRegistration = function () {
             var appMode = AppSettings.getAppMode();
             var navigate = function () {
-                //if (appMode === 'snow') {
-                //    $state.go('snowregistrationNew');
-                //} else if (appMode === 'dirt') {
-                //    $state.go('dirtregistrationNew');
-                //} else if (appMode === 'water') {
-                //    $state.go('waterregistrationNew');
-                //} else if (appMode === 'ice') {
-                //    $state.go('iceregistrationNew');
-                //}
                 $state.go('newregistration');
             };
 
@@ -333,6 +324,9 @@ angular
                     array.forEach(function (dangerObs) {
                         delete dangerObs.tempArea;
                         delete dangerObs.tempComment;
+                        if (dangerObs.DangerSignTID === null || dangerObs.DangerSignTID === undefined) {
+                            dangerObs.DangerSignTID = 0;
+                        }
                     });
                 }
             }
