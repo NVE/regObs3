@@ -12,7 +12,7 @@
         "Lng": "10,7080138"
     };*/
 
-    function Trip($http, AppSettings, Utility, User, ObsLocation, RegobsPopup, LocalStorage) {
+    function Trip($http, AppSettings, Utility, User, ObsLocation, RegobsPopup, LocalStorage, UserLocation, $state, $rootScope, Registration) {
         'ngInject';
 
         var Trip = this;
@@ -27,6 +27,23 @@
             storageKey, 'data', angular.copy(defaultModel)
         );
 
+        Trip._getTripLocation = function() {
+            if (ObsLocation.isSet()) {
+                return {
+                    latitude: ObsLocation.data.Latitude,
+                    longitude: ObsLocation.data.Longitude
+                };
+            } else if (UserLocation.hasUserLocation()) {
+                return UserLocation.getLastUserLocation();
+            }
+            return null;
+        };
+
+        Trip.canStart = function() {
+            return AppSettings.getAppMode() === 'snow' && !Trip.model.started && !User.getUser().anonymous;
+        };
+
+
         Trip.start = function (type, tripId, expectedMin, comment) {
             if (User.getUser().anonymous) {
                 return RegobsPopup.alert('Ikke innlogget', 'Vennligst logg inn for å melde tur.');
@@ -34,8 +51,8 @@
             if (!(tripId && expectedMin)) {
                 return RegobsPopup.alert('Vennligst fyll ut felter', 'Både turtype og forventet klokkeslett for innsending av observasjoner må være satt for å melde tur.');
             }
-            if (ObsLocation.isSet()) {
-
+            var loc = Trip._getTripLocation();
+            if (loc) {
                 Trip.model.time = new Date();
                 Trip.model.started = false;
                 Trip.model.data = {
@@ -45,8 +62,8 @@
                     "ObservationExpectedMinutes": expectedMin,
                     "Comment": comment,
                     "DeviceGuid": Utility.createGuid(),
-                    "Lat": ObsLocation.data.Latitude,
-                    "Lng": ObsLocation.data.Longitude
+                    "Lat": loc.latitude,
+                    "Lng": loc.longitude
                 };
                 save();
 
@@ -60,9 +77,15 @@
                     })
                     .then(function (http) {
                         if (http) {
-                            RegobsPopup.alert('Tur startet', 'Tur startet!');
+                            
                             Trip.model.started = true;
                             save();
+                            $rootScope.$broadcast('$regobs.tripStarted');
+                            RegobsPopup.alert('Tur startet', 'Tur startet!')
+                                .then(function() {
+                                    $state.go('start');
+                                });
+                            
                         }
                     })
                     .catch(function () {

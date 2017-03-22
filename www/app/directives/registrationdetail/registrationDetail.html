@@ -1,0 +1,21 @@
+﻿<div class="padding">
+    <strong><span ng-if="$ctrl.registration.LocationName">{{$ctrl.registration.LocationName}} - </span><span ng-if="$ctrl.registration.MunicipalName">{{$ctrl.registration.MunicipalName}}, </span>{{$ctrl.registration.ForecastRegionName}}</strong> &bull; {{$ctrl.registration.DtObsTime | date:'d/M HH:mm'}}<br/>
+    {{$ctrl.registration.NickName}} <span ng-if="$ctrl.registration.getObservationCompetenceLevel()">(<i ng-repeat="star in $ctrl.registration.getObservationCompetenceLevel() track by $index" class="icon ion-ios-star-outline"></i>)</span>
+    <span ng-if="!$ctrl.registration.getObservationCompetenceLevel()">({{'UNKNOWN_COMPETENCE'|translate}})</span>
+</div>
+<div class="observation-slides" ng-if="$ctrl.registration.hasImages()">
+    <ion-slides slider="data.slider" options="$ctrl.options">
+        <ion-slide-page ng-repeat="img in $ctrl.registration.getImages() track by $index">
+            <img ng-src="{{img.url}}" alt="obsimg" class="obs-detail-image" />
+            <p class="padding obs-detail-image-text">
+                <strong>{{'IMAGE' | translate}} {{($index+1)}} {{'OF' | translate}} {{$ctrl.registration.getImageCount()}}<span ng-if="img.description">:</span></strong> {{img.description}}
+            </p>
+        </ion-slide-page>
+    </ion-slides>
+</div>
+<div class="padding">
+    <regobs-observation-type-generator class="registration-detail-type-wrapper" registration="obs" ng-repeat="obs in $ctrl.registration.getRegistrations()"></regobs-observation-type-generator>
+</div>
+<div class="padding">
+    <button type="button" class="button button-block button-calm" ng-click="$ctrl.onViewWebRegistrationClick()">{{'VIEW_WEB_REGISTRATION'|translate}}</button>
+</div>

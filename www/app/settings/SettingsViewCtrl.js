@@ -1,26 +1,35 @@
 angular
     .module('RegObs')
-    .controller('SettingsViewCtrl', function ($scope, $http, $cordovaInAppBrowser, AppSettings, LocalStorage, ObsLocation, Registration, User, Utility, HeaderColor, RegobsPopup, AppLogging) {
+    .controller('SettingsViewCtrl', function ($scope, $timeout, $rootScope, $http, $state, $cordovaInAppBrowser, $ionicLoading, AppSettings, LocalStorage, ObsLocation, Registration, User, Utility, HeaderColor, RegobsPopup, AppLogging, PresistentStorage, OfflineMap, Map, $ionicScrollDelegate) {
         var vm = this;
 
         vm.settings = AppSettings;
         vm.userService = User;
+        vm.showAdvancedSettings = false;
+
+        vm.toggleAdvancedSettings = function() {
+            vm.showAdvancedSettings = !vm.showAdvancedSettings;
+            $ionicScrollDelegate.resize();
+        };
 
         vm.kdvUpdated = kdvUpdatedTime(null, LocalStorage.get('kdvUpdated'));
 
         $http.get('app/json/version.json')
-            .then(function(res){
+            .then(function (res) {
                 AppLogging.log(res);
                 vm.version = res.data;
             });
 
         $scope.$on('kdvUpdated', kdvUpdatedTime);
 
-        function kdvUpdatedTime(event, newDate){
-            $scope.$applyAsync(function() {
-                vm.kdvUpdated =  moment(parseInt(newDate)).format('DD.MM, [kl.] HH:mm');
+        function kdvUpdatedTime(event, newDate) {
+            $timeout(function () {
+                if (newDate) {
+                    vm.kdvUpdated = moment(parseInt(newDate)).format('DD.MM, [kl.] HH:mm');
+                } else {
+                    vm.kdvUpdated = '';
+                }
             });
-
             AppLogging.log('KDV UPDATE', newDate);
         }
 
@@ -37,20 +46,41 @@ angular
 
         vm.openUrl = function (relUrl) {
             var base = AppSettings.getEndPoints().services;
-            $cordovaInAppBrowser.open(base+relUrl, '_system' );
+            $cordovaInAppBrowser.open(base + relUrl, '_system');
         };
 
         vm.clearAppStorage = function () {
             RegobsPopup.delete('Nullstill app?', 'Vil du slette lokalt lagret data og nullstille appen?', 'Nullstill').then(
-                function(res) {
-                    if(res) {
+                function (res) {
+                    if (res) {
+                        $ionicLoading.show();
                         LocalStorage.clear();
-                        Registration.load();
-                        AppSettings.load();
-                        User.load();
-                        HeaderColor.init();
-                        vm.username = '';
-                        vm.password = '';
+                        PresistentStorage.removeRecursively(AppSettings.imageRootFolder)
+                        .catch(function (error) {
+                            AppLogging.log('Could not clear presistant storage for folder: ' + AppSettings.imageRootFolder +' ' + JSON.stringify(error));
+                        })
+                        .then(function () {
+                            return PresistentStorage.removeRecursively(AppSettings.registrationRootFolder);
+                        }).catch(function (error) {
+                            AppLogging.log('Could not clear presistant storage for folder: ' + AppSettings.registrationRootFolder + ' ' + JSON.stringify(error));
+                        })
+                        .then(function () {
+                            return OfflineMap.deleteAllOfflineAreas();
+                        })
+                        .catch(function (error) {
+                            AppLogging.log('Could not delete offline areas. ' + JSON.stringify(error));
+                        })
+                        .then(function () {
+                            AppSettings.load();
+                            User.load();
+                            HeaderColor.init();
+                            Map.refresh();
+                            vm.username = '';
+                            vm.password = '';
+                            $ionicLoading.hide();
+                            $rootScope.$broadcast('$regObs:appReset');
+                            $state.go('wizard');
+                        });
                     }
                 });
         };
@@ -58,13 +88,13 @@ angular
         vm.refreshKdvElements = function () {
             vm.refreshingKdv = true;
             Utility.refreshKdvElements()
-                .then(function() {
-                    RegobsPopup.alert('Suksess!', 'Nedtrekksmenyene har blitt oppdatert.');
+                .then(function () {
+                    RegobsPopup.alert('Suksess!', 'Nedtrekkslister har blitt oppdatert.');
                 })
-                .catch(function(){
-                    RegobsPopup.alert('Oisann! Appen klarte ikke oppdatere nedtrekksmenyene', 'Dette kan skyldes manglende nett, eller at serverapplikasjonen må våkne og få seg en dugelig sterk kopp med kaffe først. Gi den noen minutter og prøv igjen.');
+                .catch(function () {
+                    RegobsPopup.alert('Det oppsto en feil', 'Det oppsto en feil ved oppdatering av nedtrekksmenyer. Vennligst prøv igjen senere');
                 })
-                .finally(function(){
+                .finally(function () {
                     vm.refreshingKdv = false;
                     vm.kdvUpdated = new Date(parseInt(LocalStorage.get('kdvUpdated')));
                     AppLogging.log(vm.kdvUpdated);
@@ -76,6 +106,8 @@ angular
             vm.logOut();
             AppSettings.save();
             HeaderColor.init();
+            Map.refresh();
+            $rootScope.$broadcast('$regObs:appEnvChanged');
         };
 
     });

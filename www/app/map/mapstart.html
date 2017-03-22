@@ -1,0 +1,36 @@
+﻿<ion-view view-title="{{'regObs / '}}{{vm.getCurrentAppMode() | uppercase | translate}}">
+    <div ng-class="{'hasFooter': vm.hasRegistration()}">
+        <div ng-if="!vm.mapSelectedItem">
+            <ion-floating-button class="regobs-gps-center" button-color="#fff" icon-color="#444" icon="ion-pinpoint" click="vm.gpsCenterClick()" ng-show="vm.getFollowMode()">
+            </ion-floating-button>
+            <ion-floating-button class="regobs-gps-center" button-color="#D2D4CF" icon-color="#444" icon="ion-pinpoint" click="vm.gpsCenterClick()" ng-hide="vm.getFollowMode()">
+            </ion-floating-button>
+            <ion-floating-button class="regobs-menu" button-color="#fff" icon-color="#444" icon="ion-chevron-up" ng-click="vm.openMapMenu($event)">
+            </ion-floating-button>
+        </div>
+        <div ng-if="vm.mapSelectedItem">
+            <div ng-repeat="button in vm.mapSelectedItem.getActionButtons()">
+                <ion-floating-button ng-if="button.isVisible()" class="regobs-button-item-selected {{button.extraClasses}}" click="button.onClick()" button-color="{{button.buttonColor}}" icon-color="{{button.iconColor}}" icon="{{button.icon}}">
+                </ion-floating-button>
+            </div>
+        </div>
+        <div class="map-selected-info list card" ng-show="vm.mapSelectedItem">
+            <div class="item map-selected-info-inner" ng-click="vm.openSelectedItem()" on-swipe-up="vm.openSelectedItem()">
+                <div class="map-selected-info-date">{{vm.mapSelectedItem.getDate() | date:'d/M HH:mm'}}</div>
+                <h2 class="map-selected-info-header" ng-bind-html="vm.mapSelectedItem.getHeader() || '&nbsp;'"></h2>
+                <p class="map-selected-info-bottom">
+                    <span class="map-selected-info-bottom-description">
+                        {{vm.mapSelectedItem.getDescription()}}
+                    </span>
+                    <span class="map-selected-info-distance"><span>{{vm.mapSelectedItem.getTypeDescription() | translate}}</span>&nbsp;<span ng-if="vm.mapSelectedItem.hasDistance()">{{vm.mapSelectedItem.getDistanceText()}} {{'AWAY'|translate}}</span></span>
+                </p>
+            </div>
+            <div class="map-selected-info-image-wrapper" ng-if="vm.mapSelectedItem.hasImages()" ng-click="vm.openSelectedItem()">
+                <img class="map-selected-info-image" ng-src="{{vm.mapSelectedItem.getFirstImage().url}}" />
+            </div>
+        </div>
+        <ion-content scroll="false">
+            <div id="map" data-tap-disabled="true" class="regobs-map" regobs-map></div>
+        </ion-content>
+    </div>
+</ion-view>

@@ -17,7 +17,7 @@ angular
             template: [
                 '<ion-item class="item-icon-right" ui-sref="{{state}}">',
                     '{{title}}',
-                    '<span class="badge badge-balanced" ng-if="condition">{{badgeText || \'1\'}}</span>',
+                    '<span ng-if="condition"><span class="badge badge-balanced regobs-menu-item-badge" ng-if="badgeText">{{badgeText}}</span><i ng-if="!badgeText" class="icon ion-checkmark-circled balanced regobs-menu-item-icon"></i></span>',
                     '<i class="icon icon-accessory ion-chevron-right"></i>',
                 '</ion-item>'
             ].join('')

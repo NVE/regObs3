@@ -1,9 +1,9 @@
 <ion-modal-view>
     <ion-header-bar>
-        <button class="button button-clear button-calm" ng-click="modal.hide()">Avbryt</button>
+        <button type="button" class="button button-clear button-calm" ng-click="modal.hide()">Avbryt</button>
         <h1 class="title" ng-hide="editing">Nytt faretegn</h1>
         <h1 class="title" ng-show="editing">Rediger faretegn</h1>
-        <button class="button button-clear button-calm" ng-click="addDangerObs()">OK</button>
+        <button type="button" class="button button-clear button-calm" ng-click="addDangerObs()">OK</button>
     </ion-header-bar>
     <ion-content>
         <form name="newDangerObsForm" novalidate>
@@ -18,6 +18,7 @@
                     <select ng-model="dangerObs.DangerSignTID"
                             ng-options="sign.Id as sign.Name for sign in dangerSignKdvArray"
                             ng-change="dangerSignChanged()">
+                        <option value=""></option>
                     </select>
                 </label>
 
@@ -28,6 +29,7 @@
                     <select ng-model="dangerObs.tempArea"
                             ng-options="area for area in areaArray"
                             ng-change="commentChanged()">
+                        <option value=""></option>
                     </select>
                 </label>
 
@@ -46,7 +48,7 @@
             <div class="padding">
                 <regobs-save-button ng-click="addDangerObs()" save-action=""></regobs-save-button>
 
-                <button class="button button-block button-assertive button-clear"
+                <button type="button" class="button button-block button-assertive button-clear"
                         ng-click="deleteDangerObs()"
                         ng-show="editing">Slett
                 </button>

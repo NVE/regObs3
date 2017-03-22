@@ -1,0 +1,15 @@
+﻿<div class="item item-input item-stacked-label" ng-click="$ctrl.showPopup()">
+    <span class="input-label" ng-class="{assertive:!$ctrl.hasPosition()}">{{'POSITION'|translate}}</span>
+    <div>
+        <i class="icon regobs-position-icon ion-pinpoint" ng-if="$ctrl.hasGpsPosition()"></i>
+        <i class="icon regobs-position-icon ion-pin" ng-if="$ctrl.isStoredLocation()"></i>
+        <i class="icon regobs-position-icon ion-location" ng-if="$ctrl.hasMarkedPosition()"></i>
+
+        {{$ctrl.getDescription() | translate}}
+        <span class="item-note">
+            <span ng-if="$ctrl.hasGpsPosition()">{{'UNCERTAINTY'|translate}}: {{$ctrl.location.Uncertainty | number:0 }}m</span>
+            <span ng-if="$ctrl.isStoredLocation()">{{'PREVIOUS_USED_PLACE'|translate}}</span>
+            <span ng-if="$ctrl.hasMarkedPosition()">{{'MARKED_POSITION'|translate}}</span>
+        </span>
+    </div>
+</div>

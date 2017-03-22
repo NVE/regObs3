@@ -1,3 +1,29 @@
+$snow: #F2F2F2;
+//$dirt: #F4B183;
+$dirt: #C69C6D;
+//$water: #9DC3E6;
+$water: #94BFE0;
+//$ice: #C9C9C9;
+$ice: #CDD7D6;
+
+$footerHeight: 65px;
+
+.snow {
+    background-color: $snow;
+}
+
+.dirt {
+    background-color: $dirt;
+}
+
+.water {
+    background-color: $water;
+}
+
+.ice {
+    background-color: $ice;
+}
+
 @media (min-width: 680px) {
     .modal {
         top: 0 !important;
@@ -6,34 +32,59 @@
         right: 0 !important;
         width: 100% !important;
     }
+
     .platform-ios.platform-cordova .modal-wrapper .modal .bar-header:not(.bar-subheader) > * {
         margin-top: 20px;
     }
+
     .platform-ios.platform-cordova .modal-wrapper .modal .bar-header:not(.bar-subheader) {
         height: 64px;
     }
+
     .platform-ios.platform-cordova .modal-wrapper .modal .has-header,
     .platform-ios.platform-cordova .modal-wrapper .modal .bar-subheader {
         top: 64px;
     }
 }
+
 .button .spinner.spinner-fix {
     position: absolute;
-    top:7px;
+    top: 7px;
 }
 
-.button-bar{
+.button-bar {
     .button.margin-left {
         margin-left: 5px;
     }
+
     .button.margin-right {
         margin-right: 5px;
     }
 }
 
-input:focus, select:focus, textarea:focus {
+.item-divider.buttons-right button {
+    float: right;
+}
 
-    font-weight:bold;
+.item-divider.buttons-right button.button-small {
+    min-height: 24px;
+    line-height: 20px;
+}
+
+.regobs-footer {
+    height: $footerHeight;
+}
+
+.footer-button-wrapper {
+    margin-top: 8px;
+}
+
+.has-footer {
+    bottom: $footerHeight !important;
+}
+
+input:focus, select:focus, textarea:focus {
+    font-weight: bold;
 }
 
 /**
@@ -45,29 +96,31 @@ input:focus, select:focus, textarea:focus {
 .item-radio input:checked + .radio-content .item-content {
     /* style the item content when its checked */
     background: #f7f7f7;
-
 }
 
 .item-radio input:checked + .radio-content .radio-icon {
     /* show the checkmark icon when its checked */
     visibility: visible;
-
 }
 
 .item-stacked-label {
     padding: 6px 16px 10px 16px;
+
     .input-label {
         font-size: 0.8em;
         color: $positive;
         text-transform: uppercase;
+
         &.assertive {
             color: $assertive;
             font-weight: bold;
         }
     }
+
     &.item-input textarea {
         padding-bottom: 8px;
     }
+
     &.item-select select {
         max-width: 100%;
         display: block;
@@ -78,9 +131,8 @@ input:focus, select:focus, textarea:focus {
         direction: ltr;
         text-align: left;
     }
-
-
 }
+
 .platform-android {
     .item-stacked-label {
         &.item-select select {
@@ -88,26 +140,28 @@ input:focus, select:focus, textarea:focus {
         }
     }
 }
+
 .platform-ios {
     .item-stacked-label {
         &.item-input textarea {
-            text-indent:-3px;
+            text-indent: -3px;
         }
     }
 }
 
 .regobs-bar {
     padding: 0;
+
     .button {
         padding: 3px;
         margin: 0;
 
-        &::after{
+        &::after {
             content: '';
-            top:0;
-            bottom:0;
-            left:0;
-            right:0;
+            top: 0;
+            bottom: 0;
+            left: 0;
+            right: 0;
         }
     }
 }
@@ -123,9 +177,23 @@ input:focus, select:focus, textarea:focus {
     z-index: 10;
 }
 
+.regobs-menu-item-icon {
+    right: 26px !important;
+}
+
+.regobs-menu-item-badge {
+    width: 29px;
+    height: 29px;
+    top: 11px !important;
+    right: 28px !important;
+    padding: 6px 10px;
+    border-radius: 50%;
+}
+
 .exposedBot {
     background: #fff url('../img/mountain-bottom-grey.png') no-repeat;
     background-size: 100% 100%;
+
     &.button-positive {
         background-image: url('../img/mountain-bottom-black.png');
     }
@@ -134,6 +202,7 @@ input:focus, select:focus, textarea:focus {
 .exposedMid {
     background: #fff url('../img/mountain-middle-grey.png') no-repeat;
     background-size: 100% 100%;
+
     &.button-positive {
         background-image: url('../img/mountain-middle-black.png');
     }
@@ -142,6 +211,7 @@ input:focus, select:focus, textarea:focus {
 .exposedTop {
     background: #fff url('../img/mountain-top-grey.png') no-repeat;
     background-size: 100% 100%;
+
     &.button-positive {
         background-image: url('../img/mountain-top-black.png');
     }
@@ -150,6 +220,7 @@ input:focus, select:focus, textarea:focus {
 .bullet-list {
     list-style-type: disc;
     margin: 10px 0;
+
     li {
         margin-left: 20px;
     }
@@ -158,8 +229,129 @@ input:focus, select:focus, textarea:focus {
 .numbered-list {
     list-style-type: decimal;
     margin: 10px 0;
+
     li {
         margin-left: 20px;
     }
 }
 
+.regobs-menu-text {
+    background-color: #444 !important;
+    color: #fff !important;
+}
+
+.bar-dark .button.active, .bar-dark .button.activated {
+    background-color: #444444;
+}
+
+.downloadprogress {
+    margin: 20px;
+    width: 200px;
+    height: 200px;
+    position: relative;
+}
+
+.downloadprogress .icon {
+    font-size: 46px;
+}
+
+.downloadprogress .downloadprogress-percent {
+    font-size: 18px;
+    font-weight: bold;
+}
+
+.downloadprogress .downloadprogress-value {
+    font-size: 16px;
+}
+
+.downloadprogress .progressbar-text {
+    text-align: center;
+}
+
+.item-stacked-label.item-select select {
+    padding: 3px 0 8px 7px !important;
+}
+
+.smaller-list-items .item {
+    font-size: 13px;
+}
+
+.smaller-list-items .icon {
+    font-size: 20px;
+}
+
+.smaller-list-items .item-icon-left .icon {
+    left: 7px;
+}
+
+.smaller-list-items .item {
+    padding: 14px;
+}
+
+.smaller-list-items .item-icon-left {
+    padding-left: 44px;
+}
+
+.small-text {
+    font-size: small;
+}
+
+ion-popover-view.fit {
+    height: auto;
+
+    ion-content {
+        position: relative;
+    }
+}
+
+ion-popover-view.wider {
+    width: 250px;
+}
+
+.platform-ios ion-popover-view.fit {
+    .item:first-child {
+        @include border-top-radius($popover-border-radius-ios);
+    }
+
+    .item:last-child {
+        @include border-bottom-radius($popover-border-radius-ios);
+    }
+}
+
+.nve-icon {
+    display: block;
+    padding-left: 38px;
+    height: 40px;
+    background-repeat: no-repeat;
+}
+
+.nve-icon-water {
+    background: url(../img/ikon_flom.svg) left/40px no-repeat;
+}
+
+.nve-icon-ice {
+    background: url(../img/ikon_isvarsler2.svg) left/40px no-repeat;
+}
+
+.nve-icon-dirt {
+    background: url(../img/ikon_jordskred.svg) left/40px no-repeat;
+}
+
+.nve-icon-snow {
+    background: url(../img/ikon_snoskred.svg) left/40px no-repeat;
+}
+
+.spinner-small svg {
+  width: 18px;
+  height: 18px;
+}
+
+.popup-icon {
+    font-size: 28px;
+    margin-top: -10px;
+    padding-bottom: 10px;
+}
+
+.popup-body {
+    text-align: center !important;
+}

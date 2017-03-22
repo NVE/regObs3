@@ -1,53 +1,76 @@
 (function () {
     "use strict";
 
-    angular.module('RegObs', ['ionic', 'ngCordova'])
+    angular.module('RegObs', ['ionic', 'ngCordova', 'ion-floating-menu', 'angularProgressbar', 'pascalprecht.translate', 'ngWebworker'])
            .config(providers)
            .run(setup);
 
-    function providers($provide, $stateProvider, $urlRouterProvider, $ionicConfigProvider, AppSettingsProvider) {
+    function providers($stateProvider, $urlRouterProvider, $ionicConfigProvider, AppSettingsProvider, $translateProvider) {
         'ngInject';
-
-        $provide.decorator('$exceptionHandler', ['$delegate',
-              function ($delegate) {
-                  return function (exception, cause) {
-                      var appSettings = AppSettingsProvider.$get();
-                      if (ga_storage) {
-                          ga_storage._trackEvent('Error ' + appSettings.data.env, (cause || '') + ' ' + exception.message, exception.stack);
-                      }
-                      $delegate(exception, cause);
-                  };
-              }
-        ]);
 
         if (ionic.Platform.isAndroid()) {
             $ionicConfigProvider.scrolling.jsScrolling(false);
         }
 
+        var langMap = {
+            'nb_NO': 'no'
+        };
+
+        $translateProvider.useSanitizeValueStrategy('escapeParameters')
+        .useStaticFilesLoader({
+            prefix: './app/json/localization/',
+            suffix: '.json'
+        }).registerAvailableLanguageKeys(['no'], langMap)
+            .preferredLanguage('no')
+            .fallbackLanguage(['no']);
+
         var defaultBackIceRegistration = {
             state: 'iceregistrationNew',
-            title: 'Isobservasjon'
+            force: true
         };
         var defaultBackSnowRegistration = {
             state: 'snowregistrationNew',
-            title: 'Snøobservasjon'
+            force: true
         };
         var defaultBackDirtRegistration = {
             state: 'dirtregistrationNew',
-            title: 'Jordobservasjon'
+            force: true
         };
         var defaultBackWaterRegistration = {
             state: 'waterregistrationNew',
-            title: 'Vannobservasjon'
+            force: true
+        };
+        var defaultBackStart = {
+            state: 'start',
+            title: 'MAP',
+            force: true
+        };
+        var defaultBackHelp = {
+            state: 'start'
         };
 
-        $urlRouterProvider.otherwise('/start');
+        var appSettings = AppSettingsProvider.$get();
+        if (!appSettings.hasSetAppMode()) {
+            $urlRouterProvider.otherwise('/wizard');
+        } else {
+            $urlRouterProvider.otherwise('/start');
+        }
+
         $stateProvider
+            .state('wizard', {
+                url: '/wizard',
+                templateUrl: 'app/startwizard/startwizard.html',
+                controller: 'StartWizardCtrl as vm',
+                cache: false
+            })
             .state('start', {
                 url: '/start',
-                templateUrl: 'app/app.html',
+                templateUrl: 'app/map/mapstart.html',
+                controller: 'MapStartCtrl as vm',
                 data: {
-                    showRegistrationFooter: true
+                    showMapToggle: true,
+                    showRegistrationFooter: true,
+                    clearHistory: true
                 }
             })
             .state('settings', {
@@ -55,36 +78,73 @@
                 templateUrl: 'app/settings/settingsview.html',
                 controller: 'SettingsViewCtrl as vm',
                 data: {
-                    defaultBack: {
-                        state: 'start',
-                        title: 'regObs'
-                    }
+                    defaultBack: defaultBackHelp,
+                    showSettings: false
                 }
             })
-
-
-            //SNØ
-            .state('snow', {
-                url: '/snow',
-                templateUrl: 'app/snow/snow.html',
-                controller: 'SnowCtrl as vm',
+            .state('offlinemapoverview', {
+                url: '/offlinemapoverview',
+                templateUrl: 'app/map/offlinemapoverview.html',
+                controller: 'OfflineMapOverviewCtrl as vm',
+                data: {
+                    defaultBack: defaultBackStart,
+                    showSettings: false
+                }
+            })
+            .state('mapareadownload', {
+                url: '/mapareadownload',
+                templateUrl: 'app/map/mapareadownload.html',
+                controller: 'MapAreaDownloadCtrl as vm',
+                cache: false,
                 data: {
                     defaultBack: {
-                        state: 'start',
-                        title: 'regObs'
+                        state: 'offlinemapoverview'
                     },
-                    showRegistrationFooter: true
+                    showSettings: false
                 }
             })
+            .state('offlineareadetails', {
+                url: '/offlineareadetails',
+                templateUrl: 'app/map/offlineareadetails.html',
+                controller: 'OfflineAreaDetailsCtrl as vm',
+                cache: false,
+                params: { area: null },
+                data: {
+                    defaultBack: {
+                        state: 'offlinemapoverview'
+                    },
+                    showSettings: false
+                }
+            })
+
+            .state('observationdetails', {
+                url: '/observationdetails',
+                templateUrl: 'app/observations/details/observationdetails.html',
+                controller: 'ObservationDetailsCtrl as vm',
+                cache: false,
+                params: { observation: null },
+                data: {
+                    defaultBack: defaultBackHelp,
+                    showSettings: false
+                }
+            })
+
+            .state('observationlist', {
+                url: '/observationlist',
+                templateUrl: 'app/observations/list/observationlist.html',
+                controller: 'ObservationListCtrl as vm',
+                data: {
+                    defaultBack: defaultBackStart
+                }
+            })
+
+            //SNØ
             .state('snowregistrationNew', {
                 url: '/snowregistration',
                 templateUrl: 'app/snow/snowregistration/snowregistration.html',
                 controller: 'SnowRegistrationCtrl as vm',
                 data: {
-                    defaultBack: {
-                        state: 'snow',
-                        title: 'Snø'
-                    },
+                    defaultBack: defaultBackStart,
                     showRegistrationFooter: true
                 }
             })
@@ -93,10 +153,7 @@
                 templateUrl: 'app/snow/trip/trip.html',
                 controller: 'TripCtrl as vm',
                 data: {
-                    defaultBack: {
-                        state: 'snow',
-                        title: 'Snø'
-                    },
+                    defaultBack: defaultBackStart,
                     showTripFooter: true
                 }
             })
@@ -201,27 +258,12 @@
             })
 
             //IS
-            .state('ice', {
-                url: '/ice',
-                templateUrl: 'app/ice/ice.html',
-                controller: 'IceCtrl as vm',
-                data: {
-                    defaultBack: {
-                        state: 'start',
-                        title: 'regObs'
-                    },
-                    showRegistrationFooter: true
-                }
-            })
             .state('iceregistrationNew', {
                 url: '/iceregistration',
                 templateUrl: 'app/ice/iceregistration/iceregistration.html',
                 controller: 'IceRegistrationCtrl as vm',
                 data: {
-                    defaultBack: {
-                        state: 'ice',
-                        title: 'Is'
-                    },
+                    defaultBack: defaultBackStart,
                     showRegistrationFooter: true
                 }
             })
@@ -271,28 +313,12 @@
             })
 
             //VANN
-            .state('water', {
-                url: '/water',
-                templateUrl: 'app/water/water.html',
-                controller: 'WaterCtrl as vm',
-                data: {
-                    defaultBack: {
-                        state: 'start',
-                        title: 'regObs'
-                    },
-                    showRegistrationFooter: true
-                }
-
-            })
             .state('waterregistrationNew', {
                 url: '/waterregistration',
                 templateUrl: 'app/water/waterregistration/waterregistration.html',
                 controller: 'WaterRegistrationCtrl as vm',
                 data: {
-                    defaultBack: {
-                        state: 'water',
-                        title: 'Vann'
-                    },
+                    defaultBack: defaultBackStart,
                     showRegistrationFooter: true
                 }
             })
@@ -331,27 +357,12 @@
             })
 
             //JORD
-            .state('dirt', {
-                url: '/dirt',
-                templateUrl: 'app/dirt/dirt.html',
-                controller: 'DirtCtrl as vm',
-                data: {
-                    defaultBack: {
-                        state: 'start',
-                        title: 'regObs'
-                    },
-                    showRegistrationFooter: true
-                }
-            })
             .state('dirtregistrationNew', {
                 url: '/dirtregistration',
                 templateUrl: 'app/dirt/dirtregistration/dirtregistration.html',
                 controller: 'DirtRegistrationCtrl as vm',
                 data: {
-                    defaultBack: {
-                        state: 'dirt',
-                        title: 'Jord'
-                    },
+                    defaultBack: defaultBackStart,
                     showRegistrationFooter: true
                 }
             })
@@ -385,10 +396,6 @@
                 templateUrl: 'app/generalobs/generalobs.html',
                 controller: 'GeneralObsCtrl as vm',
                 data: {
-                    defaultBack: {
-                        state: 'start',
-                        title: 'regObs'
-                    },
                     showFormFooter: true,
                     registrationProp: 'GeneralObservation'
                 }
@@ -400,22 +407,20 @@
                 },
                 controller: 'HelpCtrl as vm',
                 data: {
-                    defaultBack: {
-                        state: 'start',
-                        title: 'regObs'
-                    }
+                    defaultBack: defaultBackHelp,
+                    showSettings: false
                 }
             });
     }
 
-    function setup($ionicPlatform, Utility, AppLogging, Registration) {
+    function setup($ionicPlatform, Utility, AppLogging, Registration, Observations, OfflineMap) {
         'ngInject';
 
-        if (Utility.shouldUpdateKdvElements()) {
-            Utility.refreshKdvElements();
-        }
-
         $ionicPlatform.ready(function () {
+
+            if (Utility.hasGoodNetwork() && Utility.shouldUpdateKdvElements()) {
+                Utility.refreshKdvElements();
+            }
 
             // Hide the accessory bar by default (remove this to show the accessory bar above the keyboard
             // for form inputs)*/
@@ -429,7 +434,14 @@
                 StatusBar.styleLightContent();
             }
 
-            Registration.setBadge(); //Update badge on startup
+            document.addEventListener("deviceready", function () {
+                Observations.removeOldObservationsFromPresistantStorage(); //cleanup old observations on startup
+                OfflineMap.checkUncompleteDownloads(); //Check if any uncomplete downloads and continue download progress
+            });        
+        });
+
+        $ionicPlatform.on('resume', function () {
+            Registration.setBadge(); //Update badge on app resume
         });
     }
 })();

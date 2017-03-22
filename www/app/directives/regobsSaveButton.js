@@ -9,8 +9,8 @@
         require: {
             formCtrl: '?^form'
         },
-        template: '<button class="button button-block button-calm" ng-click="$ctrl.save()">Lagre</button>',
-        controller: function ($scope, $state, $ionicPlatform, $ionicHistory, Property, RegobsPopup, AppLogging, $document, $element) {
+        template: '<button type="button" class="button button-block button-calm" ng-click="$ctrl.save()">Lagre</button>',
+        controller: function ($scope, $state, $ionicPlatform, $ionicHistory, Property, RegobsPopup, AppLogging) {
             'ngInject';
             var ctrl = this;
             var backState;
@@ -46,7 +46,7 @@
             }
 
             function formIsInvalid() {
-                return ctrl.formCtrl && ctrl.formCtrl.$invalid;
+                return ctrl.formCtrl && ctrl.formCtrl.$invalid && Property.exists($state.current.data.registrationProp);
             }
 
             $scope.$on('$stateChangeStart', function (event, toState, toParams, fromState, fromParams) {
@@ -74,22 +74,10 @@
                 ctrl.save();
             }, 101);
 
-            var stopRKey = function (evt) {
-                var node = (evt.target) ? evt.target :
-                                         ((evt.srcElement) ? evt.srcElement : null);
-                if ((evt.keyCode === 13) && (node.type === "number")) {
-                    evt.preventDefault();
-                }
-            };
-
             ctrl.$onInit = function () {
-                backState = $state.current.data.defaultBack.state;
-                $document.on('keydown', stopRKey);
+                var defaultBack = $state.current.data.defaultBack;
+                backState = defaultBack ? defaultBack.state : 'start';
             };
-
-            ctrl.$onDestroy = function () {
-                $document.off('keydown', stopRKey);
-            }
 
         }
     };

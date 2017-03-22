@@ -1,0 +1,22 @@
+﻿<ion-view title="{{vm.area.name}}">
+    <ion-content>
+        <map-area-select disable-user-interaction="true" bounds="vm.bounds"></map-area-select>
+        <div class="padding">
+            <div>
+                {{vm.area.maps.length}} {{'MAP' | translate | lowercase}}.
+            </div>
+            <div>
+                {{vm.area.zoom}} {{'ZOOM_LEVELS' | translate | lowercase}}. {{vm.area.complete.length}} {{'TILES' | translate | lowercase}}.
+            </div>
+            <div>
+                {{vm.humanFileSize}}
+            </div>
+            <div ng-if="vm.area.cancelled" class="assertive">
+                <i class="icon ion-alert-circled"></i> {{'MAP_DOWNLOAD_CANCELLED'|translate}}
+            </div>
+            <button type="button" class="button button-block" ng-click="vm.deleteMap()">
+                {{'DELETE_THIS_AREA' | translate}}
+            </button>
+        </div>
+    </ion-content>
+</ion-view>

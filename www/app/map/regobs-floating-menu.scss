@@ -1,0 +1,382 @@
+﻿#floating-menu ion-floating-item > li {
+    transition: all 0s;
+    -webkit-transition: all 0s;
+    -moz-transition: 0s;
+}
+
+#floating-button {
+    right: 20px !important;
+    left: auto !important;
+}
+
+.regobs-gps-center #floating-button {
+    bottom: 90px !important;
+}
+
+.hasFooter .regobs-gps-center #floating-button {
+    bottom: 147px !important;
+}
+
+.regobs-menu #floating-button {
+    bottom: 20px !important;
+}
+
+.hasFooter .regobs-menu #floating-button {
+    bottom: 77px !important;
+}
+
+.regobs-button-item-selected #floating-button {
+    bottom: 50px !important;
+}
+
+.hasFooter .regobs-button-item-selected #floating-button {
+    bottom: 115px !important;
+}
+
+.regobs-button-tour #floating-button {
+    right: 85px !important;
+}
+
+.regobs-button-delete #floating-button {
+    left: 20px !important;
+}
+
+#floating-menu.active ion-floating-item:nth-child(1) > li {
+    transform: translateY(-70px) translateZ(0);
+    -webkit-transform: translateY(-70px) translateZ(0);
+    transition-delay: 0ms;
+    -webkit-transition-delay: 0ms;
+}
+
+#floating-menu.active ion-floating-item:nth-child(2) > li {
+    transform: translateY(-140px) translateZ(0);
+    -webkit-transform: translateY(-140px) translateZ(0);
+    transition-delay: 0ms;
+    -webkit-transition-delay: 0ms;
+}
+
+#floating-menu.active ion-floating-item:nth-child(3) > li {
+    transform: translateY(-210px) translateZ(0);
+    -webkit-transform: translateY(-210px) translateZ(0);
+    transition-delay: 0ms;
+    -webkit-transition-delay: 0ms;
+}
+
+#floating-menu.active ion-floating-item:nth-child(4) > li {
+    transform: translateY(-280px) translateZ(0);
+    -webkit-transform: translateY(-280px) translateZ(0);
+    transition-delay: 0ms;
+    -webkit-transition-delay: 0ms;
+}
+
+#floating-menu.active ion-floating-item:nth-child(5) > li {
+    transform: translateY(-350px) translateZ(0);
+    -webkit-transform: translateY(-350px) translateZ(0);
+    transition-delay: 0ms;
+    -webkit-transition-delay: 0ms;
+}
+
+#floating-menu.active ion-floating-item:nth-child(6) > li {
+    transform: translateY(-420px) translateZ(0);
+    -webkit-transform: translateY(-420px) translateZ(0);
+    transition-delay: 0ms;
+    -webkit-transition-delay: 0ms;
+}
+
+#floating-menu.active ion-floating-item:nth-child(7) > li {
+    transform: translateY(-490px) translateZ(0);
+    -webkit-transform: translateY(-490px) translateZ(0);
+    transition-delay: 0ms;
+    -webkit-transition-delay: 0ms;
+}
+
+@media (orientation:landscape) {
+    #floating-menu li span.label-container {
+        display: none;
+    }
+
+    #floating-menu.active ion-floating-item:nth-child(1) > li {
+        transform: translateX(-70px) translateZ(0);
+        -webkit-transform: translateX(-70px) translateZ(0);
+    }
+
+    #floating-menu.active ion-floating-item:nth-child(2) > li {
+        transform: translateX(-140px) translateZ(0);
+        -webkit-transform: translateX(-140px) translateZ(0);
+    }
+
+    #floating-menu.active ion-floating-item:nth-child(3) > li {
+        transform: translateX(-210px) translateZ(0);
+        -webkit-transform: translateX(-210px) translateZ(0);
+    }
+
+    #floating-menu.active ion-floating-item:nth-child(4) > li {
+        transform: translateX(-280px) translateZ(0);
+        -webkit-transform: translateX(-280px) translateZ(0);
+    }
+
+    #floating-menu.active ion-floating-item:nth-child(5) > li {
+        transform: translateX(-350px) translateZ(0);
+        -webkit-transform: translateX(-350px) translateZ(0);
+    }
+
+    #floating-menu.active ion-floating-item:nth-child(6) > li {
+        transform: translateX(-420px) translateZ(0);
+        -webkit-transform: translateX(-420px) translateZ(0);
+    }
+
+    #floating-menu.active ion-floating-item:nth-child(7) > li {
+        transform: translateX(-490px) translateZ(0);
+        -webkit-transform: translateX(-490px) translateZ(0);
+    }
+}
+
+//@media only screen and (min-device-width: 320px) and (max-device-width: 568px) and (-webkit-device-pixel-ratio: 2) and (device-aspect-ratio: 40/71) {
+@media (min-width: 320px) and (max-height: 568px) and (orientation:portrait) {
+    /* iPhone 5 portrait */
+    #floating-menu {
+        width: 50px;
+        height: 50px;
+        line-height: 50px;
+    }
+
+    #floating-button {
+        width: 50px;
+        height: 50px;
+        line-height: 50px;
+    }
+
+    .regobs-gps-center #floating-button {
+        bottom: 80px !important;
+    }
+
+    .hasFooter .regobs-gps-center #floating-button {
+        bottom: 137px !important;
+    }
+
+    .regobs-button-tour #floating-button {
+        right: 77px !important;
+    }
+
+    #floating-menu li span.label-container {
+        right: 55px;
+    }
+
+    #floating-menu.active ion-floating-item:nth-child(1) > li {
+        transform: translateY(-60px) translateZ(0);
+        -webkit-transform: translateY(-60px) translateZ(0);
+    }
+
+    #floating-menu.active ion-floating-item:nth-child(2) > li {
+        transform: translateY(-120px) translateZ(0);
+        -webkit-transform: translateY(-120px) translateZ(0);
+    }
+
+    #floating-menu.active ion-floating-item:nth-child(3) > li {
+        transform: translateY(-180px) translateZ(0);
+        -webkit-transform: translateY(-180px) translateZ(0);
+    }
+
+    #floating-menu.active ion-floating-item:nth-child(4) > li {
+        transform: translateY(-240px) translateZ(0);
+        -webkit-transform: translateY(-240px) translateZ(0);
+    }
+
+    #floating-menu.active ion-floating-item:nth-child(5) > li {
+        transform: translateY(-300px) translateZ(0);
+        -webkit-transform: translateY(-300px) translateZ(0);
+    }
+
+    #floating-menu.active ion-floating-item:nth-child(6) > li {
+        transform: translateY(-360px) translateZ(0);
+        -webkit-transform: translateY(-360px) translateZ(0);
+    }
+
+    #floating-menu.active ion-floating-item:nth-child(7) > li {
+        transform: translateY(-420px) translateZ(0);
+        -webkit-transform: translateY(-420px) translateZ(0);
+    }
+}
+
+@media (min-width: 568px) and (max-height: 320px) and (orientation: landscape) {
+    #floating-menu {
+        width: 50px;
+        height: 50px;
+        line-height: 50px;
+    }
+
+    #floating-button {
+        width: 50px;
+        height: 50px;
+        line-height: 50px;
+    }
+
+    .regobs-gps-center #floating-button {
+        bottom: 80px !important;
+    }
+
+    .hasFooter .regobs-gps-center #floating-button {
+        bottom: 137px !important;
+    }
+
+    .regobs-button-tour #floating-button {
+        right: 77px !important;
+    }
+    
+    /* iPhone 5 landscape */
+    #floating-menu.active ion-floating-item:nth-child(1) > li {
+        transform: translateX(-60px) translateZ(0);
+        -webkit-transform: translateX(-60px) translateZ(0);
+    }
+
+    #floating-menu.active ion-floating-item:nth-child(2) > li {
+        transform: translateX(-120px) translateZ(0);
+        -webkit-transform: translateX(-120px) translateZ(0);
+    }
+
+    #floating-menu.active ion-floating-item:nth-child(3) > li {
+        transform: translateX(-180px) translateZ(0);
+        -webkit-transform: translateX(-180px) translateZ(0);
+    }
+
+    #floating-menu.active ion-floating-item:nth-child(4) > li {
+        transform: translateX(-240px) translateZ(0);
+        -webkit-transform: translateX(-240px) translateZ(0);
+    }
+
+    #floating-menu.active ion-floating-item:nth-child(5) > li {
+        transform: translateX(-300px) translateZ(0);
+        -webkit-transform: translateX(-300px) translateZ(0);
+    }
+
+    #floating-menu.active ion-floating-item:nth-child(6) > li {
+        transform: translateX(-360px) translateZ(0);
+        -webkit-transform: translateX(-360px) translateZ(0);
+    }
+
+    #floating-menu.active ion-floating-item:nth-child(7) > li {
+        transform: translateX(-420px) translateZ(0);
+        -webkit-transform: translateX(-420px) translateZ(0);
+    }
+}
+
+@media (min-width: 320px) and (max-height: 480px) and (orientation:portrait) {
+    /* iPhone 4 portrait */
+    #floating-menu {
+        width: 40px;
+        height: 40px;
+        line-height: 40px;
+    }
+
+    #floating-button {
+        width: 40px;
+        height: 40px;
+        line-height: 40px;
+    }
+
+    .regobs-gps-center #floating-button {
+        bottom: 70px !important;
+    }
+
+    .hasFooter .regobs-gps-center #floating-button {
+        bottom: 127px !important;
+    }
+
+    #floating-menu li span.label-container {
+        right: 45px;
+    }
+
+    #floating-menu.active ion-floating-item:nth-child(1) > li {
+        transform: translateY(-50px) translateZ(0);
+        -webkit-transform: translateY(-50px) translateZ(0);
+    }
+
+    #floating-menu.active ion-floating-item:nth-child(2) > li {
+        transform: translateY(-100px) translateZ(0);
+        -webkit-transform: translateY(-100px) translateZ(0);
+    }
+
+    #floating-menu.active ion-floating-item:nth-child(3) > li {
+        transform: translateY(-150px) translateZ(0);
+        -webkit-transform: translateY(-150px) translateZ(0);
+    }
+
+    #floating-menu.active ion-floating-item:nth-child(4) > li {
+        transform: translateY(-200px) translateZ(0);
+        -webkit-transform: translateY(-200px) translateZ(0);
+    }
+
+    #floating-menu.active ion-floating-item:nth-child(5) > li {
+        transform: translateY(-250px) translateZ(0);
+        -webkit-transform: translateY(-250px) translateZ(0);
+    }
+
+    #floating-menu.active ion-floating-item:nth-child(6) > li {
+        transform: translateY(-300px) translateZ(0);
+        -webkit-transform: translateY(-300px) translateZ(0);
+    }
+
+    #floating-menu.active ion-floating-item:nth-child(7) > li {
+        transform: translateY(-350px) translateZ(0);
+        -webkit-transform: translateY(-350px) translateZ(0);
+    }
+}
+
+@media (min-width: 480px) and (max-height: 320px) and (max-width: 567px) and (orientation: landscape) {
+    /* iPhone 4 (or similar) landscape */
+
+    #floating-menu {
+        width: 40px;
+        height: 40px;
+        line-height: 40px;
+    }
+
+    #floating-button {
+        width: 40px;
+        height: 40px;
+        line-height: 40px;
+    }
+
+    .regobs-gps-center #floating-button {
+        bottom: 70px !important;
+    }
+
+    .hasFooter .regobs-gps-center #floating-button {
+        bottom: 127px !important;
+    }
+
+    #floating-menu.active ion-floating-item:nth-child(1) > li {
+        transform: translateX(-50px) translateZ(0);
+        -webkit-transform: translateX(-50px) translateZ(0);
+    }
+
+    #floating-menu.active ion-floating-item:nth-child(2) > li {
+        transform: translateX(-100px) translateZ(0);
+        -webkit-transform: translateX(-100px) translateZ(0);
+    }
+
+    #floating-menu.active ion-floating-item:nth-child(3) > li {
+        transform: translateX(-150px) translateZ(0);
+        -webkit-transform: translateX(-150px) translateZ(0);
+    }
+
+    #floating-menu.active ion-floating-item:nth-child(4) > li {
+        transform: translateX(-200px) translateZ(0);
+        -webkit-transform: translateX(-200px) translateZ(0);
+    }
+
+    #floating-menu.active ion-floating-item:nth-child(5) > li {
+        transform: translateX(-250px) translateZ(0);
+        -webkit-transform: translateX(-250px) translateZ(0);
+    }
+
+    #floating-menu.active ion-floating-item:nth-child(6) > li {
+        transform: translateX(-300px) translateZ(0);
+        -webkit-transform: translateX(-300px) translateZ(0);
+    }
+
+    #floating-menu.active ion-floating-item:nth-child(7) > li {
+        transform: translateX(-350px) translateZ(0);
+        -webkit-transform: translateX(-350px) translateZ(0);
+    }
+}

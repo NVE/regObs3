@@ -18,7 +18,7 @@ angular
                 timeout: AppSettings.httpConfig && AppSettings.httpConfig.timeout ? AppSettings.httpConfig.timeout : 15000,
                 cache: false
             };
-            return $http.get(endpoints.getObserver, config).then(function(response) {
+            return $http.get(endpoints.getObserver, config).then(function (response) {
                 user = JSON.parse(response.data.Data);
                 user.email = username;
                 user.chosenObserverGroup = null;
@@ -30,10 +30,10 @@ angular
             }, function (response) {
                 AppLogging.log(response);
                 var status = '';
-                if(response.status === 401){
-                    status = 'Feil brukernavn eller passord. Vennligst fyll inn på nytt og prøv igjen.'
-                } else if(response.status <= 0){
-                    status = 'Det er problemer med å nå tjenesten. Har du nett? Det kan hende at serverapplikasjonen må våkne og få seg en dugelig sterk kopp med kaffe først. Gi den noen minutter og prøv igjen.'
+                if (response.status === 401) {
+                    status = 'Feil brukernavn eller passord. Vennligst fyll inn på nytt og prøv igjen.';
+                } else if (response.status <= 0) {
+                    status = 'Det er problemer med å nå tjenesten. Har du nett? Det kan hende at serverapplikasjonen må våkne og få seg en dugelig sterk kopp med kaffe først. Gi den noen minutter og prøv igjen.';
                 } else {
                     status = 'Det oppsto en feil ved innlogging. Melding fra server: ' + response.statusText;
                 }
@@ -56,8 +56,8 @@ angular
             service.save();
         };
 
-        service.refreshObserverGroups = function(){
-            if(!user.anonymous){
+        service.refreshObserverGroups = function () {
+            if (!user.anonymous) {
                 service.logIn(user.email, user.password);
             }
         };

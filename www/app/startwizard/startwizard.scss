@@ -1,0 +1,40 @@
+﻿.info-cards {
+    padding: 20px;
+    text-align: center;
+}
+
+.wizard-image-wrap {
+    text-align: center;
+    height: 60%;
+}
+
+.wizard-image-wrap.blue {
+    background-color: #BDD7EE;
+}
+
+.wizard-image-wrap.green {
+    background-color: #C5E0B4;
+}
+
+.wizard-image-wrap.orange {
+    background-color: #F8CBAD;
+}
+
+.wizard-image-wrap.yellow {
+    background-color: #FFE699;
+}
+
+.start-wizard .scroll {
+    height: 100%;
+}
+
+.start-wizard-footer {
+    font-size: 16px !important;
+}
+
+.wizard-app-mode-select-box {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+}
