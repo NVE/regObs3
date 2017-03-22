@@ -1,65 +1,56 @@
-<ion-view view-title="Vannstand">
-    <ion-content>
+<ion-view view-title="{{'WATER_LEVEL'|translate}}">
+    <ion-content class="has-footer">
         <form name="waterLevelForm" novalidate>
             <ion-list>
-
                 <ion-checkbox ng-model="vm.reg.WaterLevelChoice"
                               ng-true-value="1"
-                              ng-change="vm.resetModel()">Elv
+                              ng-change="vm.resetModel()">{{'RIVER'|translate}}
                 </ion-checkbox>
                 <ion-checkbox ng-model="vm.reg.WaterLevelChoice"
                               ng-true-value="2"
-                              ng-change="vm.resetModel()">Innsjø/magasin
+                              ng-change="vm.resetModel()">{{'LAKE'|translate}}
                 </ion-checkbox>
-
                 <div ng-if="vm.reg.WaterLevelChoice">
-
                     <regobs-number
                             field-name="vannstand"
-                            label="Vannstand (m)"
-                            help-text="I meter"
+                            label="{{'WATER_LEVEL'|translate}} (m)"
+                            help-text="{{'IN_METER'|translate}}"
                             model="vm.reg.WaterLevel.WaterLevelValue"
                             min="0" max="9999"
                     ></regobs-number>
-
-
                     <kdv-dropdown ng-show="vm.reg.WaterLevelChoice === 1"
-                                  title="Referansenivå"
+                                  title="WATER_LEVEL_REF"
                                   model="vm.reg.WaterLevel.WaterLevelRefTID"
                                   kdv-key="Water_WaterLevelRefKDV"
                                   before="200">
                     </kdv-dropdown>
-
                     <kdv-dropdown ng-show="vm.reg.WaterLevelChoice === 2"
-                                  title="Referansenivå"
+                                  title="WATER_LEVEL_REF"
                                   model="vm.reg.WaterLevel.WaterLevelRefTID"
                                   kdv-key="Water_WaterLevelRefKDV"
                                   after="200">
                     </kdv-dropdown>
-
                     <regobs-number
                             ng-if="vm.reg.WaterLevelChoice === 1"
                             field-name="vannføring"
-                            label="Faktisk vannføring (m3/s)"
-                            help-text="Gis som tall i m3/s"
+                            label="{{'ACTUAL_DISCHARGE'|translate}} (m3/s)"
+                            help-text="{{'ACTUAL_DISCHARGE_HELP_TEXT'|translate}}"
                             model="vm.reg.WaterLevel.MeasuredDischarge"
                             min="0"
                             max="500000000"
                     ></regobs-number>
                     <regobs-comment
-                            placeholder="Ytterligere beskrivelse"
+                            placeholder="{{'ADDITIONAL_COMMENT'|translate}}"
                             model="vm.reg.WaterLevel.Comment"
                     ></regobs-comment>
-
                 </div>
-
             </ion-list>
             <regobs-image-list></regobs-image-list>
         </form>
         <button type="button" ui-sref="help({page:'waterlevel'})" class="button button-positive button-block button-clear">
-            Hjelp
+            {{'HELP'|translate}}
         </button>
-
     </ion-content>
+    <form-footer></form-footer>
 </ion-view>
 

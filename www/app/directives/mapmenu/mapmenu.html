@@ -10,13 +10,10 @@
             <span class="input-label">
                 {{'SHOW_OBSERVATIONS'|translate}}
             </span>
-            <select ng-model="$ctrl.settings.showObservationsDaysBack"
-                    ng-options="option.value as option.name for option in $ctrl.daysBackArray" ng-change="$ctrl.onSettingsChanged()"></select>
+            <select ng-model="$ctrl.daysBack" tabindex="-1"
+                    ng-options="option.value as option.name | translate for option in $ctrl.daysBackArray" ng-change="$ctrl.onSettingsChanged()"></select>
         </label>
-        <ion-toggle class="item-icon-left" toggle-class="toggle-calm" ng-model="$ctrl.settings.showPreviouslyUsedPlaces" ng-change="$ctrl.onSettingsChanged()">
-            <div class="icon"><div class="menu-observation-pin observation-pin {{$ctrl.settings.appmode}}"><i class="icon ion-pin observation-pin-icon large-icon"></i></div></div> {{'SHOW_PREVIOUS'|translate}} <br />{{'USED_LOCATIONS'|translate|lowercase}}
-        </ion-toggle>
-        <ion-item class="item-icon-left item-icon-right item-text-wrap" ng-click="$ctrl.downloadMap()" menu-close>
+        <ion-item class="item-icon-left item-icon-right item-text-wrap" ng-click="$ctrl.downloadMap()">
             <i class="icon ion-ios-bolt-outline"></i> {{'OFFLINE_MAP'|translate}}
             <i class="icon icon-accessory ion-chevron-right"></i>
         </ion-item>
@@ -33,7 +30,7 @@
                         <span class="input-label">
                             {{'OPACITY'|translate}}
                         </span>
-                        <select ng-model="tile.opacity"
+                        <select ng-model="tile.opacity" tabindex="-1"
                                 ng-options="option.value as option.name for option in $ctrl.opacityArray" ng-change="$ctrl.onSettingsChanged()"></select>
                     </label>
                     <div ng-if="$ctrl.hasTileLabel(tile)">
@@ -45,11 +42,16 @@
                     </div>
                 </div>
             </div>
-        </div>      
+        </div>
+        <ion-item class="item-icon-left item-icon-right item-text-wrap" ng-click="$ctrl.navigateTo('wizard')">
+            <i class="icon ion-ios-information-outline"></i> {{'WIZARD'|translate}}
+            <i class="icon icon-accessory ion-chevron-right"></i>
+        </ion-item>
+        <ion-item class="item-icon-left item-icon-right item-text-wrap" ng-click="$ctrl.navigateTo('help', { page:'maphelp' })">
+            <i class="icon ion-ios-help-outline"></i> {{'HELP'|translate}}
+            <i class="icon icon-accessory ion-chevron-right"></i>
+        </ion-item>
         <ion-item class="item-text-wrap">
-            <button type="button" class="button button-positive button-block button-clear" ui-sref="help({page:'maphelp'})" menu-close>
-                {{'HELP'|translate}}
-            </button>
             <div class="small-text">{{'MAP_BY'|translate}} <a href="http://kartverket.no/" target="_system" >©Kartverket</a></div>
             <div class="small-text">{{'SUPPORT_MAP_BY'|translate}} <a href="http://www.nve.no/" target="_system">©NVE</a></div>
         </ion-item>

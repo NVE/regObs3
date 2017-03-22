@@ -124,7 +124,7 @@ angular
                 };
 
                 $scope.setAvalancheExtArray = function () {
-                    var filteredViewArray = $filter('filter')(viewArray, { AvalCauseTID: $scope.obs.AvalCauseTID }, true).filter(function (item) { return item.AvalancheExtTID > 0 });
+                    var filteredViewArray = $filter('filter')(viewArray, { AvalCauseTID: $scope.obs.AvalCauseTID || 0 }, true).filter(function (item) { return item.AvalancheExtTID > 0 });
                     AppLogging.log(filteredViewArray);
                     $scope.avalancheExtArray = filteredViewArray.map(function (val) {
                         return {

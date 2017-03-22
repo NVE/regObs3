@@ -1,44 +1,45 @@
-<ion-view view-title="Skredfarevurdering">
-    <ion-content>
+<ion-view view-title="{{'AVALANCHE_EVALUATION_TITLE'|translate}}">
+    <ion-content class="has-footer">
         <form name="avalancheEvaluationForm" novalidate>
             <ion-list>
                 <label class="item item-input item-stacked-label">
-                    <span class="input-label">Vurdering</span>
-                <textarea placeholder="Vurdering av skredfare"
+                    <span class="input-label">{{'EVALUATION'|translate}}</span>
+                <textarea placeholder="{{'AVALANCHE_EVALUATION'|translate}}"
                           name="vurdering"
                           cols="30" rows="3"
                           ng-model="vm.reg.AvalancheEvaluation3.AvalancheEvaluation"></textarea>
                 </label>
 
                 <label class="item item-input item-stacked-label">
-                    <span class="input-label">Utvikling</span>
-                <textarea placeholder="Utvikling av skredfare"
+                    <span class="input-label">{{'AVALANCHE_DEVELOPMENT'|translate}}</span>
+                <textarea placeholder="{{'AVALANCHE_DEVELOPMENT_LONG'|translate}}"
                           name="utvikling"
                           cols="30" rows="3"
                           ng-model="vm.reg.AvalancheEvaluation3.AvalancheDevelopment"></textarea>
                 </label>
 
                 <kdv-dropdown
-                        title="Faregrad"
+                        title="AVALANCHE_DANGER"
                         model="vm.reg.AvalancheEvaluation3.AvalancheDangerTID"
                         kdv-key="Snow_AvalancheDangerKDV">
                 </kdv-dropdown>
 
                 <kdv-dropdown
-                        title="Vurdering av varslet faregrad på Varsom"
+                        title="FORECAST_CORRECT"
                         model="vm.reg.AvalancheEvaluation3.ForeCastCorrectTID"
                         kdv-key="Snow_ForecastCorrectKDV">
                 </kdv-dropdown>
 
                 <regobs-comment
-                        placeholder="Hvordan er dagens lokale varsel i forhold til dine lokale vurderinger?"
+                        placeholder="{{'FORECAST_COMMENT'|translate}}"
                         model="vm.reg.AvalancheEvaluation3.ForecastComment"
                 ></regobs-comment>
             </ion-list>
             <regobs-image-list></regobs-image-list>
         </form>
         <button type="button" ui-sref="help({page:'avalancheevaluation'})" class="button button-positive button-block button-clear">
-            Hjelp
+            {{'HELP'|translate}}
         </button>
     </ion-content>
+    <form-footer></form-footer>
 </ion-view>

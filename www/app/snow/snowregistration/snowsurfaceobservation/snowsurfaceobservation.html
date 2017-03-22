@@ -1,12 +1,11 @@
-<ion-view view-title="Snødekke">
-    <ion-content>
+<ion-view view-title="{{'SNOW_SURFACE_TITLE'|translate}}">
+    <ion-content class="has-footer">
         <form name="snowSurfaceForm" novalidate>
             <ion-list>
-
                 <regobs-number
                         field-name="snødybde"
-                        label="Snødybde (cm)"
-                        help-text="I hele centimeter"
+                        label="{{'SNOW_DEPTH_SHORT'|translate}} (cm)"
+                        help-text="{{'IN_WHOLE_CM'|translate}}"
                         model="vm.SnowDepth"
                         min="0"
                         max="1000"
@@ -16,8 +15,8 @@
                 ></regobs-number>
                 <regobs-number
                         field-name="nysnødybde"
-                        label="Nysnødybde (cm)"
-                        help-text="I hele centimeter"
+                        label="{{'NEW_SNOW_DEPTH'|translate}} (cm)"
+                        help-text="{{'IN_WHOLE_CM'|translate}}"
                         model="vm.NewSnowDepth24"
                         min="0"
                         max="1000"
@@ -27,8 +26,8 @@
                 ></regobs-number>
                 <regobs-number
                         field-name="nysnøgrense"
-                        label="Nysnøgrense (moh)"
-                        help-text="I meter over havet"
+                        label="{{'NEW_SNOW_LINE'|translate}} (moh)"
+                        help-text="{{'METERS_ABOVE_SEA_LEVEL'|translate}}"
                         model="vm.reg.SnowSurfaceObservation.NewSnowLine"
                         min="0"
                         max="3000"
@@ -37,8 +36,8 @@
                 ></regobs-number>
                 <regobs-number
                         field-name="snøgrense"
-                        label="Snøgrense (moh)"
-                        help-text="I meter over havet"
+                        label="{{'SNOWLINE'|translate}} (moh)"
+                        help-text="{{'METERS_ABOVE_SEA_LEVEL'|translate}}"
                         model="vm.reg.SnowSurfaceObservation.SnowLine"
                         min="0"
                         max="3000"
@@ -47,35 +46,33 @@
                 ></regobs-number>
                 <regobs-number
                         field-name="grense-lagdelt-snø"
-                        label="Grense lagdelt snø (moh)"
-                        help-text="Øvre høydegrense for snø uten farlig lagdeling"
+                        label="{{'HEIGHT_LIMIT_LAYERED_SNOW'|translate}} (moh)"
+                        help-text="{{'HEIGHT_LIMIT_LAYERED_SNOW_HELP_TEXT'|translate}}"
                         model="vm.reg.SnowSurfaceObservation.HeightLimitLayeredSnow"
                         min="0"
                         max="3000"
                         step="1"
                         pattern="[0-9]*"
                 ></regobs-number>
-
                 <kdv-dropdown
-                        title="Snøfokk"
+                        title="SNOW_DRIFT"
                         model="vm.reg.SnowSurfaceObservation.SnowDriftTID"
                         kdv-key="Snow_SnowDriftKDV">
                 </kdv-dropdown>
-
                 <kdv-dropdown
-                        title="Snødekkehardhet"
+                        title="SNOW_SURFACE"
                         model="vm.reg.SnowSurfaceObservation.SnowSurfaceTID"
                         kdv-key="Snow_SnowSurfaceKDV">
                 </kdv-dropdown>
 
                 <kdv-dropdown
-                        title="Overflatefuktighet"
+                        title="SURFACE_WATER_CONTENT_REG"
                         model="vm.reg.SnowSurfaceObservation.SurfaceWaterContentTID"
                         kdv-key="Snow_SurfaceWaterContentKDV">
                 </kdv-dropdown>
 
                 <regobs-comment
-                        placeholder="Hvordan er snøfordelingen generelt ifht. høyde og eksposisjon. Er det forskjell i regionen?"
+                        placeholder="{{'SNOW_SURFACE_COMMENT'|translate}}"
                         model="vm.reg.SnowSurfaceObservation.Comment"
                 ></regobs-comment>
 
@@ -84,8 +81,9 @@
         </form>
         <button type="button" ui-sref="help({page:'snowsurfaceobservation'})"
                 class="button button-positive button-block button-clear">
-            Hjelp
+            {{'HELP'|translate}}
         </button>
     </ion-content>
+    <form-footer></form-footer>
 </ion-view>
 

@@ -1,0 +1,20 @@
+﻿.save-indicator {
+    line-height: 1.1;
+}
+
+.save-indicator-text {
+    display: inline-block !important;
+    padding-right: 5px;
+}
+
+.save-indicator-text.ng-hide {
+    transition: 2s linear all;
+    opacity: 0;
+}
+
+.save-indicator-icon {
+    position: relative;
+    bottom: -4px;
+    font-size: 22px;
+    padding-right: 5px;
+}

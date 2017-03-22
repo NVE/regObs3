@@ -1,18 +1,16 @@
-<ion-view view-title="Snøprofil">
-    <ion-content>
+<ion-view view-title="{{'SNOW_PROFILE'|translate}}">
+    <ion-content class="has-footer">
         <form name="snowProfileForm" novalidate>
             <ion-list>
                 <ion-item class="item-text-wrap">
-                    regObs har ikke støtte for å registrere en snøprofil. En profil eksportert fra AvyLab eller Ullr
-                    Labs's Avalanche lastes opp som bilde.
+                    {{'SNOW_PROFILE_HELP_TEXT'|translate}}
                 </ion-item>
-
             </ion-list>
             <regobs-image-list></regobs-image-list>
         </form>
         <button type="button" ui-sref="help({page:'snowprofile'})" class="button button-positive button-block button-clear">
-            Hjelp
+            {{'HELP'|translate}}
         </button>
-
     </ion-content>
+    <form-footer></form-footer>
 </ion-view>

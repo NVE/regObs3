@@ -1,40 +1,17 @@
-<ion-view view-title="Isobservasjon">
-    <ion-content>
-        <ion-list>
-            <regobs-position></regobs-position>
-            <regobs-time reg-object="vm.reg" reg-prop="DtObsTime"></regobs-time>
-
-            <regobs-menu-item
-                title="Isdekningsgrad"
-                condition="appVm.propertyExists('IceCoverObs')"
-                state="icecoverobs">
-            </regobs-menu-item>
-
-            <regobs-menu-item
-                title="Istykkelse"
-                condition="appVm.propertyExists('IceThickness')"
-                state="icethickness">
-            </regobs-menu-item>
-
-            <regobs-menu-item
-                title="Faretegn"
-                condition="appVm.propertyExists('DangerObs')"
-                state="icedangerobs"
-                badge-text="vm.reg.DangerObs.length">
-            </regobs-menu-item>
-
-            <regobs-menu-item
-                title="Ulykke/hendelse"
-                condition="appVm.propertyExists('Incident')"
-                state="iceincident">
-            </regobs-menu-item>
-
-            <regobs-menu-item
-                title="Fritekst"
-                condition="appVm.propertyExists('GeneralObservation')"
-                state="generalobs">
-            </regobs-menu-item>
-
-        </ion-list>
-    </ion-content>
-</ion-view>
+<regobs-menu-item title="{{'ICE_COVER_OBS'|translate}}"
+                  condition="vm.propertyExists('IceCoverObs')"
+                  state="icecoverobs">
+</regobs-menu-item>
+<regobs-menu-item title="{{'ICE_THICKNESS'|translate}}"
+                  condition="vm.propertyExists('IceThickness')"
+                  state="icethickness">
+</regobs-menu-item>
+<regobs-menu-item title="{{'DANGER_OBS'|translate}}"
+                  condition="vm.propertyExists('DangerObs')"
+                  state="icedangerobs"
+                  badge-text="vm.reg.DangerObs.length">
+</regobs-menu-item>
+<regobs-menu-item title="{{'INCIDENT'|translate}}"
+                  condition="vm.propertyExists('Incident')"
+                  state="iceincident">
+</regobs-menu-item>

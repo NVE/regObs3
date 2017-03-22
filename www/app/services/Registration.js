@@ -7,7 +7,6 @@ angular
         var unsentStorageKey = 'regobsUnsentRegistrations';
         var newStorageKey = 'regobsNewRegistration';
 
-        //var httpConfig = AppSettings.httpConfigRegistrationPost;
         var baseLength = Object.keys(createRegistration('snow')).length;
 
         var messages = [
@@ -43,30 +42,24 @@ angular
             return json;
         };
 
+        Registration.clearNewRegistrations = function () {
+            LocalStorage.remove(newStorageKey);
+        };
+
         Registration.createAndGoToNewRegistration = function () {
             var appMode = AppSettings.getAppMode();
             var navigate = function () {
-                if (appMode === 'snow') {
-                    $state.go('snowregistrationNew');
-                } else if (appMode === 'dirt') {
-                    $state.go('dirtregistrationNew');
-                } else if (appMode === 'water') {
-                    $state.go('waterregistrationNew');
-                } else if (appMode === 'ice') {
-                    $state.go('iceregistrationNew');
-                }
+                $state.go('newregistration');
             };
 
-
-
             if (Registration.isEmpty()) {
-                //Registration.createNew(Utility.geoHazardTid(appMode));
+                Registration.createNew(Utility.geoHazardTid(appMode));
                 navigate();
             } else if (Registration.data.GeoHazardTID !== Utility.geoHazardTid(appMode)) {
                 RegobsPopup.delete('Slett registrering',
-                        'Du har en påbegynt ' +
-                        Utility.geoHazardNames(Registration.data.GeoHazardTID).toLowerCase() +
-                        '-registrering, dersom du går videre blir denne slettet. Vil du slette for å gå videre?')
+                    'Du har en påbegynt ' +
+                    Utility.geoHazardNames(Registration.data.GeoHazardTID).toLowerCase() +
+                    '-registrering, dersom du går videre blir denne slettet. Vil du slette for å gå videre?')
                     .then(function (response) {
                         if (response) {
                             Registration.createNew(Utility.geoHazardTid(appMode));
@@ -82,7 +75,7 @@ angular
         };
 
         function resetRegistration() {
-            //return Registration.createNew(Registration.data.GeoHazardTID);
+
             ObsLocation.remove();
             Registration.data = {};
             Registration.save();
@@ -106,10 +99,11 @@ angular
         Registration.setBadge = function () {
             AppLogging.log('setting badge');
             try {
-                if (window.cordova && window.cordova.plugins.notification.badge) {
+                if (window.cordova && window.cordova.plugins && window.cordova.plugins.notification && window.cordova.plugins.notification.badge) {
                     if (Registration.unsent.length) {
                         cordova.plugins.notification.badge.set(Registration.unsent.length);
                     } else {
+                        cordova.plugins.notification.badge.set(0);
                         cordova.plugins.notification.badge.clear();
                     }
                 }
@@ -119,7 +113,6 @@ angular
         };
 
         Registration.save = function () {
-            AppLogging.log('save start');
             LocalStorage.setObject(storageKey, Registration.data);
             LocalStorage.setObject(unsentStorageKey, Registration.unsent);
 
@@ -196,6 +189,10 @@ angular
 
         Registration.doesExistUnsent = function (type) {
             return Registration.isOfType(type) && !Registration.isEmpty();
+        };
+
+        Registration.showSend = function () {
+            return !(Registration.isEmpty() && !Registration.unsent.length);
         };
 
         Registration._setObsLocationToUserPositionIfNotSet = function () {
@@ -327,6 +324,9 @@ angular
                     array.forEach(function (dangerObs) {
                         delete dangerObs.tempArea;
                         delete dangerObs.tempComment;
+                        if (dangerObs.DangerSignTID === null || dangerObs.DangerSignTID === undefined) {
+                            dangerObs.DangerSignTID = 0;
+                        }
                     });
                 }
             }
@@ -391,7 +391,7 @@ angular
                 var success = function () {
 
                     var newRegistrations = angular.copy(data.Registrations);
-                    newRegistrations.forEach(function(item) {
+                    newRegistrations.forEach(function (item) {
                         if (item.ObsLocation.ObsLocationId === ObsLocation.data.ObsLocationId) {
                             item.ObsLocation.Latitude = ObsLocation.data.Latitude;
                             item.ObsLocation.Longitude = ObsLocation.data.Longitude;
@@ -438,9 +438,9 @@ angular
 
                     if (error.status <= 0) {
                         RegobsPopup.confirm(title,
-                                'Fikk ikke kontakt med regObs-serveren. Dette kan skyldes manglende nettilgang, eller at serveren er midlertidig utilgjengelig. Du kan prøve på nytt, eller du kan lagre registrering for å sende inn senere.',
-                                'Prøv igjen',
-                                'Lagre')
+                            'Fikk ikke kontakt med regObs-serveren. Dette kan skyldes manglende nettilgang, eller at serveren er midlertidig utilgjengelig. Du kan prøve på nytt, eller du kan lagre registrering for å sende inn senere.',
+                            'Prøv igjen',
+                            'Lagre')
                             .then(handleUserAction);
                     } else if (error.status === 422) {
                         RegobsPopup.alert('Format stemmer ikke',
@@ -472,17 +472,6 @@ angular
             return messages[Math.round(Math.random() * (messages.length - 1))];
         }
 
-        function stopEventAndWarnUser(event, toStateName, type) {
-            event.preventDefault();
-            RegobsPopup.delete('Slett registrering', 'Du har en påbegynt ' + Utility.geoHazardNames(Registration.data.GeoHazardTID) + '-registrering, dersom du går videre blir denne slettet. Vil du slette for å gå videre?')
-                .then(function (response) {
-                    if (response) {
-                        Registration.createNew(type);
-                        $state.go(toStateName);
-                    }
-                });
-        }
-
         Registration.clearNewRegistrationsWithinRange = function () {
             return Observations.getStoredObservations(Utility.getCurrentGeoHazardTid())
                 .then(function (storedObservations) {
@@ -508,30 +497,6 @@ angular
                     LocalStorage.setObject(newStorageKey, arr);
                 });
         };
-
-        //Her sjekkes det om man har prøver å starte en ny registrering (ved at man går inn på en *registrationNew state)
-        //Dersom det finnes en registrering fra før av spørres brukeren om den skal slettes
-        $rootScope.$on('$stateChangeStart', function (event, toState, toParams, fromState, fromParams) {
-            var index = toState.name.indexOf('registrationNew');
-            if (index > 0) {
-                var type = toState.name.substr(0, index); //snow, ice, dirt etc.
-                if (!Registration.isOfType(type) && !Registration.isEmpty()) {
-                    stopEventAndWarnUser(event, toState.name, type);
-
-                } else if (Registration.isEmpty()) {
-                    Registration.createNew(type);
-                }
-
-            }
-        });
-
-
-
-        //$ionicPlatform.on('resume', function (event) {
-        //    if (Registration.isEmpty()) {
-        //        resetRegistration();
-        //    }
-        //});
 
         Registration.load();
 

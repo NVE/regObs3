@@ -72,6 +72,7 @@
                     .then(function (confirm) {
                         if (confirm) {
                             Trip.sending = true;
+                            $rootScope.$broadcast('$regobs.tripSending');
                             return $http.post(AppSettings.getEndPoints().trip, Trip.model.data, AppSettings.httpConfig);
                         }
                     })
@@ -81,10 +82,7 @@
                             Trip.model.started = true;
                             save();
                             $rootScope.$broadcast('$regobs.tripStarted');
-                            RegobsPopup.alert('Tur startet', 'Tur startet!')
-                                .then(function() {
-                                    $state.go('start');
-                                });
+                            
                             
                         }
                     })
@@ -107,6 +105,7 @@
                 .then(function (confirm) {
                     if (confirm) {
                         Trip.sending = true;
+                        $rootScope.$broadcast('$regobs.tripSending');
                         return $http.put(AppSettings.getEndPoints().trip, Trip.model.data, AppSettings.httpConfig);
                     }
                 })
@@ -143,6 +142,7 @@
             Trip.model = angular.copy(defaultModel);
             save();
             Trip.sending = false;
+            $rootScope.$broadcast('$regobs.tripStopped');
         }
 
         function save() {

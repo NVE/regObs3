@@ -1,106 +1,77 @@
-<ion-view view-title="Skred">
-    <ion-content>
+<ion-view view-title="{{'AVALANCHE_TITLE'|translate}}">
+    <ion-content class="has-footer">
         <div class="padding">
             <button type="button" class="button button-block icon-left ion-pin" ng-click="vm.openLandslideInMap()"
                     ng-class="{'button-balanced':vm.reg.AvalancheObs.StartLat}">
-                Sett skredposisjon i kart
+                {{'SET_POSITION_IN_MAP'|translate}}
             </button>
         </div>
         <form name="avalancheForm" novalidate>
             <ion-list>
-
                 <regobs-time reg-object="vm.reg.AvalancheObs" reg-prop="DtAvalancheTime"
-                             text="Tid da skredet gikk*"></regobs-time>
-
+                             text="{{'TIME_WHEN_AVALANCHE'|translate}}"></regobs-time>
                 <label class="item item-input item-stacked-label item-select">
                     <span class="input-label">
-                        Eksposisjon
+                        {{'VALID_EXPOSITION'|translate}}
                     </span>
                     <select ng-model="vm.reg.AvalancheObs.ValidExposition"
-                            ng-options="dir.val as dir.name for dir in vm.expoArray">
-                    </select>
+                            ng-options="dir.val as dir.name for dir in vm.expoArray"></select>
                 </label>
-
-                <kdv-dropdown
-                        title="Størrelse"
-                        model="vm.reg.AvalancheObs.DestructiveSizeTID"
-                        kdv-key="Snow_DestructiveSizeKDV">
+                <kdv-dropdown title="{{'DESTRUCTIVE_SIZE'|translate}}"
+                              model="vm.reg.AvalancheObs.DestructiveSizeTID"
+                              kdv-key="Snow_DestructiveSizeKDV">
                 </kdv-dropdown>
-
-                <kdv-dropdown
-                        title="Skredtype"
-                        model="vm.reg.AvalancheObs.AvalancheTID"
-                        kdv-key="Snow_AvalancheKDV">
+                <kdv-dropdown title="{{'AVALANCHE'|translate}}"
+                              model="vm.reg.AvalancheObs.AvalancheTID"
+                              kdv-key="Snow_AvalancheKDV">
                 </kdv-dropdown>
-
-                <kdv-dropdown
-                        title="Skredutløser"
-                        model="vm.reg.AvalancheObs.AvalancheTriggerTID"
-                        kdv-key="Snow_AvalancheTriggerKDV">
+                <kdv-dropdown title="{{'AVAL_TRIGGER_SIMPLE'|translate}}"
+                              model="vm.reg.AvalancheObs.AvalancheTriggerTID"
+                              kdv-key="Snow_AvalancheTriggerKDV">
                 </kdv-dropdown>
-
-                <kdv-dropdown
-                        title="Terrengtype i løsneområdet"
-                        model="vm.reg.AvalancheObs.TerrainStartZoneTID"
-                        kdv-key="Snow_TerrainStartZoneKDV">
+                <kdv-dropdown title="{{'TERRAIN_START_ZONE'|translate}}"
+                              model="vm.reg.AvalancheObs.TerrainStartZoneTID"
+                              kdv-key="Snow_TerrainStartZoneKDV">
                 </kdv-dropdown>
-
-                <kdv-dropdown
-                        title="Svakt lag"
-                        model="vm.reg.AvalancheObs.AvalCauseTID"
-                        kdv-key="Snow_AvalCauseKDV">
+                <kdv-dropdown title="{{'AVAL_CAUSE'|translate}}"
+                              model="vm.reg.AvalancheObs.AvalCauseTID"
+                              kdv-key="Snow_AvalCauseKDV">
                 </kdv-dropdown>
-
-                <regobs-number
-                        field-name="bruddhøyde"
-                        label="Bruddhøyde (cm)"
-                        help-text="Høyde på bruddet i centimeter"
-                        model="vm.reg.AvalancheObs.FractureHeight"
-                        min="0"
-                        max="50000"
-                        step="1"
-                        pattern="[0-9]*"
-                ></regobs-number>
-
-                <regobs-number
-                        field-name="bruddbredde"
-                        label="Bruddbredde (m)"
-                        help-text="Bredde på bruddkant i meter"
-                        model="vm.reg.AvalancheObs.FractureWidth"
-                        min="0"
-                        max="50000"
-                        step="1"
-                        pattern="[0-9]*"
-                ></regobs-number>
-
+                <regobs-number field-name="bruddhøyde"
+                               label="{{'FRACTURE_HEIGTH'|translate}} (cm)"
+                               help-text="Høyde på bruddet i centimeter"
+                               model="vm.reg.AvalancheObs.FractureHeight"
+                               min="0"
+                               max="50000"
+                               step="1"
+                               pattern="[0-9]*"></regobs-number>
+                <regobs-number field-name="bruddbredde"
+                               label="{{'FRACTURE_WIDTH'|translate}} (m)"
+                               help-text="{{'FRACTURE_WIDTH_HELP_TEXT'|translate}}"
+                               model="vm.reg.AvalancheObs.FractureWidth"
+                               min="0"
+                               max="50000"
+                               step="1"
+                               pattern="[0-9]*"></regobs-number>
                 <label class="item item-input item-stacked-label">
-                    <span class="input-label">Skredbanenavn</span>
-                    <textarea placeholder="Skredbanenavn"
+                    <span class="input-label">{{'TRAJECTORY_NAME'|translate}}</span>
+                    <textarea placeholder="{{'TRAJECTORY_NAME'|translate}}"
                               name="skredbanenavn"
                               cols="30" rows="3" maxlength="1024"
                               ng-model="vm.reg.AvalancheObs.Trajectory"></textarea>
                 </label>
-
-                <regobs-comment
-                        placeholder="Kommentar"
-                        model="vm.reg.AvalancheObs.Comment"
-                ></regobs-comment>
-
-                <ion-item class="item item-divider item-text-wrap">Legg til info hvis skredet kunne, eller har ført til
-                    ulykke eller skade
+                <regobs-comment placeholder="{{'COMMENT'|translate}}"
+                                model="vm.reg.AvalancheObs.Comment"></regobs-comment>
+                <ion-item class="item item-divider item-text-wrap">
+                    {{'ACTIVITY_INFLUENCED_HEADER'|translate}}
                 </ion-item>
-
                 <regobs-incident activity-influenced-kdv="Snow_ActivityInfluencedKDV"></regobs-incident>
-
             </ion-list>
-
             <regobs-image-list></regobs-image-list>
         </form>
         <button type="button" ui-sref="help({page:'snowincident'})" class="button button-positive button-block button-clear">
-            Hjelp
+            {{'HELP'|translate}}
         </button>
-
-
     </ion-content>
+    <form-footer></form-footer>
 </ion-view>
-

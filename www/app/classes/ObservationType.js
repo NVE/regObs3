@@ -52,7 +52,8 @@
                         }
 
                         var valueText = '';
-                        if (hasValue && (!displayFormat.condition || displayFormat.condition(result.value, self.data))) {
+
+                        if ((displayFormat.condition === undefined && hasValue) || (displayFormat.condition === true || (angular.isFunction(displayFormat.condition) && displayFormat.condition(result.value, self.data)))) {
                             valueText = (displayFormat.valueFormat ? displayFormat.valueFormat(result.value, self.data) : result.value);                           
                         }
                         if (valueText && angular.isFunction(valueText.then)) {

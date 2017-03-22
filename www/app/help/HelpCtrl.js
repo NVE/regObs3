@@ -1,7 +1,5 @@
 angular
     .module('RegObs')
-    .controller('HelpCtrl', function ($scope) {
+    .controller('HelpCtrl', function ($scope, $ionicHistory, AppLogging) {
         var vm = this;
-
-        $scope.$on('$ionicView.loaded', function(){});
     });

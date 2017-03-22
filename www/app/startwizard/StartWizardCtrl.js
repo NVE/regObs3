@@ -8,6 +8,11 @@ angular.module('RegObs')
 
         vm.setAppMode = function (mode) {
             AppSettings.setAppMode(mode);
+            $ionicHistory.clearHistory();
+            $ionicHistory.nextViewOptions({
+                disableBack: true,
+                historyRoot: true
+            });
             $state.go('start');
         };
 

@@ -32,10 +32,9 @@
                 document.addEventListener("deviceready",
                     function () {
                         myself._url_offline = cordova.file.dataDirectory + myself.options.folder + '/' + [myself.options.name, '{z}', '{x}', '{y}'].join('-') + '.png';
-                        if (!myself._url_offline.startsWith('file://tmp/ripple')) {
+                        if (!Utility.isRippleEmulator()) {
                             myself._url = myself._url_offline; //only offer offline mode when not emulating
                         }
-
                     });
             } catch (error) {
                 myself.debug("requestFileSystem failed (" + error.message + ")" + options.folder);
