@@ -404,9 +404,14 @@ angular
         service.getKdvElements = function () {
             return service.getAppEmbeddedKdvElements()
                 .then(function (result) {
-                    var embeddedElements = LocalStorage.getObject('kdvDropdowns', {});
-                    var mergedElements = angular.merge(angular.copy(result), embeddedElements);
-                    return { data: mergedElements };
+                    var embeddedElements = LocalStorage.getObject('kdvDropdowns', null);
+                    if (embeddedElements !== null) {
+                        service._removeDeletedKdvElements(result, embeddedElements);
+                        var mergedElements = angular.merge(result, embeddedElements);
+                        return { data: mergedElements };
+                    } else {
+                        return { data: result };
+                    }
                 });
         };
 
@@ -454,12 +459,35 @@ angular
             $rootScope.$broadcast('kdvUpdated', newDate);
         };
 
+        service._removeDeletedKdvElements = function (oldKdvElements, newKdvElements) {
+            for (var prop in oldKdvElements.KdvRepositories) {
+                if (newKdvElements.KdvRepositories.hasOwnProperty(prop)) {
+                    var values = oldKdvElements.KdvRepositories[prop];
+                    var existsInNewElements = function (item) {
+                        return newKdvElements.KdvRepositories[prop].filter(function (ne) {
+                            return ne.Id === item.Id;
+                        }).length > 0;
+                    };
+                    var keep = [];
+                    values.forEach(function (item) {
+                        if (existsInNewElements(item)) {
+                            keep.push(item);
+                        }
+                    });
+                    oldKdvElements.KdvRepositories[prop] = keep;
+                }
+            }
+        };
+
         service._refreshKdvElements = function () {
             return service._getDropdownsFromApi()
                 .then(function (newKdvElements) {
                     return service.getKdvElements().then(function (response) { //Getting old values to update
                         var oldKdvElements = response.data;
-                        service._saveKdvElements(angular.merge(oldKdvElements, newKdvElements));
+                        //remove items missing in new elements (deleted items)
+                        service._removeDeletedKdvElements(oldKdvElements, newKdvElements);              
+                        var mergedElements = angular.merge(oldKdvElements, newKdvElements);
+                        service._saveKdvElements(mergedElements);
                     });
                 });
         };

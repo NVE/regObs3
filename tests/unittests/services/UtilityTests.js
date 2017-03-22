@@ -177,6 +177,32 @@
         });
     });
 
+    it("test refreshKdvElements: old value that is removed from new values is removed", function (done) {
+        inject(function (Utility, AppSettings, $rootScope, $q) {
+            Utility.getAppEmbeddedKdvElements = function () {
+                return $q(function (resolve) {
+                    resolve({ "KdvRepositories": { "Snow_ComprTestFractureKDV": [{ Id: 0, Name: 'Ikke spesifisert' }, { Id: 1, Name: 'Q1' }, { Id: 2, Name: 'This value should be removed' }] } });
+                });
+            };
+            Utility._getDropdownsFromApi = function () {
+                return $q(function (resolve) {
+                    resolve({ "KdvRepositories": { "Snow_ComprTestFractureKDV": [{ Id: 0, Name: 'Ikke spesifisert' }, { Id: 1, Name: 'Q1' }] } });
+                });
+            };
+
+            Utility._refreshKdvElements()
+                .then(function () {
+                    var storeObs = JSON.parse(store.kdvDropdowns);
+                    expect(storeObs.KdvRepositories["Snow_ComprTestFractureKDV"].length).toEqual(2);
+                    expect(storeObs.KdvRepositories["Snow_ComprTestFractureKDV"][0].Id).toEqual(0);
+                    expect(storeObs.KdvRepositories["Snow_ComprTestFractureKDV"][1].Id).toEqual(1);
+                    done();
+                });
+
+            $rootScope.$apply();
+        });
+    });
+
     it("test isObservation: image is not counted as observation", inject(function (Utility) {
         // Invoke the unit being tested as necessary
         expect(Utility.isObservation('Picture')).toEqual(false);
