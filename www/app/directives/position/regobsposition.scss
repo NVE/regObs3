@@ -12,7 +12,7 @@
 .set-position-in-map {
     position: absolute;
     top: 0px;
-    bottom: 140px;
+    bottom: 80px;
     left: 0px;
     right: 0px;
 }
@@ -22,7 +22,25 @@
     bottom: 0px;
     left: 0px;
     right: 0px;
-    height: 140px;
+    height: 80px;
+    background-color: white;
+    z-index: 999;
+    transition-property: all;
+    transition-duration: .5s;
+    transition-timing-function: cubic-bezier(0, 1, 0.5, 1);
+}
+
+.map-detail-text {
+    position: relative;
+    top: -33px;
+}
+
+.map-detail-text i {
+    display: block;
+}
+
+.mark-position-in-map-info.show-details {
+    height: 200px;
 }
 
 .set-position-button-wrapper {
@@ -41,12 +59,10 @@
     height: 112px;
     bottom: 0px;
     left: 0px;
-    right:0px;
+    right: 0px;
 }
 
-.mark-position-info-icon {
-    font-size: 28px;
-}
+
 
 .mark-position-info-text {
     padding-left: 40px;

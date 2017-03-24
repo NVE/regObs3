@@ -5,12 +5,19 @@
 
         var map;
         var marker;
+        var userMarker;
 
         ctrl.hasMoved = false;
         ctrl.updateMarkerToGpsLocation = !ObsLocation.isSet() || ObsLocation.get().UTMSourceTID === ObsLocation.source.fetchedFromGPS;
+        ctrl.distanceText = '';
+        ctrl.showDetails = false;
+
+        ctrl.toggleDetails = function () {
+            ctrl.showDetails = !ctrl.showDetails;
+        };
 
         ctrl.loadMap = function () {
-            var div = $document.find('#map');
+            var div = document.getElementById('confirm-map');
 
             map = L.map(div, {
                 zoomControl: false,
@@ -33,6 +40,25 @@
                 });
             map.addLayer(layer);
             marker = L.marker(ctrl._getStartPosition()).addTo(map);
+
+            map.on('drag', ctrl.centerMapMarker);
+            map.on('zoom', function () {
+                if (!ctrl.isProgramaticZoom) {
+                    ctrl.centerMapMarker();
+                }
+            });
+
+            map.on('locationfound', ctrl._updateUserPosition);
+
+            ctrl.isProgramaticZoom = true;
+            map.setView(marker.getLatLng(), Map.getZoom());
+            ctrl.isProgramaticZoom = false;
+
+            if (UserLocation.hasUserLocation()) {
+                ctrl._updateUserPosition(UserLocation.getLastUserLocation());
+            }
+
+           
         };
 
         ctrl._getStartPosition = function () {
@@ -42,9 +68,7 @@
             } else {
                 return Map.getCenter();
             }
-        };
-
-        
+        };       
 
         ctrl.centerMapMarker = function () {
             var center = map.getCenter();
@@ -56,14 +80,6 @@
             });
         };
 
-        map.on('drag', ctrl.centerMapMarker);
-        map.on('zoom', function () {
-            if (!ctrl.isProgramaticZoom) {
-                ctrl.centerMapMarker();
-            }
-        });
-
-        var userMarker;
         ctrl._updateUserPosition = function (position) {
             AppLogging.log('updateUserPosition');
             if (position) {
@@ -120,7 +136,7 @@
             }
         };
 
-        map.on('locationfound', ctrl._updateUserPosition);
+        
 
         ctrl.getMarkerLatLngText = function () {
             var latLng = marker.getLatLng();
@@ -129,7 +145,7 @@
             return lat + 'N ' + lng + 'E ';
         };
 
-        ctrl.distanceText = '';
+        
 
         ctrl._updateDistanceText = function () {
             if (userMarker) {
@@ -154,30 +170,28 @@
             ctrl.onSave();
         };
 
-        ctrl.isProgramaticZoom = true;
-        map.setView(marker.getLatLng(), Map.getZoom());
-        ctrl.isProgramaticZoom = false;
+        
 
         $scope.$on('$destroy', function () {
-            AppLogging.log('Stop watching gps position and destroy map');
-            map.stopLocate();
+            AppLogging.log('Destroy map');
             map.remove();
         });
-
-        if (UserLocation.hasUserLocation()) {
-            ctrl._updateUserPosition(UserLocation.getLastUserLocation());
-        }
-
-
-        ctrl.$onInit = function () {
-            document.addEventListener("deviceready", function () {
-                AppLogging.log('Start watching gps location in SetPositionInMap');
-                map.locate({ watch: true, enableHighAccuracy: true });
-            }, false);
-        };
 
         $scope.$on('$ionicView.loaded', function () {
             ctrl.loadMap();
         });
+
+        $scope.$on('$ionicView.enter', function () {
+            document.addEventListener("deviceready", function () {
+                AppLogging.log('Start watching gps location in SetPositionInMap');
+                map.locate({ watch: true, enableHighAccuracy: true });
+            }, false);
+        });
+
+        $scope.$on('$ionicView.leave', function () {
+            AppLogging.log('Stop watching gps position');
+            map.stopLocate();
+        });
+        
         
     });
