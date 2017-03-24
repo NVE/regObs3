@@ -379,7 +379,8 @@ angular
                 }
             });
             Registration.data = {};
-            Registration.save();
+            var appMode = AppSettings.getAppMode();
+            Registration.createNew(Utility.geoHazardTid(appMode)); 
         }
 
 
