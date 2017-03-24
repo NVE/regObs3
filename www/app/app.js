@@ -114,6 +114,12 @@
                 controller: 'ObservationListCtrl as vm'
             })
 
+            .state('confirmlocation', {
+                url: '/confirmlocation',
+                templateUrl: 'app/registration/location/confirmlocation.html',
+                controller: 'ConfirmLocationCtrl as vm'
+            })
+
             .state('newregistration', {
                 url: '/newregistration',
                 templateUrl: 'app/registration/registration.html',

@@ -1,0 +1,21 @@
+﻿<ion-view view-title="{{'CONFIRM_POSITION'|translate}}"}>
+    <ion-content scroll="false">
+        <div class="set-position-in-map-wrapper">
+            <div class="set-position-in-map">
+                <div id="map" class="regobs-map" data-tap-disabled="true"></div>
+            </div>
+            <div class="mark-position-in-map-info">
+                <div class="set-position-button-wrapper">
+                    <button class="button button-block button-calm set-position-button" ng-click="vm.savePosition()">{{'CONFIRM_POSITION'|translate}}</button>
+                </div>
+                <div class="text-center mark-position-info-bottom">
+                    <div class="mark-position-info-icon"><i class="icon ion-location"></i></div>
+                    <div class="mark-position-info-text"><span ng-show="!vm.hasMoved">{{'SET_POSITION_INFO'|translate}}</span><span ng-show="vm.hasMoved">{{vm.getMarkerLatLngText()}}</span></div>
+                    <div class="mark-position-info-distance small-text" ng-show="vm.hasMoved && vm.distanceText">{{vm.distanceText}} {{'AWAY' | translate}}</div>
+                    <button class="button button-small button-clear icon-left ion-pinpoint button-calm" ng-click="vm.resetToGps()" ng-show="vm.showGpsReset()">Tilbakestill</button>
+                </div>
+
+            </div>
+        </div>
+    </ion-content>
+</ion-view>

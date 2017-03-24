@@ -49,7 +49,8 @@ angular
         Registration.createAndGoToNewRegistration = function () {
             var appMode = AppSettings.getAppMode();
             var navigate = function () {
-                $state.go('newregistration');
+                //$state.go('newregistration');
+                $state.go('confirmlocation');
             };
 
             if (Registration.isEmpty()) {

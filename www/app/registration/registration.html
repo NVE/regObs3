@@ -10,7 +10,7 @@
             <div ng-if="vm.reg.GeoHazardTID === 20" ng-include="'app/dirt/dirtregistration/dirtregistration.html'"></div>
             <div ng-if="vm.reg.GeoHazardTID === 60" ng-include="'app/water/waterregistration/waterregistration.html'"></div>
             <div ng-if="vm.reg.GeoHazardTID === 70" ng-include="'app/ice/iceregistration/iceregistration.html'"></div>
-            <regobs-menu-item title="Fritekst"
+            <regobs-menu-item title="{{'GENERAL_OBS'|translate}}"
                               condition="vm.propertyExists('GeneralObservation')"
                               state="generalobs">
             </regobs-menu-item>
