@@ -460,7 +460,7 @@ angular
             var warnIfOlderThanHoursBack = 12;
             if (!lastRun) return true;
             var lastRunMoment = moment(lastRun);
-            var diff = lastRunMoment.diff(moment(), 'hours');
+            var diff = moment().diff(lastRunMoment, 'hours');
             if (diff > warnIfOlderThanHoursBack) {
                 return true;
             }
