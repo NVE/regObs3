@@ -40,8 +40,84 @@
 }
 
 .mark-position-in-map-info.show-details {
-    height: 200px;
+    height: 230px;
 }
+
+.map-detail-left-column {
+   position: absolute;
+   left: 30px;
+   height: 150px;
+   width: 50px;
+   text-align: center;
+}
+
+.map-detail-right-column {
+    position: absolute;
+    left:100px;
+    height: 150px;
+    right: 20px;
+}
+
+.map-detail-marker {
+    width: 20px;
+}
+
+.vertical-dotted-line {
+    display: block;
+}
+
+.map-detail-position {
+    display: inline-block;
+    position: relative;
+    left: -1px;
+}
+
+.map-detail-top-box {
+    position: relative;
+}
+
+.map-detail-bottom-box {
+    position: relative;
+    margin-top: 10px;
+}
+
+.arrow-box {
+    border: 2px solid #d7d6d6;
+    z-index: 20;
+    padding: 10px;
+}
+
+.arrow-box-arrow {
+    width: 15px;
+    height: 15px;
+    border: 2px solid #d7d6d6;
+    -webkit-transform: rotate(45deg);
+    -moz-transform: rotate(45deg);
+    -o-transform: rotate(45deg);
+    -ms-transform: rotate(45deg);
+    transform: rotate(45deg);
+    position: absolute;
+    top: 30%;
+    left: -7px;
+    z-index: 10;
+}
+
+.arrow-box-arrow-cover {
+    top: 30%;
+    left: -5px;
+    width: 15px;
+    height: 15px;
+    border: 2px solid transparent;
+    position: absolute;
+    background: white;
+    z-index: 11;
+    -webkit-transform: rotate(45deg);
+    -moz-transform: rotate(45deg);
+    -o-transform: rotate(45deg);
+    -ms-transform: rotate(45deg);
+    transform: rotate(45deg);
+}
+
 
 .set-position-button-wrapper {
     margin-left: 20px;

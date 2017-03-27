@@ -129,7 +129,7 @@
             if (userMarker) {
                 var path = [marker.getLatLng(), userMarker.getLatLng()];
                 if (!pathLine) {
-                    pathLine = L.polyline(path, { color: 'black', weight: 6, opacity: .5, dashArray: "10,10" }).addTo(map);
+                    pathLine = L.polyline(path, { color: 'black', weight: 6, opacity: .9, dashArray: "1,12" }).addTo(map);
                 } else {
                     pathLine.setLatLngs(path);
                 }
