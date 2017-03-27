@@ -21,8 +21,15 @@
             Registration.save();        
         };
 
+        vm.loaded = false;
+
         $scope.$on('$ionicView.enter', function () {
             vm.reg = Registration.data;
+            vm.loaded = true;
+        });
+
+        $scope.$on('$ionicView.beforeLeave', function () {
+            vm.loaded = false;
         });
     });
 
