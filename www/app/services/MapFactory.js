@@ -567,6 +567,7 @@
          * @returns {} 
          */
         service.getZoom = function () {
+            if (!map) return service._zoomToViewOnFirstLocation;
             return map.getZoom();
         };
 

@@ -1,6 +1,6 @@
 ﻿angular
     .module('RegObs')
-    .controller('ConfirmLocationCtrl', function ($document, Map, $scope, AppSettings, AppLogging, $timeout, RegObsClasses, $filter, Utility, ObsLocation, UserLocation) {
+    .controller('ConfirmLocationCtrl', function ($document, Map, $scope, AppSettings, AppLogging, $timeout, RegObsClasses, $filter, Utility, ObsLocation, UserLocation, $http) {
         var ctrl = this;
 
         var map;
@@ -39,7 +39,15 @@
                     debugFunc: AppSettings.debugTiles ? AppLogging.debug : null
                 });
             map.addLayer(layer);
-            marker = L.marker(ctrl._getStartPosition()).addTo(map);
+
+            var redMarker = L.AwesomeMarkers.icon({
+                icon: 'record',
+                prefix: 'ion',
+                markerColor: 'red'
+            });
+
+            marker = L.marker(ctrl._getStartPosition(), { icon: redMarker }).addTo(map);
+            marker.setZIndexOffset(1500);
 
             map.on('drag', ctrl.centerMapMarker);
             map.on('zoom', function () {
@@ -58,7 +66,7 @@
                 ctrl._updateUserPosition(UserLocation.getLastUserLocation());
             }
 
-           
+            ctrl._updateLocationText();
         };
 
         ctrl._getStartPosition = function () {
@@ -68,7 +76,28 @@
             } else {
                 return Map.getCenter();
             }
-        };       
+        };
+
+        ctrl._updateLocationText = function () {
+            if (ctrl._locationTextTimeout) {
+                $timeout.cancel(ctrl._locationTextTimeout);
+                AppLogging.log('cancel timeout');
+            }
+            ctrl._locationTextTimeout = $timeout(function () {
+                AppLogging.log('run update name');
+                var latlng = marker.getLatLng();
+                $http.get(AppSettings.getEndPoints().getLocationName, {
+                    params: {
+                        latitude: latlng.lat,
+                        longitude: latlng.lng
+                    },
+                    timeout: AppSettings.httpConfig.timeout
+                }).then(function (response) {
+                    ctrl.locationText = response.data.Data;
+                });
+                
+            }, 1000); //update location if not moved in 1 sec
+        };
 
         ctrl.centerMapMarker = function () {
             var center = map.getCenter();
@@ -77,6 +106,7 @@
                 ctrl.hasMoved = true;
                 ctrl.updateMarkerToGpsLocation = false;
                 ctrl._updateDistance();
+                ctrl._updateLocationText();
             });
         };
 
@@ -167,7 +197,6 @@
                 UTMSourceTID: ctrl.updateMarkerToGpsLocation ? ObsLocation.source.fetchedFromGPS : ObsLocation.source.clickedInMap
             };
             ObsLocation.set(obsLoc);
-            ctrl.onSave();
         };
 
         
@@ -191,6 +220,9 @@
         $scope.$on('$ionicView.leave', function () {
             AppLogging.log('Stop watching gps position');
             map.stopLocate();
+            if (ctrl._locationTextTimeout) {
+                $timeout.cancel(ctrl._locationTextTimeput);
+            }
         });
         
         

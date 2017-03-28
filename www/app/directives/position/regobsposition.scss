@@ -55,7 +55,7 @@
     position: absolute;
     left:100px;
     height: 150px;
-    right: 20px;
+    right: 30px;
 }
 
 .map-detail-marker {
@@ -118,10 +118,66 @@
     transform: rotate(45deg);
 }
 
+.map-description-label {
+    font-size: 0.8em;
+    color: $positive;
+    text-transform: uppercase;
+}
+
+.map-description-small-label {
+    font-size: 0.8em;
+}
+
+.map-detail-wrapper {
+    margin-top: 5px;
+}
+
+.map-detail-line-wrapper {
+    padding: 1px;
+}
+
+.regobs-position-reset #floating-button {
+    bottom: 120px !important;
+    transition-property: all;
+    transition-duration: .5s;
+    transition-timing-function: cubic-bezier(0, 1, 0.5, 1);
+}
+
+.regobs-position-reset.show-details #floating-button {
+    bottom: 280px !important;
+}
+
+.leaflet-usermarker, .leaflet-usermarker-small {
+    background-color: #fff !important;
+    border-radius: 50%;
+    background-image: none !important;
+    width: 18px !important;
+    height: 18px !important;
+    -webkit-box-shadow: 1px 1px 5px 0px rgba(0, 0, 0, 1);
+    -moz-box-shadow: 1px 1px 5px 0px rgba(0, 0, 0, 1);
+    box-shadow: 1px 1px 5px 0px rgba(0, 0, 0, 1);
+}
+
+.leaflet-usermarker-small:before{
+    content: '';
+    position: absolute;
+    width: 14px;
+    height: 14px;
+    background-color: cornflowerblue;
+    border-radius: 50%;
+    left: 2px;
+    top: 2px;
+}
+
+.leaflet-usermarker-small i.pulse {
+    height: 32px !important;
+    width: 32px !important;
+}
+
 
 .set-position-button-wrapper {
-    margin-left: 20px;
-    margin-right: 20px;
+    margin-left: 30px;
+    margin-right: 30px;
 }
 
 .set-position-button {

@@ -1,4 +1,6 @@
-﻿<ion-view view-title="{{'CONFIRM_POSITION'|translate}}" }>
+﻿<ion-view view-title="Observasjonspunkt">
+    <ion-floating-button class="regobs-position-reset" ng-class="{'show-details':vm.showDetails}" button-color="#fff" icon-color="#444" icon="ion-pinpoint" click="vm.resetToGps()">
+    </ion-floating-button>
     <ion-content scroll="false">
         <div class="set-position-in-map-wrapper">
             <div class="set-position-in-map">
@@ -14,20 +16,19 @@
                         <div ng-show="vm.showDetails">Skjul detaljer</div>
                         <i class="icon ion-chevron-up" ng-class="{'ion-chevron-up':!vm.showDetails, 'ion-chevron-down': vm.showDetails}"></i>
                     </div>
-                    <div>
+                    <div class="map-detail-wrapper">
                         <div class="map-detail-left-column">
-                            <!--<img src="http://localhost:4400/lib/leaflet/dist/images/marker-icon-2x.png" class="map-detail-marker" />-->
                             <div class="awesome-marker awesome-marker-icon-red map-detail-position">
                                 <i class="ion ion-record icon-white"></i>
                             </div>
-                            <div>
+                            <div class="map-detail-line-wrapper">
                                 <svg width="4px" height="15px" viewBox="0 0 4 15">
                                     <line x1="1" x2="1" y1="2" y2="14" stroke="#000" stroke-width="2" stroke-linecap="round" stroke-dasharray="1,4"></line>
                                 </svg>
                             </div>
 
-                            <div>20 m</div>
-                            <div>
+                            <div>{{vm.distanceText}}</div>
+                            <div class="map-detail-line-wrapper">
                                 <svg width="4px" height="15px" viewBox="0 0 4 15">
                                     <line x1="1" x2="1" y1="2" y2="14" stroke="#000" stroke-width="2" stroke-linecap="round" stroke-dasharray="1,4"></line>
                                 </svg>
@@ -44,16 +45,16 @@
                                 <div class="arrow-box-arrow"></div>
                                 <div class="arrow-box-arrow-cover"></div>
                                 <div class="arrow-box">
-                                    <div>OBSERVASJONSPUNKT</div>
-                                    <div>Brekkestranda, 149 moh</div>
-                                    <div>59'58'13''N, 10.45,57E</div>
+                                    <div class="map-description-label">OBSERVASJONSPUNKT</div>
+                                    <div ng-if="vm.locationText"><strong>{{vm.locationText.Navn}} / {{vm.locationText.Fylke}}</strong></div>
+                                    <div class="map-description-small-label">{{vm.getMarkerLatLngText()}}</div>
                                 </div>
                             </div>
                             <div class="map-detail-bottom-box">
                                 <div class="arrow-box-arrow"></div>
                                 <div class="arrow-box-arrow-cover"></div>
                                 <div class="arrow-box">
-                                    <div>DIN POSISJON</div>
+                                    <div class="map-description-label">DIN POSISJON</div>
                                 </div>
                             </div>
                         </div>
