@@ -1,6 +1,6 @@
 ﻿angular
     .module('RegObs')
-    .controller('ConfirmLocationCtrl', function ($document, Map, $scope, AppSettings, AppLogging, $timeout, RegObsClasses, $filter, Utility, ObsLocation, UserLocation, $http, $q, Observations) {
+    .controller('ConfirmLocationCtrl', function ($document, Map, $scope, AppSettings, AppLogging, $timeout, RegObsClasses, $filter, Utility, ObsLocation, UserLocation, $http, $q, Observations, $state, $ionicHistory) {
         var ctrl = this;
 
         var map;
@@ -310,6 +310,15 @@
                 UTMSourceTID: ctrl.updateMarkerToGpsLocation ? ObsLocation.source.fetchedFromGPS : ObsLocation.source.clickedInMap
             };
             ObsLocation.set(obsLoc);
+
+            var backView = $ionicHistory.backView();
+
+            if (backView.name === 'newregistration') {
+                $state.goBack();
+            } else {
+                $state.go('confirmtime');
+            }
+
         };
 
 

@@ -120,6 +120,12 @@
                 controller: 'ConfirmLocationCtrl as vm'
             })
 
+            .state('confirmtime', {
+                url: '/confirmtime',
+                templateUrl: 'app/registration/time/confirmtime.html',
+                controller: 'ConfirmTimeCtrl as vm'
+            })
+
             .state('newregistration', {
                 url: '/newregistration',
                 templateUrl: 'app/registration/registration.html',
