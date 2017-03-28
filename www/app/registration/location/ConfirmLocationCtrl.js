@@ -1,16 +1,16 @@
 ﻿angular
     .module('RegObs')
-    .controller('ConfirmLocationCtrl', function ($document, Map, $scope, AppSettings, AppLogging, $timeout, RegObsClasses, $filter, Utility, ObsLocation, UserLocation, $http) {
+    .controller('ConfirmLocationCtrl', function ($document, Map, $scope, AppSettings, AppLogging, $timeout, RegObsClasses, $filter, Utility, ObsLocation, UserLocation, $http, $q, Observations) {
         var ctrl = this;
 
         var map;
         var marker;
         var userMarker;
 
-        ctrl.hasMoved = false;
         ctrl.updateMarkerToGpsLocation = !ObsLocation.isSet() || ObsLocation.get().UTMSourceTID === ObsLocation.source.fetchedFromGPS;
         ctrl.distanceText = '';
         ctrl.showDetails = false;
+        ctrl._httpTimeout = $q.defer();
 
         ctrl.toggleDetails = function () {
             ctrl.showDetails = !ctrl.showDetails;
@@ -40,6 +40,8 @@
                 });
             map.addLayer(layer);
 
+            ctrl._clusteredGroup = new RegObsClasses.MarkerClusterGroup().addTo(map);
+
             var redMarker = L.AwesomeMarkers.icon({
                 icon: 'record',
                 prefix: 'ion',
@@ -50,9 +52,16 @@
             marker.setZIndexOffset(1500);
 
             map.on('drag', ctrl.centerMapMarker);
-            map.on('zoom', function () {
+            //map.on('zoom', function () {
+            //    if (!ctrl.isProgramaticZoom) {
+            //        ctrl.centerMapMarker();
+            //    }
+            //});
+
+            map.on('moveend', ctrl._refreshLocationsWithTimeout);
+            map.on('zoomend', function () {
                 if (!ctrl.isProgramaticZoom) {
-                    ctrl.centerMapMarker();
+                    ctrl._refreshLocationsWithTimeout();
                 }
             });
 
@@ -67,6 +76,11 @@
             }
 
             ctrl._updateLocationText();
+
+            ctrl.loadPlaces();
+            if (Utility.hasMinimumNetwork()) {
+                ctrl._refreshLocationsWithTimeout();
+            }
         };
 
         ctrl._getStartPosition = function () {
@@ -95,19 +109,22 @@
                 }).then(function (response) {
                     ctrl.locationText = response.data.Data;
                 });
-                
+
             }, 1000); //update location if not moved in 1 sec
         };
 
         ctrl.centerMapMarker = function () {
             var center = map.getCenter();
-            marker.setLatLng(center);
-            $timeout(function () {
-                ctrl.hasMoved = true;
-                ctrl.updateMarkerToGpsLocation = false;
-                ctrl._updateDistance();
-                ctrl._updateLocationText();
-            });
+            ctrl.updateMarkerToGpsLocation = false;
+            ctrl.setPositionManually(center);
+        };
+
+        ctrl.setPositionManually = function (latlng) {
+            marker.setLatLng(latlng);
+            ctrl._unselectAllMarkers();
+            ctrl.place = null;
+            ctrl._updateLocationText();
+            ctrl._updateDistance();
         };
 
         ctrl._updateUserPosition = function (position) {
@@ -127,31 +144,25 @@
                     marker.setLatLng(latlng);
                     map.panTo(latlng);
                 }
-
-                $timeout(function () {
-                    ctrl._updateDistance();
-                });
+                ctrl._updateDistance();
             }
         };
 
         ctrl.resetToGps = function () {
             if (userMarker) {
-                var latlng = userMarker.getLatLng();
-                marker.setLatLng(latlng);
-                map.panTo(latlng);
+                var latlng = userMarker.getLatLng();           
                 ctrl.updateMarkerToGpsLocation = true;
-                ctrl._updateDistance();
+                ctrl.setPositionManually(latlng);
+                map.panTo(latlng);
             }
-        };
-
-        ctrl.showGpsReset = function () {
-            return userMarker && !ctrl.updateMarkerToGpsLocation && ctrl.hasMoved;
         };
 
 
         ctrl._updateDistance = function () {
-            ctrl._updateDistanceLine();
-            ctrl._updateDistanceText();
+            $timeout(function () {
+                ctrl._updateDistanceLine();
+                ctrl._updateDistanceText();
+            });
         };
 
         var pathLine;
@@ -166,16 +177,17 @@
             }
         };
 
-        
+
 
         ctrl.getMarkerLatLngText = function () {
             var latLng = marker.getLatLng();
-            var lat = $filter('number')(latLng.lat, 3);
-            var lng = $filter('number')(latLng.lng, 3);
-            return lat + 'N ' + lng + 'E ';
+            //var lat = $filter('number')(latLng.lat, 3);
+            //var lng = $filter('number')(latLng.lng, 3);
+            //return lat + 'N ' + lng + 'E ';
+            return Utility.formatLatLng(latLng.lat, latLng.lng);
         };
 
-        
+
 
         ctrl._updateDistanceText = function () {
             if (userMarker) {
@@ -183,6 +195,107 @@
                 ctrl.distanceText = Utility.getDistanceText(distance);
             }
         };
+
+        ctrl.loadingLocations = false;
+
+        ctrl._refreshLocations = function () {
+            var center = map.getCenter();
+            var bounds = map.getBounds();
+            var zoom = map.getZoom();
+            var radius = Utility.getRadiusFromBounds(bounds);
+            var geoHazardTid = Utility.getCurrentGeoHazardTid();
+
+            if (!ctrl._lastCenter || (ctrl._lastCenter.distanceTo(center) > (AppSettings.data.searchRange / 2)) || ctrl._lastZoom !== zoom) {
+                ctrl._lastCenter = center;
+                ctrl._lastZoom = zoom;
+                ctrl.loadingLocations = true;
+                Observations.updateNearbyLocations(center.lat, center.lng, radius, geoHazardTid, ctrl._httpTimeout)
+                    .then(function () {
+                        $timeout(function () {
+                            ctrl.loadingLocations = false;
+                        });
+                        ctrl.loadPlaces();
+                    });
+            } else {
+                ctrl.loadPlaces();
+            }
+        };
+
+        ctrl._refreshLocationsWithTimeout = function () {
+            if (ctrl._refreshLocationTimeout) {
+                $timeout.cancel(ctrl._refreshLocationTimeout);
+            }
+            if (ctrl._httpTimeout) {
+                ctrl._httpTimeout.reject(); //reject previous calls
+            }
+
+            ctrl._httpTimeout = $q.defer();
+            ctrl._refreshLocationTimeout = $timeout(ctrl._refreshLocations, 500);
+        };
+
+        ctrl._setSelectedItem = function (item) {
+            $timeout(function () {
+                ctrl._unselectAllMarkers(item);
+                ctrl.place = item;
+                ctrl.locationText = null;
+                var latlng = item.getLatLng();
+                marker.setLatLng(latlng);
+                ctrl.updateMarkerToGpsLocation = false;
+                ctrl._updateDistance();
+                map.panTo(latlng);
+            });
+        };
+
+        ctrl._unselectAllMarkers = function (except) {
+            var unselectFunc = function (arr) {
+                arr.forEach(function (item) {
+                    if (item !== except) {
+                        if (item.setUnselected) {
+                            item.setUnselected();
+                        }
+                    }
+                });
+            };
+            unselectFunc(ctrl._clusteredGroup.getLayers());
+        };
+
+        ctrl._getMarker = function (id) {
+            var existingLayers = ctrl._clusteredGroup.getLayers().filter(function (item) {
+                if (item.getId) {
+                    return item.getId() === id;
+                } else {
+                    return false;
+                }
+            });
+            if (existingLayers.length > 0) {
+                return existingLayers[0];
+            }
+
+            return null;
+        };
+
+        ctrl.loadPlaces = function () {
+            Observations.getLocations(Utility.getCurrentGeoHazardTid(), map.getBounds()).forEach(function (loc) {
+                var m = new RegObsClasses.StoredLocationMarker(loc);
+
+                if (!ctrl._getMarker(m.getId())) {
+                    m.on('selected', function (event) {
+                        ctrl._setSelectedItem(event.target);
+                    });
+                    m.addTo(ctrl._clusteredGroup);
+
+                    if (ObsLocation.isSet()) {
+                        var currentLocation = ObsLocation.get();
+                        if (currentLocation.UTMSourceTID === ObsLocation.source.storedPosition) {
+                            if (m.getId() === currentLocation.ObsLocationId) {
+                                m.setSelected();
+                            }
+                        }
+                    }
+                }
+            });
+        };
+
 
         ctrl.savePosition = function () {
             var latlng = marker.getLatLng();
@@ -199,7 +312,7 @@
             ObsLocation.set(obsLoc);
         };
 
-        
+
 
         $scope.$on('$destroy', function () {
             AppLogging.log('Destroy map');
@@ -223,7 +336,13 @@
             if (ctrl._locationTextTimeout) {
                 $timeout.cancel(ctrl._locationTextTimeput);
             }
+            if (ctrl._refreshLocationTimeout) {
+                $timeout.cancel(ctrl._refreshLocationTimeout);
+            }
+            if (ctrl._httpTimeout) {
+                ctrl._httpTimeout.reject(); //stop loading locations
+            }
         });
-        
-        
+
+
     });

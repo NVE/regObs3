@@ -745,7 +745,19 @@ angular
             return radius;
         };
 
+        service._formatDecimalToDegreesAndMinutes = function (item) {
+            var deg = parseInt(item);
+            var minutes = (item - deg) * 100;
+            var minutesRounded = parseInt(minutes);
+            var seconds = (minutes - minutesRounded) * 100;
+            var secondsRounded = $filter('number')(seconds, 0);
+            return deg + '°' + minutesRounded + '’' + secondsRounded + '’’';
+        };
 
+
+        service.formatLatLng = function (lat, lng) {
+            return service._formatDecimalToDegreesAndMinutes(lat) + 'N ' + service._formatDecimalToDegreesAndMinutes(lng) + 'E'; //'59°58’13”N, 10°46’57”E'
+        };
 
         return service;
 

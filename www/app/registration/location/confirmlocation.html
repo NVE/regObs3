@@ -47,6 +47,7 @@
                                 <div class="arrow-box">
                                     <div class="map-description-label">OBSERVASJONSPUNKT</div>
                                     <div ng-if="vm.locationText"><strong>{{vm.locationText.Navn}} / {{vm.locationText.Fylke}}</strong></div>
+                                    <div ng-if="vm.place"><strong>{{vm.place.getHeader()}}</strong></div>
                                     <div class="map-description-small-label">{{vm.getMarkerLatLngText()}}</div>
                                 </div>
                             </div>
