@@ -1,6 +1,6 @@
 ﻿angular
     .module('RegObs')
-    .controller('MapAreaDownloadCtrl', function ($ionicPlatform, $ionicLoading, $filter, $ionicScrollDelegate, OfflineMap, AppLogging, AppSettings, Map, $cordovaFile, $cordovaDevice, $ionicPopup, $scope, $pbService, $state, $timeout, Utility, $translate, PresistentStorage, RegobsPopup, Observations) {
+    .controller('MapAreaDownloadCtrl', function ($ionicPlatform, $ionicLoading, $filter, $ionicScrollDelegate, OfflineMap, AppLogging, AppSettings, Map, $cordovaFile, $cordovaDevice, $ionicPopup, $scope, $pbService, $state, $timeout, Utility, $translate, PresistentStorage, RegobsPopup, Observations, $ionicHistory) {
         var vm = this;
         vm._fragmentsFromBaseMap = 0;
         vm._calculateLevelSteps = 1;
@@ -165,17 +165,19 @@
         };
 
         vm.download = function () {
+            var navigate = function () {
+                $ionicHistory.nextViewOptions({
+                    disableBack: true
+                });
+                $state.go('start');
+            };
+
             var startDownload = function() {
                 RegobsPopup.downloadProgress($translate.instant('UPDATE_OFFLINE_MAP'),
                         downloadMap,
                         { closeOnComplete: false })
-                    .then(function() {
-                        $state.go('start');
-                    })
-                    .catch(function() {
-                        AppLogging.log('progress cancelled');
-                        $state.go('start');
-                    });
+                    .then(navigate)
+                    .catch(navigate);
             }
 
             if (vm.zoomlevel() < vm.recommendedZoom) {
