@@ -181,10 +181,7 @@
 
         ctrl.getMarkerLatLngText = function () {
             var latLng = marker.getLatLng();
-            //var lat = $filter('number')(latLng.lat, 3);
-            //var lng = $filter('number')(latLng.lng, 3);
-            //return lat + 'N ' + lng + 'E ';
-            return Utility.formatLatLng(latLng.lat, latLng.lng);
+            return Utility.ddToDms(latLng.lat, latLng.lng);
         };
 
 
@@ -313,7 +310,7 @@
 
             var backView = $ionicHistory.backView();
 
-            if (backView.name === 'newregistration') {
+            if (backView && backView.name === 'newregistration') {
                 $state.goBack();
             } else {
                 $state.go('confirmtime');

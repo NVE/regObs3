@@ -1,10 +1,17 @@
 ﻿<ion-view view-title="Dato og tid">
     <ion-content>
         <ion-list>
-            <label class="item item-input item-stacked-label">
+            <button type="button" class="button button-outline button-dark icon-left ion-clock confirm-observation-time-button" ng-click="vm.setToNow()">&nbsp;Nå</button>
+            <label class="item no-border item-input item-stacked-label confirm-observation-time-label">
                 <span class="input-label">Når observerte du?</span>
-                <input type="datetime-local" ng-model="vm.time" required>
+                <input type="datetime-local" ng-model="vm.time" ng-change="vm.onChange()">
             </label>
+            
         </ion-list>
-    </ion-content>
+        <div class="confirm-observation-time-button-panel">
+            <div class="confirm-observation-time-button-wrapper">
+                <button class="button button-block button-calm" ng-click="vm.save()">Bekreft dato og tid</button>
+            </div>
+        </div>
+</ion-content>
 </ion-view>

@@ -745,18 +745,49 @@ angular
             return radius;
         };
 
-        service._formatDecimalToDegreesAndMinutes = function (item) {
-            var deg = parseInt(item);
-            var minutes = (item - deg) * 100;
-            var minutesRounded = parseInt(minutes);
-            var seconds = (minutes - minutesRounded) * 100;
-            var secondsRounded = $filter('number')(seconds, 0);
-            return deg + '°' + minutesRounded + '’' + secondsRounded + '’’';
+        service.ddToDms = function (lat, lng) {
+
+            var lat = lat;
+            var lng = lng;
+            var latResult, lngResult, dmsResult;
+
+            lat = parseFloat(lat);
+            lng = parseFloat(lng);
+
+            // Call to getDms(lat) function for the coordinates of Latitude in DMS.
+            // The result is stored in latResult variable.
+            latResult = service._getDms(lat);
+            latResult += (lat >= 0) ? 'N' : 'S';
+
+           
+            // Call to getDms(lng) function for the coordinates of Longitude in DMS.
+            // The result is stored in lngResult variable.
+            lngResult = service._getDms(lng);
+            lngResult += (lng >= 0) ? 'E' : 'W';
+
+            // Joining both variables and separate them with a space.
+            dmsResult = latResult + ', ' + lngResult;
+
+            // Return the resultant string
+            return dmsResult;
         };
 
+        service._getDms = function (val) {
 
-        service.formatLatLng = function (lat, lng) {
-            return service._formatDecimalToDegreesAndMinutes(lat) + 'N ' + service._formatDecimalToDegreesAndMinutes(lng) + 'E'; //'59°58’13”N, 10°46’57”E'
+            var valDeg, valMin, valSec, result;
+
+            val = Math.abs(val);
+
+            valDeg = Math.floor(val);
+            result = valDeg + "º";
+
+            valMin = Math.floor((val - valDeg) * 60);
+            result += valMin + "'";
+
+            valSec = Math.round((val - valDeg - valMin / 60) * 3600 * 1000) / 1000;
+            result += valSec + '"';
+
+            return result;
         };
 
         return service;
