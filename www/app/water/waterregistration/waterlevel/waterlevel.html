@@ -2,7 +2,36 @@
     <ion-content class="has-footer">
         <form name="waterLevelForm" novalidate>
             <ion-list>
-                <ion-checkbox ng-model="vm.reg.WaterLevelChoice"
+                <div class="item item-divider item-divider-calm">
+                   {{'WATER_LEVEL_TREND_REGISTRATION_HEADER'|translate}}
+                </div>
+                <kdv-dropdown model="vm.reg.WaterLevel.WaterLevelTrendTID"
+                              kdv-key="Water_WaterLevelTrendKDV"
+                              show-as-radio="true">
+                </kdv-dropdown>
+                <div class="item item-divider item-divider-calm">
+                    {{'WATER_ASTRAY_REGISTRATION_HEADER'|translate}}
+                </div>
+                <kdv-dropdown model="vm.reg.WaterLevel.WaterAstrayTID"
+                              kdv-key="Water_WaterAstrayKDV"
+                              show-as-radio="true">
+                </kdv-dropdown>
+                <div class="item item-divider item-divider-calm">
+                    {{'WATER_OBSERVATION_TIMING_REGISTRATION_HEADER'|translate}}
+                </div>
+                <kdv-dropdown model="vm.reg.WaterLevel.WaterObservationTimingTID"
+                              kdv-key="Water_WaterObservationTimingKDV"
+                              show-as-radio="true">
+                </kdv-dropdown>
+                <div class="item item-divider item-divider-calm">
+                    {{'WATER_LEVEL_METHOD_REGISTRATION_HEADER'|translate}}
+                </div>
+                <kdv-dropdown model="vm.reg.WaterLevel.WaterLevelMethodTID"
+                              kdv-key="Water_WaterLevelMethodKDV"
+                              show-as-radio="true">
+                </kdv-dropdown>
+
+                <!--<ion-checkbox ng-model="vm.reg.WaterLevelChoice"
                               ng-true-value="1"
                               ng-change="vm.resetModel()">{{'RIVER'|translate}}
                 </ion-checkbox>
@@ -43,7 +72,7 @@
                             placeholder="{{'ADDITIONAL_COMMENT'|translate}}"
                             model="vm.reg.WaterLevel.Comment"
                     ></regobs-comment>
-                </div>
+                </div>-->
             </ion-list>
             <regobs-image-list></regobs-image-list>
         </form>

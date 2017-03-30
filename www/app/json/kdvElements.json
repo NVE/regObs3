@@ -1,5 +1,69 @@
 {
   "KdvRepositories": {
+    "Water_WaterLevelMethodKDV": [
+      {
+        "Id": 0,
+        "Name": "Ukjent"
+      },
+      {
+        "Id": 1,
+        "Name": "Markerer vannstand"
+      },
+      {
+        "Id": 2,
+        "Name": "Måler vannstand"
+      }
+    ],
+    "Water_WaterObservationTimingKDV": [
+      {
+        "Id": 0,
+        "Name": "Ukjent"
+      },
+      {
+        "Id": 1,
+        "Name": "Spor av vannet der det var"
+      },
+      {
+        "Id": 2,
+        "Name": "Vannet der det er nå"
+      }
+    ],
+    "Water_WaterAstrayKDV": [
+      {
+        "Id": 0,
+        "Name": "Ukjent"
+      },
+      {
+        "Id": 1,
+        "Name": "Ja"
+      },
+      {
+        "Id": 2,
+        "Name": "Nei"
+      }
+    ],
+    "Water_WaterLevelTrendKDV": [
+      {
+        "Id": 0,
+        "Name": "Ukjent"
+      },
+      {
+        "Id": 1,
+        "Name": "Vannstand er synkende"
+      },
+      {
+        "Id": 2,
+        "Name": "Vannstand er stigende"
+      },
+      {
+        "Id": 3,
+        "Name": "Vannstand er stabil"
+      },
+      {
+        "Id": 4,
+        "Name": "Det kan jeg ikke ta stilling til nå"
+      }
+    ],
     "Dirt_DangerSignKDV": [
       {
         "Id": 200,

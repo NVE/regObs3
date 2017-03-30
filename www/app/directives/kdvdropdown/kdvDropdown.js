@@ -1,9 +1,10 @@
 angular
     .module('RegObs')
-    .directive('kdvDropdown', function (Utility) {
+    .directive('kdvDropdown', function (Utility, AppLogging) {
         'ngInject';
 
         var link = function (scope) {
+            AppLogging.log(scope.showAsRadio);
             Utility
                 .getKdvArray(scope.kdvKey, scope.showZero)
                 .then(function (kdvRepo) {
@@ -44,7 +45,8 @@ angular
                 kdvKey: '@',
                 after: '=',
                 before: '=',
-                showZero: '<'
+                showZero: '<',
+                showAsRadio: '=',
             },
             link: link,
             templateUrl: 'app/directives/kdvdropdown/kdvDropdown.html',

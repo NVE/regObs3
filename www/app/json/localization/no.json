@@ -344,5 +344,9 @@
   "DIRT_ACTIVITY_INFLUENCED": "Hva ble påvirket?",
   "DIRT_FORECAST_ACCURATE": "Stemte varslet?",
   "SNOW_OBSERVATION": "Snøobservasjon",
-  "TODAYS_OBSERATIONS": "Dagens observasjoner"
+  "TODAYS_OBSERATIONS": "Dagens observasjoner",
+  "WATER_LEVEL_TREND_REGISTRATION_HEADER": "Hvordan vil du beskrive situasjonen?",
+  "WATER_ASTRAY_REGISTRATION_HEADER": "Kan du se vann på avveie?",
+  "WATER_OBSERVATION_TIMING_REGISTRATION_HEADER": "Hva registrerer du?",
+  "WATER_LEVEL_METHOD_REGISTRATION_HEADER": "Hvordan registrerer du?"
 }
