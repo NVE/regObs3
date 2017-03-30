@@ -9,7 +9,6 @@
 
         ctrl.onChange = function () {
             var now = new Date();
-            //var newTime = new Date(time);
             if (!ctrl.time || (ctrl.time > now)) {
                 ctrl.time = now;
             }
@@ -23,9 +22,11 @@
         };
 
         $scope.$on('$ionicView.enter', function () {
-
-            var now = new Date();
-            ctrl.time = now;
+            var time = new Date();
+            if (Registration.data && Registration.data.DtObsTime) {
+                time = new Date(Registration.data.DtObsTime);
+            }
+            ctrl.time = time;
         });
 
     });

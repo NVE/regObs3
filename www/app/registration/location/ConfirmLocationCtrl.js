@@ -1,6 +1,6 @@
 ﻿angular
     .module('RegObs')
-    .controller('ConfirmLocationCtrl', function ($document, Map, $scope, AppSettings, AppLogging, $timeout, RegObsClasses, $filter, Utility, ObsLocation, UserLocation, $http, $q, Observations, $state, $ionicHistory) {
+    .controller('ConfirmLocationCtrl', function ($document, Map, $scope, $translate, AppSettings, AppLogging, $timeout, RegObsClasses, $filter, Utility, ObsLocation, UserLocation, $http, $q, Observations, $state, $ionicHistory) {
         var ctrl = this;
 
         var map;
@@ -14,6 +14,26 @@
 
         ctrl.toggleDetails = function () {
             ctrl.showDetails = !ctrl.showDetails;
+        };
+
+        ctrl._addSupportTiles = function () {
+            var geoId = Utility.getCurrentGeoHazardTid();
+            AppSettings.data.maps.forEach(function (mapSetting) {
+                if (mapSetting.geoHazardTid === geoId) {
+                    if (mapSetting.tiles) {
+                        mapSetting.tiles.forEach(function (tileSetting) {
+                            if (tileSetting.visible) {
+                                var tile = AppSettings.getTileByName(tileSetting.name);
+                                var t = new RegObsClasses.RegObsTileLayer(tile.url, { reuseTiles: false, folder: AppSettings.mapFolder, name: tile.name, embeddedUrl: tile.embeddedUrl, embeddedMaxZoom: tile.embeddedMaxZoom, debugFunc: AppSettings.debugTiles ? AppLogging.debug : null });
+                                if (tileSetting.opacity) {
+                                    t.setOpacity(tileSetting.opacity);
+                                }
+                                map.addLayer(t);
+                            }
+                        });
+                    }
+                }
+            });
         };
 
         ctrl.loadMap = function () {
@@ -40,6 +60,15 @@
                 });
             map.addLayer(layer);
 
+            ctrl._addSupportTiles();
+
+            var infotext = $translate.instant(AppSettings.getAppMode().toUpperCase());
+            infotext += $translate.instant('OBSERVATION');
+            infotext = infotext.charAt(0).toUpperCase() + infotext.substr(1).toLowerCase();
+            var iconPostFix = AppSettings.getAppMode();
+            var infoControl = L.control.infoControl({ text: infotext, icon: 'nve-icon nve-icon-' + iconPostFix }).addTo(map);
+
+
             ctrl._clusteredGroup = new RegObsClasses.MarkerClusterGroup().addTo(map);
 
             var redMarker = L.AwesomeMarkers.icon({
@@ -52,12 +81,6 @@
             marker.setZIndexOffset(1500);
 
             map.on('drag', ctrl.centerMapMarker);
-            //map.on('zoom', function () {
-            //    if (!ctrl.isProgramaticZoom) {
-            //        ctrl.centerMapMarker();
-            //    }
-            //});
-
             map.on('moveend', ctrl._refreshLocationsWithTimeout);
             map.on('zoomend', function () {
                 if (!ctrl.isProgramaticZoom) {
@@ -133,7 +156,7 @@
                 UserLocation.setLastUserLocation(position);
                 var latlng = L.latLng(position.latitude, position.longitude);
                 if (!userMarker) {
-                    userMarker = L.userMarker(latlng, { pulsing: true, accuracy: position.accuracy, smallIcon: true, zIndexOffset: 1000 });
+                    userMarker = new RegObsClasses.UserMarker(latlng, { accuracy: position.accuracy, zIndexOffset: 1000 });
                     userMarker.addTo(map);
                 } else {
                     userMarker.setLatLng(latlng);
@@ -150,7 +173,7 @@
 
         ctrl.resetToGps = function () {
             if (userMarker) {
-                var latlng = userMarker.getLatLng();           
+                var latlng = userMarker.getLatLng();
                 ctrl.updateMarkerToGpsLocation = true;
                 ctrl.setPositionManually(latlng);
                 map.panTo(latlng);
@@ -330,6 +353,7 @@
         });
 
         $scope.$on('$ionicView.enter', function () {
+            map.invalidateSize();
             document.addEventListener("deviceready", function () {
                 AppLogging.log('Start watching gps location in SetPositionInMap');
                 map.locate({ watch: true, enableHighAccuracy: true });
@@ -339,6 +363,11 @@
         $scope.$on('$ionicView.leave', function () {
             AppLogging.log('Stop watching gps position');
             map.stopLocate();
+
+            if (userMarker) {
+                userMarker.clearHeadingWatch();
+            }
+
             if (ctrl._locationTextTimeout) {
                 $timeout.cancel(ctrl._locationTextTimeput);
             }

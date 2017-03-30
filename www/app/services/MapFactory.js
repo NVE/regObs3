@@ -217,8 +217,8 @@
             if (position) {
                 var latlng = new L.LatLng(position.latitude, position.longitude);
                 if (!userMarker) {
-                    userMarker = L.userMarker(latlng,
-                        { pulsing: true, accuracy: position.accuracy, smallIcon: true, zIndexOffset: 1000 });
+                    userMarker = new RegObsClasses.UserMarker(latlng,
+                        { accuracy: position.accuracy, zIndexOffset: 1000 });
                     userMarker.addTo(layerGroups.user);
                     service.setView(latlng);
                 } else {
@@ -739,6 +739,11 @@
                         map.locate({ watch: true, enableHighAccuracy: true });
                     },
                     false);
+
+                if (userMarker) {
+                    userMarker.watchHeading();
+                }
+
                 service._active = true;
             }
         };
@@ -752,6 +757,10 @@
                 AppLogging.log('Stop watching gps location');
                 map.stopLocate();
             }
+            if (userMarker) {
+                userMarker.clearHeadingWatch();
+            }
+
             service._active = false;
         };
 

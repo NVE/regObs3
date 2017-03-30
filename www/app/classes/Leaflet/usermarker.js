@@ -1,17 +1,12 @@
-﻿/**
- * Leaflet.UserMarker v1.0
- * 
- * Author: Jonatan Heyman <http://heyman.info>
- */
-
-(function (window) {
+﻿angular.module('RegObs')
+    .factory('UserMarker', function ($cordovaDeviceOrientation, AppLogging) {
     var icon = L.divIcon({
         className: "leaflet-usermarker",
         iconSize: [34, 34],
         iconAnchor: [17, 17],
         popupAnchor: [0, -20],
         labelAnchor: [11, -3],
-        html: ''
+        html: '<div id="heading"></div>'
     });
     var iconPulsing = L.divIcon({
         className: "leaflet-usermarker",
@@ -19,24 +14,24 @@
         iconAnchor: [17, 17],
         popupAnchor: [0, -20],
         labelAnchor: [11, -3],
-        html: '<i class="pulse"></i>'
+        html: '<div id="heading"></div><i class="pulse"></i>'
     });
 
     var iconSmall = L.divIcon({
         className: "leaflet-usermarker-small",
-        iconSize: [17, 17],
+        iconSize: [18, 18],
         iconAnchor: [9, 9],
         popupAnchor: [0, -10],
         labelAnchor: [3, -4],
-        html: ''
+        html: '<div id="heading"></div></div>'
     });
     var iconPulsingSmall = L.divIcon({
         className: "leaflet-usermarker-small",
-        iconSize: [17, 17],
+        iconSize: [18, 18],
         iconAnchor: [9, 9],
         popupAnchor: [0, -10],
         labelAnchor: [3, -4],
-        html: '<i class="pulse"></i>'
+        html: '<div id="heading"></div><i class="pulse"></i>'
     });
     var circleStyle = {
         stroke: true,
@@ -48,10 +43,11 @@
         clickable: false
     };
 
-    L.UserMarker = L.Marker.extend({
+    var UserMarker = L.Marker.extend({
         options: {
-            pulsing: false,
-            smallIcon: false,
+            pulsing: true,
+            smallIcon: true,
+            watchHeading: true,
             accuracy: 0,
             circleOpts: circleStyle
         },
@@ -62,14 +58,56 @@
             this.setPulsing(this.options.pulsing);
             this._accMarker = L.circle(latlng, this.options.accuracy, this.options.circleOpts);
 
+            if (this.options.watchHeading) {
+                this.watchHeading();
+            }
+
             // call super
             L.Marker.prototype.initialize.call(this, latlng, this.options);
 
             this.on("move", function () {
                 this._accMarker.setLatLng(this.getLatLng());
             }).on("remove", function () {
+                this.clearHeadingWatch();
                 this._map.removeLayer(this._accMarker);
             });
+        },
+
+        watchHeading: function () {
+            var self = this;
+            if (!self._isWatching) {
+                document.addEventListener("deviceready", function () {
+                    self._watch = $cordovaDeviceOrientation.watchHeading({ frequency: 3000 }).then(
+                        null,
+                        function (error) {
+                            // An error occurred
+                        },
+                        function (result) {   // updates constantly (depending on frequency value)
+                            var magneticHeading = result.magneticHeading;
+                            AppLogging.log('Got heading: ' + magneticHeading);
+                            self.setHeading(parseInt(result.magneticHeading));
+                        });
+                    self._isWatching = true;
+                });
+            }
+        },
+
+        clearHeadingWatch: function () {
+            if (self._watch) {
+                self._watch.clearWatch();
+                self._isWatching = false;
+            }
+        },
+
+        setHeading: function (degrees) {
+            this._heading = degrees;
+
+            var element = document.getElementById("heading");
+            var start = 90;
+            var rotateZ = degrees - start;
+
+            element.style['-webkit-transform'] = 'rotate(' + rotateZ + 'deg) translateX(15px)';
+            element.style.display = 'block';
         },
 
         setPulsing: function (pulsing) {
@@ -98,7 +136,5 @@
         }
     });
 
-    L.userMarker = function (latlng, options) {
-        return new L.UserMarker(latlng, options);
-    };
-})(window);
+    return UserMarker;
+});

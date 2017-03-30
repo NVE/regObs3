@@ -147,33 +147,6 @@
     bottom: 280px !important;
 }
 
-.leaflet-usermarker, .leaflet-usermarker-small {
-    background-color: #fff !important;
-    border-radius: 50%;
-    background-image: none !important;
-    width: 18px !important;
-    height: 18px !important;
-    -webkit-box-shadow: 1px 1px 5px 0px rgba(0, 0, 0, 1);
-    -moz-box-shadow: 1px 1px 5px 0px rgba(0, 0, 0, 1);
-    box-shadow: 1px 1px 5px 0px rgba(0, 0, 0, 1);
-}
-
-.leaflet-usermarker-small:before{
-    content: '';
-    position: absolute;
-    width: 14px;
-    height: 14px;
-    background-color: cornflowerblue;
-    border-radius: 50%;
-    left: 2px;
-    top: 2px;
-}
-
-.leaflet-usermarker-small i.pulse {
-    height: 32px !important;
-    width: 32px !important;
-}
-
 
 .set-position-button-wrapper {
     margin-left: 30px;

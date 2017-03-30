@@ -1,6 +1,6 @@
 ﻿angular
     .module('RegObs')
-    .controller('RegistrationCtrl', function SnowRegistrationCtrl($scope, Registration, Utility, Property) {
+    .controller('RegistrationCtrl', function SnowRegistrationCtrl($scope, Registration, Utility, Property, $ionicHistory) {
         var vm = this;
         vm.hasFooter = function () {
             return Registration.showSend();
@@ -23,7 +23,20 @@
 
         vm.loaded = false;
 
+        vm._resetHistory = function () {
+            var historyId = $ionicHistory.currentHistoryId();
+            var history = $ionicHistory.viewHistory().histories[historyId];
+            for (var i = history.stack.length - 1; i >= 0; i--) {
+                if (history.stack[i].stateName === 'start') {
+                    $ionicHistory.backView(history.stack[i]);
+                }
+            }
+        };
+
+
         $scope.$on('$ionicView.enter', function () {
+            vm._resetHistory();
+
             vm.reg = Registration.data;
             vm.loaded = true;
         });
