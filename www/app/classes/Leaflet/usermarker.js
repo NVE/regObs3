@@ -76,8 +76,11 @@
         watchHeading: function () {
             var self = this;
             if (!self._isWatching) {
+                self._isWatching = true;
                 document.addEventListener("deviceready", function () {
-                    self._watch = $cordovaDeviceOrientation.watchHeading({ frequency: 3000 }).then(
+                    AppLogging.log('start watching heading');
+                    self._watch = $cordovaDeviceOrientation.watchHeading({ frequency: 3000 });
+                    self._watch.then(
                         null,
                         function (error) {
                             // An error occurred
@@ -87,15 +90,17 @@
                             AppLogging.log('Got heading: ' + magneticHeading);
                             self.setHeading(parseInt(result.magneticHeading));
                         });
-                    self._isWatching = true;
+                    
                 });
             }
         },
 
         clearHeadingWatch: function () {
+            var self = this;
             if (self._watch) {
                 self._watch.clearWatch();
                 self._isWatching = false;
+                AppLogging.log('stop watching heading');
             }
         },
 
