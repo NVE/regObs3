@@ -2,34 +2,41 @@
     <ion-content class="has-footer">
         <form name="waterLevelForm" novalidate>
             <ion-list>
-                <div class="item item-divider item-divider-calm">
-                   {{'WATER_LEVEL_TREND_REGISTRATION_HEADER'|translate}}
-                </div>
-                <kdv-dropdown model="vm.reg.WaterLevel.WaterLevelTrendTID"
+                <kdv-dropdown title="WATER_LEVEL_TREND_REGISTRATION_HEADER"
+                              model="vm.reg.WaterLevel2.WaterLevelTrendTID"
                               kdv-key="Water_WaterLevelTrendKDV"
                               show-as-radio="true">
                 </kdv-dropdown>
-                <div class="item item-divider item-divider-calm">
-                    {{'WATER_ASTRAY_REGISTRATION_HEADER'|translate}}
-                </div>
-                <kdv-dropdown model="vm.reg.WaterLevel.WaterAstrayTID"
+                <kdv-dropdown title="WATER_ASTRAY_REGISTRATION_HEADER" 
+                              model="vm.reg.WaterLevel2.WaterAstrayTID"
                               kdv-key="Water_WaterAstrayKDV"
                               show-as-radio="true">
                 </kdv-dropdown>
-                <div class="item item-divider item-divider-calm">
-                    {{'WATER_OBSERVATION_TIMING_REGISTRATION_HEADER'|translate}}
-                </div>
-                <kdv-dropdown model="vm.reg.WaterLevel.WaterObservationTimingTID"
+                <kdv-dropdown title="WATER_OBSERVATION_TIMING_REGISTRATION_HEADER" 
+                              model="vm.reg.WaterLevel2.WaterObservationTimingTID"
                               kdv-key="Water_WaterObservationTimingKDV"
                               show-as-radio="true">
                 </kdv-dropdown>
-                <div class="item item-divider item-divider-calm">
-                    {{'WATER_LEVEL_METHOD_REGISTRATION_HEADER'|translate}}
-                </div>
-                <kdv-dropdown model="vm.reg.WaterLevel.WaterLevelMethodTID"
+                <kdv-dropdown title="WATER_LEVEL_METHOD_REGISTRATION_HEADER" 
+                              model="vm.reg.WaterLevel2.WaterLevelMethodTID"
                               kdv-key="Water_WaterLevelMethodKDV"
                               show-as-radio="true">
                 </kdv-dropdown>
+
+                
+
+                <div ng-show="vm.reg.WaterLevel2.WaterLevelMethodTID === 1">
+                    <kdv-dropdown title="WATER_LEVEL_MARKING_REFERENCE_HEADER"
+                                  model="vm.reg.WaterLevel2.MarkingReferenceTID"
+                                  kdv-key="Water_MarkingReferenceKDV"
+                                  show-as-radio="true">
+                    </kdv-dropdown>
+                    <kdv-dropdown title="WATER_LEVEL_MARKING_TYPE_HEADER"
+                                  model="vm.reg.WaterLevel2.MarkingTypeTID"
+                                  kdv-key="Water_MarkingTypeKDV"
+                                  show-as-radio="true">
+                    </kdv-dropdown>
+                </div>
 
                 <!--<ion-checkbox ng-model="vm.reg.WaterLevelChoice"
                               ng-true-value="1"

@@ -1,10 +1,7 @@
-<div>
-    <label class="item item-input item-select item-stacked-label" ng-if="!showAsRadio">
-        <span class="input-label">{{title | translate}}</span>
-        <select ng-model="model"
-                ng-options="kdv.Id as kdv.Name for kdv in kdvArray">
-            <option value=""></option>
-        </select>
-    </label>
-    <ion-radio class="radio-left radio-calm" ng-if="showAsRadio" ng-model="model" ng-value="{{kdv.Id}}" ng-repeat="kdv in kdvArray">{{kdv.Name}}</ion-radio>
-</div>
+<label class="item item-input item-select item-stacked-label">
+    <span class="input-label">{{title | translate}}</span>
+    <select ng-model="model" ng-change="log()"
+            ng-options="kdv.Id as kdv.Name for kdv in kdvArray">
+        <option value=""></option>
+    </select>
+</label>

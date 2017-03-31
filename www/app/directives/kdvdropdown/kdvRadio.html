@@ -1,0 +1,6 @@
+﻿<div>
+    <div class="item item-divider item-divider-calm" ng-if="title">
+        {{title | translate}}
+    </div>
+    <ion-radio class="radio-left radio-calm" ng-change="log()" ng-model="$parent.model" name="{{kdvKey}}" ng-value="kdv.Id" ng-repeat="kdv in kdvArray">{{kdv.Name}}</ion-radio>
+</div>

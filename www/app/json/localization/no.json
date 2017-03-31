@@ -348,5 +348,7 @@
   "WATER_LEVEL_TREND_REGISTRATION_HEADER": "Hvordan vil du beskrive situasjonen?",
   "WATER_ASTRAY_REGISTRATION_HEADER": "Kan du se vann på avveie?",
   "WATER_OBSERVATION_TIMING_REGISTRATION_HEADER": "Hva registrerer du?",
-  "WATER_LEVEL_METHOD_REGISTRATION_HEADER": "Hvordan registrerer du?"
+  "WATER_LEVEL_METHOD_REGISTRATION_HEADER": "Hvordan registrerer du?",
+  "WATER_LEVEL_MARKING_REFERENCE_HEADER": "Jeg har markert vannstanden",
+  "WATER_LEVEL_MARKING_TYPE_HEADER": "Jeg har markert vannstanden med"
 }

@@ -36,6 +36,10 @@ angular
                     }
 
                 });
+
+            scope.log = function () {
+                AppLogging.log(scope.model);
+            }
         };
 
         return {
@@ -46,10 +50,12 @@ angular
                 after: '=',
                 before: '=',
                 showZero: '<',
-                showAsRadio: '=',
+                showAsRadio: '='
             },
             link: link,
-            templateUrl: 'app/directives/kdvdropdown/kdvDropdown.html',
+            templateUrl: function (elem, attrs) {
+                return attrs.showAsRadio == 'true' ? 'app/directives/kdvdropdown/kdvRadio.html' : 'app/directives/kdvdropdown/kdvDropdown.html';
+            },
             replace: true
         }
 

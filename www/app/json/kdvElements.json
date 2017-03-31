@@ -1,5 +1,61 @@
 {
   "KdvRepositories": {
+    "Water_MarkingTypeKDV": [
+      {
+        "Id": 0,
+        "Name": "Ukjent"
+      },
+      {
+        "Id": 1,
+        "Name": "Spray"
+      },
+      {
+        "Id": 2,
+        "Name": "Tusj"
+      },
+      {
+        "Id": 3,
+        "Name": "Spiker"
+      },
+      {
+        "Id": 4,
+        "Name": "Innriss"
+      },
+      {
+        "Id": 5,
+        "Name": "Annet"
+      }
+    ],
+    "Water_MarkingReferenceKDV": [
+      {
+        "Id": 0,
+        "Name": "Ukjent"
+      },
+      {
+        "Id": 1,
+        "Name": "i terreng"
+      },
+      {
+        "Id": 2,
+        "Name": "på bro"
+      },
+      {
+        "Id": 3,
+        "Name": "på flomstøtte"
+      },
+      {
+        "Id": 4,
+        "Name": "på bygning"
+      },
+      {
+        "Id": 5,
+        "Name": "på påle"
+      },
+      {
+        "Id": 6,
+        "Name": "på noe annet"
+      }
+    ],
     "Water_WaterLevelMethodKDV": [
       {
         "Id": 0,

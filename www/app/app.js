@@ -275,7 +275,7 @@
                 templateUrl: 'app/water/waterregistration/waterlevel/waterlevel.html',
                 controller: 'WaterLevelCtrl as vm',
                 data: {
-                    registrationProp: 'WaterLevel'
+                    registrationProp: 'WaterLevel2'
                 }
             })
             .state('waterincident', {

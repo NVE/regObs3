@@ -312,6 +312,10 @@ angular
                     Comment: { displayFormat: { hideDescription: true } }
                 }
             },
+            WaterLevel2: {
+                name: "Vannstand",
+                RegistrationTID: "62",
+            },
             LandSlideObs: {
                 name: "Skredhendelse",
                 RegistrationTID: "71",
