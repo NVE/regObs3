@@ -1,38 +1,6 @@
 ﻿angular.module('RegObs')
-    .factory('UserMarker', function ($cordovaDeviceOrientation, AppLogging) {
-    var icon = L.divIcon({
-        className: "leaflet-usermarker",
-        iconSize: [34, 34],
-        iconAnchor: [17, 17],
-        popupAnchor: [0, -20],
-        labelAnchor: [11, -3],
-        html: '<div id="heading"></div>'
-    });
-    var iconPulsing = L.divIcon({
-        className: "leaflet-usermarker",
-        iconSize: [34, 34],
-        iconAnchor: [17, 17],
-        popupAnchor: [0, -20],
-        labelAnchor: [11, -3],
-        html: '<div id="heading"></div><i class="pulse"></i>'
-    });
+    .factory('UserMarker', function ($cordovaDeviceOrientation, AppLogging, Utility) {
 
-    var iconSmall = L.divIcon({
-        className: "leaflet-usermarker-small",
-        iconSize: [18, 18],
-        iconAnchor: [9, 9],
-        popupAnchor: [0, -10],
-        labelAnchor: [3, -4],
-        html: '<div id="heading"></div></div>'
-    });
-    var iconPulsingSmall = L.divIcon({
-        className: "leaflet-usermarker-small",
-        iconSize: [18, 18],
-        iconAnchor: [9, 9],
-        popupAnchor: [0, -10],
-        labelAnchor: [3, -4],
-        html: '<div id="heading"></div><i class="pulse"></i>'
-    });
     var circleStyle = {
         stroke: true,
         color: "#03f",
@@ -41,6 +9,17 @@
         fillOpacity: 0.15,
         fillColor: "#03f",
         clickable: false
+    };
+
+    var getIcon = function (id, small, pulsing) {
+        return L.divIcon({
+            className: small ? 'leaflet-usermarker-small' : 'leaflet-usermarker',
+            iconSize: small ? [18, 18] : [34, 34],
+            iconAnchor: small ? [9, 9] : [17, 17],
+            popupAnchor: small ? [0, -10] : [0, -20],
+            labelAnchor: small ? [3, -4] : [11, -3],
+            html: '<div class="heading" id="' + id + '"></div>' + (pulsing ? '<i class="pulse"></i>' : '')
+        });
     };
 
     var UserMarker = L.Marker.extend({
@@ -55,6 +34,7 @@
         initialize: function (latlng, options) {
             options = L.Util.setOptions(this, options);
 
+            this._id = Utility.createGuid();
             this.setPulsing(this.options.pulsing);
             this._accMarker = L.circle(latlng, this.options.accuracy, this.options.circleOpts);
 
@@ -107,7 +87,7 @@
         setHeading: function (degrees) {
             this._heading = degrees;
 
-            var element = document.getElementById("heading");
+            var element = document.getElementById(this._id);
             var start = 90;
             var rotateZ = degrees - start;
 
@@ -118,11 +98,8 @@
         setPulsing: function (pulsing) {
             this._pulsing = pulsing;
 
-            if (this.options.smallIcon) {
-                this.setIcon(!!this._pulsing ? iconPulsingSmall : iconSmall);
-            } else {
-                this.setIcon(!!this._pulsing ? iconPulsing : icon);
-            }
+            var icon = getIcon(this._id, this.options.smallIcon, this._pulsing);
+            this.setIcon(icon);
         },
 
         setAccuracy: function (accuracy) {

@@ -11,6 +11,7 @@
             'ngInject';
             var ctrl = this;
             var element;
+            var minheight = 20;
 
             ctrl.textareaId = Utility.createGuid();
             ctrl.labelText = ctrl.labelText || 'Kommentar';
@@ -19,7 +20,7 @@
                 if(!element){
                     element = document.getElementById(ctrl.textareaId);
                 }
-                if (element && element.style) {
+                if (element && element.style && element.scrollHeight > minheight) {
                     element.style.height = element.scrollHeight + "px";
                 }
             };

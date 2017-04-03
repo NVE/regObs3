@@ -1,5 +1,5 @@
 <ion-view view-title="{{'WATER_LEVEL'|translate}}">
-    <ion-content class="has-footer">
+    <ion-content>
         <form name="waterLevelForm" novalidate>
             <ion-list>
                 <kdv-dropdown title="WATER_LEVEL_TREND_REGISTRATION_HEADER"
@@ -7,23 +7,21 @@
                               kdv-key="Water_WaterLevelTrendKDV"
                               show-as-radio="true">
                 </kdv-dropdown>
-                <kdv-dropdown title="WATER_ASTRAY_REGISTRATION_HEADER" 
+                <kdv-dropdown title="WATER_ASTRAY_REGISTRATION_HEADER"
                               model="vm.reg.WaterLevel2.WaterAstrayTID"
                               kdv-key="Water_WaterAstrayKDV"
                               show-as-radio="true">
                 </kdv-dropdown>
-                <kdv-dropdown title="WATER_OBSERVATION_TIMING_REGISTRATION_HEADER" 
+                <kdv-dropdown title="WATER_OBSERVATION_TIMING_REGISTRATION_HEADER"
                               model="vm.reg.WaterLevel2.WaterObservationTimingTID"
                               kdv-key="Water_WaterObservationTimingKDV"
                               show-as-radio="true">
                 </kdv-dropdown>
-                <kdv-dropdown title="WATER_LEVEL_METHOD_REGISTRATION_HEADER" 
+                <kdv-dropdown title="WATER_LEVEL_METHOD_REGISTRATION_HEADER"
                               model="vm.reg.WaterLevel2.WaterLevelMethodTID"
                               kdv-key="Water_WaterLevelMethodKDV"
                               show-as-radio="true">
                 </kdv-dropdown>
-
-                
 
                 <div ng-show="vm.reg.WaterLevel2.WaterLevelMethodTID === 1">
                     <kdv-dropdown title="WATER_LEVEL_MARKING_REFERENCE_HEADER"
@@ -31,11 +29,41 @@
                                   kdv-key="Water_MarkingReferenceKDV"
                                   show-as-radio="true">
                     </kdv-dropdown>
+                    <regobs-comment placeholder="Beskriv markering"
+                                    model="vm.reg.WaterLevel2.Comment" label-text=" "></regobs-comment>
                     <kdv-dropdown title="WATER_LEVEL_MARKING_TYPE_HEADER"
                                   model="vm.reg.WaterLevel2.MarkingTypeTID"
                                   kdv-key="Water_MarkingTypeKDV"
                                   show-as-radio="true">
                     </kdv-dropdown>
+                    <div class="item item-divider item-divider-calm no-bottom-border">
+                        {{'WATER_MARK_HEADING'|translate}}
+                    </div>
+                    <div ng-repeat="m in vm.reg.WaterLevel2.WaterLevelMeasurement">
+                        <div class="item item-divider uppercase" ng-class="{'no-top-border':$index===0}">
+                            {{'MARKING'|translate}} {{($index+1)}}
+                        </div>
+                        <div>
+                            <button type="button" class="button time-button button-outline button-small button-dark icon-left ion-clock float-right" ng-click="vm.setToNow($index)">&nbsp;Nå</button>
+                        </div>
+                        <label class="item item-input item-stacked-label no-border">
+                            <span class="input-label">Klokkeslett</span>
+                            <input type="datetime-local" ng-model="m._dtMeasurementTime" required>
+                        </label>
+
+                        <div class="item item-icon-left" ng-click="vm.addWaterLevelPicture()">
+                            <i class="icon ion-image small-icon"></i> + {{'ADD_WATER_MARK_IMAGE'|translate}}
+                        </div>
+                    </div>
+                    <div class="item item-divider">
+                        &nbsp;
+                    </div>
+                    <div class="item item-icon-left" ng-click="vm.addWaterLevelMeasurement()">
+                        + {{'ADD_WATER_MARKING'|translate}}
+                    </div>
+                    <div class="item item-divider">
+                        &nbsp;
+                    </div>
                 </div>
 
                 <!--<ion-checkbox ng-model="vm.reg.WaterLevelChoice"
@@ -81,12 +109,19 @@
                     ></regobs-comment>
                 </div>-->
             </ion-list>
-            <regobs-image-list></regobs-image-list>
+            <!--<regobs-image-list></regobs-image-list>-->
+            <div class="padding">
+                <regobs-save-button save-action="vm.save()" go-back="true"></regobs-save-button>
+            </div>
         </form>
+
+        <button type="button" ng-click="vm.reset()" class="button button-positive button-block button-clear ion-android-close">
+            {{'CLEAR'|translate}}
+        </button>
         <button type="button" ui-sref="help({page:'waterlevel'})" class="button button-positive button-block button-clear">
             {{'HELP'|translate}}
         </button>
     </ion-content>
-    <form-footer></form-footer>
+    <!--<form-footer></form-footer>-->
 </ion-view>
 

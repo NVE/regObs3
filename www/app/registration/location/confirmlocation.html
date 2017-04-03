@@ -45,7 +45,7 @@
                                 <div class="arrow-box-arrow"></div>
                                 <div class="arrow-box-arrow-cover"></div>
                                 <div class="arrow-box">
-                                    <div class="map-description-label">OBSERVASJONSPUNKT</div>
+                                    <div class="map-description-label uppercase">{{'OBSERVATION_LOCATION'|translate}}</div>
                                     <div ng-if="vm.locationText"><strong>{{vm.locationText.Navn}} / {{vm.locationText.Fylke}}</strong></div>
                                     <div ng-if="vm.place"><strong>{{vm.place.getHeader()}}</strong></div>
                                     <div class="map-description-small-label">{{vm.getMarkerLatLngText()}}</div>
@@ -55,20 +55,12 @@
                                 <div class="arrow-box-arrow"></div>
                                 <div class="arrow-box-arrow-cover"></div>
                                 <div class="arrow-box">
-                                    <div class="map-description-label">DIN POSISJON</div>
+                                    <div class="map-description-label uppercase">{{'YOUR_POSITION'|translate}}</div>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
-                <!--<div class="text-center mark-position-info-bottom">
-
-                    <div class="mark-position-info-icon"><i class="icon ion-location"></i></div>
-                    <div class="mark-position-info-text"><span ng-show="!vm.hasMoved">{{'SET_POSITION_INFO'|translate}}</span><span ng-show="vm.hasMoved">{{vm.getMarkerLatLngText()}}</span></div>
-                    <div class="mark-position-info-distance small-text" ng-show="vm.hasMoved && vm.distanceText">{{vm.distanceText}} {{'AWAY' | translate}}</div>
-                    <button class="button button-small button-clear icon-left ion-pinpoint button-calm" ng-click="vm.resetToGps()" ng-show="vm.showGpsReset()">Tilbakestill</button>
-                </div>-->
-
             </div>
         </div>
     </ion-content>

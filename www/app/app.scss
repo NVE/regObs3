@@ -368,7 +368,13 @@ ion-popover-view.wider {
 }
 
 .no-border {
-    border: none;
+    border: none !important;
+}
+.no-bottom-border {
+    border-bottom: none !important;
+}
+.no-top-border {
+    border-top: none !important;
 }
 
 .item-divider-calm {
@@ -376,4 +382,28 @@ ion-popover-view.wider {
     text-transform: uppercase;
     font-size: 14px;
     padding-top: 20px;
+}
+
+.item .icon.small-icon {
+    font-size: 24px;
+}
+
+.popup-buttons .button.icon-left:not(.button-small),
+.popup-buttons .button.icon-right:not(.button-small) {
+    // fix for intel-popup with icons
+    line-height: 40px !important;
+}
+
+.uppercase {
+    text-transform: uppercase;
+}
+
+.float-right {
+    float: right;
+}
+
+.time-button {
+    position: relative;
+    top: 5px;
+    right: 5px;
 }

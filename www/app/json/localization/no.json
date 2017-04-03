@@ -103,7 +103,8 @@
   "POSITION": "Posisjon",
   "UNKNOWN_POSITION": "Ukjent posisjon",
   "UNCERTAINTY": "Usikkerhet",
-  "CONFIRM_POSITION": "Bekreft posisjon",
+  "CONFIRM_POSITION": "Bekreft observasjonspunkt",
+  "OBSERVATION_LOCATION": "Observasjonspunkt",
   "SET_POSITION_INFO": "eller dra kartet for å sette din observasjonsposisjon",
   "MANUAL_MARK_POSITION_INFO": "Markerer du egen posisjon vil denne bli brukt og ikke gpsen.",
   "MANUAL_MARK_POSITION": "Marker egen posisjon",
@@ -350,5 +351,10 @@
   "WATER_OBSERVATION_TIMING_REGISTRATION_HEADER": "Hva registrerer du?",
   "WATER_LEVEL_METHOD_REGISTRATION_HEADER": "Hvordan registrerer du?",
   "WATER_LEVEL_MARKING_REFERENCE_HEADER": "Jeg har markert vannstanden",
-  "WATER_LEVEL_MARKING_TYPE_HEADER": "Jeg har markert vannstanden med"
+  "WATER_LEVEL_MARKING_TYPE_HEADER": "Jeg har markert vannstanden med",
+  "YOUR_POSITION": "Nåværende posisjon",
+  "MARKING": "Markering",
+  "ADD_WATER_MARKING": "Legg til ny vannstandsmarkering",
+  "ADD_WATER_MARK_IMAGE": "Legg til bilde av vannstandsmarkering",
+  "WATER_MARK_HEADING": "Registrer vannstandsmarkering"
 }

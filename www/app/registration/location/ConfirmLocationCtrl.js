@@ -63,8 +63,8 @@
             ctrl._addSupportTiles();
 
             var infotext = $translate.instant(AppSettings.getAppMode().toUpperCase());
-            infotext += $translate.instant('OBSERVATION');
-            infotext = infotext.charAt(0).toUpperCase() + infotext.substr(1).toLowerCase();
+            //infotext += $translate.instant('OBSERVATION');
+            //infotext = infotext.charAt(0).toUpperCase() + infotext.substr(1).toLowerCase();
             var iconPostFix = AppSettings.getAppMode();
             var infoControl = L.control.infoControl({ text: infotext, icon: 'nve-icon nve-icon-' + iconPostFix }).addTo(map);
 
