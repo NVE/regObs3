@@ -41,17 +41,21 @@
                     </div>
                     <div ng-repeat="m in vm.reg.WaterLevel2.WaterLevelMeasurement">
                         <div class="item item-divider uppercase" ng-class="{'no-top-border':$index===0}">
-                            {{'MARKING'|translate}} {{($index+1)}}
+                            {{'MARKING'|translate}} {{($index+1)}} <div class="float-right" ng-show="$index > 0 || ($index === 0 && m.DtMeasurementTime)" ><button type="button" ng-click="vm.removeMeasurement($index)" class="button button-small button-dark button-clear icon-right ion-close-round">Fjern måling</button></div>
                         </div>
                         <div>
-                            <button type="button" class="button time-button button-outline button-small button-dark icon-left ion-clock float-right" ng-click="vm.setToNow($index)">&nbsp;Nå</button>
+                            <button type="button" class="button time-button button-outline button-small button-dark icon-left ion-clock float-right" ng-click="vm.setToNow(m)">&nbsp;Nå</button>
                         </div>
                         <label class="item item-input item-stacked-label no-border">
                             <span class="input-label">Klokkeslett</span>
-                            <input type="datetime-local" ng-model="m._dtMeasurementTime" required>
-                        </label>
-
-                        <div class="item item-icon-left" ng-click="vm.addWaterLevelPicture()">
+                            <input type="datetime-local" ng-model="m.DtMeasurementTime" required>
+                        </label>                      
+                        <div ng-repeat="pic in m.Pictures">
+                            <div class="item item-image">
+                                <img ng-src="{{pic.PictureImageBase64}}">
+                            </div>
+                        </div>
+                        <div class="item item-icon-left" ng-click="vm.addWaterLevelPicture(m)">
                             <i class="icon ion-image small-icon"></i> + {{'ADD_WATER_MARK_IMAGE'|translate}}
                         </div>
                     </div>

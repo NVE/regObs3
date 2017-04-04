@@ -34,7 +34,7 @@
 
         var serviceUrls = {
             'regObs': 'https://api.nve.no/hydrology/regobs/v3.1.0/',
-            'demo regObs' : 'http://stg-h-web03.nve.no/RegObsServices/',
+            'demo regObs': 'http://stg-h-web03.nve.no/RegObsServices/',
             'test regObs': 'http://tst-h-web03.nve.no/regobsservices_test/'
         };
 
@@ -43,7 +43,7 @@
                 .then(function(response) {
                     var headers = {
                         regObs_apptoken: response.data.apiKey,
-                        ApiJsonVersion: '3.1.0'
+                        ApiJsonVersion: '3.1.1'
                     };
 
                     settings.httpConfig = {
@@ -125,8 +125,8 @@
                 getRegistrationsWithinRadius: baseUrls[settings.data.env] + '/Search/WithinRadius', //POST json {"GeoHazards": [10],"LangKey" : 1,"FromDate": "2013-01-03","ToDate": "2017-01-03","Latitude": 59.927032,"Longtitude": 10.710034,"Radius": 40000,"ReturnCount": 100}
                 getDropdowns: baseUrls[settings.data.env] + '/kdvelements',
                 getLocationName: baseUrls[settings.data.env] + '/Location/GetName', //?latitude=11.11&longitude=11.11&geoHazardId=15
-                postRegistration: baseUrls[settings.data.env] + '/registration', //Headers: regObs_apptoken, ApiJsonVersion
-                getRegistration: baseUrls[settings.data.env] + '/search/avalanche',
+                postRegistration: baseUrls[settings.data.env] + '/Registration/Insert', //Headers: regObs_apptoken, ApiJsonVersion
+                //getRegistration: baseUrls[settings.data.env] + '/search/avalanche',
                 trip: baseUrls[settings.data.env] + '/trip', //POST= Start, PUT= Stop(object with DeviceGuid), Headers: regObs_apptoken, ApiJsonVersion
                 services: serviceUrls[settings.data.env]
             };

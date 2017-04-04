@@ -11,6 +11,7 @@ angular.module('RegObs')
             if (currentProp && !Registration.propertyExists(currentProp)) {
                 AppLogging.log('DELETE empty registration for: ' + currentProp + ' current registration: ' + JSON.stringify(Registration.data));
                 delete Registration.data[currentProp];
+                Registration.save();
             }
         });
 

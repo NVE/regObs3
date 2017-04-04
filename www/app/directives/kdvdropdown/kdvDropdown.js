@@ -4,7 +4,6 @@ angular
         'ngInject';
 
         var link = function (scope) {
-            AppLogging.log(scope.showAsRadio);
             Utility
                 .getKdvArray(scope.kdvKey, scope.showZero)
                 .then(function (kdvRepo) {
@@ -36,10 +35,6 @@ angular
                     }
 
                 });
-
-            scope.log = function () {
-                AppLogging.log(scope.model);
-            }
         };
 
         return {

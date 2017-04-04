@@ -1,6 +1,6 @@
 angular
     .module('RegObs')
-    .controller('WaterLevelCtrl', function ($scope, $state, Registration, $ionicPopup, Property, AppLogging, moment) {
+    .controller('WaterLevelCtrl', function ($scope, $state, Registration, $ionicPopup, Property, AppLogging, moment, Pictures, Utility, $cordovaCamera, AppSettings) {
 
         var vm = this;
 
@@ -23,7 +23,33 @@ angular
             vm.reg.WaterLevel2.WaterLevelMeasurement.push({});
         };
 
-        vm.addWaterLevelPicture = function () {
+        vm.addWaterLevelCameraPicture = function (waterLevel) {
+            return $cordovaCamera
+                .getPicture(Pictures.defaultCameraOptions())
+                .then(function (imageUri) {
+                    Registration.initPropertyAsArray('Picture');
+                    var pic = {
+                        RegistrationTID: Utility.registrationTid($state.current.data.registrationProp),
+                        PictureImageBase64: imageUri,
+                        PictureComment: ''
+                    };
+                    
+                    waterLevel.Pictures.push(pic);
+                    //image.src = "data:image/jpeg;base64," + imageData;
+                    if (AppSettings.data.compass) {
+                        Pictures.setOrientation(pic);
+                    }
+                }, function (err) {
+                    // error
+                    AppLogging.log('Cold not get camera picture');
+                    return null;
+                });
+        };
+
+        vm.addWaterLevelPicture = function (waterLevel) {
+            if (!waterLevel.Pictures) {
+                waterLevel.Pictures = [];
+            }
             $ionicPopup.confirm({
                 title: 'Legg til bilde',
                 template: 'Vil du legge til eksisterende bilde fra album eller ta nytt med kameraet?',
@@ -45,6 +71,14 @@ angular
                         }
                     }
                 ]
+            }).then(function (result) {
+                if (result) {
+                    if (window.Camera) {
+                        vm.addWaterLevelCameraPicture(waterLevel);
+                    } else {
+                        AppLogging.error('Camera plugin not found!');
+                    }
+                }
             });
         };
 
@@ -53,13 +87,20 @@ angular
             Property.reset($state.current.data.registrationProp);          
         };
 
+        vm.removeMeasurement = function (index) {
+            if (vm.reg.WaterLevel2.WaterLevelMeasurement.length > 1) {
+                vm.reg.WaterLevel2.WaterLevelMeasurement.splice(index, 1);
+            } else {
+                vm.reg.WaterLevel2.WaterLevelMeasurement[0] = {};
+            }
+        }
+
         vm.save = function () {
             var _tmpArray = [];
             if (vm.reg.WaterLevel2) {
                 if (vm.reg.WaterLevel2.WaterLevelMeasurement) {
                     vm.reg.WaterLevel2.WaterLevelMeasurement.forEach(function (item) {
-                        if (item._dtMeasurementTime) {
-                            item.DtMeasurementTime = moment(item._dtMeasurementTime).toISOString();
+                        if (item.DtMeasurementTime) {
                             _tmpArray.push(item);
                         }
                     });
@@ -69,8 +110,8 @@ angular
             }
         };
 
-        vm.setToNow = function (index) {
-            vm.reg.WaterLevel2.WaterLevelMeasurement[index]._dtMeasurementTime = new Date(moment().seconds(0).milliseconds(0).toISOString());
+        vm.setToNow = function (waterlevel) {
+            waterlevel.DtMeasurementTime = new Date(moment().seconds(0).milliseconds(0).toISOString());
         };
 
         vm._init = function () {
@@ -80,7 +121,9 @@ angular
                 vm.reg.WaterLevel2.WaterLevelMeasurement = [{}];
             } else {
                 vm.reg.WaterLevel2.WaterLevelMeasurement.forEach(function (item) {
-                    item._dtMeasurementTime = new Date(item.DtMeasurementTime);
+                    if (item.DtMeasurementTime && typeof (item.DtMeasurementTime) !== typeof(Date)) {
+                        item.DtMeasurementTime = new Date(item.DtMeasurementTime);
+                    }
                 });
             }
         };

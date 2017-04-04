@@ -405,7 +405,8 @@ angular
          * @returns {} 
          */
         service.updateObservationsWithinRadius = function (latitude, longitude, range, geohazardId, onProgress, cancel) {
-            var downloadAllRegistrations = function (registrations) {
+            var downloadAllRegistrations = function (result) {
+                var registrations = result.Results;
                 var progress = new RegObs.ProggressStatus();
                 var total = 0;
                 registrations.forEach(function (item) {
@@ -426,16 +427,6 @@ angular
                         return $q.all(tasks);
                     });
             };
-
-            //var testAndUpdateNearbyLocations = function() {
-            //    if (AppSettings.data.showPreviouslyUsedPlaces) {
-            //        return service.updateNearbyLocations(latitude, longitude, range, geohazardId, cancel);
-            //    } else {
-            //        return $q(function(resolve) {
-            //            resolve();
-            //        });
-            //    }
-            //};
 
             return service.removeOldObservationsFromPresistantStorage()
             .then(function () {

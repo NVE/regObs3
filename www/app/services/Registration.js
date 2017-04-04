@@ -50,13 +50,18 @@ angular
             var appMode = AppSettings.getAppMode();
             var navigate = function () {
                 //$state.go('newregistration');
-                $state.go('confirmlocation');
+                if (ObsLocation.isSet()) {
+                    $state.go('newregistration');  
+                } else {
+                    $state.go('confirmlocation');
+                }
             };
 
             if (Registration.isEmpty()) {
                 Registration.createNew(Utility.geoHazardTid(appMode));
-                navigate();
-            } else if (Registration.data.GeoHazardTID !== Utility.geoHazardTid(appMode)) {
+            }
+
+            if (Registration.data.GeoHazardTID !== Utility.geoHazardTid(appMode)) {
                 RegobsPopup.delete('Slett registrering',
                     'Du har en påbegynt ' +
                     Utility.geoHazardNames(Registration.data.GeoHazardTID).toLowerCase() +
@@ -68,9 +73,6 @@ angular
                         }
                     });
             } else {
-                if (!ObsLocation.isSet()) {
-                    ObsLocation.setPositionToCurrentUserPosition();
-                }
                 navigate();
             }
         };
@@ -126,9 +128,9 @@ angular
 
         Registration.createNew = function (type) {
             Registration.data = createRegistration(type);
-            if (!ObsLocation.isSet()) {
-                ObsLocation.setPositionToCurrentUserPosition();
-            }
+            //if (!ObsLocation.isSet()) {
+            //    ObsLocation.setPositionToCurrentUserPosition();
+            //}
             Registration.save();
 
             return Registration.data;
@@ -193,7 +195,10 @@ angular
         };
 
         Registration.showSend = function () {
-            return !(Registration.isEmpty() && !Registration.unsent.length);
+            //return !(Registration.isEmpty() && !Registration.unsent.length);
+            if (Registration.unsent.length > 0)
+                return true;
+            return !Registration.isEmpty() && Registration.data.Id && Registration.data.GeoHazardTID && Registration.data.DtObsTime && ObsLocation.isSet();
         };
 
         Registration._setObsLocationToUserPositionIfNotSet = function () {
@@ -209,28 +214,75 @@ angular
             }
         };
 
+        Registration.post = function () {
+
+            prepareRegistrationForSending();
+
+            Registration.sending = true;
+            var data = angular.copy(Registration.unsent);
+            var completed = [];
+            var failed = [];
+
+            var checkComplete = function () {
+                if ((completed.length + failed.length) === Registration.unsent.length) {
+
+                    Registration.sending = false;
+                    Registration.unsent = failed;
+                    Registration.save();
+                    //resetRegistration();
+
+                    if (failed.length > 0) {
+                        var title = getRandomMessage();
+                        RegobsPopup.confirm(title,
+                            'Fikk ikke kontakt med regObs-serveren. Dette kan skyldes manglende nettilgang, eller at serveren er midlertidig utilgjengelig. Du kan prøve på nytt, eller du kan lagre registrering for å sende inn senere.',
+                            'Prøv igjen',
+                            'Lagre')
+                            .then(function (confirmed) {
+                                if (confirmed) {
+                                    Registration.post();
+                                } else {
+                                    RegobsPopup.alert(
+                                        'Lagret',
+                                        'Dataene dine er lagret. ' +
+                                        'Du kan prøve å sende inn på nytt ved et senere tidspunkt.'
+                                    );
+                                }
+                            });
+                    } else {
+                        $state.go('start');
+                    }
+                }
+            };
+
+            if (Registration.unsent.length > 0) {
+                Utility.resizeAllImages(data)
+                    .then(function (processedData) {
+                        data = processedData;
+                        data.forEach(function (item) {
+                            $http.post(AppSettings.getEndPoints().postRegistration, item, AppSettings.httpConfigRegistrationPost).then(function (result) {
+                                item.RegId = result;
+                                completed.push(item);
+                                checkComplete();
+                            }).catch(function (error) {
+                                item.error = error.status;
+                                failed.push(item);
+                                checkComplete();
+                            });
+                        });
+                    });
+            } else {
+                checkComplete();
+            }
+        };
+
+
         Registration.send = function (force) {
-            var postUrl = AppSettings.getEndPoints().postRegistration;
             if (!Registration.isEmpty() || Registration.unsent.length) {
                 Registration._setObsLocationToUserPositionIfNotSet();
                 if (!Registration.isEmpty() && !ObsLocation.isSet()) {
                     RegobsPopup.alert('Posisjon ikke satt', 'Kan ikke sende inn uten posisjon. Vennligst sett posisjon i kartet');
                 } else if (!User.getUser().anonymous || force) {
-
-                    prepareRegistrationForSending();
-
-                    if (Registration.unsent.length) {
-                        Registration.sending = true;
-                        doPost(postUrl, { Registrations: Registration.unsent })
-                            .then(function () {
-                                resetRegistration();
-                                Registration.unsent = [];
-                                Registration.save();
-                                $state.go('start');
-                            });
-                    }
-
-                    Registration.save();
+                   Registration.post();
                 } else {
                     RegobsPopup.confirm('Du er ikke innlogget', 'Vil du logge inn, eller fortsette med anonym innsending?', 'Send', 'Logg inn')
                         .then(function (confirmed) {
@@ -296,6 +348,7 @@ angular
             cleanupObsLocation(location);
             cleanupStabilityTest(data.CompressionTest);
             cleanupIncidenct(data.Incident);
+            cleanupWaterLevel2(data.WaterLevel2);
 
             delete data.avalChoice;
             delete data.WaterLevelChoice;
@@ -363,6 +416,18 @@ angular
                     incident.IncidentText = '';
                 }
             }
+
+            function cleanupWaterLevel2(waterLevel) {
+                if (waterLevel) {
+                    if (waterLevel.WaterLevelMeasurement) {
+                        waterLevel.WaterLevelMeasurement.forEach(function (pic) {
+                            Utility.resizeImage(1200, pic.PictureImageBase64, function (imageData) {
+                                pic.PictureImageBase64 = imageData;
+                            });
+                        });
+                    }
+                }
+            };
         };
 
         function saveToUnsent(data) {
@@ -380,95 +445,11 @@ angular
             });
             Registration.data = {};
             var appMode = AppSettings.getAppMode();
-            Registration.createNew(Utility.geoHazardTid(appMode)); 
+            Registration.createNew(Utility.geoHazardTid(appMode));
         }
 
 
-        function doPost(postUrl, dataToSend) {
 
-            return $q(function (resolve, reject) {
-
-                var data = angular.copy(dataToSend);
-
-                var success = function () {
-
-                    var newRegistrations = angular.copy(data.Registrations);
-                    newRegistrations.forEach(function (item) {
-                        if (item.ObsLocation.ObsLocationId === ObsLocation.data.ObsLocationId) {
-                            item.ObsLocation.Latitude = ObsLocation.data.Latitude;
-                            item.ObsLocation.Longitude = ObsLocation.data.Longitude;
-                        }
-                    });
-
-                    LocalStorage.setObject(newStorageKey, newRegistrations);
-
-                    RegobsPopup.alert(
-                        'Suksess!',
-                        'Observasjon registrert!'
-                    );
-                    Registration.sending = false;
-                    Registration.save();
-
-                    resolve();
-                };
-
-                var exception = function (error) {
-                    AppLogging.error('Failed to send registration: ' + error.statusText, error);
-
-                    Registration.sending = false;
-                    var title = getRandomMessage();
-                    var body = 'Melding fra server: ' +
-                        error.statusText +
-                        '. Lagring av registreringen blir forsinket eller den feilet. Du kan lagre og sende inn senere, eller prøve igjen. Gi beskjed til regObs-teamet dersom problemet vedvarer. Beklager ulempen :(';
-
-                    var handleUserAction = function (confirmed) {
-                        if (confirmed) {
-                            AppLogging.log('Confirmed sending again!');
-                            post();
-                        } else {
-                            AppLogging.log('Avbryter sending');
-
-                            RegobsPopup.alert(
-                                'Lagret',
-                                'Dataene dine er lagret. ' +
-                                'Du kan prøve å sende inn på nytt ved et senere tidspunkt.'
-                            );
-                            saveToUnsent(dataToSend);
-                            reject();
-                        }
-                    };
-
-                    if (error.status <= 0) {
-                        RegobsPopup.confirm(title,
-                            'Fikk ikke kontakt med regObs-serveren. Dette kan skyldes manglende nettilgang, eller at serveren er midlertidig utilgjengelig. Du kan prøve på nytt, eller du kan lagre registrering for å sende inn senere.',
-                            'Prøv igjen',
-                            'Lagre')
-                            .then(handleUserAction);
-                    } else if (error.status === 422) {
-                        RegobsPopup.alert('Format stemmer ikke',
-                            'Det oppsto et problem ved at innsendingen ikke samstemmer med forventet format. Beklager ulempen:( Melding fra server: ' + error.statusText);
-                        reject();
-                    } else {
-                        RegobsPopup.confirm(title, body, 'Prøv igjen', 'Lagre')
-                            .then(handleUserAction);
-                    }
-
-                };
-
-                var post = function () {
-                    return $http.post(postUrl, data, AppSettings.httpConfigRegistrationPost)
-                        .then(success)
-                        .catch(exception);
-                };
-
-                //Convert to base64 strings and resize
-                Utility.resizeAllImages(data)
-                    .then(function (processedData) {
-                        data = processedData;
-                        post();
-                    });
-            });
-        }
 
         function getRandomMessage() {
             return messages[Math.round(Math.random() * (messages.length - 1))];
