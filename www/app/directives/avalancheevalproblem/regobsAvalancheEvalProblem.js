@@ -74,7 +74,7 @@ angular
                 };
 
                 $scope.add = function () {
-                    if(!$scope.editing){
+                    if (!$scope.editing) {
                         $scope.reg.AvalancheEvalProblem2.push($scope.obs);
                     }
                     $scope.modal.hide();

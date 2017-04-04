@@ -249,6 +249,7 @@ angular
                                 }
                             });
                     } else {
+                        resetRegistration();
                         $state.go('start');
                     }
                 }

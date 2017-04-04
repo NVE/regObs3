@@ -7,7 +7,7 @@
     </ion-header-bar>
     <ion-content>
         <ion-list>
-            <ion-checkbox ng-model="obs.AvalCauseTID" ng-true-value="24" ng-change="setAvalancheExtArray()">
+            <ion-checkbox ng-model="obs.AvalCauseTID" ng-false-value="0" ng-true-value="24" ng-change="setAvalancheExtArray()">
                 {{'NO_WEAK_LAYERS'|translate}}
             </ion-checkbox>
             <div ng-hide="obs.AvalCauseTID === 24">

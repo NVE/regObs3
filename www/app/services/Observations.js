@@ -407,6 +407,9 @@ angular
         service.updateObservationsWithinRadius = function (latitude, longitude, range, geohazardId, onProgress, cancel) {
             var downloadAllRegistrations = function (result) {
                 var registrations = result.Results;
+                if (registrations === undefined) {
+                    registrations = result; //backward copatibility for old api
+                }
                 var progress = new RegObs.ProggressStatus();
                 var total = 0;
                 registrations.forEach(function (item) {
