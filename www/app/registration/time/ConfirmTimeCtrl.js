@@ -4,7 +4,7 @@
         var ctrl = this;
 
         ctrl.setToNow = function () {
-            ctrl.time = new Date();
+            ctrl.time = new Date(moment().seconds(0).milliseconds(0).toISOString());
         };
 
         ctrl.onChange = function () {
@@ -26,6 +26,9 @@
             if (Registration.data && Registration.data.DtObsTime) {
                 time = new Date(Registration.data.DtObsTime);
             }
+
+            time = new Date(moment(time).seconds(0).milliseconds(0).toISOString());
+
             ctrl.time = time;
         });
 
