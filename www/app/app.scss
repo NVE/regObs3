@@ -446,3 +446,7 @@ input.extra-large-time {
     top: 18px;
     opacity: 0.5;
 }
+
+ .ng-invalid ~ .input-label {
+    color: red;
+}

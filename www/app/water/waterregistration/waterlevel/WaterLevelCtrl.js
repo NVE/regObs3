@@ -48,9 +48,9 @@ angular
                         Pictures.setOrientation(pic);
                     }
 
-                    if (!waterLevel.DtMeasurementTime) {
-                        vm.setToNow(waterLevel);
-                    }
+                    //if (!waterLevel.DtMeasurementTime) {
+                    //    vm.setToNow(waterLevel);
+                    //}
 
                 }, function (err) {
                     // error

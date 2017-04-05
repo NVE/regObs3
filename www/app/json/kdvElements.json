@@ -33,27 +33,27 @@
       },
       {
         "Id": 1,
-        "Name": "i terreng"
+        "Name": "Terreng"
       },
       {
         "Id": 2,
-        "Name": "på bro"
+        "Name": "Bro"
       },
       {
         "Id": 3,
-        "Name": "på flomstøtte"
+        "Name": "Flomstøtte"
       },
       {
         "Id": 4,
-        "Name": "på bygning"
+        "Name": "Bygning"
       },
       {
         "Id": 5,
-        "Name": "på påle"
+        "Name": "Påle"
       },
       {
         "Id": 6,
-        "Name": "på noe annet"
+        "Name": "På noe annet"
       }
     ],
     "Water_WaterLevelMethodKDV": [
