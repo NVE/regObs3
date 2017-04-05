@@ -24,36 +24,53 @@
                 </kdv-dropdown>
 
                 <div ng-show="vm.reg.WaterLevel2.WaterLevelMethodTID === 1">
-                    <kdv-dropdown title="WATER_LEVEL_MARKING_REFERENCE_HEADER"
+                    <!--<kdv-dropdown title="WATER_LEVEL_MARKING_REFERENCE_HEADER"
                                   model="vm.reg.WaterLevel2.MarkingReferenceTID"
                                   kdv-key="Water_MarkingReferenceKDV"
                                   show-as-radio="true">
-                    </kdv-dropdown>
-                    <regobs-comment placeholder="Beskriv markering"
-                                    model="vm.reg.WaterLevel2.Comment" label-text=" "></regobs-comment>
+                    </kdv-dropdown>-->
+                    <div class="item item-divider item-divider-calm">
+                        {{'WATER_LEVEL_MARKING_REFERENCE_HEADER' | translate}}
+                    </div>
+                    <div ng-repeat="kdv in vm.markingKdvArray">
+                        <ion-radio class="radio-left radio-calm" ng-model="vm.reg.WaterLevel2.MarkingReferenceTID" name="Water_MarkingReferenceKDV" ng-value="kdv.Id">
+                            {{kdv.Name}}
+                        </ion-radio>
+                        <textarea class="radio-textarea" rows="4" cols="30" maxlength="1024" ng-show="vm.reg.WaterLevel2.MarkingReferenceTID === kdv.Id" placeholder="Beskriv markering"
+                                  ng-model="vm.reg.WaterLevel2.Comment"></textarea>
+                    </div>
+                    
                     <kdv-dropdown title="WATER_LEVEL_MARKING_TYPE_HEADER"
                                   model="vm.reg.WaterLevel2.MarkingTypeTID"
                                   kdv-key="Water_MarkingTypeKDV"
                                   show-as-radio="true">
                     </kdv-dropdown>
-                    <div class="item item-divider item-divider-calm no-bottom-border">
+                    <!--<div class="item item-divider item-divider-calm no-bottom-border">
                         {{'WATER_MARK_HEADING'|translate}}
-                    </div>
+                    </div>-->
                     <div ng-repeat="m in vm.reg.WaterLevel2.WaterLevelMeasurement">
-                        <div class="item item-divider uppercase" ng-class="{'no-top-border':$index===0}">
-                            {{'MARKING'|translate}} {{($index+1)}} <div class="float-right" ng-show="$index > 0 || ($index === 0 && m.DtMeasurementTime)" ><button type="button" ng-click="vm.removeMeasurement($index)" class="button button-small button-dark button-clear icon-right ion-close-round">Fjern måling</button></div>
+                        <div class="item item-divider item-divider-calm">
+                            {{'MARKING'|translate}} {{($index+1)}} <div class="item-divider-button-right" ng-show="$index > 0 || ($index === 0 && m.DtMeasurementTime)"><button type="button" ng-click="vm.removeMeasurement($index)" class="button button-small button-dark button-clear icon-right ion-close-round">{{'REMOVE'|translate}}</button></div>
                         </div>
                         <div>
                             <button type="button" class="button time-button button-outline button-small button-dark icon-left ion-clock float-right" ng-click="vm.setToNow(m)">&nbsp;Nå</button>
                         </div>
                         <label class="item item-input item-stacked-label no-border">
                             <span class="input-label">Klokkeslett</span>
-                            <input type="datetime-local" ng-model="m.DtMeasurementTime" required>
-                        </label>                      
+                            <input type="datetime-local" ng-model="m.DtMeasurementTime">
+                        </label>
                         <div ng-repeat="pic in m.Pictures">
-                            <div class="item item-image">
-                                <img ng-src="{{pic.PictureImageBase64}}">
+                            <div class="item">
+                                <div class="border-thin item-image">                                  
+                                    <img ng-src="{{pic.PictureImageBase64}}">
+                                    <div class="padding">
+                                        <div class="input-label normalcase">Beskrivelse av bildet:</div>
+                                        <textarea cols="30" rows="3" placeholder="Her kan du gi en beskrivelse av bilde" ng-model="pic.PictureComment"></textarea>
+                                    </div>
+                                    <i class="icon icon-remove-image ion-close-circled" ng-click="vm.removeImage(m, $index)"></i>
+                                </div>
                             </div>
+
                         </div>
                         <div class="item item-icon-left" ng-click="vm.addWaterLevelPicture(m)">
                             <i class="icon ion-image small-icon"></i> + {{'ADD_WATER_MARK_IMAGE'|translate}}

@@ -395,11 +395,21 @@ ion-popover-view.wider {
 }
 
 .uppercase {
-    text-transform: uppercase;
+    text-transform: uppercase !important;
+}
+
+.normalcase {
+    text-transform: none !important;
 }
 
 .float-right {
     float: right;
+}
+
+.item-divider-button-right {
+    position: absolute;
+    right: 5px;
+    bottom: 3px;
 }
 
 .time-button {
@@ -414,4 +424,25 @@ input.extra-large-time {
     color: #6d6d72; 
     font-size: 23px;
     padding-right: 16px;
+}
+
+.border-thin {
+    border: 1px solid #ddd;
+}
+
+.item-image textarea {
+    width: 100%;
+}
+
+.item-image .input-label {
+    font-size: 14px;
+}
+
+.icon-remove-image {
+    color: #000;
+    font-size: 32px;
+    position: absolute;
+    right: 20px;
+    top: 18px;
+    opacity: 0.5;
 }

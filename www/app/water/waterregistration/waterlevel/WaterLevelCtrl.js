@@ -19,8 +19,16 @@ angular
         //    delete vm.reg.WaterLevel.WaterLevelRefTID;
         //};
 
+        
+
         vm.addWaterLevelMeasurement = function () {
             vm.reg.WaterLevel2.WaterLevelMeasurement.push({});
+        };
+
+        vm.removeImage = function (waterlevel, index) {
+            if (waterlevel.Pictures && waterlevel.Pictures.length > index) {
+                waterlevel.Pictures.splice(index, 1);
+            }
         };
 
         vm.addWaterLevelCameraPicture = function (waterLevel) {
@@ -39,6 +47,11 @@ angular
                     if (AppSettings.data.compass) {
                         Pictures.setOrientation(pic);
                     }
+
+                    if (!waterLevel.DtMeasurementTime) {
+                        vm.setToNow(waterLevel);
+                    }
+
                 }, function (err) {
                     // error
                     AppLogging.log('Cold not get camera picture');
@@ -126,6 +139,9 @@ angular
                     }
                 });
             }
+            Utility.getKdvArray('Water_MarkingReferenceKDV').then(function (result) {
+                vm.markingKdvArray = result;
+            });
         };
 
 

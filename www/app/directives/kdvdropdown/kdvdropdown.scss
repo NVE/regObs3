@@ -68,3 +68,7 @@
     padding-left: 64px;
     padding-right: 5px;
 }
+
+.radio-left.item-radio input:checked + .radio-content .item-content {
+    background: #fff;
+}

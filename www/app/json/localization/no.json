@@ -353,8 +353,9 @@
   "WATER_LEVEL_MARKING_REFERENCE_HEADER": "Jeg har markert vannstanden",
   "WATER_LEVEL_MARKING_TYPE_HEADER": "Jeg har markert vannstanden med",
   "YOUR_POSITION": "Nåværende posisjon",
-  "MARKING": "Markering",
+  "MARKING": "Vannstandsmarkering",
   "ADD_WATER_MARKING": "Legg til ny vannstandsmarkering",
   "ADD_WATER_MARK_IMAGE": "Legg til bilde av vannstandsmarkering",
-  "WATER_MARK_HEADING": "Registrer vannstandsmarkering"
+  "WATER_MARK_HEADING": "Registrer vannstandsmarkering",
+  "REMOVE": "Fjern"
 }
