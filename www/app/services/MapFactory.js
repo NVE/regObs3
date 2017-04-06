@@ -5,9 +5,9 @@
 
         var map, //Leaflet map
             layerGroups, //Layer groups object
-            obsLocationMarker, //Leaflet marker for current obs location
+            //obsLocationMarker, //Leaflet marker for current obs location
             userMarker, //Leaflet marker for user position
-            pathLine, //Leaflet (dotted) path between user position and current obs location
+            //pathLine, //Leaflet (dotted) path between user position and current obs location
             //observationInfo, //Obs location information. Displayed on top right corner
             tiles = []; //Map tiles      
 
@@ -89,7 +89,7 @@
          */
         service._onObsLocationChange = function (latlng) {
             //service._updateObsInfoText(latlng);
-            service._updateDistanceLineLatLng(latlng);
+            //service._updateDistanceLineLatLng(latlng);
             service._updateSelectedItemDistance();
         };
 
@@ -108,7 +108,6 @@
                 });
             };
             unselectFunc(layerGroups.observations.getLayers());
-            unselectFunc([obsLocationMarker]);
         };
 
         /**
@@ -180,33 +179,33 @@
         //};
 
 
-        /**
-         * Set obs location
-         * @param {L.LatLng} latlng
-         */
-        service._setObsLocation = function (latlng) {
-            service._checkIfInitialized();
-            if (latlng) {
-                obsLocationMarker.setObsLocationManually(latlng);
-                obsLocationMarker.setSelected();
-            }
-        };
+        ///**
+        // * Set obs location
+        // * @param {L.LatLng} latlng
+        // */
+        //service._setObsLocation = function (latlng) {
+        //    service._checkIfInitialized();
+        //    if (latlng) {
+        //        obsLocationMarker.setObsLocationManually(latlng);
+        //        obsLocationMarker.setSelected();
+        //    }
+        //};
 
-        /**
-         * Update distance path line
-         * @param {L.LatLng} latlng
-         */
-        service._updateDistanceLineLatLng = function (latlng) {
-            if (userMarker && latlng) {
-                var path = [latlng, userMarker.getLatLng()];
-                if (!pathLine) {
-                    pathLine = L.polyline(path, { color: 'black', weight: 6, opacity: .5, dashArray: "10,10" })
-                        .addTo(layerGroups.user);
-                } else {
-                    pathLine.setLatLngs(path);
-                }
-            }
-        };
+        ///**
+        // * Update distance path line
+        // * @param {L.LatLng} latlng
+        // */
+        //service._updateDistanceLineLatLng = function (latlng) {
+        //    if (userMarker && latlng) {
+        //        var path = [latlng, userMarker.getLatLng()];
+        //        if (!pathLine) {
+        //            pathLine = L.polyline(path, { color: 'black', weight: 6, opacity: .5, dashArray: "10,10" })
+        //                .addTo(layerGroups.user);
+        //        } else {
+        //            pathLine.setLatLngs(path);
+        //        }
+        //    }
+        //};
 
         /**
          * Refresh user position in map
@@ -308,25 +307,25 @@
             UserLocation.setLastUserLocation(position);
             service._refreshUserMarker(position);
             var latlng = new L.LatLng(position.latitude, position.longitude);
-            obsLocationMarker.setUserPosition(latlng);
+            //obsLocationMarker.setUserPosition(latlng);
             service._updateSelectedItemDistance();
-            if (ObsLocation.isSet()) {
-                var obslatlng = new L.LatLng(ObsLocation.get().Latitude, ObsLocation.get().Longitude);
-                service._updateDistanceLineLatLng(obslatlng);
-            }
+            //if (ObsLocation.isSet()) {
+            //    var obslatlng = new L.LatLng(ObsLocation.get().Latitude, ObsLocation.get().Longitude);
+            //    service._updateDistanceLineLatLng(obslatlng);
+            //}
         };
 
-        /**
-         * Event that runs when obsLocation is cleared
-         * @returns {} 
-         */
-        service._onObsLocationCleared = function () {
-            service.clearSelectedMarkers();
-            if (pathLine) {
-                layerGroups.user.removeLayer(pathLine);
-                pathLine = null;
-            }
-        };
+        ///**
+        // * Event that runs when obsLocation is cleared
+        // * @returns {} 
+        // */
+        //service._onObsLocationCleared = function () {
+        //    service.clearSelectedMarkers();
+        //    if (pathLine) {
+        //        layerGroups.user.removeLayer(pathLine);
+        //        pathLine = null;
+        //    }
+        //};
 
         /**
          * Create layer groups
@@ -459,12 +458,12 @@
             });
 
 
-            obsLocationMarker = new RegObsClasses.CurrentObsLocationMarker(center);
-            obsLocationMarker.on('selected', function (event) { service._setSelectedItem(event.target); });
-            obsLocationMarker.on('obsLocationChange', service._onObsLocationChange);
+            //obsLocationMarker = new RegObsClasses.CurrentObsLocationMarker(center);
+            //obsLocationMarker.on('selected', function (event) { service._setSelectedItem(event.target); });
+            //obsLocationMarker.on('obsLocationChange', service._onObsLocationChange);
 
-            obsLocationMarker.on('obsLocationCleared', service._onObsLocationCleared);
-            obsLocationMarker.addTo(layerGroups.user);
+            //obsLocationMarker.on('obsLocationCleared', service._onObsLocationCleared);
+            //obsLocationMarker.addTo(layerGroups.user);
 
             L.control.scale({ imperial: false }).addTo(map);
 
@@ -487,15 +486,15 @@
                 });
             });
 
-            $rootScope.$on('$regObs:obsLocationSaved', function () {
-                obsLocationMarker.refresh();
-            });
+            //$rootScope.$on('$regObs:obsLocationSaved', function () {
+            //    obsLocationMarker.refresh();
+            //});
 
-            $rootScope.$on('$regObs:nearbyLocationRegistration', function () {
-                $timeout(function () {
-                    service._setSelectedItem(obsLocationMarker);
-                });
-            });
+            //$rootScope.$on('$regObs:nearbyLocationRegistration', function () {
+            //    $timeout(function () {
+            //        service._setSelectedItem(obsLocationMarker);
+            //    });
+            //});
 
             $rootScope.$on('$regObs:observationsUpdated', function () {
                 service.refresh();
@@ -526,13 +525,13 @@
             return map;
         };
 
-        /**
-        * Remove current set obs location
-        * @returns {} 
-        */
-        service.clearObsLocation = function () {
-            obsLocationMarker.clear();
-        };
+        ///**
+        //* Remove current set obs location
+        //* @returns {} 
+        //*/
+        //service.clearObsLocation = function () {
+        //    obsLocationMarker.clear();
+        //};
 
         /**
          * Clear selected marker
@@ -670,7 +669,7 @@
          * @returns {} 
          */
         service._checkSelectedItemGeoHazard = function () {
-            if (service._selectedItem && service._selectedItem !== obsLocationMarker && service._selectedItem.getGeoHazardId() !== Utility.getCurrentGeoHazardTid()) {
+            if (service._selectedItem && service._selectedItem.getGeoHazardId() !== Utility.getCurrentGeoHazardTid()) {
                 service.clearSelectedMarkers();
             }
         };
@@ -705,9 +704,9 @@
         service.refresh = function () {
             AppLogging.log('Map refresh');
 
-            if (!ObsLocation.isSet() && service._selectedItem && service._selectedItem === obsLocationMarker) {
-                service.clearSelectedMarkers();
-            }
+            //if (!ObsLocation.isSet() && service._selectedItem && service._selectedItem === obsLocationMarker) {
+            //    service.clearSelectedMarkers();
+            //}
 
             service._checkSelectedItemGeoHazard();
             service._redrawTilesForThisGeoHazard();

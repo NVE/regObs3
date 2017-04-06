@@ -329,12 +329,19 @@
                 Uncertainty: accuracy,
                 UTMSourceTID: ctrl.updateMarkerToGpsLocation ? ObsLocation.source.fetchedFromGPS : ObsLocation.source.clickedInMap
             };
-            ObsLocation.set(obsLoc);
 
+            if (ctrl.place) {
+                obsLoc.UTMSourceTID = ObsLocation.source.storedPosition;
+                obsLoc.Latitude = ctrl.place.storedLocation.LatLngObject.Latitude;
+                obsLoc.Longitude = ctrl.place.storedLocation.LatLngObject.Longitude;
+                ObsLocation.setPreviousUsedPlace(ctrl.place.storedLocation.Id, ctrl.place.storedLocation.Name, obsLoc);
+            } else {
+                ObsLocation.set(obsLoc);
+            }
             var backView = $ionicHistory.backView();
 
-            if (backView && backView.name === 'newregistration') {
-                $state.goBack();
+            if (backView && backView.stateId === 'newregistration') {
+                $ionicHistory.goBack();
             } else {
                 $state.go('confirmtime');
             }

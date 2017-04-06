@@ -20,14 +20,14 @@
     </h1>
     <div class='clearfix'>
       <div class='fl pad1y space-right2'>
-        <span class="strong">30.59% </span>
+        <span class="strong">30.18% </span>
         <span class="quiet">Statements</span>
-        <span class='fraction'>67/219</span>
+        <span class='fraction'>67/222</span>
       </div>
       <div class='fl pad1y space-right2'>
-        <span class="strong">19.12% </span>
+        <span class="strong">18.57% </span>
         <span class="quiet">Branches</span>
-        <span class='fraction'>13/68</span>
+        <span class='fraction'>13/70</span>
       </div>
       <div class='fl pad1y space-right2'>
         <span class="strong">20% </span>
@@ -35,9 +35,9 @@
         <span class='fraction'>14/70</span>
       </div>
       <div class='fl pad1y space-right2'>
-        <span class="strong">30.84% </span>
+        <span class="strong">30.41% </span>
         <span class="quiet">Lines</span>
-        <span class='fraction'>66/214</span>
+        <span class='fraction'>66/217</span>
       </div>
     </div>
   </div>
@@ -507,13 +507,7 @@
 462
 463
 464
-465
-466
-467
-468
-469
-470
-471</td><td class="line-coverage quiet"><span class="cline-any cline-yes">1×</span>
+465</td><td class="line-coverage quiet"><span class="cline-any cline-yes">1×</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">55×</span>
@@ -924,6 +918,10 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -939,16 +937,6 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -1390,7 +1378,11 @@
          * @returns {} 
          */
         service.updateObservationsWithinRadius = <span class="fstat-no" title="function not covered" >function (latitude, longitude, range, geohazardId, onProgress, cancel) {</span>
-<span class="cstat-no" title="statement not covered" >            var downloadAllRegistrations = <span class="fstat-no" title="function not covered" >function (registrations) {</span></span>
+<span class="cstat-no" title="statement not covered" >            var downloadAllRegistrations = <span class="fstat-no" title="function not covered" >function (result) {</span></span>
+<span class="cstat-no" title="statement not covered" >                var registrations = result.Results;</span>
+<span class="cstat-no" title="statement not covered" >                if (registrations === undefined) {</span>
+<span class="cstat-no" title="statement not covered" >                    registrations = result; </span>//backward copatibility for old api
+                }
 <span class="cstat-no" title="statement not covered" >                var progress = new RegObs.ProggressStatus();</span>
 <span class="cstat-no" title="statement not covered" >                var total = 0;</span>
 <span class="cstat-no" title="statement not covered" >                registrations.forEach(<span class="fstat-no" title="function not covered" >function (item) {</span></span>
@@ -1411,16 +1403,6 @@
 <span class="cstat-no" title="statement not covered" >                        return $q.all(tasks);</span>
                     });
             };
-&nbsp;
-            //var testAndUpdateNearbyLocations = function() {
-            //    if (AppSettings.data.showPreviouslyUsedPlaces) {
-            //        return service.updateNearbyLocations(latitude, longitude, range, geohazardId, cancel);
-            //    } else {
-            //        return $q(function(resolve) {
-            //            resolve();
-            //        });
-            //    }
-            //};
 &nbsp;
 <span class="cstat-no" title="statement not covered" >            return service.removeOldObservationsFromPresistantStorage()</span>
             .then(<span class="fstat-no" title="function not covered" >function () {</span>
@@ -1445,7 +1427,7 @@
 <span class="cstat-no" title="statement not covered" >            var warnIfOlderThanHoursBack = 12;</span>
 <span class="cstat-no" title="statement not covered" >            if (!lastRun) <span class="cstat-no" title="statement not covered" >return true;</span></span>
 <span class="cstat-no" title="statement not covered" >            var lastRunMoment = moment(lastRun);</span>
-<span class="cstat-no" title="statement not covered" >            var diff = lastRunMoment.diff(moment(), 'hours');</span>
+<span class="cstat-no" title="statement not covered" >            var diff = moment().diff(lastRunMoment, 'hours');</span>
 <span class="cstat-no" title="statement not covered" >            if (diff &gt; warnIfOlderThanHoursBack) {</span>
 <span class="cstat-no" title="statement not covered" >                return true;</span>
             }
@@ -1459,7 +1441,7 @@
 </div><!-- /wrapper -->
 <div class='footer quiet pad2 space-top1 center small'>
   Code coverage
-  generated by <a href="http://istanbul-js.org/" target="_blank">istanbul</a> at Wed Mar 22 2017 12:39:47 GMT+0100 (W. Europe Standard Time)
+  generated by <a href="http://istanbul-js.org/" target="_blank">istanbul</a> at Thu Apr 06 2017 14:15:57 GMT+0200 (W. Europe Daylight Time)
 </div>
 </div>
 <script src="../../prettify.js"></script>

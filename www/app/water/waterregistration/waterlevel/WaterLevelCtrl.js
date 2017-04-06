@@ -106,6 +106,14 @@ angular
             waterlevel.DtMeasurementTime = new Date(moment().seconds(0).milliseconds(0).toISOString());
         };
 
+        vm.showRemoveWaterMeasurment = function (index) {
+            if (index > 0) {
+                return true;
+            }
+            var wm = vm.reg.WaterLevel2.WaterLevelMeasurement[index];
+            return !Utility.isEmpty(JSON.parse(angular.toJson(wm)));
+        };
+
         vm._init = function () {
             vm.reg = Registration.initPropertyAsObject($state.current.data.registrationProp);
 

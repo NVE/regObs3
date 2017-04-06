@@ -63,7 +63,7 @@
                 <div ng-show="vm.reg.WaterLevel2.WaterLevelMethodTID">
                     <div ng-repeat="m in vm.reg.WaterLevel2.WaterLevelMeasurement">
                         <div class="item item-divider item-divider-calm">
-                            <span ng-show="vm.reg.WaterLevel2.WaterLevelMethodTID === 1">{{'MARKING'|translate}}</span><span ng-show="vm.reg.WaterLevel2.WaterLevelMethodTID === 2">{{'MEASUREMENT'|translate}}</span> {{($index+1)}} <div class="item-divider-button-right" ng-show="$index > 0 || ($index === 0 && m.DtMeasurementTime)"><button type="button" ng-click="vm.removeMeasurement($index)" class="button button-small button-dark button-clear icon-right ion-close-round">{{'REMOVE'|translate}}</button></div>
+                            <span ng-show="vm.reg.WaterLevel2.WaterLevelMethodTID === 1">{{'MARKING'|translate}}</span><span ng-show="vm.reg.WaterLevel2.WaterLevelMethodTID === 2">{{'MEASUREMENT'|translate}}</span> {{($index+1)}} <div class="item-divider-button-right" ng-show="vm.showRemoveWaterMeasurment($index)"><button type="button" ng-click="vm.removeMeasurement($index)" class="button button-small button-dark button-clear icon-right ion-close-round">{{'REMOVE'|translate}}</button></div>
                         </div>
                         <regobs-number ng-show="vm.reg.WaterLevel2.WaterLevelMethodTID === 2" field-name="water_level_value"
                                        label="{{(vm.reg.WaterLevel2.MeasurementTypeTID === 3 ? 'WATER_LEVEL_VALUE_ABSOLUTE' : 'WATER_LEVEL_VALUE') | translate}}"

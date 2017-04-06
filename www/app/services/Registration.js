@@ -187,7 +187,12 @@ angular
         }
 
         Registration.isEmpty = function () {
-            return Object.keys(Registration.data).length <= baseLength;
+            var clone = angular.copy(Registration.data);
+            delete clone.Id;
+            delete clone.GeoHazardTID;
+            delete clone.DtObsTime;
+            return Utility.isEmpty(clone);
+            //return Object.keys(Registration.data).length <= baseLength;
         };
 
         Registration.doesExistUnsent = function (type) {
@@ -323,7 +328,12 @@ angular
         };
 
         Registration.propertyExists = function (prop) {
-            return !Utility.isEmpty(Registration.data[prop]);
+            var data = Registration.data[prop];
+            if (!data)
+                return false;
+
+            var dataJson = angular.toJson(data);
+            return !Utility.isEmpty(JSON.parse(dataJson));
         };
 
         Registration.hasImageForRegistration = function (prop) {

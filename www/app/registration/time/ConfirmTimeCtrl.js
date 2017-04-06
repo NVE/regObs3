@@ -8,9 +8,8 @@
         };
 
         ctrl.onChange = function () {
-            var now = new Date();
-            if (!ctrl.time || (ctrl.time > now)) {
-                ctrl.time = now;
+            if (!ctrl.time || (ctrl.time > new Date())) {
+                ctrl.setToNow();
             }
         };
 

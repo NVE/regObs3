@@ -1,6 +1,6 @@
 ﻿angular
     .module('RegObs')
-    .controller('RegistrationCtrl', function SnowRegistrationCtrl($scope, Registration, Utility, Property, $ionicHistory) {
+    .controller('RegistrationCtrl', function SnowRegistrationCtrl($scope, Registration, Utility, Property, $ionicHistory, ObsLocation) {
         var vm = this;
         vm.hasFooter = function () {
             return Registration.showSend();
@@ -38,6 +38,8 @@
             vm._resetHistory();
 
             vm.reg = Registration.data;
+            vm.locationText = ObsLocation.getDescription();
+
             vm.loaded = true;
         });
 

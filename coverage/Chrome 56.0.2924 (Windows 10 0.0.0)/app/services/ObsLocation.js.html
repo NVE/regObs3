@@ -20,28 +20,28 @@
     </h1>
     <div class='clearfix'>
       <div class='fl pad1y space-right2'>
-        <span class="strong">50% </span>
+        <span class="strong">42.37% </span>
         <span class="quiet">Statements</span>
-        <span class='fraction'>25/50</span>
+        <span class='fraction'>25/59</span>
       </div>
       <div class='fl pad1y space-right2'>
-        <span class="strong">29.41% </span>
+        <span class="strong">14.81% </span>
         <span class="quiet">Branches</span>
-        <span class='fraction'>5/17</span>
+        <span class='fraction'>4/27</span>
       </div>
       <div class='fl pad1y space-right2'>
-        <span class="strong">45.45% </span>
+        <span class="strong">33.33% </span>
         <span class="quiet">Functions</span>
-        <span class='fraction'>5/11</span>
+        <span class='fraction'>4/12</span>
       </div>
       <div class='fl pad1y space-right2'>
-        <span class="strong">51.02% </span>
+        <span class="strong">43.1% </span>
         <span class="quiet">Lines</span>
-        <span class='fraction'>25/49</span>
+        <span class='fraction'>25/58</span>
       </div>
     </div>
   </div>
-  <div class='status-line medium'></div>
+  <div class='status-line low'></div>
 <pre><table class="coverage">
 <tr><td class="line-count quiet">1
 2
@@ -143,7 +143,22 @@
 98
 99
 100
-101</td><td class="line-coverage quiet"><span class="cline-any cline-yes">1×</span>
+101
+102
+103
+104
+105
+106
+107
+108
+109
+110
+111
+112
+113
+114
+115
+116</td><td class="line-coverage quiet"><span class="cline-any cline-yes">1×</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">55×</span>
@@ -165,7 +180,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">55×</span>
-<span class="cline-any cline-yes">59×</span>
+<span class="cline-any cline-yes">55×</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">55×</span>
@@ -175,6 +190,21 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">55×</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">55×</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">55×</span>
@@ -210,7 +240,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">55×</span>
-<span class="cline-any cline-yes">4×</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -245,7 +275,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">angular
     .module('RegObs')
-    .factory('ObsLocation', function ($http, $ionicPlatform, $cordovaGeolocation, AppSettings, LocalStorage, AppLogging, $rootScope, UserLocation) {
+    .factory('ObsLocation', function ($http, $ionicPlatform, $cordovaGeolocation, AppSettings, LocalStorage, AppLogging, $rootScope, UserLocation, Utility) {
         var ObsLocation = this;
         var storageKey = 'regobsLocation';
 &nbsp;
@@ -271,6 +301,21 @@
         ObsLocation.remove = <span class="fstat-no" title="function not covered" >function () {</span>
 <span class="cstat-no" title="statement not covered" >            ObsLocation.data = {};</span>
 <span class="cstat-no" title="statement not covered" >            save();</span>
+        };
+&nbsp;
+        ObsLocation.getDescription = <span class="fstat-no" title="function not covered" >function () {</span>
+<span class="cstat-no" title="statement not covered" >            if (ObsLocation.isSet()) {</span>
+<span class="cstat-no" title="statement not covered" >                if (ObsLocation.data.ObsLocationId) {</span>
+<span class="cstat-no" title="statement not covered" >                    return ObsLocation.data.Name;</span>
+                }
+<span class="cstat-no" title="statement not covered" >                if (ObsLocation.data.place) {</span>
+<span class="cstat-no" title="statement not covered" >                    return ObsLocation.data.place.Navn + ' / ' + ObsLocation.data.place.Fylke;</span>
+                }
+<span class="cstat-no" title="statement not covered" >                if (ObsLocation.data.Latitude &amp;&amp; ObsLocation.data.Longitude) {</span>
+<span class="cstat-no" title="statement not covered" >                    return Utility.ddToDms(ObsLocation.data.Latitude, ObsLocation.data.Longitude);</span>
+                }
+            }
+<span class="cstat-no" title="statement not covered" >            return 'UNKNOWN_POSITION';</span>
         };
 &nbsp;
         ObsLocation.get = <span class="fstat-no" title="function not covered" >function () {</span>
@@ -309,8 +354,8 @@
             }
         };
 &nbsp;
-        ObsLocation.setPositionToCurrentUserPosition = function() {
-            <span class="missing-if-branch" title="if path not taken" >I</span>if (UserLocation.hasUserLocation()) {
+        ObsLocation.setPositionToCurrentUserPosition = <span class="fstat-no" title="function not covered" >function() {</span>
+<span class="cstat-no" title="statement not covered" >            if (UserLocation.hasUserLocation()) {</span>
 <span class="cstat-no" title="statement not covered" >                var loc = UserLocation.getLastUserLocation();</span>
 <span class="cstat-no" title="statement not covered" >                ObsLocation.set({ Latitude: loc.latitude.toString(), Longitude: loc.longitude.toString(), Uncertainty: loc.accuracy.toString(), UTMSourceTID: ObsLocation.source.fetchedFromGPS });</span>
             }
@@ -349,7 +394,7 @@
 </div><!-- /wrapper -->
 <div class='footer quiet pad2 space-top1 center small'>
   Code coverage
-  generated by <a href="http://istanbul-js.org/" target="_blank">istanbul</a> at Wed Mar 22 2017 12:39:47 GMT+0100 (W. Europe Standard Time)
+  generated by <a href="http://istanbul-js.org/" target="_blank">istanbul</a> at Thu Apr 06 2017 14:15:57 GMT+0200 (W. Europe Daylight Time)
 </div>
 </div>
 <script src="../../prettify.js"></script>

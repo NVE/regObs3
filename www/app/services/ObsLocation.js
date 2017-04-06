@@ -1,6 +1,6 @@
 angular
     .module('RegObs')
-    .factory('ObsLocation', function ($http, $ionicPlatform, $cordovaGeolocation, AppSettings, LocalStorage, AppLogging, $rootScope, UserLocation) {
+    .factory('ObsLocation', function ($http, $ionicPlatform, $cordovaGeolocation, AppSettings, LocalStorage, AppLogging, $rootScope, UserLocation, Utility) {
         var ObsLocation = this;
         var storageKey = 'regobsLocation';
 
@@ -26,6 +26,21 @@ angular
         ObsLocation.remove = function () {
             ObsLocation.data = {};
             save();
+        };
+
+        ObsLocation.getDescription = function () {
+            if (ObsLocation.isSet()) {
+                if (ObsLocation.data.ObsLocationId) {
+                    return ObsLocation.data.Name;
+                }
+                if (ObsLocation.data.place) {
+                    return ObsLocation.data.place.Navn + ' / ' + ObsLocation.data.place.Fylke;
+                }
+                if (ObsLocation.data.Latitude && ObsLocation.data.Longitude) {
+                    return Utility.ddToDms(ObsLocation.data.Latitude, ObsLocation.data.Longitude);
+                }
+            }
+            return 'UNKNOWN_POSITION';
         };
 
         ObsLocation.get = function () {

@@ -576,7 +576,18 @@ angular
                 if (obj.length === 0) {
                     return true;
                 } else {
-                    return false;
+                    var any = [];
+                    obj.forEach(function (item) {
+                        if (item) {
+                            var dataJson = angular.toJson(item);
+                            var obj = JSON.parse(dataJson);
+                            if (!service.isEmpty(obj)) {
+                                any.push(obj);
+                            }
+                        }
+                    });
+
+                    return any.length === 0;
                 }
             }
 
