@@ -22,13 +22,7 @@
                               kdv-key="Water_WaterLevelMethodKDV"
                               show-as-radio="true">
                 </kdv-dropdown>
-
                 <div ng-show="vm.reg.WaterLevel2.WaterLevelMethodTID === 1">
-                    <!--<kdv-dropdown title="WATER_LEVEL_MARKING_REFERENCE_HEADER"
-                                  model="vm.reg.WaterLevel2.MarkingReferenceTID"
-                                  kdv-key="Water_MarkingReferenceKDV"
-                                  show-as-radio="true">
-                    </kdv-dropdown>-->
                     <div class="item item-divider item-divider-calm">
                         {{'WATER_LEVEL_MARKING_REFERENCE_HEADER' | translate}}
                     </div>
@@ -36,33 +30,60 @@
                         <ion-radio class="radio-left radio-calm" ng-model="vm.reg.WaterLevel2.MarkingReferenceTID" name="Water_MarkingReferenceKDV" ng-value="kdv.Id">
                             {{kdv.Name}}
                         </ion-radio>
-                        <textarea class="radio-textarea" rows="4" cols="30" maxlength="1024" ng-show="vm.reg.WaterLevel2.MarkingReferenceTID === kdv.Id" placeholder="Beskriv markering"
+                        <textarea class="radio-textarea" rows="4" cols="30" maxlength="1024" ng-show="vm.reg.WaterLevel2.MarkingReferenceTID === kdv.Id" placeholder="{{'MARKING_DESCRIPTION'|translate}}"
                                   ng-model="vm.reg.WaterLevel2.Comment"></textarea>
                     </div>
-                    
+
                     <kdv-dropdown title="WATER_LEVEL_MARKING_TYPE_HEADER"
                                   model="vm.reg.WaterLevel2.MarkingTypeTID"
                                   kdv-key="Water_MarkingTypeKDV"
                                   show-as-radio="true">
                     </kdv-dropdown>
+                </div>
+                <div ng-show="vm.reg.WaterLevel2.WaterLevelMethodTID === 2">
+                    <kdv-dropdown title="WATER_MEASUREMENT_TYPE_HEADER"
+                                  model="vm.reg.WaterLevel2.MeasurementTypeTID"
+                                  kdv-key="Water_MeasurementTypeKDV"
+                                  show-as-radio="true">
+                    </kdv-dropdown>
+                    <div ng-show="vm.reg.WaterLevel2.MeasurementTypeTID === 1">
+                        <div class="item item-divider item-divider-calm">
+                            {{'WATER_LEVEL_MEASUREMENT_REFERENCE_HEADER' | translate}}
+                        </div>
+                        <div ng-repeat="kdv in vm.measurementReferenceKdvArray">
+                            <ion-radio class="radio-left radio-calm" ng-model="vm.reg.WaterLevel2.MeasurementReferenceTID" name="Water_MeasurementReferenceKDV" ng-value="kdv.Id">
+                                {{kdv.Name}}
+                            </ion-radio>
+                            <textarea class="radio-textarea" rows="4" cols="30" maxlength="1024" ng-show="vm.reg.WaterLevel2.MeasurementReferenceTID === kdv.Id" placeholder="{{'MEASUREMENT_DESCRIPTION'|translate}}"
+                                      ng-model="vm.reg.WaterLevel2.Comment"></textarea>
+                        </div>
+                    </div>
+                    <regobs-comment ng-show="vm.reg.WaterLevel2.MeasurementTypeTID === 3" label-text="{{'MEASURING_TOOL'|translate}}" placeholder="{{'MEASURING_TOOL_PLACEHOLDER'|translate}}" model="vm.reg.WaterLevel2.MeasuringToolDescription"></regobs-comment>
+                </div>
+                <div ng-show="vm.reg.WaterLevel2.WaterLevelMethodTID">
                     <div ng-repeat="m in vm.reg.WaterLevel2.WaterLevelMeasurement">
                         <div class="item item-divider item-divider-calm">
-                            {{'MARKING'|translate}} {{($index+1)}} <div class="item-divider-button-right" ng-show="$index > 0 || ($index === 0 && m.DtMeasurementTime)"><button type="button" ng-click="vm.removeMeasurement($index)" class="button button-small button-dark button-clear icon-right ion-close-round">{{'REMOVE'|translate}}</button></div>
+                            <span ng-show="vm.reg.WaterLevel2.WaterLevelMethodTID === 1">{{'MARKING'|translate}}</span><span ng-show="vm.reg.WaterLevel2.WaterLevelMethodTID === 2">{{'MEASUREMENT'|translate}}</span> {{($index+1)}} <div class="item-divider-button-right" ng-show="$index > 0 || ($index === 0 && m.DtMeasurementTime)"><button type="button" ng-click="vm.removeMeasurement($index)" class="button button-small button-dark button-clear icon-right ion-close-round">{{'REMOVE'|translate}}</button></div>
                         </div>
+                        <regobs-number ng-show="vm.reg.WaterLevel2.WaterLevelMethodTID === 2" field-name="water_level_value"
+                                       label="{{(vm.reg.WaterLevel2.MeasurementTypeTID === 3 ? 'WATER_LEVEL_VALUE_ABSOLUTE' : 'WATER_LEVEL_VALUE') | translate}}"
+                                       model="m.WaterLevelValue"
+                                       min="0"
+                                       max="10000"></regobs-number>
                         <div>
-                            <button type="button" class="button time-button button-outline button-small button-dark icon-left ion-clock float-right" ng-click="vm.setToNow(m)">&nbsp;Nå</button>
+                            <button type="button" class="button time-button button-outline button-small button-dark icon-left ion-clock float-right" ng-click="vm.setToNow(m)">&nbsp;{{'NOW'|translate}}</button>
                         </div>
                         <label class="item item-input item-stacked-label no-border">
-                            <span class="input-label" ng-class="{assertive:(m.Pictures.length > 0 && !m.DtMeasurementTime)}">Klokkeslett</span>
+                            <span class="input-label" ng-class="{assertive:(m.Pictures.length > 0 && !m.DtMeasurementTime)}">{{'TIME'|translate}}</span>
                             <input name="{{'DtMeasurementTime_' +$index }}" type="datetime-local" ng-model="m.DtMeasurementTime" ng-required="m.Pictures.length > 0">
                         </label>
                         <div ng-repeat="pic in m.Pictures">
                             <div class="item">
-                                <div class="border-thin item-image">                                  
+                                <div class="border-thin item-image">
                                     <img ng-src="{{pic.PictureImageBase64}}">
                                     <div class="padding">
-                                        <div class="input-label normalcase">Beskrivelse av bildet:</div>
-                                        <textarea cols="30" rows="3" placeholder="Her kan du gi en beskrivelse av bilde" ng-model="pic.PictureComment"></textarea>
+                                        <div class="input-label normalcase">{{'IMAGE_DESCRIPTION'|translate}}:</div>
+                                        <textarea cols="30" rows="3" placeholder="{{'IMAGE_DESCRIPTION_PLACEHOLDER'|translate}}" ng-model="pic.PictureComment"></textarea>
                                     </div>
                                     <i class="icon icon-remove-image ion-close-circled" ng-click="vm.removeImage(m, $index)"></i>
                                 </div>
@@ -70,64 +91,21 @@
 
                         </div>
                         <div class="item item-icon-left" ng-click="vm.addWaterLevelPicture(m)">
-                            <i class="icon ion-image small-icon"></i> + {{'ADD_WATER_MARK_IMAGE'|translate}}
+                            <i class="icon ion-image small-icon"></i> + <span ng-show="vm.reg.WaterLevel2.WaterLevelMethodTID === 1">{{'ADD_WATER_MARK_IMAGE'|translate}}</span><span ng-show="vm.reg.WaterLevel2.WaterLevelMethodTID === 2">{{'ADD_WATER_MEASUREMENT_IMAGE'|translate}}</span>
                         </div>
+                        <regobs-comment ng-show="vm.reg.WaterLevel2.MeasurementTypeTID === 3" label-text="{{'MEASURING_DESCRIPTION'|translate}}" placeholder="{{'MEASURING_DESCRIPTION_PLACEHOLDER'|translate}}" model="m.Comment"></regobs-comment>
                     </div>
                     <div class="item item-divider">
                         &nbsp;
                     </div>
                     <div class="item item-icon-left" ng-click="vm.addWaterLevelMeasurement()">
-                        + {{'ADD_WATER_MARKING'|translate}}
+                        + <span ng-show="vm.reg.WaterLevel2.WaterLevelMethodTID === 1">{{'ADD_WATER_MARKING'|translate}}</span><span ng-show="vm.reg.WaterLevel2.WaterLevelMethodTID === 2">{{'ADD_WATER_MEASUREMENT'|translate}}</span>
                     </div>
-                    
                 </div>
                 <div class="item item-divider">
                     &nbsp;
                 </div>
-                <!--<ion-checkbox ng-model="vm.reg.WaterLevelChoice"
-                              ng-true-value="1"
-                              ng-change="vm.resetModel()">{{'RIVER'|translate}}
-                </ion-checkbox>
-                <ion-checkbox ng-model="vm.reg.WaterLevelChoice"
-                              ng-true-value="2"
-                              ng-change="vm.resetModel()">{{'LAKE'|translate}}
-                </ion-checkbox>
-                <div ng-if="vm.reg.WaterLevelChoice">
-                    <regobs-number
-                            field-name="vannstand"
-                            label="{{'WATER_LEVEL'|translate}} (m)"
-                            help-text="{{'IN_METER'|translate}}"
-                            model="vm.reg.WaterLevel.WaterLevelValue"
-                            min="0" max="9999"
-                    ></regobs-number>
-                    <kdv-dropdown ng-show="vm.reg.WaterLevelChoice === 1"
-                                  title="WATER_LEVEL_REF"
-                                  model="vm.reg.WaterLevel.WaterLevelRefTID"
-                                  kdv-key="Water_WaterLevelRefKDV"
-                                  before="200">
-                    </kdv-dropdown>
-                    <kdv-dropdown ng-show="vm.reg.WaterLevelChoice === 2"
-                                  title="WATER_LEVEL_REF"
-                                  model="vm.reg.WaterLevel.WaterLevelRefTID"
-                                  kdv-key="Water_WaterLevelRefKDV"
-                                  after="200">
-                    </kdv-dropdown>
-                    <regobs-number
-                            ng-if="vm.reg.WaterLevelChoice === 1"
-                            field-name="vannføring"
-                            label="{{'ACTUAL_DISCHARGE'|translate}} (m3/s)"
-                            help-text="{{'ACTUAL_DISCHARGE_HELP_TEXT'|translate}}"
-                            model="vm.reg.WaterLevel.MeasuredDischarge"
-                            min="0"
-                            max="500000000"
-                    ></regobs-number>
-                    <regobs-comment
-                            placeholder="{{'ADDITIONAL_COMMENT'|translate}}"
-                            model="vm.reg.WaterLevel.Comment"
-                    ></regobs-comment>
-                </div>-->
             </ion-list>
-            <!--<regobs-image-list></regobs-image-list>-->
             <div class="padding">
                 <regobs-save-button save-action="vm.save()" go-back="true"></regobs-save-button>
             </div>
@@ -140,6 +118,5 @@
             {{'HELP'|translate}}
         </button>
     </ion-content>
-    <!--<form-footer></form-footer>-->
 </ion-view>
 

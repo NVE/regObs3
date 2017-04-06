@@ -1,5 +1,49 @@
 {
   "KdvRepositories": {
+    "Water_MeasurementReferenceKDV": [
+      {
+        "Id": 0,
+        "Name": "Ukjent"
+      },
+      {
+        "Id": 1,
+        "Name": "Bakken"
+      },
+      {
+        "Id": 2,
+        "Name": "Flomvoll"
+      },
+      {
+        "Id": 3,
+        "Name": "Gulv"
+      },
+      {
+        "Id": 4,
+        "Name": "Bro"
+      },
+      {
+        "Id": 5,
+        "Name": "Annet"
+      }
+    ],
+    "Water_MeasurementTypeKDV": [
+      {
+        "Id": 0,
+        "Name": "Ukjent"
+      },
+      {
+        "Id": 1,
+        "Name": "Relativt til merke"
+      },
+      {
+        "Id": 2,
+        "Name": "Målestav"
+      },
+      {
+        "Id": 3,
+        "Name": "Måleinstrument"
+      }
+    ],
     "Water_MarkingTypeKDV": [
       {
         "Id": 0,
