@@ -115,6 +115,15 @@
     border: 2px solid #d7d6d6;
     z-index: 20;
     padding: 10px;
+    
+}
+
+.arrow-box strong {
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
+    display: inline-block;
+    width: 100%;
 }
 
 .arrow-box-arrow {
