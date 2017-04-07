@@ -674,12 +674,6 @@
             }
         };
 
-        service._checkIfMarkerShouldBeReset = function () {
-            if (Registration.isEmpty() && ObsLocation.isSet() && ObsLocation.data.UTMSourceTID === ObsLocation.source.fetchedFromGPS) {
-                ObsLocation.remove(); //Remove obs location set in map when registration is empty and position is from GPS
-            }
-
-        };
 
         service.setOfflineAreaBounds = function (offlineMapsBoundsArray) {
             if (!angular.isArray(offlineMapsBoundsArray)) throw Error('offlineMapsBoundsArray must be an array!');
@@ -731,7 +725,6 @@
          */
         service.startWatch = function () {
             if (map) {
-                service._checkIfMarkerShouldBeReset();
                 document.addEventListener("deviceready",
                     function () {
                         AppLogging.log('Start watching gps location');

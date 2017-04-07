@@ -263,6 +263,7 @@
                 ctrl.updateMarkerToGpsLocation = false;
                 ctrl._updateDistance();
                 map.panTo(latlng);
+                ctrl.showDetails = true;
             });
         };
 

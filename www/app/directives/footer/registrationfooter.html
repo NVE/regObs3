@@ -1,5 +1,14 @@
-﻿<ion-footer-bar class="regobs-footer" ng-if="$ctrl.registration.showSend()">
-    <div ng-show="$ctrl.registration.sending" class="col col-center text-center">
+﻿<ion-footer-bar class="registration regobs-footer">
+    <div class="regobs-footer-top">
+
+    </div>
+    <div class="regobs-footer-content">
+        <button type="button" ng-disabled="!$ctrl.registration.showSend()" class="send-button button-large button button-block button-calm icon-right ion-android-send" ng-click="$ctrl.registration.send()">
+            <span class="badge badge-assertive" ng-show="$ctrl.registration.unsent.length" ng-bind="$ctrl.registration.unsent.length"></span> {{'SEND'|translate}}
+        </button>
+        <button type="button" ng-click="$ctrl.registration.remove()" class="delete-button button button-small button-clear button-dark icon-right ion-ios-trash-outline">Slett observasjon</button>
+    </div>
+    <!--<div ng-show="$ctrl.registration.sending" class="col col-center text-center">
         <ion-spinner class="spinner-dark"></ion-spinner> {{'SENDING'|translate}}
     </div>
     <div class="col col-center" ng-hide="$ctrl.registration.sending">
@@ -15,5 +24,5 @@
                 <span class="badge badge-assertive" ng-show="$ctrl.registration.unsent.length" ng-bind="$ctrl.registration.unsent.length"></span> {{'SEND'|translate}}
             </button>
         </div>
-    </div>
+    </div>-->
 </ion-footer-bar>

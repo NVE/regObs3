@@ -9,12 +9,14 @@
             }
         };
 
+        appVm.registration = Registration;
+
         appVm.gotoRegistration = function () {
             Registration.createAndGoToNewRegistration();
         };
 
         appVm.hasRegistration = function () {
-            return !(Registration.isEmpty() && !Registration.unsent.length);
+            return Registration.hasStarted() || Registration.unsent.length > 0;
         };
 
         var popoverScope = {
@@ -39,7 +41,7 @@
                 Registration.createAndGoToNewRegistration();
             },
             showNewRegistration: function () {
-                return Registration.isEmpty();
+                return !Registration.hasStarted();
             },
             showTrip: function () {
                 return Trip.canStart();
@@ -88,8 +90,7 @@
         };
 
         $scope.$on('$ionicView.enter', function () {
-            $ionicHistory.clearHistory();
-
+            $ionicHistory.clearHistory();          
             appVm.setViewTitle();                
             Map.invalidateSize();
             Map.startWatch();

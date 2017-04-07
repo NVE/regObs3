@@ -1,6 +1,6 @@
 angular
     .module('RegObs')
-    .factory('Registration', function Registration($rootScope, $ionicPlatform, $http, $state, $ionicPopup, $ionicHistory, $cordovaBadge, LocalStorage, Utility, User, ObsLocation, AppSettings, RegobsPopup, AppLogging, Observations, UserLocation, $q, $timeout) {
+    .factory('Registration', function Registration($rootScope, $ionicPlatform, $http, $state, $ionicPopup, $ionicHistory, $cordovaBadge, LocalStorage, Utility, User, ObsLocation, AppSettings, RegobsPopup, AppLogging, Observations, UserLocation, $q, $timeout, $translate) {
         var Registration = this;
 
         var storageKey = 'regobsRegistrations';
@@ -27,7 +27,7 @@ angular
                 "Id": Utility.createGuid(),
                 "GeoHazardTID": Utility.geoHazardTid(type),
                 //Dette må genereres
-                "DtObsTime": new Date().toISOString()
+                //"DtObsTime": new Date().toISOString()
                 //Kommenter inn dette dersom en har lyst til å teste bilder (ellers må det testes på device)
                 /*,Picture: [{
                  RegistrationTID: '10',
@@ -49,15 +49,16 @@ angular
         Registration.createAndGoToNewRegistration = function () {
             var appMode = AppSettings.getAppMode();
             var navigate = function () {
-                //$state.go('newregistration');
-                if (ObsLocation.isSet()) {
-                    $state.go('newregistration');  
-                } else {
+                if (!ObsLocation.isSet()) {
                     $state.go('confirmlocation');
+                } else if (!Registration.data.DtObsTime) {
+                    $state.go('confirmtime');
+                } else {
+                    $state.go('newregistration');  
                 }
             };
 
-            if (Registration.isEmpty()) {
+            if (!Registration.data.GeoHazardTID) {
                 Registration.createNew(Utility.geoHazardTid(appMode));
             }
 
@@ -128,40 +129,46 @@ angular
 
         Registration.createNew = function (type) {
             Registration.data = createRegistration(type);
-            //if (!ObsLocation.isSet()) {
-            //    ObsLocation.setPositionToCurrentUserPosition();
-            //}
             Registration.save();
-
             return Registration.data;
         };
 
         Registration.remove = function () {
-            if (!Registration.isEmpty())
-                RegobsPopup.delete('Slett registrering', 'Er du sikker på at du vil slette påbegynt registrering?')
-                    .then(function (response) {
-                        if (response) {
-                            resetRegistration();
-                            $state.go('start');
+            $translate(['DELETE_REGISTRATION', 'DELETE_REGISTRATION_CONFIRM_TEXT', 'DELETE_UNSENT_REGISTRATION', 'DELETE_ONE_UNSENT_REGISTRATION_TEXT']).then(function (translations) {
+                var checkunsent = function () {
+                    if (Registration.unsent.length) {
+                        var plural = Registration.unsent.length !== 1;
+                        var text;
+                        if (plural) {
+                            text = 'Du har ' + Registration.unsent.length + ' usendte registreringer. Vil du slette disse?';
+                        } else {
+                            text = translations['DELETE_ONE_UNSENT_REGISTRATION_TEXT'];
                         }
-                    });
-            else if (Registration.unsent.length) {
-                var plural = Registration.unsent.length !== 1;
-                var text;
-                if (plural) {
-                    text = 'Du har ' + Registration.unsent.length + ' usendte registreringer. Vil du slette disse?';
-                } else {
-                    text = 'Du har ' + Registration.unsent.length + ' usendt registrering. Vil du slette denne?';
-                }
-                RegobsPopup.delete('Slett usendte registreringer', text)
-                    .then(function (response) {
-                        if (response) {
-                            Registration.unsent = [];
-                            Registration.save();
+                        RegobsPopup.delete(translations['DELETE_UNSENT_REGISTRATION'], text)
+                            .then(function (response) {
+                                if (response) {
+                                    Registration.unsent = [];
+                                    Registration.save();
+                                    $state.go('start');
+                                }
+                            });
+                    } else {
+                        $state.go('start');
+                    }
+                };
 
-                        }
-                    });
-            }
+                if (Registration.hasStarted()) {
+                    RegobsPopup.delete(translations['DELETE_REGISTRATION'], translations['DELETE_REGISTRATION_CONFIRM_TEXT'])
+                        .then(function (response) {
+                            if (response) {
+                                resetRegistration();
+                                checkunsent();
+                            }
+                        });
+                } else {
+                    checkunsent();
+                }
+            });
         };
 
         Registration.isOfType = function (type) {
@@ -195,6 +202,16 @@ angular
             //return Object.keys(Registration.data).length <= baseLength;
         };
 
+        Registration.hasStarted = function () {
+            var clone = angular.copy(Registration.data);
+            delete clone.Id;
+            delete clone.GeoHazardTID;
+            var regHasStarted = !Utility.isEmpty(clone);
+            var obsLocationIsSet = ObsLocation.isSet();
+            var hasStarted = regHasStarted || obsLocationIsSet;
+            return hasStarted;
+        };
+
         Registration.doesExistUnsent = function (type) {
             return Registration.isOfType(type) && !Registration.isEmpty();
         };
@@ -223,6 +240,8 @@ angular
 
             prepareRegistrationForSending();
 
+            resetRegistration();
+
             Registration.sending = true;
             var data = angular.copy(Registration.unsent);
             var completed = [];
@@ -234,9 +253,10 @@ angular
                     Registration.sending = false;
                     Registration.unsent = failed;
                     Registration.save();
-                    //resetRegistration();
 
                     if (failed.length > 0) {
+                        var appMode = AppSettings.getAppMode();
+                        Registration.createNew(Utility.geoHazardTid(appMode));
                         var title = getRandomMessage();
                         RegobsPopup.confirm(title,
                             'Fikk ikke kontakt med regObs-serveren. Dette kan skyldes manglende nettilgang, eller at serveren er midlertidig utilgjengelig. Du kan prøve på nytt, eller du kan lagre registrering for å sende inn senere.',
@@ -254,7 +274,7 @@ angular
                                 }
                             });
                     } else {
-                        resetRegistration();
+                        
                         $state.go('start');
                     }
                 }
@@ -454,9 +474,9 @@ angular
                     Registration.unsent.push(regToSave);
                 }
             });
-            Registration.data = {};
-            var appMode = AppSettings.getAppMode();
-            Registration.createNew(Utility.geoHazardTid(appMode));
+            //Registration.data = {};
+            //var appMode = AppSettings.getAppMode();
+            //Registration.createNew(Utility.geoHazardTid(appMode));
         }
 
 

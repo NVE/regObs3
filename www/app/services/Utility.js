@@ -368,6 +368,7 @@ angular
         };
 
         service.geoHazardNames = function (tid) {
+            if (!tid) return '';
             return $translate.instant(service.getGeoHazardType(tid).toUpperCase());
         };
 
