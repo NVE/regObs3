@@ -74,6 +74,15 @@ angular
             });
         };
 
+        vm.waterLevelMethodChanged = function () {
+            vm.reg.WaterLevel2.MarkingReferenceTID = null;
+            vm.reg.WaterLevel2.Comment = null;
+            vm.reg.WaterLevel2.MarkingTypeTID = null;
+            vm.reg.WaterLevel2.MeasurementReferenceTID = null;
+            vm.reg.WaterLevel2.MeasuringToolDescription = null;
+            vm.reg.WaterLevel2.WaterLevelMeasurement = [{}];
+        };
+
         vm.reset = function () {
             vm.reg.WaterLevel2.WaterLevelMeasurement = [{}];
             Property.reset($state.current.data.registrationProp);

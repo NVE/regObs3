@@ -97,7 +97,7 @@
       },
       {
         "Id": 6,
-        "Name": "På noe annet"
+        "Name": "Noe annet"
       }
     ],
     "Water_WaterLevelMethodKDV": [
@@ -114,7 +114,7 @@
         "Name": "Måler vannstand"
       }
     ],
-    "Water_WaterObservationTimingKDV": [
+    "Water_ObservationTimingKDV": [
       {
         "Id": 0,
         "Name": "Ukjent"
@@ -142,7 +142,7 @@
         "Name": "Nei"
       }
     ],
-    "Water_WaterLevelTrendKDV": [
+    "Water_WaterLevelStateKDV": [
       {
         "Id": 0,
         "Name": "Ukjent"

@@ -45,7 +45,8 @@ angular
                 after: '=',
                 before: '=',
                 showZero: '<',
-                showAsRadio: '='
+                showAsRadio: '=',
+                changeHandler: '&'
             },
             link: link,
             templateUrl: function (elem, attrs) {

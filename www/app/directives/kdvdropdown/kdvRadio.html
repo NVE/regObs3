@@ -2,5 +2,5 @@
     <div class="item item-divider item-divider-calm" ng-if="title">
         {{title | translate}}
     </div>
-    <ion-radio class="radio-left radio-calm" ng-model="$parent.model" name="{{kdvKey}}" ng-value="kdv.Id" ng-repeat="kdv in kdvArray">{{kdv.Name}}</ion-radio>
+    <ion-radio class="radio-left radio-calm" ng-model="$parent.model" name="{{kdvKey}}" ng-value="kdv.Id" ng-repeat="kdv in kdvArray" ng-change="changeHandler()">{{kdv.Name}}</ion-radio>
 </div>

@@ -402,5 +402,14 @@
   "DELETE_REGISTRATION": "Slett registrering",
   "DELETE_REGISTRATION_CONFIRM_TEXT": "Er du sikker på at du vil slette påbegynt registrering?",
   "DELETE_UNSENT_REGISTRATION": "Slett usendte registreringer",
-  "DELETE_ONE_UNSENT_REGISTRATION_TEXT": "Du har en usendt registrering. Vil du slette denne?"
+  "DELETE_ONE_UNSENT_REGISTRATION_TEXT": "Du har en usendt registrering. Vil du slette denne?",
+  "WATER_LEVEL_STATE": "Situasjon",
+  "WATER_ASTRAY": "Vann på avveie",
+  "OBSERVATION_TIMING": "Registrert",
+  "WATER_LEVEL_METHOD": "Metode",
+  "MARKING_REFERENCE": "Referansepunkt",
+  "MARKING_TYPE": "Markert med",
+  "MEASUREMENT_TYPE": "Type",
+  "MEASUREMENT_REFERENCE": "Høyden relativ til",
+  "MEASURING_TOOL_DESCRIPTION": "Beskrivelse av måleinstrument"
 }

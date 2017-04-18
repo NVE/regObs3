@@ -315,6 +315,18 @@ angular
             WaterLevel2: {
                 name: "Vannstand",
                 RegistrationTID: "62",
+                properties: {
+                    WaterLevelStateTID: {},
+                    WaterAstrayTID: {},
+                    ObservationTimingTID: {},
+                    WaterLevelMethodTID: {},
+                    MarkingReferenceTID: {},
+                    Comment: {},
+                    MarkingTypeTID: {},
+                    MeasurementTypeTID: {},
+                    MeasurementReferenceTID: {},
+                    MeasuringToolDescription: {}
+                }
             },
             LandSlideObs: {
                 name: "Skredhendelse",

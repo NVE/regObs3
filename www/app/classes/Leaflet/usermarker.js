@@ -59,7 +59,7 @@
                 self._isWatching = true;
                 document.addEventListener("deviceready", function () {
                     AppLogging.log('start watching heading');
-                    self._watch = $cordovaDeviceOrientation.watchHeading({ frequency: 3000 });
+                    self._watch = $cordovaDeviceOrientation.watchHeading({ frequency: 500 });
                     self._watch.then(
                         null,
                         function (error) {

@@ -2,27 +2,13 @@
     <div class="regobs-footer-top">
 
     </div>
-    <div class="regobs-footer-content">
+    <div class="regobs-footer-content" ng-hide="$ctrl.registration.sending">
         <button type="button" ng-disabled="!$ctrl.registration.showSend()" class="send-button button-large button button-block button-calm icon-right ion-android-send" ng-click="$ctrl.registration.send()">
             <span class="badge badge-assertive" ng-show="$ctrl.registration.unsent.length" ng-bind="$ctrl.registration.unsent.length"></span> {{'SEND'|translate}}
         </button>
-        <button type="button" ng-click="$ctrl.registration.remove()" class="delete-button button button-small button-clear button-dark icon-right ion-ios-trash-outline">Slett observasjon</button>
+        <button type="button" ng-click="$ctrl.registration.remove()" class="delete-button button button-small button-clear button-dark icon-right ion-ios-trash-outline">{{'DELETE'|translate}} {{'OBSERVATION'|translate|lowercase}}</button>
     </div>
-    <!--<div ng-show="$ctrl.registration.sending" class="col col-center text-center">
+    <div class="regobs-footer-content" ng-show="$ctrl.registration.sending">
         <ion-spinner class="spinner-dark"></ion-spinner> {{'SENDING'|translate}}
     </div>
-    <div class="col col-center" ng-hide="$ctrl.registration.sending">
-        <div class="padding footer-button-wrapper">
-            <button class="button  button-block button-outline button-dark icon-right ion-trash-a" ng-click="$ctrl.registration.remove()">
-                {{'DELETE'|translate}}
-            </button>
-        </div>
-    </div>
-    <div class="col col-center" ng-hide="$ctrl.registration.sending">
-        <div class="padding footer-button-wrapper">
-            <button class="button button-block button-calm icon-right ion-android-send" ng-click="$ctrl.registration.send()">
-                <span class="badge badge-assertive" ng-show="$ctrl.registration.unsent.length" ng-bind="$ctrl.registration.unsent.length"></span> {{'SEND'|translate}}
-            </button>
-        </div>
-    </div>-->
 </ion-footer-bar>

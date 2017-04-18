@@ -3,8 +3,8 @@
         <form name="waterlevelform" novalidate>
             <ion-list>
                 <kdv-dropdown title="WATER_LEVEL_TREND_REGISTRATION_HEADER"
-                              model="vm.reg.WaterLevel2.WaterLevelTrendTID"
-                              kdv-key="Water_WaterLevelTrendKDV"
+                              model="vm.reg.WaterLevel2.WaterLevelStateTID"
+                              kdv-key="Water_WaterLevelStateKDV"
                               show-as-radio="true">
                 </kdv-dropdown>
                 <kdv-dropdown title="WATER_ASTRAY_REGISTRATION_HEADER"
@@ -13,13 +13,13 @@
                               show-as-radio="true">
                 </kdv-dropdown>
                 <kdv-dropdown title="WATER_OBSERVATION_TIMING_REGISTRATION_HEADER"
-                              model="vm.reg.WaterLevel2.WaterObservationTimingTID"
-                              kdv-key="Water_WaterObservationTimingKDV"
+                              model="vm.reg.WaterLevel2.ObservationTimingTID"
+                              kdv-key="Water_ObservationTimingKDV"
                               show-as-radio="true">
                 </kdv-dropdown>
                 <kdv-dropdown title="WATER_LEVEL_METHOD_REGISTRATION_HEADER"
                               model="vm.reg.WaterLevel2.WaterLevelMethodTID"
-                              kdv-key="Water_WaterLevelMethodKDV"
+                              kdv-key="Water_WaterLevelMethodKDV" change-handler="vm.waterLevelMethodChanged()"
                               show-as-radio="true">
                 </kdv-dropdown>
                 <div ng-show="vm.reg.WaterLevel2.WaterLevelMethodTID === 1">
