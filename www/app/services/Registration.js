@@ -471,9 +471,9 @@ angular
                         var measurements = 0;
 
                         waterLevel.WaterLevelMeasurement.forEach(function (m) {
-                            measurements++;
-                            pic.PictureComment = (waterLevel.WaterLevelMethodTID === 1 ? $translate.instant('MARKING_SHORT') : $translate.instant('MEASUREMENT')) + ' ' + measurements + (pic.PictureComment ? ': ' + pic.PictureComment : '');
+                            measurements++;                            
                             m.Pictures.forEach(function (pic) {
+                                pic.PictureComment = (waterLevel.WaterLevelMethodTID === 1 ? $translate.instant('MARKING_SHORT') : $translate.instant('MEASUREMENT')) + ' ' + measurements + (pic.PictureComment ? ': ' + pic.PictureComment : '');
                                 Utility.resizeImage(1200, pic.PictureImageBase64, function (imageData) {
                                     pic.PictureImageBase64 = imageData;                                   
                                     callbacks++;
