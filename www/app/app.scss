@@ -88,7 +88,7 @@ $greyBackground: rgba(245, 245, 245, 1);
     left: 0px;
     right: 0px;
     height: 20px;
-    background: linear-gradient(to top, $greyBackground, rgba(245, 245, 245, 0.8));
+    background: linear-gradient(to top, rgba(245, 245, 245, 1.0), rgba(245, 245, 245, 0.8));
 }
 
 .registration .regobs-footer-content {
@@ -123,7 +123,7 @@ $greyBackground: rgba(245, 245, 245, 1);
 
 .delete-button.icon-right:before {
     margin-left: 6px;
-    font-size: 24px !important;
+    font-size: 21px !important;
     line-height: 34px !important;
     font-weight: 600 !important;
 }
@@ -498,11 +498,11 @@ ion-popover-view.wider {
 }
 
 input.extra-large-time {
-    height: 80px;
+    height: 100px;
     text-align: center;
     color: #6d6d72; 
     font-size: 23px;
-    padding-right: 16px;
+    padding-right: 0px;
     line-height: 80px;
 }
 
@@ -520,15 +520,25 @@ input.extra-large-time {
 }
 
 .icon-remove-image {
-    color: #000;
-    font-size: 32px;
+    color: #fff;
+    font-size: 21px;
     position: absolute;
     right: 20px;
     top: 18px;
-    opacity: 0.5;
+    background-color: rgba(0, 0, 0, 0.5);
+    border-radius: 50%;
+    -moz-border-radius: 50%;
+    -webkit-border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    line-height: 38px;
 }
 
- .ng-invalid ~ .input-label {
+.icon-remove-image:before {
+    
+}
+
+.ng-invalid ~ .input-label {
     color: red;
 }
 

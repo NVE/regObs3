@@ -27,7 +27,7 @@
                         {{'WATER_LEVEL_MARKING_REFERENCE_HEADER' | translate}}
                     </div>
                     <div ng-repeat="kdv in vm.markingKdvArray">
-                        <ion-radio class="radio-left radio-calm" ng-model="vm.reg.WaterLevel2.MarkingReferenceTID" name="Water_MarkingReferenceKDV" ng-value="kdv.Id">
+                        <ion-radio class="radio-left radio-calm" ng-change="vm.clearComment()" ng-model="vm.reg.WaterLevel2.MarkingReferenceTID" name="Water_MarkingReferenceKDV" ng-value="kdv.Id">
                             {{kdv.Name}}
                         </ion-radio>
                         <textarea class="radio-textarea" rows="4" cols="30" maxlength="1024" ng-show="vm.reg.WaterLevel2.MarkingReferenceTID === kdv.Id" placeholder="{{'MARKING_DESCRIPTION'|translate}}"
@@ -43,7 +43,7 @@
                 <div ng-show="vm.reg.WaterLevel2.WaterLevelMethodTID === 2">
                     <kdv-dropdown title="WATER_MEASUREMENT_TYPE_HEADER"
                                   model="vm.reg.WaterLevel2.MeasurementTypeTID"
-                                  kdv-key="Water_MeasurementTypeKDV"
+                                  kdv-key="Water_MeasurementTypeKDV" change-handler="vm.waterMeasurementTypeChanged()"
                                   show-as-radio="true">
                     </kdv-dropdown>
                     <div ng-show="vm.reg.WaterLevel2.MeasurementTypeTID === 1">
@@ -51,7 +51,7 @@
                             {{'WATER_LEVEL_MEASUREMENT_REFERENCE_HEADER' | translate}}
                         </div>
                         <div ng-repeat="kdv in vm.measurementReferenceKdvArray">
-                            <ion-radio class="radio-left radio-calm" ng-model="vm.reg.WaterLevel2.MeasurementReferenceTID" name="Water_MeasurementReferenceKDV" ng-value="kdv.Id">
+                            <ion-radio class="radio-left radio-calm" ng-change="vm.clearComment()" ng-model="vm.reg.WaterLevel2.MeasurementReferenceTID" name="Water_MeasurementReferenceKDV" ng-value="kdv.Id">
                                 {{kdv.Name}}
                             </ion-radio>
                             <textarea class="radio-textarea" rows="4" cols="30" maxlength="1024" ng-show="vm.reg.WaterLevel2.MeasurementReferenceTID === kdv.Id" placeholder="{{'MEASUREMENT_DESCRIPTION'|translate}}"
@@ -85,7 +85,7 @@
                                         <div class="input-label normalcase">{{'IMAGE_DESCRIPTION'|translate}}:</div>
                                         <textarea cols="30" rows="3" placeholder="{{'IMAGE_DESCRIPTION_PLACEHOLDER'|translate}}" ng-model="pic.PictureComment"></textarea>
                                     </div>
-                                    <i class="icon icon-remove-image ion-close-circled" ng-click="vm.removeImage(m, $index)"></i>
+                                    <i class="icon icon-remove-image ion-close-round" ng-click="vm.removeImage(m, $index)"></i>
                                 </div>
                             </div>
 

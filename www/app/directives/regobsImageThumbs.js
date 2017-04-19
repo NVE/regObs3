@@ -10,15 +10,17 @@
                 if (!ctrl.registrationProp) return [];
                 if (ctrl.registrationProp === 'WaterLevel2') {
                     var arr = [];
-                    var wm = Registration.data.WaterLevel2.WaterLevelMeasurement;
-                    if (wm && angular.isArray(wm)) {
-                        wm.forEach(function (item) {
-                            if (item && item.Pictures && angular.isArray(item.Pictures)) {
-                                item.Pictures.forEach(function (pic) {
-                                    arr.push(pic);
-                                });
-                            }
-                        });
+                    if (Registration.data && Registration.data.WaterLevel2){
+                        var wm = Registration.data.WaterLevel2.WaterLevelMeasurement;
+                        if (wm && angular.isArray(wm)) {
+                            wm.forEach(function (item) {
+                                if (item && item.Pictures && angular.isArray(item.Pictures)) {
+                                    item.Pictures.forEach(function (pic) {
+                                        arr.push(pic);
+                                    });
+                                }
+                            });
+                        }
                     }
                     return arr;
                 } else {

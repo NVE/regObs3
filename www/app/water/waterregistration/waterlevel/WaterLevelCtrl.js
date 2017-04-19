@@ -1,6 +1,6 @@
 angular
     .module('RegObs')
-    .controller('WaterLevelCtrl', function ($scope, $state, Registration, $ionicPopup, Property, AppLogging, moment, Pictures, Utility, $cordovaCamera, AppSettings, $translate) {
+    .controller('WaterLevelCtrl', function ($scope, $state, Registration, $ionicPopup, Property, AppLogging, moment, Pictures, Utility, $cordovaCamera, AppSettings, $translate, $ionicScrollDelegate) {
         var vm = this;
 
         vm.addWaterLevelMeasurement = function () {
@@ -74,6 +74,10 @@ angular
             });
         };
 
+        vm.clearComment = function () {
+            vm.reg.WaterLevel2.Comment = null;
+        };
+
         vm.waterLevelMethodChanged = function () {
             vm.reg.WaterLevel2.MarkingReferenceTID = null;
             vm.reg.WaterLevel2.Comment = null;
@@ -81,11 +85,21 @@ angular
             vm.reg.WaterLevel2.MeasurementReferenceTID = null;
             vm.reg.WaterLevel2.MeasuringToolDescription = null;
             vm.reg.WaterLevel2.WaterLevelMeasurement = [{}];
+
+            $ionicScrollDelegate.resize();
+        };
+
+        vm.waterMeasurementTypeChanged = function () {
+            vm.reg.WaterLevel2.MeasurementReferenceTID = null;
+            vm.reg.WaterLevel2.MeasuringToolDescription = null;
+            vm.reg.WaterLevel2.Comment = null;
+            $ionicScrollDelegate.resize();
         };
 
         vm.reset = function () {
             vm.reg.WaterLevel2.WaterLevelMeasurement = [{}];
             Property.reset($state.current.data.registrationProp);
+            $ionicScrollDelegate.resize();
         };
 
         vm.removeMeasurement = function (index) {
@@ -94,6 +108,7 @@ angular
             } else {
                 vm.reg.WaterLevel2.WaterLevelMeasurement[0] = {};
             }
+            $ionicScrollDelegate.resize();
         }
 
         vm.save = function () {

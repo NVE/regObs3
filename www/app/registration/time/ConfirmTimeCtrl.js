@@ -1,6 +1,6 @@
 ﻿angular
     .module('RegObs')
-    .controller('ConfirmTimeCtrl', function ($scope, Registration, $state) {
+    .controller('ConfirmTimeCtrl', function ($scope, Registration, $state, RegobsPopup, $translate) {
         var ctrl = this;
 
         ctrl.setToNow = function () {
@@ -9,7 +9,11 @@
 
         ctrl.onChange = function () {
             if (!ctrl.time || (ctrl.time > new Date())) {
-                ctrl.setToNow();
+                $translate(['INVALID_VALUE', 'INVALID_OBSERVATION_TIME']).then(function (translations) {
+                    RegobsPopup.alert(translations['INVALID_VALUE'], translations['INVALID_OBSERVATION_TIME']).then(function () {
+                        ctrl.setToNow();
+                    }); 
+                });                            
             }
         };
 

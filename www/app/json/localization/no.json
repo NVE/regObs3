@@ -413,5 +413,7 @@
   "MEASUREMENT_TYPE": "Type",
   "MEASUREMENT_REFERENCE": "Høyden relativ til",
   "MEASURING_TOOL_DESCRIPTION": "Beskrivelse av måleinstrument",
-  "OBS_COMMENT": "Notat"
+  "OBS_COMMENT": "Notat",
+  "INVALID_VALUE": "Ugyldig verdi",
+  "INVALID_OBSERVATION_TIME": "Observasjonstidspunkt kan ikke være frem i tid."
 }
