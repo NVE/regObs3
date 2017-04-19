@@ -1,25 +1,44 @@
+var regobsMenuItemController = function (Property, Registration, ObservationType, Utility, $scope, $rootScope) {
+    var ctrl = this;
+
+    var update = function () {
+        if (ctrl.property) {
+            ctrl.isSet = Property.exists(ctrl.property);
+            ctrl.obsType = ObservationType.fromRegistration(Registration, ctrl.property);
+        }
+    };
+
+    ctrl.$onInit = function () {
+        update();
+    };
+
+    $rootScope.$on('$ionicView.beforeEnter', function () {
+        update();
+    });
+
+    $rootScope.$on('$regObs:registrationSaved', function () {
+        update();
+    });
+};
+
 angular
     .module('RegObs')
-    .directive('regobsMenuItem', function () {
+    .component('regobsMenuItem', {
+        bindings: {
+            title: '@',
+            property: '@',
+            state: '@'
+        },
+        controller: regobsMenuItemController,
+        template: [
+            '<ion-item class="item-icon-right" ui-sref="{{$ctrl.state}}">',
+            '<h2>{{$ctrl.title}}</h2>',
+            '<p><observation-type-generic show-header="false" show-bullets="false" registration="$ctrl.obsType"></observation-type-generic>',
+            '<regobs-image-thumbs class="registration-image-thumbs" registration-prop="{{$ctrl.property}}"></regobs-image-thumbs>',
+            '</p>',
+            '<i ng-if="$ctrl.isSet" class="icon ion-checkmark-circled balanced regobs-menu-item-icon"></i>',
+            '<i class="icon icon-accessory ion-chevron-right"></i>',
+            '</ion-item>'
+        ].join('')
 
-        var link = function (scope) {
-
-        };
-
-        return {
-            scope:{
-                title: '@',
-                condition: '=',
-                state: '@',
-                badgeText: '='
-            },
-            link: link,
-            template: [
-                '<ion-item class="item-icon-right" ui-sref="{{state}}">',
-                    '{{title}}',
-                    '<span ng-if="condition"><span class="badge badge-balanced regobs-menu-item-badge" ng-if="badgeText">{{badgeText}}</span><i ng-if="!badgeText" class="icon ion-checkmark-circled balanced regobs-menu-item-icon"></i></span>',
-                    '<i class="icon icon-accessory ion-chevron-right"></i>',
-                '</ion-item>'
-            ].join('')
-        }
     });

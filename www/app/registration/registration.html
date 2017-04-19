@@ -24,7 +24,7 @@
             <div ng-if="vm.reg.GeoHazardTID === 60" ng-include="'app/water/waterregistration/waterregistration.html'"></div>
             <div ng-if="vm.reg.GeoHazardTID === 70" ng-include="'app/ice/iceregistration/iceregistration.html'"></div>
             <regobs-menu-item title="{{'GENERAL_OBS'|translate}}"
-                              condition="vm.propertyExists('GeneralObservation')"
+                              property="GeneralObservation"
                               state="generalobs">
             </regobs-menu-item>
         </ion-list>

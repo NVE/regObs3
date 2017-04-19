@@ -67,12 +67,12 @@ angular
                 case 2:
                     return 'Under ' + getValue(data.FullObject.ExposedHeight1) + ' moh';
                 case 3:
-                    return 'Ikke mellom ' + getValue(data.FullObject.ExposedHeight1) + ' - ' + getValue(data.FullObject.ExposedHeight2) +' moh';
+                    return 'Ikke mellom ' + getValue(data.FullObject.ExposedHeight1) + ' - ' + getValue(data.FullObject.ExposedHeight2) + ' moh';
                 case 4:
-                    return 'Mellom ' + getValue(data.FullObject.ExposedHeight1) + ' - ' + getValue(data.FullObject.ExposedHeight2) +' moh';
+                    return 'Mellom ' + getValue(data.FullObject.ExposedHeight1) + ' - ' + getValue(data.FullObject.ExposedHeight2) + ' moh';
             }
 
-            return getValue(data.FullObject.ExposedHeight1) +' moh';
+            return getValue(data.FullObject.ExposedHeight1) + ' moh';
         };
 
         /**
@@ -130,6 +130,29 @@ angular
         service.showStabilityTest = function (fullObject) {
             return fullObject.PropagationTID > 0 || fullObject.TapsFracture > 0 || fullObject.FractureDepth > 0 || fullObject.ComprTestFractureTID > 0;
         };
+
+        service.formatWaterLevelMeasurement = function (fullObject) {
+            var result = [];
+            if (fullObject && fullObject.WaterLevelMeasurement && angular.isArray(fullObject.WaterLevelMeasurement)) {
+                fullObject.WaterLevelMeasurement.forEach(function (item) {
+                    var str = fullObject.WaterLevelMethodTID === 1 ? $translate.instant('MARKING_SHORT') : $translate.instant('MEASUREMENT');
+                    str += ' ' + (result.length + 1) + ': ';
+                    if (item.DtMeasurementTime) {
+                        str += moment(item.DtMeasurementTime).format('D/M HH:mm');
+                    }
+                    if (item.WaterLevelValue) {
+                        str += ' &bull; ' + $filter('number')(item.WaterLevelValue, 2) + ' m';
+                    }
+                    if (item.Comment) {
+                        str += ' &bull; ' + item.Comment;
+                    }
+                    result.push(str);
+                });
+            }
+
+            return result.join(', ');
+        };
+
 
         //Brukt der det er bilder (RegistrationTID)
         var OBSERVATIONS = {
@@ -325,7 +348,8 @@ angular
                     MarkingTypeTID: {},
                     MeasurementTypeTID: {},
                     MeasurementReferenceTID: {},
-                    MeasuringToolDescription: {}
+                    MeasuringToolDescription: {},
+                    WaterLevelMeasurement: { displayFormat: { hideDescription: true, valueFormat: function (item, data) { return service.formatWaterLevelMeasurement(data.FullObject) } } }
                 }
             },
             LandSlideObs: {
@@ -346,7 +370,10 @@ angular
             },
             GeneralObservation: {
                 name: "Fritekst",
-                RegistrationTID: "10"
+                RegistrationTID: "10",
+                properties: {
+                    ObsComment: {}
+                }
             }
         };
 
@@ -445,7 +472,7 @@ angular
 
             AppLogging.log('Last update', lastUpdate);
             if (isNaN(lastUpdate)) {
-                lastUpdate = new Date('2016-01-01');          
+                lastUpdate = new Date('2016-01-01');
             } else {
                 lastUpdate = new Date(parseInt(lastUpdate));
             }
@@ -502,7 +529,7 @@ angular
                     return service.getKdvElements().then(function (response) { //Getting old values to update
                         var oldKdvElements = response.data;
                         //remove items missing in new elements (deleted items)
-                        service._removeDeletedKdvElements(oldKdvElements, newKdvElements);              
+                        service._removeDeletedKdvElements(oldKdvElements, newKdvElements);
                         var mergedElements = angular.merge(oldKdvElements, newKdvElements);
                         service._saveKdvElements(mergedElements);
                     });
@@ -787,7 +814,7 @@ angular
             latResult = service._getDms(lat);
             latResult += (lat >= 0) ? 'N' : 'S';
 
-           
+
             // Call to getDms(lng) function for the coordinates of Longitude in DMS.
             // The result is stored in lngResult variable.
             lngResult = service._getDms(lng);

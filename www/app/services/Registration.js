@@ -54,7 +54,7 @@ angular
                 } else if (!Registration.data.DtObsTime) {
                     $state.go('confirmtime');
                 } else {
-                    $state.go('newregistration');  
+                    $state.go('newregistration');
                 }
             };
 
@@ -237,68 +237,68 @@ angular
         };
 
         Registration.post = function () {
+            prepareRegistrationForSending().then(function () {
 
-            prepareRegistrationForSending();
+                resetRegistration();
 
-            resetRegistration();
+                Registration.sending = true;
+                var data = angular.copy(Registration.unsent);
+                var completed = [];
+                var failed = [];
 
-            Registration.sending = true;
-            var data = angular.copy(Registration.unsent);
-            var completed = [];
-            var failed = [];
+                var checkComplete = function () {
+                    if ((completed.length + failed.length) === Registration.unsent.length) {
 
-            var checkComplete = function () {
-                if ((completed.length + failed.length) === Registration.unsent.length) {
+                        Registration.sending = false;
+                        Registration.unsent = failed;
+                        Registration.save();
 
-                    Registration.sending = false;
-                    Registration.unsent = failed;
-                    Registration.save();
+                        if (failed.length > 0) {
+                            var appMode = AppSettings.getAppMode();
+                            Registration.createNew(Utility.geoHazardTid(appMode));
+                            var title = getRandomMessage();
+                            RegobsPopup.confirm(title,
+                                'Fikk ikke kontakt med regObs-serveren. Dette kan skyldes manglende nettilgang, eller at serveren er midlertidig utilgjengelig. Du kan prøve på nytt, eller du kan lagre registrering for å sende inn senere.',
+                                'Prøv igjen',
+                                'Lagre')
+                                .then(function (confirmed) {
+                                    if (confirmed) {
+                                        Registration.post();
+                                    } else {
+                                        RegobsPopup.alert(
+                                            'Lagret',
+                                            'Dataene dine er lagret. ' +
+                                            'Du kan prøve å sende inn på nytt ved et senere tidspunkt.'
+                                        );
+                                    }
+                                });
+                        } else {
 
-                    if (failed.length > 0) {
-                        var appMode = AppSettings.getAppMode();
-                        Registration.createNew(Utility.geoHazardTid(appMode));
-                        var title = getRandomMessage();
-                        RegobsPopup.confirm(title,
-                            'Fikk ikke kontakt med regObs-serveren. Dette kan skyldes manglende nettilgang, eller at serveren er midlertidig utilgjengelig. Du kan prøve på nytt, eller du kan lagre registrering for å sende inn senere.',
-                            'Prøv igjen',
-                            'Lagre')
-                            .then(function (confirmed) {
-                                if (confirmed) {
-                                    Registration.post();
-                                } else {
-                                    RegobsPopup.alert(
-                                        'Lagret',
-                                        'Dataene dine er lagret. ' +
-                                        'Du kan prøve å sende inn på nytt ved et senere tidspunkt.'
-                                    );
-                                }
-                            });
-                    } else {
-                        
-                        $state.go('start');
+                            $state.go('start');
+                        }
                     }
-                }
-            };
+                };
 
-            if (Registration.unsent.length > 0) {
-                Utility.resizeAllImages(data)
-                    .then(function (processedData) {
-                        data = processedData;
-                        data.forEach(function (item) {
-                            $http.post(AppSettings.getEndPoints().postRegistration, item, AppSettings.httpConfigRegistrationPost).then(function (result) {
-                                item.RegId = result;
-                                completed.push(item);
-                                checkComplete();
-                            }).catch(function (error) {
-                                item.error = error.status;
-                                failed.push(item);
-                                checkComplete();
+                if (Registration.unsent.length > 0) {
+                    Utility.resizeAllImages(data)
+                        .then(function (processedData) {
+                            data = processedData;
+                            data.forEach(function (item) {
+                                $http.post(AppSettings.getEndPoints().postRegistration, item, AppSettings.httpConfigRegistrationPost).then(function (result) {
+                                    item.RegId = result;
+                                    completed.push(item);
+                                    checkComplete();
+                                }).catch(function (error) {
+                                    item.error = error.status;
+                                    failed.push(item);
+                                    checkComplete();
+                                });
                             });
                         });
-                    });
-            } else {
-                checkComplete();
-            }
+                } else {
+                    checkComplete();
+                }
+            });
         };
 
 
@@ -308,7 +308,7 @@ angular
                 if (!Registration.isEmpty() && !ObsLocation.isSet()) {
                     RegobsPopup.alert('Posisjon ikke satt', 'Kan ikke sende inn uten posisjon. Vennligst sett posisjon i kartet');
                 } else if (!User.getUser().anonymous || force) {
-                   Registration.post();
+                    Registration.post();
                 } else {
                     RegobsPopup.confirm('Du er ikke innlogget', 'Vil du logge inn, eller fortsette med anonym innsending?', 'Send', 'Logg inn')
                         .then(function (confirmed) {
@@ -362,103 +362,128 @@ angular
         };
 
         function prepareRegistrationForSending() {
-            if (Registration.isEmpty()) {
-                return;
-            }
+            return $q(function (resolve) {
 
-            var user = User.getUser();
+                if (Registration.isEmpty()) {
+                    resolve();
+                }
 
-            var data = angular.copy(Registration.data);
-            var location = angular.copy(ObsLocation.data);
+                var user = User.getUser();
 
-            //Cleanup
-            cleanupDangerObs(data.DangerObs);
-            stripExposedHeight(data.AvalancheEvalProblem2);
-            stripExposedHeight(data.AvalancheActivityObs2);
-            cleanupGeneralObservation(data.GeneralObservation);
-            cleanupObsLocation(location);
-            cleanupStabilityTest(data.CompressionTest);
-            cleanupIncidenct(data.Incident);
-            cleanupWaterLevel2(data.WaterLevel2);
+                var data = angular.copy(Registration.data);
+                var location = angular.copy(ObsLocation.data);
 
-            delete data.avalChoice;
-            delete data.WaterLevelChoice;
+                //Cleanup
+                cleanupDangerObs(data.DangerObs);
+                stripExposedHeight(data.AvalancheEvalProblem2);
+                stripExposedHeight(data.AvalancheActivityObs2);
+                cleanupGeneralObservation(data.GeneralObservation);
+                cleanupObsLocation(location);
+                cleanupStabilityTest(data.CompressionTest);
+                cleanupIncidenct(data.Incident);
+                cleanupWaterLevel2(data.WaterLevel2).then(function () {
+                    delete data.avalChoice;
+                    delete data.WaterLevelChoice;
 
-            angular.extend(data, {
-                "ObserverGuid": user.Guid,
-                "ObserverGroupID": user.chosenObserverGroup || null,
-                "Email": user.anonymous ? false : !!AppSettings.data.emailReceipt,
-                "ObsLocation": location
-            });
-
-            AppLogging.log('User', user);
-            AppLogging.log('Sending', data);
-
-            saveToUnsent({ Registrations: [data] });
-
-            function cleanupStabilityTest(array) {
-                if (angular.isArray(array)) {
-                    array.forEach(function (stest) {
-                        delete stest.tempFractureDepth;
+                    angular.extend(data, {
+                        "ObserverGuid": user.Guid,
+                        "ObserverGroupID": user.chosenObserverGroup || null,
+                        "Email": user.anonymous ? false : !!AppSettings.data.emailReceipt,
+                        "ObsLocation": location
                     });
-                }
-            }
 
-            function cleanupDangerObs(array) {
-                if (angular.isArray(array)) {
-                    array.forEach(function (dangerObs) {
-                        delete dangerObs.tempArea;
-                        delete dangerObs.tempComment;
-                        if (dangerObs.DangerSignTID === null || dangerObs.DangerSignTID === undefined) {
-                            dangerObs.DangerSignTID = 0;
-                        }
-                    });
-                }
-            }
+                    AppLogging.log('User', user);
+                    AppLogging.log('Sending', data);
 
-            function stripExposedHeight(array) {
-                if (angular.isArray(array)) {
-                    array.forEach(function (obs) {
-                        if (obs.exposedHeight)
-                            delete obs.exposedHeight;
-                    });
-                }
-            }
+                    saveToUnsent({ Registrations: [data] });
 
-            function cleanupGeneralObservation(obs) {
-                if (obs) {
-                    obs.ObsHeader = '';
-                }
-            }
+                    resolve();
+                });
 
-            function cleanupObsLocation(location) {
-                delete location.place;
-                delete location.Name;
-                if (location.ObsLocationId) {
-                    delete location.Latitude;
-                    delete location.Longitude;
-                    delete location.Uncertainty;
-                    delete location.UTMSourceTID;
-                }
-            }
-
-            function cleanupIncidenct(incident) {
-                if (incident && !incident.IncidentText) {
-                    incident.IncidentText = '';
-                }
-            }
-
-            function cleanupWaterLevel2(waterLevel) {
-                if (waterLevel) {
-                    if (waterLevel.WaterLevelMeasurement) {
-                        waterLevel.WaterLevelMeasurement.forEach(function (pic) {
-                            Utility.resizeImage(1200, pic.PictureImageBase64, function (imageData) {
-                                pic.PictureImageBase64 = imageData;
-                            });
+                function cleanupStabilityTest(array) {
+                    if (angular.isArray(array)) {
+                        array.forEach(function (stest) {
+                            delete stest.tempFractureDepth;
                         });
                     }
                 }
-            };
+
+                function cleanupDangerObs(array) {
+                    if (angular.isArray(array)) {
+                        array.forEach(function (dangerObs) {
+                            delete dangerObs.tempArea;
+                            delete dangerObs.tempComment;
+                            if (dangerObs.DangerSignTID === null || dangerObs.DangerSignTID === undefined) {
+                                dangerObs.DangerSignTID = 0;
+                            }
+                        });
+                    }
+                }
+
+                function stripExposedHeight(array) {
+                    if (angular.isArray(array)) {
+                        array.forEach(function (obs) {
+                            if (obs.exposedHeight)
+                                delete obs.exposedHeight;
+                        });
+                    }
+                }
+
+                function cleanupGeneralObservation(obs) {
+                    if (obs) {
+                        obs.ObsHeader = '';
+                    }
+                }
+
+                function cleanupObsLocation(location) {
+                    delete location.place;
+                    delete location.Name;
+                    if (location.ObsLocationId) {
+                        delete location.Latitude;
+                        delete location.Longitude;
+                        delete location.Uncertainty;
+                        delete location.UTMSourceTID;
+                    }
+                }
+
+                function cleanupIncidenct(incident) {
+                    if (incident && !incident.IncidentText) {
+                        incident.IncidentText = '';
+                    }
+                }
+
+                function cleanupWaterLevel2(waterLevel) {
+                    return $q(function (resolve) {
+                        if (!waterLevel || !waterLevel.WaterLevelMeasurement || waterLevel.WaterLevelMeasurement.length === 0) resolve();
+
+                        var callbacks = 0;
+                        var total = 0;
+                        waterLevel.WaterLevelMeasurement.forEach(function (m) {
+                            total += m.Pictures.length;
+                        });
+
+                        var checkCallbacks = function () {
+                            if (callbacks === total) {
+                                resolve();
+                            };
+                        };
+
+                        var measurements = 0;
+
+                        waterLevel.WaterLevelMeasurement.forEach(function (m) {
+                            measurements++;
+                            pic.PictureComment = (waterLevel.WaterLevelMethodTID === 1 ? $translate.instant('MARKING_SHORT') : $translate.instant('MEASUREMENT')) + ' ' + measurements + (pic.PictureComment ? ': ' + pic.PictureComment : '');
+                            m.Pictures.forEach(function (pic) {
+                                Utility.resizeImage(1200, pic.PictureImageBase64, function (imageData) {
+                                    pic.PictureImageBase64 = imageData;                                   
+                                    callbacks++;
+                                    checkCallbacks();
+                                });
+                            });
+                        });
+                    });
+                };
+            });
         };
 
         function saveToUnsent(data) {

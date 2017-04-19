@@ -133,5 +133,22 @@
         }
     };
 
+    ObservationType.fromRegistration = function (registration, prop) {
+        if (!registration) throw Error('Registration must be set!');
+        if (!prop) throw Error('Property must be set!');
+        var reg = registration.data[prop];
+        if (!reg) return null;
+        var registrationTid = Utility.registrationTid(prop);
+        var definition = Utility.getObservationDefinition(registrationTid);
+
+        return new ObservationType(registration.data.GeoHazardTID, {
+            RegistrationName: definition.name,
+            RegistrationTid: registrationTid,
+            TypicalValue1: '',
+            TypicalValue2: '',
+            FullObject: angular.copy(reg)
+        });
+    };
+
     return ObservationType;
 });

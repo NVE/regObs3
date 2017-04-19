@@ -208,7 +208,7 @@
 }
 
 .hasFooter .map-selected-info {
-    bottom: $footerHeight;
+    bottom: $footerHeight - 1;
 }
 
 .map-selected-info-bottom-description {

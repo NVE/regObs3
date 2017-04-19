@@ -67,7 +67,6 @@
                         },
                         function (result) {   // updates constantly (depending on frequency value)
                             var magneticHeading = result.magneticHeading;
-                            AppLogging.log('Got heading: ' + magneticHeading);
                             self.setHeading(parseInt(result.magneticHeading));
                         });
                     
