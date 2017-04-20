@@ -258,6 +258,8 @@ angular
                         Registration.unsent = failed;
                         Registration.save();
 
+                        LocalStorage.setObject(newStorageKey, completed);
+
                         if (hasFailed) {
                             var appMode = AppSettings.getAppMode();
                             Registration.createNew(Utility.geoHazardTid(appMode));
@@ -292,7 +294,8 @@ angular
                             completed = [];
                             data.forEach(function (item) {
                                 $http.post(AppSettings.getEndPoints().postRegistration, item, AppSettings.httpConfigRegistrationPost).then(function (result) {
-                                    item.RegId = result;
+                                    item.ObjectLogId = result.data;
+                                    
                                     completed.push(item);
                                     checkComplete();
                                 }).catch(function (error) {
