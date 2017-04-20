@@ -17,21 +17,6 @@
             return Property.exists(prop);
         };
 
-        vm.getRegistration = function (prop) {
-            var reg = Registration.data[prop];
-            if (reg && !Utility.isEmpty(reg)) {
-                var obsType = new ObservationType(vm.reg.GeoHazardTID, {
-                    RegistrationName: "Vannstand",
-                    RegistrationTid: 62,
-                    TypicalValue1: "TBD01",
-                    TypicalValue2: "TBD02",
-                    FullObject: angular.copy(reg)
-                });
-                return obsType;
-            }
-            return null;
-        };
-
         vm.save = function () {
             Registration.save();        
         };

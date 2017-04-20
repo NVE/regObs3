@@ -6,7 +6,9 @@ $water: #94BFE0;
 //$ice: #C9C9C9;
 $ice: #CDD7D6;
 
-$footerHeight: 65px;
+//$footerHeight: 65px;
+$smallFooterHeight: 65px;
+$footerHeight: 140px;
 $greyBackground: rgba(245, 245, 245, 1);
 
 .snow {
@@ -76,8 +78,11 @@ $greyBackground: rgba(245, 245, 245, 1);
     height: $footerHeight;
 }
 
+.regobs-footer.small-footer {
+    height: $smallFooterHeight;
+}
+
 .registration.regobs-footer {
-    height: 140px;
     padding: 0px;
     background: rgba(255, 255, 255, 0);
 }
@@ -101,6 +106,10 @@ $greyBackground: rgba(245, 245, 245, 1);
     right: 0px;
 }
 
+.regobs-footer-content.send-spinner {
+    text-align: center;
+    padding-top: 20px;
+}
 
 .send-button {
     height: 55px;
@@ -524,7 +533,7 @@ input.extra-large-time {
     font-size: 21px;
     position: absolute;
     right: 20px;
-    top: 18px;
+    top: 20px;
     background-color: rgba(0, 0, 0, 0.5);
     border-radius: 50%;
     -moz-border-radius: 50%;
@@ -535,7 +544,9 @@ input.extra-large-time {
 }
 
 .icon-remove-image:before {
-    
+    position: absolute;
+    top: 10px;
+    left: 12px;
 }
 
 .ng-invalid ~ .input-label {

@@ -8,7 +8,7 @@
         </button>
         <button type="button" ng-click="$ctrl.registration.remove()" class="delete-button button button-small button-clear button-dark icon-right ion-ios-trash-outline">{{'DELETE'|translate}} {{'OBSERVATION'|translate|lowercase}}</button>
     </div>
-    <div class="regobs-footer-content" ng-show="$ctrl.registration.sending">
+    <div class="regobs-footer-content send-spinner" ng-show="$ctrl.registration.sending">
         <ion-spinner class="spinner-dark"></ion-spinner> {{'SENDING'|translate}}
     </div>
 </ion-footer-bar>

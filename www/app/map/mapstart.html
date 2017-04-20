@@ -42,34 +42,15 @@
             <div id="map" data-tap-disabled="true" class="regobs-map" regobs-map></div>
         </ion-content>
     </div>
-    <ion-footer-bar class="regobs-footer" ng-if="vm.hasRegistration()">
-        <div class="row row-no-padding">
-            <div class="col col-center">
-                <div class="padding footer-button-wrapper">
-                    <button class="button  button-block button-calm icon-right ion-edit" ng-show="vm.registration.hasStarted()" ng-click="vm.gotoRegistration()">
-                        {{'CONTINUE_REGISTRATION'|translate}}&nbsp;
-                    </button>         
-                    <div class="row" ng-hide="vm.registration.hasStarted()">
-                        <div ng-show="vm.registration.sending" class="col col-center text-center">
-                            <ion-spinner class="spinner-dark"></ion-spinner> {{'SENDING'|translate}}
-                        </div>
-                        <div class="col col-center" ng-hide="vm.registration.sending">
-                            <div class="padding footer-button-wrapper">
-                                <button class="button  button-block button-outline button-dark icon-right ion-trash-a" ng-click="vm.registration.remove()">
-                                    {{'DELETE'|translate}}
-                                </button>
-                            </div>
-                        </div>
-                        <div class="col col-center" ng-hide="vm.registration.sending">
-                            <div class="padding footer-button-wrapper">
-                                <button class="button button-block button-calm icon-right ion-android-send" ng-click="vm.registration.send()">
-                                    <span class="badge badge-assertive" ng-show="vm.registration.unsent.length" ng-bind="vm.registration.unsent.length"></span> {{'SEND'|translate}}
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
+    <ion-footer-bar class="registration regobs-footer" ng-if="vm.registration.hasStarted()">
+        <div class="regobs-footer-top">
+        </div>
+        <div class="regobs-footer-content">
+            <button type="button" class="send-button button-large button button-block button-calm icon-right ion-edit" ng-click="vm.gotoRegistration()">
+                {{'CONTINUE_REGISTRATION'|translate}}
+            </button>
+            <button type="button" ng-click="vm.registration.remove()" class="delete-button button button-small button-clear button-dark icon-right ion-ios-trash-outline">{{'DELETE'|translate}} {{'OBSERVATION'|translate|lowercase}}</button>
         </div>
     </ion-footer-bar>
+    <registration-footer ng-if="!vm.registration.hasStarted() && vm.registration.unsent.length"></registration-footer>
 </ion-view>

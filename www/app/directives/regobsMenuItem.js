@@ -27,13 +27,14 @@ angular
         bindings: {
             title: '@',
             property: '@',
-            state: '@'
+            state: '@',
+            showSummary: '='
         },
         controller: regobsMenuItemController,
         template: [
             '<ion-item class="item-icon-right" ui-sref="{{$ctrl.state}}">',
             '<h2>{{$ctrl.title}}</h2>',
-            '<p><observation-type-generic show-header="false" show-bullets="false" registration="$ctrl.obsType"></observation-type-generic>',
+            '<p ng-if="$ctrl.showSummary"><observation-type-generic show-header="false" show-bullets="false" registration="$ctrl.obsType"></observation-type-generic>',
             '<regobs-image-thumbs class="registration-image-thumbs" registration-prop="{{$ctrl.property}}"></regobs-image-thumbs>',
             '</p>',
             '<i ng-if="$ctrl.isSet" class="icon ion-checkmark-circled balanced regobs-menu-item-icon"></i>',
