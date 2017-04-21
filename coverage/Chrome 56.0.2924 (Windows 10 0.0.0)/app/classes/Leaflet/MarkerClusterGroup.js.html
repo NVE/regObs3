@@ -20,14 +20,14 @@
     </h1>
     <div class='clearfix'>
       <div class='fl pad1y space-right2'>
-        <span class="strong">18.75% </span>
+        <span class="strong">14.29% </span>
         <span class="quiet">Statements</span>
-        <span class='fraction'>3/16</span>
+        <span class='fraction'>3/21</span>
       </div>
       <div class='fl pad1y space-right2'>
         <span class="strong">0% </span>
         <span class="quiet">Branches</span>
-        <span class='fraction'>0/8</span>
+        <span class='fraction'>0/12</span>
       </div>
       <div class='fl pad1y space-right2'>
         <span class="strong">25% </span>
@@ -35,9 +35,9 @@
         <span class='fraction'>1/4</span>
       </div>
       <div class='fl pad1y space-right2'>
-        <span class="strong">21.43% </span>
+        <span class="strong">15.79% </span>
         <span class="quiet">Lines</span>
-        <span class='fraction'>3/14</span>
+        <span class='fraction'>3/19</span>
       </div>
     </div>
   </div>
@@ -74,14 +74,21 @@
 29
 30
 31
-32</td><td class="line-coverage quiet"><span class="cline-any cline-yes">1×</span>
+32
+33
+34
+35
+36
+37
+38
+39</td><td class="line-coverage quiet"><span class="cline-any cline-yes">1×</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">44×</span>
+<span class="cline-any cline-yes">55×</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -97,6 +104,13 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -104,7 +118,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">44×</span>
+<span class="cline-any cline-yes">55×</span>
 <span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">﻿angular.module('RegObs').factory('MarkerClusterGroup', function (AppSettings, ObservationMarker, StoredLocationMarker) {
 &nbsp;
     /**
@@ -121,7 +135,14 @@
 <span class="cstat-no" title="statement not covered" >                var childPins = cluster.getAllChildMarkers();</span>
 <span class="cstat-no" title="statement not covered" >                var observations = childPins.filter(<span class="fstat-no" title="function not covered" >function (item) {</span> <span class="cstat-no" title="statement not covered" >return item instanceof ObservationMarker }</span>);</span>
 <span class="cstat-no" title="statement not covered" >                var storedLocations = childPins.filter(<span class="fstat-no" title="function not covered" >function (item) {</span> <span class="cstat-no" title="statement not covered" >return item instanceof StoredLocationMarker }</span>);</span>
-<span class="cstat-no" title="statement not covered" >                var innerDiv = '&lt;div class="observation-pin obs-marker-cluster ' + appMode + '"&gt;&lt;div class="observation-pin-icon"&gt;&lt;div class="obs-marker-cluster-icons ' +(observations.length &gt; 0 &amp;&amp; storedLocations.length &gt; 0 ? 'obs-marker-cluster-two-line' : '') + '"&gt;';</span>
+<span class="cstat-no" title="statement not covered" >                var iconClass = 'obs-marker-cluster-icons';</span>
+<span class="cstat-no" title="statement not covered" >                if (observations.length &gt;= 100 || storedLocations.length &gt;= 100) {</span>
+<span class="cstat-no" title="statement not covered" >                    iconClass += ' obs-marker-cluster-small-font'</span>
+                }
+<span class="cstat-no" title="statement not covered" >                if (observations.length &gt; 0 &amp;&amp; storedLocations.length &gt; 0) {</span>
+<span class="cstat-no" title="statement not covered" >                    iconClass += ' obs-marker-cluster-two-line'</span>
+                }
+<span class="cstat-no" title="statement not covered" >                var innerDiv = '&lt;div class="observation-pin obs-marker-cluster ' + appMode + '"&gt;&lt;div class="observation-pin-icon"&gt;&lt;div class="' + iconClass + '"&gt;';</span>
 <span class="cstat-no" title="statement not covered" >                if (observations.length &gt; 0) {</span>
 <span class="cstat-no" title="statement not covered" >                    innerDiv += '&lt;div&gt;&lt;i class="icon ion-eye"&gt;&lt;/i&gt;' + observations.length +'&lt;/div&gt;';</span>
                 }
@@ -142,7 +163,7 @@
 </div><!-- /wrapper -->
 <div class='footer quiet pad2 space-top1 center small'>
   Code coverage
-  generated by <a href="http://istanbul-js.org/" target="_blank">istanbul</a> at Tue Mar 07 2017 10:34:51 GMT+0100 (W. Europe Standard Time)
+  generated by <a href="http://istanbul-js.org/" target="_blank">istanbul</a> at Wed Mar 22 2017 12:39:47 GMT+0100 (W. Europe Standard Time)
 </div>
 </div>
 <script src="../../../prettify.js"></script>

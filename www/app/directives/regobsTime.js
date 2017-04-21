@@ -14,12 +14,13 @@ angular
                     var now = new Date();
                     var newTime = new Date(time);
                     if (newTime < now) {
-                        //Registration.data.DtObsTime = newTime.toISOString();
                         scope.regObject[scope.regProp] = newTime.toISOString();
                     } else {
-                        //Registration.data.DtObsTime = now.toISOString();
                         scope.regObject[scope.regProp] = now.toISOString();
                         scope.DtObsTime = now;
+                    }
+                    if (scope.onChange && angular.isFunction(scope.onChange)) {
+                        scope.onChange();
                     }
                 });
             };
@@ -42,7 +43,8 @@ angular
             scope: {
                 regObject: '=',
                 regProp: '@',
-                text: '@'
+                text: '@',
+                onChange:'&'
             },
             link: link,
             template: [

@@ -1,8 +1,10 @@
-﻿.observation-slides {
-    width: 100%;
-    height: 250px;
+﻿.observation-list-distance {
+    position: absolute;
+    bottom: 5px;
+    right: 10px;
 }
 
-.observation-slides .swiper-slide {
-    text-align: center;
+.observation-list-content .item-content {
+    padding-bottom: 24px !important;
+    padding-right: 33px !important;
 }

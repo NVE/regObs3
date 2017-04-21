@@ -18,6 +18,8 @@
         service._defaultCenter = [62.5, 10]; //default map center when no observation or user location
         service._followMode = true; //Follow user position, or has user manually dragged or zoomed map?
         service._lastViewBounds = null;
+        service._offlinemaps = [];
+        service._active = false;
 
 
         /**
@@ -143,8 +145,9 @@
                     }
                 });
             });
-            Registration.getNewRegistrations()
-                .forEach(function (reg) {
+            Registration.getNewRegistrations().filter(function (item) {
+                return item.GeoHazardTID === Utility.getCurrentGeoHazardTid();
+            }).forEach(function (reg) {
                     AppLogging.log(JSON.stringify(reg));
                     if (reg && reg.ObsLocation && reg.ObsLocation.Latitude && reg.ObsLocation.Longitude) {
                         var m = new RegObsClasses.NewRegistrationMarker(reg);
@@ -164,17 +167,17 @@
             layerGroups.observations.clearLayers();
         };
 
-        /**
-         * Draw locations stored in presistant storage as stored location markers
-         */
-        service._drawStoredLocations = function () {
-            service._checkIfInitialized();
-            Observations.getLocations(Utility.getCurrentGeoHazardTid()).forEach(function (loc) {
-                var m = new RegObsClasses.StoredLocationMarker(loc);
-                m.on('selected', function (event) { service._setSelectedItem(event.target); });
-                m.addTo(layerGroups.observations);
-            });
-        };
+        ///**
+        // * Draw locations stored in presistant storage as stored location markers
+        // */
+        //service._drawStoredLocations = function () {
+        //    service._checkIfInitialized();
+        //    Observations.getLocations(Utility.getCurrentGeoHazardTid()).forEach(function (loc) {
+        //        var m = new RegObsClasses.StoredLocationMarker(loc);
+        //        m.on('selected', function (event) { service._setSelectedItem(event.target); });
+        //        m.addTo(layerGroups.observations);
+        //    });
+        //};
 
 
         /**
@@ -309,7 +312,6 @@
             service._updateSelectedItemDistance();
             if (ObsLocation.isSet()) {
                 var obslatlng = new L.LatLng(ObsLocation.get().Latitude, ObsLocation.get().Longitude);
-                //service._updateObsInfoText(obslatlng);
                 service._updateDistanceLineLatLng(obslatlng);
             }
         };
@@ -334,7 +336,8 @@
             var lg = { //Layers are added in order
                 tiles: L.layerGroup().addTo(mapToAdd),
                 observations: new RegObsClasses.MarkerClusterGroup({ icon: 'ion-eye' }).addTo(mapToAdd),
-                user: L.layerGroup().addTo(mapToAdd)
+                offlinemaps: L.layerGroup().addTo(mapToAdd),
+                user: L.layerGroup().addTo(mapToAdd)             
             };
 
             return lg;
@@ -430,11 +433,11 @@
                     AppLogging.log('GPS error: ' + e.message);
                 });
 
-            map.on('contextmenu', function (e) {
-                if (service._isSetLocationManuallyPossible()) {
-                    service._setObsLocation(e.latlng); //Set location manually on right klick / long press in map if no registration present
-                }
-            });
+            //map.on('contextmenu', function (e) {
+            //    if (service._isSetLocationManuallyPossible()) {
+            //        service._setObsLocation(e.latlng); //Set location manually on right klick / long press in map if no registration present
+            //    }
+            //});
 
             map.on('click', service.clearSelectedMarkers);
 
@@ -466,13 +469,17 @@
             L.control.scale({ imperial: false }).addTo(map);
 
             $rootScope.$on('$regObs:registrationSaved', function () {
-                service.refresh();
-                $timeout(function () {
-                    map.invalidateSize(); //Footer bar could have been removed, invalidate map size
-                }, 50);
+                //if (service._active) {
+                    service.refresh();
+                    $timeout(function () {
+                        map.invalidateSize(); //Footer bar could have been removed, invalidate map size
+                    }, 50);
+                //}
             });
 
-            $rootScope.$on('$regObs:appSettingsChanged', service.refresh);
+            $rootScope.$on('$regObs:appSettingsChanged', function () {
+                service.refresh();
+            });
 
             $rootScope.$on('$regObs:registrationReset', function () {
                 $timeout(function () {
@@ -615,7 +622,7 @@
             //    AppSettings.save();
             //}
 
-            return RegobsPopup.downloadProgress('UPDATE_DATA_MESSAGE', workFunc, { longTimoutMessageDelay: 15, closeOnComplete: true });
+            return RegobsPopup.downloadProgress('UPDATE_MAP_OBSERVATIONS', workFunc, { longTimoutMessageDelay: 20, closeOnComplete: true });
         };
 
         /**
@@ -674,6 +681,22 @@
 
         };
 
+        service.setOfflineAreaBounds = function (offlineMapsBoundsArray) {
+            if (!angular.isArray(offlineMapsBoundsArray)) throw Error('offlineMapsBoundsArray must be an array!');
+            service._offlinemaps = offlineMapsBoundsArray;
+            service._redrawOfflineMapLines();
+        };
+
+        service._redrawOfflineMapLines = function () {
+            if (layerGroups.offlinemaps) {
+                layerGroups.offlinemaps.clearLayers();
+                service._offlinemaps.forEach(function (item) {
+                    var bounds = L.latLngBounds(item);
+                    var polygon = L.polygon([bounds.getNorthWest(), bounds.getNorthEast(), bounds.getSouthEast(), bounds.getSouthWest()], { color: "#ff7800", weight: 2, fill: false }).addTo(layerGroups.offlinemaps);
+                });
+            }
+        };
+
         /**
          * Refresh map an redraw layers and markers as set in settings
          * @returns {} 
@@ -687,13 +710,14 @@
 
             service._checkSelectedItemGeoHazard();
             service._redrawTilesForThisGeoHazard();
+            service._redrawOfflineMapLines();
 
             Registration.clearNewRegistrationsWithinRange()
                 .then(function () {
                     service._removeObservations(); //clear all markers
-                    if (AppSettings.data.showPreviouslyUsedPlaces) {
-                        service._drawStoredLocations();
-                    }
+                    //if (AppSettings.data.showPreviouslyUsedPlaces) {
+                    //    service._drawStoredLocations();
+                    //}
                     if (AppSettings.data.showObservations) {
                         service._drawObservations();
                     }
@@ -714,6 +738,7 @@
                         map.locate({ watch: true, enableHighAccuracy: true });
                     },
                     false);
+                service._active = true;
             }
         };
 
@@ -726,6 +751,7 @@
                 AppLogging.log('Stop watching gps location');
                 map.stopLocate();
             }
+            service._active = false;
         };
 
         /**

@@ -17,3 +17,7 @@ secret.json
 /build.json
 /bld/iOS/Debug
 /bin/iOS/Debug
+/.vs/regObs3/v15/.suo
+simulation/
+/bin/iOS/Release
+/bld/iOS/Release

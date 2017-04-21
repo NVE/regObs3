@@ -1,5 +1,5 @@
 ﻿angular.module('RegObs')
-    .controller('MapStartCtrl', function ($scope, $rootScope, $state, $ionicHistory, User, Map, AppSettings, Registration, AppLogging, Utility, $timeout, $ionicPopover, $cordovaInAppBrowser, Observations, RegobsPopup, UserLocation, $translate, Trip) {
+    .controller('MapStartCtrl', function ($scope, $rootScope, $state, $ionicHistory, User, Map, AppSettings, Registration, AppLogging, Utility, $timeout, $ionicPopover, $cordovaInAppBrowser, Observations, RegobsPopup, UserLocation, $translate, Trip, Translate, OfflineMap) {
         var appVm = this;
 
         appVm.gpsCenterClick = Map.centerMapToUser;
@@ -7,6 +7,10 @@
             if (appVm.mapSelectedItem && appVm.mapSelectedItem.isClickable()) {
                 appVm.mapSelectedItem.onClick();
             }
+        };
+
+        appVm.gotoRegistration = function () {
+            Registration.createAndGoToNewRegistration();
         };
 
         appVm.hasRegistration = function () {
@@ -65,11 +69,37 @@
             return AppSettings.getAppMode();
         };
 
+
         appVm.getFollowMode = Map.getFollowMode;
 
+        appVm.viewTitle = 'regObs';
+
+        appVm.setViewTitle = function () {
+            appVm.viewTitle = 'regObs';
+            var currentAppMode = AppSettings.getAppMode();
+            if (currentAppMode) { 
+                Translate.translateWithFallback(currentAppMode.toUpperCase(), '').then(function (result) {
+                    $timeout(function () {
+                        var title = 'regObs' + (result ? ' / ' + result : '');
+                        appVm.viewTitle = title;
+                    });
+                });
+            }
+        };
+
         $scope.$on('$ionicView.enter', function () {
+            $ionicHistory.clearHistory();
+
+            appVm.setViewTitle();                
             Map.invalidateSize();
             Map.startWatch();
+            OfflineMap.getOfflineAreaBounds().then(function (result) {
+                Map.setOfflineAreaBounds(result);
+            });
+        });
+
+        $scope.$on('$regobs.appModeChanged', function () {
+            appVm.setViewTitle();
         });
 
         appVm._checkObsWatch = $timeout(function () {
@@ -104,6 +134,4 @@
                 appVm.mapSelectedItem = item;
             });
         });
-
-
     });

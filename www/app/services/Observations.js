@@ -27,6 +27,10 @@ angular
             return locationsStorageKey + '_' + AppSettings.data.env.replace(/ /g, '');
         };
 
+
+        /**
+        * Get registratons from presistant storage. TODO: rewrite to SQLLite plugin for better performance?
+        */
         service._getRegistrationsFromPresistantStorage = function () {
             return $q(function (resolve) {
                 document.addEventListener("deviceready", function () {
@@ -206,11 +210,15 @@ angular
         };
 
         service._mergeRegistrations = function (destArr, existingRegistrations) {
+            var keepLimit = moment(AppSettings.getObservationsFromDateISOString(), moment.ISO_8601);
             existingRegistrations.forEach(function (item) {
-                var newRegistration = destArr.filter(function (reg) { return reg.RegId === item.RegId });
-                if (newRegistration.length === 0) {
-                    //Registration does not exist, push old value to new list
-                    destArr.push(item);
+                var date = moment(item.DtObsTime, moment.ISO_8601); //strict parsing
+                if (date.isBefore(keepLimit)) { //only keep old values before new observation time to remove deleted items
+                    var newRegistration = destArr.filter(function (reg) { return reg.RegId === item.RegId });
+                    if (newRegistration.length === 0) {
+                        //Registration does not exist, push old value to new list
+                        destArr.push(item);
+                    }
                 }
             });
         };
@@ -237,7 +245,7 @@ angular
 
 
         service._getShowObservationsDaysBack = function () {
-            return AppSettings.data.showObservationsDaysBack;
+            return AppSettings.getObservationsDaysBack();
         };
 
         /**
@@ -419,18 +427,17 @@ angular
                     });
             };
 
-            var testAndUpdateNearbyLocations = function() {
-                if (AppSettings.data.showPreviouslyUsedPlaces) {
-                    return service.updateNearbyLocations(latitude, longitude, range, geohazardId, cancel);
-                } else {
-                    return $q(function(resolve) {
-                        resolve();
-                    });
-                }
-            };
+            //var testAndUpdateNearbyLocations = function() {
+            //    if (AppSettings.data.showPreviouslyUsedPlaces) {
+            //        return service.updateNearbyLocations(latitude, longitude, range, geohazardId, cancel);
+            //    } else {
+            //        return $q(function(resolve) {
+            //            resolve();
+            //        });
+            //    }
+            //};
 
-            return testAndUpdateNearbyLocations()
-            .then(service.removeOldObservationsFromPresistantStorage)
+            return service.removeOldObservationsFromPresistantStorage()
             .then(function () {
                 return service._getRegistrationsWithinRadius(latitude,
                     longitude,
@@ -453,7 +460,7 @@ angular
             var warnIfOlderThanHoursBack = 12;
             if (!lastRun) return true;
             var lastRunMoment = moment(lastRun);
-            var diff = lastRunMoment.diff(moment(), 'hours');
+            var diff = moment().diff(lastRunMoment, 'hours');
             if (diff > warnIfOlderThanHoursBack) {
                 return true;
             }

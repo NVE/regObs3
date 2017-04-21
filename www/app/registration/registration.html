@@ -1,0 +1,20 @@
+<ion-view view-title={{vm.getTitle()|translate}}>
+    <ion-nav-buttons side="right">
+        <nav-saving-indicator></nav-saving-indicator>
+    </ion-nav-buttons>
+    <ion-content ng-class="{'has-footer': vm.hasFooter()}", ng-show="vm.loaded">
+        <ion-list>
+            <regobs-position></regobs-position>
+            <regobs-time reg-object="vm.reg" reg-prop="DtObsTime" on-change="vm.save()"></regobs-time>
+            <div ng-if="vm.reg.GeoHazardTID === 10" ng-include="'app/snow/snowregistration/snowregistration.html'"></div>
+            <div ng-if="vm.reg.GeoHazardTID === 20" ng-include="'app/dirt/dirtregistration/dirtregistration.html'"></div>
+            <div ng-if="vm.reg.GeoHazardTID === 60" ng-include="'app/water/waterregistration/waterregistration.html'"></div>
+            <div ng-if="vm.reg.GeoHazardTID === 70" ng-include="'app/ice/iceregistration/iceregistration.html'"></div>
+            <regobs-menu-item title="Fritekst"
+                              condition="vm.propertyExists('GeneralObservation')"
+                              state="generalobs">
+            </regobs-menu-item>
+        </ion-list>
+    </ion-content>
+    <registration-footer ng-cloak ng-if="vm.loaded"></registration-footer>
+</ion-view>

@@ -8,7 +8,7 @@
         <ion-slide-page ng-repeat="img in $ctrl.registration.getImages() track by $index">
             <img ng-src="{{img.url}}" alt="obsimg" class="obs-detail-image" />
             <p class="padding obs-detail-image-text">
-                <strong>{{'IMAGE' | translate}} {{($index+1)}} {{'OF' | translate}} {{$ctrl.registration.getImageCount()}}<span ng-if="img.description">:</span></strong> {{img.description}}
+                <strong>{{'IMAGE' | translate}} {{($index+1)}} {{'OF' | translate}} {{$ctrl.registration.getImageCount()}}:</strong> {{img.name}}<span ng-show="img.description"> &bull; {{img.description}}</span>
             </p>
         </ion-slide-page>
     </ion-slides>

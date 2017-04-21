@@ -2,11 +2,42 @@
     "use strict";
 
     angular.module('RegObs', ['ionic', 'ngCordova', 'ion-floating-menu', 'angularProgressbar', 'pascalprecht.translate', 'ngWebworker'])
-           .config(providers)
-           .run(setup);
+        .config(providers)
+        .run(setup);
 
-    function providers($stateProvider, $urlRouterProvider, $ionicConfigProvider, AppSettingsProvider, $translateProvider) {
+    function providers($provide, $stateProvider, $urlRouterProvider, $ionicConfigProvider, AppSettingsProvider, $translateProvider, UserProvider, UtilityProvider) {
         'ngInject';
+
+        var utils = UtilityProvider.$get();
+        if (!utils.isRippleEmulator()) {
+            $provide.decorator('$exceptionHandler', ['$delegate',
+                function ($delegate) {
+                    return function (exception, cause) {
+                        if (ga_storage) {
+                            var userService = UserProvider.$get();
+                            var appSettings = AppSettingsProvider.$get();
+                            var user = userService.getUser();
+                            var userText = 'Anonymous user';
+                            if (!user.anonymous) {
+                                userText = 'User: ' + user.Guid + ' Nick: ' + user.Nick;
+                            }
+
+                            var initInjector = angular.injector(['ng']);
+                            var $http = initInjector.get('$http');
+
+                            $http.get('app/json/version.json').then(function (version) {
+                                var label = 'Error ' + appSettings.data.env + ' ' + version.data.version + ' ' + version.data.build;
+                                var action = ((cause || '') + ' ' + exception.message).trim();
+                                var stack = userText + ' Stack: ' + exception.stack.replace(/(\r\n|\n|\r)/gm, "\n ○ ");
+                                ga_storage._trackEvent(label, action, stack);
+                            });
+                        }
+                        $delegate(exception, cause);
+                    };
+                }
+            ]);
+        }
+
 
         if (ionic.Platform.isAndroid()) {
             $ionicConfigProvider.scrolling.jsScrolling(false);
@@ -17,44 +48,21 @@
         };
 
         $translateProvider.useSanitizeValueStrategy('escapeParameters')
-        .useStaticFilesLoader({
-            prefix: './app/json/localization/',
-            suffix: '.json'
-        }).registerAvailableLanguageKeys(['no'], langMap)
+            .useStaticFilesLoader({
+                prefix: './app/json/localization/',
+                suffix: '.json'
+            }).registerAvailableLanguageKeys(['no'], langMap)
             .preferredLanguage('no')
             .fallbackLanguage(['no']);
 
-        var defaultBackIceRegistration = {
-            state: 'iceregistrationNew',
-            force: true
-        };
-        var defaultBackSnowRegistration = {
-            state: 'snowregistrationNew',
-            force: true
-        };
-        var defaultBackDirtRegistration = {
-            state: 'dirtregistrationNew',
-            force: true
-        };
-        var defaultBackWaterRegistration = {
-            state: 'waterregistrationNew',
-            force: true
-        };
-        var defaultBackStart = {
-            state: 'start',
-            title: 'MAP',
-            force: true
-        };
-        var defaultBackHelp = {
-            state: 'start'
-        };
 
-        var appSettings = AppSettingsProvider.$get();
-        if (!appSettings.hasSetAppMode()) {
+        if (!AppSettingsProvider.$get().hasSetAppMode()) {
             $urlRouterProvider.otherwise('/wizard');
         } else {
             $urlRouterProvider.otherwise('/start');
         }
+
+        $ionicConfigProvider.backButton.previousTitleText(false).text('&emsp;&emsp;'); //Increase the touch target area on back button
 
         $stateProvider
             .state('wizard', {
@@ -66,55 +74,30 @@
             .state('start', {
                 url: '/start',
                 templateUrl: 'app/map/mapstart.html',
-                controller: 'MapStartCtrl as vm',
-                data: {
-                    showMapToggle: true,
-                    showRegistrationFooter: true,
-                    clearHistory: true
-                }
+                controller: 'MapStartCtrl as vm'
             })
             .state('settings', {
                 url: '/settings',
                 templateUrl: 'app/settings/settingsview.html',
-                controller: 'SettingsViewCtrl as vm',
-                data: {
-                    defaultBack: defaultBackHelp,
-                    showSettings: false
-                }
+                controller: 'SettingsViewCtrl as vm'
             })
             .state('offlinemapoverview', {
                 url: '/offlinemapoverview',
                 templateUrl: 'app/map/offlinemapoverview.html',
-                controller: 'OfflineMapOverviewCtrl as vm',
-                data: {
-                    defaultBack: defaultBackStart,
-                    showSettings: false
-                }
+                controller: 'OfflineMapOverviewCtrl as vm'
             })
             .state('mapareadownload', {
                 url: '/mapareadownload',
                 templateUrl: 'app/map/mapareadownload.html',
                 controller: 'MapAreaDownloadCtrl as vm',
-                cache: false,
-                data: {
-                    defaultBack: {
-                        state: 'offlinemapoverview'
-                    },
-                    showSettings: false
-                }
+                cache: false
             })
             .state('offlineareadetails', {
                 url: '/offlineareadetails',
                 templateUrl: 'app/map/offlineareadetails.html',
                 controller: 'OfflineAreaDetailsCtrl as vm',
                 cache: false,
-                params: { area: null },
-                data: {
-                    defaultBack: {
-                        state: 'offlinemapoverview'
-                    },
-                    showSettings: false
-                }
+                params: { area: null }
             })
 
             .state('observationdetails', {
@@ -122,40 +105,27 @@
                 templateUrl: 'app/observations/details/observationdetails.html',
                 controller: 'ObservationDetailsCtrl as vm',
                 cache: false,
-                params: { observation: null },
-                data: {
-                    defaultBack: defaultBackHelp,
-                    showSettings: false
-                }
+                params: { observation: null }
             })
 
             .state('observationlist', {
                 url: '/observationlist',
                 templateUrl: 'app/observations/list/observationlist.html',
-                controller: 'ObservationListCtrl as vm',
-                data: {
-                    defaultBack: defaultBackStart
-                }
+                controller: 'ObservationListCtrl as vm'
             })
 
-            //SNØ
-            .state('snowregistrationNew', {
-                url: '/snowregistration',
-                templateUrl: 'app/snow/snowregistration/snowregistration.html',
-                controller: 'SnowRegistrationCtrl as vm',
-                data: {
-                    defaultBack: defaultBackStart,
-                    showRegistrationFooter: true
-                }
+            .state('newregistration', {
+                url: '/newregistration',
+                templateUrl: 'app/registration/registration.html',
+                controller: 'RegistrationCtrl as vm'
             })
+
+
+            //SNØ
             .state('snowtrip', {
                 url: '/snowtrip',
                 templateUrl: 'app/snow/trip/trip.html',
-                controller: 'TripCtrl as vm',
-                data: {
-                    defaultBack: defaultBackStart,
-                    showTripFooter: true
-                }
+                controller: 'TripCtrl as vm'
             })
             .state('snowdangerobs', {
                 //Faretegn
@@ -163,8 +133,6 @@
                 templateUrl: 'app/snow/snowregistration/snowdangerobs/snowdangerobs.html',
                 controller: 'SnowDangerObsCtrl as vm',
                 data: {
-                    defaultBack: defaultBackSnowRegistration,
-                    showFormFooter: true,
                     registrationProp: 'DangerObs'
                 }
             })
@@ -174,8 +142,6 @@
                 templateUrl: 'app/snow/snowregistration/stabilitytest/stabilitytest.html',
                 controller: 'SnowStabilityTestCtrl as vm',
                 data: {
-                    defaultBack: defaultBackSnowRegistration,
-                    showFormFooter: true,
                     registrationProp: 'CompressionTest'
                 }
             })
@@ -185,8 +151,6 @@
                 templateUrl: 'app/snow/snowregistration/avalancheobs/avalancheobs.html',
                 controller: 'AvalancheObsCtrl as vm',
                 data: {
-                    defaultBack: defaultBackSnowRegistration,
-                    showFormFooter: true,
                     registrationProp: 'AvalancheObs'
                 }
             })
@@ -196,8 +160,6 @@
                 templateUrl: 'app/snow/snowregistration/avalancheactivityobs/avalancheactivityobs.html',
                 controller: 'AvalancheActivityObsCtrl as vm',
                 data: {
-                    defaultBack: defaultBackSnowRegistration,
-                    showFormFooter: true,
                     registrationProp: 'AvalancheActivityObs2'
                 }
             })
@@ -207,8 +169,6 @@
                 templateUrl: 'app/snow/snowregistration/snowweatherobservation/snowweatherobservation.html',
                 controller: 'SnowWeatherObservationCtrl as vm',
                 data: {
-                    defaultBack: defaultBackSnowRegistration,
-                    showFormFooter: true,
                     registrationProp: 'WeatherObservation'
                 }
             })
@@ -218,8 +178,6 @@
                 templateUrl: 'app/snow/snowregistration/snowsurfaceobservation/snowsurfaceobservation.html',
                 controller: 'SnowSurfaceObservationCtrl as vm',
                 data: {
-                    defaultBack: defaultBackSnowRegistration,
-                    showFormFooter: true,
                     registrationProp: 'SnowSurfaceObservation'
                 }
             })
@@ -229,8 +187,6 @@
                 templateUrl: 'app/snow/snowregistration/snowprofile/snowprofile.html',
                 controller: 'SnowProfileCtrl as vm',
                 data: {
-                    defaultBack: defaultBackSnowRegistration,
-                    showFormFooter: true,
                     registrationProp: 'SnowProfile'
                 }
             })
@@ -240,8 +196,6 @@
                 templateUrl: 'app/snow/snowregistration/avalancheevalproblem/avalancheevalproblem.html',
                 controller: 'AvalancheEvalProblemCtrl as vm',
                 data: {
-                    defaultBack: defaultBackSnowRegistration,
-                    showFormFooter: true,
                     registrationProp: 'AvalancheEvalProblem2'
                 }
             })
@@ -251,30 +205,17 @@
                 templateUrl: 'app/snow/snowregistration/avalancheevaluation/avalancheevaluation.html',
                 controller: 'AvalancheEvaluationCtrl as vm',
                 data: {
-                    defaultBack: defaultBackSnowRegistration,
-                    showFormFooter: true,
                     registrationProp: 'AvalancheEvaluation3'
                 }
             })
 
             //IS
-            .state('iceregistrationNew', {
-                url: '/iceregistration',
-                templateUrl: 'app/ice/iceregistration/iceregistration.html',
-                controller: 'IceRegistrationCtrl as vm',
-                data: {
-                    defaultBack: defaultBackStart,
-                    showRegistrationFooter: true
-                }
-            })
             .state('icedangerobs', {
                 //Faretegn
                 url: '/icedangerobs',
                 templateUrl: 'app/ice/iceregistration/icedangerobs/icedangerobs.html',
                 controller: 'IceDangerObsCtrl as vm',
                 data: {
-                    defaultBack: defaultBackIceRegistration,
-                    showFormFooter: true,
                     registrationProp: 'DangerObs'
                 }
             })
@@ -284,8 +225,6 @@
                 templateUrl: 'app/ice/iceregistration/icecoverobs/icecoverobs.html',
                 controller: 'IceCoverObsCtrl as vm',
                 data: {
-                    defaultBack: defaultBackIceRegistration,
-                    showFormFooter: true,
                     registrationProp: 'IceCoverObs'
                 }
             })
@@ -295,8 +234,6 @@
                 templateUrl: 'app/ice/iceregistration/icethickness/icethickness.html',
                 controller: 'IceThicknessCtrl as vm',
                 data: {
-                    defaultBack: defaultBackIceRegistration,
-                    showFormFooter: true,
                     registrationProp: 'IceThickness'
                 }
             })
@@ -306,30 +243,17 @@
                 templateUrl: 'app/ice/iceregistration/iceincident/iceincident.html',
                 controller: 'IceIncidentCtrl as vm',
                 data: {
-                    defaultBack: defaultBackIceRegistration,
-                    showFormFooter: true,
                     registrationProp: 'Incident'
                 }
             })
 
             //VANN
-            .state('waterregistrationNew', {
-                url: '/waterregistration',
-                templateUrl: 'app/water/waterregistration/waterregistration.html',
-                controller: 'WaterRegistrationCtrl as vm',
-                data: {
-                    defaultBack: defaultBackStart,
-                    showRegistrationFooter: true
-                }
-            })
             .state('waterdangerobs', {
                 //Faretegn
                 url: '/waterdangerobs',
                 templateUrl: 'app/water/waterregistration/waterdangerobs/waterdangerobs.html',
                 controller: 'WaterDangerObsCtrl as vm',
                 data: {
-                    defaultBack: defaultBackWaterRegistration,
-                    showFormFooter: true,
                     registrationProp: 'DangerObs'
                 }
             })
@@ -339,8 +263,6 @@
                 templateUrl: 'app/water/waterregistration/waterlevel/waterlevel.html',
                 controller: 'WaterLevelCtrl as vm',
                 data: {
-                    defaultBack: defaultBackWaterRegistration,
-                    showFormFooter: true,
                     registrationProp: 'WaterLevel'
                 }
             })
@@ -350,30 +272,17 @@
                 templateUrl: 'app/water/waterregistration/waterincident/waterincident.html',
                 controller: 'WaterIncidentCtrl as vm',
                 data: {
-                    defaultBack: defaultBackWaterRegistration,
-                    showFormFooter: true,
                     registrationProp: 'Incident'
                 }
             })
 
             //JORD
-            .state('dirtregistrationNew', {
-                url: '/dirtregistration',
-                templateUrl: 'app/dirt/dirtregistration/dirtregistration.html',
-                controller: 'DirtRegistrationCtrl as vm',
-                data: {
-                    defaultBack: defaultBackStart,
-                    showRegistrationFooter: true
-                }
-            })
             .state('dirtdangerobs', {
                 //Faretegn
                 url: '/dirtdangerobs',
                 templateUrl: 'app/dirt/dirtregistration/dirtdangerobs/dirtdangerobs.html',
                 controller: 'DirtDangerObsCtrl as vm',
                 data: {
-                    defaultBack: defaultBackDirtRegistration,
-                    showFormFooter: true,
                     registrationProp: 'DangerObs'
                 }
             })
@@ -383,8 +292,6 @@
                 templateUrl: 'app/dirt/dirtregistration/landslideobs/landslideobs.html',
                 controller: 'LandSlideObsCtrl as vm',
                 data: {
-                    defaultBack: defaultBackDirtRegistration,
-                    showFormFooter: true,
                     registrationProp: 'LandSlideObs'
                 }
             })
@@ -396,7 +303,6 @@
                 templateUrl: 'app/generalobs/generalobs.html',
                 controller: 'GeneralObsCtrl as vm',
                 data: {
-                    showFormFooter: true,
                     registrationProp: 'GeneralObservation'
                 }
             })
@@ -405,13 +311,9 @@
                 templateUrl: function (stateParams) {
                     return 'app/help/' + stateParams.page + '.html';
                 },
-                controller: 'HelpCtrl as vm',
-                data: {
-                    defaultBack: defaultBackHelp,
-                    showSettings: false
-                }
+                controller: 'HelpCtrl as vm'
             });
-    }
+    };
 
     function setup($ionicPlatform, Utility, AppLogging, Registration, Observations, OfflineMap) {
         'ngInject';
@@ -435,9 +337,10 @@
             }
 
             document.addEventListener("deviceready", function () {
+                Registration.clearNewRegistrations();
                 Observations.removeOldObservationsFromPresistantStorage(); //cleanup old observations on startup
                 OfflineMap.checkUncompleteDownloads(); //Check if any uncomplete downloads and continue download progress
-            });        
+            });
         });
 
         $ionicPlatform.on('resume', function () {

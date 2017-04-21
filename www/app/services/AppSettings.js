@@ -8,7 +8,7 @@
         var storageKey = 'regobsAppSettings';
         settings._defaults = {
             env: 'regObs',
-            emailReceipt: false,
+            emailReceipt: true,
             compass: false,
             searchRange: 50000,
             locale: 'nb',
@@ -23,9 +23,7 @@
                 { geoHazardTid: 70, tiles: [{ name: 'ice', opacity: 0.5, visible: true }] },
                 { geoHazardTid: 60, tiles: [{ name: 'flood', opacity: 0.5, visible: true }] }
             ],
-            showObservations: true,
-            showObservationsDaysBack: 3,
-            showPreviouslyUsedPlaces: false
+            showObservations: true
         };
 
         var baseUrls = {
@@ -181,12 +179,34 @@
         };
 
         settings.getObservationsFromDateISOString = function() {
-            return moment().subtract(settings.data.showObservationsDaysBack, 'days').startOf('day').toISOString();
+            return moment().subtract(settings.getObservationsDaysBack(), 'days').startOf('day').toISOString();
         };
 
-        settings.getObservationsDaysBack = function() {
-            return settings.data.showObservationsDaysBack;
+        settings.getObservationsDaysBack = function () {
+            var currentAppMode = settings.getAppMode();
+            var settingsKey = 'showObservationsDaysBack' + currentAppMode;
+
+            //first, check local storage settings for user saved setting
+            if (settings.data[settingsKey] !== undefined && settings.data[settingsKey] >= 0) {
+                return settings.data[settingsKey];
+            }
+            //else return default days back for current geo hazard
+            var daysBackDefault = settings.getDaysBackArrayForCurrentGeoHazard().filter(function (item) {
+                return item.default;
+            });
+            if (daysBackDefault.length > 0) {
+                return daysBackDefault[0].value;
+            }
+            return 3; //If nothning found, return 3 days
         };
+
+        settings.setObservationsDaysBack = function (value) {
+            var currentAppMode = settings.getAppMode();
+            var settingsKey = 'showObservationsDaysBack' + currentAppMode;
+            settings.data[settingsKey] = value;
+            settings.save();
+        };
+
 
         settings.getCurrentLangKey = function() {
             return 1; //Implement when language support is needed
@@ -196,6 +216,24 @@
             return settings.data.env === 'regObs' ? 'bar-dark' : (settings.data.env === 'demo regObs' ? 'bar-assertive' : 'bar-calm');
         };
 
+
+        settings.getDaysBackSettings = function () {
+            return {
+                snow: [{ name: 'TODAYS_OBSERATIONS', value: 0 },{ name: 'ONE_DAY_BACK', value: 1 }, { name: 'TWO_DAYS_BACK', value: 2 }, { name: 'THREE_DAYS_BACK', value: 3, default: true }, { name: 'ONE_WEEK_BACK', value: 7 }, { name: 'TWOO_WEEKS_BACK', value: 14 }],
+                ice: [{ name: 'ONE_DAY_BACK', value: 1 }, { name: 'TWO_DAYS_BACK', value: 2 }, { name: 'ONE_WEEK_BACK', value: 7, default:true }, { name: 'FOUR_WEEKS_BACK', value: 28 }, { name: 'TWELVE_WEEKS_BACK', value: 84 }],
+                default: [{ name: 'ONE_DAY_BACK', value: 1 }, { name: 'TWO_DAYS_BACK', value: 2 }, { name: 'THREE_DAYS_BACK', value: 3, default: true }, { name: 'ONE_WEEK_BACK', value: 7 }, { name: 'TWOO_WEEKS_BACK', value: 14 }]
+            };
+        };
+
+        settings.getDaysBackArrayForCurrentGeoHazard = function () {
+            var currentAppMode = settings.getAppMode();
+            var daysBackSettings = settings.getDaysBackSettings();
+            if (angular.isArray(daysBackSettings[currentAppMode])) {
+                return daysBackSettings[currentAppMode];
+            } else {
+                return daysBackSettings.default;
+            }
+        };
 
         init();
         settings.load();

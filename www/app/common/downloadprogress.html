@@ -1,5 +1,5 @@
 ﻿<div ng-if="downloadStatus">
-    <div class="downloadprogress" pb-circle progress-key="{{progressName}}" options="progressOptions"></div>    
+    <div class="downloadprogress" pb-circle progress-key="{{progressName}}" options="progressOptions"></div>
     <div ng-show="downloadStatus.hasError() && !downloadStatus.isCancelled()" class="item-text-wrap text-center">
         <span ng-bind="downloadStatus.getErrors().length"></span>/<span ng-bind="downloadStatus.getTotal()"></span> {{"FAILED" | translate | lowercase}}
     </div>
@@ -9,9 +9,10 @@
 </div>
 <div class="item-text-wrap text-center" ng-if="showLongDownloadMessage && !complete">{{"SLOW_DOWNLOAD_MESSAGE" | translate}}</div>
 <div class="popup-buttons">
-    <button type="button" class="button button-dark" ng-show="isRunning()" ng-click="cancelDownload()">{{"CANCEL" | translate}}</button>
-    <div ng-show="isProcessing()" class="text-center">
-        <ion-spinner></ion-spinner>
-    </div>
+    <button type="button" class="button button-dark" ng-show="isRunning()" ng-click="cancelDownload()">
+        <div class="center-vertical-horizontal">
+            {{"CANCEL" | translate}} <ion-spinner class="button-spinner" ng-show="isProcessing()"></ion-spinner>
+        </div>
+    </button>
     <button type="button" class="button button-calm" ng-show="complete" ng-click="closePopup()">{{"OK" | translate}}</button>
 </div>

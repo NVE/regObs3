@@ -14,7 +14,14 @@
                 var childPins = cluster.getAllChildMarkers();
                 var observations = childPins.filter(function (item) { return item instanceof ObservationMarker });
                 var storedLocations = childPins.filter(function (item) { return item instanceof StoredLocationMarker });
-                var innerDiv = '<div class="observation-pin obs-marker-cluster ' + appMode + '"><div class="observation-pin-icon"><div class="obs-marker-cluster-icons ' +(observations.length > 0 && storedLocations.length > 0 ? 'obs-marker-cluster-two-line' : '') + '">';
+                var iconClass = 'obs-marker-cluster-icons';
+                if (observations.length >= 100 || storedLocations.length >= 100) {
+                    iconClass += ' obs-marker-cluster-small-font'
+                }
+                if (observations.length > 0 && storedLocations.length > 0) {
+                    iconClass += ' obs-marker-cluster-two-line'
+                }
+                var innerDiv = '<div class="observation-pin obs-marker-cluster ' + appMode + '"><div class="observation-pin-icon"><div class="' + iconClass + '">';
                 if (observations.length > 0) {
                     innerDiv += '<div><i class="icon ion-eye"></i>' + observations.length +'</div>';
                 }

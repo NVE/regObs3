@@ -144,6 +144,50 @@
         expect(resultWithOutParameter).toEqual(false);
     }));
 
+    it("_mergeRegistrations do not add items that exists in new observations", inject(function (Observations, AppSettings) {
+        spyOn(AppSettings, 'getObservationsFromDateISOString')
+            .and.callFake(function () {
+                return '2017-02-17T00:00:00.000';
+            });
+
+        var newObservations = [{ RegId: 1, DtObsTime: '2017-02-18T00:00:00.000'}];
+        var existingObservations = [{ RegId: 1, DtObsTime: '2017-02-18T00:00:05.000' }];
+
+        Observations._mergeRegistrations(newObservations, existingObservations);
+        expect(newObservations.length).toEqual(1);
+        expect(newObservations[0].RegId).toEqual(1);
+        expect(newObservations[0].DtObsTime).toEqual('2017-02-18T00:00:00.000');
+    }));
+
+    it("_mergeRegistrations adds existing items that is before new observation date fetch limit", inject(function (Observations, AppSettings) {
+        spyOn(AppSettings, 'getObservationsFromDateISOString')
+            .and.callFake(function () {
+                return '2017-02-17T00:00:00.000';
+            });
+
+        var newObservations = [{ RegId: 1, DtObsTime: '2017-02-18T00:00:00.000' }];
+        var existingObservations = [{ RegId: 2, DtObsTime: '2017-02-16T00:00:05.000' }];
+
+        Observations._mergeRegistrations(newObservations, existingObservations);
+        expect(newObservations.length).toEqual(2);
+        expect(newObservations[0].RegId).toEqual(1);
+        expect(newObservations[1].RegId).toEqual(2);
+    }));
+
+    it("_mergeRegistrations deletes existing items not in new registrations after get observations fetch limit", inject(function (Observations, AppSettings) {
+        spyOn(AppSettings, 'getObservationsFromDateISOString')
+            .and.callFake(function () {
+                return '2017-02-17T00:00:00.000';
+            });
+
+        var newObservations = [{ RegId: 1, DtObsTime: '2017-02-18T00:00:00.000' }];
+        var existingObservations = [{ RegId: 2, DtObsTime: '2017-02-18T00:00:05.000' }]; //this is after get observations from date, and should be in new result. So if it's not in new result, then it's deleted and sould not be added
+
+        Observations._mergeRegistrations(newObservations, existingObservations);
+        expect(newObservations.length).toEqual(1);
+        expect(newObservations[0].RegId).toEqual(1);
+    }));
+
     it("removeOldObservationsFromPresistantStorage should delete items that is older than 15 days", function (done) {
         inject(function (Observations, $q, $rootScope) {
 

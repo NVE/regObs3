@@ -50,6 +50,31 @@ angular
             return service.getWindDirectionText(direction, true);
         };
 
+        service.getExposionHeightText = function (item, data) {
+            AppLogging.log('data.FullObject.ExposedHeightComboTID: ' + data.FullObject.ExposedHeightComboTID);
+            AppLogging.log('data.FullObject: ' + JSON.stringify(data.FullObject));
+
+            var getValue = function (item) {
+                if (item === undefined || item === null) {
+                    return 'ukjent';
+                }
+                return item;
+            };
+
+            switch (data.FullObject.ExposedHeightComboTID) {
+                case 1:
+                    return 'Over ' + getValue(data.FullObject.ExposedHeight1) + ' moh';
+                case 2:
+                    return 'Under ' + getValue(data.FullObject.ExposedHeight1) + ' moh';
+                case 3:
+                    return 'Ikke mellom ' + getValue(data.FullObject.ExposedHeight1) + ' - ' + getValue(data.FullObject.ExposedHeight2) +' moh';
+                case 4:
+                    return 'Mellom ' + getValue(data.FullObject.ExposedHeight1) + ' - ' + getValue(data.FullObject.ExposedHeight2) +' moh';
+            }
+
+            return getValue(data.FullObject.ExposedHeight1) +' moh';
+        };
+
         /**
          * Get description from exposition bit order, for example 00011001
          * @param {} expositionBitOrder 
@@ -86,7 +111,7 @@ angular
         };
 
         service.formatStabilityTest = function (fullObject) {
-            var result = fullObject.PropagationTName;
+            var result = fullObject.PropagationTID > 0 ? fullObject.PropagationTName : '';
 
             if (fullObject.TapsFracture > 0) {
                 result += fullObject.TapsFracture;
@@ -100,6 +125,10 @@ angular
                 result += fullObject.ComprTestFractureTName;
             }
             return result;
+        };
+
+        service.showStabilityTest = function (fullObject) {
+            return fullObject.PropagationTID > 0 || fullObject.TapsFracture > 0 || fullObject.FractureDepth > 0 || fullObject.ComprTestFractureTID > 0;
         };
 
         //Brukt der det er bilder (RegistrationTID)
@@ -162,9 +191,7 @@ angular
                     AvalTriggerSimpleTID: {},
                     DestructiveSizeTID: {},
                     AvalPropagationTID: {},
-                    ExposedHeightComboTID: {},
-                    ExposedHeight1: { displayFormat: { valueFormat: function (item) { return item + ' m' } } },
-                    ExposedHeight2: { displayFormat: { valueFormat: function (item) { return item + ' m' } } },
+                    ExposedHeightComboTID: { displayFormat: { hideDescription: true, valueFormat: service.getExposionHeightText } },
                     ValidExposition: { displayFormat: { condition: function (item) { return item !== '00000000' }, valueFormat: service.getExpositonDescriptionFromBitOrder } },
                     Comment: { displayFormat: { hideDescription: true } }
                 }
@@ -208,7 +235,7 @@ angular
                 name: "Stabilitetstest",
                 RegistrationTID: "25",
                 properties: {
-                    PropagationTID: { displayFormat: { hideDescription: true, valueFormat: function(item, data) { return service.formatStabilityTest(data.FullObject) } } },
+                    PropagationTID: { displayFormat: { hideDescription: true, condition: function (item, data) { return service.showStabilityTest(data.FullObject) }, valueFormat: function (item, data) { return service.formatStabilityTest(data.FullObject) } } },
                     StabilityEvalTID: {},
                     Comment: { displayFormat: { hideDescription: true } }
                 }
@@ -224,8 +251,7 @@ angular
                     AvalProbabilityTID: {},
                     DestructiveSizeTID: {},
                     AvalPropagationTID: {},
-                    ExposedHeight1: { displayFormat: { valueFormat: function (item) { return item + ' m' } } },
-                    ExposedHeight2: { displayFormat: { valueFormat: function (item) { return item + ' m' } } },
+                    ExposedHeightComboTID: { displayFormat: { hideDescription: true, valueFormat: service.getExposionHeightText } },
                     Comment: { displayFormat: { hideDescription: true } }
                 }
             },
@@ -378,9 +404,14 @@ angular
         service.getKdvElements = function () {
             return service.getAppEmbeddedKdvElements()
                 .then(function (result) {
-                    var embeddedElements = LocalStorage.getObject('kdvDropdowns', {});
-                    var mergedElements = angular.merge(angular.copy(result), embeddedElements);
-                    return { data: mergedElements };
+                    var embeddedElements = LocalStorage.getObject('kdvDropdowns', null);
+                    if (embeddedElements !== null) {
+                        service._removeDeletedKdvElements(result, embeddedElements);
+                        var mergedElements = angular.merge(result, embeddedElements);
+                        return { data: mergedElements };
+                    } else {
+                        return { data: result };
+                    }
                 });
         };
 
@@ -395,7 +426,12 @@ angular
             var lastUpdate = LocalStorage.get('kdvUpdated', '2016-01-01');
             var now = new Date();
 
-            lastUpdate = new Date(lastUpdate);
+            AppLogging.log('Last update', lastUpdate);
+            if (isNaN(lastUpdate)) {
+                lastUpdate = new Date('2016-01-01');          
+            } else {
+                lastUpdate = new Date(parseInt(lastUpdate));
+            }
             AppLogging.log('Last update', lastUpdate);
 
             timeDiff = Math.abs(now.getTime() - lastUpdate.getTime());
@@ -423,12 +459,35 @@ angular
             $rootScope.$broadcast('kdvUpdated', newDate);
         };
 
+        service._removeDeletedKdvElements = function (oldKdvElements, newKdvElements) {
+            for (var prop in oldKdvElements.KdvRepositories) {
+                if (newKdvElements.KdvRepositories.hasOwnProperty(prop)) {
+                    var values = oldKdvElements.KdvRepositories[prop];
+                    var existsInNewElements = function (item) {
+                        return newKdvElements.KdvRepositories[prop].filter(function (ne) {
+                            return ne.Id === item.Id;
+                        }).length > 0;
+                    };
+                    var keep = [];
+                    values.forEach(function (item) {
+                        if (existsInNewElements(item)) {
+                            keep.push(item);
+                        }
+                    });
+                    oldKdvElements.KdvRepositories[prop] = keep;
+                }
+            }
+        };
+
         service._refreshKdvElements = function () {
             return service._getDropdownsFromApi()
                 .then(function (newKdvElements) {
                     return service.getKdvElements().then(function (response) { //Getting old values to update
                         var oldKdvElements = response.data;
-                        service._saveKdvElements(angular.merge(oldKdvElements, newKdvElements));
+                        //remove items missing in new elements (deleted items)
+                        service._removeDeletedKdvElements(oldKdvElements, newKdvElements);              
+                        var mergedElements = angular.merge(oldKdvElements, newKdvElements);
+                        service._saveKdvElements(mergedElements);
                     });
                 });
         };
@@ -628,7 +687,10 @@ angular
          * @returns {boolean} - true if ripple emulator is running 
          */
         service.isRippleEmulator = function () {
-            return window.parent && window.parent.ripple;
+            //return window.parent && window.parent.ripple;
+            return !((window.cordova || window.PhoneGap || window.phonegap)
+                && /^file:\/{3}[^\/]/i.test(window.location.href)
+                && /ios|iphone|ipod|ipad|android/i.test(navigator.userAgent));
         };
 
         service.isString = function (obj) {
@@ -669,15 +731,21 @@ angular
             return dText;
         };
 
+        service.getRadiusFromBounds = function (bounds) {
+            return parseInt((bounds.getNorthWest().distanceTo(bounds.getSouthEast()) / 2).toFixed(0));
+        };
+
         service.getSearchRadius = function (map) {
             var bounds = map.getBounds();
-            var radius = parseInt((bounds.getNorthWest().distanceTo(bounds.getSouthEast()) / 2).toFixed(0));
+            var radius = service.getRadiusFromBounds(bounds);
             var settingsRaduis = AppSettings.data.searchRange;
             if (settingsRaduis > radius) {
                 radius = settingsRaduis;
             }
             return radius;
         };
+
+
 
         return service;
 

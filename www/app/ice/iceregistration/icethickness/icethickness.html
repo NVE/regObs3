@@ -1,43 +1,36 @@
-<ion-view view-title="Istykkelse">
-    <ion-content>
-
+<ion-view view-title="{{'ICE_THICKNESS'|translate}}">
+    <ion-content class="has-footer">
         <form name="iceThicknessForm" novalidate>
             <ion-list>
-
                 <regobs-number
                         field-name="tørrSnøFørBoring"
-                        label="Tørr snø før boring (cm)"
-                        help-text="I centimeter"
+                        label="{{'DRY_SNOW_BEFORE_DRILL'|translate}} (cm)"
+                        help-text="{{'IN_CM'|translate}}"
                         model="vm.SnowDepth"
                         min="0"
                         max="10000"
                         change-handler="vm.propChanged('SnowDepth')"
                 ></regobs-number>
-
-
                 <regobs-number
                         field-name="sørpeFørBoring"
-                        label="Sørpe før boring (cm)"
-                        help-text="I centimeter"
+                        label="{{'SLUSH_SNOW_BEFORE_DRILL'|translate}} (cm)"
+                        help-text="{{'IN_CM'|translate}}"
                         model="vm.SlushSnow"
                         min="0"
                         max="10000"
                         change-handler="vm.propChanged('SlushSnow')"
                 ></regobs-number>
-
                 <regobs-ice-layer obs-object="vm.reg.IceThickness"></regobs-ice-layer>
-
-                
-
                 <regobs-comment
-                        placeholder="Ytterligere beskrivelse"
+                        placeholder="{{'ADDITIONAL_COMMENT'|translate}}"
                         model="vm.reg.IceThickness.Comment"
                 ></regobs-comment>
             </ion-list>
             <regobs-image-list></regobs-image-list>
         </form>
         <button type="button" ui-sref="help({page:'icethickness'})" class="button button-positive button-block button-clear">
-            Hjelp
+            {{'HELP'|translate}}
         </button>
     </ion-content>
+    <form-footer></form-footer>
 </ion-view>
