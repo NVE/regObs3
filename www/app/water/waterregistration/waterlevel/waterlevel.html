@@ -73,7 +73,7 @@
                         <div>
                             <button type="button" class="button time-button button-outline button-small button-dark icon-left ion-clock float-right" ng-click="vm.setToNow(m)">&nbsp;{{'NOW'|translate}}</button>
                         </div>
-                        <label class="item item-input item-stacked-label no-border">
+                        <label class="item item-input item-stacked-label no-border input-time-right">
                             <span class="input-label" ng-class="{assertive:(m.Pictures.length > 0 && !m.DtMeasurementTime)}">{{'TIME'|translate}}</span>
                             <input name="{{'DtMeasurementTime_' +$index }}" type="datetime-local" ng-model="m.DtMeasurementTime" ng-required="m.Pictures.length > 0">
                         </label>

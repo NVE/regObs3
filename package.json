@@ -51,7 +51,7 @@
     "cordova-plugin-network-information@1.3.0"
   ],
   "cordovaPlatforms": [
-    "android@5.2.2",
+    "android@6.2.1",
     "ios@4.3.1"
   ]
 }
