@@ -418,5 +418,7 @@
   "MEASURING_TOOL_DESCRIPTION": "Beskrivelse av måleinstrument",
   "OBS_COMMENT": "Notat",
   "INVALID_VALUE": "Ugyldig verdi",
-  "INVALID_OBSERVATION_TIME": "Observasjonstidspunkt kan ikke være frem i tid."
+  "INVALID_OBSERVATION_TIME": "Observasjonstidspunkt kan ikke være frem i tid.",
+  "DELETE_STABILITY_TEST": "Slett stabilitetstest",
+  "DELETE_STABILITY_TEST_CONFIRM_TEXT": "Er du sikker på at du vil slette denne stabilitetstesten?"
 }

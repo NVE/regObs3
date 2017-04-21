@@ -1,6 +1,6 @@
 angular
     .module('RegObs')
-    .directive('regobsStabilityTest', function ($ionicModal, Registration, RegobsPopup, Utility, AppLogging) {
+    .directive('regobsStabilityTest', function ($ionicModal, Registration, RegobsPopup, Utility, AppLogging, $filter, $translate) {
         'ngInject';
         return {
             link: link,
@@ -11,8 +11,11 @@ angular
         function link($scope) {
             var indexEditing = -1;
             var showConfirm = function () {
-                return RegobsPopup.delete('Slett stabilitetstest',
-                    'Er du sikker på at du vil slette denne stabilitetstesten?');
+                return $translate(['DELETE_STABILITY_TEST', 'DELETE_STABILITY_TEST_CONFIRM_TEXT']).then(function (translations) {
+                    return RegobsPopup.delete(translations['DELETE_STABILITY_TEST'],
+                        translations['DELETE_STABILITY_TEST_CONFIRM_TEXT']);
+                });
+                
             };
 
             $scope.reg = Registration.initPropertyAsArray('CompressionTest');
@@ -135,7 +138,18 @@ angular
             };
 
             $scope.getStabilityTestName = function (stabilityTest) {
-                return $scope.getPropagationName(stabilityTest.PropagationTID) + ' ' + (stabilityTest.TapsFracture || '') + '@' + (stabilityTest.tempFractureDepth || '') + 'cm' + $scope.getComprTestFractureName(stabilityTest.ComprTestFractureTID);
+                var result = $scope.getPropagationName(stabilityTest.PropagationTID);
+                if (stabilityTest.TapsFracture > 0) {
+                    result += stabilityTest.TapsFracture;
+                }
+                if (stabilityTest.tempFractureDepth > 0) {
+                    result += '@';
+                    result += $filter('number')(stabilityTest.tempFractureDepth, 0) + 'cm';
+                }
+                if (stabilityTest.ComprTestFractureTID > 0) {
+                    result += $scope.getComprTestFractureName(stabilityTest.ComprTestFractureTID)
+                }
+                return result;
             };
 
             var loadModal = function () {
