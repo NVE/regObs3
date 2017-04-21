@@ -308,7 +308,7 @@ angular
                 name: "Snø og istykkelse",
                 RegistrationTID: "50",
                 properties: {
-                    SnowDepth: { displayFormat: { valueFormat: function (item) { return $filter('number')(item * 100, 0) + ' cm' } } },
+                    SnowDepth: { displayFormat: { title:'DRY_SNOW_BEFORE_DRILL', valueFormat: function (item) { return $filter('number')(item * 100, 0) + ' cm' } } },
                     SlushSnow: { displayFormat: { valueFormat: function (item) { return $filter('number')(item * 100, 0) + ' cm' } } },
                     IceThicknessLayers: {
                         displayFormat: {

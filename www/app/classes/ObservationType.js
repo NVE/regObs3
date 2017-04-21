@@ -96,13 +96,14 @@
                     if (angular.isFunction(hideDescription)) {
                         hideDescription = hideDescription(self.data.FullObject[prop], self.data);
                     }
+                    
 
                     if (hideDescription) {
                         result.push({ prop: prop, hasValue: hasValue, value: valueText, order: Object.keys(properties).indexOf(prop) });
                         checkCallback();
                     } else {
-                        var translationName = Utility.camelCaseToUnderscore(prop.replace('TID', ''));
-                        Translate.translateWithFallback(translationName, '')
+                        var title = displayFormat.title ? displayFormat.title : Utility.camelCaseToUnderscore(prop.replace('TID', ''));
+                        Translate.translateWithFallback(title, '')
                             .then(function (description) {
                                 result.push({ prop: prop, hasValue: hasValue, value: description + ': ' + valueText, order: Object.keys(properties).indexOf(prop) });
                                 checkCallback();
