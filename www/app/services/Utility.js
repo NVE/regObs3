@@ -131,6 +131,50 @@ angular
             return fullObject.PropagationTID > 0 || fullObject.TapsFracture > 0 || fullObject.FractureDepth > 0 || fullObject.ComprTestFractureTID > 0;
         };
 
+
+        service._pushKdvDescription = function (tidValue, arr, prepos, kdvname, condition) {
+            return $q(function (resolve) {
+                if (tidValue && (condition === undefined || condition === true)) {
+                    if (prepos) {
+                        arr.push(prepos);
+                    }
+                    service.getKdvValue(kdvname, tidValue).then(function (result) {
+                        arr.push(result.Name.toLowerCase());
+                        resolve();
+                    });
+                } else {
+                    resolve();
+                }
+            });
+        };
+
+        service.formatWaterLevelMethod = function (fullObject) {
+            return $q(function (resolve) {
+                var arr = [];
+                if (fullObject.WaterLevelMethodTID) {
+                    arr.push(fullObject.WaterLevelMethodTID === 1 ? 'Vannstandsmarkering' : 'Vannstansdsmåling');
+                    service._pushKdvDescription(fullObject.MarkingReferenceTID, arr, 'på/i', 'Water_MarkingReferenceKDV', fullObject.WaterLevelMethodTID === 1)
+                        .then(function () {
+                            return service._pushKdvDescription(fullObject.MarkingTypeTID, arr, 'med', 'Water_MarkingTypeKDV', fullObject.WaterLevelMethodTID === 1);
+                        })
+                        .then(function () {
+                            if (fullObject.WaterLevelMethodTID === 2 && fullObject.MeasurementTypeTID === 1) {
+                                arr.push('relativt til');
+                            }
+                            return service._pushKdvDescription(fullObject.MeasurementReferenceTID, arr, '', 'Water_MeasurementReferenceKDV', fullObject.WaterLevelMethodTID === 2);
+                        })
+                        .then(function () {
+                            return service._pushKdvDescription(fullObject.MeasurementTypeTID, arr, 'med', 'Water_MeasurementTypeKDV', fullObject.WaterLevelMethodTID === 2 && fullObject.MeasurementTypeTID > 1);
+                        })
+                        .then(function () {
+                            resolve(arr.join(' '));
+                        });
+                } else {
+                    resolve(arr.join(' '));
+                }
+            });
+        };
+
         service.formatWaterLevelMeasurement = function (fullObject) {
             var result = [];
             if (fullObject && fullObject.WaterLevelMeasurement && angular.isArray(fullObject.WaterLevelMeasurement)) {
@@ -141,10 +185,10 @@ angular
                         str += moment(item.DtMeasurementTime).format('D/M HH:mm');
                     }
                     if (item.WaterLevelValue) {
-                        str += ' &bull; ' + $filter('number')(item.WaterLevelValue, 2) + ' m';
+                        str += ', ' + $filter('number')(item.WaterLevelValue, 2) + ' m';
                     }
                     if (item.Comment) {
-                        str += ' &bull; ' + item.Comment;
+                        str += '<div class="water-level-comment-summary">' + item.Comment +'</div>';
                     }
                     result.push(str);
                 });
@@ -308,7 +352,7 @@ angular
                 name: "Snø og istykkelse",
                 RegistrationTID: "50",
                 properties: {
-                    SnowDepth: { displayFormat: { title:'DRY_SNOW_BEFORE_DRILL', valueFormat: function (item) { return $filter('number')(item * 100, 0) + ' cm' } } },
+                    SnowDepth: { displayFormat: { title: 'DRY_SNOW_BEFORE_DRILL', valueFormat: function (item) { return $filter('number')(item * 100, 0) + ' cm' } } },
                     SlushSnow: { displayFormat: { valueFormat: function (item) { return $filter('number')(item * 100, 0) + ' cm' } } },
                     IceThicknessLayers: {
                         displayFormat: {
@@ -342,12 +386,12 @@ angular
                     WaterLevelStateTID: {},
                     WaterAstrayTID: {},
                     ObservationTimingTID: {},
-                    WaterLevelMethodTID: {},
-                    MarkingReferenceTID: {},
+                    WaterLevelMethodTID: { displayFormat: { hideDescription: true, valueFormat: function (item, data) { return service.formatWaterLevelMethod(data.FullObject) } } },
+                    //MarkingReferenceTID: {},
                     Comment: {},
-                    MarkingTypeTID: {},
-                    MeasurementTypeTID: {},
-                    MeasurementReferenceTID: {},
+                    //MarkingTypeTID: {},
+                    //MeasurementTypeTID: {},
+                    //MeasurementReferenceTID: {},
                     MeasuringToolDescription: {},
                     WaterLevelMeasurement: { displayFormat: { hideDescription: true, valueFormat: function (item, data) { return service.formatWaterLevelMeasurement(data.FullObject) } } }
                 }
@@ -374,7 +418,12 @@ angular
                 properties: {
                     ObsComment: {}
                 }
+            },
+            DamageObs: {
+                name: "Skader",
+                RegistrationTID: "99"
             }
+
         };
 
 

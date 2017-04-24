@@ -269,6 +269,12 @@ input:focus, select:focus, textarea:focus {
     border-radius: 50%;
 }
 
+.regobs-menu-list .water-level-comment-summary {
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
+}
+
 .registration-image-thumbs {
     display: block;
     padding-top: 5px;
@@ -555,5 +561,17 @@ input.extra-large-time {
 
 .ng-invalid ~ .input-label {
     color: red;
+}
+
+.regobs-svg-marker {
+    
+}
+
+.regobs-svg-marker-icon {
+    font-size: 22px;
+    left: 13px;
+    top: 2px;
+    z-index: 300;
+    position: relative;
 }
 

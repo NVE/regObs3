@@ -63,8 +63,6 @@
             ctrl._addSupportTiles();
 
             var infotext = $translate.instant(AppSettings.getAppMode().toUpperCase());
-            //infotext += $translate.instant('OBSERVATION');
-            //infotext = infotext.charAt(0).toUpperCase() + infotext.substr(1).toLowerCase();
             var iconPostFix = AppSettings.getAppMode();
             var infoControl = L.control.infoControl({ text: infotext, icon: 'nve-icon nve-icon-' + iconPostFix }).addTo(map);
 
@@ -76,8 +74,10 @@
                 prefix: 'ion',
                 markerColor: 'red'
             });
+            //var redMarker = L.regobsMarker({ showCircle: true });
 
             marker = L.marker(ctrl._getStartPosition(), { icon: redMarker }).addTo(map);
+
             marker.setZIndexOffset(1500);
 
             map.on('drag', ctrl.centerMapMarker);
