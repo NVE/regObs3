@@ -244,8 +244,12 @@ input:focus, select:focus, textarea:focus {
 }
 
 .regobs-menu-list .item-complex.item-icon-right .item-content {
-    min-height: 66px;
+    //min-height: 66px;
     padding-right: 70px;
+}
+
+.regobs-menu-list .item-complex.large .item-content {
+    min-height: 66px;
 }
 
 .regobs-menu-list .item-complex.item-icon-right .item-content p {
@@ -597,5 +601,9 @@ input.extra-large-time {
     left: 13px;
     top: 2px;
     z-index: 300;
+    position: relative;
+}
+
+.relative {
     position: relative;
 }

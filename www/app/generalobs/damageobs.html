@@ -1,0 +1,61 @@
+﻿<ion-view view-title="{{'DAMAGE_OBS'|translate}}">
+    <ion-content>
+        <form name="damageobsform" novalidate>
+            <ion-list>
+                <div class="item item-divider item-divider-calm">
+                    {{'DAMAGE_VISIBLE_HEADER' | translate}}
+                </div>
+                <ion-radio class="radio-left radio-calm" ng-model="vm.DamageVisible" name="DamageVisible" ng-value="0">
+                    Nei
+                </ion-radio>
+                <ion-radio class="radio-left radio-calm" ng-model="vm.DamageVisible" name="DamageVisible" ng-value="1">
+                    Ja
+                </ion-radio>
+                <ion-radio class="radio-left radio-calm" ng-model="vm.DamageVisible" name="DamageVisible" ng-value="2">
+                    Det kan jeg ikke ta stilling til nå
+                </ion-radio>
+                <div ng-if="vm.DamageVisible === 1">
+                    <div class="item item-divider item-divider-calm">
+                        Hva er skadet?
+                    </div>
+                    <div class="damage-details" ng-repeat="dm in vm.DamageObs">
+                        <ion-checkbox ng-model="dm.checked" name="DamageDetails">
+                            {{dm.Name}}
+                        </ion-checkbox>
+                        <div class="damage-details-wrapper" ng-show="dm.checked">
+                            <div class="damage-detail-arrow"></div>
+                            <div class="damage-detail-cover"></div>
+                            <div class="damage-detail-arrow-box">
+                                <div class="item item-icon-left item-stacked-label">
+                                    <div class="input-label normalcase">Hvor er skadepunktet?</div>
+                                    <div class="input-stacked-icon-wrapper">
+                                        <i class="icon small-icon ion-ios-location-outline"></i> + Legg til skadepunkt her
+                                    </div>
+                                </div>
+                                <div class="item item-icon-left item-stacked-label">
+                                    <div class="input-label normalcase">Bilder av skaden(e)</div>
+                                    <div class="input-stacked-icon-wrapper">
+                                        <i class="icon small-icon ion-image"></i> + Legg til bilder
+                                    </div>
+                                </div>
+                                <div class="item item-icon-left item-stacked-label">
+                                    <div class="input-label normalcase">Beskriv skaden</div>
+                                    <regobs-comment min-height="80" hide-label="true" placeholder="Du kan beskrive skaden ytterligere her" model="dm.Comment"></regobs-comment>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="item item-divider">
+                    &nbsp;
+                </div>
+            </ion-list>
+            <div class="padding">
+                <regobs-save-button save-action="vm.save()" go-back="true"></regobs-save-button>
+            </div>
+            <button type="button" ng-click="vm.reset()" class="button button-positive button-block button-clear ion-android-close">
+                {{'CLEAR'|translate}}
+            </button>
+        </form>
+    </ion-content>
+</ion-view>

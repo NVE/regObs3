@@ -33,7 +33,7 @@ angular
         },
         controller: regobsMenuItemController,
         template: [
-            '<ion-item class="item-icon-right" ui-sref="{{$ctrl.state}}">',
+            '<ion-item class="item-icon-right" ui-sref="{{$ctrl.state}}" ng-class="{\'large\':$ctrl.showSummary === true}">',
             '<h2>{{$ctrl.title}}</h2>',
             '<p ng-if="$ctrl.showSummary"><observation-type-generic show-header="false" show-bullets="false" registration="$ctrl.obsType"></observation-type-generic>',
             '<regobs-image-thumbs ng-if="$ctrl.showImages === undefined || $ctrl.showImages === true" class="registration-image-thumbs" registration-prop="{{$ctrl.property}}"></regobs-image-thumbs>',

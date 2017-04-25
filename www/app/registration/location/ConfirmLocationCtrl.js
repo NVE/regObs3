@@ -24,11 +24,13 @@
                         mapSetting.tiles.forEach(function (tileSetting) {
                             if (tileSetting.visible) {
                                 var tile = AppSettings.getTileByName(tileSetting.name);
-                                var t = new RegObsClasses.RegObsTileLayer(tile.url, { reuseTiles: false, folder: AppSettings.mapFolder, name: tile.name, embeddedUrl: tile.embeddedUrl, embeddedMaxZoom: tile.embeddedMaxZoom, debugFunc: AppSettings.debugTiles ? AppLogging.debug : null });
-                                if (tileSetting.opacity) {
-                                    t.setOpacity(tileSetting.opacity);
+                                if (tile) {
+                                    var t = new RegObsClasses.RegObsTileLayer(tile.url, { reuseTiles: false, folder: AppSettings.mapFolder, name: tile.name, embeddedUrl: tile.embeddedUrl, embeddedMaxZoom: tile.embeddedMaxZoom, debugFunc: AppSettings.debugTiles ? AppLogging.debug : null });
+                                    if (tileSetting.opacity) {
+                                        t.setOpacity(tileSetting.opacity);
+                                    }
+                                    map.addLayer(t);
                                 }
-                                map.addLayer(t);
                             }
                         });
                     }

@@ -425,5 +425,6 @@
   "DAMAGE_OBS": "Skader",
   "ON_IN": "på/i",
   "WITH": "med",
-  "RELATIVE_TO": "relativt til"
+  "RELATIVE_TO": "relativt til",
+  "DAMAGE_VISIBLE_HEADER": "Kan du se noen skader?"
 }

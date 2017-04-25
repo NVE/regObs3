@@ -319,6 +319,17 @@
                     registrationProp: 'GeneralObservation'
                 }
             })
+
+            .state('damageobs', {
+                //Fritekst
+                url: '/damageobs',
+                templateUrl: 'app/generalobs/damageobs.html',
+                controller: 'DamageObsCtrl as vm',
+                data: {
+                    registrationProp: 'DamageObs'
+                }
+            })
+
             .state('help', {
                 url: '/help/:page',
                 templateUrl: function (stateParams) {

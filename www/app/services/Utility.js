@@ -401,7 +401,7 @@ angular
                     WaterLevelStateTID: {},
                     WaterAstrayTID: {},
                     ObservationTimingTID: {},
-                    WaterLevelMethodTID: { displayFormat: { hideDescription: true, valueFormat: function (item, data) { return service.formatWaterLevelMethod(data.FullObject) } } },
+                    WaterLevelMethodTID: { displayFormat: { valueFormat: function (item, data) { return service.formatWaterLevelMethod(data.FullObject) } } },
                     //MarkingReferenceTID: {},
                     Comment: {},
                     //MarkingTypeTID: {},

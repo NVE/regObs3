@@ -22,7 +22,7 @@
                 { geoHazardTid: 10, tiles: [{ name: 'steepness', opacity: 0.5, visible: true }] },
                 { geoHazardTid: 70, tiles: [{ name: 'ice', opacity: 0.5, visible: true }] },
                 { geoHazardTid: 60, tiles: [{ name: 'flood', opacity: 0.5, visible: true }] },
-                { geoHazardTid: 20, tiles: [{ name: 'quickclay', opacity: 0.5, visible: true }] }
+                //{ geoHazardTid: 20, tiles: [{ name: 'quickclay', opacity: 0.5, visible: true }] }
             ],
             showObservations: true
         };
