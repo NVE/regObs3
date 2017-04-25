@@ -139,7 +139,9 @@ angular
                         arr.push(prepos);
                     }
                     service.getKdvValue(kdvname, tidValue).then(function (result) {
-                        arr.push(result.Name.toLowerCase());
+                        if (result && result.Name) {
+                            arr.push(result.Name.toLowerCase());
+                        }
                         resolve();
                     });
                 } else {
@@ -150,28 +152,30 @@ angular
 
         service.formatWaterLevelMethod = function (fullObject) {
             return $q(function (resolve) {
-                var arr = [];
-                if (fullObject.WaterLevelMethodTID) {
-                    arr.push(fullObject.WaterLevelMethodTID === 1 ? 'Vannstandsmarkering' : 'Vannstansdsmåling');
-                    service._pushKdvDescription(fullObject.MarkingReferenceTID, arr, 'på/i', 'Water_MarkingReferenceKDV', fullObject.WaterLevelMethodTID === 1)
-                        .then(function () {
-                            return service._pushKdvDescription(fullObject.MarkingTypeTID, arr, 'med', 'Water_MarkingTypeKDV', fullObject.WaterLevelMethodTID === 1);
-                        })
-                        .then(function () {
-                            if (fullObject.WaterLevelMethodTID === 2 && fullObject.MeasurementTypeTID === 1) {
-                                arr.push('relativt til');
-                            }
-                            return service._pushKdvDescription(fullObject.MeasurementReferenceTID, arr, '', 'Water_MeasurementReferenceKDV', fullObject.WaterLevelMethodTID === 2);
-                        })
-                        .then(function () {
-                            return service._pushKdvDescription(fullObject.MeasurementTypeTID, arr, 'med', 'Water_MeasurementTypeKDV', fullObject.WaterLevelMethodTID === 2 && fullObject.MeasurementTypeTID > 1);
-                        })
-                        .then(function () {
-                            resolve(arr.join(' '));
-                        });
-                } else {
-                    resolve(arr.join(' '));
-                }
+                $translate(['MARKING', 'WATER_MEASUREMENT', 'ON_IN', 'WITH', 'RELATIVE_TO']).then(function (translations) {
+                    var arr = [];
+                    if (fullObject.WaterLevelMethodTID) {
+                        arr.push(fullObject.WaterLevelMethodTID === 1 ? translations['MARKING'] : translations['WATER_MEASUREMENT']);
+                        service._pushKdvDescription(fullObject.MarkingReferenceTID, arr, translations['ON_IN'], 'Water_MarkingReferenceKDV', fullObject.WaterLevelMethodTID === 1)
+                            .then(function () {
+                                return service._pushKdvDescription(fullObject.MarkingTypeTID, arr, translations['WITH'], 'Water_MarkingTypeKDV', fullObject.WaterLevelMethodTID === 1);
+                            })
+                            .then(function () {
+                                if (fullObject.WaterLevelMethodTID === 2 && fullObject.MeasurementTypeTID === 1) {
+                                    arr.push(translations['RELATIVE_TO']);
+                                }
+                                return service._pushKdvDescription(fullObject.MeasurementReferenceTID, arr, '', 'Water_MeasurementReferenceKDV', fullObject.WaterLevelMethodTID === 2);
+                            })
+                            .then(function () {
+                                return service._pushKdvDescription(fullObject.MeasurementTypeTID, arr, translations['WITH'], 'Water_MeasurementTypeKDV', fullObject.WaterLevelMethodTID === 2 && fullObject.MeasurementTypeTID > 1);
+                            })
+                            .then(function () {
+                                resolve(arr.join(' '));
+                            });
+                    } else {
+                        resolve(arr.join(' '));
+                    }
+                });
             });
         };
 
@@ -179,22 +183,33 @@ angular
             var result = [];
             if (fullObject && fullObject.WaterLevelMeasurement && angular.isArray(fullObject.WaterLevelMeasurement)) {
                 fullObject.WaterLevelMeasurement.forEach(function (item) {
-                    var str = fullObject.WaterLevelMethodTID === 1 ? $translate.instant('MARKING_SHORT') : $translate.instant('MEASUREMENT');
-                    str += ' ' + (result.length + 1) + ': ';
+                    var str = '<div class="water-level-measurement">';
+                    str += '<span class="observation-descrription">' +(fullObject.WaterLevelMethodTID === 1 ? $translate.instant('MARKING_SHORT') : $translate.instant('MEASUREMENT'));
+                    str += ' ' + (result.length + 1) + '</span>: ';
                     if (item.DtMeasurementTime) {
                         str += moment(item.DtMeasurementTime).format('D/M HH:mm');
                     }
                     if (item.WaterLevelValue) {
                         str += ', ' + $filter('number')(item.WaterLevelValue, 2) + ' m';
                     }
-                    if (item.Comment) {
-                        str += '<div class="water-level-comment-summary">' + item.Comment +'</div>';
+ 
+                    str += '<div class="water-level-comment-summary">' + (item.Comment !== undefined ? item.Comment : '') + '</div>';
+
+                    if (item.Pictures && angular.isArray(item.Pictures)) {
+                        str += '<div class="registration-image-thumbs">';
+                        item.Pictures.forEach(function (item) {
+                            str += '<img src="' + item.PictureImageBase64 +'" width="50" />';
+                        });
+                        str += '</div>';
                     }
+                    str += ('</div>');
+                    
                     result.push(str);
+
                 });
             }
 
-            return result.join(', ');
+            return result.join('');
         };
 
 

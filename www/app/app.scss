@@ -239,7 +239,7 @@ input:focus, select:focus, textarea:focus {
     z-index: 10;
 }
 
-.regobs-menu-list .list{
+.regobs-menu-list .list {
     padding-bottom: 145px;
 }
 
@@ -275,12 +275,36 @@ input:focus, select:focus, textarea:focus {
     overflow: hidden;
 }
 
+.regobs-menu-list .observation-descrription {
+    font-weight: 500;
+}
+
+.registration-detail-type-wrapper .water-level-comment-summary {
+    display: inline;
+    white-space: normal;
+    text-overflow: inherit;
+    overflow: auto;
+}
+
+.registration-detail-type-wrapper .water-level-comment-summary:before {
+    content: '\0020\2022\0020';
+}
+
+.registration-detail-type-wrapper .water-level-measurement {
+    display: inline;
+}
+
+.registration-detail-type-wrapper .water-level-measurement:not(:first-child):before {
+    content: '\0020\2022\0020';
+}
+
+
 .registration-image-thumbs {
     display: block;
     padding-top: 5px;
 }
 
-.registration-image-thumbs img {    
+.registration-image-thumbs img {
     padding: 2px;
 }
 
@@ -436,8 +460,8 @@ ion-popover-view.wider {
 }
 
 .spinner-small svg {
-  width: 18px;
-  height: 18px;
+    width: 18px;
+    height: 18px;
 }
 
 .center-vertical-horizontal {
@@ -464,9 +488,11 @@ ion-popover-view.wider {
 .no-border {
     border: none !important;
 }
+
 .no-bottom-border {
     border-bottom: none !important;
 }
+
 .no-top-border {
     border-top: none !important;
 }
@@ -519,7 +545,7 @@ ion-popover-view.wider {
 input.extra-large-time {
     height: 100px;
     text-align: center;
-    color: #6d6d72; 
+    color: #6d6d72;
     font-size: 23px;
     padding-right: 0px;
     line-height: 80px;
@@ -564,7 +590,6 @@ input.extra-large-time {
 }
 
 .regobs-svg-marker {
-    
 }
 
 .regobs-svg-marker-icon {
@@ -574,4 +599,3 @@ input.extra-large-time {
     z-index: 300;
     position: relative;
 }
-

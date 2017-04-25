@@ -383,6 +383,7 @@
   "WATER_LEVEL_MEASUREMENT_REFERENCE_HEADER": "Høyden er relativ til",
   "MEASUREMENT_DESCRIPTION": "Beskriv høyde",
   "MEASUREMENT": "Måling",
+  "WATER_MEASUREMENT": "Vannstandsmåling",
   "WATER_LEVEL_VALUE": "Vannstand i meter",
   "ADD_WATER_MEASUREMENT_IMAGE": "Legg til bilde av vannstandsmåling",
   "ADD_WATER_MEASUREMENT": "Legg til ny vannstandsmåling",
@@ -421,5 +422,8 @@
   "INVALID_OBSERVATION_TIME": "Observasjonstidspunkt kan ikke være frem i tid.",
   "DELETE_STABILITY_TEST": "Slett stabilitetstest",
   "DELETE_STABILITY_TEST_CONFIRM_TEXT": "Er du sikker på at du vil slette denne stabilitetstesten?",
-  "DAMAGE_OBS": "Skader"
+  "DAMAGE_OBS": "Skader",
+  "ON_IN": "på/i",
+  "WITH": "med",
+  "RELATIVE_TO": "relativt til"
 }

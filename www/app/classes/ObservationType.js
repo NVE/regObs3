@@ -105,7 +105,7 @@
                         var title = displayFormat.title ? displayFormat.title : Utility.camelCaseToUnderscore(prop.replace('TID', ''));
                         Translate.translateWithFallback(title, '')
                             .then(function (description) {
-                                result.push({ prop: prop, hasValue: hasValue, value: description + ': ' + valueText, order: Object.keys(properties).indexOf(prop) });
+                                result.push({ prop: prop, hasValue: hasValue, value: '<span class="observation-descrription">' +description + '</span>: ' + valueText, order: Object.keys(properties).indexOf(prop) });
                                 checkCallback();
                             });
                     }

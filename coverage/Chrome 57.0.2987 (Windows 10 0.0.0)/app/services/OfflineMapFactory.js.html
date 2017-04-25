@@ -1,0 +1,1394 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <title>Code coverage report for app\services\OfflineMapFactory.js</title>
+    <meta charset="utf-8" />
+    <link rel="stylesheet" href="../../prettify.css" />
+    <link rel="stylesheet" href="../../base.css" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <style type='text/css'>
+        .coverage-summary .sorter {
+            background-image: url(../../sort-arrow-sprite.png);
+        }
+    </style>
+</head>
+<body>
+<div class='wrapper'>
+  <div class='pad1'>
+    <h1>
+      <a href="../../index.html">all files</a> / <a href="index.html">app/services/</a> OfflineMapFactory.js
+    </h1>
+    <div class='clearfix'>
+      <div class='fl pad1y space-right2'>
+        <span class="strong">55.65% </span>
+        <span class="quiet">Statements</span>
+        <span class='fraction'>133/239</span>
+      </div>
+      <div class='fl pad1y space-right2'>
+        <span class="strong">32.39% </span>
+        <span class="quiet">Branches</span>
+        <span class='fraction'>23/71</span>
+      </div>
+      <div class='fl pad1y space-right2'>
+        <span class="strong">48.61% </span>
+        <span class="quiet">Functions</span>
+        <span class='fraction'>35/72</span>
+      </div>
+      <div class='fl pad1y space-right2'>
+        <span class="strong">57.02% </span>
+        <span class="quiet">Lines</span>
+        <span class='fraction'>130/228</span>
+      </div>
+    </div>
+  </div>
+  <div class='status-line medium'></div>
+<pre><table class="coverage">
+<tr><td class="line-count quiet">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31
+32
+33
+34
+35
+36
+37
+38
+39
+40
+41
+42
+43
+44
+45
+46
+47
+48
+49
+50
+51
+52
+53
+54
+55
+56
+57
+58
+59
+60
+61
+62
+63
+64
+65
+66
+67
+68
+69
+70
+71
+72
+73
+74
+75
+76
+77
+78
+79
+80
+81
+82
+83
+84
+85
+86
+87
+88
+89
+90
+91
+92
+93
+94
+95
+96
+97
+98
+99
+100
+101
+102
+103
+104
+105
+106
+107
+108
+109
+110
+111
+112
+113
+114
+115
+116
+117
+118
+119
+120
+121
+122
+123
+124
+125
+126
+127
+128
+129
+130
+131
+132
+133
+134
+135
+136
+137
+138
+139
+140
+141
+142
+143
+144
+145
+146
+147
+148
+149
+150
+151
+152
+153
+154
+155
+156
+157
+158
+159
+160
+161
+162
+163
+164
+165
+166
+167
+168
+169
+170
+171
+172
+173
+174
+175
+176
+177
+178
+179
+180
+181
+182
+183
+184
+185
+186
+187
+188
+189
+190
+191
+192
+193
+194
+195
+196
+197
+198
+199
+200
+201
+202
+203
+204
+205
+206
+207
+208
+209
+210
+211
+212
+213
+214
+215
+216
+217
+218
+219
+220
+221
+222
+223
+224
+225
+226
+227
+228
+229
+230
+231
+232
+233
+234
+235
+236
+237
+238
+239
+240
+241
+242
+243
+244
+245
+246
+247
+248
+249
+250
+251
+252
+253
+254
+255
+256
+257
+258
+259
+260
+261
+262
+263
+264
+265
+266
+267
+268
+269
+270
+271
+272
+273
+274
+275
+276
+277
+278
+279
+280
+281
+282
+283
+284
+285
+286
+287
+288
+289
+290
+291
+292
+293
+294
+295
+296
+297
+298
+299
+300
+301
+302
+303
+304
+305
+306
+307
+308
+309
+310
+311
+312
+313
+314
+315
+316
+317
+318
+319
+320
+321
+322
+323
+324
+325
+326
+327
+328
+329
+330
+331
+332
+333
+334
+335
+336
+337
+338
+339
+340
+341
+342
+343
+344
+345
+346
+347
+348
+349
+350
+351
+352
+353
+354
+355
+356
+357
+358
+359
+360
+361
+362
+363
+364
+365
+366
+367
+368
+369
+370
+371
+372
+373
+374
+375
+376
+377
+378
+379
+380
+381
+382
+383
+384
+385
+386
+387
+388
+389
+390
+391
+392
+393
+394
+395
+396
+397
+398
+399
+400
+401
+402
+403
+404
+405
+406
+407
+408
+409
+410
+411
+412
+413
+414
+415
+416
+417
+418
+419
+420
+421
+422
+423
+424
+425
+426
+427
+428
+429
+430
+431
+432
+433
+434
+435
+436
+437
+438
+439
+440
+441
+442
+443
+444</td><td class="line-coverage quiet"><span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">55×</span>
+<span class="cline-any cline-yes">55×</span>
+<span class="cline-any cline-yes">55×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">55×</span>
+<span class="cline-any cline-yes">2×</span>
+<span class="cline-any cline-yes">2×</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">2×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">2×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">2×</span>
+<span class="cline-any cline-yes">2×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">55×</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">55×</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">55×</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">55×</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">55×</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">55×</span>
+<span class="cline-any cline-yes">2×</span>
+<span class="cline-any cline-yes">2×</span>
+<span class="cline-any cline-yes">2×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">2×</span>
+<span class="cline-any cline-yes">2×</span>
+<span class="cline-any cline-yes">2×</span>
+<span class="cline-any cline-yes">2×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">2×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">55×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">2×</span>
+<span class="cline-any cline-yes">2×</span>
+<span class="cline-any cline-yes">2×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">2×</span>
+<span class="cline-any cline-yes">2×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">2×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">2×</span>
+<span class="cline-any cline-yes">2×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">2×</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">2×</span>
+<span class="cline-any cline-yes">2×</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">2×</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">2×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">2×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">2×</span>
+<span class="cline-any cline-yes">2×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">55×</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">55×</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">55×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">3×</span>
+<span class="cline-any cline-yes">3×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">2×</span>
+<span class="cline-any cline-yes">2×</span>
+<span class="cline-any cline-yes">2×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">2×</span>
+<span class="cline-any cline-yes">2×</span>
+<span class="cline-any cline-yes">2×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">2×</span>
+<span class="cline-any cline-yes">2×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">55×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">55×</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">55×</span>
+<span class="cline-any cline-yes">2×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">55×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">2×</span>
+<span class="cline-any cline-yes">2×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">55×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">2×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">2×</span>
+<span class="cline-any cline-yes">2×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">2×</span>
+<span class="cline-any cline-yes">2×</span>
+<span class="cline-any cline-yes">2×</span>
+<span class="cline-any cline-yes">2×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">55×</span>
+<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">angular
+    .module('RegObs')
+    .factory('OfflineMap', function ($ionicPlatform, $window, $q, AppSettings, AppLogging, Map, PresistentStorage, RegobsPopup, $translate) {
+        var service = this;
+        var metaFilename = 'offline-meta.json';
+        var meta;
+&nbsp;
+        service.getOfflineAreas = function () {
+            return $q(function (resolve, reject) {
+                <span class="missing-if-branch" title="if path not taken" >I</span>if (meta) { //map metadata is loaded, return
+<span class="cstat-no" title="statement not covered" >                    resolve(meta);</span>
+                } else { //load map metadata from file
+                    PresistentStorage.readAsText(metaFilename)
+                        .then(function (success) {
+&nbsp;
+                            try {
+                                // success
+                                meta = JSON.parse(success);
+                                resolve(meta);
+                            }catch(e)
+                            {
+                                //json not parsed correctly, probably force quit app when storing to file
+<span class="cstat-no" title="statement not covered" >                                service.saveOfflineAreas([]).then(resolve([]));</span>
+                            }
+                        }, <span class="fstat-no" title="function not covered" >function (error) {</span>
+<span class="cstat-no" title="statement not covered" >                            if (error.code === 1) { //file does not exist</span>
+<span class="cstat-no" title="statement not covered" >                                service.saveOfflineAreas([]).then(resolve([]));</span>
+                            } else {
+<span class="cstat-no" title="statement not covered" >                                reject(error);</span>
+                            }
+                        });
+                }
+            });
+        };
+&nbsp;
+        service.getOfflineAreaBounds = <span class="fstat-no" title="function not covered" >function () {</span>
+<span class="cstat-no" title="statement not covered" >            return service.getOfflineAreas().then(<span class="fstat-no" title="function not covered" >function (result) {</span></span>
+<span class="cstat-no" title="statement not covered" >                var arr = [];</span>
+<span class="cstat-no" title="statement not covered" >                result.forEach(<span class="fstat-no" title="function not covered" >function (item) {</span></span>
+<span class="cstat-no" title="statement not covered" >                    arr.push(item.bounds);</span>
+                });
+<span class="cstat-no" title="statement not covered" >                return arr;</span>
+            });
+        };
+&nbsp;
+        service.saveOfflineAreas = <span class="fstat-no" title="function not covered" >function (metadata) {</span>
+<span class="cstat-no" title="statement not covered" >            return PresistentStorage.storeFile(metaFilename, JSON.stringify(metadata)).then(<span class="fstat-no" title="function not covered" >function () {</span></span>
+<span class="cstat-no" title="statement not covered" >                meta = metadata; </span>//update saved metadata in memory
+            });
+        };
+&nbsp;
+        service.deleteAllOfflineAreas = <span class="fstat-no" title="function not covered" >function () {</span>
+<span class="cstat-no" title="statement not covered" >            return $q(<span class="fstat-no" title="function not covered" >function (resolve, reject) {</span></span>
+<span class="cstat-no" title="statement not covered" >                PresistentStorage.removeRecursively(AppSettings.mapFolder)</span>
+                    .then(<span class="fstat-no" title="function not covered" >function () {</span>
+<span class="cstat-no" title="statement not covered" >                        service.saveOfflineAreas([]).then(resolve, reject);</span>
+                    },
+<span class="fstat-no" title="function not covered" >                        function (error) {</span>
+<span class="cstat-no" title="statement not covered" >                            AppLogging.log('Error deleting map folder: ' + JSON.stringify(error));</span>
+<span class="cstat-no" title="statement not covered" >                            if (error.code === 1) { //directory does not exist</span>
+<span class="cstat-no" title="statement not covered" >                                service.saveOfflineAreas([]).then(resolve);</span>
+                            } else {
+<span class="cstat-no" title="statement not covered" >                                reject(error);</span>
+                            }
+                        });
+            });
+        };
+&nbsp;
+        var existsInOtherOfflineMap = <span class="fstat-no" title="function not covered" >function (map, xyzCoordinate, areas) {</span>
+<span class="cstat-no" title="statement not covered" >            var found = false;</span>
+<span class="cstat-no" title="statement not covered" >            areas.forEach(<span class="fstat-no" title="function not covered" >function (area) {</span></span>
+<span class="cstat-no" title="statement not covered" >                var mapExists = area.maps.filter(<span class="fstat-no" title="function not covered" >function (item) {</span> <span class="cstat-no" title="statement not covered" >return item === map }</span>).length &gt; 0;</span>
+<span class="cstat-no" title="statement not covered" >                if (mapExists) {</span>
+<span class="cstat-no" title="statement not covered" >                    var coordinateExists = area.xyzList.filter(<span class="fstat-no" title="function not covered" >function (item) {</span></span>
+<span class="cstat-no" title="statement not covered" >                        return item.x === xyzCoordinate.x &amp;&amp;</span>
+                            item.y === xyzCoordinate.y &amp;&amp;
+                            item.z === xyzCoordinate.z;
+                    }).length &gt; 0;
+<span class="cstat-no" title="statement not covered" >                    if (coordinateExists) {</span>
+<span class="cstat-no" title="statement not covered" >                        found = true; </span>//Another offline map has this coordinate for current map
+<span class="cstat-no" title="statement not covered" >                        return;</span>
+                    }
+                }
+            });
+<span class="cstat-no" title="statement not covered" >            return found;</span>
+        };
+&nbsp;
+        service.deleteOfflineArea = <span class="fstat-no" title="function not covered" >function (area) {</span>
+<span class="cstat-no" title="statement not covered" >            if (!area) <span class="cstat-no" title="statement not covered" >throw Error('area parameter not set!');</span></span>
+<span class="cstat-no" title="statement not covered" >            return $q(<span class="fstat-no" title="function not covered" >function (resolve, reject) {</span></span>
+<span class="cstat-no" title="statement not covered" >                var otherAreas = meta.filter(<span class="fstat-no" title="function not covered" >function (item) {</span> <span class="cstat-no" title="statement not covered" >return item.name !== area.name }</span>);</span>
+<span class="cstat-no" title="statement not covered" >                var deleted = 0;</span>
+<span class="cstat-no" title="statement not covered" >                var skipped = 0;</span>
+<span class="cstat-no" title="statement not covered" >                var error = 0;</span>
+<span class="cstat-no" title="statement not covered" >                var checkDone = <span class="fstat-no" title="function not covered" >function () {</span></span>
+<span class="cstat-no" title="statement not covered" >                    if ((deleted + skipped + error) === area.tiles) {</span>
+<span class="cstat-no" title="statement not covered" >                        meta = otherAreas;</span>
+<span class="cstat-no" title="statement not covered" >                        service.saveOfflineAreas(meta)</span>
+                            .finally(<span class="fstat-no" title="function not covered" >function () {</span>
+<span class="cstat-no" title="statement not covered" >                                resolve({ deleted: deleted, skipped: skipped, error: error });</span>
+                            });
+                    }
+                }
+<span class="cstat-no" title="statement not covered" >                var callbackSuccess = <span class="fstat-no" title="function not covered" >function () {</span></span>
+<span class="cstat-no" title="statement not covered" >                    deleted++;</span>
+<span class="cstat-no" title="statement not covered" >                    checkDone();</span>
+                };
+<span class="cstat-no" title="statement not covered" >                var callbackError = <span class="fstat-no" title="function not covered" >function (e) {</span></span>
+<span class="cstat-no" title="statement not covered" >                    AppLogging.log('cold not delete file. Error: ' + JSON.stringify(e));</span>
+<span class="cstat-no" title="statement not covered" >                    error++;</span>
+<span class="cstat-no" title="statement not covered" >                    checkDone();</span>
+                };
+<span class="cstat-no" title="statement not covered" >                var callbackSkip = <span class="fstat-no" title="function not covered" >function () {</span></span>
+<span class="cstat-no" title="statement not covered" >                    skipped++;</span>
+<span class="cstat-no" title="statement not covered" >                    checkDone();</span>
+                };
+&nbsp;
+<span class="cstat-no" title="statement not covered" >                area.xyzList.forEach(<span class="fstat-no" title="function not covered" >function (xyzCoordinate) {</span></span>
+<span class="cstat-no" title="statement not covered" >                    AppLogging.log('Delete xyz coordinate: [' + xyzCoordinate.x + ',' + xyzCoordinate.y + ',' + xyzCoordinate.z + ']');</span>
+<span class="cstat-no" title="statement not covered" >                    area.maps.forEach(<span class="fstat-no" title="function not covered" >function (map) {</span></span>
+<span class="cstat-no" title="statement not covered" >                        if (existsInOtherOfflineMap(map, xyzCoordinate, otherAreas)) {</span>
+<span class="cstat-no" title="statement not covered" >                            AppLogging.log('Map exists in other offline area, skipping');</span>
+<span class="cstat-no" title="statement not covered" >                            callbackSkip();</span>
+                        } else {
+<span class="cstat-no" title="statement not covered" >                            var tile = Map.getTileByName(map);</span>
+<span class="cstat-no" title="statement not covered" >                            if (!tile) {</span>
+<span class="cstat-no" title="statement not covered" >                                AppLogging.log('tile ' + map + ' not found');</span>
+<span class="cstat-no" title="statement not covered" >                                reject('tile ' + map + ' not found');</span>
+                            }
+<span class="cstat-no" title="statement not covered" >                            var filename = AppSettings.mapFolder + '/' + tile.getMapFilename(xyzCoordinate.x, xyzCoordinate.y, xyzCoordinate.z);</span>
+<span class="cstat-no" title="statement not covered" >                            AppLogging.log('Deleting file:' + filename);</span>
+<span class="cstat-no" title="statement not covered" >                            PresistentStorage.removeFile(filename).then(callbackSuccess, callbackError);</span>
+                        }
+                    });
+                });
+            });
+        };
+&nbsp;
+        var downloadAndStoreTile = function (tile, x, y, z, successCallback, errorCallback, cancel) {
+            var sourceurl = tile._url_online.replace('{z}', z).replace('{x}', x).replace('{y}', y);
+            var filename = AppSettings.mapFolder + '/' + tile.getMapFilename(x, y, z);
+            AppLogging.log("Download " + sourceurl + " =&gt; " + filename);
+&nbsp;
+            <span class="missing-if-branch" title="else path not taken" >E</span>if (tile.options.subdomains) {
+                var idx = Math.floor(Math.random() * tile.options.subdomains.length);
+                var dom = tile.options.subdomains[idx];
+                sourceurl = sourceurl.replace('{s}', dom);
+            }
+            PresistentStorage.downloadUrl(sourceurl, filename, cancel).then(successCallback, errorCallback);
+        };
+&nbsp;
+        var downloadXyzList = function (tile, xyzlist, completeXyzList, overwrite, progressCallback, completeCallback, errorCallback, cancelCallback, cancelPromise) {
+            var cancel = false;
+            <span class="missing-if-branch" title="else path not taken" >E</span>if (cancelPromise) {
+                cancelPromise.promise.then(<span class="fstat-no" title="function not covered" >function () {</span>
+<span class="cstat-no" title="statement not covered" >                    cancel = true;</span>
+                });
+            }
+&nbsp;
+            function runThisOneByIndex(xyzs, index, cbprog, cbdone, cberr) {
+                var x = xyzs[index].x;
+                var y = xyzs[index].y;
+                var z = xyzs[index].z;
+&nbsp;
+                // thanks to closures this function would call downloadAndStoreTile() for this XYZ, then do the callbacks and all...
+                // all we need to do is call it below, depending on the overwrite outcome
+                function doneWithIt() {
+                    // the download was skipped and not an error, so call the progress callback; then either move on to the next one, or else call our success callback
+                    <span class="missing-if-branch" title="else path not taken" >E</span>if (cbprog) cbprog(tile, { x: x, y: y, z: z });
+                    continueOnNext();
+                };
+&nbsp;
+                function continueOnNext() {
+                    if (index + 1 &lt; xyzs.length) {
+                        runThisOneByIndex(xyzs, index + 1, cbprog, cbdone, cberr);
+                    } else {
+                        <span class="missing-if-branch" title="else path not taken" >E</span>if (cbdone) cbdone();
+                    }
+                };
+&nbsp;
+                function yesReally() {
+                    try {
+                        downloadAndStoreTile(tile, x, y, z, doneWithIt,
+<span class="fstat-no" title="function not covered" >                            function (errmsg) {</span>
+                                // an error in downloading
+<span class="cstat-no" title="statement not covered" >                                if (cberr) <span class="cstat-no" title="statement not covered" >cberr(errmsg);</span></span>
+<span class="cstat-no" title="statement not covered" >                                doneWithIt();</span>
+                            },
+                            cancelPromise
+                        );
+                    } catch (error) {
+<span class="cstat-no" title="statement not covered" >                        if (cberr) <span class="cstat-no" title="statement not covered" >cberr(error.message);</span></span>
+<span class="cstat-no" title="statement not covered" >                        doneWithIt();</span>
+                    }
+                }
+                <span class="missing-if-branch" title="if path not taken" >I</span>if (cancel) {
+<span class="cstat-no" title="statement not covered" >                    if (cancelCallback) <span class="cstat-no" title="statement not covered" >cancelCallback();</span></span>
+                } else {
+                    var filename = tile.getMapFilename(x, y, z);
+                    <span class="missing-if-branch" title="if path not taken" >I</span>if (completeXyzList.filter(function (item) { return item === filename }).length &gt; 0) {
+<span class="cstat-no" title="statement not covered" >                        continueOnNext(); </span>//this tile has allready been downloaded, skip
+                    } else {
+                        <span class="missing-if-branch" title="if path not taken" >I</span>if (overwrite) {
+<span class="cstat-no" title="statement not covered" >                            AppLogging.log("Tile " + z + '/' + x + '/' + y + " -- " + "Overwrite=true so proceeding.");</span>
+<span class="cstat-no" title="statement not covered" >                            yesReally();</span>
+                        } else {
+                            try {
+&nbsp;
+                                PresistentStorage.checkIfFileExsists(AppSettings.mapFolder + '/' + filename)
+                                    .then(<span class="fstat-no" title="function not covered" >function () {</span>
+<span class="cstat-no" title="statement not covered" >                                        AppLogging.log(filename + " exists. Skipping.");</span>
+<span class="cstat-no" title="statement not covered" >                                        doneWithIt();</span>
+                                    },
+                                        function () {
+                                            AppLogging.log(filename + " missing. Fetching.");
+                                            yesReally();
+                                        });
+                            } catch (error) {
+<span class="cstat-no" title="statement not covered" >                                if (cberr) <span class="cstat-no" title="statement not covered" >cberr(error.message);</span></span>
+<span class="cstat-no" title="statement not covered" >                                doneWithIt();</span>
+                            }
+                        }
+                    }
+                }
+            }
+            runThisOneByIndex(xyzlist, 0, progressCallback, completeCallback, errorCallback);
+        };
+&nbsp;
+        /**
+         * Check if any uncomplete downloads, and continue download
+         * @returns {} 
+         */
+        service.checkUncompleteDownloads = <span class="fstat-no" title="function not covered" >function () {</span>
+<span class="cstat-no" title="statement not covered" >            service.getUncompletedDownloads().then(<span class="fstat-no" title="function not covered" >function (uncomplete) {</span></span>
+<span class="cstat-no" title="statement not covered" >                if (uncomplete.length &gt; 0) {</span>
+<span class="cstat-no" title="statement not covered" >                    var downloadMap = <span class="fstat-no" title="function not covered" >function (onProgress, cancel) {</span></span>
+<span class="cstat-no" title="statement not covered" >                        return service.downloadArea(uncomplete[0],</span>
+                            onProgress,
+                            cancel);
+                    };
+&nbsp;
+<span class="cstat-no" title="statement not covered" >                    RegobsPopup.downloadProgress($translate.instant('UPDATE_OFFLINE_MAP'),</span>
+                        downloadMap,
+                    { closeOnComplete: false });
+                }
+            });
+        };
+&nbsp;
+        /**
+         * Check if any maps is not completed downloaded
+         * @returns {} 
+         */
+        service.getUncompletedDownloads = <span class="fstat-no" title="function not covered" >function () {</span>
+<span class="cstat-no" title="statement not covered" >            return service.getOfflineAreas().then(<span class="fstat-no" title="function not covered" >function (result) {</span></span>
+<span class="cstat-no" title="statement not covered" >                return result.filter(<span class="fstat-no" title="function not covered" >function (item) {</span> <span class="cstat-no" title="statement not covered" >return !item.cancelled &amp;&amp; item.complete.length  &lt; item.tiles }</span>);</span>
+            });
+        };
+&nbsp;
+        /**
+         * Download map area
+         * @param {} area 
+         * @param {} progressCallback 
+         * @param {} cancelCallback 
+         * @returns {} 
+         */
+        service.downloadArea = function (area, progressCallback, cancelCallback) {
+            return $q(function (resolve) {
+                var progress = new RegObs.ProggressStatus();
+                var mapsComplete = [];
+                var total = area.tiles;
+                progress.setTotal(total);
+                progress.setComplete(area.complete.length);
+                progress.setErrors(area.errors);
+&nbsp;
+                var updateAreaFromProgress = function () {
+                    area.errors = progress.getErrors();
+                    area.hasError = progress.hasError();
+                };
+&nbsp;
+                var progressFunc = function () {
+                    updateAreaFromProgress();
+                    service.saveOfflineAreas(meta).then(function () {
+                        progressCallback(progress);
+                    });
+                };
+&nbsp;
+                var doneFunc = function (map) {
+                    mapsComplete.push(map);
+                    <span class="missing-if-branch" title="else path not taken" >E</span>if (mapsComplete.length === area.maps.length) {
+                        updateAreaFromProgress();
+                        service.saveOfflineAreas(meta)
+                            .then(function () {
+                                <span class="missing-if-branch" title="else path not taken" >E</span>if (progress.isDone()) {
+                                    service.getDiskUsageForXyzList(area.maps,
+                                        area.xyzList,
+                                        function (files, bytes) {
+                                            area.size = bytes;
+                                            area.tiles = total - progress.getErrors().length;
+                                            <span class="missing-if-branch" title="if path not taken" >I</span>if (files !== area.tiles) {
+<span class="cstat-no" title="statement not covered" >                                                AppLogging</span>
+                                                    .warn('Tiles downloaded ' +
+                                                        area.tiles +
+                                                        ' but files from disk usage is ' +
+                                                        files);
+                                            }
+                                            service.saveOfflineAreas(meta).then(resolve);
+                                        });
+                                }
+                            });
+                    }
+                };
+&nbsp;
+                PresistentStorage.createDirectory(AppSettings.mapFolder)
+                    .then(function () {
+                        area.maps.forEach(function (item) {
+                            var tile = Map.getTileByName(item);
+                            downloadXyzList(tile,
+                                area.xyzList,
+                                area.complete,
+                                false,
+                                function onProgress(tile, xyz) {
+                                    var filename = tile.getMapFilename(xyz.x, xyz.y, xyz.z);
+                                    <span class="missing-if-branch" title="else path not taken" >E</span>if (!progress.isCancelled()) {
+                                        area.complete.push(filename);
+                                    }
+                                    progress.addComplete();
+                                    progressFunc();
+                                },
+                                function onComplete() {
+                                    doneFunc(item);
+                                },
+<span class="fstat-no" title="function not covered" >                                function onError(error) {</span>
+<span class="cstat-no" title="statement not covered" >                                    progress.addError(error);</span>
+<span class="cstat-no" title="statement not covered" >                                    AppLogging.warn('Could not download map tile: ' + JSON.stringify(error));</span>
+                                },
+<span class="fstat-no" title="function not covered" >                                function onCancel() {</span>
+<span class="cstat-no" title="statement not covered" >                                    area.cancelled = true;</span>
+<span class="cstat-no" title="statement not covered" >                                    progress.setCancelled(true);</span>
+<span class="cstat-no" title="statement not covered" >                                    doneFunc(item);</span>
+                                },
+                                cancelCallback);
+                        });
+                    });
+            });
+        };
+&nbsp;
+&nbsp;
+        service.downloadMapFromXyzList = function (name, bounds, xyzList, zoomMin, zoomMax, mapsArray, progressCallback, cancelCallback) {
+            var downloadMapFromXyzListInternal = function () {
+                <span class="missing-if-branch" title="if path not taken" >I</span>if (!zoomMin)
+<span class="cstat-no" title="statement not covered" >                    throw Error('zoomMin must be set');</span>
+                <span class="missing-if-branch" title="if path not taken" >I</span>if (!zoomMax)
+<span class="cstat-no" title="statement not covered" >                    throw Error('zoomMax must be set');</span>
+                <span class="missing-if-branch" title="if path not taken" >I</span>if (!mapsArray || mapsArray.length &lt;= 0)
+<span class="cstat-no" title="statement not covered" >                    throw Error('Maps array must be an array of map names');</span>
+                <span class="missing-if-branch" title="if path not taken" >I</span>if (!xyzList)
+<span class="cstat-no" title="statement not covered" >                    throw Error('Xyz list must be set!');</span>
+&nbsp;
+                var boundingBox = [
+                    [bounds.getSouthWest().lat, bounds.getSouthWest().lng],
+                    [bounds.getNorthEast().lat, bounds.getNorthEast().lng]
+                ];
+&nbsp;
+                var area = {
+                    name: name,
+                    size: 0,
+                    bounds: boundingBox,
+                    tiles: xyzList.length * mapsArray.length,
+                    maps: mapsArray,
+                    xyzList: xyzList,
+                    zoom: zoomMax,
+                    cancelled: false,
+                    complete: [],
+                    errors: []
+                };
+                meta.push(area);
+                return service.saveOfflineAreas(meta)
+                    .then(function () {
+                        return service.downloadArea(area, progressCallback, cancelCallback);
+                    });
+            };
+&nbsp;
+            return service.getOfflineAreas().then(downloadMapFromXyzListInternal);
+        };
+&nbsp;
+        service.downloadMapFromBounds = <span class="fstat-no" title="function not covered" >function (name, bounds, zoomMin, zoomMax, mapsArray, progressCallback, cancelCallback) {</span>
+<span class="cstat-no" title="statement not covered" >            var xyzList = Map.calculateXYZListFromBounds(bounds, zoomMin, zoomMax);</span>
+<span class="cstat-no" title="statement not covered" >            return service.downloadMapFromXyzList(name, bounds, xyzList,</span>
+                zoomMin,
+                zoomMax,
+                mapsArray,
+                progressCallback,
+                cancelCallback);
+        };
+&nbsp;
+        service.getFileName = function (map, x, y, z) {
+            return [map, z, x, y].join('-') + '.png';
+        };
+&nbsp;
+        service.getFilesFromXyzList = function (maps, xyzList) {
+            var files = [];
+            xyzList.forEach(function (coord) {
+                maps.forEach(function (map) {
+                    files.push(service.getFileName(map, coord.x, coord.y, coord.z));
+                });
+            });
+            return files;
+        };
+&nbsp;
+        service.getDiskUsageForXyzList = function (maps, xyzList, callback) {
+            var fileNames = service.getFilesFromXyzList(maps, xyzList);
+            AppLogging.log('Filenames to find: ' + JSON.stringify(fileNames));
+            var found = [];
+            var notFound = [];
+            var bytes = 0;
+&nbsp;
+            var checkCallback = function () {
+                if ((found.length + notFound.length) === fileNames.length) {
+                    <span class="missing-if-branch" title="else path not taken" >E</span>if (callback) {
+                        callback(found.length, bytes);
+                    }
+                    return;
+                }
+            };
+&nbsp;
+            fileNames.forEach(function (file) {
+                var relativePath = AppSettings.mapFolder + '/' + file;
+                PresistentStorage.getFileSize(relativePath)
+                    .then(function (result) {
+                        AppLogging.log('file: ' + relativePath + ' is ' +result +' bytes');
+                        bytes += result;
+                        found.push(file);
+                        checkCallback();
+                    })
+                    .catch(<span class="fstat-no" title="function not covered" >function (error) {</span>
+<span class="cstat-no" title="statement not covered" >                        AppLogging.log('file not found: ' + relativePath +'. 0 bytes returned');</span>
+<span class="cstat-no" title="statement not covered" >                        notFound.push({ name: file, error: error });</span>
+<span class="cstat-no" title="statement not covered" >                        checkCallback();</span>
+                    });
+            });
+        };
+&nbsp;
+        return service;
+    });</pre></td></tr>
+</table></pre>
+<div class='push'></div><!-- for sticky footer -->
+</div><!-- /wrapper -->
+<div class='footer quiet pad2 space-top1 center small'>
+  Code coverage
+  generated by <a href="http://istanbul-js.org/" target="_blank">istanbul</a> at Tue Apr 25 2017 09:31:06 GMT+0200 (W. Europe Daylight Time)
+</div>
+</div>
+<script src="../../prettify.js"></script>
+<script>
+window.onload = function () {
+        if (typeof prettyPrint === 'function') {
+            prettyPrint();
+        }
+};
+</script>
+<script src="../../sorter.js"></script>
+</body>
+</html>

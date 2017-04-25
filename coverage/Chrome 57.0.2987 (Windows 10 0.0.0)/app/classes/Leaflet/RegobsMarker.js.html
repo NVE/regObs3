@@ -1,0 +1,197 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <title>Code coverage report for app\classes\Leaflet\RegobsMarker.js</title>
+    <meta charset="utf-8" />
+    <link rel="stylesheet" href="../../../prettify.css" />
+    <link rel="stylesheet" href="../../../base.css" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <style type='text/css'>
+        .coverage-summary .sorter {
+            background-image: url(../../../sort-arrow-sprite.png);
+        }
+    </style>
+</head>
+<body>
+<div class='wrapper'>
+  <div class='pad1'>
+    <h1>
+      <a href="../../../index.html">all files</a> / <a href="index.html">app/classes/Leaflet/</a> RegobsMarker.js
+    </h1>
+    <div class='clearfix'>
+      <div class='fl pad1y space-right2'>
+        <span class="strong">15.79% </span>
+        <span class="quiet">Statements</span>
+        <span class='fraction'>3/19</span>
+      </div>
+      <div class='fl pad1y space-right2'>
+        <span class="strong">0% </span>
+        <span class="quiet">Branches</span>
+        <span class='fraction'>0/6</span>
+      </div>
+      <div class='fl pad1y space-right2'>
+        <span class="strong">14.29% </span>
+        <span class="quiet">Functions</span>
+        <span class='fraction'>1/7</span>
+      </div>
+      <div class='fl pad1y space-right2'>
+        <span class="strong">15.79% </span>
+        <span class="quiet">Lines</span>
+        <span class='fraction'>3/19</span>
+      </div>
+    </div>
+  </div>
+  <div class='status-line low'></div>
+<pre><table class="coverage">
+<tr><td class="line-count quiet">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31
+32
+33
+34
+35
+36
+37
+38
+39
+40
+41
+42
+43
+44
+45</td><td class="line-coverage quiet"><span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">﻿(function (L) {
+    L.RegobsMarker = L.DivIcon.extend({
+        options: {
+            iconSize: [44, 44],
+            iconAnchor: [19, 44],
+            className: 'regobs-svg-marker',
+            iconColor: '#fff',
+            markerColor: '#D0011B',
+            showCircle: false
+        },
+        initialize: <span class="fstat-no" title="function not covered" >function (options) {</span>
+<span class="cstat-no" title="statement not covered" >            options = L.Util.setOptions(this, options);</span>
+&nbsp;
+<span class="cstat-no" title="statement not covered" >            options.html = this._createHtml();</span>
+        },
+        _createHtml: <span class="fstat-no" title="function not covered" >function () { </span>
+<span class="cstat-no" title="statement not covered" >            var style = "width:" + this.options.iconSize.x + "; height:" + this.options.iconSize.y + ";"</span>
+<span class="cstat-no" title="statement not covered" >            var svg = '&lt;svg style="' + style + '" x="0px" y="0px" viewBox="0 0 512 512"&gt;&lt;style type="text/css"&gt;.marker{fill:' + this.options.markerColor + ';}.circle{fill:' + this.options.iconColor + ';}&lt;/style&gt;';</span>
+<span class="cstat-no" title="statement not covered" >            svg += this._createPath();</span>
+<span class="cstat-no" title="statement not covered" >            if (this.options.showCircle) {</span>
+<span class="cstat-no" title="statement not covered" >                svg += this._createCircle();</span>
+            }
+<span class="cstat-no" title="statement not covered" >            svg += '&lt;/svg&gt;';</span>
+<span class="cstat-no" title="statement not covered" >            if (this.options.icon) {</span>
+<span class="cstat-no" title="statement not covered" >                svg += this._createIcon();</span>
+            };
+            
+<span class="cstat-no" title="statement not covered" >            return svg;</span>
+        },
+        _createPath: <span class="fstat-no" title="function not covered" >function () {</span>
+<span class="cstat-no" title="statement not covered" >            return '&lt;path class="marker" d="M 401.745 195.902 C 401.745 232.702 389.545 271.402 371.445 308.602 C 303.045 414.802 216.645 512.102 216.645 512.102 C 216.645 512.102 117.245 418.102 53.645 306.602 C 37.745 271.802 27.345 235.002 27.345 198.102 C 27.245 94.602 111.045 4.602 214.445 4.602 C 317.945 4.602 401.745 92.302 401.745 195.902 Z"/&gt;';</span>
+        },
+        _createCircle: <span class="fstat-no" title="function not covered" >function () {</span>
+<span class="cstat-no" title="statement not covered" >            return '&lt;ellipse class="circle" cx="211.821" cy="186.095" rx="95" ry="95"/&gt;';</span>
+        },
+        _createIcon: <span class="fstat-no" title="function not covered" >function () {</span>
+<span class="cstat-no" title="statement not covered" >            var style = 'color:' + this.options.iconColor;</span>
+<span class="cstat-no" title="statement not covered" >            return '&lt;i class="regobs-svg-marker-icon ' + (this.options.iconClass ? this.options.iconClass : '')  +' ' + this.options.icon +'" style="' +style +'"&gt;&lt;/i&gt;';</span>
+        }
+    });
+&nbsp;
+    L.regobsMarker = <span class="fstat-no" title="function not covered" >function (options) {</span>
+<span class="cstat-no" title="statement not covered" >        return new L.RegobsMarker(options);</span>
+    }
+})(window.L);</pre></td></tr>
+</table></pre>
+<div class='push'></div><!-- for sticky footer -->
+</div><!-- /wrapper -->
+<div class='footer quiet pad2 space-top1 center small'>
+  Code coverage
+  generated by <a href="http://istanbul-js.org/" target="_blank">istanbul</a> at Tue Apr 25 2017 09:31:06 GMT+0200 (W. Europe Daylight Time)
+</div>
+</div>
+<script src="../../../prettify.js"></script>
+<script>
+window.onload = function () {
+        if (typeof prettyPrint === 'function') {
+            prettyPrint();
+        }
+};
+</script>
+<script src="../../../sorter.js"></script>
+</body>
+</html>
