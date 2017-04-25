@@ -87,11 +87,13 @@
             this._heading = degrees;
 
             var element = document.getElementById(this._id);
-            var start = 90;
-            var rotateZ = degrees - start;
+            if (element) {
+                var start = 90;
+                var rotateZ = degrees - start;
 
-            element.style['-webkit-transform'] = 'rotate(' + rotateZ + 'deg) translateX(15px)';
-            element.style.display = 'block';
+                element.style['-webkit-transform'] = 'rotate(' + rotateZ + 'deg) translateX(15px)';
+                element.style.display = 'block';
+            }
         },
 
         setPulsing: function (pulsing) {

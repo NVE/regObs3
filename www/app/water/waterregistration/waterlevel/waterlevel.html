@@ -30,7 +30,7 @@
                         <ion-radio class="radio-left radio-calm" ng-change="vm.clearComment()" ng-model="vm.reg.WaterLevel2.MarkingReferenceTID" name="Water_MarkingReferenceKDV" ng-value="kdv.Id">
                             {{kdv.Name}}
                         </ion-radio>
-                        <regobs-comment class="radio-textarea" ng-show="vm.reg.WaterLevel2.MarkingReferenceTID === kdv.Id" initial-rows="4" hide-label="true" placeholder="{{'MARKING_DESCRIPTION'|translate}}" model="vm.reg.WaterLevel2.Comment"></regobs-comment>
+                        <regobs-comment class="radio-textarea" ng-show="vm.reg.WaterLevel2.MarkingReferenceTID === kdv.Id" min-height="80" hide-label="true" placeholder="{{'MARKING_DESCRIPTION'|translate}}" model="vm.reg.WaterLevel2.Comment"></regobs-comment>
                     </div>
 
                     <kdv-dropdown title="WATER_LEVEL_MARKING_TYPE_HEADER"
@@ -53,7 +53,7 @@
                             <ion-radio class="radio-left radio-calm" ng-change="vm.clearComment()" ng-model="vm.reg.WaterLevel2.MeasurementReferenceTID" name="Water_MeasurementReferenceKDV" ng-value="kdv.Id">
                                 {{kdv.Name}}
                             </ion-radio>
-                            <regobs-comment class="radio-textarea" ng-show="vm.reg.WaterLevel2.MeasurementReferenceTID === kdv.Id" initial-rows="4" hide-label="true" placeholder="{{'MEASUREMENT_DESCRIPTION'|translate}}" model="vm.reg.WaterLevel2.Comment"></regobs-comment>
+                            <regobs-comment class="radio-textarea" ng-show="vm.reg.WaterLevel2.MeasurementReferenceTID === kdv.Id" min-height="80" hide-label="true" placeholder="{{'MEASUREMENT_DESCRIPTION'|translate}}" model="vm.reg.WaterLevel2.Comment"></regobs-comment>
                         </div>
                     </div>
                     <regobs-comment ng-show="vm.reg.WaterLevel2.MeasurementTypeTID === 3" label-text="{{'MEASURING_TOOL'|translate}}" placeholder="{{'MEASURING_TOOL_PLACEHOLDER'|translate}}" model="vm.reg.WaterLevel2.MeasuringToolDescription"></regobs-comment>
