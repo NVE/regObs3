@@ -70,7 +70,7 @@
 
                             }
                         });
-                } else {
+                } else if (!confirmed) {
                     ctrl.saveAction();
                 }
             });

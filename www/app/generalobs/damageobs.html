@@ -5,20 +5,20 @@
                 <div class="item item-divider item-divider-calm">
                     {{'DAMAGE_VISIBLE_HEADER' | translate}}
                 </div>
-                <ion-radio class="radio-left radio-calm" ng-model="vm.DamageVisible" name="DamageVisible" ng-value="0">
-                    Nei
+                <ion-radio class="radio-left radio-calm" ng-model="vm.DamageVisible" name="DamageVisible" ng-value="0" ng-change="vm.DamageVisibleChanged()">
+                    {{'NO'|translate}}
                 </ion-radio>
-                <ion-radio class="radio-left radio-calm" ng-model="vm.DamageVisible" name="DamageVisible" ng-value="1">
-                    Ja
+                <ion-radio class="radio-left radio-calm" ng-model="vm.DamageVisible" name="DamageVisible" ng-value="1" ng-change="vm.DamageVisibleChanged()">
+                    {{'YES'|translate}}
                 </ion-radio>
-                <ion-radio class="radio-left radio-calm" ng-model="vm.DamageVisible" name="DamageVisible" ng-value="2">
+                <!--<ion-radio class="radio-left radio-calm" ng-model="vm.DamageVisible" name="DamageVisible" ng-value="2">
                     Det kan jeg ikke ta stilling til nå
-                </ion-radio>
+                </ion-radio>-->
                 <div ng-if="vm.DamageVisible === 1">
                     <div class="item item-divider item-divider-calm">
-                        Hva er skadet?
+                        {{'DAMAGE_OBS_HEADER'|translate}}
                     </div>
-                    <div class="damage-details" ng-repeat="dm in vm.DamageObs">
+                    <div class="damage-details" ng-repeat="dm in vm.reg.DamageObs" ng-show="dm.DamageTypeTID > 0 && dm.DamageTypeTID !== 7">
                         <ion-checkbox ng-model="dm.checked" name="DamageDetails">
                             {{dm.Name}}
                         </ion-checkbox>
@@ -27,20 +27,20 @@
                             <div class="damage-detail-cover"></div>
                             <div class="damage-detail-arrow-box">
                                 <div class="item item-icon-left item-stacked-label">
-                                    <div class="input-label normalcase">Hvor er skadepunktet?</div>
+                                    <div class="input-label normalcase">{{'DAMAGE_OBS_POSITION'|translate}}</div>
                                     <div class="input-stacked-icon-wrapper">
-                                        <i class="icon small-icon ion-ios-location-outline"></i> + Legg til skadepunkt her
+                                        <i class="icon small-icon ion-ios-location-outline"></i> + {{'ADD_DAMAGE_POSITION'|translate}}
                                     </div>
                                 </div>
                                 <div class="item item-icon-left item-stacked-label">
-                                    <div class="input-label normalcase">Bilder av skaden(e)</div>
+                                    <div class="input-label normalcase">{{'DAMAGE_OBS_IMAGES'|translate}}</div>
                                     <div class="input-stacked-icon-wrapper">
-                                        <i class="icon small-icon ion-image"></i> + Legg til bilder
+                                        <i class="icon small-icon ion-image"></i> + {{'ADD_IMAGES'|translate}}
                                     </div>
                                 </div>
                                 <div class="item item-icon-left item-stacked-label">
-                                    <div class="input-label normalcase">Beskriv skaden</div>
-                                    <regobs-comment min-height="80" hide-label="true" placeholder="Du kan beskrive skaden ytterligere her" model="dm.Comment"></regobs-comment>
+                                    <div class="input-label normalcase">{{'DAMAGE_DESCRIPTION'|translate}}</div>
+                                    <regobs-comment min-height="80" hide-label="true" placeholder="{{'DAMAGE_DESCRIPTION_PLACEHOLDER'|translate}}" model="dm.Comment"></regobs-comment>
                                 </div>
                             </div>
                         </div>

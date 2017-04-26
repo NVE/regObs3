@@ -1893,6 +1893,40 @@
         "Id": 5,
         "Name": "Annet"
       }
+    ],
+    "DamageTypeKDV": [
+      {
+        "Id": 0,
+        "Name": "Ukjent"
+      },
+      {
+        "Id": 1,
+        "Name": "Bygninger og eiendeler"
+      },
+      {
+        "Id": 2,
+        "Name": "Infrastruktur"
+      },
+      {
+        "Id": 3,
+        "Name": "Innmark"
+      },
+      {
+        "Id": 4,
+        "Name": "Utmark"
+      },
+      {
+        "Id": 5,
+        "Name": "Person/personer"
+      },
+      {
+        "Id": 6,
+        "Name": "Annet"
+      },
+      {
+        "Id": 7,
+        "Name": "Ingen skade observert"
+      }
     ]
   },
   "ViewRepositories": {

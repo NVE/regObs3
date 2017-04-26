@@ -36,6 +36,7 @@
             }
             Pictures.removePictures(prop);
             $rootScope.$broadcast('$ionicView.loaded');
+            $rootScope.$broadcast('$regobs:propertyReset', prop);
         }
     }
 

@@ -16,9 +16,9 @@ var regobsMenuItemController = function (Property, Registration, ObservationType
         update();
     });
 
-    $rootScope.$on('$regObs:registrationSaved', function () {
-        update();
-    });
+    //$rootScope.$on('$regObs:registrationSaved', function () {
+    //    update();
+    //});
 };
 
 angular

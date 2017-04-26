@@ -426,5 +426,14 @@
   "ON_IN": "på/i",
   "WITH": "med",
   "RELATIVE_TO": "relativt til",
-  "DAMAGE_VISIBLE_HEADER": "Kan du se noen skader?"
+  "DAMAGE_VISIBLE_HEADER": "Kan du se noen skader?",
+  "DAMAGE_OBS_HEADER": "Hva er skadet?",
+  "DAMAGE_OBS_POSITION": "Hvor er skadepunktet?",
+  "ADD_DAMAGE_POSITION": "Legg til skadepunkt her",
+  "DAMAGE_OBS_IMAGES": "Bilder av skaden(e)",
+  "ADD_IMAGES": "Legg til bilder",
+  "DAMAGE_DESCRIPTION": "Beskriv skade",
+  "DAMAGE_DESCRIPTION_PLACEHOLDER": "Du kan beskrive skaden ytterligere her",
+  "YES": "Ja",
+  "NO": "Nei"
 }

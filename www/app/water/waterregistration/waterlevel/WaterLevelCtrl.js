@@ -96,10 +96,8 @@ angular
             $ionicScrollDelegate.resize();
         };
 
-        vm.reset = function () {
-            vm.reg.WaterLevel2.WaterLevelMeasurement = [{}];
-            Property.reset($state.current.data.registrationProp);
-            $ionicScrollDelegate.resize();
+        vm.reset = function () {          
+            Property.reset($state.current.data.registrationProp);           
         };
 
         vm.removeMeasurement = function (index) {
@@ -160,5 +158,10 @@ angular
 
 
         $scope.$on('$ionicView.beforeEnter', vm._init);
-        $scope.$on('$ionicView.loaded', vm._init);
+
+        $scope.$on('$regobs:propertyReset', function () {
+            vm.reg.WaterLevel2.WaterLevelMeasurement = [{}];
+            $ionicScrollDelegate.resize();
+            $ionicScrollDelegate.scrollTop();
+        });
     });
