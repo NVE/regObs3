@@ -1,169 +1,5 @@
 {
   "KdvRepositories": {
-    "Water_MeasurementReferenceKDV": [
-      {
-        "Id": 0,
-        "Name": "Ukjent"
-      },
-      {
-        "Id": 1,
-        "Name": "Bakken"
-      },
-      {
-        "Id": 2,
-        "Name": "Flomvoll"
-      },
-      {
-        "Id": 3,
-        "Name": "Gulv"
-      },
-      {
-        "Id": 4,
-        "Name": "Bro"
-      },
-      {
-        "Id": 5,
-        "Name": "Annet"
-      }
-    ],
-    "Water_MeasurementTypeKDV": [
-      {
-        "Id": 0,
-        "Name": "Ukjent"
-      },
-      {
-        "Id": 1,
-        "Name": "Relativt til merke"
-      },
-      {
-        "Id": 2,
-        "Name": "Målestav"
-      },
-      {
-        "Id": 3,
-        "Name": "Måleinstrument"
-      }
-    ],
-    "Water_MarkingTypeKDV": [
-      {
-        "Id": 0,
-        "Name": "Ukjent"
-      },
-      {
-        "Id": 1,
-        "Name": "Spray"
-      },
-      {
-        "Id": 2,
-        "Name": "Tusj"
-      },
-      {
-        "Id": 3,
-        "Name": "Spiker"
-      },
-      {
-        "Id": 4,
-        "Name": "Innriss"
-      },
-      {
-        "Id": 5,
-        "Name": "Annet"
-      }
-    ],
-    "Water_MarkingReferenceKDV": [
-      {
-        "Id": 0,
-        "Name": "Ukjent"
-      },
-      {
-        "Id": 1,
-        "Name": "Terreng"
-      },
-      {
-        "Id": 2,
-        "Name": "Bro"
-      },
-      {
-        "Id": 3,
-        "Name": "Flomstøtte"
-      },
-      {
-        "Id": 4,
-        "Name": "Bygning"
-      },
-      {
-        "Id": 5,
-        "Name": "Påle"
-      },
-      {
-        "Id": 6,
-        "Name": "Noe annet"
-      }
-    ],
-    "Water_WaterLevelMethodKDV": [
-      {
-        "Id": 0,
-        "Name": "Ukjent"
-      },
-      {
-        "Id": 1,
-        "Name": "Markerer vannstand"
-      },
-      {
-        "Id": 2,
-        "Name": "Måler vannstand"
-      }
-    ],
-    "Water_ObservationTimingKDV": [
-      {
-        "Id": 0,
-        "Name": "Ukjent"
-      },
-      {
-        "Id": 1,
-        "Name": "Spor av vannet der det var"
-      },
-      {
-        "Id": 2,
-        "Name": "Vannet der det er nå"
-      }
-    ],
-    "Water_WaterAstrayKDV": [
-      {
-        "Id": 0,
-        "Name": "Ukjent"
-      },
-      {
-        "Id": 1,
-        "Name": "Ja"
-      },
-      {
-        "Id": 2,
-        "Name": "Nei"
-      }
-    ],
-    "Water_WaterLevelStateKDV": [
-      {
-        "Id": 0,
-        "Name": "Ukjent"
-      },
-      {
-        "Id": 1,
-        "Name": "Vannstand er synkende"
-      },
-      {
-        "Id": 2,
-        "Name": "Vannstand er stigende"
-      },
-      {
-        "Id": 3,
-        "Name": "Vannstand er stabil"
-      },
-      {
-        "Id": 4,
-        "Name": "Det kan jeg ikke ta stilling til nå"
-      }
-    ],
     "Dirt_DangerSignKDV": [
       {
         "Id": 200,
@@ -1892,6 +1728,170 @@
       {
         "Id": 101,
         "Name": "Til administrativ bruk"
+      }
+    ],
+    "WaterLevelStateKDV": [
+      {
+        "Id": 0,
+        "Name": "Ukjent"
+      },
+      {
+        "Id": 1,
+        "Name": "Vannstand er synkende"
+      },
+      {
+        "Id": 2,
+        "Name": "Vannstand er stigende"
+      },
+      {
+        "Id": 3,
+        "Name": "Vannstand er stabil"
+      },
+      {
+        "Id": 4,
+        "Name": "Det kan jeg ikke ta stilling til nå"
+      }
+    ],
+    "WaterAstrayKDV": [
+      {
+        "Id": 0,
+        "Name": "Ukjent"
+      },
+      {
+        "Id": 1,
+        "Name": "Ja"
+      },
+      {
+        "Id": 2,
+        "Name": "Nei"
+      }
+    ],
+    "ObservationTimingKDV": [
+      {
+        "Id": 0,
+        "Name": "Ukjent"
+      },
+      {
+        "Id": 1,
+        "Name": "Spor av vannet der det var"
+      },
+      {
+        "Id": 2,
+        "Name": "Vannet der det er nå"
+      }
+    ],
+    "WaterLevelMethodKDV": [
+      {
+        "Id": 0,
+        "Name": "Ukjent"
+      },
+      {
+        "Id": 1,
+        "Name": "Markerer vannstand"
+      },
+      {
+        "Id": 2,
+        "Name": "Måler vannstand"
+      }
+    ],
+    "MeasurementTypeKDV": [
+      {
+        "Id": 0,
+        "Name": "Ukjent"
+      },
+      {
+        "Id": 1,
+        "Name": "Relativt til merke"
+      },
+      {
+        "Id": 2,
+        "Name": "Målestav"
+      },
+      {
+        "Id": 3,
+        "Name": "Måleinstrument"
+      }
+    ],
+    "MeasurementReferenceKDV": [
+      {
+        "Id": 0,
+        "Name": "Ukjent"
+      },
+      {
+        "Id": 1,
+        "Name": "Bakken"
+      },
+      {
+        "Id": 2,
+        "Name": "Flomvoll"
+      },
+      {
+        "Id": 3,
+        "Name": "Gulv"
+      },
+      {
+        "Id": 4,
+        "Name": "Bro"
+      },
+      {
+        "Id": 5,
+        "Name": "Annet"
+      }
+    ],
+    "MarkingReferenceKDV": [
+      {
+        "Id": 0,
+        "Name": "Ukjent"
+      },
+      {
+        "Id": 1,
+        "Name": "Terreng"
+      },
+      {
+        "Id": 2,
+        "Name": "Bro"
+      },
+      {
+        "Id": 3,
+        "Name": "Flomstøtte"
+      },
+      {
+        "Id": 4,
+        "Name": "Bygning"
+      },
+      {
+        "Id": 5,
+        "Name": "Påle"
+      },
+      {
+        "Id": 6,
+        "Name": "Noe annet"
+      }
+    ],
+    "MarkingTypeKDV": [
+      {
+        "Id": 0,
+        "Name": "Ukjent"
+      },
+      {
+        "Id": 1,
+        "Name": "Spray"
+      },
+      {
+        "Id": 2,
+        "Name": "Tusj"
+      },
+      {
+        "Id": 3,
+        "Name": "Spiker"
+      },
+      {
+        "Id": 4,
+        "Name": "Innriss"
+      },
+      {
+        "Id": 5,
+        "Name": "Annet"
       }
     ]
   },

@@ -4,22 +4,22 @@
             <ion-list>
                 <kdv-dropdown title="WATER_LEVEL_TREND_REGISTRATION_HEADER"
                               model="vm.reg.WaterLevel2.WaterLevelStateTID"
-                              kdv-key="Water_WaterLevelStateKDV"
+                              kdv-key="WaterLevelStateKDV"
                               show-as-radio="true">
                 </kdv-dropdown>
                 <kdv-dropdown title="WATER_ASTRAY_REGISTRATION_HEADER"
                               model="vm.reg.WaterLevel2.WaterAstrayTID"
-                              kdv-key="Water_WaterAstrayKDV"
+                              kdv-key="WaterAstrayKDV"
                               show-as-radio="true">
                 </kdv-dropdown>
                 <kdv-dropdown title="WATER_OBSERVATION_TIMING_REGISTRATION_HEADER"
                               model="vm.reg.WaterLevel2.ObservationTimingTID"
-                              kdv-key="Water_ObservationTimingKDV"
+                              kdv-key="ObservationTimingKDV"
                               show-as-radio="true">
                 </kdv-dropdown>
                 <kdv-dropdown title="WATER_LEVEL_METHOD_REGISTRATION_HEADER"
                               model="vm.reg.WaterLevel2.WaterLevelMethodTID"
-                              kdv-key="Water_WaterLevelMethodKDV" change-handler="vm.waterLevelMethodChanged()"
+                              kdv-key="WaterLevelMethodKDV" change-handler="vm.waterLevelMethodChanged()"
                               show-as-radio="true">
                 </kdv-dropdown>
                 <div ng-show="vm.reg.WaterLevel2.WaterLevelMethodTID === 1">
@@ -27,7 +27,7 @@
                         {{'WATER_LEVEL_MARKING_REFERENCE_HEADER' | translate}}
                     </div>
                     <div ng-repeat="kdv in vm.markingKdvArray">
-                        <ion-radio class="radio-left radio-calm" ng-change="vm.clearComment()" ng-model="vm.reg.WaterLevel2.MarkingReferenceTID" name="Water_MarkingReferenceKDV" ng-value="kdv.Id">
+                        <ion-radio class="radio-left radio-calm" ng-change="vm.clearComment()" ng-model="vm.reg.WaterLevel2.MarkingReferenceTID" name="MarkingReferenceKDV" ng-value="kdv.Id">
                             {{kdv.Name}}
                         </ion-radio>
                         <regobs-comment class="radio-textarea" ng-show="vm.reg.WaterLevel2.MarkingReferenceTID === kdv.Id" min-height="80" hide-label="true" placeholder="{{'MARKING_DESCRIPTION'|translate}}" model="vm.reg.WaterLevel2.Comment"></regobs-comment>
@@ -35,14 +35,14 @@
 
                     <kdv-dropdown title="WATER_LEVEL_MARKING_TYPE_HEADER"
                                   model="vm.reg.WaterLevel2.MarkingTypeTID"
-                                  kdv-key="Water_MarkingTypeKDV"
+                                  kdv-key="MarkingTypeKDV"
                                   show-as-radio="true">
                     </kdv-dropdown>
                 </div>
                 <div ng-show="vm.reg.WaterLevel2.WaterLevelMethodTID === 2">
                     <kdv-dropdown title="WATER_MEASUREMENT_TYPE_HEADER"
                                   model="vm.reg.WaterLevel2.MeasurementTypeTID"
-                                  kdv-key="Water_MeasurementTypeKDV" change-handler="vm.waterMeasurementTypeChanged()"
+                                  kdv-key="MeasurementTypeKDV" change-handler="vm.waterMeasurementTypeChanged()"
                                   show-as-radio="true">
                     </kdv-dropdown>
                     <div ng-show="vm.reg.WaterLevel2.MeasurementTypeTID === 1">
@@ -50,7 +50,7 @@
                             {{'WATER_LEVEL_MEASUREMENT_REFERENCE_HEADER' | translate}}
                         </div>
                         <div ng-repeat="kdv in vm.measurementReferenceKdvArray">
-                            <ion-radio class="radio-left radio-calm" ng-change="vm.clearComment()" ng-model="vm.reg.WaterLevel2.MeasurementReferenceTID" name="Water_MeasurementReferenceKDV" ng-value="kdv.Id">
+                            <ion-radio class="radio-left radio-calm" ng-change="vm.clearComment()" ng-model="vm.reg.WaterLevel2.MeasurementReferenceTID" name="MeasurementReferenceKDV" ng-value="kdv.Id">
                                 {{kdv.Name}}
                             </ion-radio>
                             <regobs-comment class="radio-textarea" ng-show="vm.reg.WaterLevel2.MeasurementReferenceTID === kdv.Id" min-height="80" hide-label="true" placeholder="{{'MEASUREMENT_DESCRIPTION'|translate}}" model="vm.reg.WaterLevel2.Comment"></regobs-comment>

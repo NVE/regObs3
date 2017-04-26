@@ -156,18 +156,18 @@ angular
                     var arr = [];
                     if (fullObject.WaterLevelMethodTID) {
                         arr.push(fullObject.WaterLevelMethodTID === 1 ? translations['MARKING'] : translations['WATER_MEASUREMENT']);
-                        service._pushKdvDescription(fullObject.MarkingReferenceTID, arr, translations['ON_IN'], 'Water_MarkingReferenceKDV', fullObject.WaterLevelMethodTID === 1)
+                        service._pushKdvDescription(fullObject.MarkingReferenceTID, arr, translations['ON_IN'], 'MarkingReferenceKDV', fullObject.WaterLevelMethodTID === 1)
                             .then(function () {
-                                return service._pushKdvDescription(fullObject.MarkingTypeTID, arr, translations['WITH'], 'Water_MarkingTypeKDV', fullObject.WaterLevelMethodTID === 1);
+                                return service._pushKdvDescription(fullObject.MarkingTypeTID, arr, translations['WITH'], 'MarkingTypeKDV', fullObject.WaterLevelMethodTID === 1);
                             })
                             .then(function () {
                                 if (fullObject.WaterLevelMethodTID === 2 && fullObject.MeasurementTypeTID === 1) {
                                     arr.push(translations['RELATIVE_TO']);
                                 }
-                                return service._pushKdvDescription(fullObject.MeasurementReferenceTID, arr, '', 'Water_MeasurementReferenceKDV', fullObject.WaterLevelMethodTID === 2);
+                                return service._pushKdvDescription(fullObject.MeasurementReferenceTID, arr, '', 'MeasurementReferenceKDV', fullObject.WaterLevelMethodTID === 2);
                             })
                             .then(function () {
-                                return service._pushKdvDescription(fullObject.MeasurementTypeTID, arr, translations['WITH'], 'Water_MeasurementTypeKDV', fullObject.WaterLevelMethodTID === 2 && fullObject.MeasurementTypeTID > 1);
+                                return service._pushKdvDescription(fullObject.MeasurementTypeTID, arr, translations['WITH'], 'MeasurementTypeKDV', fullObject.WaterLevelMethodTID === 2 && fullObject.MeasurementTypeTID > 1);
                             })
                             .then(function () {
                                 resolve(arr.join(' '));
