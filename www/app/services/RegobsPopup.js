@@ -75,13 +75,13 @@ angular
                                     circle.path.setAttribute('stroke-width', state.width);
                                     var text =
                                         '<i class="icon ion-ios-cloud-download"></i><div class="downloadprogress-percent">' +
-                                            scope.downloadStatus.getPercentFormated() +
-                                            '</div><div class="downloadprogress-value">(' +
-                                            scope.downloadStatus.getDone() +
-                                            '/' +
-                                            scope.downloadStatus.getTotal() +
-                                            ')' +
-                                            '</div>';
+                                        scope.downloadStatus.getPercentFormated() +
+                                        '</div><div class="downloadprogress-value">(' +
+                                        scope.downloadStatus.getDone() +
+                                        '/' +
+                                        scope.downloadStatus.getTotal() +
+                                        ')' +
+                                        '</div>';
                                     circle.setText(text);
                                 }
                             }
@@ -95,11 +95,11 @@ angular
 
                         var checkProgress = null;
                         if (result.longTimoutMessageDelay > 0) {
-                            checkProgress = $interval(function() {
-                                    var diff = moment().diff(lastProgress, 'seconds');
-                                    AppLogging.log('progressdiff: ' + diff);
-                                    scope.showLongDownloadMessage = diff > result.longTimoutMessageDelay;
-                                }, 1000);
+                            checkProgress = $interval(function () {
+                                var diff = moment().diff(lastProgress, 'seconds');
+                                AppLogging.log('progressdiff: ' + diff);
+                                scope.showLongDownloadMessage = diff > result.longTimoutMessageDelay;
+                            }, 1000);
                         }
 
                         scope.progressOptions = result.progressOptions;

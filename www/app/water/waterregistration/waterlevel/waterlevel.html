@@ -81,7 +81,8 @@
                                     <img ng-src="{{pic.PictureImageBase64}}">
                                     <div class="padding">
                                         <div class="input-label normalcase">{{'IMAGE_DESCRIPTION'|translate}}:</div>
-                                        <textarea cols="30" rows="3" placeholder="{{'IMAGE_DESCRIPTION_PLACEHOLDER'|translate}}" ng-model="pic.PictureComment"></textarea>
+                                        <!--<textarea cols="30" rows="3" placeholder="{{'IMAGE_DESCRIPTION_PLACEHOLDER'|translate}}" ng-model="pic.PictureComment"></textarea>-->
+                                        <regobs-comment class="bordered" hide-label="true" placeholder="{{'IMAGE_DESCRIPTION_PLACEHOLDER'|translate}}" model="pic.PictureComment"></regobs-comment>
                                     </div>
                                     <i class="icon icon-remove-image ion-close-round" ng-click="vm.removeImage(m, $index)"></i>
                                 </div>

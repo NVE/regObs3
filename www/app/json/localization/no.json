@@ -114,7 +114,7 @@
   "POSITION": "Posisjon",
   "UNKNOWN_POSITION": "Ukjent posisjon",
   "UNCERTAINTY": "Usikkerhet",
-  "CONFIRM_POSITION": "Bekreft observasjonspunkt",
+  "CONFIRM": "Bekreft",
   "OBSERVATION_LOCATION": "Observasjonspunkt",
   "SET_POSITION_INFO": "eller dra kartet for å sette din observasjonsposisjon",
   "MANUAL_MARK_POSITION_INFO": "Markerer du egen posisjon vil denne bli brukt og ikke gpsen.",
@@ -432,8 +432,9 @@
   "ADD_DAMAGE_POSITION": "Legg til skadepunkt her",
   "DAMAGE_OBS_IMAGES": "Bilder av skaden(e)",
   "ADD_IMAGES": "Legg til bilder",
-  "DAMAGE_DESCRIPTION": "Beskriv skade",
+  "DAMAGE_DESCRIPTION": "Beskriv skaden",
   "DAMAGE_DESCRIPTION_PLACEHOLDER": "Du kan beskrive skaden ytterligere her",
   "YES": "Ja",
-  "NO": "Nei"
+  "NO": "Nei",
+  "DAMAGE_OBS_POSITION_HEADER": "Skadepunkt"
 }

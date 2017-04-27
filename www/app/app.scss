@@ -559,6 +559,12 @@ input.extra-large-time {
     border: 1px solid #ddd;
 }
 
+.item-image {
+    background-color: #fff;
+    position: relative;
+    margin-bottom: 16px;
+}
+
 .item-image textarea {
     width: 100%;
 }
@@ -566,14 +572,15 @@ input.extra-large-time {
 .item-image .input-label {
     font-size: 14px;
     text-align: left;
+    display: block;
 }
 
 .icon-remove-image {
     color: #fff;
     font-size: 21px;
     position: absolute;
-    right: 20px;
-    top: 20px;
+    right: 10px;
+    top: 10px;
     background-color: rgba(0, 0, 0, 0.5);
     border-radius: 50%;
     -moz-border-radius: 50%;

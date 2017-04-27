@@ -1,6 +1,6 @@
 ﻿angular
     .module('RegObs')
-    .controller('DamageObsCtrl', function ($scope, $state, Registration, Property, $ionicScrollDelegate, Utility) {
+    .controller('DamageObsCtrl', function ($scope, $state, Registration, Property, $ionicScrollDelegate, Utility, Pictures) {
         var vm = this;
         var noDamageVisibleId = 7;
         var unknownDamageVisibleId = 0;
@@ -47,7 +47,7 @@
         vm.init = function () {
             vm.registrationProp = $state.current.data.registrationProp;
             vm.reg = Registration.initPropertyAsArray($state.current.data.registrationProp);
-            Utility.getKdvArray('DamageTypeKDV').then(function (result) {
+            Utility.getKdvArray('DamageTypeKDV', true).then(function (result) {
                 vm.DamageObsTypeKdvArray = result;
                 vm.update();
             });
@@ -81,6 +81,24 @@
             }
         };
 
+        vm.addDamageObsPicture = function (damageObs) {           
+            Pictures.showImageSelector(Utility.registrationTid(vm.registrationProp)).then(function (result) {
+                if (!damageObs.Pictures) {
+                    damageObs.Pictures = [];
+                }
+                damageObs.Pictures.push(result);
+            }, function (error) {
+                AppLogging.log('Error getting picture: ' +(error && error.message ? error.message : ''));
+            });
+        };
+
+        vm.removeImage = function (damageObs, index) {
+            if (damageObs.Pictures && damageObs.Pictures.length > index) {
+                damageObs.Pictures.splice(index, 1);
+            }
+        };
+
+
         vm.save = function () {
             if (vm.reg.DamageObs && angular.isArray(vm.reg.DamageObs)) {
                 vm.DamageVisibleChanged();
@@ -99,6 +117,14 @@
 
         vm.reset = function () {
             Property.reset(vm.registrationProp);
+        };
+
+        vm.addDamagePosition = function (damageObs) {
+            $state.go('confirmdamagelocation', { damageObs: damageObs });
+        };
+
+        vm.formatPosition = function (position) {
+            return Utility.ddToDms(parseFloat(position.Latitude), parseFloat(position.Longitude));
         };
 
         $scope.$on('$regobs:propertyReset', function () {

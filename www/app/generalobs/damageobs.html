@@ -11,14 +11,11 @@
                 <ion-radio class="radio-left radio-calm" ng-model="vm.DamageVisible" name="DamageVisible" ng-value="1" ng-change="vm.DamageVisibleChanged()">
                     {{'YES'|translate}}
                 </ion-radio>
-                <!--<ion-radio class="radio-left radio-calm" ng-model="vm.DamageVisible" name="DamageVisible" ng-value="2">
-                    Det kan jeg ikke ta stilling til nå
-                </ion-radio>-->
                 <div ng-if="vm.DamageVisible === 1">
                     <div class="item item-divider item-divider-calm">
                         {{'DAMAGE_OBS_HEADER'|translate}}
                     </div>
-                    <div class="damage-details" ng-repeat="dm in vm.reg.DamageObs" ng-show="dm.DamageTypeTID > 0 && dm.DamageTypeTID !== 7">
+                    <div class="damage-details" ng-repeat="dm in vm.reg.DamageObs | orderBy: 'DamageTypeTID'" ng-show="dm.DamageTypeTID > 0 && dm.DamageTypeTID !== 7">
                         <ion-checkbox ng-model="dm.checked" name="DamageDetails">
                             {{dm.Name}}
                         </ion-checkbox>
@@ -26,21 +23,33 @@
                             <div class="damage-detail-arrow"></div>
                             <div class="damage-detail-cover"></div>
                             <div class="damage-detail-arrow-box">
-                                <div class="item item-icon-left item-stacked-label">
+                                <div class="item item-icon-left item-stacked-label" ng-click="vm.addDamagePosition(dm)">
                                     <div class="input-label normalcase">{{'DAMAGE_OBS_POSITION'|translate}}</div>
                                     <div class="input-stacked-icon-wrapper">
-                                        <i class="icon small-icon ion-ios-location-outline"></i> + {{'ADD_DAMAGE_POSITION'|translate}}
+                                        <i class="icon small-icon ion-ios-location-outline"></i> <span ng-hide="dm.DamagePosition">+ {{'ADD_DAMAGE_POSITION'|translate}}</span><span ng-if="dm.DamagePosition">{{vm.formatPosition(dm.DamagePosition)}}</span>
                                     </div>
                                 </div>
+
                                 <div class="item item-icon-left item-stacked-label">
                                     <div class="input-label normalcase">{{'DAMAGE_OBS_IMAGES'|translate}}</div>
-                                    <div class="input-stacked-icon-wrapper">
+                                    <div ng-repeat="pic in dm.Pictures">
+                                        <div class="border-thin item-image">
+                                            <img ng-src="{{pic.PictureImageBase64}}">
+                                            <div class="padding">
+                                                <div class="input-label normalcase">{{'IMAGE_DESCRIPTION'|translate}}:</div>
+                                                <!--<textarea cols="30" rows="3" placeholder="{{'IMAGE_DESCRIPTION_PLACEHOLDER'|translate}}" ng-model="pic.PictureComment"></textarea>-->
+                                                <regobs-comment class="bordered" hide-label="true" placeholder="{{'IMAGE_DESCRIPTION_PLACEHOLDER'|translate}}" model="pic.PictureComment"></regobs-comment>
+                                            </div>
+                                            <i class="icon-remove-image ion-close-round" ng-click="vm.removeImage(dm, $index)"></i>
+                                        </div>
+                                    </div>
+                                    <div class="input-stacked-icon-wrapper" ng-click="vm.addDamageObsPicture(dm)">
                                         <i class="icon small-icon ion-image"></i> + {{'ADD_IMAGES'|translate}}
                                     </div>
                                 </div>
                                 <div class="item item-icon-left item-stacked-label">
                                     <div class="input-label normalcase">{{'DAMAGE_DESCRIPTION'|translate}}</div>
-                                    <regobs-comment min-height="80" hide-label="true" placeholder="{{'DAMAGE_DESCRIPTION_PLACEHOLDER'|translate}}" model="dm.Comment"></regobs-comment>
+                                    <regobs-comment class="bordered" min-height="80" hide-label="true" placeholder="{{'DAMAGE_DESCRIPTION_PLACEHOLDER'|translate}}" model="dm.Comment"></regobs-comment>
                                 </div>
                             </div>
                         </div>

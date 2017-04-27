@@ -1,7 +1,7 @@
 (function () {
     'use strict';
 
-    function PicturesService(Registration, RegobsPopup, Utility, AppSettings, $cordovaCamera, $cordovaDeviceOrientation) {
+    function PicturesService(Registration, RegobsPopup, Utility, AppSettings, $cordovaCamera, $cordovaDeviceOrientation, $q, $translate, $ionicPopup) {
         'ngInject';
         var Pictures = this;
 
@@ -141,6 +141,61 @@
                     AppLogging.log('Cold not get album picture');
                     return null;
                 });
+        };
+
+        Pictures.showImageSelector = function (registrationTid) {
+            return $q(function (resolve, reject) {
+                var getImage = function (result) {
+                    var processPictureResult = function (imageUri) {
+                        var pic = {
+                            RegistrationTID: registrationTid,
+                            PictureImageBase64: imageUri,
+                            PictureComment: ''
+                        };
+
+                        if (AppSettings.data.compass) {
+                            Pictures.setOrientation(pic);
+                        }
+
+                        resolve(pic);
+                    };
+
+
+                    if (window.Camera) {
+                        var options = result ? Pictures.defaultCameraOptions() : Pictures.defaultAlbumOptions();
+                        return $cordovaCamera
+                            .getPicture(options)
+                            .then(processPictureResult, reject);
+                    } else {
+                        reject(new Error('No camera plugin found!'));
+                    }
+                };
+
+                $translate(['ADD_PICTURE', 'ADD_PICTURE_DESCRIPTION', 'ALBUM', 'CAMERA']).then(function (translations) {
+                    $ionicPopup.confirm({
+                        title: translations['ADD_PICTURE'],
+                        template: translations['ADD_PICTURE_DESCRIPTION'],
+                        buttons: [
+                            {
+                                text: translations['ALBUM'],
+                                type: 'button icon-left ion-images',
+                                onTap: function (e) {
+                                    // Returning a value will cause the promise to resolve with the given value.
+                                    return false;
+                                }
+                            },
+                            {
+                                text: translations['CAMERA'],
+                                type: 'button icon-left ion-camera',
+                                onTap: function (e) {
+                                    // Returning a value will cause the promise to resolve with the given value.
+                                    return true;
+                                }
+                            }
+                        ]
+                    }).then(getImage);
+                });
+            });
         };
 
     }

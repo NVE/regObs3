@@ -117,8 +117,7 @@
             .state('confirmlocation', {
                 url: '/confirmlocation',
                 templateUrl: 'app/registration/location/confirmlocation.html',
-                controller: 'ConfirmLocationCtrl as vm',
-                cache: false
+                controller: 'ConfirmLocationCtrl as vm'
             })
 
             .state('confirmtime', {
@@ -328,6 +327,13 @@
                 data: {
                     registrationProp: 'DamageObs'
                 }
+            })
+
+            .state('confirmdamagelocation', {
+                url: '/confirmdamagelocation',
+                templateUrl: 'app/generalobs/damageobsposition.html',
+                controller: 'DamageObsPositionCtrl as vm',
+                params: { damageObs: null }
             })
 
             .state('help', {
