@@ -15,10 +15,6 @@ var regobsMenuItemController = function (Property, Registration, ObservationType
     $rootScope.$on('$ionicView.beforeEnter', function () {
         update();
     });
-
-    //$rootScope.$on('$regObs:registrationSaved', function () {
-    //    update();
-    //});
 };
 
 angular
@@ -35,7 +31,8 @@ angular
         template: [
             '<ion-item class="item-icon-right" ui-sref="{{$ctrl.state}}" ng-class="{\'large\':$ctrl.showSummary === true}">',
             '<h2>{{$ctrl.title}}</h2>',
-            '<p ng-if="$ctrl.showSummary"><observation-type-generic show-header="false" show-bullets="false" registration="$ctrl.obsType"></observation-type-generic>',
+            '<p ng-if="$ctrl.showSummary && $ctrl.isSet">',
+            '<regobs-observation-type-generator is-summary="true" show-header="false" show-bullets="false" registration="$ctrl.obsType"></regobs-observation-type-generator>',
             '<regobs-image-thumbs ng-if="$ctrl.showImages === undefined || $ctrl.showImages === true" class="registration-image-thumbs" registration-prop="{{$ctrl.property}}"></regobs-image-thumbs>',
             '</p>',
             '<i ng-if="$ctrl.isSet" class="icon ion-checkmark-circled balanced regobs-menu-item-icon"></i>',

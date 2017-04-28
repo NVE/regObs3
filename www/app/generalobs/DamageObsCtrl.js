@@ -124,7 +124,7 @@
         };
 
         vm.formatPosition = function (position) {
-            return Utility.ddToDms(parseFloat(position.Latitude), parseFloat(position.Longitude));
+            return Utility.ddToDms(position.Latitude, position.Longitude);
         };
 
         $scope.$on('$regobs:propertyReset', function () {

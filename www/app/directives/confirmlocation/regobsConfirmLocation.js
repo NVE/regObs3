@@ -15,6 +15,7 @@
             var map;
             var marker;
             var userMarker;
+
             ctrl.distanceText = '';
             ctrl.showDetails = false;
             ctrl._httpTimeout = $q.defer();
@@ -125,12 +126,6 @@
             };
 
             ctrl._getStartPosition = function () {
-                //if (ObsLocation.isSet()) {
-                //    var location = ObsLocation.get();
-                //    return L.latLng(location.Latitude, location.Longitude);
-                //} else {
-                //    return Map.getCenter();
-                //}
                 if (ctrl.startPosition) {
                     return L.latLng(ctrl.startPosition.Latitude, ctrl.startPosition.Longitude);
                 }
@@ -330,14 +325,6 @@
                         });
                         m.addTo(ctrl._clusteredGroup);
 
-                        //if (ObsLocation.isSet()) {
-                        //    var currentLocation = ObsLocation.get();
-                        //    if (currentLocation.UTMSourceTID === ObsLocation.source.storedPosition) {
-                        //        if (m.getId() === currentLocation.ObsLocationId) {
-                        //            m.setSelected();
-                        //        }
-                        //    }
-                        //}
                         if (ctrl.startPosition && ctrl.startPosition.UTMSourceTID === ObsLocation.source.storedPosition) {
                             if (m.getId() === ctrl.startPosition.ObsLocationId) {
                                 m.setSelected();
@@ -349,9 +336,6 @@
 
 
             ctrl.savePositionClick = function () {
-                //if (ctrl.place) {
-                //    ctrl.savePlace(ctrl.place);
-                // } else {
                 var latlng = marker.getLatLng();
                 var accuracy = "0";
                 if (ctrl.updateMarkerToGpsLocation && UserLocation.hasUserLocation()) {
@@ -374,56 +358,11 @@
                 }
 
                 ctrl.savePosition({ pos: obsLoc, place: place });
-                // }
-
-                //var context = $stateParams.context;
-                //var index = $stateParams.index;
-                //position = { Lat: 51.342342343, Lng: 10.2222222 };
-
-                //var damageObs = Registration.data.DamageObs[index];
-                //damageObs.position = { Lat: 51.342342343, Lng: 10.2222222 };
-
-                //AppLogging.log('save position');
-                //$ionicHistory.goBack();
-
-                //var latlng = marker.getLatLng();
-                //var accuracy = "0";
-                //if (ctrl.updateMarkerToGpsLocation && UserLocation.hasUserLocation()) {
-                //    accuracy = UserLocation.getLastUserLocation().accuracy.toString();
-                //}
-                //var obsLoc = {
-                //    Latitude: latlng.lat.toString(),
-                //    Longitude: latlng.lng.toString(),
-                //    Uncertainty: accuracy,
-                //    UTMSourceTID: ctrl.updateMarkerToGpsLocation ? ObsLocation.source.fetchedFromGPS : ObsLocation.source.clickedInMap
-                //};
-
-                //if (ctrl.place) {
-                //    obsLoc.UTMSourceTID = ObsLocation.source.storedPosition;
-                //    obsLoc.Latitude = ctrl.place.storedLocation.LatLngObject.Latitude;
-                //    obsLoc.Longitude = ctrl.place.storedLocation.LatLngObject.Longitude;
-                //    ObsLocation.setPreviousUsedPlace(ctrl.place.storedLocation.Id, ctrl.place.storedLocation.Name, obsLoc);
-                //} else {
-                //    ObsLocation.set(obsLoc);
-                //}
-                //var backView = $ionicHistory.backView();
-
-                //if (backView && backView.stateId === 'newregistration') {
-                //    $ionicHistory.goBack();
-                //} else {
-                //    $state.go('confirmtime');
-                //}
             };
-
-
 
             ctrl.$onDestroy = function () {
                 AppLogging.log('Stop watching gps position');
                 map.stopLocate();
-
-                //if (userMarker) {
-                //    userMarker.clearHeadingWatch();
-                //}
 
                 if (ctrl._locationTextTimeout) {
                     $timeout.cancel(ctrl._locationTextTimeput);
@@ -440,40 +379,11 @@
             };
 
             ctrl.$onInit = function () {
-                ctrl.loadMap();
-
+                if (!map) {
+                    ctrl.loadMap();
+                }
             };
-
-            //$rootScope.$on('$ionicView.loaded', function () {
-            //    ctrl.loadMap();
-            //});
-
-            //$rootScope.$on('$ionicView.enter', function () {
-            //    map.invalidateSize();
-            //    document.addEventListener("deviceready", function () {
-            //        AppLogging.log('Start watching gps location in SetPositionInMap');
-            //        map.locate({ watch: true, enableHighAccuracy: true });
-            //    }, false);
-            //});
-
-            //$rootScope.$on('$ionicView.leave', function () {
-            //    AppLogging.log('Stop watching gps position');
-            //    map.stopLocate();
-
-            //    if (userMarker) {
-            //        userMarker.clearHeadingWatch();
-            //    }
-
-            //    if (ctrl._locationTextTimeout) {
-            //        $timeout.cancel(ctrl._locationTextTimeput);
-            //    }
-            //    if (ctrl._refreshLocationTimeout) {
-            //        $timeout.cancel(ctrl._refreshLocationTimeout);
-            //    }
-            //    if (ctrl._httpTimeout) {
-            //        ctrl._httpTimeout.reject(); //stop loading locations
-            //    }
-            //});
+           
         }
     };
 

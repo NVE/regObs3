@@ -8,8 +8,8 @@
         </div>
         <div class="map-detail-text">
             <div class="text-center" ng-click="$ctrl.toggleDetails()">
-                <div ng-show="!$ctrl.showDetails">Vis detaljer</div>
-                <div ng-show="$ctrl.showDetails">Skjul detaljer</div>
+                <div ng-show="!$ctrl.showDetails">{{'SHOW'|translate}} {{'DETAILS'|translate|lowercase}}</div>
+                <div ng-show="$ctrl.showDetails">{{'HIDE'|translate}} {{'DETAILS'|translate|lowercase}}</div>
                 <i class="icon ion-chevron-up" ng-class="{'ion-chevron-up':!$ctrl.showDetails, 'ion-chevron-down': $ctrl.showDetails}"></i>
             </div>
             <div class="map-detail-wrapper">

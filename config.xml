@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='utf-8'?>
-<widget android-versionCode="312170427" id="no.nlink.nve" ios-CFBundleIdentifier="nve.regobs" ios-CFBundleVersion="20170427122936" version="3.1.2" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
+<widget android-versionCode="312170428" id="no.nlink.nve" ios-CFBundleIdentifier="nve.regobs" ios-CFBundleVersion="20170428101259" version="3.1.2" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
     <name>regObs</name>
     <description>
         Report incidents in nature

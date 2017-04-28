@@ -195,10 +195,12 @@ angular
  
                     str += '<div class="water-level-comment-summary">' + (item.Comment !== undefined ? item.Comment : '') + '</div>';
 
-                    if (item.Pictures && angular.isArray(item.Pictures)) {
+                    if (item.Pictures && angular.isArray(item.Pictures) && item.Pictures.filter(function (pic) { return pic.PictureImageBase64 !== undefined }).length > 0) {
                         str += '<div class="registration-image-thumbs">';
                         item.Pictures.forEach(function (item) {
-                            str += '<img src="' + item.PictureImageBase64 +'" width="50" />';
+                            if (item.PictureImageBase64) {
+                                str += '<img src="' + item.PictureImageBase64 + '" width="50" />';
+                            }
                         });
                         str += '</div>';
                     }
@@ -434,11 +436,14 @@ angular
                     ObsComment: {}
                 }
             },
-            DamageObs: {
+            DamageObs: { //Has custom summary component in registration summary: directives/registrationdetail/summary/damageObsSummary.js
                 name: "Skader",
-                RegistrationTID: "99"
+                RegistrationTID: "99",
+                properties: {
+                    DamageTypeTID: {},
+                    Comment: {}
+                },
             }
-
         };
 
 
@@ -865,24 +870,29 @@ angular
         };
 
         service.ddToDms = function (lat, lng) {
+            var _lat, _lng, latResult, lngResult, dmsResult;
 
-            var lat = lat;
-            var lng = lng;
-            var latResult, lngResult, dmsResult;
-
-            lat = parseFloat(lat);
-            lng = parseFloat(lng);
+            if (typeof lat === 'string') {
+                _lat = parseFloat(lat);
+            } else {
+                _lat = lat;
+            }
+            if (typeof lng === 'string') {
+                _lng = parseFloat(lng);
+            } else {
+                _lng = lng;
+            }
 
             // Call to getDms(lat) function for the coordinates of Latitude in DMS.
             // The result is stored in latResult variable.
-            latResult = service._getDms(lat);
-            latResult += (lat >= 0) ? 'N' : 'S';
+            latResult = service._getDms(_lat);
+            latResult += (_lat >= 0) ? 'N' : 'S';
 
 
             // Call to getDms(lng) function for the coordinates of Longitude in DMS.
             // The result is stored in lngResult variable.
-            lngResult = service._getDms(lng);
-            lngResult += (lng >= 0) ? 'E' : 'W';
+            lngResult = service._getDms(_lng);
+            lngResult += (_lng >= 0) ? 'E' : 'W';
 
             // Joining both variables and separate them with a space.
             dmsResult = latResult + ', ' + lngResult;

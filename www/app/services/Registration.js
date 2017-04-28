@@ -390,7 +390,11 @@ angular
                     cleanupObsLocation(location);
                     cleanupStabilityTest(data.CompressionTest);
                     cleanupIncidenct(data.Incident);
-                    cleanupWaterLevel2(data.WaterLevel2).then(function () {
+                    cleanupWaterLevel2(data.WaterLevel2)
+                    .then(function () {
+                        return cleanupDamageObs(data.DamageObs)
+                    })
+                    .then(function () {
                         delete data.avalChoice;
                         delete data.WaterLevelChoice;
 
@@ -462,41 +466,58 @@ angular
                     }
                 }
 
+                function resizePictures(arr) {
+                    return $q(function (resolve) {
+                        var callbacks = 0;
+                        var total = 0;
+                        arr.forEach(function (m) {
+                            if (m.Pictures && angular.isArray(m.Pictures)) {
+                                total += m.Pictures.length;
+                            }
+                        });
+
+                        var checkCallbacks = function () {
+                            if (callbacks === total) {
+                                resolve();
+                            };
+                        };
+
+                        arr.forEach(function (m) {
+                            if (m.Pictures && angular.isArray(m.Pictures)) {
+                                m.Pictures.forEach(function (pic) {
+                                    Utility.resizeImage(1200, pic.PictureImageBase64, function (imageData) {
+                                        pic.PictureImageBase64 = imageData;
+                                        callbacks++;
+                                        checkCallbacks();
+                                    });
+                                });
+                            } else {
+                                checkCallbacks();
+                            }
+                        });
+                    });
+                };
+
                 function cleanupWaterLevel2(waterLevel) {
                     return $q(function (resolve) {
                         if (!waterLevel || !waterLevel.WaterLevelMeasurement || waterLevel.WaterLevelMeasurement.length === 0) {
                             resolve();
                         } else {
-                            var callbacks = 0;
-                            var total = 0;
-                            waterLevel.WaterLevelMeasurement.forEach(function (m) {
-                                if (m.Pictures && angular.isArray(m.Pictures)) {
-                                    total += m.Pictures.length;
-                                }
-                            });
-
-                            var checkCallbacks = function () {
-                                if (callbacks === total) {
-                                    resolve();
-                                };
-                            };
-
-                            waterLevel.WaterLevelMeasurement.forEach(function (m) {
-                                if (m.Pictures && angular.isArray(m.Pictures)) {                                   
-                                    m.Pictures.forEach(function (pic) {
-                                        Utility.resizeImage(1200, pic.PictureImageBase64, function (imageData) {
-                                            pic.PictureImageBase64 = imageData;
-                                            callbacks++;
-                                            checkCallbacks();
-                                        });
-                                    });
-                                } else {
-                                    checkCallbacks();
-                                }
-                            });
+                            resizePictures(waterLevel.WaterLevelMeasurement).then(resolve);
                         }
                     });
                 };
+
+                function cleanupDamageObs(damageObs) {
+                    return $q(function (resolve) {
+                        if (!damageObs || !angular.isArray(damageObs) || damageObs.length === 0) {
+                            resolve();
+                        } else {
+                            resizePictures(damageObs).then(resolve);
+                        }
+                    });
+                };
+
             });
         };
 

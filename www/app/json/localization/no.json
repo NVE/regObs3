@@ -436,5 +436,7 @@
   "DAMAGE_DESCRIPTION_PLACEHOLDER": "Du kan beskrive skaden ytterligere her",
   "YES": "Ja",
   "NO": "Nei",
-  "DAMAGE_OBS_POSITION_HEADER": "Skadepunkt"
+  "DAMAGE_OBS_POSITION_HEADER": "Skadepunkt",
+  "DETAILS": "Detaljer",
+  "DAMAGE_POSITION_IN_MAP": "Skadepunkt i kart"
 }
