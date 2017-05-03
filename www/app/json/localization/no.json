@@ -438,5 +438,7 @@
   "NO": "Nei",
   "DAMAGE_OBS_POSITION_HEADER": "Skadepunkt",
   "DETAILS": "Detaljer",
-  "DAMAGE_POSITION_IN_MAP": "Skadepunkt i kart"
+  "OBSERVATION_TIME_DESCRIPTION": "Når observerte du?",
+  "DAMAGE_POSITION": "Skadepunkt i kart",
+  "MARKED_IN_MAP":"Markert i kart"
 }

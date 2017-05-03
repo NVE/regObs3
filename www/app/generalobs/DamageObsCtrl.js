@@ -1,6 +1,6 @@
 ﻿angular
     .module('RegObs')
-    .controller('DamageObsCtrl', function ($scope, $state, Registration, Property, $ionicScrollDelegate, Utility, Pictures) {
+    .controller('DamageObsCtrl', function ($scope, $state, Registration, Property, $ionicScrollDelegate, Utility, Pictures, $filter) {
         var vm = this;
         var noDamageVisibleId = 7;
         var unknownDamageVisibleId = 0;
@@ -124,7 +124,8 @@
         };
 
         vm.formatPosition = function (position) {
-            return Utility.ddToDms(position.Latitude, position.Longitude);
+            //return Utility.ddToDms(position.Latitude, position.Longitude);
+            return Utility.formatLatLng(position.Latitude, position.Longitude);
         };
 
         $scope.$on('$regobs:propertyReset', function () {

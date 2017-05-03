@@ -1,0 +1,43 @@
+﻿<ion-view view-title="Innsending">
+    <ion-content class="padding">
+        <div class="status-wrapper" ng-if="vm.loaded">
+            <div ng-if="vm.isSending">
+                <h3>Sender inn observasjon {{vm.completed.length + 1}}/{{vm.unsent.length}}</h3>
+                <p class="status-description">Vennligst vent</p>
+                <div class="downloadprogress inline-block" pb-circle progress-key="{{vm.progressName}}" options="vm.progressOptions"></div>
+            </div>
+            <div ng-if="!vm.isSending">
+                    <div><i class="icon status-icon" ng-class="{'ion-checkmark-circled balanced':!vm.failed(), 'ion-close-circled assertive':vm.failed()}"></i></div>
+                    <div ng-hide="vm.failed()">
+                        <h3 ng-show="vm.completed.length > 1">Dine observasjoner er sendt inn</h3>
+                        <h3 ng-show="vm.completed.length === 1">Din observasjon er sendt inn</h3>
+                        <p class="status-description">Takk for at du sendte inn observasjon og hjelper Norge med å bli tryggere. Du kan gjøre endringer på observasjonen på www.regobs.no innen 48 timer. Etter det låses den og du kan ikke gjøre endringer. Bekreftelse er sendt til din e-postadresse. </p>
+                    </div>
+                    <div ng-show="vm.failed()">
+                        <h3 ng-show="vm.completed.length > 1">Innsending av en eller flere observasjoner feilet</h3>
+                        <h3 ng-show="vm.completed.length === 1">Innsending feilet</h3>
+                        <p class="status-description">Dette kan skyldes manglende nettilgang, eller at serveren er midlertidig utilgjengelig. Usendte observasjoner er lagret på telefonen. Du kan prøve å sende inn på nytt, eller du kan vente og sende inn på et senere tidspunkt. Hvis problemet vedvarer, ta kontakt med regObs-teamet.</p>
+                    </div>
+                    
+                    <div class="status-footer">                       
+                        <div ng-if="vm.completed.length > 1">
+                            <ion-list>
+                                <ion-item class="item-icon-left" ng-repeat="obs in vm.completed">
+                                    <div ng-if="!obs.error" ui-sref="observationdetails({observation:obs})">
+                                        <i class="icon ion-checkmark-circled balanced"></i> {{vm.getObservationDescription(obs)}}
+                                    </div>
+                                    <div ng-if="obs.error">
+                                        <i class="icon ion-close-circled assertive"></i> {{vm.getObservationDescription(obs)}}
+                                    </div>
+                                </ion-item>
+                            </ion-list>
+                        </div>
+                        <div ng-show="vm.completed.length === 1 && !vm.failed()"><button type="button" class="button button-calm button-block status-footer-button" ui-sref="observationdetails({observation:vm.completed[0]})">Se observasjon</button></div>
+                        <div ng-show="vm.failed()"><button type="button" class="button button-calm button-block status-footer-button" ng-click="vm.resendFailed()">Prøv igjen</button></div>
+                        <div><button type="button" class="button button-outline button-calm button-block status-footer-button" ui-sref="start">Gå tilbake til forsiden</button></div>
+                    </div>
+                </div>              
+            </div>
+    </ion-content>
+    <!--<registration-footer></registration-footer>-->
+</ion-view>

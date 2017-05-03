@@ -23,16 +23,6 @@
 
         vm.loaded = false;
 
-        vm._resetHistory = function () {
-            var historyId = $ionicHistory.currentHistoryId();
-            var history = $ionicHistory.viewHistory().histories[historyId];
-            for (var i = history.stack.length - 1; i >= 0; i--) {
-                if (history.stack[i].stateName === 'start') {
-                    $ionicHistory.backView(history.stack[i]);
-                }
-            }
-        };
-
         vm.hasLocation = function () {
             return ObsLocation.isSet();
         };
@@ -43,7 +33,7 @@
 
 
         $scope.$on('$ionicView.enter', function () {
-            vm._resetHistory();
+            Utility.setBackView('start');
             vm.reg = Registration.data;
             vm.loaded = true;
         });

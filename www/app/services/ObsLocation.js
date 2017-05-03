@@ -37,7 +37,8 @@ angular
                     return ObsLocation.data.place.Navn + ' / ' + ObsLocation.data.place.Fylke;
                 }
                 if (ObsLocation.data.Latitude && ObsLocation.data.Longitude) {
-                    return Utility.ddToDms(ObsLocation.data.Latitude, ObsLocation.data.Longitude);
+                    //return Utility.ddToDms(ObsLocation.data.Latitude, ObsLocation.data.Longitude);
+                    return Utility.formatLatLng(ObsLocation.data.Latitude, ObsLocation.data.Longitude);
                 }
             }
             return 'UNKNOWN_POSITION';

@@ -9,7 +9,7 @@ angular.module('RegObs').factory('Observation', function (MapSelectableItem, App
      * @returns {} 
      */
     var Observation = function (json) {
-        if (!json || typeof json !== 'object' || !json.RegId) {
+        if (!json || typeof json !== 'object') {
             throw new Error('Could not create Observation. Invalid json!');
         }
 

@@ -222,7 +222,8 @@
             ctrl.getMarkerLatLngText = function () {
                 if (marker) {
                     var latLng = marker.getLatLng();
-                    return Utility.ddToDms(latLng.lat, latLng.lng);
+                    //return Utility.ddToDms(latLng.lat, latLng.lng);
+                    return Utility.formatLatLng(latLng.lat, latLng.lng);
                 }
                 return '';
             };

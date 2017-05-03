@@ -8,7 +8,7 @@ $ice: #CDD7D6;
 
 //$footerHeight: 65px;
 $smallFooterHeight: 65px;
-$footerHeight: 140px;
+$footerHeight: 115px;
 $greyBackground: rgba(245, 245, 245, 1);
 
 .snow {
@@ -122,7 +122,7 @@ $greyBackground: rgba(245, 245, 245, 1);
 
 
 .delete-button {
-    bottom: 5px !important;
+    bottom: 9px !important;
     top: auto !important;
     left: 0px;
     font-size: 15px !important;
@@ -245,7 +245,7 @@ input:focus, select:focus, textarea:focus {
 
 .regobs-menu-list .item-complex.item-icon-right .item-content {
     //min-height: 66px;
-    padding-right: 70px;
+    padding-right: 80px;
 }
 
 .regobs-menu-list .item-complex.large .item-content {
@@ -613,4 +613,8 @@ input.extra-large-time {
 
 .relative {
     position: relative;
+}
+
+.inline-block {
+    display: inline-block !important;
 }

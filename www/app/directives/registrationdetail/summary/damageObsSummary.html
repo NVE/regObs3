@@ -3,7 +3,7 @@
 </div>
 <div ng-repeat="obs in $ctrl.damageObs">
     <div class="water-level-comment-summary"><span class="observation-descrription">{{'DAMAGE_EXTENT'|translate}}:</span> {{$ctrl.getDamageTypeName(obs.DamageTypeTID)}}</div>
-    <div class="water-level-comment-summary" ng-if="obs.DamagePosition"><span class="observation-descrription">{{'DAMAGE_POSITION_IN_MAP'|translate}}:</span> {{$ctrl.formatPosition(obs.DamagePosition)}}</div>
+    <div class="water-level-comment-summary" ng-if="obs.DamagePosition"><span class="observation-descrription">{{'DAMAGE_OBS_POSITION_HEADER'|translate}}:</span> {{'MARKED_IN_MAP'|translate}}</div>
     <div class="water-level-comment-summary" ng-if="obs.Comment"><span class="observation-descrription">{{'COMMENT'|translate}}:</span> {{obs.Comment}}</div>
     <div class="registration-image-thumbs">
         <span ng-repeat="pic in obs.Pictures">

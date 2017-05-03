@@ -3,7 +3,7 @@
  */
 angular
     .module('RegObs')
-    .factory('Utility', function Utility($http, $q, $rootScope, AppSettings, User, LocalStorage, AppLogging, $translate, $cordovaNetwork, moment, $filter) {
+    .factory('Utility', function Utility($http, $q, $rootScope, AppSettings, User, LocalStorage, AppLogging, $translate, $cordovaNetwork, moment, $filter, $ionicHistory) {
         var service = this;
 
         var canvas;
@@ -187,7 +187,8 @@ angular
                     str += '<span class="observation-descrription">' +(fullObject.WaterLevelMethodTID === 1 ? $translate.instant('MARKING_SHORT') : $translate.instant('MEASUREMENT'));
                     str += ' ' + (result.length + 1) + '</span>: ';
                     if (item.DtMeasurementTime) {
-                        str += moment(item.DtMeasurementTime).format('D/M HH:mm');
+                        //str += moment(item.DtMeasurementTime).format('D/M HH:mm');
+                        str += service.formatDateAndTime(item.DtMeasurementTime);
                     }
                     if (item.WaterLevelValue) {
                         str += ', ' + $filter('number')(item.WaterLevelValue, 2) + ' m';
@@ -438,9 +439,10 @@ angular
             },
             DamageObs: { //Has custom summary component in registration summary: directives/registrationdetail/summary/damageObsSummary.js
                 name: "Skader",
-                RegistrationTID: "99",
+                RegistrationTID: "14",
                 properties: {
-                    DamageTypeTID: {},
+                    DamageTypeTID: { kdvKey: 'DamageTypeKDV', displayFormat: { hideDescription: true } },
+                    DamagePosition: { displayFormat: { valueFormat: function (item) { return service.formatLatLng(item.Latitude, item.Longitude); } } },
                     Comment: {}
                 },
             }
@@ -869,6 +871,13 @@ angular
             return radius;
         };
 
+        service.formatLatLng = function (lat, lng, decimals) {
+            return $filter('number')(lat, decimals || 5) + ', ' + $filter('number')(lng, decimals || 5);
+        };
+
+        /**
+        * Format lat lng as degrees, minutes, seconds
+        */
         service.ddToDms = function (lat, lng) {
             var _lat, _lng, latResult, lngResult, dmsResult;
 
@@ -917,6 +926,25 @@ angular
             result += valSec + '"';
 
             return result;
+        };
+
+        service.setBackView = function (name) {
+            var backName = name || 'start';
+            var historyId = $ionicHistory.currentHistoryId();
+            var history = $ionicHistory.viewHistory().histories[historyId];
+            for (var i = history.stack.length - 1; i >= 0; i--) {
+                if (history.stack[i].stateName === backName) {
+                    $ionicHistory.backView(history.stack[i]);
+                }
+            }
+        };
+
+        service.formatDate = function (date) {
+            return $filter('date')(date, 'd') + '. ' + $filter('lowercase')($filter('translate')($filter('uppercase')($filter('date')(date, 'MMM')))) + ' ' + $filter('date')(date, 'yyyy');
+        };
+
+        service.formatDateAndTime = function (date) {
+            return service.formatDate(date) + ', ' + $filter('date')(date, 'HH:mm');
         };
 
         return service;

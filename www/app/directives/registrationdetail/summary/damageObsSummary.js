@@ -33,10 +33,6 @@
                 return '';
             };
 
-            ctrl.formatPosition = function (position) {
-                return Utility.ddToDms(position.Latitude, position.Longitude);
-            };
-
             ctrl.$onInit = function () {
                 update();
             };
@@ -49,5 +45,5 @@
 
     angular
         .module('RegObs')
-        .component('observationTypeSummary99', damageObsSummary);
+        .component('observationTypeSummary14', damageObsSummary);
 })();

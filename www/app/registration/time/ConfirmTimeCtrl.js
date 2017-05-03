@@ -7,21 +7,22 @@
             ctrl.time = new Date(moment().seconds(0).milliseconds(0).toISOString());
         };
 
-        ctrl.onChange = function () {
+        ctrl.save = function () {
+            var doSave = function () {
+                Registration.data.DtObsTime = ctrl.time.toISOString();
+                Registration.save();
+                $state.go('newregistration');
+            };
+
             if (!ctrl.time || (ctrl.time > new Date())) {
                 $translate(['INVALID_VALUE', 'INVALID_OBSERVATION_TIME']).then(function (translations) {
                     RegobsPopup.alert(translations['INVALID_VALUE'], translations['INVALID_OBSERVATION_TIME']).then(function () {
                         ctrl.setToNow();
-                    }); 
-                });                            
+                    });
+                });
+            } else {
+                doSave();
             }
-        };
-
-        ctrl.save = function () {
-            Registration.data.DtObsTime = ctrl.time.toISOString();
-            Registration.save();
-
-            $state.go('newregistration');
         };
 
         $scope.$on('$ionicView.enter', function () {

@@ -133,6 +133,11 @@
                 controller: 'RegistrationCtrl as vm'
             })
 
+            .state('registrationstatus', {
+                url: '/registrationstatus',
+                templateUrl: 'app/registration/status/registrationstatus.html',
+                controller: 'RegistrationStatusCtrl as vm'
+            })
 
             //SNØ
             .state('snowtrip', {

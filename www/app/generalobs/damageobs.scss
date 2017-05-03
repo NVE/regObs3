@@ -87,12 +87,16 @@
 regobs-comment.bordered textarea {
     padding: 5px !important;
     border: 1px solid #ddd !important;
-    font-size: 0.9em !important;
+    //font-size: 0.9em !important;
 }
 
-regobs-comment.bordered textarea::-webkit-input-placeholder {
+regobs-comment textarea {
     font-style: italic;
 }
+
+/*regobs-comment.bordered textarea::-webkit-input-placeholder {
+    font-style: italic;
+}*/
 
 
 .damage-detail-arrow-box .item:not(:first-child) {
