@@ -297,7 +297,11 @@ angular
                                 completed = [];
                                 data.forEach(function (item) {
                                     $http.post(AppSettings.getEndPoints().postRegistration, item, AppSettings.httpConfigRegistrationPost).then(function (result) {
-                                        item.RegId = result.data;
+                                        if (angular.isObject(result.data)) {
+                                            item.RegId = result.data.RegId;
+                                        } else {
+                                            item.RegId = result.data; //api backward compatibility
+                                        }                                       
                                         completed.push(item);
                                         if (onItemCompleteCallback && angular.isFunction(onItemCompleteCallback)) {
                                             onItemCompleteCallback(item);
