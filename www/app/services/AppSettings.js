@@ -132,7 +132,8 @@
                 //getRegistration: baseUrls[settings.data.env] + '/search/avalanche',
                 trip: baseUrls[settings.data.env] + '/trip', //POST= Start, PUT= Stop(object with DeviceGuid), Headers: regObs_apptoken, ApiJsonVersion
                 services: serviceUrls[settings.data.env],
-                getLog: baseUrls[settings.data.env] +'/Log' // /{id}
+                getLog: baseUrls[settings.data.env] + '/Log', // /{id}
+                search: baseUrls[settings.data.env] + '/Search/All'
             };
         };
 

@@ -1,6 +1,6 @@
 ﻿angular
     .module('RegObs')
-    .controller('RegistrationStatusCtrl', function RegistrationStatusCtrl($scope, Registration, $state, Utility, $pbService, $http, AppSettings, $timeout, Observation) {
+    .controller('RegistrationStatusCtrl', function RegistrationStatusCtrl($scope, Registration, $ionicPopup, $state, Utility, $pbService, $http, AppSettings, $timeout, $q, Observations, Observation) {
         var vm = this;
         vm.loaded = false;
 
@@ -59,7 +59,7 @@
                         ')' +
                         '</div>';
                     circle.setText(text);
-                }               
+                }
             };
 
             var onItemCompleteCallback = function (registration) {
@@ -69,61 +69,56 @@
             };
 
             Registration.post(onItemCompleteCallback).then(function () {
-                vm._updateProgress();
-                vm.isSending = false;
-                //vm.updateStatus();
+                vm._updateProgress().then(function () {
+                    vm.isSending = false;
+                });
             });
         };
 
-        vm.getObservationDescription = function (obs) {
-            //var arr = [];
-            //vm.completed.forEach(function (item) {
-            //    var name = item.getName();
-            //    if (arr.indexOf(name) < 0) { //Do not add duplicated values
-            //        arr.push(name);
-            //    }
-            //});           
-            //return arr.join(', ');
-            return 'Faretegn, Bilder og notater';
-        };
-
         vm._updateProgress = function () {
-            $timeout(function () {
-                $pbService.animate(vm.progressName, vm.downloadStatus.getPercent());
-            });  
+            return $q(function (resolve) {
+                $timeout(function () {
+                    $pbService.animate(vm.progressName, vm.downloadStatus.getPercent());
+                    $timeout(function () {
+                        resolve();
+                    }, 1000);
+                });
+            });
         };
 
-        //vm.goToObservation = function (observation) {
-        //    $state.go('observationdetails', { observation: observation });
-        //};
-        //vm.updateStatus = function () {
-        //    if (vm.completed && angular.isArray(vm.completed)) {
-        //        vm.completed.forEach(function (item) {
-        //            if (!item.error) {
-        //                item.isFetchingStatus = true;
-        //                $http.get(AppSettings.getEndPoints().getLog + '/' + item.ObjectLogId).then(function (data) {
-        //                    //if (data.Status === 1) {
-        //                    //     //Observations.downloadObservation();
-        //                    //}
-        //                    item.status = data;
-        //                }).catch(function (error) {
-        //                    item.status = null;
-        //                }).finally(function () {
-        //                    item.isFetchingStatus = false;
-        //                });
-        //            } else {
-        //                item.isFetchingStatus = false;
-        //            }
-        //        });
-        //    }
-        //};
+
+        vm.onRegistrationClick = function (obs) {
+            if (!obs.error) {
+                vm.loadingRegistration = true;
+                //Observations.getRegistrationsById(obs.RegId).then(function () {
+                //    return Registration.clearExistingNewRegistrations();
+                //}).then(function () {
+                //    return Observations.getStoredObservations(Utility.getCurrentGeoHazardTid(), false).then(function (result) {
+                //        var filtered = result.filter(function (item) { return item.RegId === obs.RegId; });
+                //        if (filtered.length > 0) {
+                //            $state.go('observationdetails', { observation: Observation.fromJson(filtered[0]) });
+                //        }
+                //        return true;
+                //    });
+                //}).finally(function () {
+                //    vm.loadingRegistration = false;
+                //});
+                Observations.getRegistrationsById(obs.RegId).then(function (result) {
+                    return Registration.clearExistingNewRegistrations().then(function () {
+                        $state.go('observationdetails', { observation: Observation.fromJson(result) });
+                    });
+                }).finally(function () {
+                    vm.loadingRegistration = false;
+                });
+            }
+        };
 
         vm.resendFailed = function () {
             vm.unsent = Registration.unsent;
             vm.send();
         };
 
-        
+
 
         $scope.$on('$ionicView.enter', vm.init);
     });

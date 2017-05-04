@@ -297,7 +297,7 @@ angular
                                 completed = [];
                                 data.forEach(function (item) {
                                     $http.post(AppSettings.getEndPoints().postRegistration, item, AppSettings.httpConfigRegistrationPost).then(function (result) {
-                                        item.ObjectLogId = result.data;
+                                        item.RegId = result.data;
                                         completed.push(item);
                                         if (onItemCompleteCallback && angular.isFunction(onItemCompleteCallback)) {
                                             onItemCompleteCallback(item);
@@ -340,7 +340,17 @@ angular
                 //            }
                 //        });
                 //}
-                $state.go('registrationstatus');
+                if (User.getUser().anonymous) {
+                    RegobsPopup.confirm('Du er ikke innlogget', 'Du må logge inn for å kunne sende inn observasjoner', 'Logg inn', 'Avbryt')
+                        .then(function (confirmed) {
+                            if (confirmed) {
+                                $state.go('settings');
+                            }
+                        });
+                } else {
+                    $state.go('registrationstatus');
+                }
+
             }
         };
 
@@ -383,7 +393,7 @@ angular
             return Registration.data.Picture && Registration.data.Picture.filter(function (item) { return item.RegistrationTID === registrationTid }).length > 0;
         };
 
-        Registration.prepareRegistrationForSending = function(){
+        Registration.prepareRegistrationForSending = function () {
             return $q(function (resolve) {
                 if (Registration.isEmpty()) {
                     resolve();
@@ -403,27 +413,27 @@ angular
                     cleanupStabilityTest(data.CompressionTest);
                     cleanupIncidenct(data.Incident);
                     cleanupWaterLevel2(data.WaterLevel2)
-                    .then(function () {
-                        return cleanupDamageObs(data.DamageObs)
-                    })
-                    .then(function () {
-                        delete data.avalChoice;
-                        delete data.WaterLevelChoice;
+                        .then(function () {
+                            return cleanupDamageObs(data.DamageObs)
+                        })
+                        .then(function () {
+                            delete data.avalChoice;
+                            delete data.WaterLevelChoice;
 
-                        angular.extend(data, {
-                            "ObserverGuid": user.Guid,
-                            "ObserverGroupID": user.chosenObserverGroup || null,
-                            "Email": user.anonymous ? false : !!AppSettings.data.emailReceipt,
-                            "ObsLocation": location
+                            angular.extend(data, {
+                                "ObserverGuid": user.Guid,
+                                "ObserverGroupID": user.chosenObserverGroup || null,
+                                "Email": user.anonymous ? false : !!AppSettings.data.emailReceipt,
+                                "ObsLocation": location
+                            });
+
+                            AppLogging.log('User', user);
+                            AppLogging.log('Sending', data);
+
+                            saveToUnsent({ Registrations: [data] });
+
+                            resolve();
                         });
-
-                        AppLogging.log('User', user);
-                        AppLogging.log('Sending', data);
-
-                        saveToUnsent({ Registrations: [data] });
-
-                        resolve();
-                    });
                 }
 
                 function cleanupStabilityTest(array) {
@@ -558,26 +568,20 @@ angular
             return messages[Math.round(Math.random() * (messages.length - 1))];
         }
 
-        Registration.clearNewRegistrationsWithinRange = function () {
+        Registration.clearExistingNewRegistrations = function () {
             return Observations.getStoredObservations(Utility.getCurrentGeoHazardTid())
                 .then(function (storedObservations) {
                     var newRegistrations = Registration.getNewRegistrations();
                     var arr = [];
                     newRegistrations.forEach(function (reg) {
-                        if (reg && reg.ObsLocation && reg.ObsLocation.Latitude && reg.ObsLocation.Longitude) {
-                            var regLatLng = L.latLng(reg.ObsLocation.Latitude, reg.ObsLocation.Longitude);
-                            var keep = true;
-                            storedObservations.forEach(function (obs) {
-                                var obsLatLng = L.latLng(obs.Latitude, obs.Longitude);
-
-                                if (regLatLng.distanceTo(obsLatLng) < 100) {
-                                    //TODO: Removing observations that is nearby. A better way is to check ID, but we don't get ID of new registration form API as of now
-                                    keep = false;
-                                }
-                            });
-                            if (keep) {
-                                arr.push(reg);
+                        var keep = true;
+                        storedObservations.forEach(function (obs) {
+                            if (reg.RegId === obs.RegId) {
+                                keep = false;
                             }
+                        });
+                        if (keep) {
+                            arr.push(reg);
                         }
                     });
                     LocalStorage.setObject(newStorageKey, arr);

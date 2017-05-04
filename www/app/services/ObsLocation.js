@@ -4,7 +4,7 @@ angular
         var ObsLocation = this;
         var storageKey = 'regobsLocation';
 
-        function init() {
+        ObsLocation.init = function() {
             ObsLocation.fetching = false;
             ObsLocation.data = LocalStorage.getObject(storageKey);
             ObsLocation.source = {
@@ -110,7 +110,7 @@ angular
             $rootScope.$broadcast('$regObs:obsLocationSaved');
         }
 
-        init();
+        ObsLocation.init();
 
         return ObsLocation;
     });

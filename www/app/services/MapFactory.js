@@ -151,7 +151,7 @@
                 var latlng = new L.LatLng(position.latitude, position.longitude);
                 if (!userMarker) {
                     userMarker = new RegObsClasses.UserMarker(latlng,
-                        { accuracy: position.accuracy, zIndexOffset: 1000 });
+                        { accuracy: position.accuracy });
                     userMarker.addTo(layerGroups.user);
                     service.setView(latlng);
                 } else {
@@ -600,7 +600,7 @@
             service._redrawTilesForThisGeoHazard();
             service._redrawOfflineMapLines();
 
-            Registration.clearNewRegistrationsWithinRange()
+            Registration.clearExistingNewRegistrations()
                 .then(function () {
                     service._removeObservations(); //clear all markers
                     //if (AppSettings.data.showPreviouslyUsedPlaces) {

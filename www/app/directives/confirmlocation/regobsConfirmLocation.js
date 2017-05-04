@@ -173,7 +173,7 @@
                     UserLocation.setLastUserLocation(position);
                     var latlng = L.latLng(position.latitude, position.longitude);
                     if (!userMarker) {
-                        userMarker = new RegObsClasses.UserMarker(latlng, { accuracy: position.accuracy, zIndexOffset: 1000 });
+                        userMarker = new RegObsClasses.UserMarker(latlng, { accuracy: position.accuracy });
                         userMarker.addTo(map);
                     } else {
                         userMarker.setLatLng(latlng);

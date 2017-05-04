@@ -78,7 +78,9 @@ angular
                         .then(function () {
                             AppSettings.load();
                             User.load();
+                            Registration.load();
                             HeaderColor.init();
+                            ObsLocation.init();
                             Map.refresh();
                             vm.username = '';
                             vm.password = '';
