@@ -1,6 +1,6 @@
 ﻿angular
     .module('RegObs')
-    .controller('DamageObsCtrl', function ($scope, $state, Registration, Property, $ionicScrollDelegate, Utility, Pictures, $filter) {
+    .controller('DamageObsCtrl', function ($scope, $state, Registration, Property, $ionicScrollDelegate, Utility, Pictures, $filter, AppLogging) {
         var vm = this;
         var noDamageVisibleId = 7;
         var unknownDamageVisibleId = 0;

@@ -184,10 +184,9 @@ angular
             if (fullObject && fullObject.WaterLevelMeasurement && angular.isArray(fullObject.WaterLevelMeasurement)) {
                 fullObject.WaterLevelMeasurement.forEach(function (item) {
                     var str = '<div class="water-level-measurement">';
-                    str += '<span class="observation-descrription">' +(fullObject.WaterLevelMethodTID === 1 ? $translate.instant('MARKING_SHORT') : $translate.instant('MEASUREMENT'));
+                    str += '<span class="observation-description">' +(fullObject.WaterLevelMethodTID === 1 ? $translate.instant('MARKING_SHORT') : $translate.instant('MEASUREMENT'));
                     str += ' ' + (result.length + 1) + '</span>: ';
                     if (item.DtMeasurementTime) {
-                        //str += moment(item.DtMeasurementTime).format('D/M HH:mm');
                         str += service.formatDateAndTime(item.DtMeasurementTime);
                     }
                     if (item.WaterLevelValue) {
@@ -405,11 +404,7 @@ angular
                     WaterAstrayTID: {},
                     ObservationTimingTID: {},
                     WaterLevelMethodTID: { displayFormat: { valueFormat: function (item, data) { return service.formatWaterLevelMethod(data.FullObject) } } },
-                    //MarkingReferenceTID: {},
                     Comment: {},
-                    //MarkingTypeTID: {},
-                    //MeasurementTypeTID: {},
-                    //MeasurementReferenceTID: {},
                     MeasuringToolDescription: {},
                     WaterLevelMeasurement: { displayFormat: { hideDescription: true, valueFormat: function (item, data) { return service.formatWaterLevelMeasurement(data.FullObject) } } }
                 }
@@ -443,7 +438,7 @@ angular
                 properties: {
                     DamageTypeTID: { kdvKey: 'DamageTypeKDV', displayFormat: { hideDescription: true } },
                     DamagePosition: { displayFormat: { valueFormat: function (item) { return service.formatLatLng(item.Latitude, item.Longitude); } } },
-                    Comment: {}
+                    Comment: { displayFormat: { hideDescription: true } }
                 },
             }
         };

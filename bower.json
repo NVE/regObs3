@@ -71,6 +71,9 @@
     ],
     "ng-webworker": [
       "src/*.min.*"
+    ],
+    "ionic-close-popup": [
+      "ionic-close-popup.js"
     ]
   },
   "dependencies": {
@@ -85,7 +88,8 @@
     "angular-translate": "2.11.0",
     "angular-translate-loader-static-files": "^2.13.1",
     "leaflet.markercluster": "^1.0.0",
-    "ng-webworker": "^0.2.3"
+    "ng-webworker": "^0.2.3",
+    "ionic-close-popup": "^0.0.1"
   },
   "resolutions": {
     "angular-ui-router": "0.3.2",

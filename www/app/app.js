@@ -1,7 +1,7 @@
 (function () {
     "use strict";
 
-    angular.module('RegObs', ['ionic', 'ngCordova', 'ion-floating-menu', 'angularProgressbar', 'pascalprecht.translate', 'ngWebworker'])
+    angular.module('RegObs', ['ionic', 'ngCordova', 'ion-floating-menu', 'angularProgressbar', 'pascalprecht.translate', 'ngWebworker', 'ionic.closePopup'])
         .config(providers)
         .run(setup);
 

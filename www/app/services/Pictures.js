@@ -1,7 +1,7 @@
 (function () {
     'use strict';
 
-    function PicturesService(Registration, RegobsPopup, Utility, AppSettings, $cordovaCamera, $cordovaDeviceOrientation, $q, $translate, $ionicPopup) {
+    function PicturesService(Registration, RegobsPopup, Utility, AppSettings, $cordovaCamera, $cordovaDeviceOrientation, $q, $translate, $ionicPopup, IonicClosePopupService) {
         'ngInject';
         var Pictures = this;
 
@@ -146,33 +146,37 @@
         Pictures.showImageSelector = function (registrationTid) {
             return $q(function (resolve, reject) {
                 var getImage = function (result) {
-                    var processPictureResult = function (imageUri) {
-                        var pic = {
-                            RegistrationTID: registrationTid,
-                            PictureImageBase64: imageUri,
-                            PictureComment: ''
+                    if (result) {
+                        var processPictureResult = function (imageUri) {
+                            var pic = {
+                                RegistrationTID: registrationTid,
+                                PictureImageBase64: imageUri,
+                                PictureComment: ''
+                            };
+
+                            if (AppSettings.data.compass) {
+                                Pictures.setOrientation(pic);
+                            }
+
+                            resolve(pic);
                         };
 
-                        if (AppSettings.data.compass) {
-                            Pictures.setOrientation(pic);
+
+                        if (window.Camera) {
+                            var options = result === 'camera' ? Pictures.defaultCameraOptions() : Pictures.defaultAlbumOptions();
+                            return $cordovaCamera
+                                .getPicture(options)
+                                .then(processPictureResult, reject);
+                        } else {
+                            reject(new Error('No camera plugin found!'));
                         }
-
-                        resolve(pic);
-                    };
-
-
-                    if (window.Camera) {
-                        var options = result ? Pictures.defaultCameraOptions() : Pictures.defaultAlbumOptions();
-                        return $cordovaCamera
-                            .getPicture(options)
-                            .then(processPictureResult, reject);
                     } else {
-                        reject(new Error('No camera plugin found!'));
+                        reject();
                     }
                 };
 
                 $translate(['ADD_PICTURE', 'ADD_PICTURE_DESCRIPTION', 'ALBUM', 'CAMERA']).then(function (translations) {
-                    $ionicPopup.confirm({
+                    var popup = $ionicPopup.show({
                         title: translations['ADD_PICTURE'],
                         template: translations['ADD_PICTURE_DESCRIPTION'],
                         buttons: [
@@ -181,7 +185,7 @@
                                 type: 'button icon-left ion-images',
                                 onTap: function (e) {
                                     // Returning a value will cause the promise to resolve with the given value.
-                                    return false;
+                                    return 'album';
                                 }
                             },
                             {
@@ -189,11 +193,13 @@
                                 type: 'button icon-left ion-camera',
                                 onTap: function (e) {
                                     // Returning a value will cause the promise to resolve with the given value.
-                                    return true;
+                                    return 'camera';
                                 }
                             }
                         ]
-                    }).then(getImage);
+                    });
+                    IonicClosePopupService.register(popup);
+                    popup.then(getImage);
                 });
             });
         };

@@ -1,10 +1,10 @@
 ﻿<div>
-    <span class="observation-descrription">{{'DAMAGE_OBS'|translate}}:</span> {{($ctrl.hasDamages ? 'YES' : 'NO') | translate}}
+    <span class="observation-description">{{'DAMAGE_OBS'|translate}}:</span> {{($ctrl.hasDamages ? 'YES' : 'NO') | translate}}
 </div>
 <div ng-repeat="obs in $ctrl.damageObs">
-    <div class="water-level-comment-summary"><span class="observation-descrription">{{'DAMAGE_EXTENT'|translate}}:</span> {{$ctrl.getDamageTypeName(obs.DamageTypeTID)}}</div>
-    <div class="water-level-comment-summary" ng-if="obs.DamagePosition"><span class="observation-descrription">{{'DAMAGE_OBS_POSITION_HEADER'|translate}}:</span> {{'MARKED_IN_MAP'|translate}}</div>
-    <div class="water-level-comment-summary" ng-if="obs.Comment"><span class="observation-descrription">{{'COMMENT'|translate}}:</span> {{obs.Comment}}</div>
+    <div class="water-level-comment-summary"><span class="observation-description">{{'DAMAGE_EXTENT'|translate}}:</span> {{$ctrl.getDamageTypeName(obs.DamageTypeTID)}}</div>
+    <div class="water-level-comment-summary" ng-if="obs.DamagePosition"><span class="observation-description">{{'DAMAGE_OBS_POSITION_HEADER'|translate}}:</span> {{'MARKED_IN_MAP'|translate}}</div>
+    <div class="water-level-comment-summary" ng-if="obs.Comment"><span class="observation-description">{{'COMMENT'|translate}}:</span> {{obs.Comment}}</div>
     <div class="registration-image-thumbs">
         <span ng-repeat="pic in obs.Pictures">
             <img ng-src="{{pic.PictureImageBase64}}" width="50" />

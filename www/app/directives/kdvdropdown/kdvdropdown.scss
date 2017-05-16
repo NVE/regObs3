@@ -59,6 +59,15 @@
     border-color: $calm !important;
 }
 
+.checkbox-calm .checkbox-icon::before{
+    border-color: #979797 !important;
+}
+
+.checkbox-calm input:checked + .checkbox-icon:before {
+    border-color: $calm !important;
+    background-color: $calm !important;
+}
+
 
 .radio-left .radio-icon {
     right: auto !important;
