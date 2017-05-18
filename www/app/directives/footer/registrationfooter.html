@@ -7,8 +7,6 @@
             <span class="badge badge-assertive" ng-show="$ctrl.registration.unsent.length" ng-bind="$ctrl.registration.unsent.length"></span> {{'SEND'|translate}}
         </button>
         <button type="button" ng-click="$ctrl.registration.remove()" class="delete-button button button-small button-clear button-dark icon-right ion-ios-trash-outline">{{'DELETE'|translate}} {{'OBSERVATION'|translate|lowercase}}</button>
-    </div>
-    <div class="regobs-footer-content send-spinner" ng-show="$ctrl.registration.sending">
-        <ion-spinner class="spinner-dark"></ion-spinner> {{'SENDING'|translate}}
+        <span class="unsent-badge-info" ng-show="$ctrl.registration.unsent.length">*{{'BADGE_INFO'|translate}}</span>
     </div>
 </ion-footer-bar>

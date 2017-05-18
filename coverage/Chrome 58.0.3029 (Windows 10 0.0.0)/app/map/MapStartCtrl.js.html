@@ -1,0 +1,479 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <title>Code coverage report for app\map\MapStartCtrl.js</title>
+    <meta charset="utf-8" />
+    <link rel="stylesheet" href="../../prettify.css" />
+    <link rel="stylesheet" href="../../base.css" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <style type='text/css'>
+        .coverage-summary .sorter {
+            background-image: url(../../sort-arrow-sprite.png);
+        }
+    </style>
+</head>
+<body>
+<div class='wrapper'>
+  <div class='pad1'>
+    <h1>
+      <a href="../../index.html">all files</a> / <a href="index.html">app/map/</a> MapStartCtrl.js
+    </h1>
+    <div class='clearfix'>
+      <div class='fl pad1y space-right2'>
+        <span class="strong">1.47% </span>
+        <span class="quiet">Statements</span>
+        <span class='fraction'>1/68</span>
+      </div>
+      <div class='fl pad1y space-right2'>
+        <span class="strong">0% </span>
+        <span class="quiet">Branches</span>
+        <span class='fraction'>0/19</span>
+      </div>
+      <div class='fl pad1y space-right2'>
+        <span class="strong">0% </span>
+        <span class="quiet">Functions</span>
+        <span class='fraction'>0/28</span>
+      </div>
+      <div class='fl pad1y space-right2'>
+        <span class="strong">1.47% </span>
+        <span class="quiet">Lines</span>
+        <span class='fraction'>1/68</span>
+      </div>
+    </div>
+  </div>
+  <div class='status-line low'></div>
+<pre><table class="coverage">
+<tr><td class="line-count quiet">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31
+32
+33
+34
+35
+36
+37
+38
+39
+40
+41
+42
+43
+44
+45
+46
+47
+48
+49
+50
+51
+52
+53
+54
+55
+56
+57
+58
+59
+60
+61
+62
+63
+64
+65
+66
+67
+68
+69
+70
+71
+72
+73
+74
+75
+76
+77
+78
+79
+80
+81
+82
+83
+84
+85
+86
+87
+88
+89
+90
+91
+92
+93
+94
+95
+96
+97
+98
+99
+100
+101
+102
+103
+104
+105
+106
+107
+108
+109
+110
+111
+112
+113
+114
+115
+116
+117
+118
+119
+120
+121
+122
+123
+124
+125
+126
+127
+128
+129
+130
+131
+132
+133
+134
+135
+136
+137
+138
+139</td><td class="line-coverage quiet"><span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">﻿angular.module('RegObs')
+    .controller('MapStartCtrl', <span class="fstat-no" title="function not covered" >function ($scope, $rootScope, $state, $ionicHistory, User, Map, AppSettings, Registration, AppLogging, Utility, $timeout, $ionicPopover, $cordovaInAppBrowser, Observations, RegobsPopup, UserLocation, $translate, Trip, Translate, OfflineMap) {</span>
+<span class="cstat-no" title="statement not covered" >        var appVm = this;</span>
+&nbsp;
+<span class="cstat-no" title="statement not covered" >        appVm.gpsCenterClick = Map.centerMapToUser;</span>
+<span class="cstat-no" title="statement not covered" >        appVm.openSelectedItem = <span class="fstat-no" title="function not covered" >function () {</span></span>
+<span class="cstat-no" title="statement not covered" >            if (appVm.mapSelectedItem &amp;&amp; appVm.mapSelectedItem.isClickable()) {</span>
+<span class="cstat-no" title="statement not covered" >                appVm.mapSelectedItem.onClick();</span>
+            }
+        };
+&nbsp;
+<span class="cstat-no" title="statement not covered" >        appVm.registration = Registration;</span>
+&nbsp;
+<span class="cstat-no" title="statement not covered" >        appVm.gotoRegistration = <span class="fstat-no" title="function not covered" >function () {</span></span>
+<span class="cstat-no" title="statement not covered" >            Registration.createAndGoToNewRegistration();</span>
+        };
+&nbsp;
+<span class="cstat-no" title="statement not covered" >        appVm.hasRegistration = <span class="fstat-no" title="function not covered" >function () {</span></span>
+<span class="cstat-no" title="statement not covered" >            return Registration.hasStarted() || Registration.unsent.length &gt; 0;</span>
+        };
+&nbsp;
+<span class="cstat-no" title="statement not covered" >        var popoverScope = {</span>
+            updateObservationsInMap: <span class="fstat-no" title="function not covered" >function () {</span>
+<span class="cstat-no" title="statement not covered" >                appVm.mapMenu.hide();</span>
+<span class="cstat-no" title="statement not covered" >                Map.updateObservationsInMap();</span>
+            },
+            viewObservations: <span class="fstat-no" title="function not covered" >function () {</span>
+<span class="cstat-no" title="statement not covered" >                appVm.mapMenu.hide();</span>
+<span class="cstat-no" title="statement not covered" >                $state.go('observationlist');</span>
+            },
+            openWebWarning: <span class="fstat-no" title="function not covered" >function () {</span>
+<span class="cstat-no" title="statement not covered" >                appVm.mapMenu.hide();</span>
+<span class="cstat-no" title="statement not covered" >                var url = AppSettings.getWarningUrl();</span>
+<span class="cstat-no" title="statement not covered" >                $cordovaInAppBrowser.open(url, '_system');</span>
+            },
+            getCurrentGeoHazardName: <span class="fstat-no" title="function not covered" >function () {</span>
+<span class="cstat-no" title="statement not covered" >                return Utility.getCurrentGeoHazardName();</span>
+            },
+            newRegistration: <span class="fstat-no" title="function not covered" >function () {</span>
+<span class="cstat-no" title="statement not covered" >                appVm.mapMenu.hide();</span>
+<span class="cstat-no" title="statement not covered" >                Registration.createAndGoToNewRegistration();</span>
+            },
+            showNewRegistration: <span class="fstat-no" title="function not covered" >function () {</span>
+<span class="cstat-no" title="statement not covered" >                return !Registration.hasStarted();</span>
+            },
+            showTrip: <span class="fstat-no" title="function not covered" >function () {</span>
+<span class="cstat-no" title="statement not covered" >                return Trip.canStart();</span>
+            },
+            tripStarted: <span class="fstat-no" title="function not covered" >function () {</span>
+<span class="cstat-no" title="statement not covered" >                return Trip.model.started;</span>
+            },
+            newTrip: <span class="fstat-no" title="function not covered" >function () {</span>
+<span class="cstat-no" title="statement not covered" >                appVm.mapMenu.hide();</span>
+<span class="cstat-no" title="statement not covered" >                $state.go('snowtrip');</span>
+            },
+            stopTrip: <span class="fstat-no" title="function not covered" >function () {</span>
+<span class="cstat-no" title="statement not covered" >                appVm.mapMenu.hide();</span>
+<span class="cstat-no" title="statement not covered" >                Trip.stop();</span>
+            }
+        };
+&nbsp;
+<span class="cstat-no" title="statement not covered" >        $ionicPopover.fromTemplateUrl('app/menus/mapPopoverMenu.html', { scope: angular.merge($rootScope.$new(), popoverScope) }).then(<span class="fstat-no" title="function not covered" >function (popover) {</span></span>
+<span class="cstat-no" title="statement not covered" >            appVm.mapMenu = popover;</span>
+        });
+&nbsp;
+<span class="cstat-no" title="statement not covered" >        appVm.openMapMenu = <span class="fstat-no" title="function not covered" >function ($event) {</span></span>
+<span class="cstat-no" title="statement not covered" >            appVm.mapMenu.show($event);</span>
+        };
+&nbsp;
+<span class="cstat-no" title="statement not covered" >        appVm.getCurrentAppMode = <span class="fstat-no" title="function not covered" >function () {</span></span>
+<span class="cstat-no" title="statement not covered" >            return AppSettings.getAppMode();</span>
+        };
+&nbsp;
+&nbsp;
+<span class="cstat-no" title="statement not covered" >        appVm.getFollowMode = Map.getFollowMode;</span>
+&nbsp;
+<span class="cstat-no" title="statement not covered" >        appVm.viewTitle = 'regObs';</span>
+&nbsp;
+<span class="cstat-no" title="statement not covered" >        appVm.setViewTitle = <span class="fstat-no" title="function not covered" >function () {</span></span>
+<span class="cstat-no" title="statement not covered" >            appVm.viewTitle = 'regObs';</span>
+<span class="cstat-no" title="statement not covered" >            var currentAppMode = AppSettings.getAppMode();</span>
+<span class="cstat-no" title="statement not covered" >            if (currentAppMode) { </span>
+<span class="cstat-no" title="statement not covered" >                Translate.translateWithFallback(currentAppMode.toUpperCase(), '').then(<span class="fstat-no" title="function not covered" >function (result) {</span></span>
+<span class="cstat-no" title="statement not covered" >                    $timeout(<span class="fstat-no" title="function not covered" >function () {</span></span>
+<span class="cstat-no" title="statement not covered" >                        var title = 'regObs' + (result ? ' / ' + result : '');</span>
+<span class="cstat-no" title="statement not covered" >                        appVm.viewTitle = title;</span>
+                    });
+                });
+            }
+        };
+&nbsp;
+<span class="cstat-no" title="statement not covered" >        $scope.$on('$ionicView.enter', <span class="fstat-no" title="function not covered" >function () {</span></span>
+<span class="cstat-no" title="statement not covered" >            $ionicHistory.clearHistory();          </span>
+<span class="cstat-no" title="statement not covered" >            appVm.setViewTitle();                </span>
+<span class="cstat-no" title="statement not covered" >            Map.invalidateSize();</span>
+<span class="cstat-no" title="statement not covered" >            Map.startWatch();</span>
+<span class="cstat-no" title="statement not covered" >            OfflineMap.getOfflineAreaBounds().then(<span class="fstat-no" title="function not covered" >function (result) {</span></span>
+<span class="cstat-no" title="statement not covered" >                Map.setOfflineAreaBounds(result);</span>
+            });
+        });
+&nbsp;
+<span class="cstat-no" title="statement not covered" >        $scope.$on('$regobs.appModeChanged', <span class="fstat-no" title="function not covered" >function () {</span></span>
+<span class="cstat-no" title="statement not covered" >            appVm.setViewTitle();</span>
+        });
+&nbsp;
+<span class="cstat-no" title="statement not covered" >        appVm._checkObsWatch = $timeout(<span class="fstat-no" title="function not covered" >function () {</span></span>
+<span class="cstat-no" title="statement not covered" >            if (Observations.checkIfObservationsShouldBeUpdated() &amp;&amp; UserLocation.hasUserLocation() &amp;&amp; Utility.hasGoodNetwork()) {</span>
+<span class="cstat-no" title="statement not covered" >                appVm._updateObservationsPopup = RegobsPopup</span>
+                    .confirm($translate.instant('UPDATE_OBSERVATIONS_IN_MAP'),
+                        '&lt;div class="text-center popup-icon"&gt;&lt;i class="icon ion-loop"&gt;&lt;/i&gt;&lt;/div&gt;&lt;p&gt;' +
+                        $translate.instant('UPDATE_OBSERVATIONS_IN_MAP_HELP_TEXT') +
+                        '&lt;/p&gt;&lt;p&gt;' +
+                        $translate.instant('UPDATE_OBSERVATIONS_IN_MAP_HELP_TEXT_2') +
+                        '&lt;/p&gt;');
+&nbsp;
+<span class="cstat-no" title="statement not covered" >                appVm._updateObservationsPopup.then(<span class="fstat-no" title="function not covered" >function (response) {</span></span>
+<span class="cstat-no" title="statement not covered" >                        if (response) {</span>
+<span class="cstat-no" title="statement not covered" >                            Map.updateObservationsInMap();</span>
+                        }
+                    });
+            }
+        }, 10000);
+&nbsp;
+&nbsp;
+<span class="cstat-no" title="statement not covered" >        $scope.$on('$ionicView.beforeLeave', <span class="fstat-no" title="function not covered" >function () {</span></span>
+<span class="cstat-no" title="statement not covered" >            Map.clearWatch();</span>
+<span class="cstat-no" title="statement not covered" >            $timeout.cancel(appVm._checkObsWatch);</span>
+<span class="cstat-no" title="statement not covered" >            if (appVm._updateObservationsPopup) {</span>
+<span class="cstat-no" title="statement not covered" >                appVm._updateObservationsPopup.close();</span>
+            }
+        });
+&nbsp;
+<span class="cstat-no" title="statement not covered" >        $scope.$on('$regObs:mapItemSelected', <span class="fstat-no" title="function not covered" >function (event, item) {</span></span>
+<span class="cstat-no" title="statement not covered" >            $timeout(<span class="fstat-no" title="function not covered" >function () {</span></span>
+<span class="cstat-no" title="statement not covered" >                appVm.mapSelectedItem = item;</span>
+            });
+        });
+    });
+&nbsp;</pre></td></tr>
+</table></pre>
+<div class='push'></div><!-- for sticky footer -->
+</div><!-- /wrapper -->
+<div class='footer quiet pad2 space-top1 center small'>
+  Code coverage
+  generated by <a href="http://istanbul-js.org/" target="_blank">istanbul</a> at Thu May 18 2017 11:35:09 GMT+0200 (W. Europe Daylight Time)
+</div>
+</div>
+<script src="../../prettify.js"></script>
+<script>
+window.onload = function () {
+        if (typeof prettyPrint === 'function') {
+            prettyPrint();
+        }
+};
+</script>
+<script src="../../sorter.js"></script>
+</body>
+</html>

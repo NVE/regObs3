@@ -1730,7 +1730,7 @@
         "Name": "Til administrativ bruk"
       }
     ],
-    "WaterLevelStateKDV": [
+    "Water_WaterLevelStateKDV": [
       {
         "Id": 0,
         "Name": "Ukjent"
@@ -1752,7 +1752,7 @@
         "Name": "Det kan jeg ikke ta stilling til nå"
       }
     ],
-    "WaterAstrayKDV": [
+    "Water_WaterAstrayKDV": [
       {
         "Id": 0,
         "Name": "Ukjent"
@@ -1766,7 +1766,7 @@
         "Name": "Nei"
       }
     ],
-    "ObservationTimingKDV": [
+    "Water_ObservationTimingKDV": [
       {
         "Id": 0,
         "Name": "Ukjent"
@@ -1780,7 +1780,7 @@
         "Name": "Vannet der det er nå"
       }
     ],
-    "WaterLevelMethodKDV": [
+    "Water_WaterLevelMethodKDV": [
       {
         "Id": 0,
         "Name": "Ukjent"
@@ -1794,7 +1794,7 @@
         "Name": "Måler vannstand"
       }
     ],
-    "MeasurementTypeKDV": [
+    "Water_MeasurementTypeKDV": [
       {
         "Id": 0,
         "Name": "Ukjent"
@@ -1812,7 +1812,7 @@
         "Name": "Måleinstrument"
       }
     ],
-    "MeasurementReferenceKDV": [
+    "Water_MeasurementReferenceKDV": [
       {
         "Id": 0,
         "Name": "Ukjent"
@@ -1838,7 +1838,7 @@
         "Name": "Annet"
       }
     ],
-    "MarkingReferenceKDV": [
+    "Water_MarkingReferenceKDV": [
       {
         "Id": 0,
         "Name": "Ukjent"
@@ -1868,7 +1868,7 @@
         "Name": "Noe annet"
       }
     ],
-    "MarkingTypeKDV": [
+    "Water_MarkingTypeKDV": [
       {
         "Id": 0,
         "Name": "Ukjent"

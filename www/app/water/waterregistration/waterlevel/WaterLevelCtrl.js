@@ -148,10 +148,10 @@ angular
                     }
                 });
             }
-            Utility.getKdvArray('MarkingReferenceKDV').then(function (result) {
+            Utility.getKdvArray('Water_MarkingReferenceKDV').then(function (result) {
                 vm.markingKdvArray = result;
             });
-            Utility.getKdvArray('MeasurementReferenceKDV').then(function (result) {
+            Utility.getKdvArray('Water_MeasurementReferenceKDV').then(function (result) {
                 vm.measurementReferenceKdvArray = result;
             });
         };

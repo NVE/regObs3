@@ -21,6 +21,8 @@
             });
         };
 
+        vm.emailReceipt = AppSettings.data.emailReceipt;
+
         vm.failed = function () {
             if (vm.completed) {
                 return vm.completed.filter(function (item) {
@@ -50,7 +52,7 @@
                     circle.path.setAttribute('stroke', state.color);
                     circle.path.setAttribute('stroke-width', state.width);
                     var text =
-                        '<i class="icon ion-ios-cloud-download"></i><div class="downloadprogress-percent">' +
+                        '<i class="icon ion-ios-cloud-upload"></i><div class="downloadprogress-percent">' +
                         vm.downloadStatus.getPercentFormated() +
                         '</div><div class="downloadprogress-value">(' +
                         vm.downloadStatus.getDone() +
@@ -90,19 +92,6 @@
         vm.onRegistrationClick = function (obs) {
             if (!obs.error) {
                 vm.loadingRegistration = true;
-                //Observations.getRegistrationsById(obs.RegId).then(function () {
-                //    return Registration.clearExistingNewRegistrations();
-                //}).then(function () {
-                //    return Observations.getStoredObservations(Utility.getCurrentGeoHazardTid(), false).then(function (result) {
-                //        var filtered = result.filter(function (item) { return item.RegId === obs.RegId; });
-                //        if (filtered.length > 0) {
-                //            $state.go('observationdetails', { observation: Observation.fromJson(filtered[0]) });
-                //        }
-                //        return true;
-                //    });
-                //}).finally(function () {
-                //    vm.loadingRegistration = false;
-                //});
                 Observations.getRegistrationsById(obs.RegId).then(function (result) {
                     return Registration.clearExistingNewRegistrations().then(function () {
                         $state.go('observationdetails', { observation: Observation.fromJson(result) });

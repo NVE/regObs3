@@ -1,41 +1,45 @@
-﻿<ion-view view-title="Innsending">
+﻿<ion-view view-title="{{'SEND_HEADER'|translate}}">
     <ion-content class="padding">
         <div class="status-wrapper" ng-if="vm.loaded">
             <div ng-if="vm.isSending">
-                <h3>Sender inn observasjon {{(vm.completed.length >= vm.unsent.length ? vm.unsent.length : vm.completed.length + 1) }}/{{vm.unsent.length}}</h3>
-                <p class="status-description">Vennligst vent</p>
+                <h3>{{'SENDING_OBSERVATION'|translate}} {{(vm.completed.length >= vm.unsent.length ? vm.unsent.length : vm.completed.length + 1) }}/{{vm.unsent.length}}</h3>
+                <p class="status-description">
+                    {{'PLEASE_WAIT'|translate}}
+                </p>
+                <div class="center">
+                    <ion-spinner icon="lines" class="spinner-assertive"></ion-spinner>
+                </div>
+
                 <div class="downloadprogress inline-block" pb-circle progress-key="{{vm.progressName}}" options="vm.progressOptions"></div>
             </div>
             <div ng-if="!vm.isSending">
-                <div><i class="icon status-icon" ng-class="{'ion-checkmark-circled balanced':!vm.failed(), 'ion-close-circled assertive':vm.failed()}"></i></div>
+                <div class="status-icon"><i class="icon" ng-class="{'ion-checkmark-circled balanced':!vm.failed(), 'ion-close-circled assertive':vm.failed()}"></i></div>
                 <div ng-hide="vm.failed()">
-                    <h3 ng-show="vm.completed.length > 1">Dine observasjoner er sendt inn</h3>
-                    <h3 ng-show="vm.completed.length === 1">Din observasjon er sendt inn</h3>
-                    <p class="status-description">Takk for at du sendte inn observasjon og hjelper Norge med å bli tryggere. Du kan gjøre endringer på observasjonen på www.regobs.no innen 48 timer. Etter det låses den og du kan ikke gjøre endringer. Bekreftelse er sendt til din e-postadresse. </p>
+                    <h3 ng-show="vm.completed.length > 1">{{'OBSERVATIONS_SENT_CONFIRMATION_HEADER'|translate}}</h3>
+                    <h3 ng-show="vm.completed.length === 1">{{'OBSERVATION_SENT_CONFIRMATION_HEADER'|translate}}</h3>
+                    <p class="status-description">{{'OBSERVATION_SENT_CONFIRMATION_TEXT'|translate}} <span ng-show="vm.emailReceipt">{{'CONFIRM_EMAIL_SENT'|translate}}</span></p>
                 </div>
                 <div ng-show="vm.failed()">
-                    <h3 ng-show="vm.completed.length > 1">Innsending av en eller flere observasjoner feilet</h3>
-                    <h3 ng-show="vm.completed.length === 1">Innsending feilet</h3>
-                    <p class="status-description">Dette kan skyldes manglende nettilgang, eller at serveren er midlertidig utilgjengelig. Usendte observasjoner er lagret på telefonen. Du kan prøve å sende inn på nytt, eller du kan vente og sende inn på et senere tidspunkt. Hvis problemet vedvarer, ta kontakt med regObs-teamet.</p>
+                    <h3 ng-show="vm.completed.length > 1">{{'OBSERVATIONS_FAILED_CONFIRMATION_HEADER'|translate}}</h3>
+                    <h3 ng-show="vm.completed.length === 1">{{'OBSERVATION_FAILED_CONFIRMATION_HEADER'|translate}}</h3>
+                    <p class="status-description">{{'OBSERVATION_FAILED_CONFIRMATION_TEXT'|translate}}</p>
                 </div>
-
                 <div class="status-footer">
                     <div ng-if="vm.completed.length > 1">
                         <ion-list>
                             <ion-item class="item-icon-left" ng-repeat="obs in vm.completed" ng-click="vm.onRegistrationClick(obs)">
                                 <i class="icon" ng-class="{'ion-close-circled assertive':obs.error, 'ion-checkmark-circled balanced':!obs.error}"></i>
                                 <span class="status-list-description">{{obs.DtObsTime | regobsDate }}</span>
-                                <span ng-show="obs.error" class="item-note">Feilet</span>
-                                <span ng-hide="obs.error" class="item-note">Sendt inn</span>
+                                <span ng-show="obs.error" class="item-note">{{'SEND_FAILED'|translate}}</span>
+                                <span ng-hide="obs.error" class="item-note">{{'SEND_SUCCESS'|translate}}</span>
                             </ion-item>
                         </ion-list>
                     </div>
-                    <div ng-show="vm.completed.length === 1 && !vm.failed()"><button type="button" class="button button-calm button-block status-footer-button" ng-click="vm.onRegistrationClick(vm.completed[0])">Se observasjon</button></div>
-                    <div ng-show="vm.failed()"><button type="button" class="button button-calm button-block status-footer-button" ng-click="vm.resendFailed()">Prøv igjen</button></div>
-                    <div><button type="button" class="button button-outline button-calm button-block status-footer-button" ui-sref="start">Gå tilbake til forsiden</button></div>
+                    <div ng-show="vm.completed.length === 1 && !vm.failed()"><button type="button" class="button button-calm button-block status-footer-button" ng-click="vm.onRegistrationClick(vm.completed[0])">{{'VIEW_OBSERVATION'|translate}}</button></div>
+                    <div ng-show="vm.failed()"><button type="button" class="button button-calm button-block status-footer-button" ng-click="vm.resendFailed()">{{'RETRY'|translate}}</button></div>
+                    <div><button type="button" class="button button-outline button-calm button-block status-footer-button" ui-sref="start">{{'GO_TO_FRONT_PAGE'|translate}}</button></div>
                 </div>
             </div>
         </div>
     </ion-content>
-    <!--<registration-footer></registration-footer>-->
 </ion-view>

@@ -183,7 +183,7 @@
         var newObservations = [{ RegId: 1, DtObsTime: '2017-02-18T00:00:00.000' }];
         var existingObservations = [{ RegId: 2, DtObsTime: '2017-02-18T00:00:05.000' }]; //this is after get observations from date, and should be in new result. So if it's not in new result, then it's deleted and sould not be added
 
-        Observations._mergeRegistrations(newObservations, existingObservations);
+        Observations._mergeRegistrations(newObservations, existingObservations, true);
         expect(newObservations.length).toEqual(1);
         expect(newObservations[0].RegId).toEqual(1);
     }));

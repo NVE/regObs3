@@ -195,7 +195,7 @@ angular
                 httpConfig
             ).then(function (result) {
                 var registrations = service._getRegistrationResults(result.data);
-                return service._downloadAllRegistrations(registrations, onProgress, cancel).then(function () { return registrations; });
+                return service._downloadAllRegistrations(registrations, onProgress, cancel, false).then(function () { return registrations; });
             }).then(function (result) {
                 return $q(function (resolve, reject) {
                     $rootScope.$broadcast('$regObs:observationsUpdated');
@@ -236,11 +236,11 @@ angular
             });
         };
 
-        service._mergeRegistrations = function (destArr, existingRegistrations) {
+        service._mergeRegistrations = function (destArr, existingRegistrations, removeDeleted) {
             var keepLimit = moment(AppSettings.getObservationsFromDateISOString(), moment.ISO_8601);
             existingRegistrations.forEach(function (item) {
                 var date = moment(item.DtObsTime, moment.ISO_8601); //strict parsing
-                if (date.isBefore(keepLimit)) { //only keep old values before new observation time to remove deleted items
+                if (!removeDeleted || date.isBefore(keepLimit)) { //only keep old values before new observation time to remove deleted items
                     var newRegistration = destArr.filter(function (reg) { return reg.RegId === item.RegId });
                     if (newRegistration.length === 0) {
                         //Registration does not exist, push old value to new list
@@ -259,11 +259,11 @@ angular
             return PresistentStorage.storeFile(path, JSON.stringify(registrations));
         };
 
-        service.saveNewRegistrationsToPresistantStorage = function (registrations) {
+        service.saveNewRegistrationsToPresistantStorage = function (registrations, removeDeleted) {
             AppLogging.log('saving ' + registrations.length + ' new registrations');
             var mergeExistingRegistrations = function (existingRegistrations) {
                 AppLogging.log('merging in ' + existingRegistrations.length + ' existingRegistrations registrations');
-                service._mergeRegistrations(registrations, existingRegistrations);
+                service._mergeRegistrations(registrations, existingRegistrations, removeDeleted);
                 AppLogging.log('save after merge ' + registrations.length + ' registrations');
                 return service._storeRegistrations(registrations);
             };
@@ -428,7 +428,7 @@ angular
             return registrations;
         }
 
-        service._downloadAllRegistrations = function (result, onProgress, cancel) {
+        service._downloadAllRegistrations = function (result, onProgress, cancel, removeDeleted) {
             var registrations = service._getRegistrationResults(result);
             var progress = new RegObs.ProggressStatus();
             var total = 0;
@@ -440,7 +440,7 @@ angular
                 onProgress(progress);
             }
 
-            return service.saveNewRegistrationsToPresistantStorage(registrations)
+            return service.saveNewRegistrationsToPresistantStorage(registrations, removeDeleted)
                 .then(function () {
                     var tasks = [];
                     registrations.forEach(function (item) {
@@ -471,7 +471,7 @@ angular
                         geohazardId,
                         cancel);
                 }).then(function (result) {
-                    return service._downloadAllRegistrations(result, onProgress, cancel);
+                    return service._downloadAllRegistrations(result, onProgress, cancel, true);
                 }).finally(function () {
                     AppLogging.log('All registrations saved');
                     LocalStorage.set(observationUpdatedStorageKey, moment().toISOString());
