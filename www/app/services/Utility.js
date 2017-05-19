@@ -3,7 +3,7 @@
  */
 angular
     .module('RegObs')
-    .factory('Utility', function Utility($http, $q, $rootScope, AppSettings, User, LocalStorage, AppLogging, $translate, $cordovaNetwork, moment, $filter, $ionicHistory) {
+    .factory('Utility', function Utility($http, $q, $rootScope, AppSettings, User, LocalStorage, AppLogging, $translate, $cordovaNetwork, moment, $filter, $ionicHistory, Raven) {
         var service = this;
 
         var canvas;
@@ -184,7 +184,7 @@ angular
             if (fullObject && fullObject.WaterLevelMeasurement && angular.isArray(fullObject.WaterLevelMeasurement)) {
                 fullObject.WaterLevelMeasurement.forEach(function (item) {
                     var str = '<div class="water-level-measurement">';
-                    str += '<span class="observation-description">' +(fullObject.WaterLevelMethodTID === 1 ? $translate.instant('MARKING_SHORT') : $translate.instant('MEASUREMENT'));
+                    str += '<span class="observation-description">' + (fullObject.WaterLevelMethodTID === 1 ? $translate.instant('MARKING_SHORT') : $translate.instant('MEASUREMENT'));
                     str += ' ' + (result.length + 1) + '</span>: ';
                     if (item.DtMeasurementTime) {
                         str += service.formatDateAndTime(item.DtMeasurementTime);
@@ -192,7 +192,7 @@ angular
                     if (item.WaterLevelValue) {
                         str += ', ' + $filter('number')(item.WaterLevelValue, 2) + ' m';
                     }
- 
+
                     str += '<div class="water-level-comment-summary">' + (item.Comment !== undefined ? item.Comment : '') + '</div>';
 
                     if (item.Pictures && angular.isArray(item.Pictures) && item.Pictures.filter(function (pic) { return pic.PictureImageBase64 !== undefined }).length > 0) {
@@ -205,7 +205,7 @@ angular
                         str += '</div>';
                     }
                     str += ('</div>');
-                    
+
                     result.push(str);
 
                 });
@@ -400,9 +400,9 @@ angular
                 name: "Vannstand",
                 RegistrationTID: "62",
                 properties: {
-                    WaterLevelStateTID: { },
-                    WaterAstrayTID: { }, 
-                    ObservationTimingTID: { },
+                    WaterLevelStateTID: {},
+                    WaterAstrayTID: {},
+                    ObservationTimingTID: {},
                     WaterLevelMethodTID: { displayFormat: { valueFormat: function (item, data) { return service.formatWaterLevelMethod(data.FullObject) } } },
                     Comment: {},
                     MeasuringToolDescription: {},
@@ -940,6 +940,28 @@ angular
 
         service.formatDateAndTime = function (date) {
             return service.formatDate(date) + ', ' + $filter('date')(date, 'HH:mm');
+        };
+
+        service.getVersion = function () {
+            return $http.get('app/json/version.json')
+                .then(function (res) {
+                    return res.data;
+                });
+        };
+
+        service.configureRaven = function () {
+            service.getVersion().then(function (version) {
+                Raven.setShouldSendCallback(function () { return AppSettings.data.env !== 'test regObs' });
+                Raven.setEnvironment(AppSettings.data.env);
+
+                var user = User.getUser();
+                if (!user.anonymous) {
+                    Raven.setUserContext({
+                        email: user.email,
+                        id: user.Guid
+                    })
+                }
+            });
         };
 
         return service;

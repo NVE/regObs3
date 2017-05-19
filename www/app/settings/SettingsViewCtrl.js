@@ -19,11 +19,9 @@ angular
 
         vm.kdvUpdated = kdvUpdatedTime(null, LocalStorage.get('kdvUpdated'));
 
-        $http.get('app/json/version.json')
-            .then(function (res) {
-                AppLogging.log(res);
-                vm.version = res.data;
-            });
+        Utility.getVersion().then(function (result) {
+            vm.version = result;
+        });
 
         $scope.$on('kdvUpdated', kdvUpdatedTime);
 
@@ -39,13 +37,16 @@ angular
         }
 
         vm.logIn = function () {
-            User.logIn(vm.username, vm.password);
+            User.logIn(vm.username, vm.password).then(function () {
+                Utility.configureRaven();
+            });
         };
 
         vm.logOut = function () {
             vm.username = '';
             vm.password = '';
-            User.logOut();
+            User.logOut();    
+            Utility.configureRaven();
             //vm.user = User.getUser();
         };
 
@@ -114,6 +115,7 @@ angular
             AppSettings.save();
             HeaderColor.init();
             Map.refresh();
+            Utility.configureRaven();
             $rootScope.$broadcast('$regObs:appEnvChanged');
         };
 

@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='utf-8'?>
-<widget android-versionCode="312170518" id="no.nlink.nve" ios-CFBundleIdentifier="nve.regobs" ios-CFBundleVersion="20170518092542" version="3.1.2" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
+<widget android-versionCode="312170519" id="no.nlink.nve" ios-CFBundleIdentifier="nve.regobs" ios-CFBundleVersion="20170519155527" version="3.1.2" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
     <name>regObs</name>
     <description>
         Report incidents in nature
@@ -70,27 +70,27 @@
         <splash height="480" src="resources/ios/splash/Default~iphone.png" width="320" />
     </platform>
     <icon src="resources/android/icon/drawable-xhdpi-icon.png" />
-    <plugin name="cordova-plugin-device" version="1.1.3" />
-    <plugin name="cordova-plugin-console" version="1.0.4" />
-    <plugin name="cordova-plugin-whitelist" version="1.3.0" />
-    <plugin name="cordova-plugin-splashscreen" version="4.0.2" />
-    <plugin name="cordova-plugin-statusbar" version="2.2.0" />
-    <plugin name="cordova-plugin-geolocation" version="2.4.0" />
-    <plugin name="cordova-plugin-inappbrowser" version="1.5.0" />
-    <plugin name="cordova-plugin-device-orientation" version="1.0.4" />
     <plugin name="cordova-plugin-badge" version="0.7.3" />
-    <plugin name="cordova-plugin-app-event" version="1.2.0" />
-    <plugin name="cordova-plugin-compat" version="1.0.0" />
-    <plugin name="ionic-plugin-keyboard" version="2.2.1" />
-    <plugin name="cordova-plugin-camera" version="2.4.0">
+    <vs:toolsetVersion xmlns:vs="http://schemas.microsoft.com/appx/2014/htmlapps">7.0.1</vs:toolsetVersion>
+    <engine name="android" spec="5.2.1" />
+    <preference name="windows-target-version" value="10.0" />
+    <engine name="ios" spec="~4.4.0" />
+    <plugin name="cordova-plugin-app-event" spec="^1.2.0" />
+    <plugin name="cordova-plugin-camera" spec="^2.4.0">
         <variable name="CAMERA_USAGE_DESCRIPTION" value="Document observations" />
         <variable name="PHOTOLIBRARY_USAGE_DESCRIPTION" value="Document observations" />
     </plugin>
-    <plugin name="cordova-plugin-file" version="4.3.2" />
-    <plugin name="cordova-plugin-file-transfer" version="1.6.2" />
-    <plugin name="cordova-plugin-network-information" version="1.3.0" />
-    <vs:toolsetVersion xmlns:vs="http://schemas.microsoft.com/appx/2014/htmlapps">6.5.0</vs:toolsetVersion>
-    <engine name="android" spec="5.2.1" />
-    <engine name="ios" spec="4.3.1" />
-    <preference name="windows-target-version" value="10.0" />
+    <plugin name="cordova-plugin-compat" spec="^1.0.0" />
+    <plugin name="cordova-plugin-device-orientation" spec="^1.0.4" />
+    <plugin name="cordova-plugin-file" spec="^4.3.2" />
+    <plugin name="cordova-plugin-file-transfer" spec="^1.6.2" />
+    <plugin name="cordova-plugin-geolocation" spec="^2.4.0" />
+    <plugin name="cordova-plugin-inappbrowser" spec="^1.5.0" />
+    <plugin name="cordova-plugin-network-information" spec="^1.3.0" />
+    <plugin name="ionic-plugin-keyboard" spec="^2.2.1" />
+    <plugin name="cordova-plugin-device" spec="^1.1.3" />
+    <plugin name="cordova-plugin-console" spec="^1.0.4" />
+    <plugin name="cordova-plugin-whitelist" spec="^1.3.0" />
+    <plugin name="cordova-plugin-splashscreen" spec="^4.0.2" />
+    <plugin name="cordova-plugin-statusbar" spec="^2.2.0" />
 </widget>

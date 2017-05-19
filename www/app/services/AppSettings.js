@@ -221,8 +221,7 @@
         settings.getEnvClass = function () {
             return settings.data.env === 'regObs' ? 'bar-dark' : (settings.data.env === 'demo regObs' ? 'bar-assertive' : 'bar-calm');
         };
-
-
+               
         settings.getDaysBackSettings = function () {
             return {
                 snow: [{ name: 'TODAYS_OBSERATIONS', value: 0 },{ name: 'ONE_DAY_BACK', value: 1 }, { name: 'TWO_DAYS_BACK', value: 2 }, { name: 'THREE_DAYS_BACK', value: 3, default: true }, { name: 'ONE_WEEK_BACK', value: 7 }, { name: 'TWOO_WEEKS_BACK', value: 14 }],

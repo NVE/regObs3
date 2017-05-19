@@ -20,28 +20,28 @@
     </h1>
     <div class='clearfix'>
       <div class='fl pad1y space-right2'>
-        <span class="strong">46% </span>
+        <span class="strong">65.63% </span>
         <span class="quiet">Statements</span>
-        <span class='fraction'>23/50</span>
+        <span class='fraction'>21/32</span>
       </div>
       <div class='fl pad1y space-right2'>
-        <span class="strong">45.45% </span>
+        <span class="strong">64.29% </span>
         <span class="quiet">Branches</span>
-        <span class='fraction'>10/22</span>
+        <span class='fraction'>9/14</span>
       </div>
       <div class='fl pad1y space-right2'>
-        <span class="strong">40% </span>
+        <span class="strong">57.14% </span>
         <span class="quiet">Functions</span>
-        <span class='fraction'>4/10</span>
+        <span class='fraction'>4/7</span>
       </div>
       <div class='fl pad1y space-right2'>
-        <span class="strong">46% </span>
+        <span class="strong">65.63% </span>
         <span class="quiet">Lines</span>
-        <span class='fraction'>23/50</span>
+        <span class='fraction'>21/32</span>
       </div>
     </div>
   </div>
-  <div class='status-line low'></div>
+  <div class='status-line medium'></div>
 <pre><table class="coverage">
 <tr><td class="line-count quiet">1
 2
@@ -432,7 +432,6 @@
 387
 388</td><td class="line-coverage quiet"><span class="cline-any cline-yes">1×</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1×</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -440,31 +439,31 @@
 <span class="cline-any cline-yes">1×</span>
 <span class="cline-any cline-yes">54×</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">54×</span>
-<span class="cline-any cline-yes">54×</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -809,6 +808,7 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -819,43 +819,42 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">(function () {
     "use strict";
-&nbsp;
-    angular.module('RegObs', ['ionic', 'ngCordova', 'ion-floating-menu', 'angularProgressbar', 'pascalprecht.translate', 'ngWebworker', 'ionic.closePopup'])
+    angular.module('RegObs', ['ionic', 'ngCordova', 'ion-floating-menu', 'angularProgressbar', 'pascalprecht.translate', 'ngWebworker', 'ionic.closePopup', 'ngRaven'])
         .config(providers)
         .run(setup);
 &nbsp;
     function providers($provide, $stateProvider, $urlRouterProvider, $ionicConfigProvider, AppSettingsProvider, $translateProvider, UserProvider, UtilityProvider) {
         'ngInject';
 &nbsp;
-        var utils = UtilityProvider.$get();
-        <span class="missing-if-branch" title="if path not taken" >I</span>if (!utils.isRippleEmulator()) {
-<span class="cstat-no" title="statement not covered" >            $provide.decorator('$exceptionHandler', ['$delegate',</span>
-<span class="fstat-no" title="function not covered" >                function ($delegate) {</span>
-<span class="cstat-no" title="statement not covered" >                    return <span class="fstat-no" title="function not covered" >function (exception, cause) {</span></span>
-<span class="cstat-no" title="statement not covered" >                        if (ga_storage) {</span>
-<span class="cstat-no" title="statement not covered" >                            var userService = UserProvider.$get();</span>
-<span class="cstat-no" title="statement not covered" >                            var appSettings = AppSettingsProvider.$get();</span>
-<span class="cstat-no" title="statement not covered" >                            var user = userService.getUser();</span>
-<span class="cstat-no" title="statement not covered" >                            var userText = 'Anonymous user';</span>
-<span class="cstat-no" title="statement not covered" >                            if (!user.anonymous) {</span>
-<span class="cstat-no" title="statement not covered" >                                userText = 'User: ' + user.Guid + ' Nick: ' + user.Nick;</span>
-                            }
+        //var utils = UtilityProvider.$get();
+        //if (!utils.isRippleEmulator()) {
+        //    $provide.decorator('$exceptionHandler', ['$delegate',
+        //        function ($delegate) {
+        //            return function (exception, cause) {
+        //                if (ga_storage) {
+        //                    var userService = UserProvider.$get();
+        //                    var appSettings = AppSettingsProvider.$get();
+        //                    var user = userService.getUser();
+        //                    var userText = 'Anonymous user';
+        //                    if (!user.anonymous) {
+        //                        userText = 'User: ' + user.Guid + ' Nick: ' + user.Nick;
+        //                    }
 &nbsp;
-<span class="cstat-no" title="statement not covered" >                            var initInjector = angular.injector(['ng']);</span>
-<span class="cstat-no" title="statement not covered" >                            var $http = initInjector.get('$http');</span>
+        //                    var initInjector = angular.injector(['ng']);
+        //                    var $http = initInjector.get('$http');
 &nbsp;
-<span class="cstat-no" title="statement not covered" >                            $http.get('app/json/version.json').then(<span class="fstat-no" title="function not covered" >function (version) {</span></span>
-<span class="cstat-no" title="statement not covered" >                                var label = 'Error ' + appSettings.data.env + ' ' + version.data.version + ' ' + version.data.build;</span>
-<span class="cstat-no" title="statement not covered" >                                var action = ((cause || '') + ' ' + exception.message).trim();</span>
-<span class="cstat-no" title="statement not covered" >                                var stack = userText + ' Stack: ' + exception.stack.replace(/(\r\n|\n|\r)/gm, "\n ○ ");</span>
-<span class="cstat-no" title="statement not covered" >                                ga_storage._trackEvent(label, action, stack);</span>
-                            });
-                        }
-<span class="cstat-no" title="statement not covered" >                        $delegate(exception, cause);</span>
-                    };
-                }
-            ]);
-        }
+        //                    $http.get('app/json/version.json').then(function (version) {
+        //                        var label = 'Error ' + appSettings.data.env + ' ' + version.data.version + ' ' + version.data.build;
+        //                        var action = ((cause || '') + ' ' + exception.message).trim();
+        //                        var stack = userText + ' Stack: ' + exception.stack.replace(/(\r\n|\n|\r)/gm, "\n ○ ");
+        //                        ga_storage._trackEvent(label, action, stack);
+        //                    });
+        //                }
+        //                $delegate(exception, cause);
+        //            };
+        //        }
+        //    ]);
+        //}
 &nbsp;
 &nbsp;
         <span class="missing-if-branch" title="if path not taken" >I</span>if (ionic.Platform.isAndroid()) {
@@ -1171,7 +1170,7 @@
             });
     };
 &nbsp;
-    function setup($ionicPlatform, Utility, AppLogging, Registration, Observations, OfflineMap) {
+    function setup($ionicPlatform, Utility, AppLogging, Registration, Observations, OfflineMap, $http, User) {
         'ngInject';
 &nbsp;
         $ionicPlatform.ready(function () {
@@ -1193,6 +1192,7 @@
             }
 &nbsp;
             document.addEventListener("deviceready", <span class="fstat-no" title="function not covered" >function () {</span>
+<span class="cstat-no" title="statement not covered" >                Utility.configureRaven();</span>
 <span class="cstat-no" title="statement not covered" >                Registration.clearNewRegistrations();</span>
 <span class="cstat-no" title="statement not covered" >                Observations.removeOldObservationsFromPresistantStorage(); </span>//cleanup old observations on startup
 <span class="cstat-no" title="statement not covered" >                OfflineMap.checkUncompleteDownloads(); </span>//Check if any uncomplete downloads and continue download progress
@@ -1210,7 +1210,7 @@
 </div><!-- /wrapper -->
 <div class='footer quiet pad2 space-top1 center small'>
   Code coverage
-  generated by <a href="http://istanbul-js.org/" target="_blank">istanbul</a> at Thu May 18 2017 11:35:09 GMT+0200 (W. Europe Daylight Time)
+  generated by <a href="http://istanbul-js.org/" target="_blank">istanbul</a> at Fri May 19 2017 14:19:01 GMT+0200 (W. Europe Daylight Time)
 </div>
 </div>
 <script src="../prettify.js"></script>
