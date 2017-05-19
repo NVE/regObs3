@@ -73,30 +73,9 @@
     padding-top: 2px;
 }
 
-/*.damage-detail-arrow-box regobs-comment textarea {
-    width: 100%;
-    padding: 5px;
-    border: 1px solid #ddd;
-    font-size: 0.9em;
-    font-style: italic;
-}*/
 .damage-detail-arrow-box regobs-comment textarea {
     width: 100%;
 }
-
-regobs-comment.bordered textarea {
-    padding: 5px !important;
-    border: 1px solid #ddd !important;
-    //font-size: 0.9em !important;
-}
-
-regobs-comment textarea {
-    font-style: italic;
-}
-
-/*regobs-comment.bordered textarea::-webkit-input-placeholder {
-    font-style: italic;
-}*/
 
 
 .damage-detail-arrow-box .item:not(:first-child) {

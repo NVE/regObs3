@@ -624,3 +624,16 @@ input.extra-large-time {
     float: right;
     line-height: 10px;
 }
+
+regobs-comment.bordered textarea {
+    padding: 5px !important;
+    border: 1px solid #ddd !important;
+    //font-size: 0.9em !important;
+}
+
+regobs-comment textarea::placeholder {
+    font-style: italic;
+}
+regobs-comment textarea::-webkit-input-placeholder {
+    font-style: italic;
+}

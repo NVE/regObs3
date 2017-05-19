@@ -5,8 +5,9 @@
         bindings: {
             savePosition: '&',
             positionDescription: '@',
-            startPosition: '=',
-            showPreviouslyUsedLocations: '<'
+            startPosition: '<',
+            showPreviouslyUsedLocations: '<',
+            startZoom: '<'
         },
         templateUrl: 'app/directives/confirmlocation/confirmlocation.html',
         controller: function ($document, Map, $rootScope, $scope, $translate, AppSettings, AppLogging, $timeout, RegObsClasses, $filter, Utility, ObsLocation, UserLocation, $http, $q, Observations, $state, $ionicHistory, $stateParams, Registration) {
@@ -95,7 +96,7 @@
                 map.on('locationfound', ctrl._updateUserPosition);
 
                 ctrl.isProgramaticZoom = true;
-                map.setView(marker.getLatLng(), Map.getZoom());
+                map.setView(marker.getLatLng(), ctrl.startZoom || Map.getZoom());
                 ctrl.isProgramaticZoom = false;
 
                 if (UserLocation.hasUserLocation()) {

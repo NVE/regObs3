@@ -268,8 +268,8 @@ angular
                                 failed = [];
                                 completed = [];
                                 data.forEach(function (item) {
+                                    delete item.error;
                                     $http.post(AppSettings.getEndPoints().postRegistration, item, AppSettings.httpConfigRegistrationPost).then(function (result) {
-                                        delete item.error;
                                         item.RegId = result.data.RegId;
                                         completed.push(item);
                                     }).catch(function (error) {
@@ -489,6 +489,9 @@ angular
                         if (!damageObs || !angular.isArray(damageObs) || damageObs.length === 0) {
                             resolve();
                         } else {
+                            damageObs.forEach(function (item) {
+                                delete item.checked;
+                            });
                             resizePictures(damageObs).then(resolve);
                         }
                     });
