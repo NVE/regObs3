@@ -38,12 +38,14 @@ angular
         };
 
         Registration.getNewRegistrations = function () {
-            var json = LocalStorage.getObject(newStorageKey, []);
+            var key = newStorageKey + '_' + AppSettings.data.env.replace(/ /g, '');
+            var json = LocalStorage.getObject(key, []);
             return json;
         };
 
         Registration.clearNewRegistrations = function () {
-            LocalStorage.remove(newStorageKey);
+            var key = newStorageKey + '_' + AppSettings.data.env.replace(/ /g, '');
+            LocalStorage.remove(key);
         };
 
         Registration.createAndGoToNewRegistration = function () {
@@ -255,7 +257,8 @@ angular
                             Registration.unsent = failed;
                             Registration.save();
 
-                            LocalStorage.setObject(newStorageKey, completed);
+                            var key = newStorageKey + '_' + AppSettings.data.env.replace(/ /g, '');
+                            LocalStorage.setObject(key, completed);
 
                             resolve({ completed: completed, failed: failed });
                         }
@@ -461,7 +464,7 @@ angular
                         arr.forEach(function (m) {
                             if (m.Pictures && angular.isArray(m.Pictures)) {
                                 m.Pictures.forEach(function (pic) {
-                                    Utility.resizeImage(1200, pic.PictureImageBase64, function (imageData) {
+                                    Utility.resizeImage(AppSettings.imageSize, pic.PictureImageBase64, function (imageData) {
                                         pic.PictureImageBase64 = imageData;
                                         callbacks++;
                                         checkCallbacks();
@@ -531,7 +534,8 @@ angular
                             arr.push(reg);
                         }
                     });
-                    LocalStorage.setObject(newStorageKey, arr);
+                    var key = newStorageKey + '_' + AppSettings.data.env.replace(/ /g, '');
+                    LocalStorage.setObject(key, arr);
                 });
         };
 

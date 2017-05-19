@@ -763,7 +763,7 @@ angular
                     if (reg.Picture) {
                         picturePresent += reg.Picture.length;
                         reg.Picture.forEach(function (pic) {
-                            service.resizeImage(1200, pic.PictureImageBase64, function (imageData) {
+                            service.resizeImage(AppSettings.imageSize, pic.PictureImageBase64, function (imageData) {
                                 pic.PictureImageBase64 = imageData;
                                 picturePresent = picturePresent - 1;
                                 if (!picturePresent) {

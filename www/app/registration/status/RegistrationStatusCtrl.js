@@ -11,6 +11,7 @@
             vm.loaded = false;
             Registration.prepareRegistrationForSending().then(function () {
                 vm.unsent = Registration.unsent;
+                vm.isSending = vm.unsent.length > 0;
                 vm.loaded = true;
 
                 if (vm.unsent.length > 0) {
@@ -33,10 +34,10 @@
         };
 
         vm.send = function () {
+            vm.isSending = true;
             vm.completed = [];
             vm.downloadStatus = new RegObs.ProggressStatus();
-            vm.downloadStatus.setTotal(vm.unsent.length);
-            vm.isSending = true;
+            vm.downloadStatus.setTotal(vm.unsent.length);           
             vm.progressOptions = {
                 color: '#333',
                 // This has to be the same size as the maximum width to
