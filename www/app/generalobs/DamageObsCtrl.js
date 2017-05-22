@@ -79,6 +79,7 @@
                     vm.setChecked(unknownDamageVisibleId, true);
                 }
             }
+            $ionicScrollDelegate.resize();
         };
 
         vm.addDamageObsPicture = function (damageObs) {           
@@ -87,6 +88,7 @@
                     damageObs.Pictures = [];
                 }
                 damageObs.Pictures.push(result);
+                $ionicScrollDelegate.resize();
             }, function (error) {
                 AppLogging.log('Error getting picture: ' +(error && error.message ? error.message : ''));
             });

@@ -22,9 +22,12 @@ module.exports = function (context) {
 
     obj.CFBundleShortVersionString = trimmedVersion;
 
-    obj.NSMainNibFile = null;
-    obj['NSMainNibFile~ipad'] = null; //fix for some bug in plist node module that wrongly converts this <key> to <string>
+     //fix for some bug in plist node module that wrongly converts this <key> to <string>
+    obj.NSMainNibFile = '';
+    obj['NSMainNibFile~ipad'] = '';
+    obj.NSLocationWhenInUseUsageDescription = '';
 
     xml = plist.build(obj);
-    //fs.writeFileSync(FILEPATH, xml, { encoding: 'utf8' }); //there is some bug in saving plist, so it won't open in XCode
+
+    fs.writeFileSync(FILEPATH, xml, { encoding: 'utf8' });
 };

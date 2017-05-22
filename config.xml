@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='utf-8'?>
-<widget android-versionCode="312170522" id="no.nlink.nve" ios-CFBundleIdentifier="nve.regobs" ios-CFBundleVersion="20170522103058" version="3.1.2" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
+<widget android-versionCode="312170522" id="no.nlink.nve" ios-CFBundleIdentifier="nve.regobs" ios-CFBundleVersion="20170522134510" version="3.1.2" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
     <name>regObs</name>
     <description>
         Report incidents in nature
@@ -73,6 +73,7 @@
     <vs:toolsetVersion xmlns:vs="http://schemas.microsoft.com/appx/2014/htmlapps">7.0.1</vs:toolsetVersion>
     <preference name="windows-target-version" value="10.0" />
     <engine name="android" spec="^6.2.3" />
+    <engine name="ios" spec="^4.4.0" />
     <plugin name="cordova-plugin-app-event" spec="^1.2.0" />
     <plugin name="cordova-plugin-badge" spec="^0.7.3" />
     <plugin name="cordova-plugin-camera" spec="^2.4.0">
@@ -92,5 +93,4 @@
     <plugin name="cordova-plugin-statusbar" spec="^2.2.0" />
     <plugin name="cordova-plugin-whitelist" spec="^1.3.0" />
     <plugin name="ionic-plugin-keyboard" spec="^2.2.1" />
-    <engine name="ios" spec="~4.4.0" />
 </widget>

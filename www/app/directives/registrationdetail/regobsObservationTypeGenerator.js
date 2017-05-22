@@ -15,7 +15,7 @@
                 var directiveName = 'observation-type-' + (scope.isSummary ? 'summary-' : '') + scope.registration.data.RegistrationTid;
                 generatedTemplate = '<' + directiveName + ' registration="registration"></' + directiveName + '>';
             }
-            element.append($compile(generatedTemplate)(scope));
+            element.replaceWith($compile(generatedTemplate)(scope));
         }
     };
 });

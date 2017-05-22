@@ -25,6 +25,7 @@ angular
                 }
 
                 waterLevel.Pictures.push(pic);
+                $ionicScrollDelegate.resize();
             };
 
 
