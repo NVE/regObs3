@@ -89,7 +89,7 @@
                             </div>
 
                         </div>
-                        <div class="item item-icon-left" ng-click="vm.addWaterLevelPicture(m)">
+                        <div class="item item-icon-left" on-tap="vm.addWaterLevelPicture(m)">
                             <i class="icon ion-image small-icon"></i> + <span ng-show="vm.reg.WaterLevel2.WaterLevelMethodTID === 1">{{'ADD_WATER_MARK_IMAGE'|translate}}</span><span ng-show="vm.reg.WaterLevel2.WaterLevelMethodTID === 2">{{'ADD_WATER_MEASUREMENT_IMAGE'|translate}}</span>
                         </div>
                         <regobs-comment ng-show="vm.reg.WaterLevel2.WaterLevelMethodTID === 1" label-text="{{'MARKING_COMMENT_DESCRIPTION'|translate}}" placeholder="{{'MARKING_DESCRIPTION_PLACEHOLDER'|translate}}" model="m.Comment"></regobs-comment>

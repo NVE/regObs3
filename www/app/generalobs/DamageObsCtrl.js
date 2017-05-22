@@ -82,7 +82,8 @@
             $ionicScrollDelegate.resize();
         };
 
-        vm.addDamageObsPicture = function (damageObs) {           
+        vm.addDamageObsPicture = function (damageObs) {        
+            AppLogging.log('Open picture selector');
             Pictures.showImageSelector(Utility.registrationTid(vm.registrationProp)).then(function (result) {
                 if (!damageObs.Pictures) {
                     damageObs.Pictures = [];

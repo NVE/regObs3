@@ -16,7 +16,7 @@
                         {{'DAMAGE_OBS_HEADER'|translate}}
                     </div>
                     <div class="damage-details" ng-repeat="dm in vm.reg.DamageObs | orderBy: 'DamageTypeTID'" ng-show="dm.DamageTypeTID > 0 && dm.DamageTypeTID !== 7">
-                        <ion-checkbox ng-model="dm.checked" class="checkbox-calm" name="DamageDetails">
+                        <ion-checkbox ng-model="dm.checked" class="checkbox-square checkbox-calm" name="DamageDetails">
                             {{dm.Name}}
                         </ion-checkbox>
                         <div class="damage-details-wrapper" ng-show="dm.checked">
@@ -42,7 +42,7 @@
                                             <i class="icon-remove-image ion-close-round" ng-click="vm.removeImage(dm, $index)"></i>
                                         </div>
                                     </div>
-                                    <div class="input-stacked-icon-wrapper" ng-click="vm.addDamageObsPicture(dm)">
+                                    <div class="input-stacked-icon-wrapper" on-tap="vm.addDamageObsPicture(dm)">
                                         <i class="icon small-icon ion-image"></i> + {{'ADD_IMAGES'|translate}}
                                     </div>
                                 </div>
