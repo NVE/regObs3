@@ -94,8 +94,11 @@
             appVm.setViewTitle();                
             Map.invalidateSize();
             Map.startWatch();
-            OfflineMap.getOfflineAreaBounds().then(function (result) {
-                Map.setOfflineAreaBounds(result);
+
+            document.addEventListener("deviceready", function () {
+                OfflineMap.getOfflineAreaBounds().then(function (result) {
+                    Map.setOfflineAreaBounds(result);
+                });
             });
         });
 
