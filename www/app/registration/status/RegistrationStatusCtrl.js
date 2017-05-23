@@ -1,6 +1,6 @@
 ﻿angular
     .module('RegObs')
-    .controller('RegistrationStatusCtrl', function RegistrationStatusCtrl($scope, Registration, $ionicPopup, $state, Utility, $pbService, $http, AppSettings, $timeout, $q, Observations, Observation) {
+    .controller('RegistrationStatusCtrl', function RegistrationStatusCtrl($scope, Registration, $ionicPopup, $state, Utility, $pbService, $http, AppSettings, $timeout, $q, Observations, Observation, $rootScope) {
         var vm = this;
         vm.loaded = false;
 
@@ -107,8 +107,6 @@
             vm.unsent = Registration.unsent;
             vm.send();
         };
-
-
 
         $scope.$on('$ionicView.enter', vm.init);
     });
