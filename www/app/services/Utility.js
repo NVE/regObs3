@@ -953,6 +953,7 @@ angular
             service.getVersion().then(function (version) {
                 Raven.setShouldSendCallback(function () { return AppSettings.data.env !== 'test regObs' });
                 Raven.setEnvironment(AppSettings.data.env);
+                Raven.setRelease(version.version + ' - ' + version.build);
 
                 var user = User.getUser();
                 if (!user.anonymous) {
