@@ -1,24 +1,26 @@
 angular
     .module('RegObs')
-    .factory('RegobsPopup', function ($ionicPopup, $rootScope, $q, $pbService, $timeout, AppLogging, Translate, moment, $interval) {
+    .factory('RegobsPopup', function ($ionicPopup, $rootScope, $q, $pbService, $timeout, AppLogging, Translate, $translate, moment, $interval) {
         var RegobsPopup = this;
 
         RegobsPopup.delete = function (title, text, confirmText) {
-            return $ionicPopup.confirm({
-                title: title,
-                template: text,
-                buttons: [
-                    { text: 'Avbryt' },
-                    {
-                        text: confirmText || 'Slett',
-                        type: 'button-assertive',
-                        onTap: function (e) {
-                            // Returning a value will cause the promise to resolve with the given value.
-                            return true;
+            return $translate(['CANCEL', 'DELETE', title, text, confirmText]).then(function (translations) {
+                return $ionicPopup.confirm({
+                    title: translations[title] || title,
+                    template: translations[text] || text,
+                    buttons: [
+                        { text: translations['CANCEL'] },
+                        {
+                            text: translations[confirmText] || confirmText || translations['DELETE'],
+                            type: 'button-assertive',
+                            onTap: function (e) {
+                                // Returning a value will cause the promise to resolve with the given value.
+                                return true;
+                            }
                         }
-                    }
-                ]
-            });
+                    ]
+                });
+            });   
         };
 
         RegobsPopup.confirm = function (title, text, confirmText, cancelText, cancelType) {

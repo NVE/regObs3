@@ -951,7 +951,7 @@ angular
 
         service.configureRaven = function () {
             service.getVersion().then(function (version) {
-                Raven.setShouldSendCallback(function () { return AppSettings.data.env !== 'test regObs' });
+                Raven.setShouldSendCallback(function () { return AppSettings.data.env !== 'test regObs' && !service.isRippleEmulator() });
                 Raven.setEnvironment(AppSettings.data.env);
                 Raven.setRelease(version.version + ' - ' + version.build);
 

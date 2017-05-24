@@ -78,11 +78,27 @@ $greyBackground: rgba(245, 245, 245, 1);
     height: $footerHeight;
 }
 
+.regobs-next-prev-footer {
+    height: 200px;
+}
+
+.regobs-next-prev-footer .button {
+    padding: 0 16px;
+    font-size: 20px;
+    line-height: 53px;
+}
+
+.regobs-next-prev-footer .button.icon-right:before, .regobs-next-prev-footer .button.icon-left:before {
+    font-size: 32px;
+    line-height: 51px;
+}
+
+
 .regobs-footer.small-footer {
     height: $smallFooterHeight;
 }
 
-.registration.regobs-footer {
+.registration.regobs-footer, .registration.regobs-next-prev-footer {
     padding: 0px;
     background: rgba(255, 255, 255, 0);
 }
@@ -100,7 +116,7 @@ $greyBackground: rgba(245, 245, 245, 1);
     padding: 0px 13px 22px 13px;
     background-color: $greyBackground;
     position: absolute;
-    top: 10px;
+    top: 20px;
     bottom: 0px;
     left: 0px;
     right: 0px;
@@ -114,6 +130,7 @@ $greyBackground: rgba(245, 245, 245, 1);
 .send-button {
     height: 55px;
     font-size: 18px !important;
+    margin-top: 0px;
 }
 
 .send-button:before {
@@ -636,4 +653,14 @@ regobs-comment textarea::placeholder {
 }
 regobs-comment textarea::-webkit-input-placeholder {
     font-style: italic;
+}
+
+.prev-button {
+    width: 49%;
+}
+
+.next-button {
+    width: 49%;
+    position: relative;
+    float: right;
 }

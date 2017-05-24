@@ -461,5 +461,8 @@
   "SEND_UNSENT_OBSERVATIONS": "Send usendte observasjoner",
   "BADGE_INFO": "Antall tidligere usendte observasjoner vises i rødt",
   "YOU_HAVE_STARTED": "Du har en påbegynt",
-  "YOU_HAVE_STARTED_END_TEXT": "-registrering, dersom du går videre blir denne slettet. Vil du slette for å gå videre?"
+  "YOU_HAVE_STARTED_END_TEXT": "-registrering, dersom du går videre blir denne slettet. Vil du slette for å gå videre?",
+  "INVALID_FORM": "Skjema har feil eller mangler",
+  "INVALID_FORM_TEXT": "Hvis du fortsetter, mister du verdier du har skrevet inn. Aktuelle felter er markert i rødt. Vil du fortsette?",
+  "CONTINUE": "Fortsett"
 }

@@ -1,7 +1,7 @@
 <ion-view view-title="{{'WATER_LEVEL'|translate}}">
     <ion-content>
-        <form name="waterlevelform" novalidate>
-            <ion-list>
+        <regobs-form save-action="vm.save()">
+            <ion-list class="regobs-menu-list">
                 <kdv-dropdown title="WATER_LEVEL_TREND_REGISTRATION_HEADER"
                               model="vm.reg.WaterLevel2.WaterLevelStateTID"
                               kdv-key="Water_WaterLevelStateKDV"
@@ -106,10 +106,16 @@
                     &nbsp;
                 </div>
             </ion-list>
-            <div class="padding">
-                <regobs-save-button save-action="vm.save()" go-back="true"></regobs-save-button>
-            </div>
-        </form>
+
+            <!--<div class="padding">-->
+            <!--<regobs-save-button save-text="Se min observasjon" save-action="vm.save()" go-back="true"></regobs-save-button>-->
+            <!--<button type="button" class="button button-outline button-calm icon-left ion-android-arrow-back prev-button">Forrige</button>
+                <button type="button" class="button button-calm icon-right ion-android-arrow-forward">Neste</button>
+                <div>
+                    <button type="submit" class="button button-block button-dark button-outline"><i class="ion-eye"></i> Se min observasjon</button>
+                </div>
+            </div>-->
+        </regobs-form>
 
         <button type="button" ng-click="vm.reset()" class="button button-positive button-block button-clear ion-android-close">
             {{'CLEAR'|translate}}
@@ -118,5 +124,17 @@
             {{'HELP'|translate}}
         </button>-->
     </ion-content>
+    <div class="bar bar-footer registration regobs-next-prev-footer">
+        <div class="regobs-footer-top">
+
+        </div>
+        <div class="regobs-footer-content" ng-hide="$ctrl.registration.sending">
+            <button type="button" class="button button-large button-outline button-calm icon-left ion-android-arrow-back prev-button" ui-sref="confirmtime">Forrige</button>
+            <button type="button" class="button button-large button-calm icon-right ion-android-arrow-forward next-button" ui-sref="generalobs">Neste</button>
+            <div>
+                <button type="submit" class="button button-large button-block button-dark button-outline"><i class="ion-eye"></i> Se min observasjon</button>
+            </div>
+        </div>
+    </div>
 </ion-view>
 

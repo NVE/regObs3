@@ -4,12 +4,13 @@
     var regobsSaveButton = {
         bindings: {
             saveAction: '&',
-            goBack: '<'
+            goBack: '<',
+            saveText: '@'
         },
         require: {
             formCtrl: '?^form'
         },
-        template: '<button type="button" class="button button-block button-calm" ng-click="$ctrl.save()">Lagre</button>',
+        template: '<button type="button" class="button button-block button-calm" ng-click="$ctrl.save()">{{($ctrl.saveText ? $ctrl.saveText : "SAVE")|translate}}</button>',
         controller: function ($scope, $state, $ionicPlatform, $ionicHistory, Property, RegobsPopup, AppLogging) {
             'ngInject';
             var ctrl = this;
