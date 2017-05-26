@@ -2,14 +2,64 @@
     line-height: 1.1;
 }
 
+.save-indicator-spinner {
+    display: block !important;
+    position: absolute;
+    right: 10px;
+    top: 4px;
+    stroke: #fff;
+    fill: #fff;
+    opacity: 0;
+    -webkit-animation: fadeinout1 6s linear forwards;
+    animation: fadeinout1 6s linear forwards;
+}
+
 .save-indicator-text {
     display: inline-block !important;
     padding-right: 5px;
+    opacity: 0;
+    -webkit-animation: fadeinout2 6s linear forwards;
+    animation: fadeinout2 6s linear forwards;
 }
 
-.save-indicator-text.ng-hide {
-    transition: 2s linear all;
-    opacity: 0;
+@-webkit-keyframes fadeinout1 {
+    0%,40% {
+        opacity: 0;
+    }
+
+    20% {
+        opacity: 1;
+    }
+}
+
+@keyframes fadeinout1 {
+    0%,40% {
+        opacity: 0;
+    }
+
+    20% {
+        opacity: 1;
+    }
+}
+
+@-webkit-keyframes fadeinout2 {
+    0%,40%,100% {
+        opacity: 0;
+    }
+
+    70% {
+        opacity: 1;
+    }
+}
+
+@keyframes fadeinout2 {
+    0%,40%,100% {
+        opacity: 0;
+    }
+
+    70% {
+        opacity: 1;
+    }
 }
 
 .save-indicator-icon {

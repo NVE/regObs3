@@ -1,32 +1,22 @@
 ﻿angular.module('RegObs').component('navSavingIndicator', {
-    template: '<div class="save-indicator"><span class="save-indicator-text" ng-show="$ctrl.showSavedText">Lagret</span> <i class="icon ion-checkmark-circled save-indicator-icon"></i></div>',
-    controller: function (Registration, $rootScope, $timeout) {
+    template: '<div class="save-indicator" ng-if="$ctrl.showSavedText"><ion-spinner icon="dots" class="save-indicator-spinner"></ion-spinner><span class="save-indicator-text">{{"SAVED"|translate}} <i class="icon ion-checkmark-circled save-indicator-icon"></i></span></div>',
+    controller: function ($rootScope, $timeout, LocalStorage) {
         var ctrl = this;
         ctrl.showSavedText = false;
-        ctrl.isEmpty = function () {
-            return Registration.isEmpty();
-        };
 
         ctrl.triggerSave = function () {
-            if (ctrl.timer) {
-                $timeout.cancel(ctrl.timer);
-            }
-
-            ctrl.showSavedText = true;
-            ctrl.timer = $timeout(function () {
-                ctrl.showSavedText = false;
-            }, 2000);
+            LocalStorage.setObject('triggerSave', true);          
         };
 
-        ctrl.$onInit = ctrl.triggerSave;
+        ctrl.$onInit = function () {
+            var isSaving = LocalStorage.getObject('triggerSave', false);
+            if (isSaving) {
+                ctrl.showSavedText = true;
+                LocalStorage.setObject('triggerSave', false);
+            }
+        };
 
         $rootScope.$on('$regObs:registrationSaved', ctrl.triggerSave);
         $rootScope.$on('$regObs:obsLocationSaved', ctrl.triggerSave);
-
-        ctrl.$onDestroy = function () {
-            if (ctrl.timer) {
-                $timeout.cancel(ctrl.timer);
-            }
-        };
     }
 });

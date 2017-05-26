@@ -9,7 +9,8 @@ $ice: #CDD7D6;
 //$footerHeight: 65px;
 $smallFooterHeight: 65px;
 $footerHeight: 115px;
-$greyBackground: rgba(245, 245, 245, 1);
+$greyBackground: #F5F5F5;
+$darkGrey: #9B9B9B;
 
 .snow {
     background-color: $snow;
@@ -78,19 +79,35 @@ $greyBackground: rgba(245, 245, 245, 1);
     height: $footerHeight;
 }
 
-.regobs-next-prev-footer {
-    height: 200px;
-}
+/*.regobs-next-prev-footer {
+    height: 150px;
+}*/
 
-.regobs-next-prev-footer .button {
+.regobs-next-prev-footer .button-large {
     padding: 0 16px;
     font-size: 20px;
     line-height: 53px;
 }
 
-.regobs-next-prev-footer .button.icon-right:before, .regobs-next-prev-footer .button.icon-left:before {
+.regobs-next-prev-footer .button-large.icon-right:before, .regobs-next-prev-footer .button-large.icon-left:before, .regobs-next-prev-footer .icon:before {
     font-size: 32px;
     line-height: 51px;
+}
+
+.regobs-next-prev-footer-content {
+    padding-left: 20px;
+    padding-right: 20px;
+    padding-top: 20px;
+}
+
+.button-grey {
+    border-color: $darkGrey !important;
+    color: rgb(92, 94, 91) !important;
+}
+
+.button-outline.button-dark-fade {
+    border-color: rgb(40,75,99) !important;
+    color: rgb(40,75,99) !important;
 }
 
 
@@ -130,7 +147,9 @@ $greyBackground: rgba(245, 245, 245, 1);
 .send-button {
     height: 55px;
     font-size: 18px !important;
-    margin-top: 0px;
+    margin-top: 0px !important;
+    padding-top: 0px !important;
+    margin-bottom: 9px !important;
 }
 
 .send-button:before {
@@ -525,6 +544,19 @@ ion-popover-view.wider {
     padding-top: 20px;
 }
 
+.item-divider-calm p {
+    text-transform: none;
+    color: #000;
+    font-weight: 400;
+    padding-top: 10px;
+    text-overflow: initial;
+    white-space: normal;
+}
+
+.item-divider-calm .icon {
+    padding-right: 8px;
+}
+
 .item .icon.small-icon {
     font-size: 24px;
 }
@@ -651,6 +683,7 @@ regobs-comment.bordered textarea {
 regobs-comment textarea::placeholder {
     font-style: italic;
 }
+
 regobs-comment textarea::-webkit-input-placeholder {
     font-style: italic;
 }
@@ -663,4 +696,8 @@ regobs-comment textarea::-webkit-input-placeholder {
     width: 49%;
     position: relative;
     float: right;
+}
+
+.grey-view {
+    background-color: $greyBackground;
 }

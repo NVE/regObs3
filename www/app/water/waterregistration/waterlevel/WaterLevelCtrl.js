@@ -138,6 +138,7 @@ angular
         };
 
         vm._init = function () {
+
             vm.reg = Registration.initPropertyAsObject($state.current.data.registrationProp);
 
             if (!vm.reg.WaterLevel2.WaterLevelMeasurement || vm.reg.WaterLevel2.WaterLevelMeasurement.length === 0) {

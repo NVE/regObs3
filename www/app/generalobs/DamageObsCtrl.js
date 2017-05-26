@@ -5,6 +5,8 @@
         var noDamageVisibleId = 7;
         var unknownDamageVisibleId = 0;
 
+        vm.geoHazardId = Registration.data.GeoHazardTID;
+
         vm.anyChecked = function () {
             return vm.reg.DamageObs.filter(function (damageObs) {
                 return damageObs.DamageTypeTID !== noDamageVisibleId && damageObs.checked === true;
@@ -108,7 +110,9 @@
 
                 for (var i = 0; i < vm.reg.DamageObs.length; i++) {
                     var damageObs = vm.reg.DamageObs[i];
-                    if (!damageObs.checked) {
+                    var checked = damageObs.checked;
+                    delete damageObs.checked;
+                    if (!checked) {
                         vm.reg.DamageObs.splice(i, 1);
                         i--;
                     }
@@ -123,11 +127,10 @@
         };
 
         vm.addDamagePosition = function (damageObs) {
-            $state.go('confirmdamagelocation', { damageObs: damageObs });
+            $state.go('confirmdamagelocation', { damageObs: damageObs }, {reload: true});
         };
 
         vm.formatPosition = function (position) {
-            //return Utility.ddToDms(position.Latitude, position.Longitude);
             return Utility.formatLatLng(position.Latitude, position.Longitude);
         };
 

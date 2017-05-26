@@ -927,8 +927,10 @@ angular
             var backName = name || 'start';
             var historyId = $ionicHistory.currentHistoryId();
             var history = $ionicHistory.viewHistory().histories[historyId];
+            var found = false;
             for (var i = history.stack.length - 1; i >= 0; i--) {
                 if (history.stack[i].stateName === backName) {
+                    found = true;
                     $ionicHistory.backView(history.stack[i]);
                 }
             }

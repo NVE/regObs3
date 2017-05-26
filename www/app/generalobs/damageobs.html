@@ -1,6 +1,9 @@
-﻿<ion-view view-title="{{'DAMAGE_OBS'|translate}}">
+﻿<ion-view view-title="{{'DAMAGE_OBS'|translate}}" ng-class="{'grey-view':vm.geoHazardId === 60}">
+    <ion-nav-buttons side="right">
+        <nav-saving-indicator></nav-saving-indicator>
+    </ion-nav-buttons>
     <ion-content>
-        <form name="damageobsform" novalidate>
+        <regobs-form save-action="vm.save()" back-state="newregistration">
             <ion-list>
                 <div class="item item-divider item-divider-calm">
                     {{'DAMAGE_VISIBLE_HEADER' | translate}}
@@ -54,16 +57,32 @@
                         </div>
                     </div>
                 </div>
-                <div class="item item-divider">
-                    &nbsp;
+                <div ng-if="vm.geoHazardId === 60">
+                    <div class="regobs-next-prev-footer">
+                        <div class="regobs-next-prev-footer-content">
+                            <button type="button" class="button button-large button-outline button-dark-fade icon-left ion-android-arrow-back prev-button" ui-sref="waterlevel" ui-sref-opts="{reload: true}">{{'PREVIOUS'|translate}}</button>
+                            <button type="button" class="button button-large button-calm icon-right ion-android-arrow-forward next-button" ui-sref="generalobs2" ui-sref-opts="{reload: true}">{{'NEXT'|translate}}</button>
+                            <div>
+                                <button type="submit" class="button button-large button-block button-grey button-outline"><i class="icon ion-eye"></i>&nbsp;&nbsp;{{'VIEW_MY_OBSERVATION'|translate}}</button>
+                            </div>
+                            <button type="button" ng-click="vm.reset()" class="button button-positive button-block button-clear ion-android-close">
+                                {{'CLEAR'|translate}}
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                <div ng-if="vm.geoHazardId !== 60">
+                    <div class="item item-divider">
+                        &nbsp;
+                    </div>
+                    <div class="padding">
+                        <regobs-save-button save-action="vm.save()" go-back="true"></regobs-save-button>
+                    </div>
+                    <button type="button" ng-click="vm.reset()" class="button button-positive button-block button-clear ion-android-close">
+                        {{'CLEAR'|translate}}
+                    </button>
                 </div>
             </ion-list>
-            <div class="padding">
-                <regobs-save-button save-action="vm.save()" go-back="true"></regobs-save-button>
-            </div>
-            <button type="button" ng-click="vm.reset()" class="button button-positive button-block button-clear ion-android-close">
-                {{'CLEAR'|translate}}
-            </button>
-        </form>
+        </regobs-form>
     </ion-content>
 </ion-view>

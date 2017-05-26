@@ -324,6 +324,16 @@
                 }
             })
 
+            .state('generalobs2', {
+                //Fritekst
+                url: '/generalobs2',
+                templateUrl: 'app/generalobs/generalobs2.html',
+                controller: 'GeneralObsCtrl2 as vm',
+                data: {
+                    registrationProp: 'GeneralObservation'
+                }
+            })
+
             .state('damageobs', {
                 //Fritekst
                 url: '/damageobs',

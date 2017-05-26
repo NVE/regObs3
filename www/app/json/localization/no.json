@@ -464,5 +464,9 @@
   "YOU_HAVE_STARTED_END_TEXT": "-registrering, dersom du går videre blir denne slettet. Vil du slette for å gå videre?",
   "INVALID_FORM": "Skjema har feil eller mangler",
   "INVALID_FORM_TEXT": "Hvis du fortsetter, mister du verdier du har skrevet inn. Aktuelle felter er markert i rødt. Vil du fortsette?",
-  "CONTINUE": "Fortsett"
+  "CONTINUE": "Fortsett",
+  "PREVIOUS": "Forrige",
+  "NEXT": "Neste",
+  "VIEW_MY_OBSERVATION": "Se min observasjon",
+  "SAVED": "Lagret"
 }

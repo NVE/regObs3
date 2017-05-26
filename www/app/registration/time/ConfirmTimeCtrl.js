@@ -1,6 +1,6 @@
 ﻿angular
     .module('RegObs')
-    .controller('ConfirmTimeCtrl', function ($scope, Registration, $state, RegobsPopup, $translate) {
+    .controller('ConfirmTimeCtrl', function ($scope, Registration, $state, RegobsPopup, $translate, Utility) {
         var ctrl = this;
 
         ctrl.setToNow = function () {
@@ -11,7 +11,11 @@
             var doSave = function () {
                 Registration.data.DtObsTime = ctrl.time.toISOString();
                 Registration.save();
-                $state.go('newregistration');
+                if (Registration.data.GeoHazardTID === Utility.geoHazardTid('water')){
+                    $state.go('waterlevel', {}, { reload: true });
+                } else {
+                    $state.go('newregistration', {}, {reload: true});
+                }
             };
 
             if (!ctrl.time || (ctrl.time > new Date())) {

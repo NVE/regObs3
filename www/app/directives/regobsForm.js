@@ -3,11 +3,10 @@
         name: '@',
         saveAction: '&',
         goBack: '<',
+        backState: '@'
     },
     controller: function ($state, Property, $scope, RegobsPopup, $ionicHistory, $q) {
         var ctrl = this;
-
-        var confirmed = false;
         ctrl.name = ctrl.name || 'regobsform';
 
         ctrl.formIsInvalid = function () {
@@ -22,58 +21,46 @@
             );
         };
 
-        ctrl.checkFormAndSave = function (event, toSate) {
-            var complete = function () {
-                confirmed = true;
-                if (toSate) {
-                    $state.go(toSate);
-                }
-            };
-
+        ctrl.checkFormAndSave = function (event, toState) {
             var callAction = function () {
                 if (angular.isFunction(ctrl.saveAction)) {
-                    var result = ctrl.saveAction();
-                    if (result && angular.isFunction(result.then)) {
-                        result.then(function () {
-                            complete();
-                        });
-                    } else {
-                        complete();
-                    }
-                } else {
-                    complete();
+                    ctrl.saveAction();
                 }
             };
 
-            if (ctrl.formIsInvalid() && !confirmed) {
+            if (ctrl.formIsInvalid()) {
                 if (event) {
                     event.preventDefault();
                 }
                 ctrl.getUserConfirmation()
                     .then(function (confirm) {
                         if (confirm) {
-                            confirmed = true;
                             Property.reset($state.current.data.registrationProp, true);
                             callAction();
+                            $state.go(toState.name, { confirmed: true });
                         }
                     });
-            } else if (!confirmed) {
+            } else {
                 callAction();
             }
         };
 
         ctrl.post = function () {
-            if (ctrl.goBack === undefined || ctrl.goBack === true) {
-                $ionicHistory.goBack();
+            if (ctrl.goBack === undefined || ctrl.goBack === true) {             
+                if (ctrl.backState) {
+                    $state.go(ctrl.backState);
+                } else {
+                    $ionicHistory.goBack();
+                }
             } else {
                 ctrl.checkFormAndSave();
             }
         };
 
-
-
         $scope.$on('$stateChangeStart', function (event, toState, toParams, fromState, fromParams) {
-            ctrl.checkFormAndSave(event, toState.name);
+            if (!toParams.confirmed) {
+                ctrl.checkFormAndSave(event, toState);
+            }
         });
     },
     transclude: true,

@@ -39,7 +39,7 @@
                 '<span class="input-label" ng-bind="$ctrl.labelText" ng-class="{assertive:$ctrl.required && !$ctrl.model.length}"></span>',
                 '<textarea id="{{$ctrl.textareaId}}" placeholder="{{$ctrl.placeholder}}" name="comment" cols="30" rows="auto" maxlength="1024" ng-model="$ctrl.model" ng-keyup="$ctrl.updateTextareaSize()" ng-required="$ctrl.required"></textarea>',
             '</label>',
-            '<textarea ng-if="$ctrl.hideLabel" id="{{$ctrl.textareaId}}" placeholder="{{$ctrl.placeholder}}" name="comment" cols="30" rows="auto maxlength="1024" ng-model="$ctrl.model" ng-keyup="$ctrl.updateTextareaSize()" ng-required="$ctrl.required"></textarea>',
+            '<textarea ng-if="$ctrl.hideLabel" id="{{$ctrl.textareaId}}" placeholder="{{$ctrl.placeholder}}" name="comment" cols="30" rows="auto" maxlength="1024" ng-model="$ctrl.model" ng-keyup="$ctrl.updateTextareaSize()" ng-required="$ctrl.required"></textarea>',
         ].join('')
     };
 
