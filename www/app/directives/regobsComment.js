@@ -27,6 +27,7 @@
                 }
                 if (element) {
                     element.style.height = (element.scrollHeight > minheight ? element.scrollHeight : minheight) + "px";
+                    element.scrollTop = element.scrollHeight; //scroll to bottom when typing
                 }
             };
 

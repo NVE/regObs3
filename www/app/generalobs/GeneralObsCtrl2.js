@@ -17,6 +17,14 @@ angular
             });
         };
 
+        vm.getPictures = function () {
+            return Pictures.getPictures(vm.registrationProp);
+        };
+
+        vm.removeImage = function (picture) {
+            Pictures.deletePicture(picture);
+        };
+
         vm.reset = function () {
             Property.reset(vm.registrationProp);
         };

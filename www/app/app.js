@@ -1,42 +1,11 @@
 (function () {
     "use strict";
-    angular.module('RegObs', ['ionic', 'ngCordova', 'ion-floating-menu', 'angularProgressbar', 'pascalprecht.translate', 'ngWebworker', 'ionic.closePopup', 'ngRaven'])
+    angular.module('RegObs', ['ionic', 'ngCordova', 'ion-floating-menu', 'angularProgressbar', 'pascalprecht.translate', 'ngWebworker', 'ionic.closePopup', 'ngRaven', 'ng-showdown'])
         .config(providers)
         .run(setup);
 
     function providers($provide, $stateProvider, $urlRouterProvider, $ionicConfigProvider, AppSettingsProvider, $translateProvider, UserProvider, UtilityProvider) {
         'ngInject';
-
-        //var utils = UtilityProvider.$get();
-        //if (!utils.isRippleEmulator()) {
-        //    $provide.decorator('$exceptionHandler', ['$delegate',
-        //        function ($delegate) {
-        //            return function (exception, cause) {
-        //                if (ga_storage) {
-        //                    var userService = UserProvider.$get();
-        //                    var appSettings = AppSettingsProvider.$get();
-        //                    var user = userService.getUser();
-        //                    var userText = 'Anonymous user';
-        //                    if (!user.anonymous) {
-        //                        userText = 'User: ' + user.Guid + ' Nick: ' + user.Nick;
-        //                    }
-
-        //                    var initInjector = angular.injector(['ng']);
-        //                    var $http = initInjector.get('$http');
-
-        //                    $http.get('app/json/version.json').then(function (version) {
-        //                        var label = 'Error ' + appSettings.data.env + ' ' + version.data.version + ' ' + version.data.build;
-        //                        var action = ((cause || '') + ' ' + exception.message).trim();
-        //                        var stack = userText + ' Stack: ' + exception.stack.replace(/(\r\n|\n|\r)/gm, "\n ○ ");
-        //                        ga_storage._trackEvent(label, action, stack);
-        //                    });
-        //                }
-        //                $delegate(exception, cause);
-        //            };
-        //        }
-        //    ]);
-        //}
-
 
         if (ionic.Platform.isAndroid()) {
             $ionicConfigProvider.scrolling.jsScrolling(false);
@@ -358,16 +327,23 @@
                     return 'app/help/' + stateParams.page + '.html';
                 },
                 controller: 'HelpCtrl as vm'
+            })
+
+            .state('dynamichelp', {
+                url: '/dynamichelp/:registrationProp',
+                templateUrl: 'app/help/dynamichelp.html',
+                controller: 'HelpCtrl as vm'
             });
     };
 
-    function setup($ionicPlatform, Utility, AppLogging, Registration, Observations, OfflineMap, $http, User) {
+    function setup($ionicPlatform, Utility, AppLogging, Registration, Observations, OfflineMap, $http, User, HelpTexts) {
         'ngInject';
 
         $ionicPlatform.ready(function () {
 
             if (Utility.hasGoodNetwork() && Utility.shouldUpdateKdvElements()) {
                 Utility.refreshKdvElements();
+                HelpTexts.updateHelpTexts();
             }
 
             // Hide the accessory bar by default (remove this to show the accessory bar above the keyboard

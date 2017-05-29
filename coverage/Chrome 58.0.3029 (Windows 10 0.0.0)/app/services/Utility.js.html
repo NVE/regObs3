@@ -20,14 +20,14 @@
     </h1>
     <div class='clearfix'>
       <div class='fl pad1y space-right2'>
-        <span class="strong">32.94% </span>
+        <span class="strong">32.71% </span>
         <span class="quiet">Statements</span>
-        <span class='fraction'>141/428</span>
+        <span class='fraction'>141/431</span>
       </div>
       <div class='fl pad1y space-right2'>
-        <span class="strong">18.14% </span>
+        <span class="strong">17.97% </span>
         <span class="quiet">Branches</span>
-        <span class='fraction'>39/215</span>
+        <span class='fraction'>39/217</span>
       </div>
       <div class='fl pad1y space-right2'>
         <span class="strong">18.6% </span>
@@ -35,9 +35,9 @@
         <span class='fraction'>24/129</span>
       </div>
       <div class='fl pad1y space-right2'>
-        <span class="strong">33.33% </span>
+        <span class="strong">33.1% </span>
         <span class="quiet">Lines</span>
-        <span class='fraction'>139/417</span>
+        <span class='fraction'>139/420</span>
       </div>
     </div>
   </div>
@@ -1011,7 +1011,10 @@
 966
 967
 968
-969</td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+969
+970
+971
+972</td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1×</span>
@@ -1943,6 +1946,8 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -1963,6 +1968,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">54×</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -1984,7 +1990,7 @@
  */
 angular
     .module('RegObs')
-    .factory('Utility', function Utility($http, $q, $rootScope, AppSettings, User, LocalStorage, AppLogging, $translate, $cordovaNetwork, moment, $filter, $ionicHistory) {
+    .factory('Utility', function Utility($http, $q, $rootScope, AppSettings, User, LocalStorage, AppLogging, $translate, $cordovaNetwork, moment, $filter, $ionicHistory, Raven) {
         var service = this;
 &nbsp;
         var canvas;
@@ -2908,8 +2914,10 @@ angular
 <span class="cstat-no" title="statement not covered" >            var backName = name || 'start';</span>
 <span class="cstat-no" title="statement not covered" >            var historyId = $ionicHistory.currentHistoryId();</span>
 <span class="cstat-no" title="statement not covered" >            var history = $ionicHistory.viewHistory().histories[historyId];</span>
+<span class="cstat-no" title="statement not covered" >            var found = false;</span>
 <span class="cstat-no" title="statement not covered" >            for (var i = history.stack.length - 1; i &gt;= 0; i--) {</span>
 <span class="cstat-no" title="statement not covered" >                if (history.stack[i].stateName === backName) {</span>
+<span class="cstat-no" title="statement not covered" >                    found = true;</span>
 <span class="cstat-no" title="statement not covered" >                    $ionicHistory.backView(history.stack[i]);</span>
                 }
             }
@@ -2932,8 +2940,9 @@ angular
 &nbsp;
         service.configureRaven = <span class="fstat-no" title="function not covered" >function () {</span>
 <span class="cstat-no" title="statement not covered" >            service.getVersion().then(<span class="fstat-no" title="function not covered" >function (version) {</span></span>
-<span class="cstat-no" title="statement not covered" >                Raven.setShouldSendCallback(<span class="fstat-no" title="function not covered" >function () {</span> <span class="cstat-no" title="statement not covered" >return AppSettings.data.env !== 'test regObs' }</span>);</span>
-<span class="cstat-no" title="statement not covered" >                Raven.setTagsContext({ env: AppSettings.data.env });</span>
+<span class="cstat-no" title="statement not covered" >                Raven.setShouldSendCallback(<span class="fstat-no" title="function not covered" >function () {</span> <span class="cstat-no" title="statement not covered" >return AppSettings.data.env !== 'test regObs' &amp;&amp; !service.isRippleEmulator() }</span>);</span>
+<span class="cstat-no" title="statement not covered" >                Raven.setEnvironment(AppSettings.data.env);</span>
+<span class="cstat-no" title="statement not covered" >                Raven.setRelease(version.version + ' - ' + version.build);</span>
 &nbsp;
 <span class="cstat-no" title="statement not covered" >                var user = User.getUser();</span>
 <span class="cstat-no" title="statement not covered" >                if (!user.anonymous) {</span>
@@ -2953,7 +2962,7 @@ angular
 </div><!-- /wrapper -->
 <div class='footer quiet pad2 space-top1 center small'>
   Code coverage
-  generated by <a href="http://istanbul-js.org/" target="_blank">istanbul</a> at Fri May 19 2017 14:19:01 GMT+0200 (W. Europe Daylight Time)
+  generated by <a href="http://istanbul-js.org/" target="_blank">istanbul</a> at Mon May 29 2017 13:52:48 GMT+0200 (W. Europe Daylight Time)
 </div>
 </div>
 <script src="../../prettify.js"></script>

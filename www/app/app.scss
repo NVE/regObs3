@@ -79,9 +79,9 @@ $darkGrey: #9B9B9B;
     height: $footerHeight;
 }
 
-/*.regobs-next-prev-footer {
-    height: 150px;
-}*/
+.regobs-next-prev-footer {
+    background-color: $greyBackground;
+}
 
 .regobs-next-prev-footer .button-large {
     padding: 0 16px;
@@ -178,8 +178,13 @@ $darkGrey: #9B9B9B;
 }
 
 .has-footer {
+    bottom: $smallFooterHeight !important;
+}
+
+.has-large-footer {
     bottom: $footerHeight !important;
 }
+
 
 input:focus, select:focus, textarea:focus {
     font-weight: bold;
@@ -537,6 +542,10 @@ ion-popover-view.wider {
     border-top: none !important;
 }
 
+.no-bottom-padding {
+    padding-bottom: 0px !important;
+}
+
 .item-divider-calm {
     color: #6d6d72;
     text-transform: uppercase;
@@ -555,6 +564,7 @@ ion-popover-view.wider {
 
 .item-divider-calm .icon {
     padding-right: 8px;
+    color: rgb(27,23,20);
 }
 
 .item .icon.small-icon {
@@ -700,4 +710,23 @@ regobs-comment textarea::-webkit-input-placeholder {
 
 .grey-view {
     background-color: $greyBackground;
+}
+
+.white-background {
+    background-color: #fff;
+}
+
+
+.show-bullets ul {
+    list-style: disc;
+}
+
+.show-bullets ol {
+    list-style: decimal;
+}
+
+.show-bullets ul,ol {
+    padding-left: 40px;
+    margin-top: 14px;
+    margin-bottom: 14px;
 }

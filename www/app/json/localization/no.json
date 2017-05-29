@@ -336,6 +336,7 @@
   "ICE_COVER_OBS": "Isdekningsgrad",
   "INCIDENT": "Ulykke/hendelse",
   "GENERAL_OBS": "Notater",
+  "GENERAL_OBS_PICTURES": "Bilder og notater",
   "ICE_DANGER_OBS": "Faretegn - is",
   "DRY_SNOW_BEFORE_DRILL": "Snø før boring",
   "IN_CM": "I centimeter",
@@ -468,5 +469,10 @@
   "PREVIOUS": "Forrige",
   "NEXT": "Neste",
   "VIEW_MY_OBSERVATION": "Se min observasjon",
-  "SAVED": "Lagret"
+  "SAVED": "Lagret",
+  "ADD_OBSERVATION_IMAGES": "Legg til bilder av observasjonen",
+  "ADD_OBSERVATION_IMAGES_DESCRIPTION": "Her kan du laste opp bilder av området du har observert eller bilder av andre relevante ting til observasjonen din.",
+  "ADD_OBSERVATION_NOTES": "Skriv notater fra observasjonen",
+  "ADD_OBSERVATION_NOTES_PLACEHOLDER": "Dine notater kan du skrive inn her",
+  "ADD_NEW_DANGER_SIGN": "Legg til nytt faretegn"
 }

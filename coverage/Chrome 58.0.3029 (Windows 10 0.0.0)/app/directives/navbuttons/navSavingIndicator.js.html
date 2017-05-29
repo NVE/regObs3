@@ -20,24 +20,24 @@
     </h1>
     <div class='clearfix'>
       <div class='fl pad1y space-right2'>
-        <span class="strong">5.88% </span>
+        <span class="strong">8.33% </span>
         <span class="quiet">Statements</span>
-        <span class='fraction'>1/17</span>
+        <span class='fraction'>1/12</span>
       </div>
       <div class='fl pad1y space-right2'>
         <span class="strong">0% </span>
         <span class="quiet">Branches</span>
-        <span class='fraction'>0/4</span>
+        <span class='fraction'>0/2</span>
       </div>
       <div class='fl pad1y space-right2'>
         <span class="strong">0% </span>
         <span class="quiet">Functions</span>
-        <span class='fraction'>0/5</span>
+        <span class='fraction'>0/3</span>
       </div>
       <div class='fl pad1y space-right2'>
-        <span class="strong">5.88% </span>
+        <span class="strong">8.33% </span>
         <span class="quiet">Lines</span>
-        <span class='fraction'>1/17</span>
+        <span class='fraction'>1/12</span>
       </div>
     </div>
   </div>
@@ -64,21 +64,12 @@
 19
 20
 21
-22
-23
-24
-25
-26
-27
-28
-29
-30
-31
-32</td><td class="line-coverage quiet"><span class="cline-any cline-yes">1×</span>
+22</td><td class="line-coverage quiet"><span class="cline-any cline-yes">1×</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -86,55 +77,34 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">﻿angular.module('RegObs').component('navSavingIndicator', {
-    template: '&lt;div class="save-indicator"&gt;&lt;span class="save-indicator-text" ng-show="$ctrl.showSavedText"&gt;Lagret&lt;/span&gt; &lt;i class="icon ion-checkmark-circled save-indicator-icon"&gt;&lt;/i&gt;&lt;/div&gt;',
-    controller: <span class="fstat-no" title="function not covered" >function (Registration, $rootScope, $timeout) {</span>
+    template: '&lt;div class="save-indicator" ng-if="$ctrl.showSavedText"&gt;&lt;ion-spinner icon="dots" class="save-indicator-spinner"&gt;&lt;/ion-spinner&gt;&lt;span class="save-indicator-text"&gt;{{"SAVED"|translate}} &lt;i class="icon ion-checkmark-circled save-indicator-icon"&gt;&lt;/i&gt;&lt;/span&gt;&lt;/div&gt;',
+    controller: <span class="fstat-no" title="function not covered" >function ($rootScope, $timeout, LocalStorage) {</span>
 <span class="cstat-no" title="statement not covered" >        var ctrl = this;</span>
 <span class="cstat-no" title="statement not covered" >        ctrl.showSavedText = false;</span>
-<span class="cstat-no" title="statement not covered" >        ctrl.isEmpty = <span class="fstat-no" title="function not covered" >function () {</span></span>
-<span class="cstat-no" title="statement not covered" >            return Registration.isEmpty();</span>
-        };
 &nbsp;
 <span class="cstat-no" title="statement not covered" >        ctrl.triggerSave = <span class="fstat-no" title="function not covered" >function () {</span></span>
-<span class="cstat-no" title="statement not covered" >            if (ctrl.timer) {</span>
-<span class="cstat-no" title="statement not covered" >                $timeout.cancel(ctrl.timer);</span>
-            }
-&nbsp;
-<span class="cstat-no" title="statement not covered" >            ctrl.showSavedText = true;</span>
-<span class="cstat-no" title="statement not covered" >            ctrl.timer = $timeout(<span class="fstat-no" title="function not covered" >function () {</span></span>
-<span class="cstat-no" title="statement not covered" >                ctrl.showSavedText = false;</span>
-            }, 2000);
+<span class="cstat-no" title="statement not covered" >            LocalStorage.setObject('triggerSave', true);          </span>
         };
 &nbsp;
-<span class="cstat-no" title="statement not covered" >        ctrl.$onInit = ctrl.triggerSave;</span>
+<span class="cstat-no" title="statement not covered" >        ctrl.$onInit = <span class="fstat-no" title="function not covered" >function () {</span></span>
+<span class="cstat-no" title="statement not covered" >            var isSaving = LocalStorage.getObject('triggerSave', false);</span>
+<span class="cstat-no" title="statement not covered" >            if (isSaving) {</span>
+<span class="cstat-no" title="statement not covered" >                ctrl.showSavedText = true;</span>
+<span class="cstat-no" title="statement not covered" >                LocalStorage.setObject('triggerSave', false);</span>
+            }
+        };
 &nbsp;
 <span class="cstat-no" title="statement not covered" >        $rootScope.$on('$regObs:registrationSaved', ctrl.triggerSave);</span>
 <span class="cstat-no" title="statement not covered" >        $rootScope.$on('$regObs:obsLocationSaved', ctrl.triggerSave);</span>
-&nbsp;
-<span class="cstat-no" title="statement not covered" >        ctrl.$onDestroy = <span class="fstat-no" title="function not covered" >function () {</span></span>
-<span class="cstat-no" title="statement not covered" >            if (ctrl.timer) {</span>
-<span class="cstat-no" title="statement not covered" >                $timeout.cancel(ctrl.timer);</span>
-            }
-        };
     }
 });</pre></td></tr>
 </table></pre>
@@ -142,7 +112,7 @@
 </div><!-- /wrapper -->
 <div class='footer quiet pad2 space-top1 center small'>
   Code coverage
-  generated by <a href="http://istanbul-js.org/" target="_blank">istanbul</a> at Fri May 19 2017 14:19:01 GMT+0200 (W. Europe Daylight Time)
+  generated by <a href="http://istanbul-js.org/" target="_blank">istanbul</a> at Mon May 29 2017 13:52:48 GMT+0200 (W. Europe Daylight Time)
 </div>
 </div>
 <script src="../../../prettify.js"></script>

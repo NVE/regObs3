@@ -35,6 +35,8 @@ module.exports = function (config) {
             { pattern: 'www/lib/ion-floating-menu/dist/ion-floating-menu.min.js', included: true },
             { pattern: 'www/lib/ng-webworker/src/ng-webworker.min.js', included: true },
             { pattern: 'www/lib/ionic-close-popup/ionic-close-popup.js', included: true },
+            { pattern: 'www/lib/showdown/dist/showdown.min.js', included: true },
+            { pattern: 'www/lib/ng-showdown/dist/ng-showdown.min.js', included: true },
             { pattern: 'www/lib/raven-js/dist/raven.min.js', included: true },
             { pattern: 'www/lib/raven-js/dist/plugins/angular.min.js', included: true },
             { pattern: 'www/ravenconfig.js', included: true },

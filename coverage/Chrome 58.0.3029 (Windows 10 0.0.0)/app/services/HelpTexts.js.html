@@ -20,28 +20,28 @@
     </h1>
     <div class='clearfix'>
       <div class='fl pad1y space-right2'>
-        <span class="strong">83.33% </span>
+        <span class="strong">77.42% </span>
         <span class="quiet">Statements</span>
-        <span class='fraction'>20/24</span>
+        <span class='fraction'>24/31</span>
       </div>
       <div class='fl pad1y space-right2'>
-        <span class="strong">100% </span>
+        <span class="strong">90.91% </span>
         <span class="quiet">Branches</span>
-        <span class='fraction'>9/9</span>
+        <span class='fraction'>10/11</span>
       </div>
       <div class='fl pad1y space-right2'>
-        <span class="strong">60% </span>
+        <span class="strong">53.85% </span>
         <span class="quiet">Functions</span>
-        <span class='fraction'>6/10</span>
+        <span class='fraction'>7/13</span>
       </div>
       <div class='fl pad1y space-right2'>
-        <span class="strong">83.33% </span>
+        <span class="strong">77.42% </span>
         <span class="quiet">Lines</span>
-        <span class='fraction'>20/24</span>
+        <span class='fraction'>24/31</span>
       </div>
     </div>
   </div>
-  <div class='status-line high'></div>
+  <div class='status-line medium'></div>
 <pre><table class="coverage">
 <tr><td class="line-count quiet">1
 2
@@ -88,22 +88,41 @@
 43
 44
 45
-46</td><td class="line-coverage quiet"><span class="cline-any cline-yes">1×</span>
-<span class="cline-any cline-yes">7×</span>
+46
+47
+48
+49
+50
+51
+52
+53
+54
+55
+56
+57
+58
+59
+60
+61</td><td class="line-coverage quiet"><span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">54×</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">7×</span>
+<span class="cline-any cline-yes">54×</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">7×</span>
+<span class="cline-any cline-yes">54×</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">7×</span>
+<span class="cline-any cline-yes">54×</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">7×</span>
+<span class="cline-any cline-yes">54×</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">54×</span>
 <span class="cline-any cline-yes">2×</span>
 <span class="cline-any cline-yes">2×</span>
 <span class="cline-any cline-yes">1×</span>
@@ -114,8 +133,12 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">7×</span>
+<span class="cline-any cline-yes">54×</span>
 <span class="cline-any cline-yes">5×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">5×</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">5×</span>
 <span class="cline-any cline-yes">11×</span>
@@ -128,11 +151,18 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">7×</span>
+<span class="cline-any cline-yes">54×</span>
+<span class="cline-any cline-yes">39×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">7×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">54×</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">54×</span>
 <span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">﻿angular.module('RegObs').factory('HelpTexts', function (LocalStorage, $http, AppSettings, $q) {
     var service = this;
 &nbsp;
@@ -144,14 +174,18 @@
         });
     };
 &nbsp;
-    service._getLocalStorageHelpTexts = <span class="fstat-no" title="function not covered" >function () {</span>
-<span class="cstat-no" title="statement not covered" >        return LocalStorage.getObject(service._localStorageKey + '_' + AppSettings.data.env.replace(/ /g, ''), []);</span>
+    service._getStorageKey = <span class="fstat-no" title="function not covered" >function () {</span>
+<span class="cstat-no" title="statement not covered" >        return service._localStorageKey + '_' + AppSettings.data.env.replace(/ /g, '');</span>
     };
 &nbsp;
-    service._getHelpTexts = function () {       
+    service._getLocalStorageHelpTexts = <span class="fstat-no" title="function not covered" >function () {</span>
+<span class="cstat-no" title="statement not covered" >        return LocalStorage.getObject(service._getStorageKey(), []);</span>
+    };
+&nbsp;
+    service._getHelpTexts = function () {
         var updatedElements = service._getLocalStorageHelpTexts();
         if (updatedElements.length &gt; 0) {
-            return $q(function(resolve) {
+            return $q(function (resolve) {
                 resolve(updatedElements);
             });
         } else {
@@ -159,10 +193,14 @@
         }
     };
 &nbsp;
-    service._getHelpText = function(tid, geoHazardId, langKey) {
+    service._getHelpText = function (tid, geoHazardId, langKey) {
         return service._getHelpTexts()
-            .then(function(result) {
-                var filtered = result.filter(function(item) {
+            .then(function (result) {
+                <span class="missing-if-branch" title="if path not taken" >I</span>if (angular.isString(tid)) {
+<span class="cstat-no" title="statement not covered" >                    tid = parseInt(tid);</span>
+                }
+&nbsp;
+                var filtered = result.filter(function (item) {
                     return item.RegistrationTID === tid &amp;&amp; item.GeoHazardTID === geoHazardId &amp;&amp; item.LangKey === langKey;
                 });
                 if (filtered.length &gt; 0) {
@@ -173,7 +211,14 @@
             });
     };
 &nbsp;
-    service.getHelpText = <span class="fstat-no" title="function not covered" >function(tid, geoHazardId) {</span>
+    service.updateHelpTexts = function () {
+        $http.get(AppSettings.getEndPoints().getHelpTexts, { langKey: AppSettings.getCurrentLangKey() }, AppSettings.httpConfig)
+            .then(<span class="fstat-no" title="function not covered" >function (res) {</span>
+<span class="cstat-no" title="statement not covered" >                LocalStorage.set(service._getStorageKey(), JSON.stringify(res.data));</span>
+            });
+    };
+&nbsp;
+    service.getHelpText = <span class="fstat-no" title="function not covered" >function (tid, geoHazardId) {</span>
 <span class="cstat-no" title="statement not covered" >        return service._getHelpText(tid, geoHazardId, AppSettings.getCurrentLangKey());</span>
     };
 &nbsp;
@@ -184,7 +229,7 @@
 </div><!-- /wrapper -->
 <div class='footer quiet pad2 space-top1 center small'>
   Code coverage
-  generated by <a href="http://istanbul-js.org/" target="_blank">istanbul</a> at Fri May 19 2017 14:19:01 GMT+0200 (W. Europe Daylight Time)
+  generated by <a href="http://istanbul-js.org/" target="_blank">istanbul</a> at Mon May 29 2017 13:52:48 GMT+0200 (W. Europe Daylight Time)
 </div>
 </div>
 <script src="../../prettify.js"></script>

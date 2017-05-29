@@ -78,6 +78,12 @@
     "raven-js": [
       "dist/*.min.*",
       "dist/plugins/angular.min.*"
+    ],
+    "showdown": [
+      "dist/*.*"
+    ],
+    "ng-showdown": [
+      "dist/*.*"
     ]
   },
   "dependencies": {
@@ -94,7 +100,8 @@
     "leaflet.markercluster": "^1.0.0",
     "ng-webworker": "^0.2.3",
     "ionic-close-popup": "^0.0.1",
-    "raven-js": "^3.15.0"
+    "raven-js": "^3.15.0",
+    "ng-showdown": "^1.1.0"
   },
   "resolutions": {
     "angular-ui-router": "0.3.2",

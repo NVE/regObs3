@@ -134,7 +134,8 @@
                 trip: baseUrls[settings.data.env] + '/trip', //POST= Start, PUT= Stop(object with DeviceGuid), Headers: regObs_apptoken, ApiJsonVersion
                 services: serviceUrls[settings.data.env],
                 getLog: baseUrls[settings.data.env] + '/Log', // /{id}
-                search: baseUrls[settings.data.env] + '/Search/All'
+                search: baseUrls[settings.data.env] + '/Search/All',
+                getHelpTexts: baseUrls[settings.data.env] +'Helptext'
             };
         };
 

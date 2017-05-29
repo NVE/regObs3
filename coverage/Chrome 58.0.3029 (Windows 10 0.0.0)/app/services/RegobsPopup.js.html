@@ -20,24 +20,24 @@
     </h1>
     <div class='clearfix'>
       <div class='fl pad1y space-right2'>
-        <span class="strong">10.94% </span>
+        <span class="strong">10.77% </span>
         <span class="quiet">Statements</span>
-        <span class='fraction'>7/64</span>
+        <span class='fraction'>7/65</span>
       </div>
       <div class='fl pad1y space-right2'>
         <span class="strong">0% </span>
         <span class="quiet">Branches</span>
-        <span class='fraction'>0/30</span>
+        <span class='fraction'>0/35</span>
       </div>
       <div class='fl pad1y space-right2'>
-        <span class="strong">5.26% </span>
+        <span class="strong">5% </span>
         <span class="quiet">Functions</span>
-        <span class='fraction'>1/19</span>
+        <span class='fraction'>1/20</span>
       </div>
       <div class='fl pad1y space-right2'>
-        <span class="strong">10.94% </span>
+        <span class="strong">10.77% </span>
         <span class="quiet">Lines</span>
-        <span class='fraction'>7/64</span>
+        <span class='fraction'>7/65</span>
       </div>
     </div>
   </div>
@@ -211,12 +211,15 @@
 166
 167
 168
-169</td><td class="line-coverage quiet"><span class="cline-any cline-yes">1×</span>
+169
+170
+171</td><td class="line-coverage quiet"><span class="cline-any cline-yes">1×</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">54×</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">54×</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -228,6 +231,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -381,25 +385,27 @@
 <span class="cline-any cline-yes">54×</span>
 <span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">angular
     .module('RegObs')
-    .factory('RegobsPopup', function ($ionicPopup, $rootScope, $q, $pbService, $timeout, AppLogging, Translate, moment, $interval) {
+    .factory('RegobsPopup', function ($ionicPopup, $rootScope, $q, $pbService, $timeout, AppLogging, Translate, $translate, moment, $interval) {
         var RegobsPopup = this;
 &nbsp;
         RegobsPopup.delete = <span class="fstat-no" title="function not covered" >function (title, text, confirmText) {</span>
-<span class="cstat-no" title="statement not covered" >            return $ionicPopup.confirm({</span>
-                title: title,
-                template: text,
-                buttons: [
-                    { text: 'Avbryt' },
-                    {
-                        text: confirmText || 'Slett',
-                        type: 'button-assertive',
-                        onTap: <span class="fstat-no" title="function not covered" >function (e) {</span>
-                            // Returning a value will cause the promise to resolve with the given value.
-<span class="cstat-no" title="statement not covered" >                            return true;</span>
+<span class="cstat-no" title="statement not covered" >            return $translate(['CANCEL', 'DELETE', title, text, confirmText]).then(<span class="fstat-no" title="function not covered" >function (translations) {</span></span>
+<span class="cstat-no" title="statement not covered" >                return $ionicPopup.confirm({</span>
+                    title: translations[title] || title,
+                    template: translations[text] || text,
+                    buttons: [
+                        { text: translations['CANCEL'] },
+                        {
+                            text: translations[confirmText] || confirmText || translations['DELETE'],
+                            type: 'button-assertive',
+                            onTap: <span class="fstat-no" title="function not covered" >function (e) {</span>
+                                // Returning a value will cause the promise to resolve with the given value.
+<span class="cstat-no" title="statement not covered" >                                return true;</span>
+                            }
                         }
-                    }
-                ]
-            });
+                    ]
+                });
+            });   
         };
 &nbsp;
         RegobsPopup.confirm = <span class="fstat-no" title="function not covered" >function (title, text, confirmText, cancelText, cancelType) {</span>
@@ -553,7 +559,7 @@
 </div><!-- /wrapper -->
 <div class='footer quiet pad2 space-top1 center small'>
   Code coverage
-  generated by <a href="http://istanbul-js.org/" target="_blank">istanbul</a> at Fri May 19 2017 14:19:01 GMT+0200 (W. Europe Daylight Time)
+  generated by <a href="http://istanbul-js.org/" target="_blank">istanbul</a> at Mon May 29 2017 13:52:48 GMT+0200 (W. Europe Daylight Time)
 </div>
 </div>
 <script src="../../prettify.js"></script>
