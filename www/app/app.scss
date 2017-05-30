@@ -730,3 +730,14 @@ regobs-comment textarea::-webkit-input-placeholder {
     margin-top: 14px;
     margin-bottom: 14px;
 }
+
+.info-button {
+    display: block;
+    position: absolute;
+    top: 12px;
+    right: 12px;
+    padding: 5px;
+    font-size: 26px;
+    color: rgb(190,189,189);
+    z-index: 999;
+}

@@ -22,6 +22,7 @@
                         <ion-checkbox ng-model="dm.checked" class="checkbox-square checkbox-calm" name="DamageDetails">
                             {{dm.Name}}
                         </ion-checkbox>
+                        <i ng-if="dm.Description" class="icon ion-ios-information-outline info-button" ng-click="vm.openHelpTextPopover(dm.Description)"></i>
                         <div class="damage-details-wrapper" ng-show="dm.checked">
                             <div class="damage-detail-arrow"></div>
                             <div class="damage-detail-cover"></div>

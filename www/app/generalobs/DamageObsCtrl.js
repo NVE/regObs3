@@ -1,6 +1,6 @@
 ﻿angular
     .module('RegObs')
-    .controller('DamageObsCtrl', function ($scope, $state, Registration, Property, $ionicScrollDelegate, Utility, Pictures, $filter, AppLogging) {
+    .controller('DamageObsCtrl', function ($scope, $state, Registration, Property, $ionicScrollDelegate, Utility, Pictures, $filter, AppLogging, RegobsPopup, $translate) {
         var vm = this;
         var noDamageVisibleId = 7;
         var unknownDamageVisibleId = 0;
@@ -25,11 +25,12 @@
                     return item.Id === damageObs.DamageTypeTID;
                 });
                 if (exists.length == 0) {
-                    vm.reg.DamageObs.push({ DamageTypeTID: item.Id, Name: item.Name, checked: false });
+                    vm.reg.DamageObs.push({ DamageTypeTID: item.Id, Name: item.Name, Description: item.Description, checked: false });
                 } else {
                     var damageObs = exists[0];
-                    damageObs.checked = true;
                     damageObs.Name = item.Name;
+                    damageObs.Description = item.Description;
+                    damageObs.checked = true;
                 }
             });
 
@@ -82,6 +83,12 @@
                 }
             }
             $ionicScrollDelegate.resize();
+        };
+
+        vm.openHelpTextPopover = function (text) {
+            $translate('HELP').then(function (translation) {
+                RegobsPopup.alert(translation, text);
+            });
         };
 
         vm.addDamageObsPicture = function (damageObs) {        
