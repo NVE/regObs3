@@ -1,6 +1,6 @@
 ﻿angular
     .module('RegObs')
-    .controller('DamageObsCtrl', function ($scope, $state, Registration, Property, $ionicScrollDelegate, Utility, Pictures, $filter, AppLogging, RegobsPopup, $translate) {
+    .controller('DamageObsCtrl', function ($scope, $state, Registration, Property, $ionicScrollDelegate, Utility, Pictures, $filter, AppLogging, RegobsPopup, $translate, AppSettings) {
         var vm = this;
         var noDamageVisibleId = 7;
         var unknownDamageVisibleId = 0;
@@ -50,7 +50,9 @@
         vm.init = function () {
             vm.registrationProp = $state.current.data.registrationProp;
             vm.reg = Registration.initPropertyAsArray($state.current.data.registrationProp);
-            Utility.getKdvArray('DamageTypeKDV', true).then(function (result) {
+            var geoHazardName = AppSettings.getAppMode();
+            var kdvName = geoHazardName.charAt(0).toUpperCase() + geoHazardName.slice(1) + '_DamageTypeKDV';
+            Utility.getKdvArray(kdvName, true).then(function (result) {
                 vm.DamageObsTypeKdvArray = result;
                 vm.update();
             });

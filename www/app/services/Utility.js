@@ -436,7 +436,7 @@ angular
                 name: "Skader",
                 RegistrationTID: "14",
                 properties: {
-                    DamageTypeTID: { kdvKey: 'DamageTypeKDV', displayFormat: { hideDescription: true } },
+                    DamageTypeTID: { displayFormat: { hideDescription: true } },
                     DamagePosition: { displayFormat: { valueFormat: function (item) { return service.formatLatLng(item.Latitude, item.Longitude); } } },
                     Comment: { displayFormat: { hideDescription: true } }
                 },

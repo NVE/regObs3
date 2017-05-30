@@ -84,7 +84,6 @@
                                     <img ng-src="{{pic.PictureImageBase64}}">
                                     <div class="padding">
                                         <div class="input-label normalcase">{{'IMAGE_DESCRIPTION'|translate}}:</div>
-                                        <!--<textarea cols="30" rows="3" placeholder="{{'IMAGE_DESCRIPTION_PLACEHOLDER'|translate}}" ng-model="pic.PictureComment"></textarea>-->
                                         <regobs-comment class="bordered" hide-label="true" placeholder="{{'IMAGE_DESCRIPTION_PLACEHOLDER'|translate}}" model="pic.PictureComment"></regobs-comment>
                                     </div>
                                     <i class="icon icon-remove-image ion-close-round" ng-click="vm.removeImage(m, $index)"></i>
@@ -119,23 +118,9 @@
                 </div>
             </ion-list>
         </regobs-form>
-
-
         <!--<button type="button" ui-sref="help({page:'waterlevel'})" class="button button-positive button-block button-clear">
             {{'HELP'|translate}}
         </button>-->
     </ion-content>
-    <!--<div class="bar bar-footer registration regobs-next-prev-footer">
-        <div class="regobs-footer-top">
-
-        </div>
-        <div class="regobs-footer-content">
-            <button type="button" class="button button-large button-outline button-calm icon-left ion-android-arrow-back prev-button" ui-sref="confirmtime">Forrige</button>
-            <button type="button" class="button button-large button-calm icon-right ion-android-arrow-forward next-button" ui-sref="generalobs">Neste</button>
-            <div>
-                <button type="submit" class="button button-large button-block button-dark button-outline"><i class="ion-eye"></i> Se min observasjon</button>
-            </div>
-        </div>
-    </div>-->
 </ion-view>
 

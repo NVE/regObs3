@@ -17,12 +17,17 @@
                 ctrl.hasDamages = ctrl.damageObs.length > 0;
             };    
 
-            Utility.getKdvArray('DamageTypeKDV', true).then(function (result) {
-                ctrl.DamageObsTypeKdvArray = result;
-            });
+            if (ctrl.registration.geoHazardTid) {
+                var geoHazardName = Utility.getGeoHazardType(ctrl.registration.geoHazardTid);
+                var kdvName = geoHazardName.charAt(0).toUpperCase() + geoHazardName.slice(1) + '_DamageTypeKDV';
+
+                Utility.getKdvArray(kdvName, true).then(function (result) {
+                    ctrl.DamageObsTypeKdvArray = result;
+                });
+            }
 
             ctrl.getDamageTypeName = function (tid) {
-                if (ctrl.DamageObsTypeKdvArray) {
+                if (ctrl.DamageObsTypeKdvArray && angular.isArray(ctrl.DamageObsTypeKdvArray)) {
                     var match = ctrl.DamageObsTypeKdvArray.filter(function (item) {
                         return item.Id === tid;
                     });
