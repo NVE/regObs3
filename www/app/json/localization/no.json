@@ -474,5 +474,6 @@
   "ADD_OBSERVATION_IMAGES_DESCRIPTION": "Her kan du laste opp bilder av området du har observert eller bilder av andre relevante ting til observasjonen din.",
   "ADD_OBSERVATION_NOTES": "Skriv notater fra observasjonen",
   "ADD_OBSERVATION_NOTES_PLACEHOLDER": "Dine notater kan du skrive inn her",
-  "ADD_NEW_DANGER_SIGN": "Legg til nytt faretegn"
+  "ADD_NEW_DANGER_SIGN": "Legg til nytt faretegn",
+  "NEW_REGISTRATION": "Ny registrering"
 }

@@ -241,25 +241,8 @@
             UserLocation.setLastUserLocation(position);
             service._refreshUserMarker(position);
             var latlng = new L.LatLng(position.latitude, position.longitude);
-            //obsLocationMarker.setUserPosition(latlng);
             service._updateSelectedItemDistance();
-            //if (ObsLocation.isSet()) {
-            //    var obslatlng = new L.LatLng(ObsLocation.get().Latitude, ObsLocation.get().Longitude);
-            //    service._updateDistanceLineLatLng(obslatlng);
-            //}
         };
-
-        ///**
-        // * Event that runs when obsLocation is cleared
-        // * @returns {} 
-        // */
-        //service._onObsLocationCleared = function () {
-        //    service.clearSelectedMarkers();
-        //    if (pathLine) {
-        //        layerGroups.user.removeLayer(pathLine);
-        //        pathLine = null;
-        //    }
-        //};
 
         /**
          * Create layer groups
@@ -302,33 +285,6 @@
 
         service._updateViewBounds = function () {
             service._lastViewBounds = map.getBounds();
-        };
-
-
-        service._goToNewRegistrationDetails = function () {
-            if (service._goToNewRegistrationOnUpdate && service._goToNewRegistrationOnUpdate.ObsLocation) {
-                Observations.getStoredObservations(Utility.getCurrentGeoHazardTid())
-                    .then(function (result) {
-                        var orderedResult = $filter('orderBy')(result, 'DtObsTime');
-                        var navigateTo = null;
-                        orderedResult.forEach(function (obs) {
-                            if (!navigateTo) {
-                                if (obs.LocationId && service._goToNewRegistrationOnUpdate.ObsLocation.ObsLocationId && obs.LocationId === service._goToNewRegistrationOnUpdate.ObsLocation.ObsLocationId) {
-                                    navigateTo = obs;
-                                } else {
-                                    var distance = L.latLng(obs.Latitude, obs.Longitude).distanceTo(L.latLng(service._goToNewRegistrationOnUpdate.ObsLocation.Latitude, service._goToNewRegistrationOnUpdate.ObsLocation.Longitude));
-                                    if (distance < 10) { //TODO: use registration ID instead of distance and location when RegId is returned from new registration POST
-                                        navigateTo = obs;
-                                    }
-                                }
-                            }
-                        });
-                        service._goToNewRegistrationOnUpdate = null;
-                        if (navigateTo != null) {
-                            $state.go('observationdetails', { observation: RegObsClasses.Observation.fromJson(navigateTo) });
-                        }
-                    });
-            }
         };
 
 
@@ -404,17 +360,6 @@
 
             $rootScope.$on('$regObs:observationsUpdated', function () {
                 service.refresh();
-
-                if (service._goToNewRegistrationOnUpdate) {
-                    service._goToNewRegistrationDetails();
-                }
-            });
-
-            $rootScope.$on('$regObs:updateObservations', function (event, item) {
-                if (item) {
-                    service._goToNewRegistrationOnUpdate = item;
-                }
-                service.updateObservationsInMap();
             });
 
             service._isInitialized = true; //map is created!
