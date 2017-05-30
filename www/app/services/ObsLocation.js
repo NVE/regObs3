@@ -95,7 +95,8 @@ angular
             $http.get(AppSettings.getEndPoints().getLocationName, {
                 params: {
                     latitude: loc.Latitude,
-                    longitude: loc.Longitude
+                    longitude: loc.Longitude,
+                    geoHazardId: AppSettings.getCurrentGeoHazardTid()
                 },
                 timeout: AppSettings.httpConfig.timeout
             }).then(function (response) {

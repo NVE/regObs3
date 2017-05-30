@@ -144,7 +144,8 @@
                     $http.get(AppSettings.getEndPoints().getLocationName, {
                         params: {
                             latitude: latlng.lat,
-                            longitude: latlng.lng
+                            longitude: latlng.lng,
+                            geoHazardId: AppSettings.getCurrentGeoHazardTid()
                         },
                         timeout: AppSettings.httpConfig.timeout
                     }).then(function (response) {
