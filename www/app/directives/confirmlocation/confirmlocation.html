@@ -42,7 +42,7 @@
                         <div class="arrow-box-arrow-cover"></div>
                         <div class="arrow-box">
                             <div class="map-description-label uppercase" ng-show="$ctrl.positionDescription">{{$ctrl.positionDescription}}</div>
-                            <div ng-if="$ctrl.locationText && !$ctrl.place"><strong>{{$ctrl.locationText.Navn}} / {{$ctrl.locationText.Fylke}}</strong></div>
+                            <div ng-if="$ctrl.locationText && !$ctrl.place"><strong>{{$ctrl.locationText.Navn}}<span ng-if="$ctrl.locationText.Fylke"> / {{$ctrl.locationText.Fylke}}</span></strong></div>
                             <div ng-if="$ctrl.place"><strong>{{$ctrl.place.getHeader()}}</strong></div>
                             <div class="map-description-small-label">{{$ctrl.getMarkerLatLngText()}}</div>
                         </div>

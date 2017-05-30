@@ -314,7 +314,8 @@ input:focus, select:focus, textarea:focus {
     border-radius: 50%;
 }
 
-.regobs-menu-list .water-level-comment-summary {
+
+.text-overflow-ellipsis {
     white-space: nowrap;
     text-overflow: ellipsis;
     overflow: hidden;

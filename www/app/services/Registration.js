@@ -265,7 +265,7 @@ angular
                     };
 
                     if (Registration.unsent.length > 0) {
-                        Utility.resizeAllImages(angular.copy(Registration.unsent))
+                        Utility.resizeAllImages(Registration.unsent)
                             .then(function (processedData) {
                                 var data = processedData;
                                 failed = [];

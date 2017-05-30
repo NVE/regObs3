@@ -145,7 +145,7 @@
                         params: {
                             latitude: latlng.lat,
                             longitude: latlng.lng,
-                            geoHazardId: AppSettings.getCurrentGeoHazardTid()
+                            geoHazardId: Utility.getCurrentGeoHazardTid()
                         },
                         timeout: AppSettings.httpConfig.timeout
                     }).then(function (response) {

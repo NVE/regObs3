@@ -46,10 +46,10 @@
         <div class="regobs-footer-top">
         </div>
         <div class="regobs-footer-content">
-            <button ng-if="vm.registration.hasStarted()" type="button" class="send-button button-large button button-block button-calm icon-right ion-edit" ng-click="vm.gotoRegistration()">
+            <button ng-if="vm.registration.hasStarted()" type="button" class="send-button button-large button button-block button-calm icon-right ion-edit text-overflow-ellipsis" ng-click="vm.gotoRegistration()">
                 {{'CONTINUE_REGISTRATION'|translate}}
             </button>
-            <button ng-if="!vm.registration.hasStarted() && vm.registration.unsent.length" type="button" class="send-button button-large button button-block button-calm icon-right ion-android-send" ng-click="vm.registration.send()">
+            <button ng-if="!vm.registration.hasStarted() && vm.registration.unsent.length" type="button" class="send-button button-large button button-block button-calm icon-right ion-android-send text-overflow-ellipsis" ng-click="vm.registration.send()">
                 <span class="badge badge-assertive" ng-show="vm.registration.unsent.length">{{vm.registration.unsent.length}}</span> {{'SEND_UNSENT_OBSERVATIONS'|translate}}
             </button>
             <button type="button" ng-click="vm.registration.remove()" class="delete-button button button-small button-clear button-dark icon-right ion-ios-trash-outline">{{'DELETE'|translate}} {{'OBSERVATION'|translate|lowercase}}</button>

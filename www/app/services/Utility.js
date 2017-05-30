@@ -552,13 +552,9 @@ angular
         };
 
         service._getDropdownsFromApi = function () {
-            return $http.get(AppSettings.getEndPoints().getDropdowns, AppSettings.httpConfig)
+            return $http.get(AppSettings.getEndPoints().getDropdowns, { langkey: AppSettings.getCurrentLangKey() }, AppSettings.httpConfig)
                 .then(function (res) {
-                    if (res.data && res.data.Data) {
-                        return JSON.parse(res.data.Data);
-                    } else {
-                        throw new Error('Could not get kdv elements from API');
-                    }
+                    return res.data;
                 });
         };
 
@@ -755,12 +751,11 @@ angular
 
         service.resizeAllImages = function (data) {
             var deferred = $q.defer();
-            var picturePresent, i, reg;
-            if (data && data.Registrations) {
-                picturePresent = 0;
-                for (i = 0; i < data.Registrations.length; i++) {
-                    reg = data.Registrations[i];
-                    if (reg.Picture) {
+            var picturePresent = 0, i, reg;
+            if (angular.isArray(data)) {
+                for (i = 0; i < data.length; i++) {
+                    reg = data[i];
+                    if (reg.Picture && angular.isArray(reg.Picture)) {
                         picturePresent += reg.Picture.length;
                         reg.Picture.forEach(function (pic) {
                             service.resizeImage(AppSettings.imageSize, pic.PictureImageBase64, function (imageData) {
@@ -775,6 +770,7 @@ angular
                     }
                 }
             }
+
 
             if (!picturePresent) {
                 deferred.resolve(data);

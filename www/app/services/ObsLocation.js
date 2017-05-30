@@ -34,7 +34,14 @@ angular
                     return ObsLocation.data.Name;
                 }
                 if (ObsLocation.data.place) {
-                    return ObsLocation.data.place.Navn + ' / ' + ObsLocation.data.place.Fylke;
+                    var arr = [];
+                    if (ObsLocation.data.place.Navn) {
+                        arr.push(ObsLocation.data.place.Navn);
+                    }
+                    if (ObsLocation.data.place.Fylke) {
+                        arr.push(ObsLocation.data.place.Fylke);
+                    }
+                    return arr.join(' / ');
                 }
                 if (ObsLocation.data.Latitude && ObsLocation.data.Longitude) {
                     //return Utility.ddToDms(ObsLocation.data.Latitude, ObsLocation.data.Longitude);
@@ -96,7 +103,7 @@ angular
                 params: {
                     latitude: loc.Latitude,
                     longitude: loc.Longitude,
-                    geoHazardId: AppSettings.getCurrentGeoHazardTid()
+                    geoHazardId: Utility.getCurrentGeoHazardTid()
                 },
                 timeout: AppSettings.httpConfig.timeout
             }).then(function (response) {

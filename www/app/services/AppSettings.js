@@ -127,7 +127,7 @@
                 getObservationsWithinRadius: baseUrls[settings.data.env] + '/Observations/GetObservationsWithinRadius',
                 getLocationsWithinRadius: baseUrls[settings.data.env] + '/Location/WithinRadius',
                 getRegistrationsWithinRadius: baseUrls[settings.data.env] + '/Search/WithinRadius', //POST json {"GeoHazards": [10],"LangKey" : 1,"FromDate": "2013-01-03","ToDate": "2017-01-03","Latitude": 59.927032,"Longtitude": 10.710034,"Radius": 40000,"ReturnCount": 100}
-                getDropdowns: baseUrls[settings.data.env] + '/kdvelements',
+                getDropdowns: baseUrls[settings.data.env] + '/kdvelements/getkdvs', //?langkey=1
                 getLocationName: baseUrls[settings.data.env] + '/Location/GetName', //?latitude=11.11&longitude=11.11&geoHazardId=15
                 postRegistration: baseUrls[settings.data.env] + '/Registration/Insert', //Headers: regObs_apptoken, ApiJsonVersion
                 //getRegistration: baseUrls[settings.data.env] + '/search/avalanche',
