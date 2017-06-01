@@ -11,7 +11,7 @@
         ctrl.openPopover = function ($event) {
             if (ctrl.lastSaved) {
                 var dateAndTime = Utility.formatDateAndTime(ctrl.lastSaved);
-                var template = '<ion-popover-view class="save-popover"><ion-header-bar><h1 class="title text-align-left">{{"SAVED"|translate}} ' + dateAndTime +'</h1></ion-header-bar><ion-content>{{"OBSERVATION_SAVED_INFO"|translate}}</ion-content></ion-popover-view>';
+                var template = '<ion-popover-view class="save-popover"><ion-header-bar><h1 class="title">{{"SAVED"|translate}} ' + dateAndTime +'</h1></ion-header-bar><ion-content>{{"OBSERVATION_SAVED_INFO"|translate}}</ion-content></ion-popover-view>';
                 ctrl.popover = $ionicPopover.fromTemplate(template);
                 ctrl.popover.show($event);
             }
