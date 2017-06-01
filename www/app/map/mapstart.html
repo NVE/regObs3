@@ -52,7 +52,7 @@
             <button ng-if="!vm.registration.hasStarted() && vm.registration.unsent.length" type="button" class="send-button button-large button button-block button-calm icon-right ion-android-send text-overflow-ellipsis" ng-click="vm.registration.send()">
                 <span class="badge badge-assertive" ng-show="vm.registration.unsent.length">{{vm.registration.unsent.length}}</span> {{'SEND_UNSENT_OBSERVATIONS'|translate}}
             </button>
-            <button type="button" ng-click="vm.registration.remove()" class="delete-button button button-small button-clear button-dark icon-right ion-ios-trash-outline">{{'DELETE'|translate}} {{'OBSERVATION'|translate|lowercase}}</button>
+            <button type="button" ng-click="vm.registration.remove()" class="delete-button button button-small button-clear button-dark icon-right ion-ios-trash-outline">{{'DELETE'|translate}} <span ng-show="vm.registration.unsent.length<=1">{{'OBSERVATION'|translate|lowercase}}</span><span ng-show="vm.registration.unsent.length>1">{{'OBSERVATIONS'|translate|lowercase}}</span></button>
             <span class="unsent-badge-info" ng-show="!vm.registration.hasStarted() && vm.registration.unsent.length">*{{'BADGE_INFO'|translate}}</span>
         </div>
     </ion-footer-bar>

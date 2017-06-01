@@ -64,23 +64,22 @@
         };
 
         Pictures.deletePicture = function (picture) {
+            $translate(['REMOVE_PICTURE', 'REMOVE_PICTURE_TEXT', 'REMOVE']).then(function (translations) {
+                RegobsPopup.delete(translations['REMOVE_PICTURE'], translations['REMOVE_PICTURE_TEXT'], translations['REMOVE'])
+                    .then(function (confirmed) {
+                        if (confirmed) {
+                            for (var i = 0; i < Registration.data.Picture.length; i++) {
+                                var obj = Registration.data.Picture[i];
+                                if (obj.PictureImageBase64 === picture.PictureImageBase64) {
+                                    Registration.data.Picture.splice(i, 1);
+                                    cache = {};
+                                    return true;
+                                }
 
-            RegobsPopup.delete('Fjern bilde', 'Vil du fjerne dette bildet fra registreringen?', 'Fjern')
-                .then(function (confirmed) {
-                    if (confirmed) {
-                        for (var i = 0; i < Registration.data.Picture.length; i++) {
-                            var obj = Registration.data.Picture[i];
-                            if (obj.PictureImageBase64 === picture.PictureImageBase64) {
-                                Registration.data.Picture.splice(i, 1);
-                                cache = {};
-                                return true;
                             }
-
                         }
-                    }
-
-                });
-
+                    });
+            });
         };
 
         Pictures.removePictures = function (propertyKey) {

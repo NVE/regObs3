@@ -3,6 +3,20 @@
     top: 4px;
 }
 
+.save-popover {
+    height: 120px;
+}
+
+.save-popover .popover-arrow {
+    margin-left: -5px;
+}
+
+.save-popover ion-content {
+    padding-left: 10px;
+    padding-right: 10px;
+}
+
+
 .save-indicator-spinner {
     display: block !important;
     position: absolute;
@@ -22,8 +36,21 @@
     animation: fadeinout2 5s linear forwards;
 }
 
+.save-indicator-icon {
+    position: relative;
+    bottom: -4px;
+    font-size: 22px;
+    padding-right: 10px;
+    opacity: 0;
+    -webkit-animation: fadeinout3 5s linear forwards;
+    animation: fadeinout3 5s linear forwards;
+}
+
+
+
+
 @-webkit-keyframes fadeinout1 {
-    0%,100% {
+    0%, 100% {
         opacity: 0;
     }
 
@@ -62,9 +89,22 @@
     }
 }
 
-.save-indicator-icon {
-    position: relative;
-    bottom: -4px;
-    font-size: 22px;
-    padding-right: 5px;
+@-webkit-keyframes fadeinout3 {
+    20% {
+        opacity: 0;
+    }
+
+    60%,100% {
+        opacity: 1;
+    }
+}
+
+@keyframes fadeinout3 {
+    20% {
+        opacity: 0;
+    }
+
+    60%,100% {
+        opacity: 1;
+    }
 }

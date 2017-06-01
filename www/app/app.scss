@@ -17,15 +17,18 @@ $darkGrey: #9B9B9B;
 }
 
 .dirt {
-    background-color: $dirt;
+    background-color: $snow;
+    //background-color: $dirt;
 }
 
 .water {
-    background-color: $water;
+    background-color: $snow;
+    //background-color: $water;
 }
 
 .ice {
-    background-color: $ice;
+    background-color: $snow;
+    //background-color: $ice;
 }
 
 @media (min-width: 680px) {
@@ -108,6 +111,11 @@ $darkGrey: #9B9B9B;
 .button-outline.button-dark-fade {
     border-color: rgb(40,75,99) !important;
     color: rgb(40,75,99) !important;
+}
+
+.button-outline.button-grey {
+    border-color: rgb(155,155,155) !important;
+    color: #6d6d72 !important;
 }
 
 
@@ -547,6 +555,15 @@ ion-popover-view.wider {
     padding-bottom: 0px !important;
 }
 
+.no-bottom-margin {
+    margin-bottom: 0px !important;
+}
+
+.text-align-left {
+    text-align: left !important;
+}
+
+
 .item-divider-calm {
     color: #6d6d72;
     text-transform: uppercase;
@@ -566,6 +583,7 @@ ion-popover-view.wider {
 .item-divider-calm .icon {
     padding-right: 8px;
     color: rgb(27,23,20);
+    font-size: 21px;
 }
 
 .item .icon.small-icon {
@@ -602,7 +620,7 @@ ion-popover-view.wider {
 
 .time-button {
     position: relative;
-    top: 5px;
+    top: 20px;
     right: 5px;
 }
 
@@ -741,4 +759,9 @@ regobs-comment textarea::-webkit-input-placeholder {
     font-size: 26px;
     color: rgb(190,189,189);
     z-index: 999;
+}
+
+.button-small.extra-padding {
+    padding-left: 6px;
+    padding-right: 6px;
 }

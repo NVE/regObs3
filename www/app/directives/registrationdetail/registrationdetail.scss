@@ -28,6 +28,14 @@
     text-align: center;
 }
 
+.registration-detail.water {
+    display: block;
+}
+
+.registration-detail.water, registration-detail.ice, registration-detail.snow, registration-detail.dirt {
+    background-color: #fff !important;
+}
+
 /*.registration-detail-type-wrapper {
     word-break: break-all;
 }

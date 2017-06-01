@@ -2,7 +2,7 @@
     <ion-nav-buttons side="right">
         <nav-saving-indicator></nav-saving-indicator>
     </ion-nav-buttons>
-    <ion-content>
+    <ion-content overflow-scroll="true">
         <regobs-form save-action="vm.save()" back-state="newregistration">
             <ion-list>
                 <kdv-dropdown title="WATER_LEVEL_TREND_REGISTRATION_HEADER"
@@ -30,7 +30,7 @@
                         {{'WATER_LEVEL_MARKING_REFERENCE_HEADER' | translate}}
                     </div>
                     <div ng-repeat="kdv in vm.markingKdvArray">
-                        <ion-radio class="radio-left radio-calm" ng-change="vm.clearComment()" ng-model="vm.reg.WaterLevel2.MarkingReferenceTID" name="Water_MarkingReferenceKDV" ng-value="kdv.Id">
+                        <ion-radio class="radio-left radio-calm" ng-model="vm.reg.WaterLevel2.MarkingReferenceTID" name="Water_MarkingReferenceKDV" ng-value="kdv.Id">
                             {{kdv.Name}}
                         </ion-radio>
                         <regobs-comment class="radio-textarea" ng-show="vm.reg.WaterLevel2.MarkingReferenceTID === kdv.Id" min-height="80" hide-label="true" placeholder="{{'MARKING_DESCRIPTION'|translate}}" model="vm.reg.WaterLevel2.Comment"></regobs-comment>
@@ -62,7 +62,7 @@
                     <regobs-comment ng-show="vm.reg.WaterLevel2.MeasurementTypeTID === 3" label-text="{{'MEASURING_TOOL'|translate}}" placeholder="{{'MEASURING_TOOL_PLACEHOLDER'|translate}}" model="vm.reg.WaterLevel2.MeasuringToolDescription"></regobs-comment>
                 </div>
                 <div class="white-background" ng-show="vm.reg.WaterLevel2.WaterLevelMethodTID">
-                    <div ng-repeat="m in vm.reg.WaterLevel2.WaterLevelMeasurement">
+                    <div ng-repeat="m in vm.WaterLevelMeasurement">
                         <div class="item item-divider item-divider-calm">
                             <span ng-show="vm.reg.WaterLevel2.WaterLevelMethodTID === 1">{{'MARKING'|translate}}</span><span ng-show="vm.reg.WaterLevel2.WaterLevelMethodTID === 2">{{'MEASUREMENT'|translate}}</span> {{($index+1)}} <div class="item-divider-button-right" ng-show="vm.showRemoveWaterMeasurment($index)"><button type="button" ng-click="vm.removeMeasurement($index)" class="button button-small button-dark button-clear icon-right ion-close-round">{{'REMOVE'|translate}}</button></div>
                         </div>
@@ -72,7 +72,7 @@
                                        min="0"
                                        max="10000"></regobs-number>
                         <div>
-                            <button type="button" class="button time-button button-outline button-small button-dark icon-left ion-clock float-right" ng-click="vm.setToNow(m)">&nbsp;{{'NOW'|translate}}</button>
+                            <button type="button" class="button time-button button-outline button-small extra-padding button-grey icon-left ion-clock float-right" ng-click="vm.setToNow(m)">&nbsp;{{'NOW'|translate}}</button>
                         </div>
                         <label class="item item-input item-stacked-label no-border input-time-right">
                             <span class="input-label" ng-class="{assertive:(m.Pictures.length > 0 && !m.DtMeasurementTime)}">{{'TIME'|translate}}</span>
@@ -80,7 +80,7 @@
                         </label>
                         <div ng-repeat="pic in m.Pictures">
                             <div class="item">
-                                <div class="border-thin item-image">
+                                <div class="border-thin item-image no-bottom-margin">
                                     <img ng-src="{{pic.PictureImageBase64}}">
                                     <div class="padding">
                                         <div class="input-label normalcase">{{'IMAGE_DESCRIPTION'|translate}}:</div>
@@ -94,8 +94,8 @@
                         <div class="item item-icon-left" on-tap="vm.addWaterLevelPicture(m)">
                             <i class="icon ion-image small-icon"></i> + <span ng-show="vm.reg.WaterLevel2.WaterLevelMethodTID === 1">{{'ADD_WATER_MARK_IMAGE'|translate}}</span><span ng-show="vm.reg.WaterLevel2.WaterLevelMethodTID === 2">{{'ADD_WATER_MEASUREMENT_IMAGE'|translate}}</span>
                         </div>
-                        <regobs-comment ng-show="vm.reg.WaterLevel2.WaterLevelMethodTID === 1" label-text="{{'MARKING_COMMENT_DESCRIPTION'|translate}}" placeholder="{{'MARKING_DESCRIPTION_PLACEHOLDER'|translate}}" model="m.Comment"></regobs-comment>
-                        <regobs-comment ng-hide="vm.reg.WaterLevel2.WaterLevelMethodTID === 1" label-text="{{'MEASURING_DESCRIPTION'|translate}}" placeholder="{{'MEASURING_DESCRIPTION_PLACEHOLDER'|translate}}" model="m.Comment"></regobs-comment>
+                        <regobs-comment ng-if="vm.reg.WaterLevel2.WaterLevelMethodTID === 1" label-text="{{'MARKING_COMMENT_DESCRIPTION'|translate}}" placeholder="{{'MARKING_DESCRIPTION_PLACEHOLDER'|translate}}" model="m.Comment"></regobs-comment>
+                        <regobs-comment ng-if="vm.reg.WaterLevel2.WaterLevelMethodTID !== 1" label-text="{{'MEASURING_DESCRIPTION'|translate}}" placeholder="{{'MEASURING_DESCRIPTION_PLACEHOLDER'|translate}}" model="m.Comment"></regobs-comment>
                     </div>
                     <div class="item item-divider">
                         &nbsp;
@@ -106,7 +106,7 @@
                 </div>
                 <div class="regobs-next-prev-footer">
                     <div class="regobs-next-prev-footer-content">
-                        <button type="button" class="button button-large button-outline button-dark-fade icon-left ion-android-arrow-back prev-button" ui-sref="confirmtime">{{'PREVIOUS'|translate}}</button>
+                        <button type="button" class="button button-large button-outline button-calm icon-left ion-android-arrow-back prev-button" ui-sref="confirmtime">{{'PREVIOUS'|translate}}</button>
                         <button type="button" class="button button-large button-calm icon-right ion-android-arrow-forward next-button" ui-sref="damageobs" ui-sref-opts="{reload: true}">{{'NEXT'|translate}}</button>
                         <div>
                             <button type="submit" class="button button-large button-block button-grey button-outline"><i class="icon ion-eye"></i>&nbsp;&nbsp;{{'VIEW_MY_OBSERVATION'|translate}}</button>

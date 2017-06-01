@@ -424,6 +424,7 @@
   "DELETE_STABILITY_TEST": "Slett stabilitetstest",
   "DELETE_STABILITY_TEST_CONFIRM_TEXT": "Er du sikker på at du vil slette denne stabilitetstesten?",
   "DAMAGE_OBS": "Skader",
+  "DAMAGE_OBS_SINGLE": "Skade",
   "ON_IN": "på/i",
   "WITH": "med",
   "RELATIVE_TO": "relativt til",
@@ -449,7 +450,8 @@
   "CONFIRM_EMAIL_SENT": "Bekreftelse er sendt til din e-postadresse",
   "OBSERVATIONS_FAILED_CONFIRMATION_HEADER": "Innsending av en eller flere observasjoner feilet",
   "OBSERVATION_FAILED_CONFIRMATION_HEADER": "Innsending feilet",
-  "OBSERVATION_FAILED_CONFIRMATION_TEXT": "Dette kan skyldes manglende nettilgang, eller at serveren er midlertidig utilgjengelig. Usendte observasjoner er lagret på telefonen. Du kan prøve å sende inn på nytt, eller du kan vente og sende inn på et senere tidspunkt. Hvis problemet vedvarer, ta kontakt med regObs-teamet.",
+  "OBSERVATION_FAILED_CONFIRMATION_TEXT": "Dette kan skyldes manglende nettilgang, eller at serveren er midlertidig utilgjengelig. Usendte observasjoner er lagret på telefonen. Du kan prøve å sende inn på nytt, eller du kan sende inn igjen på et senere tidspunkt. Hvis problemet vedvarer, ta kontakt med",
+  "REGOBS_TEAM": "regObs-teamet",
   "SEND_FAILED": "Feilet",
   "SEND_SUCCESS": "Sendt inn",
   "SEND_HEADER": "Innsending",
@@ -460,7 +462,7 @@
   "NOT_LOGGED_IN": "Du er ikke innlogget",
   "NOT_LOGGED_IN_DESCRIPTION": "Du må logge inn for å kunne sende inn observasjoner",
   "SEND_UNSENT_OBSERVATIONS": "Send usendte observasjoner",
-  "BADGE_INFO": "Antall tidligere usendte observasjoner vises i rødt",
+  "BADGE_INFO": "Usendte observasjoner vises i rødt",
   "YOU_HAVE_STARTED": "Du har en påbegynt",
   "YOU_HAVE_STARTED_END_TEXT": "-registrering, dersom du går videre blir denne slettet. Vil du slette for å gå videre?",
   "INVALID_FORM": "Skjema har feil eller mangler",
@@ -475,5 +477,8 @@
   "ADD_OBSERVATION_NOTES": "Skriv notater fra observasjonen",
   "ADD_OBSERVATION_NOTES_PLACEHOLDER": "Dine notater kan du skrive inn her",
   "ADD_NEW_DANGER_SIGN": "Legg til nytt faretegn",
-  "NEW_REGISTRATION": "Ny registrering"
+  "NEW_REGISTRATION": "Ny registrering",
+  "REMOVE_PICTURE": "Fjern bilde",
+  "REMOVE_PICTURE_TEXT": "Vil du fjerne dette bildet fra registreringen?",
+  "OBSERVATION_SAVED_INFO": "Observasjonen er lagret lokalt på din telefon. Husk å sende inn når du er ferdig."
 }

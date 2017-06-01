@@ -1,6 +1,6 @@
 ﻿angular
     .module('RegObs')
-    .controller('RegistrationStatusCtrl', function RegistrationStatusCtrl($scope, Registration, $ionicPopup, $state, Utility, $pbService, $http, AppSettings, $timeout, $q, Observations, Observation, $rootScope) {
+    .controller('RegistrationStatusCtrl', function RegistrationStatusCtrl($scope, Registration, $ionicPopup, $state, Utility, $pbService, $http, AppSettings, $timeout, $q, Observations, Observation, $rootScope, $ionicScrollDelegate) {
         var vm = this;
         vm.loaded = false;
 
@@ -12,6 +12,8 @@
             Registration.prepareRegistrationForSending().then(function () {
                 vm.unsent = Registration.unsent;
                 vm.isSending = vm.unsent.length > 0;
+                $ionicScrollDelegate.resize();
+                $ionicScrollDelegate.scrollTop();
                 vm.loaded = true;
 
                 if (vm.unsent.length > 0) {

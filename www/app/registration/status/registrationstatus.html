@@ -7,7 +7,7 @@
                     {{'PLEASE_WAIT'|translate}}
                 </p>
                 <div class="center">
-                    <ion-spinner icon="lines" class="spinner-assertive"></ion-spinner>
+                    <ion-spinner icon="dots" class="spinner-calm"></ion-spinner>
                 </div>
 
                 <div class="downloadprogress inline-block" pb-circle progress-key="{{vm.progressName}}" options="vm.progressOptions"></div>
@@ -22,7 +22,9 @@
                 <div ng-show="vm.failed()">
                     <h3 ng-show="vm.completed.length > 1">{{'OBSERVATIONS_FAILED_CONFIRMATION_HEADER'|translate}}</h3>
                     <h3 ng-show="vm.completed.length === 1">{{'OBSERVATION_FAILED_CONFIRMATION_HEADER'|translate}}</h3>
-                    <p class="status-description">{{'OBSERVATION_FAILED_CONFIRMATION_TEXT'|translate}}</p>
+                    <p class="status-description">{{'OBSERVATION_FAILED_CONFIRMATION_TEXT'|translate}} <a href="http://www.regobs.no/Home/About" target="_system">{{'REGOBS_TEAM'|translate}}</a>.
+                    </p>
+                    
                 </div>
                 <div class="status-footer">
                     <div ng-if="vm.completed.length > 1">

@@ -11,7 +11,6 @@ angular
         vm.addPicture = function () {
             Pictures.showImageSelector(Utility.registrationTid(vm.registrationProp)).then(function (result) {
                 Pictures.addPicture(vm.registrationProp, result.PictureImageBase64);
-                $ionicScrollDelegate.resize();
             }, function (error) {
                 AppLogging.log('Error getting picture: ' + (error && error.message ? error.message : ''));
             });

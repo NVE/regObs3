@@ -2,7 +2,7 @@
     <ion-nav-buttons side="right">
         <nav-saving-indicator></nav-saving-indicator>
     </ion-nav-buttons>
-    <ion-content>
+    <ion-content overflow-scroll="true">
         <regobs-form save-action="vm.save()" back-state="newregistration">
             <ion-list>
                 <div class="item item-divider item-divider-calm">
@@ -18,7 +18,7 @@
                     <div class="item item-divider item-divider-calm">
                         {{'DAMAGE_OBS_HEADER'|translate}}
                     </div>
-                    <div class="damage-details" ng-repeat="dm in vm.reg.DamageObs | orderBy: 'DamageTypeTID'" ng-show="dm.DamageTypeTID > 0 && dm.DamageTypeTID !== 7">
+                    <div class="damage-details" ng-repeat="dm in vm.DamageObsArray | orderBy: 'DamageTypeTID'" ng-show="dm.DamageTypeTID > 0 && dm.DamageTypeTID !== 7">
                         <ion-checkbox ng-model="dm.checked" class="checkbox-square checkbox-calm" name="DamageDetails">
                             {{dm.Name}}
                         </ion-checkbox>
@@ -61,7 +61,7 @@
                 <div ng-if="vm.geoHazardId === 60">
                     <div class="regobs-next-prev-footer">
                         <div class="regobs-next-prev-footer-content">
-                            <button type="button" class="button button-large button-outline button-dark-fade icon-left ion-android-arrow-back prev-button" ui-sref="waterlevel" ui-sref-opts="{reload: true}">{{'PREVIOUS'|translate}}</button>
+                            <button type="button" class="button button-large button-outline button-calm icon-left ion-android-arrow-back prev-button" ui-sref="waterlevel" ui-sref-opts="{reload: true}">{{'PREVIOUS'|translate}}</button>
                             <button type="button" class="button button-large button-calm icon-right ion-android-arrow-forward next-button" ui-sref="generalobs2" ui-sref-opts="{reload: true}">{{'NEXT'|translate}}</button>
                             <div>
                                 <button type="submit" class="button button-large button-block button-grey button-outline"><i class="icon ion-eye"></i>&nbsp;&nbsp;{{'VIEW_MY_OBSERVATION'|translate}}</button>

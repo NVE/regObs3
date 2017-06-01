@@ -1,15 +1,22 @@
 angular
     .module('RegObs')
-    .controller('WaterLevelCtrl', function ($scope, $state, Registration, $ionicPopup, Property, AppLogging, moment, Pictures, Utility, $cordovaCamera, AppSettings, $translate, $ionicScrollDelegate) {
+    .controller('WaterLevelCtrl', function ($scope, $state, Registration, $ionicPopup, Property, AppLogging, moment, Pictures, Utility, $cordovaCamera, AppSettings, $translate, $ionicScrollDelegate, RegobsPopup) {
         var vm = this;
 
         vm.addWaterLevelMeasurement = function () {
-            vm.reg.WaterLevel2.WaterLevelMeasurement.push({});
+            vm.WaterLevelMeasurement.push({});
         };
 
         vm.removeImage = function (waterlevel, index) {
             if (waterlevel.Pictures && waterlevel.Pictures.length > index) {
-                waterlevel.Pictures.splice(index, 1);
+                $translate(['REMOVE_PICTURE', 'REMOVE_PICTURE_TEXT', 'REMOVE']).then(function (translations) {
+                    RegobsPopup.delete(translations['REMOVE_PICTURE'], translations['REMOVE_PICTURE_TEXT'], translations['REMOVE'])
+                        .then(function (confirmed) {
+                            if (confirmed) {
+                                waterlevel.Pictures.splice(index, 1);
+                            }
+                        });
+                });
             }
         };
         vm._addWaterLevelCameraPicture = function (waterLevel, useCamera) {
@@ -25,7 +32,6 @@ angular
                 }
 
                 waterLevel.Pictures.push(pic);
-                $ionicScrollDelegate.resize();
             };
 
 
@@ -75,10 +81,6 @@ angular
             });
         };
 
-        vm.clearComment = function () {
-            vm.reg.WaterLevel2.Comment = null;
-        };
-
         vm.waterLevelMethodChanged = function () {
             vm.reg.WaterLevel2.MarkingReferenceTID = null;
             vm.reg.WaterLevel2.Comment = null;
@@ -86,35 +88,31 @@ angular
             vm.reg.WaterLevel2.MeasurementReferenceTID = null;
             vm.reg.WaterLevel2.MeasuringToolDescription = null;
             vm.reg.WaterLevel2.WaterLevelMeasurement = [{}];
-
-            $ionicScrollDelegate.resize();
         };
 
         vm.waterMeasurementTypeChanged = function () {
             vm.reg.WaterLevel2.MeasurementReferenceTID = null;
             vm.reg.WaterLevel2.MeasuringToolDescription = null;
             vm.reg.WaterLevel2.Comment = null;
-            $ionicScrollDelegate.resize();
         };
 
         vm.reset = function () {          
-            Property.reset($state.current.data.registrationProp);           
+            Property.reset($state.current.data.registrationProp);
         };
 
         vm.removeMeasurement = function (index) {
-            if (vm.reg.WaterLevel2.WaterLevelMeasurement.length > 1) {
-                vm.reg.WaterLevel2.WaterLevelMeasurement.splice(index, 1);
+            if (vm.WaterLevelMeasurement.length > 1) {
+                vm.WaterLevelMeasurement.splice(index, 1);
             } else {
-                vm.reg.WaterLevel2.WaterLevelMeasurement[0] = {};
+                vm.WaterLevelMeasurement[0] = {};
             }
-            $ionicScrollDelegate.resize();
         }
 
         vm.save = function () {
             var _tmpArray = [];
             if (vm.reg.WaterLevel2) {
-                if (vm.reg.WaterLevel2.WaterLevelMeasurement) {
-                    vm.reg.WaterLevel2.WaterLevelMeasurement.forEach(function (item) {
+                if (vm.WaterLevelMeasurement) {
+                    vm.WaterLevelMeasurement.forEach(function (item) {
                         if (item.DtMeasurementTime) {
                             _tmpArray.push(item);
                         }
@@ -133,7 +131,7 @@ angular
             if (index > 0) {
                 return true;
             }
-            var wm = vm.reg.WaterLevel2.WaterLevelMeasurement[index];
+            var wm = vm.WaterLevelMeasurement[index];
             return !Utility.isEmpty(JSON.parse(angular.toJson(wm)));
         };
 
@@ -141,14 +139,19 @@ angular
 
             vm.reg = Registration.initPropertyAsObject($state.current.data.registrationProp);
 
-            if (!vm.reg.WaterLevel2.WaterLevelMeasurement || vm.reg.WaterLevel2.WaterLevelMeasurement.length === 0) {
-                vm.reg.WaterLevel2.WaterLevelMeasurement = [{}];
-            } else {
+            vm.WaterLevelMeasurement = [];
+
+            if (vm.reg.WaterLevel2.WaterLevelMeasurement && angular.isArray(vm.reg.WaterLevel2.WaterLevelMeasurement)) {
                 vm.reg.WaterLevel2.WaterLevelMeasurement.forEach(function (item) {
-                    if (item.DtMeasurementTime && typeof (item.DtMeasurementTime) !== typeof (Date)) {
-                        item.DtMeasurementTime = new Date(item.DtMeasurementTime);
+                    var clone = angular.copy(item);
+                    
+                    if (clone.DtMeasurementTime && typeof (clone.DtMeasurementTime) !== typeof (Date)) {
+                        clone.DtMeasurementTime = new Date(clone.DtMeasurementTime);
                     }
+                    vm.WaterLevelMeasurement.push(clone);
                 });
+            } else {
+                vm.WaterLevelMeasurement.push({});
             }
             Utility.getKdvArray('Water_MarkingReferenceKDV').then(function (result) {
                 vm.markingKdvArray = result;
@@ -162,7 +165,7 @@ angular
         $scope.$on('$ionicView.beforeEnter', vm._init);
 
         $scope.$on('$regobs:propertyReset', function () {
-            vm.reg.WaterLevel2.WaterLevelMeasurement = [{}];
+            vm.WaterLevelMeasurement = [{}];
             $ionicScrollDelegate.resize();
             $ionicScrollDelegate.scrollTop();
         });
