@@ -8,8 +8,11 @@
 }
 
 .save-popover .title {
-    text-align: left;
+    text-align: left;   
+}
 
+.platform-android .save-popover .title {
+    font-size: 18px !important;
 }
 
 .save-popover .popover-arrow {

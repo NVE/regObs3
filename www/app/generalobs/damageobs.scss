@@ -5,7 +5,7 @@
     padding-left: 5px;
     padding-right: 5px;
     padding-top: 10px;
-    padding-bottom: 10px;
+    /*padding-bottom: 10px;*/
 }
 
 .damage-details .item {
@@ -24,8 +24,8 @@
 
 .damage-detail-arrow-box {
     border: 2px solid #329CCA;
-    padding: 2px;
     background-color: rgba(50,156,202,0.07);
+    border-bottom: none;
 }
 
 .damage-detail-arrow {
@@ -82,4 +82,16 @@
 
 .damage-detail-arrow-box .item:not(:first-child) {
     border-top: 1px solid #ddd;
+}
+
+.damage-detail-arrow-box-bottom {
+    margin-left: 5px;
+    margin-right: 5px;
+    margin-bottom: 10px !important;
+    border-top: 1px solid #ddd;
+    padding: 10px;
+    background-color: rgba(50,156,202,0.07) !important;
+    border-left: 2px solid #329CCA !important;
+    border-right: 2px solid #329CCA !important;
+    border-bottom: 2px solid #329CCA !important;
 }

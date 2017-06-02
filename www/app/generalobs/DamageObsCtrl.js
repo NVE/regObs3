@@ -101,7 +101,6 @@
                     damageObs.Pictures = [];
                 }
                 damageObs.Pictures.push(result);
-                $ionicScrollDelegate.resize();
             }, function (error) {
                 AppLogging.log('Error getting picture: ' + (error && error.message ? error.message : ''));
             });
@@ -161,6 +160,7 @@
         };
 
         $scope.$on('$regobs:propertyReset', function () {
+            vm.DamageObsArray = [];
             vm.update();
             $ionicScrollDelegate.resize();
             $ionicScrollDelegate.scrollTop();

@@ -19,65 +19,16 @@ angular
                 });
             }
         };
-        vm._addWaterLevelCameraPicture = function (waterLevel, useCamera) {
-            var processPictureResult = function (imageUri) {
-                var pic = {
-                    RegistrationTID: Utility.registrationTid($state.current.data.registrationProp),
-                    PictureImageBase64: imageUri,
-                    PictureComment: ''
-                };
-
-                if (AppSettings.data.compass) {
-                    Pictures.setOrientation(pic);
-                }
-
-                waterLevel.Pictures.push(pic);
-            };
-
-
-            if (window.Camera) {
-                var options = useCamera ? Pictures.defaultCameraOptions() : Pictures.defaultAlbumOptions();
-                return $cordovaCamera
-                    .getPicture(options)
-                    .then(processPictureResult, function (err) {
-                        // error
-                        AppLogging.log('Picture selection cancelled');
-                    });
-            } else {
-                AppLogging.error('Camera plugin not found!');
-            }
-        };
 
 
         vm.addWaterLevelPicture = function (waterLevel) {
-            if (!waterLevel.Pictures) {
-                waterLevel.Pictures = [];
-            }
-            $translate(['ADD_PICTURE', 'ADD_PICTURE_DESCRIPTION', 'ALBUM', 'CAMERA']).then(function (translations) {
-                $ionicPopup.confirm({
-                    title: translations['ADD_PICTURE'],
-                    template: translations['ADD_PICTURE_DESCRIPTION'],
-                    buttons: [
-                        {
-                            text: translations['ALBUM'],
-                            type: 'button icon-left ion-images',
-                            onTap: function (e) {
-                                // Returning a value will cause the promise to resolve with the given value.
-                                return false;
-                            }
-                        },
-                        {
-                            text: translations['CAMERA'],
-                            type: 'button icon-left ion-camera',
-                            onTap: function (e) {
-                                // Returning a value will cause the promise to resolve with the given value.
-                                return true;
-                            }
-                        }
-                    ]
-                }).then(function (result) {
-                    vm._addWaterLevelCameraPicture(waterLevel, result);
-                });
+            Pictures.showImageSelector(Utility.registrationTid($state.current.data.registrationProp)).then(function (result) {
+                if (!waterLevel.Pictures) {
+                    waterLevel.Pictures = [];
+                }
+                waterLevel.Pictures.push(pic);
+            }, function (error) {
+                AppLogging.log('Error getting picture: ' + (error && error.message ? error.message : ''));
             });
         };
 
@@ -150,9 +101,11 @@ angular
                     }
                     vm.WaterLevelMeasurement.push(clone);
                 });
-            } else {
+            }
+            if (vm.WaterLevelMeasurement.length === 0) {
                 vm.WaterLevelMeasurement.push({});
             }
+            
             Utility.getKdvArray('Water_MarkingReferenceKDV').then(function (result) {
                 vm.markingKdvArray = result;
             });
