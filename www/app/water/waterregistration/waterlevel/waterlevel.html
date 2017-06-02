@@ -74,8 +74,8 @@
                         <button type="button" class="button time-button button-outline button-small extra-padding button-grey icon-left ion-clock float-right" ng-click="vm.setToNow(m)">&nbsp;{{'NOW'|translate}}</button>
                     </div>
                     <label class="item item-input item-stacked-label no-border input-time-right">
-                        <span class="input-label" ng-class="{assertive:(m.Pictures.length > 0 && !m.DtMeasurementTime)}">{{'TIME'|translate}}</span>
-                        <input name="{{'DtMeasurementTime_' +$index }}" type="datetime-local" ng-model="m.DtMeasurementTime" ng-required="m.Pictures.length > 0">
+                        <span class="input-label" ng-class="{assertive:((m.Pictures.length > 0 || m.Comment.length > 0 || m.WaterLevelValue > 0) && !m.DtMeasurementTime)}">{{'TIME'|translate}}</span>
+                        <input name="{{'DtMeasurementTime_' +$index }}" type="datetime-local" ng-model="m.DtMeasurementTime" ng-required="m.Pictures.length > 0 || m.Comment.length > 0 || m.WaterLevelValue > 0">
                     </label>
                     <div class="item" ng-repeat="pic in m.Pictures">
                         <div class="border-thin item-image no-bottom-margin">

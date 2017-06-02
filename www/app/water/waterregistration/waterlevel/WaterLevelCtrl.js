@@ -27,6 +27,7 @@ angular
                     waterLevel.Pictures = [];
                 }
                 waterLevel.Pictures.push(pic);
+                $ionicScrollDelegate.resize();
             }, function (error) {
                 AppLogging.log('Error getting picture: ' + (error && error.message ? error.message : ''));
             });
@@ -39,6 +40,7 @@ angular
             vm.reg.WaterLevel2.MeasurementReferenceTID = null;
             vm.reg.WaterLevel2.MeasuringToolDescription = null;
             vm.reg.WaterLevel2.WaterLevelMeasurement = [{}];
+            $ionicScrollDelegate.resize();
         };
 
         vm.waterMeasurementTypeChanged = function () {
@@ -111,6 +113,8 @@ angular
             });
             Utility.getKdvArray('Water_MeasurementReferenceKDV').then(function (result) {
                 vm.measurementReferenceKdvArray = result;
+
+                $ionicScrollDelegate.resize();
             });
         };
 

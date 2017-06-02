@@ -45,6 +45,8 @@
             } else {
                 vm.DamageVisible = null;
             }
+
+            $ionicScrollDelegate.resize();
         };
 
         vm.init = function () {
@@ -86,6 +88,7 @@
                     vm.setChecked(unknownDamageVisibleId, true);
                 }
             }
+            $ionicScrollDelegate.resize();
         };
 
         vm.openHelpTextPopover = function (text) {
@@ -101,6 +104,7 @@
                     damageObs.Pictures = [];
                 }
                 damageObs.Pictures.push(result);
+                $ionicScrollDelegate.resize();
             }, function (error) {
                 AppLogging.log('Error getting picture: ' + (error && error.message ? error.message : ''));
             });

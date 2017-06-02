@@ -1,6 +1,6 @@
 ﻿angular
     .module('RegObs')
-    .controller('RegistrationStatusCtrl', function RegistrationStatusCtrl($scope, Registration, $ionicPopup, $state, Utility, $pbService, $http, AppSettings, $timeout, $q, Observations, Observation, $rootScope, $ionicScrollDelegate) {
+    .controller('RegistrationStatusCtrl', function RegistrationStatusCtrl($scope, Registration, $ionicPopup, $state, Utility, $pbService, $http, AppSettings, $timeout, $q, Observations, Observation, $rootScope, $ionicScrollDelegate, $ionicHistory) {
         var vm = this;
         vm.loaded = false;
 
@@ -91,18 +91,39 @@
             });
         };
 
+        vm.clearRegistrationCacheViews = function () {
+            var states = $state.get();
+            var registrationStates = states.filter(function (item) {
+                return item.data && item.data.registrationProp; //Clearing all registration views from cache
+            });
+            var cacheToClear = ['newregistration', 'registrationstatus', 'confirmlocation', 'confirmtime'];
+            registrationStates.forEach(function (item) {
+                cacheToClear.push(item.name);
+            });
+
+            return $ionicHistory.clearCache(cacheToClear);
+        };
+
 
         vm.onRegistrationClick = function (obs) {
             if (!obs.error) {
                 vm.loadingRegistration = true;
                 Observations.getRegistrationsById(obs.RegId).then(function (result) {
                     return Registration.clearExistingNewRegistrations().then(function () {
-                        $state.go('observationdetails', { observation: Observation.fromJson(result) });
+                        return vm.clearRegistrationCacheViews().then(function () {
+                             $state.go('observationdetails', { observation: Observation.fromJson(result) });
+                        });
                     });
                 }).finally(function () {
                     vm.loadingRegistration = false;
                 });
             }
+        };
+
+        vm.goToStart = function () {
+            vm.clearRegistrationCacheViews().then(function () {
+                $state.go('start');
+            });
         };
 
         vm.resendFailed = function () {
