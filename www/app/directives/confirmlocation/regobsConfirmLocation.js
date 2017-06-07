@@ -21,6 +21,7 @@
             ctrl.showDetails = false;
             ctrl._httpTimeout = $q.defer();
             ctrl.updateMarkerToGpsLocation = !ctrl.startPosition;
+            ctrl._defaultZoom = 14;
 
             ctrl.toggleDetails = function () {
                 ctrl.showDetails = !ctrl.showDetails;
@@ -96,7 +97,7 @@
                 map.on('locationfound', ctrl._updateUserPosition);
 
                 ctrl.isProgramaticZoom = true;
-                map.setView(marker.getLatLng(), ctrl.startZoom || Map.getZoom());
+                map.setView(marker.getLatLng(), ctrl.startZoom || ctrl._defaultZoom);
                 ctrl.isProgramaticZoom = false;
 
                 if (UserLocation.hasUserLocation()) {
@@ -195,7 +196,9 @@
                     var latlng = userMarker.getLatLng();
                     ctrl.updateMarkerToGpsLocation = true;
                     ctrl.setPositionManually(latlng);
-                    map.panTo(latlng);
+                    ctrl.isProgramaticZoom = true;
+                    map.setView(latlng, ctrl.startZoom || ctrl._defaultZoom);
+                    ctrl.isProgramaticZoom = false;
                 }
             };
 

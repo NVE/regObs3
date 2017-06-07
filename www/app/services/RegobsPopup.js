@@ -24,30 +24,36 @@ angular
         };
 
         RegobsPopup.confirm = function (title, text, confirmText, cancelText, cancelType) {
-            return $ionicPopup.confirm({
-                title: title,
-                template: text,
-                buttons: [
-                    {
-                        text: cancelText || 'Avbryt',
-                        type: cancelType || ''
-                    },
-                    {
-                        text: confirmText || 'OK',
-                        type: 'button-positive',
-                        onTap: function (e) {
-                            // Returning a value will cause the promise to resolve with the given value.
-                            return true;
+            var _confirmText = confirmText || 'OK';
+            var _cancelText = cancelText || 'CANCEL';
+            return $translate([title, text, _confirmText, _cancelText]).then(function (translations) {
+                return $ionicPopup.confirm({
+                    title: translations[title],
+                    template: translations[text],
+                    buttons: [
+                        {
+                            text: translations[_cancelText],
+                            type: cancelType || ''
+                        },
+                        {
+                            text: translations[_confirmText],
+                            type: 'button-positive',
+                            onTap: function (e) {
+                                // Returning a value will cause the promise to resolve with the given value.
+                                return true;
+                            }
                         }
-                    }
-                ]
+                    ]
+                });
             });
         };
 
         RegobsPopup.alert = function (title, text) {
-            return $ionicPopup.alert({
-                title: title,
-                template: text
+            return $translate([title, text]).then(function (translations) {
+                return $ionicPopup.alert({
+                    title: translations[title] || title,
+                    template: translations[text] || text
+                });
             });
         };
 

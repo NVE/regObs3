@@ -10,7 +10,7 @@
         ctrl.name = ctrl.name || 'regobsform';
 
         ctrl.formIsInvalid = function () {
-            return $scope[ctrl.name].$invalid && Property.exists($state.current.data.registrationProp);
+            return $scope[ctrl.name].$invalid;
         };
 
         ctrl.getUserConfirmation = function () {

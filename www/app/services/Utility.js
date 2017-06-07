@@ -3,7 +3,7 @@
  */
 angular
     .module('RegObs')
-    .factory('Utility', function Utility($http, $q, $rootScope, AppSettings, User, LocalStorage, AppLogging, $translate, $cordovaNetwork, moment, $filter, $ionicHistory, Raven) {
+    .factory('Utility', function Utility($http, $q, $rootScope, AppSettings, User, LocalStorage, AppLogging, $translate, $cordovaNetwork, moment, $filter, $ionicHistory, Raven, $state) {
         var service = this;
 
         var canvas;
@@ -192,8 +192,9 @@ angular
                     if (item.WaterLevelValue) {
                         str += ', ' + $filter('number')(item.WaterLevelValue, 2) + ' m';
                     }
-
-                    str += '<div class="water-level-comment-summary">' + (item.Comment !== undefined ? item.Comment : '') + '</div>';
+                    if (!service.isEmpty(item.Comment)) {
+                        str += '<div class="water-level-comment-summary">' +item.Comment + '</div>';
+                    }
 
                     if (item.Pictures && angular.isArray(item.Pictures) && item.Pictures.filter(function (pic) { return pic.PictureImageBase64 !== undefined }).length > 0) {
                         str += '<div class="registration-image-thumbs">';
@@ -949,7 +950,7 @@ angular
 
         service.configureRaven = function () {
             service.getVersion().then(function (version) {
-                Raven.setShouldSendCallback(function () { return AppSettings.data.env !== 'test regObs' && !service.isRippleEmulator() });
+                Raven.setShouldSendCallback(function () { return /*AppSettings.data.env !== 'test regObs' &&*/ !service.isRippleEmulator() });
                 Raven.setEnvironment(AppSettings.data.env);
                 Raven.setRelease(version.version + ' - ' + version.build);
 
@@ -961,6 +962,19 @@ angular
                     })
                 }
             });
+        };
+
+        service.clearRegistrationCacheViews = function () {
+            var states = $state.get();
+            var registrationStates = states.filter(function (item) {
+                return item.data && item.data.registrationProp; //Clearing all registration views from cache
+            });
+            var cacheToClear = ['newregistration', 'confirmlocation', 'confirmtime'];
+            registrationStates.forEach(function (item) {
+                cacheToClear.push(item.name);
+            });
+
+            return $ionicHistory.clearCache(cacheToClear);
         };
 
         return service;

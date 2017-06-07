@@ -26,7 +26,7 @@ angular
                 if (!waterLevel.Pictures) {
                     waterLevel.Pictures = [];
                 }
-                waterLevel.Pictures.push(pic);
+                waterLevel.Pictures.push(result);
                 $ionicScrollDelegate.resize();
             }, function (error) {
                 AppLogging.log('Error getting picture: ' + (error && error.message ? error.message : ''));

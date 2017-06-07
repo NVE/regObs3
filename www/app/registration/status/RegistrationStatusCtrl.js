@@ -3,24 +3,27 @@
     .controller('RegistrationStatusCtrl', function RegistrationStatusCtrl($scope, Registration, $ionicPopup, $state, Utility, $pbService, $http, AppSettings, $timeout, $q, Observations, Observation, $rootScope, $ionicScrollDelegate, $ionicHistory) {
         var vm = this;
         vm.loaded = false;
+        vm.cancelled = false;
 
         vm.init = function () {
             Utility.setBackView('start');
             vm.progressName = Utility.createGuid();
             vm.completed = [];
             vm.loaded = false;
-            Registration.prepareRegistrationForSending().then(function () {
-                vm.unsent = Registration.unsent;
-                vm.isSending = vm.unsent.length > 0;
-                $ionicScrollDelegate.resize();
-                $ionicScrollDelegate.scrollTop();
-                vm.loaded = true;
+            Utility.clearRegistrationCacheViews().then(function () {
+                Registration.prepareRegistrationForSending().then(function () {
+                    vm.unsent = Registration.unsent;
+                    vm.isSending = vm.unsent.length > 0;
+                    $ionicScrollDelegate.resize();
+                    $ionicScrollDelegate.scrollTop();
+                    vm.loaded = true;
 
-                if (vm.unsent.length > 0) {
-                    vm.send();
-                } else {
-                    $state.go('start');
-                }
+                    if (vm.unsent.length > 0) {
+                        vm.send();
+                    } else {
+                        $state.go('start');
+                    }
+                });
             });
         };
 
@@ -36,10 +39,11 @@
         };
 
         vm.send = function () {
+            vm.cancelled = false;
             vm.isSending = true;
             vm.completed = [];
             vm.downloadStatus = new RegObs.ProggressStatus();
-            vm.downloadStatus.setTotal(vm.unsent.length);           
+            vm.downloadStatus.setTotal(vm.unsent.length);
             vm.progressOptions = {
                 color: '#333',
                 // This has to be the same size as the maximum width to
@@ -73,9 +77,13 @@
                 vm._updateProgress();
             };
 
-            Registration.post(onItemCompleteCallback).then(function () {
+            vm.cancelPromise = $q.defer();
+
+            Registration.post(onItemCompleteCallback, vm.cancelPromise).then(function () {
                 vm._updateProgress().then(function () {
-                    vm.isSending = false;
+                    $timeout(function () {
+                        vm.isSending = false;
+                    });
                 });
             });
         };
@@ -91,28 +99,13 @@
             });
         };
 
-        vm.clearRegistrationCacheViews = function () {
-            var states = $state.get();
-            var registrationStates = states.filter(function (item) {
-                return item.data && item.data.registrationProp; //Clearing all registration views from cache
-            });
-            var cacheToClear = ['newregistration', 'registrationstatus', 'confirmlocation', 'confirmtime'];
-            registrationStates.forEach(function (item) {
-                cacheToClear.push(item.name);
-            });
-
-            return $ionicHistory.clearCache(cacheToClear);
-        };
-
 
         vm.onRegistrationClick = function (obs) {
-            if (!obs.error) {
+            if (!obs.error && obs.RegId) {
                 vm.loadingRegistration = true;
                 Observations.getRegistrationsById(obs.RegId).then(function (result) {
                     return Registration.clearExistingNewRegistrations().then(function () {
-                        return vm.clearRegistrationCacheViews().then(function () {
-                             $state.go('observationdetails', { observation: Observation.fromJson(result) });
-                        });
+                        $state.go('observationdetails', { observation: Observation.fromJson(result) });
                     });
                 }).finally(function () {
                     vm.loadingRegistration = false;
@@ -121,9 +114,7 @@
         };
 
         vm.goToStart = function () {
-            vm.clearRegistrationCacheViews().then(function () {
-                $state.go('start');
-            });
+            $state.go('start');
         };
 
         vm.resendFailed = function () {
@@ -131,5 +122,18 @@
             vm.send();
         };
 
+        vm.cancel = function () {
+            if (vm.cancelPromise) {
+                vm.cancelled = true;
+                vm.cancelPromise.resolve();
+            }
+        };
+
         $scope.$on('$ionicView.enter', vm.init);
+
+        $scope.$on('$ionicView.beforeLeave', function () {
+            if (vm.cancelPromise && vm.isSending) {
+                vm.cancelPromise.resolve();
+            }
+        });
     });

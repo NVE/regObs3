@@ -1,6 +1,6 @@
 angular
     .module('RegObs')
-    .factory('Registration', function Registration($rootScope, $ionicPlatform, $http, $state, $ionicPopup, $ionicHistory, $cordovaBadge, LocalStorage, Utility, User, ObsLocation, AppSettings, RegobsPopup, AppLogging, Observations, UserLocation, $q, $timeout, $translate) {
+    .factory('Registration', function Registration($rootScope, $ionicPlatform, $http, $state, $ionicPopup, $ionicHistory, $cordovaBadge, LocalStorage, Utility, User, ObsLocation, AppSettings, RegobsPopup, AppLogging, Observations, UserLocation, $q, $timeout, $translate, Raven) {
         var Registration = this;
 
         var storageKey = 'regobsRegistrations';
@@ -49,37 +49,44 @@ angular
         };
 
         Registration.createAndGoToNewRegistration = function () {
-            var appMode = AppSettings.getAppMode();
-            var navigate = function () {
-                if (!ObsLocation.isSet()) {
-                    $state.go('confirmlocation', {}, {reload:true});
-                } else if (!Registration.data.DtObsTime) {
-                    $state.go('confirmtime');
-                } else {
-                    $state.go('newregistration', {}, { reload: true });
+            if (Registration.checkIfUserIsLoggedIn()) {
+
+
+
+                var appMode = AppSettings.getAppMode();
+                var navigate = function () {
+                    if (!ObsLocation.isSet()) {
+                        $state.go('confirmlocation', {}, { reload: true });
+                    } else if (!Registration.data.DtObsTime) {
+                        $state.go('confirmtime');
+                    } else {
+                        $state.go('newregistration', {}, { reload: true });
+                    }
+                };
+
+                if (!Registration.data.GeoHazardTID) {
+                    Registration.createNew(Utility.geoHazardTid(appMode));
                 }
-            };
 
-            if (!Registration.data.GeoHazardTID) {
-                Registration.createNew(Utility.geoHazardTid(appMode));
-            }
-
-            if (Registration.data.GeoHazardTID !== Utility.geoHazardTid(appMode)) {
-                $translate(['DELETE', 'OBSERVATION', 'YOU_HAVE_STARTED']).then(function (translations) {
-                    RegobsPopup.delete(translations['DELETE'] + ' ' + translations['OBSERVATION'].toLowerCase(),
-                        translations['YOU_HAVE_STARTED'] + ' ' +
-                        Utility.geoHazardNames(Registration.data.GeoHazardTID).toLowerCase() +
-                        translations['YOU_HAVE_STARTED_END_TEXT'])
-                        .then(function (response) {
-                            if (response) {
-                                ObsLocation.remove();
-                                Registration.createNew(Utility.geoHazardTid(appMode));
-                                navigate();
-                            }
-                        });
-                });
-            } else {
-                navigate();
+                if (Registration.data.GeoHazardTID !== Utility.geoHazardTid(appMode)) {
+                    $translate(['DELETE', 'OBSERVATION', 'YOU_HAVE_STARTED', 'YOU_HAVE_STARTED_END_TEXT']).then(function (translations) {
+                        RegobsPopup.delete(translations['DELETE'] + ' ' + translations['OBSERVATION'].toLowerCase(),
+                            translations['YOU_HAVE_STARTED'] + ' ' +
+                            Utility.geoHazardNames(Registration.data.GeoHazardTID).toLowerCase() +
+                            translations['YOU_HAVE_STARTED_END_TEXT'])
+                            .then(function (response) {
+                                if (response) {
+                                    ObsLocation.remove();
+                                    Registration.createNew(Utility.geoHazardTid(appMode));
+                                    Utility.clearRegistrationCacheViews().then(function () {
+                                        navigate();
+                                    });
+                                }
+                            });
+                    });
+                } else {
+                    navigate();
+                }
             }
         };
 
@@ -88,6 +95,7 @@ angular
             ObsLocation.remove();
             Registration.data = {};
             Registration.save();
+            Utility.clearRegistrationCacheViews();
 
             $rootScope.$broadcast('$regObs:registrationReset');
         }
@@ -239,7 +247,12 @@ angular
             }
         };
 
-        Registration.post = function (onItemCompleteCallback) {
+        Registration._isDuplicateRegistrationStatus = function (error) {
+            return error.status === 400 && error.data && error.data.ModelState && error.data.ModelState.registration && error.data.ModelState.registration.length > 0 && angular.isString(error.data.ModelState.registration[0]) && error.data.ModelState.registration[0].startsWith("Duplicate registration");
+        }
+
+
+        Registration.post = function (onItemCompleteCallback, cancelPromise) {
             return $q(function (resolve) {
                 Registration.prepareRegistrationForSending().then(function () {
 
@@ -248,6 +261,12 @@ angular
                     Registration.sending = true;
                     var completed = [];
                     var failed = [];
+                    var cancelled = false;
+                    if (cancelPromise) {
+                        cancelPromise.promise.then(function () {
+                            cancelled = true;
+                        });
+                    }
 
                     var checkComplete = function () {
                         if ((completed.length + failed.length) === Registration.unsent.length) {
@@ -266,24 +285,43 @@ angular
 
                     if (Registration.unsent.length > 0) {
                         Utility.resizeAllImages(Registration.unsent)
-                            .then(function (processedData) {
-                                var data = processedData;
+                            .then(function (data) {
                                 failed = [];
                                 completed = [];
                                 data.forEach(function (item) {
-                                    delete item.error;
-                                    $http.post(AppSettings.getEndPoints().postRegistration, item, AppSettings.httpConfigRegistrationPost).then(function (result) {
-                                        item.RegId = result.data.RegId;
-                                        completed.push(item);
-                                    }).catch(function (error) {
-                                        item.error = error.status;
+                                    if (cancelled) {
+                                        item.error = { status: 0, time: new Date() };
                                         failed.push(item);
-                                    }).finally(function () {
-                                        if (onItemCompleteCallback && angular.isFunction(onItemCompleteCallback)) {
-                                            onItemCompleteCallback(item);
-                                        }
                                         checkComplete();
-                                    });
+                                    } else {
+                                        delete item.error;
+                                        var postSettings = angular.copy(AppSettings.httpConfigRegistrationPost);
+                                        if (cancelPromise) {
+                                            postSettings.timeout = cancelPromise.promise;
+                                        }
+                                        $http.post(AppSettings.getEndPoints().postRegistration, item, postSettings).then(function (result) {
+                                            item.RegId = result.data.RegId;
+                                            completed.push(item);
+                                        }).catch(function (error) {
+                                            if (error.status === 409) { //duplicate
+                                                completed.push(item);
+                                            } else {
+                                                item.error = { status: error.status, time: new Date(), message: error.data };
+                                                failed.push(item);
+
+                                                if (error.status === 400) { //Bad request is logged
+                                                    Raven.captureMessage('Error sending registration. Message: ' + angular.toJson(error.data) + ' Json: ' + angular.toJson(item), {
+                                                        level: 'error'
+                                                    });
+                                                }
+                                            }
+                                        }).finally(function () {
+                                            if (onItemCompleteCallback && angular.isFunction(onItemCompleteCallback)) {
+                                                onItemCompleteCallback(item);
+                                            }
+                                            checkComplete();
+                                        });
+                                    }
                                 });
                             });
                     } else {
@@ -293,19 +331,25 @@ angular
             });
         };
 
+        Registration.checkIfUserIsLoggedIn = function () {
+            if (User.getUser().anonymous) {
+                $translate(['NOT_LOGGED_IN', 'NOT_LOGGED_IN_DESCRIPTION', 'LOGIN', 'CANCEL']).then(function (translations) {
+                    RegobsPopup.confirm(translations['NOT_LOGGED_IN'], translations['NOT_LOGGED_IN_DESCRIPTION'], translations['LOGIN'], translations['CANCEL'])
+                        .then(function (confirmed) {
+                            if (confirmed) {
+                                $state.go('settings');
+                            }
+                        });
+                });
+                return false;
+            }
+            return true;
+        }
+
 
         Registration.send = function (force) {
             if (!Registration.isEmpty() || Registration.unsent.length) {
-                if (User.getUser().anonymous) {
-                    $translate(['NOT_LOGGED_IN', 'NOT_LOGGED_IN_DESCRIPTION', 'LOGIN', 'CANCEL']).then(function (translations) {
-                        RegobsPopup.confirm(translations['NOT_LOGGED_IN'], translations['NOT_LOGGED_IN_DESCRIPTION'], translations['LOGIN'], translations['CANCEL'])
-                            .then(function (confirmed) {
-                                if (confirmed) {
-                                    $state.go('settings');
-                                }
-                            });
-                    });
-                } else {
+                if (Registration.checkIfUserIsLoggedIn()) {
                     $state.go('registrationstatus');
                 }
             }

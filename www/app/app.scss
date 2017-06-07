@@ -635,12 +635,12 @@ input.extra-large-time {
 
 .border-thin {
     border: 1px solid #ddd;
+    margin-bottom: 16px;
 }
 
 .item-image {
     background-color: #fff;
     position: relative;
-    margin-bottom: 16px;
 }
 
 .item-image textarea {
@@ -764,4 +764,15 @@ regobs-comment textarea::-webkit-input-placeholder {
 .button-small.extra-padding {
     padding-left: 6px;
     padding-right: 6px;
+}
+
+.button.spinner-right .spinner {
+    position: relative;
+    top: 9px;
+    left: 10px;
+}
+
+.button-calm.spinner-right .spinner {
+    stroke: #fff;
+    fill: #fff;
 }

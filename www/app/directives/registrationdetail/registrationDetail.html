@@ -13,8 +13,8 @@
         </ion-slide-page>
     </ion-slides>
 </div>
-<div class="padding">
-    <regobs-observation-type-generator class="registration-detail-type-wrapper" registration="obs" ng-repeat="obs in $ctrl.registration.getRegistrations()"></regobs-observation-type-generator>
+<div class="padding registration-detail-type-wrapper">
+    <regobs-observation-type-generator registration="obs" ng-repeat="obs in $ctrl.registration.getRegistrations()"></regobs-observation-type-generator>
 </div>
 <div class="padding">
     <button type="button" class="button button-block button-calm" ng-click="$ctrl.onViewWebRegistrationClick()">{{'VIEW_WEB_REGISTRATION'|translate}}</button>
