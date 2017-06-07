@@ -20,24 +20,24 @@
     </h1>
     <div class='clearfix'>
       <div class='fl pad1y space-right2'>
-        <span class="strong">10.77% </span>
+        <span class="strong">10.14% </span>
         <span class="quiet">Statements</span>
-        <span class='fraction'>7/65</span>
+        <span class='fraction'>7/69</span>
       </div>
       <div class='fl pad1y space-right2'>
         <span class="strong">0% </span>
         <span class="quiet">Branches</span>
-        <span class='fraction'>0/35</span>
+        <span class='fraction'>0/39</span>
       </div>
       <div class='fl pad1y space-right2'>
-        <span class="strong">5% </span>
+        <span class="strong">4.55% </span>
         <span class="quiet">Functions</span>
-        <span class='fraction'>1/20</span>
+        <span class='fraction'>1/22</span>
       </div>
       <div class='fl pad1y space-right2'>
-        <span class="strong">10.77% </span>
+        <span class="strong">10.14% </span>
         <span class="quiet">Lines</span>
-        <span class='fraction'>7/65</span>
+        <span class='fraction'>7/69</span>
       </div>
     </div>
   </div>
@@ -213,7 +213,13 @@
 168
 169
 170
-171</td><td class="line-coverage quiet"><span class="cline-any cline-yes">1×</span>
+171
+172
+173
+174
+175
+176
+177</td><td class="line-coverage quiet"><span class="cline-any cline-yes">1×</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">54×</span>
@@ -240,6 +246,9 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">54×</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -253,6 +262,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -261,6 +271,8 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">54×</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -409,30 +421,36 @@
         };
 &nbsp;
         RegobsPopup.confirm = <span class="fstat-no" title="function not covered" >function (title, text, confirmText, cancelText, cancelType) {</span>
-<span class="cstat-no" title="statement not covered" >            return $ionicPopup.confirm({</span>
-                title: title,
-                template: text,
-                buttons: [
-                    {
-                        text: cancelText || 'Avbryt',
-                        type: cancelType || ''
-                    },
-                    {
-                        text: confirmText || 'OK',
-                        type: 'button-positive',
-                        onTap: <span class="fstat-no" title="function not covered" >function (e) {</span>
-                            // Returning a value will cause the promise to resolve with the given value.
-<span class="cstat-no" title="statement not covered" >                            return true;</span>
+<span class="cstat-no" title="statement not covered" >            var _confirmText = confirmText || 'OK';</span>
+<span class="cstat-no" title="statement not covered" >            var _cancelText = cancelText || 'CANCEL';</span>
+<span class="cstat-no" title="statement not covered" >            return $translate([title, text, _confirmText, _cancelText]).then(<span class="fstat-no" title="function not covered" >function (translations) {</span></span>
+<span class="cstat-no" title="statement not covered" >                return $ionicPopup.confirm({</span>
+                    title: translations[title],
+                    template: translations[text],
+                    buttons: [
+                        {
+                            text: translations[_cancelText],
+                            type: cancelType || ''
+                        },
+                        {
+                            text: translations[_confirmText],
+                            type: 'button-positive',
+                            onTap: <span class="fstat-no" title="function not covered" >function (e) {</span>
+                                // Returning a value will cause the promise to resolve with the given value.
+<span class="cstat-no" title="statement not covered" >                                return true;</span>
+                            }
                         }
-                    }
-                ]
+                    ]
+                });
             });
         };
 &nbsp;
         RegobsPopup.alert = <span class="fstat-no" title="function not covered" >function (title, text) {</span>
-<span class="cstat-no" title="statement not covered" >            return $ionicPopup.alert({</span>
-                title: title,
-                template: text
+<span class="cstat-no" title="statement not covered" >            return $translate([title, text]).then(<span class="fstat-no" title="function not covered" >function (translations) {</span></span>
+<span class="cstat-no" title="statement not covered" >                return $ionicPopup.alert({</span>
+                    title: translations[title] || title,
+                    template: translations[text] || text
+                });
             });
         };
 &nbsp;
@@ -559,7 +577,7 @@
 </div><!-- /wrapper -->
 <div class='footer quiet pad2 space-top1 center small'>
   Code coverage
-  generated by <a href="http://istanbul-js.org/" target="_blank">istanbul</a> at Mon May 29 2017 13:52:48 GMT+0200 (W. Europe Daylight Time)
+  generated by <a href="http://istanbul-js.org/" target="_blank">istanbul</a> at Wed Jun 07 2017 15:07:32 GMT+0200 (W. Europe Daylight Time)
 </div>
 </div>
 <script src="../../prettify.js"></script>

@@ -20,14 +20,14 @@
     </h1>
     <div class='clearfix'>
       <div class='fl pad1y space-right2'>
-        <span class="strong">1.44% </span>
+        <span class="strong">1.42% </span>
         <span class="quiet">Statements</span>
-        <span class='fraction'>3/209</span>
+        <span class='fraction'>3/212</span>
       </div>
       <div class='fl pad1y space-right2'>
         <span class="strong">0% </span>
         <span class="quiet">Branches</span>
-        <span class='fraction'>0/85</span>
+        <span class='fraction'>0/87</span>
       </div>
       <div class='fl pad1y space-right2'>
         <span class="strong">2.56% </span>
@@ -35,9 +35,9 @@
         <span class='fraction'>1/39</span>
       </div>
       <div class='fl pad1y space-right2'>
-        <span class="strong">1.44% </span>
+        <span class="strong">1.42% </span>
         <span class="quiet">Lines</span>
-        <span class='fraction'>3/209</span>
+        <span class='fraction'>3/212</span>
       </div>
     </div>
   </div>
@@ -437,7 +437,11 @@
 392
 393
 394
-395</td><td class="line-coverage quiet"><span class="cline-any cline-yes">1×</span>
+395
+396
+397
+398
+399</td><td class="line-coverage quiet"><span class="cline-any cline-yes">1×</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1×</span>
@@ -460,6 +464,7 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -581,6 +586,7 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -628,6 +634,8 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -854,6 +862,7 @@
 <span class="cstat-no" title="statement not covered" >            ctrl.showDetails = false;</span>
 <span class="cstat-no" title="statement not covered" >            ctrl._httpTimeout = $q.defer();</span>
 <span class="cstat-no" title="statement not covered" >            ctrl.updateMarkerToGpsLocation = !ctrl.startPosition;</span>
+<span class="cstat-no" title="statement not covered" >            ctrl._defaultZoom = 14;</span>
 &nbsp;
 <span class="cstat-no" title="statement not covered" >            ctrl.toggleDetails = <span class="fstat-no" title="function not covered" >function () {</span></span>
 <span class="cstat-no" title="statement not covered" >                ctrl.showDetails = !ctrl.showDetails;</span>
@@ -929,7 +938,7 @@
 <span class="cstat-no" title="statement not covered" >                map.on('locationfound', ctrl._updateUserPosition);</span>
 &nbsp;
 <span class="cstat-no" title="statement not covered" >                ctrl.isProgramaticZoom = true;</span>
-<span class="cstat-no" title="statement not covered" >                map.setView(marker.getLatLng(), ctrl.startZoom || Map.getZoom());</span>
+<span class="cstat-no" title="statement not covered" >                map.setView(marker.getLatLng(), ctrl.startZoom || ctrl._defaultZoom);</span>
 <span class="cstat-no" title="statement not covered" >                ctrl.isProgramaticZoom = false;</span>
 &nbsp;
 <span class="cstat-no" title="statement not covered" >                if (UserLocation.hasUserLocation()) {</span>
@@ -977,7 +986,8 @@
 <span class="cstat-no" title="statement not covered" >                    $http.get(AppSettings.getEndPoints().getLocationName, {</span>
                         params: {
                             latitude: latlng.lat,
-                            longitude: latlng.lng
+                            longitude: latlng.lng,
+                            geoHazardId: Utility.getCurrentGeoHazardTid()
                         },
                         timeout: AppSettings.httpConfig.timeout
                     }).then(<span class="fstat-no" title="function not covered" >function (response) {</span>
@@ -1027,7 +1037,9 @@
 <span class="cstat-no" title="statement not covered" >                    var latlng = userMarker.getLatLng();</span>
 <span class="cstat-no" title="statement not covered" >                    ctrl.updateMarkerToGpsLocation = true;</span>
 <span class="cstat-no" title="statement not covered" >                    ctrl.setPositionManually(latlng);</span>
-<span class="cstat-no" title="statement not covered" >                    map.panTo(latlng);</span>
+<span class="cstat-no" title="statement not covered" >                    ctrl.isProgramaticZoom = true;</span>
+<span class="cstat-no" title="statement not covered" >                    map.setView(latlng, ctrl.startZoom || ctrl._defaultZoom);</span>
+<span class="cstat-no" title="statement not covered" >                    ctrl.isProgramaticZoom = false;</span>
                 }
             };
 &nbsp;
@@ -1231,7 +1243,7 @@
 </div><!-- /wrapper -->
 <div class='footer quiet pad2 space-top1 center small'>
   Code coverage
-  generated by <a href="http://istanbul-js.org/" target="_blank">istanbul</a> at Mon May 29 2017 13:52:48 GMT+0200 (W. Europe Daylight Time)
+  generated by <a href="http://istanbul-js.org/" target="_blank">istanbul</a> at Wed Jun 07 2017 15:07:32 GMT+0200 (W. Europe Daylight Time)
 </div>
 </div>
 <script src="../../../prettify.js"></script>

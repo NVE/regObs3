@@ -20,9 +20,9 @@
     </h1>
     <div class='clearfix'>
       <div class='fl pad1y space-right2'>
-        <span class="strong">25.27% </span>
+        <span class="strong">25% </span>
         <span class="quiet">Statements</span>
-        <span class='fraction'>23/91</span>
+        <span class='fraction'>23/92</span>
       </div>
       <div class='fl pad1y space-right2'>
         <span class="strong">0% </span>
@@ -30,14 +30,14 @@
         <span class='fraction'>0/30</span>
       </div>
       <div class='fl pad1y space-right2'>
-        <span class="strong">10.34% </span>
+        <span class="strong">10% </span>
         <span class="quiet">Functions</span>
-        <span class='fraction'>3/29</span>
+        <span class='fraction'>3/30</span>
       </div>
       <div class='fl pad1y space-right2'>
-        <span class="strong">25.84% </span>
+        <span class="strong">25.56% </span>
         <span class="quiet">Lines</span>
-        <span class='fraction'>23/89</span>
+        <span class='fraction'>23/90</span>
       </div>
     </div>
   </div>
@@ -252,8 +252,7 @@
 207
 208
 209
-210
-211</td><td class="line-coverage quiet"><span class="cline-any cline-yes">1×</span>
+210</td><td class="line-coverage quiet"><span class="cline-any cline-yes">1×</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1×</span>
@@ -319,17 +318,16 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1×</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -529,23 +527,22 @@
         };
 &nbsp;
         Pictures.deletePicture = <span class="fstat-no" title="function not covered" >function (picture) {</span>
+<span class="cstat-no" title="statement not covered" >            $translate(['REMOVE_PICTURE', 'REMOVE_PICTURE_TEXT', 'REMOVE']).then(<span class="fstat-no" title="function not covered" >function (translations) {</span></span>
+<span class="cstat-no" title="statement not covered" >                RegobsPopup.delete(translations['REMOVE_PICTURE'], translations['REMOVE_PICTURE_TEXT'], translations['REMOVE'])</span>
+                    .then(<span class="fstat-no" title="function not covered" >function (confirmed) {</span>
+<span class="cstat-no" title="statement not covered" >                        if (confirmed) {</span>
+<span class="cstat-no" title="statement not covered" >                            for (var i = 0; i &lt; Registration.data.Picture.length; i++) {</span>
+<span class="cstat-no" title="statement not covered" >                                var obj = Registration.data.Picture[i];</span>
+<span class="cstat-no" title="statement not covered" >                                if (obj.PictureImageBase64 === picture.PictureImageBase64) {</span>
+<span class="cstat-no" title="statement not covered" >                                    Registration.data.Picture.splice(i, 1);</span>
+<span class="cstat-no" title="statement not covered" >                                    cache = {};</span>
+<span class="cstat-no" title="statement not covered" >                                    return true;</span>
+                                }
 &nbsp;
-<span class="cstat-no" title="statement not covered" >            RegobsPopup.delete('Fjern bilde', 'Vil du fjerne dette bildet fra registreringen?', 'Fjern')</span>
-                .then(<span class="fstat-no" title="function not covered" >function (confirmed) {</span>
-<span class="cstat-no" title="statement not covered" >                    if (confirmed) {</span>
-<span class="cstat-no" title="statement not covered" >                        for (var i = 0; i &lt; Registration.data.Picture.length; i++) {</span>
-<span class="cstat-no" title="statement not covered" >                            var obj = Registration.data.Picture[i];</span>
-<span class="cstat-no" title="statement not covered" >                            if (obj.PictureImageBase64 === picture.PictureImageBase64) {</span>
-<span class="cstat-no" title="statement not covered" >                                Registration.data.Picture.splice(i, 1);</span>
-<span class="cstat-no" title="statement not covered" >                                cache = {};</span>
-<span class="cstat-no" title="statement not covered" >                                return true;</span>
                             }
-&nbsp;
                         }
-                    }
-&nbsp;
-                });
-&nbsp;
+                    });
+            });
         };
 &nbsp;
         Pictures.removePictures = <span class="fstat-no" title="function not covered" >function (propertyKey) {</span>
@@ -679,7 +676,7 @@
 </div><!-- /wrapper -->
 <div class='footer quiet pad2 space-top1 center small'>
   Code coverage
-  generated by <a href="http://istanbul-js.org/" target="_blank">istanbul</a> at Mon May 29 2017 13:52:48 GMT+0200 (W. Europe Daylight Time)
+  generated by <a href="http://istanbul-js.org/" target="_blank">istanbul</a> at Wed Jun 07 2017 15:07:32 GMT+0200 (W. Europe Daylight Time)
 </div>
 </div>
 <script src="../../prettify.js"></script>

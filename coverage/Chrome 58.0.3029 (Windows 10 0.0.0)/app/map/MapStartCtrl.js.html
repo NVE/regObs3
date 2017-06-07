@@ -20,9 +20,9 @@
     </h1>
     <div class='clearfix'>
       <div class='fl pad1y space-right2'>
-        <span class="strong">1.45% </span>
+        <span class="strong">1.41% </span>
         <span class="quiet">Statements</span>
-        <span class='fraction'>1/69</span>
+        <span class='fraction'>1/71</span>
       </div>
       <div class='fl pad1y space-right2'>
         <span class="strong">0% </span>
@@ -32,12 +32,12 @@
       <div class='fl pad1y space-right2'>
         <span class="strong">0% </span>
         <span class="quiet">Functions</span>
-        <span class='fraction'>0/29</span>
+        <span class='fraction'>0/31</span>
       </div>
       <div class='fl pad1y space-right2'>
-        <span class="strong">1.45% </span>
+        <span class="strong">1.41% </span>
         <span class="quiet">Lines</span>
-        <span class='fraction'>1/69</span>
+        <span class='fraction'>1/71</span>
       </div>
     </div>
   </div>
@@ -184,7 +184,24 @@
 139
 140
 141
-142</td><td class="line-coverage quiet"><span class="cline-any cline-yes">1×</span>
+142
+143
+144
+145
+146
+147
+148
+149
+150
+151
+152
+153
+154
+155
+156
+157
+158
+159</td><td class="line-coverage quiet"><span class="cline-any cline-yes">1×</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -295,6 +312,15 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -303,8 +329,16 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -326,7 +360,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">﻿angular.module('RegObs')
-    .controller('MapStartCtrl', <span class="fstat-no" title="function not covered" >function ($scope, $rootScope, $state, $ionicHistory, User, Map, AppSettings, Registration, AppLogging, Utility, $timeout, $ionicPopover, $cordovaInAppBrowser, Observations, RegobsPopup, UserLocation, $translate, Trip, Translate, OfflineMap) {</span>
+    .controller('MapStartCtrl', <span class="fstat-no" title="function not covered" >function ($scope, $rootScope, $state, $ionicHistory, User, Map, AppSettings, Registration, AppLogging, Utility, $timeout, $ionicPopover, $cordovaInAppBrowser, Observations, RegobsPopup, UserLocation, $translate, Trip, Translate, OfflineMap, $ionicPopup) {</span>
 <span class="cstat-no" title="statement not covered" >        var appVm = this;</span>
 &nbsp;
 <span class="cstat-no" title="statement not covered" >        appVm.gpsCenterClick = Map.centerMapToUser;</span>
@@ -435,19 +469,36 @@
 &nbsp;
 <span class="cstat-no" title="statement not covered" >        appVm._checkObsWatch = $timeout(<span class="fstat-no" title="function not covered" >function () {</span></span>
 <span class="cstat-no" title="statement not covered" >            if (Observations.checkIfObservationsShouldBeUpdated() &amp;&amp; UserLocation.hasUserLocation() &amp;&amp; Utility.hasGoodNetwork()) {</span>
-<span class="cstat-no" title="statement not covered" >                appVm._updateObservationsPopup = RegobsPopup</span>
-                    .confirm($translate.instant('UPDATE_OBSERVATIONS_IN_MAP'),
-                        '&lt;div class="text-center popup-icon"&gt;&lt;i class="icon ion-loop"&gt;&lt;/i&gt;&lt;/div&gt;&lt;p&gt;' +
-                        $translate.instant('UPDATE_OBSERVATIONS_IN_MAP_HELP_TEXT') +
+<span class="cstat-no" title="statement not covered" >                $translate(['UPDATE_OBSERVATIONS_IN_MAP', 'UPDATE_OBSERVATIONS_IN_MAP_HELP_TEXT', 'UPDATE_OBSERVATIONS_IN_MAP_HELP_TEXT_2', 'CANCEL', 'OK']).then(<span class="fstat-no" title="function not covered" >function (translations) {</span></span>
+<span class="cstat-no" title="statement not covered" >                    appVm._updateObservationsPopup = $ionicPopup.confirm({</span>
+                        title: translations['UPDATE_OBSERVATIONS_IN_MAP'],
+                        template: '&lt;div class="text-center popup-icon"&gt;&lt;i class="icon ion-loop"&gt;&lt;/i&gt;&lt;/div&gt;&lt;p&gt;' +
+                        translations['UPDATE_OBSERVATIONS_IN_MAP_HELP_TEXT'] +
                         '&lt;/p&gt;&lt;p&gt;' +
-                        $translate.instant('UPDATE_OBSERVATIONS_IN_MAP_HELP_TEXT_2') +
-                        '&lt;/p&gt;');
-&nbsp;
-<span class="cstat-no" title="statement not covered" >                appVm._updateObservationsPopup.then(<span class="fstat-no" title="function not covered" >function (response) {</span></span>
+                        translations['UPDATE_OBSERVATIONS_IN_MAP_HELP_TEXT_2'] +
+                        '&lt;/p&gt;',
+                        buttons: [
+                            {
+                                text: translations['CANCEL'],
+                            },
+                            {
+                                text: translations['OK'],
+                                type: 'button-positive',
+                                onTap: <span class="fstat-no" title="function not covered" >function (e) {</span>
+                                    // Returning a value will cause the promise to resolve with the given value.
+<span class="cstat-no" title="statement not covered" >                                    return true;</span>
+                                }
+                            }
+                        ]
+                    });
+<span class="cstat-no" title="statement not covered" >                    appVm._updateObservationsPopup.then(<span class="fstat-no" title="function not covered" >function (response) {</span></span>
 <span class="cstat-no" title="statement not covered" >                        if (response) {</span>
 <span class="cstat-no" title="statement not covered" >                            Map.updateObservationsInMap();</span>
                         }
                     });
+                });
+&nbsp;
+                
             }
         }, 10000);
 &nbsp;
@@ -472,7 +523,7 @@
 </div><!-- /wrapper -->
 <div class='footer quiet pad2 space-top1 center small'>
   Code coverage
-  generated by <a href="http://istanbul-js.org/" target="_blank">istanbul</a> at Mon May 29 2017 13:52:48 GMT+0200 (W. Europe Daylight Time)
+  generated by <a href="http://istanbul-js.org/" target="_blank">istanbul</a> at Wed Jun 07 2017 15:07:32 GMT+0200 (W. Europe Daylight Time)
 </div>
 </div>
 <script src="../../prettify.js"></script>

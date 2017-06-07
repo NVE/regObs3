@@ -20,24 +20,24 @@
     </h1>
     <div class='clearfix'>
       <div class='fl pad1y space-right2'>
-        <span class="strong">32.71% </span>
+        <span class="strong">32.49% </span>
         <span class="quiet">Statements</span>
-        <span class='fraction'>141/431</span>
+        <span class='fraction'>142/437</span>
       </div>
       <div class='fl pad1y space-right2'>
-        <span class="strong">17.97% </span>
+        <span class="strong">18.31% </span>
         <span class="quiet">Branches</span>
-        <span class='fraction'>39/217</span>
+        <span class='fraction'>39/213</span>
       </div>
       <div class='fl pad1y space-right2'>
-        <span class="strong">18.6% </span>
+        <span class="strong">18.18% </span>
         <span class="quiet">Functions</span>
-        <span class='fraction'>24/129</span>
+        <span class='fraction'>24/132</span>
       </div>
       <div class='fl pad1y space-right2'>
-        <span class="strong">33.1% </span>
+        <span class="strong">32.86% </span>
         <span class="quiet">Lines</span>
-        <span class='fraction'>139/420</span>
+        <span class='fraction'>140/426</span>
       </div>
     </div>
   </div>
@@ -1014,7 +1014,17 @@
 969
 970
 971
-972</td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+972
+973
+974
+975
+976
+977
+978
+979
+980
+981
+982</td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1×</span>
@@ -1208,8 +1218,9 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -1571,10 +1582,6 @@
 <span class="cline-any cline-yes">39×</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -1783,11 +1790,11 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -1984,13 +1991,26 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">54×</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">54×</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">/**
  * Created by storskel on 06.10.2015.
  */
 angular
     .module('RegObs')
-    .factory('Utility', function Utility($http, $q, $rootScope, AppSettings, User, LocalStorage, AppLogging, $translate, $cordovaNetwork, moment, $filter, $ionicHistory, Raven) {
+    .factory('Utility', function Utility($http, $q, $rootScope, AppSettings, User, LocalStorage, AppLogging, $translate, $cordovaNetwork, moment, $filter, $ionicHistory, Raven, $state) {
         var service = this;
 &nbsp;
         var canvas;
@@ -2179,8 +2199,9 @@ angular
 <span class="cstat-no" title="statement not covered" >                    if (item.WaterLevelValue) {</span>
 <span class="cstat-no" title="statement not covered" >                        str += ', ' + $filter('number')(item.WaterLevelValue, 2) + ' m';</span>
                     }
-&nbsp;
-<span class="cstat-no" title="statement not covered" >                    str += '&lt;div class="water-level-comment-summary"&gt;' + (item.Comment !== undefined ? item.Comment : '') + '&lt;/div&gt;';</span>
+<span class="cstat-no" title="statement not covered" >                    if (!service.isEmpty(item.Comment)) {</span>
+<span class="cstat-no" title="statement not covered" >                        str += '&lt;div class="water-level-comment-summary"&gt;' +item.Comment + '&lt;/div&gt;';</span>
+                    }
 &nbsp;
 <span class="cstat-no" title="statement not covered" >                    if (item.Pictures &amp;&amp; angular.isArray(item.Pictures) &amp;&amp; item.Pictures.filter(<span class="fstat-no" title="function not covered" >function (pic) {</span> <span class="cstat-no" title="statement not covered" >return pic.PictureImageBase64 !== undefined }</span>).length &gt; 0) {</span>
 <span class="cstat-no" title="statement not covered" >                        str += '&lt;div class="registration-image-thumbs"&gt;';</span>
@@ -2423,7 +2444,7 @@ angular
                 name: "Skader",
                 RegistrationTID: "14",
                 properties: {
-                    DamageTypeTID: { kdvKey: 'DamageTypeKDV', displayFormat: { hideDescription: true } },
+                    DamageTypeTID: { displayFormat: { hideDescription: true } },
                     DamagePosition: { displayFormat: { valueFormat: <span class="fstat-no" title="function not covered" >function (item) {</span> <span class="cstat-no" title="statement not covered" >return service.formatLatLng(item.Latitude, item.Longitude); </span>} } },
                     Comment: { displayFormat: { hideDescription: true } }
                 },
@@ -2539,13 +2560,9 @@ angular
         };
 &nbsp;
         service._getDropdownsFromApi = function () {
-            return $http.get(AppSettings.getEndPoints().getDropdowns, AppSettings.httpConfig)
+            return $http.get(AppSettings.getEndPoints().getDropdowns, { langkey: AppSettings.getCurrentLangKey() }, AppSettings.httpConfig)
                 .then(<span class="fstat-no" title="function not covered" >function (res) {</span>
-<span class="cstat-no" title="statement not covered" >                    if (res.data &amp;&amp; res.data.Data) {</span>
-<span class="cstat-no" title="statement not covered" >                        return JSON.parse(res.data.Data);</span>
-                    } else {
-<span class="cstat-no" title="statement not covered" >                        throw new Error('Could not get kdv elements from API');</span>
-                    }
+<span class="cstat-no" title="statement not covered" >                    return res.data;</span>
                 });
         };
 &nbsp;
@@ -2742,12 +2759,11 @@ angular
 &nbsp;
         service.resizeAllImages = <span class="fstat-no" title="function not covered" >function (data) {</span>
 <span class="cstat-no" title="statement not covered" >            var deferred = $q.defer();</span>
-<span class="cstat-no" title="statement not covered" >            var picturePresent, i, reg;</span>
-<span class="cstat-no" title="statement not covered" >            if (data &amp;&amp; data.Registrations) {</span>
-<span class="cstat-no" title="statement not covered" >                picturePresent = 0;</span>
-<span class="cstat-no" title="statement not covered" >                for (i = 0; i &lt; data.Registrations.length; i++) {</span>
-<span class="cstat-no" title="statement not covered" >                    reg = data.Registrations[i];</span>
-<span class="cstat-no" title="statement not covered" >                    if (reg.Picture) {</span>
+<span class="cstat-no" title="statement not covered" >            var picturePresent = 0, i, reg;</span>
+<span class="cstat-no" title="statement not covered" >            if (angular.isArray(data)) {</span>
+<span class="cstat-no" title="statement not covered" >                for (i = 0; i &lt; data.length; i++) {</span>
+<span class="cstat-no" title="statement not covered" >                    reg = data[i];</span>
+<span class="cstat-no" title="statement not covered" >                    if (reg.Picture &amp;&amp; angular.isArray(reg.Picture)) {</span>
 <span class="cstat-no" title="statement not covered" >                        picturePresent += reg.Picture.length;</span>
 <span class="cstat-no" title="statement not covered" >                        reg.Picture.forEach(<span class="fstat-no" title="function not covered" >function (pic) {</span></span>
 <span class="cstat-no" title="statement not covered" >                            service.resizeImage(AppSettings.imageSize, pic.PictureImageBase64, <span class="fstat-no" title="function not covered" >function (imageData) {</span></span>
@@ -2762,6 +2778,7 @@ angular
                     }
                 }
             }
+&nbsp;
 &nbsp;
 <span class="cstat-no" title="statement not covered" >            if (!picturePresent) {</span>
 <span class="cstat-no" title="statement not covered" >                deferred.resolve(data);</span>
@@ -2940,7 +2957,7 @@ angular
 &nbsp;
         service.configureRaven = <span class="fstat-no" title="function not covered" >function () {</span>
 <span class="cstat-no" title="statement not covered" >            service.getVersion().then(<span class="fstat-no" title="function not covered" >function (version) {</span></span>
-<span class="cstat-no" title="statement not covered" >                Raven.setShouldSendCallback(<span class="fstat-no" title="function not covered" >function () {</span> <span class="cstat-no" title="statement not covered" >return AppSettings.data.env !== 'test regObs' &amp;&amp; !service.isRippleEmulator() }</span>);</span>
+<span class="cstat-no" title="statement not covered" >                Raven.setShouldSendCallback(<span class="fstat-no" title="function not covered" >function () {</span> <span class="cstat-no" title="statement not covered" >return /*AppSettings.data.env !== 'test regObs' &amp;&amp;*/ !service.isRippleEmulator() }</span>);</span>
 <span class="cstat-no" title="statement not covered" >                Raven.setEnvironment(AppSettings.data.env);</span>
 <span class="cstat-no" title="statement not covered" >                Raven.setRelease(version.version + ' - ' + version.build);</span>
 &nbsp;
@@ -2954,6 +2971,19 @@ angular
             });
         };
 &nbsp;
+        service.clearRegistrationCacheViews = <span class="fstat-no" title="function not covered" >function () {</span>
+<span class="cstat-no" title="statement not covered" >            var states = $state.get();</span>
+<span class="cstat-no" title="statement not covered" >            var registrationStates = states.filter(<span class="fstat-no" title="function not covered" >function (item) {</span></span>
+<span class="cstat-no" title="statement not covered" >                return item.data &amp;&amp; item.data.registrationProp; </span>//Clearing all registration views from cache
+            });
+<span class="cstat-no" title="statement not covered" >            var cacheToClear = ['newregistration', 'confirmlocation', 'confirmtime'];</span>
+<span class="cstat-no" title="statement not covered" >            registrationStates.forEach(<span class="fstat-no" title="function not covered" >function (item) {</span></span>
+<span class="cstat-no" title="statement not covered" >                cacheToClear.push(item.name);</span>
+            });
+&nbsp;
+<span class="cstat-no" title="statement not covered" >            return $ionicHistory.clearCache(cacheToClear);</span>
+        };
+&nbsp;
         return service;
 &nbsp;
     });</pre></td></tr>
@@ -2962,7 +2992,7 @@ angular
 </div><!-- /wrapper -->
 <div class='footer quiet pad2 space-top1 center small'>
   Code coverage
-  generated by <a href="http://istanbul-js.org/" target="_blank">istanbul</a> at Mon May 29 2017 13:52:48 GMT+0200 (W. Europe Daylight Time)
+  generated by <a href="http://istanbul-js.org/" target="_blank">istanbul</a> at Wed Jun 07 2017 15:07:32 GMT+0200 (W. Europe Daylight Time)
 </div>
 </div>
 <script src="../../prettify.js"></script>

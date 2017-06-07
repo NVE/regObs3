@@ -20,9 +20,9 @@
     </h1>
     <div class='clearfix'>
       <div class='fl pad1y space-right2'>
-        <span class="strong">23.19% </span>
+        <span class="strong">22.86% </span>
         <span class="quiet">Statements</span>
-        <span class='fraction'>16/69</span>
+        <span class='fraction'>16/70</span>
       </div>
       <div class='fl pad1y space-right2'>
         <span class="strong">0% </span>
@@ -30,14 +30,14 @@
         <span class='fraction'>0/29</span>
       </div>
       <div class='fl pad1y space-right2'>
-        <span class="strong">11.76% </span>
+        <span class="strong">12.5% </span>
         <span class="quiet">Functions</span>
-        <span class='fraction'>2/17</span>
+        <span class='fraction'>2/16</span>
       </div>
       <div class='fl pad1y space-right2'>
-        <span class="strong">23.19% </span>
+        <span class="strong">22.86% </span>
         <span class="quiet">Lines</span>
-        <span class='fraction'>16/69</span>
+        <span class='fraction'>16/70</span>
       </div>
     </div>
   </div>
@@ -197,12 +197,7 @@
 152
 153
 154
-155
-156
-157
-158
-159
-160</td><td class="line-coverage quiet"><span class="cline-any cline-yes">1×</span>
+155</td><td class="line-coverage quiet"><span class="cline-any cline-yes">1×</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -271,16 +266,13 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -288,16 +280,14 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -390,7 +380,7 @@
             storageKey, 'data', angular.copy(defaultModel)
         );
 &nbsp;
-        Trip._getTripLocation = <span class="fstat-no" title="function not covered" >function() {</span>
+        Trip._getTripLocation = <span class="fstat-no" title="function not covered" >function () {</span>
 <span class="cstat-no" title="statement not covered" >            if (ObsLocation.isSet()) {</span>
 <span class="cstat-no" title="statement not covered" >                return {</span>
                     latitude: ObsLocation.data.Latitude,
@@ -402,17 +392,17 @@
 <span class="cstat-no" title="statement not covered" >            return null;</span>
         };
 &nbsp;
-        Trip.canStart = <span class="fstat-no" title="function not covered" >function() {</span>
+        Trip.canStart = <span class="fstat-no" title="function not covered" >function () {</span>
 <span class="cstat-no" title="statement not covered" >            return AppSettings.getAppMode() === 'snow' &amp;&amp; !Trip.model.started &amp;&amp; !User.getUser().anonymous;</span>
         };
 &nbsp;
 &nbsp;
-        Trip.start = <span class="fstat-no" title="function not covered" >function (type, tripId, expectedMin, comment) {</span>
+        Trip.start = <span class="fstat-no" title="function not covered" >function (type, tripId, expectedMin, comment, cancelPromise) {</span>
 <span class="cstat-no" title="statement not covered" >            if (User.getUser().anonymous) {</span>
-<span class="cstat-no" title="statement not covered" >                return RegobsPopup.alert('Ikke innlogget', 'Vennligst logg inn for å melde tur.');</span>
+<span class="cstat-no" title="statement not covered" >                return RegobsPopup.alert('NOT_LOGGED_IN', 'NOT_LOGGED_IN_TRIP_MESSAGE');</span>
             }
 <span class="cstat-no" title="statement not covered" >            if (!(tripId &amp;&amp; expectedMin)) {</span>
-<span class="cstat-no" title="statement not covered" >                return RegobsPopup.alert('Vennligst fyll ut felter', 'Både turtype og forventet klokkeslett for innsending av observasjoner må være satt for å melde tur.');</span>
+<span class="cstat-no" title="statement not covered" >                return RegobsPopup.alert('PLEASE_FILL_FORM', 'PLEASE_FILL_FORM_MESSAGE');</span>
             }
 <span class="cstat-no" title="statement not covered" >            var loc = Trip._getTripLocation();</span>
 <span class="cstat-no" title="statement not covered" >            if (loc) {</span>
@@ -430,41 +420,36 @@
                 };
 <span class="cstat-no" title="statement not covered" >                save();</span>
 &nbsp;
+<span class="cstat-no" title="statement not covered" >                var settings = angular.copy(AppSettings.httpConfig);</span>
+<span class="cstat-no" title="statement not covered" >                if (cancelPromise) {</span>
+<span class="cstat-no" title="statement not covered" >                    settings.timeout = cancelPromise.promise;</span>
+                }
 &nbsp;
-<span class="cstat-no" title="statement not covered" >                RegobsPopup.confirm('Bekreft innsending', 'Vil du melde inn denne turen?')</span>
-                    .then(<span class="fstat-no" title="function not covered" >function (confirm) {</span>
-<span class="cstat-no" title="statement not covered" >                        if (confirm) {</span>
-<span class="cstat-no" title="statement not covered" >                            Trip.sending = true;</span>
-<span class="cstat-no" title="statement not covered" >                            $rootScope.$broadcast('$regobs.tripSending');</span>
-<span class="cstat-no" title="statement not covered" >                            return $http.post(AppSettings.getEndPoints().trip, Trip.model.data, AppSettings.httpConfig);</span>
-                        }
-                    })
-                    .then(<span class="fstat-no" title="function not covered" >function (http) {</span>
-<span class="cstat-no" title="statement not covered" >                        if (http) {</span>
-                            
+<span class="cstat-no" title="statement not covered" >                Trip.sending = true;</span>
+<span class="cstat-no" title="statement not covered" >                $rootScope.$broadcast('$regobs.tripSending');</span>
+<span class="cstat-no" title="statement not covered" >                return $http.post(AppSettings.getEndPoints().trip, Trip.model.data, settings)</span>
+                    .then(<span class="fstat-no" title="function not covered" >function () {</span>
 <span class="cstat-no" title="statement not covered" >                            Trip.model.started = true;</span>
 <span class="cstat-no" title="statement not covered" >                            save();</span>
 <span class="cstat-no" title="statement not covered" >                            $rootScope.$broadcast('$regobs.tripStarted');</span>
-                            
-                            
-                        }
                     })
-                    .catch(<span class="fstat-no" title="function not covered" >function () {</span>
-<span class="cstat-no" title="statement not covered" >                        RegobsPopup.alert('Feilmelding', 'Klarte ikke starte tur.');</span>
+                    .catch(<span class="fstat-no" title="function not covered" >function (httpResponse) {</span>
+<span class="cstat-no" title="statement not covered" >                        if (httpResponse.status !== 0) {</span>
+<span class="cstat-no" title="statement not covered" >                            RegobsPopup.alert('ERROR', 'TRIP_ERROR_MESSAGE');</span>
+                        }
 <span class="cstat-no" title="statement not covered" >                        Trip.model.started = false;</span>
 <span class="cstat-no" title="statement not covered" >                        save();</span>
                     })
                     .finally(<span class="fstat-no" title="function not covered" >function () {</span>
 <span class="cstat-no" title="statement not covered" >                        Trip.sending = false;</span>
                     });
-&nbsp;
             } else {
-<span class="cstat-no" title="statement not covered" >                RegobsPopup.alert('Posisjon ikke satt', 'Posisjon må være satt for å starte tur');</span>
+<span class="cstat-no" title="statement not covered" >                return RegobsPopup.alert('NO_POSITION', 'NO_TRIP_POSITION');</span>
             }
         };
 &nbsp;
         Trip.stop = <span class="fstat-no" title="function not covered" >function () {</span>
-<span class="cstat-no" title="statement not covered" >            return RegobsPopup.confirm('Bekreft innsending', 'Vil du avslutte denne turen?')</span>
+<span class="cstat-no" title="statement not covered" >            return RegobsPopup.confirm('CONFIRM_SEND', 'STOP_TRIP')</span>
                 .then(<span class="fstat-no" title="function not covered" >function (confirm) {</span>
 <span class="cstat-no" title="statement not covered" >                    if (confirm) {</span>
 <span class="cstat-no" title="statement not covered" >                        Trip.sending = true;</span>
@@ -475,11 +460,11 @@
                 .then(<span class="fstat-no" title="function not covered" >function (httpPromise) {</span>
 <span class="cstat-no" title="statement not covered" >                    if (httpPromise) {</span>
 <span class="cstat-no" title="statement not covered" >                        stop();</span>
-<span class="cstat-no" title="statement not covered" >                        return RegobsPopup.alert('Tur stoppet', 'Tur avsluttet!');</span>
+<span class="cstat-no" title="statement not covered" >                        return RegobsPopup.alert('TRIP_STOPPED', 'TRIP_STOPPED_TEXT');</span>
                     }
                 })
                 .catch(<span class="fstat-no" title="function not covered" >function () {</span>
-<span class="cstat-no" title="statement not covered" >                    RegobsPopup.alert('Feilmelding', 'Klarte ikke avslutte tur, dette kan skyldes at den allerede har blitt avsluttet på nett, eller på serveren.');</span>
+<span class="cstat-no" title="statement not covered" >                    RegobsPopup.alert('ERROR', 'STOP_TRIP_ERROR_TEXT');</span>
 <span class="cstat-no" title="statement not covered" >                    stop();</span>
                 })
                 .finally(<span class="fstat-no" title="function not covered" >function () {</span>
@@ -497,7 +482,7 @@
 &nbsp;
 <span class="cstat-no" title="statement not covered" >            if (Trip.model.time &amp;&amp; now.getDay() !== modelTime.getDay()) {</span>
 <span class="cstat-no" title="statement not covered" >                stop();</span>
-<span class="cstat-no" title="statement not covered" >                return RegobsPopup.alert('Tur stoppet', 'Gårsdagens tur har automatisk blitt avsluttet.');</span>
+<span class="cstat-no" title="statement not covered" >                return RegobsPopup.alert('TRIP_STOPPED', 'TRIP_AUTO_STOPPED');</span>
             }
         };
 &nbsp;
@@ -526,7 +511,7 @@
 </div><!-- /wrapper -->
 <div class='footer quiet pad2 space-top1 center small'>
   Code coverage
-  generated by <a href="http://istanbul-js.org/" target="_blank">istanbul</a> at Mon May 29 2017 13:52:48 GMT+0200 (W. Europe Daylight Time)
+  generated by <a href="http://istanbul-js.org/" target="_blank">istanbul</a> at Wed Jun 07 2017 15:07:32 GMT+0200 (W. Europe Daylight Time)
 </div>
 </div>
 <script src="../../prettify.js"></script>
