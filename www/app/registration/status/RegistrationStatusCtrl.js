@@ -6,18 +6,18 @@
         vm.cancelled = false;
 
         vm.init = function () {
+            vm.loaded = false;
+            vm.isSending = true;
+            vm.cancelled = false;
             Utility.setBackView('start');
             vm.progressName = Utility.createGuid();
-            vm.completed = [];
-            vm.loaded = false;
+            vm.completed = [];       
             Utility.clearRegistrationCacheViews().then(function () {
                 Registration.prepareRegistrationForSending().then(function () {
                     vm.unsent = Registration.unsent;
-                    vm.isSending = vm.unsent.length > 0;
                     $ionicScrollDelegate.resize();
                     $ionicScrollDelegate.scrollTop();
                     vm.loaded = true;
-
                     if (vm.unsent.length > 0) {
                         vm.send();
                     } else {
@@ -39,8 +39,8 @@
         };
 
         vm.send = function () {
-            vm.cancelled = false;
             vm.isSending = true;
+            vm.cancelled = false;            
             vm.completed = [];
             vm.downloadStatus = new RegObs.ProggressStatus();
             vm.downloadStatus.setTotal(vm.unsent.length);
