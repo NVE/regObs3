@@ -409,7 +409,6 @@ angular
                     cleanupDangerObs(data.DangerObs);
                     stripExposedHeight(data.AvalancheEvalProblem2);
                     stripExposedHeight(data.AvalancheActivityObs2);
-                    cleanupGeneralObservation(data.GeneralObservation);
                     cleanupObsLocation(location);
                     cleanupStabilityTest(data.CompressionTest);
                     cleanupIncidenct(data.Incident);
@@ -463,12 +462,6 @@ angular
                             if (obs.exposedHeight)
                                 delete obs.exposedHeight;
                         });
-                    }
-                }
-
-                function cleanupGeneralObservation(obs) {
-                    if (obs) {
-                        obs.ObsHeader = '';
                     }
                 }
 
