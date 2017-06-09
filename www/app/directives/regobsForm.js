@@ -1,13 +1,14 @@
 ﻿angular.module('RegObs').component('regobsForm', {
     bindings: {
         name: '@',
-        saveAction: '&',
+        saveAction: '&?',
         goBack: '<',
         backState: '@'
     },
-    controller: function ($state, Property, $scope, RegobsPopup, $ionicHistory, $q) {
+    controller: function ($state, Property, $scope, RegobsPopup, $ionicHistory, $q, Registration, Pictures) {
         var ctrl = this;
         ctrl.name = ctrl.name || 'regobsform';
+        ctrl._confirmed = false;
 
         ctrl.formIsInvalid = function () {
             return $scope[ctrl.name].$invalid;
@@ -21,11 +22,22 @@
             );
         };
 
-        ctrl.checkFormAndSave = function (event, toState) {
+        ctrl.checkFormAndSave = function (event, toState, toParams, fromState, fromParams) {
+            if (ctrl._confirmed) {
+                return;
+            }
+
+            if ($state.current.data.registrationProp && !Registration.propertyExists($state.current.data.registrationProp) && !Pictures.hasPictures($state.current.data.registrationProp)) {
+                return; //Do not save empty registration, because it is cleaned up in AppCtrl
+            }
+
             var callAction = function () {
                 if (angular.isFunction(ctrl.saveAction)) {
                     ctrl.saveAction();
+                } else {
+                    Registration.save();
                 }
+
             };
 
             if (ctrl.formIsInvalid()) {
@@ -35,9 +47,9 @@
                 ctrl.getUserConfirmation()
                     .then(function (confirm) {
                         if (confirm) {
-                            Property.reset($state.current.data.registrationProp, true);
+                            ctrl._confirmed = true;
                             callAction();
-                            $state.go(toState.name, { confirmed: true });
+                            $state.go(toState.name);
                         }
                     });
             } else {
@@ -46,7 +58,7 @@
         };
 
         ctrl.post = function () {
-            if (ctrl.goBack === undefined || ctrl.goBack === true) {             
+            if (ctrl.goBack === undefined || ctrl.goBack === true) {
                 if (ctrl.backState) {
                     $state.go(ctrl.backState);
                 } else {
@@ -57,11 +69,7 @@
             }
         };
 
-        $scope.$on('$stateChangeStart', function (event, toState, toParams, fromState, fromParams) {
-            if (!toParams.confirmed) {
-                ctrl.checkFormAndSave(event, toState);
-            }
-        });
+        $scope.$on('$stateChangeStart', ctrl.checkFormAndSave);
     },
     transclude: true,
     template: '<form name="{{$ctrl.name}}" ng-submit="$ctrl.post()" novalidate><ng-transclude></ng-transclude></form>',

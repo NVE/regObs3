@@ -46,6 +46,8 @@ angular.module('RegObs')
                 // call super
                 L.Marker.prototype.initialize.call(this, latlng, this.options);
                 this.on('click', this.setSelected);
+                this.on('contextmenu', this.setSelected);
+                //this.on('mousedown', this.setSelected);
             },
 
             isClickable: function() {

@@ -30,6 +30,7 @@
             $urlRouterProvider.otherwise('/start');
         }
 
+        $ionicConfigProvider.views.swipeBackEnabled(false); //turn off swipe back (map interactions often swipes back)
         $ionicConfigProvider.backButton.previousTitleText(false).text('&emsp;&emsp;'); //Increase the touch target area on back button
 
         $stateProvider

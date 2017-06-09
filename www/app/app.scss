@@ -636,7 +636,16 @@ input.extra-large-time {
 .border-thin {
     border: 1px solid #ddd;
     margin-bottom: 16px;
+    //margin: 16px;
 }
+.line {
+    border-bottom: 1px solid #ddd;
+}
+
+/*.border-thin .input-label, textarea {
+    padding-left: 5px;
+    padding-right: 5px;
+}*/
 
 .item-image {
     background-color: #fff;

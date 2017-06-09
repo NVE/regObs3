@@ -99,15 +99,22 @@
 
         vm.addDamageObsPicture = function (damageObs) {
             AppLogging.log('Open picture selector');
+            vm.imageSelectorOpen = true;
             Pictures.showImageSelector(Utility.registrationTid(vm.registrationProp)).then(function (result) {
                 if (!damageObs.Pictures) {
                     damageObs.Pictures = [];
                 }
                 damageObs.Pictures.push(result);
                 $ionicScrollDelegate.resize();
-            }, function (error) {
+            }).catch(function (error) {
                 AppLogging.log('Error getting picture: ' + (error && error.message ? error.message : ''));
+            }).finally(function () {
+                vm.imageSelectorOpen = false;
             });
+        };
+
+        vm.scrollup = function () {
+            $ionicScrollDelegate.scrollBy(0, 400, true);
         };
 
         vm.removeImage = function (damageObs, index) {
@@ -149,14 +156,16 @@
         };
 
         vm.addDamagePosition = function (dm) {
-            vm.save();
-            vm.isAddingPosition = true;
-            var damageObsFiltered = vm.reg.DamageObs.filter(function (item) {
-                return item.DamageTypeTID === dm.DamageTypeTID;
-            });
-            if (damageObsFiltered.length > 0){
-                $state.go('confirmdamagelocation', { damageObs: damageObsFiltered[0] }, { reload: true });
-            }  
+            if (!vm.imageSelectorOpen) {
+                vm.save();
+                vm.isAddingPosition = true;
+                var damageObsFiltered = vm.reg.DamageObs.filter(function (item) {
+                    return item.DamageTypeTID === dm.DamageTypeTID;
+                });
+                if (damageObsFiltered.length > 0) {
+                    $state.go('confirmdamagelocation', { damageObs: damageObsFiltered[0] });
+                }
+            }
         };
 
         vm.formatPosition = function (position) {

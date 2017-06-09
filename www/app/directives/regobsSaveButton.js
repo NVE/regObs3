@@ -22,9 +22,8 @@
                 AppLogging.log('formCtrl', ctrl.formCtrl);
                 if (formIsInvalid()) {
                     getUserConfirmation()
-                        .then(function (confirmed) {
+                        .then(function (confirmed) {                         
                             if (confirmed) {
-                                Property.reset($state.current.data.registrationProp, true);
                                 saveAndGoBack(true);
                             }
                         });
@@ -58,17 +57,12 @@
             $scope.$on('$stateChangeStart', function (event, toState, toParams, fromState, fromParams) {
                 if (formIsInvalid() && !confirmed) {
                     event.preventDefault();
-                    $state.go(fromState.name);
                     getUserConfirmation()
                         .then(function (confirm) {
                             if (confirm) {
                                 confirmed = true;
-                                Property.reset($state.current.data.registrationProp, true);
                                 ctrl.saveAction();
                                 $state.go(toState.name);
-                            } else {
-                                $state.go($state.current, {}, {reload: true});
-
                             }
                         });
                 } else if (!confirmed) {

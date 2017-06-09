@@ -40,7 +40,7 @@
                                         <img ng-src="{{pic.PictureImageBase64}}">
                                         <div class="padding">
                                             <div class="input-label normalcase">{{'IMAGE_DESCRIPTION'|translate}}:</div>
-                                            <regobs-comment class="bordered" hide-label="true" placeholder="{{'IMAGE_DESCRIPTION_PLACEHOLDER'|translate}}" model="pic.PictureComment"></regobs-comment>
+                                            <regobs-comment force-scroll="true" class="bordered" hide-label="true" placeholder="{{'IMAGE_DESCRIPTION_PLACEHOLDER'|translate}}" model="pic.PictureComment"></regobs-comment>
                                         </div>
                                         <i class="icon-remove-image ion-close-round" ng-click="vm.removeImage(dm, $index)"></i>
                                     </div>
@@ -49,23 +49,18 @@
                                     <i class="icon small-icon ion-image"></i> + {{'ADD_IMAGES'|translate}}
                                 </div>
                             </div>
-                            <!--<label class="item item-input item-icon-left item-stacked-label">
+                            <label class="item item-input item-icon-left item-stacked-label">
                                 <span class="input-label normalcase">{{'DAMAGE_DESCRIPTION'|translate}}</span>
-                                <regobs-comment class="bordered" min-height="80" hide-label="true" placeholder="{{'DAMAGE_DESCRIPTION_PLACEHOLDER'|translate}}" model="dm.Comment"></regobs-comment>
-                            </label>-->
+                                <regobs-comment force-scroll="true" class="bordered" min-height="80" hide-label="true" placeholder="{{'DAMAGE_DESCRIPTION_PLACEHOLDER'|translate}}" model="dm.Comment"></regobs-comment>
+                            </label>
                         </div>
                     </div>
-                    <!-- I had to put this input field outside damage-details wrapper, or else it didn't scroll up when focused (keyboard open) -->
-                    <label ng-show="dm.checked" class="item item-input item-icon-left item-stacked-label damage-detail-arrow-box-bottom">
-                        <span class="input-label normalcase">{{'DAMAGE_DESCRIPTION'|translate}}</span>
-                        <regobs-comment class="bordered" min-height="80" hide-label="true" placeholder="{{'DAMAGE_DESCRIPTION_PLACEHOLDER'|translate}}" model="dm.Comment"></regobs-comment>
-                    </label>
                 </div>
                 <div ng-if="vm.geoHazardId === 60">
                     <div class="regobs-next-prev-footer">
                         <div class="regobs-next-prev-footer-content">
-                            <button type="button" class="button button-large button-outline button-calm icon-left ion-android-arrow-back prev-button" ui-sref="waterlevel" ui-sref-opts="{reload: true}">{{'PREVIOUS'|translate}}</button>
-                            <button type="button" class="button button-large button-calm icon-right ion-android-arrow-forward next-button" ui-sref="generalobs2" ui-sref-opts="{reload: true}">{{'NEXT'|translate}}</button>
+                            <button type="button" class="button button-large button-outline button-calm icon-left ion-android-arrow-back prev-button" ui-sref="waterlevel">{{'PREVIOUS'|translate}}</button>
+                            <button type="button" class="button button-large button-calm icon-right ion-android-arrow-forward next-button" ui-sref="generalobs2">{{'NEXT'|translate}}</button>
                             <div>
                                 <button type="submit" class="button button-large button-block button-grey button-outline"><i class="icon ion-eye"></i>&nbsp;&nbsp;{{'VIEW_MY_OBSERVATION'|translate}}</button>
                             </div>

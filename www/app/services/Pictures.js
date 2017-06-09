@@ -183,6 +183,7 @@
                                 text: translations['ALBUM'],
                                 type: 'button icon-left ion-images',
                                 onTap: function (e) {
+                                    e.stopPropagation();
                                     // Returning a value will cause the promise to resolve with the given value.
                                     return 'album';
                                 }
@@ -191,6 +192,7 @@
                                 text: translations['CAMERA'],
                                 type: 'button icon-left ion-camera',
                                 onTap: function (e) {
+                                    e.stopPropagation();                       
                                     // Returning a value will cause the promise to resolve with the given value.
                                     return 'camera';
                                 }

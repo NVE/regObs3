@@ -56,11 +56,11 @@ angular
                 var appMode = AppSettings.getAppMode();
                 var navigate = function () {
                     if (!ObsLocation.isSet()) {
-                        $state.go('confirmlocation', {}, { reload: true });
+                        $state.go('confirmlocation');
                     } else if (!Registration.data.DtObsTime) {
                         $state.go('confirmtime');
                     } else {
-                        $state.go('newregistration', {}, { reload: true });
+                        $state.go('newregistration');
                     }
                 };
 

@@ -3,7 +3,7 @@
         <nav-saving-indicator></nav-saving-indicator>
     </ion-nav-buttons>
     <ion-content overflow-scroll="true">
-        <regobs-form save-action="vm.save()" back-state="newregistration">
+        <regobs-form back-state="newregistration">
             <ion-list>
                 <div class="item item-divider item-divider-calm">
                     <div><i class="icon ion-image"></i> {{'ADD_OBSERVATION_IMAGES'|translate}}</div>
@@ -14,7 +14,7 @@
                         <img ng-src="{{pic.PictureImageBase64}}">
                         <div class="padding">
                             <div class="input-label normalcase">{{'IMAGE_DESCRIPTION'|translate}}:</div>
-                            <regobs-comment class="bordered" hide-label="true" placeholder="{{'IMAGE_DESCRIPTION_PLACEHOLDER'|translate}}" model="pic.PictureComment"></regobs-comment>
+                            <regobs-comment force-scroll="true" class="bordered" hide-label="true" placeholder="{{'IMAGE_DESCRIPTION_PLACEHOLDER'|translate}}" model="pic.PictureComment"></regobs-comment>
                         </div>
                         <i class="icon icon-remove-image ion-close-round" ng-click="vm.removeImage(pic)"></i>
                     </div>
@@ -32,8 +32,8 @@
                                 model="vm.reg.GeneralObservation.ObsComment" min-height="100" hide-label="true"></regobs-comment>
                 <div class="regobs-next-prev-footer">
                     <div class="regobs-next-prev-footer-content">
-                        <button type="button" class="button button-large button-outline button-calm icon-left ion-android-arrow-back prev-button" ui-sref="damageobs" ui-sref-opts="{reload: true}">{{'PREVIOUS'|translate}}</button>
-                        <button type="button" class="button button-large button-calm icon-right ion-android-arrow-forward next-button" ui-sref="newregistration" ui-sref-opts="{reload: true}">{{'NEXT'|translate}}</button>
+                        <button type="button" class="button button-large button-outline button-calm icon-left ion-android-arrow-back prev-button" ui-sref="damageobs">{{'PREVIOUS'|translate}}</button>
+                        <button type="button" class="button button-large button-calm icon-right ion-android-arrow-forward next-button" ui-sref="newregistration">{{'NEXT'|translate}}</button>
                         <div>
                             <button type="submit" class="button button-large button-block button-grey button-outline"><i class="icon ion-eye"></i>&nbsp;&nbsp;{{'VIEW_MY_OBSERVATION'|translate}}</button>
                         </div>

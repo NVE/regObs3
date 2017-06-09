@@ -50,10 +50,25 @@ angular
             return service.getWindDirectionText(direction, true);
         };
 
-        service.getExposionHeightText = function (item, data) {
-            AppLogging.log('data.FullObject.ExposedHeightComboTID: ' + data.FullObject.ExposedHeightComboTID);
-            AppLogging.log('data.FullObject: ' + JSON.stringify(data.FullObject));
+        service.getAvalCauseAttributes = function (item, data) {
+            var arr = [];
+            var pushIfNotEmpty = function (items) {
+                items.forEach(function (item) {
+                    if (item) {
+                        arr.push(item.trim());
+                    }
+                });
+            };
+            pushIfNotEmpty([data.FullObject.AvalCauseAttributeCrystalTName,
+                data.FullObject.AvalCauseAttributeLightTName,
+                data.FullObject.AvalCauseAttributeSoftTName,
+                data.FullObject.AvalCauseAttributeThinTName
+            ]);
 
+            return arr.join('&nbsp;&bull;&nbsp;');
+        };
+
+        service.getExposionHeightText = function (item, data) {
             var getValue = function (item) {
                 if (item === undefined || item === null) {
                     return 'ukjent';
@@ -332,6 +347,14 @@ angular
                     AvalancheExtTID: {},
                     AvalCauseTID: {},
                     AvalCauseDepthTID: {},
+                    AvalCauseAttributes: {
+                        displayFormat: {
+                            condition: function (item, data) {
+                                return data.FullObject.AvalCauseAttributeCrystalTName || data.FullObject.AvalCauseAttributeLightTName || data.FullObject.AvalCauseAttributeSoftTName || data.FullObject.AvalCauseAttributeThinTName;
+                            },
+                            valueFormat: service.getAvalCauseAttributes
+                        }
+                    },
                     AvalTriggerSimpleTID: {},
                     AvalProbabilityTID: {},
                     DestructiveSizeTID: {},
@@ -430,7 +453,7 @@ angular
                 name: "Fritekst",
                 RegistrationTID: "10",
                 properties: {
-                    ObsComment: {}
+                    ObsComment: { displayFormat: { hideDescription: true } }
                 }
             },
             DamageObs: { //Has custom summary component in registration summary: directives/registrationdetail/summary/damageObsSummary.js

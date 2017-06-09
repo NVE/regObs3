@@ -11,11 +11,7 @@
             var doSave = function () {
                 Registration.data.DtObsTime = ctrl.time.toISOString();
                 Registration.save();
-                if (Registration.data.GeoHazardTID === Utility.geoHazardTid('water')){
-                    $state.go('waterlevel', {}, { reload: true });
-                } else {
-                    $state.go('newregistration', {}, {reload: true});
-                }
+                $state.go('newregistration');
             };
 
             if (!ctrl.time || (ctrl.time > new Date())) {

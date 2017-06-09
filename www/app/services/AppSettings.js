@@ -28,8 +28,8 @@
         };
 
         var baseUrls = {
-            'regObs': 'https://api.nve.no/hydrology/regobs/webapi_v3.1.0',
-            'demo regObs': 'https://api.nve.no/hydrology/demo/regobs/webapi',           
+            'regObs': 'https://api.nve.no/hydrology/regobs/webapi_v3.2.0',
+            'demo regObs': 'https://api.nve.no/hydrology/demo/regobs/webapi_v3.2/',           
             'test regObs': 'http://tst-h-web03.nve.no/regobswebapi'
             //'test regObs': 'http://localhost:40001'
         };
@@ -45,7 +45,7 @@
                 .then(function(response) {
                     var headers = {
                         regObs_apptoken: response.data.apiKey,
-                        ApiJsonVersion: '3.1.1'
+                        ApiJsonVersion: '3.2.0'
                     };
 
                     settings.httpConfig = {
@@ -171,7 +171,6 @@
 
         settings.getWebImageUrl = function (id) {
             return settings.getEndPoints().services + 'Image/medium/' + id;
-            //return settings.getWebRoot() + 'Picture/image/' + id;
         };
 
         settings.imageRootFolder = 'picture';

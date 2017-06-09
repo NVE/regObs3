@@ -503,5 +503,6 @@
   "TRIP_STOPPED": "Tur stoppet",
   "TRIP_STOPPED_TEXT": "Tur avsluttet!",
   "STOP_TRIP_ERROR_TEXT": "Klarte ikke avslutte tur, dette kan skyldes at den allerede har blitt avsluttet på nett, eller på serveren.",
-  "TRIP_AUTO_STOPPED": "Gårsdagens tur har automatisk blitt avsluttet."
+  "TRIP_AUTO_STOPPED": "Gårsdagens tur har automatisk blitt avsluttet.",
+  "AVAL_CAUSE_ATTRIBUTES": "Ugunstige egenskaper på det svake laget"
 }
