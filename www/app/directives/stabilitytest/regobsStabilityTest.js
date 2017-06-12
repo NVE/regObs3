@@ -144,7 +144,7 @@ angular
                 }
                 if (stabilityTest.tempFractureDepth > 0) {
                     result += '@';
-                    result += $filter('number')(stabilityTest.tempFractureDepth, 0) + 'cm';
+                    result += $filter('number')(stabilityTest.tempFractureDepth, 0).replace(',', '.') + 'cm';
                 }
                 if (stabilityTest.ComprTestFractureTID > 0) {
                     result += $scope.getComprTestFractureName(stabilityTest.ComprTestFractureTID)

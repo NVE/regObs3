@@ -1,44 +1,44 @@
 <ion-modal-view>
-    <ion-header-bar>
-        <button type="button" class="button button-clear button-calm" ng-click="modal.hide()">Avbryt</button>
-        <h1 class="title" ng-hide="editing">Nytt islag</h1>
-        <h1 class="title" ng-show="editing">Rediger islag</h1>
-        <button type="button" class="button button-clear button-calm" ng-click="add()">OK</button>
-    </ion-header-bar>
-    <ion-content>
-        <div class="padding">
-            Islag registreres ovenfra og ned.
-        </div>
-        <form name="newIceLayerForm" novalidate>
+    <form name="newIceLayerForm" novalidate>
+        <ion-header-bar>
+            <button type="button" class="button button-clear button-calm" ng-click="modal.hide()">Avbryt</button>
+            <h1 class="title" ng-hide="editing">Nytt islag</h1>
+            <h1 class="title" ng-show="editing">Rediger islag</h1>
+            <button type="button" class="button button-clear button-calm" ng-click="add(newIceLayerForm)">OK</button>
+        </ion-header-bar>
+        <ion-content>
+            <div class="padding">
+                Islag registreres ovenfra og ned.
+            </div>
+
             <ion-list>
 
                 <label class="item item-input item-stacked-label item-select">
-                <span class="input-label">
-                    Type is
-                </span>
+                    <span class="input-label">
+                        Type is
+                    </span>
                     <select ng-model="iceLayer.IceLayerTID"
-                            ng-options="kdv.Id as kdv.Name for kdv in iceLayerKdvArray">
-                    </select>
+                            ng-options="kdv.Id as kdv.Name for kdv in iceLayerKdvArray"></select>
                 </label>
 
-                <regobs-number
-                        field-name="vindhastighet"
-                        label="Tykkelse på islag (cm)"
-                        help-text="I centimeter"
-                        model="data.thickness"
-                        min="0"
-                        max="10000"
-                        change-handler="thicknessChanged()"
-                ></regobs-number>
+                <regobs-number field-name="vindhastighet"
+                               label="Tykkelse på islag (cm)"
+                               help-text="I centimeter"
+                               model="data.thickness"
+                               min="0"
+                               max="10000"></regobs-number>
 
             </ion-list>
             <div class="padding">
-                <regobs-save-button ng-click="add()" save-action="modal.hide()"></regobs-save-button>
+                <!--<regobs-save-button ng-disabled="newIceLayerForm.$invalid" ng-click="add(newIceLayerForm)" save-action="modal.hide()"></regobs-save-button>-->
+                <button type="button" class="button button-block button-calm" ng-disabled="newIceLayerForm.$invalid" ng-click="add(newIceLayerForm)">{{'SAVE'|translate}}</button>
                 <button type="button" class="button button-block button-assertive button-clear"
                         ng-click="delete()"
-                        ng-show="editing">Slett
+                        ng-show="editing">
+                    Slett
                 </button>
             </div>
-        </form>
-    </ion-content>
+
+        </ion-content>
+    </form>
 </ion-modal-view>

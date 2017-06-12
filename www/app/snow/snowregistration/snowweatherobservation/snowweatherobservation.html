@@ -19,14 +19,14 @@
                         label="{{'WIND_SPEED'|translate}} (m/s)"
                         help-text="{{'AIR_TEMPERATURE_HELP_TEXT'|translate}}"
                         model="vm.reg.WeatherObservation.WindSpeed"
-                        min="0"
+                        min="0" max="50"
                 ></regobs-number>
                 <regobs-number
                         field-name="skydekke"
                         label="{{'CLOUD_COVER'|translate}} (%)"
                         help-text="{{'ONLY_ROUND_PERCENTAGE'|translate}}"
                         model="vm.reg.WeatherObservation.CloudCover"
-                        min="0"
+                        min="0" max="100"
                         step="1"
                         pattern="[0-9]*"
                 ></regobs-number>

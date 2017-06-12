@@ -132,6 +132,7 @@
         $scope.$on('$ionicView.enter', vm.init);
 
         $scope.$on('$ionicView.beforeLeave', function () {
+            vm.loaded = false;
             if (vm.cancelPromise && vm.isSending) {
                 vm.cancelPromise.resolve();
             }

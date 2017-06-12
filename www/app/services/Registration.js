@@ -130,6 +130,8 @@ angular
         };
 
         Registration.save = function () {
+            $rootScope.$broadcast('$regObs:beforeSave');
+
             LocalStorage.setObject(storageKey, Registration.data);
             LocalStorage.setObject(unsentStorageKey, Registration.unsent);
 
@@ -247,10 +249,6 @@ angular
             }
         };
 
-        Registration._isDuplicateRegistrationStatus = function (error) {
-            return error.status === 400 && error.data && error.data.ModelState && error.data.ModelState.registration && error.data.ModelState.registration.length > 0 && angular.isString(error.data.ModelState.registration[0]) && error.data.ModelState.registration[0].startsWith("Duplicate registration");
-        }
-
 
         Registration.post = function (onItemCompleteCallback, cancelPromise) {
             return $q(function (resolve) {
@@ -309,7 +307,7 @@ angular
                                                 item.error = { status: error.status, time: new Date(), message: error.data };
                                                 failed.push(item);
 
-                                                if (error.status === 400) { //Bad request is logged
+                                                if (error.status === 400 || (error.status >= 500 && error.status < 600)) { //Bad request is logged
                                                     Raven.captureMessage('Error sending registration. Message: ' + angular.toJson(error.data) + ' Json: ' + angular.toJson(item), {
                                                         level: 'error'
                                                     });

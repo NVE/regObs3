@@ -105,7 +105,8 @@
             .state('registrationstatus', {
                 url: '/registrationstatus',
                 templateUrl: 'app/registration/status/registrationstatus.html',
-                controller: 'RegistrationStatusCtrl as vm'
+                controller: 'RegistrationStatusCtrl as vm',
+                cache: false
             })
 
             //SNØ

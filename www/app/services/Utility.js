@@ -134,7 +134,7 @@ angular
 
             if (fullObject.FractureDepth) {
                 result += '@';
-                result += $filter('number')(fullObject.FractureDepth * 100, 0) + 'cm';
+                result += $filter('number')(fullObject.FractureDepth * 100, 0).replace(',', '.') + 'cm';
             }
             if (fullObject.ComprTestFractureTID > 0) {
                 result += fullObject.ComprTestFractureTName;
@@ -256,8 +256,8 @@ angular
                 name: "Snødekke",
                 RegistrationTID: "22",
                 properties: {
-                    SnowDepth: { displayFormat: { valueFormat: function (item) { return $filter('number')(item * 100, 0) + ' cm' } } },
-                    NewSnowDepth24: { displayFormat: { valueFormat: function (item) { return $filter('number')(item * 100, 0) + ' cm' } } },
+                    SnowDepth: { displayFormat: { valueFormat: function (item) { return $filter('number')(item * 100, 0).replace(',', '.') + ' cm' } } },
+                    NewSnowDepth24: { displayFormat: { valueFormat: function (item) { return $filter('number')(item * 100, 0).replace(',', '.') + ' cm' } } },
                     NewSnowLine: { displayFormat: { valueFormat: function (item) { return item + ' moh' } } },
                     Snowline: { displayFormat: { valueFormat: function (item) { return item + ' moh' } } },
                     HeightLimitLayeredSnow: { displayFormat: { valueFormat: function (item) { return item + ' moh' } } },
@@ -393,20 +393,20 @@ angular
                 name: "Snø og istykkelse",
                 RegistrationTID: "50",
                 properties: {
-                    SnowDepth: { displayFormat: { title: 'DRY_SNOW_BEFORE_DRILL', valueFormat: function (item) { return $filter('number')(item * 100, 0) + ' cm' } } },
-                    SlushSnow: { displayFormat: { valueFormat: function (item) { return $filter('number')(item * 100, 0) + ' cm' } } },
+                    SnowDepth: { displayFormat: { title: 'DRY_SNOW_BEFORE_DRILL', valueFormat: function (item) { return $filter('number')(item * 100, 0).replace(',','.') + ' cm' } } },
+                    SlushSnow: { displayFormat: { valueFormat: function (item) { return $filter('number')(item * 100, 0).replace(',', '.') + ' cm' } } },
                     IceThicknessLayers: {
                         displayFormat: {
                             valueFormat: function (item) {
                                 var result = [];
                                 item.forEach(function (layer) {
-                                    result.push($filter('number')((layer.IceLayerThickness || 0) * 100, 0) + ' cm ' + layer.IceLayerTName);
+                                    result.push($filter('number')((layer.IceLayerThickness || 0) * 100, 0).replace(',', '.') + ' cm ' + layer.IceLayerTName);
                                 });
                                 return result.join(', ');
                             }
                         }
                     },
-                    IceThicknessSum: { displayFormat: { valueFormat: function (item) { return $filter('number')(item * 100, 0) + ' cm' } } },
+                    IceThicknessSum: { displayFormat: { valueFormat: function (item) { return $filter('number')(item * 100, 0).replace(',', '.') + ' cm' } } },
                     Comment: { displayFormat: { hideDescription: true } }
                 }
             },
