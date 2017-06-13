@@ -20,24 +20,24 @@
     </h1>
     <div class='clearfix'>
       <div class='fl pad1y space-right2'>
-        <span class="strong">0.98% </span>
+        <span class="strong">0.93% </span>
         <span class="quiet">Statements</span>
-        <span class='fraction'>1/102</span>
+        <span class='fraction'>1/107</span>
       </div>
       <div class='fl pad1y space-right2'>
         <span class="strong">0% </span>
         <span class="quiet">Branches</span>
-        <span class='fraction'>0/45</span>
+        <span class='fraction'>0/47</span>
       </div>
       <div class='fl pad1y space-right2'>
         <span class="strong">0% </span>
         <span class="quiet">Functions</span>
-        <span class='fraction'>0/29</span>
+        <span class='fraction'>0/31</span>
       </div>
       <div class='fl pad1y space-right2'>
-        <span class="strong">0.98% </span>
+        <span class="strong">0.93% </span>
         <span class="quiet">Lines</span>
-        <span class='fraction'>1/102</span>
+        <span class='fraction'>1/107</span>
       </div>
     </div>
   </div>
@@ -216,7 +216,16 @@
 171
 172
 173
-174</td><td class="line-coverage quiet"><span class="cline-any cline-yes">1×</span>
+174
+175
+176
+177
+178
+179
+180
+181
+182
+183</td><td class="line-coverage quiet"><span class="cline-any cline-yes">1×</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -320,14 +329,21 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -371,9 +387,11 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -490,15 +508,22 @@
 &nbsp;
 <span class="cstat-no" title="statement not covered" >        vm.addDamageObsPicture = <span class="fstat-no" title="function not covered" >function (damageObs) {</span></span>
 <span class="cstat-no" title="statement not covered" >            AppLogging.log('Open picture selector');</span>
+<span class="cstat-no" title="statement not covered" >            vm.imageSelectorOpen = true;</span>
 <span class="cstat-no" title="statement not covered" >            Pictures.showImageSelector(Utility.registrationTid(vm.registrationProp)).then(<span class="fstat-no" title="function not covered" >function (result) {</span></span>
 <span class="cstat-no" title="statement not covered" >                if (!damageObs.Pictures) {</span>
 <span class="cstat-no" title="statement not covered" >                    damageObs.Pictures = [];</span>
                 }
 <span class="cstat-no" title="statement not covered" >                damageObs.Pictures.push(result);</span>
 <span class="cstat-no" title="statement not covered" >                $ionicScrollDelegate.resize();</span>
-            }, <span class="fstat-no" title="function not covered" >function (error) {</span>
+            }).catch(<span class="fstat-no" title="function not covered" >function (error) {</span>
 <span class="cstat-no" title="statement not covered" >                AppLogging.log('Error getting picture: ' + (error &amp;&amp; error.message ? error.message : ''));</span>
+            }).finally(<span class="fstat-no" title="function not covered" >function () {</span>
+<span class="cstat-no" title="statement not covered" >                vm.imageSelectorOpen = false;</span>
             });
+        };
+&nbsp;
+<span class="cstat-no" title="statement not covered" >        vm.scrollup = <span class="fstat-no" title="function not covered" >function () {</span></span>
+<span class="cstat-no" title="statement not covered" >            $ionicScrollDelegate.scrollBy(0, 400, true);</span>
         };
 &nbsp;
 <span class="cstat-no" title="statement not covered" >        vm.removeImage = <span class="fstat-no" title="function not covered" >function (damageObs, index) {</span></span>
@@ -540,14 +565,16 @@
         };
 &nbsp;
 <span class="cstat-no" title="statement not covered" >        vm.addDamagePosition = <span class="fstat-no" title="function not covered" >function (dm) {</span></span>
-<span class="cstat-no" title="statement not covered" >            vm.save();</span>
-<span class="cstat-no" title="statement not covered" >            vm.isAddingPosition = true;</span>
-<span class="cstat-no" title="statement not covered" >            var damageObsFiltered = vm.reg.DamageObs.filter(<span class="fstat-no" title="function not covered" >function (item) {</span></span>
-<span class="cstat-no" title="statement not covered" >                return item.DamageTypeTID === dm.DamageTypeTID;</span>
-            });
-<span class="cstat-no" title="statement not covered" >            if (damageObsFiltered.length &gt; 0){</span>
-<span class="cstat-no" title="statement not covered" >                $state.go('confirmdamagelocation', { damageObs: damageObsFiltered[0] }, { reload: true });</span>
-            }  
+<span class="cstat-no" title="statement not covered" >            if (!vm.imageSelectorOpen) {</span>
+<span class="cstat-no" title="statement not covered" >                vm.save();</span>
+<span class="cstat-no" title="statement not covered" >                vm.isAddingPosition = true;</span>
+<span class="cstat-no" title="statement not covered" >                var damageObsFiltered = vm.reg.DamageObs.filter(<span class="fstat-no" title="function not covered" >function (item) {</span></span>
+<span class="cstat-no" title="statement not covered" >                    return item.DamageTypeTID === dm.DamageTypeTID;</span>
+                });
+<span class="cstat-no" title="statement not covered" >                if (damageObsFiltered.length &gt; 0) {</span>
+<span class="cstat-no" title="statement not covered" >                    $state.go('confirmdamagelocation', { damageObs: damageObsFiltered[0] });</span>
+                }
+            }
         };
 &nbsp;
 <span class="cstat-no" title="statement not covered" >        vm.formatPosition = <span class="fstat-no" title="function not covered" >function (position) {</span></span>
@@ -568,7 +595,7 @@
 </div><!-- /wrapper -->
 <div class='footer quiet pad2 space-top1 center small'>
   Code coverage
-  generated by <a href="http://istanbul-js.org/" target="_blank">istanbul</a> at Wed Jun 07 2017 15:07:32 GMT+0200 (W. Europe Daylight Time)
+  generated by <a href="http://istanbul-js.org/" target="_blank">istanbul</a> at Tue Jun 13 2017 11:07:55 GMT+0200 (W. Europe Daylight Time)
 </div>
 </div>
 <script src="../../prettify.js"></script>

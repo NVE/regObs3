@@ -20,24 +20,24 @@
     </h1>
     <div class='clearfix'>
       <div class='fl pad1y space-right2'>
-        <span class="strong">6.67% </span>
+        <span class="strong">6.25% </span>
         <span class="quiet">Statements</span>
-        <span class='fraction'>1/15</span>
+        <span class='fraction'>1/16</span>
       </div>
       <div class='fl pad1y space-right2'>
         <span class="strong">0% </span>
         <span class="quiet">Branches</span>
-        <span class='fraction'>0/8</span>
+        <span class='fraction'>0/16</span>
       </div>
       <div class='fl pad1y space-right2'>
         <span class="strong">0% </span>
         <span class="quiet">Functions</span>
-        <span class='fraction'>0/4</span>
+        <span class='fraction'>0/3</span>
       </div>
       <div class='fl pad1y space-right2'>
-        <span class="strong">6.67% </span>
+        <span class="strong">6.25% </span>
         <span class="quiet">Lines</span>
-        <span class='fraction'>1/15</span>
+        <span class='fraction'>1/16</span>
       </div>
     </div>
   </div>
@@ -72,7 +72,10 @@
 27
 28
 29
-30</td><td class="line-coverage quiet"><span class="cline-any cline-yes">1×</span>
+30
+31
+32
+33</td><td class="line-coverage quiet"><span class="cline-any cline-yes">1×</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -81,12 +84,15 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -107,18 +113,21 @@
 &nbsp;
 <span class="cstat-no" title="statement not covered" >        var vm = this;</span>
 &nbsp;
-<span class="cstat-no" title="statement not covered" >        vm.propChanged = <span class="fstat-no" title="function not covered" >function (prop){</span></span>
-<span class="cstat-no" title="statement not covered" >            $timeout(<span class="fstat-no" title="function not covered" >function(){</span></span>
-<span class="cstat-no" title="statement not covered" >                var num = parseFloat(vm[prop]);</span>
-&nbsp;
-<span class="cstat-no" title="statement not covered" >                if(!isNaN(num)){</span>
-<span class="cstat-no" title="statement not covered" >                    AppLogging.log(num);</span>
-<span class="cstat-no" title="statement not covered" >                    vm.reg.IceThickness[prop] = Utility.nDecimal(num/100, 5);</span>
-&nbsp;
-<span class="cstat-no" title="statement not covered" >                    AppLogging.log('IceThicknessSum', vm.IceThicknessSum);</span>
+<span class="cstat-no" title="statement not covered" >        $scope.$on('$regObs:beforeSave', <span class="fstat-no" title="function not covered" >function () {</span></span>
+<span class="cstat-no" title="statement not covered" >            if (vm.reg.IceThickness) {</span>
+<span class="cstat-no" title="statement not covered" >                if (vm.SnowDepth &gt;= 0 &amp;&amp; vm.SnowDepth &lt;= 10000) {</span>
+<span class="cstat-no" title="statement not covered" >                    vm.reg.IceThickness.SnowDepth = Utility.nDecimal(vm.SnowDepth / 100, 5);</span>
+                } else {
+<span class="cstat-no" title="statement not covered" >                    vm.reg.IceThickness.SnowDepth = undefined;</span>
                 }
-            });
-        };
+<span class="cstat-no" title="statement not covered" >                if (vm.SlushSnow &gt;= 0 &amp;&amp; vm.SlushSnow &lt;= 10000) {</span>
+<span class="cstat-no" title="statement not covered" >                    vm.reg.IceThickness.SlushSnow = Utility.nDecimal(vm.SlushSnow / 100, 5);</span>
+                } else {
+<span class="cstat-no" title="statement not covered" >                    vm.reg.IceThickness.SlushSnow = undefined;</span>
+                }
+            }
+        });
+&nbsp;
 &nbsp;
 &nbsp;
 <span class="cstat-no" title="statement not covered" >        $scope.$on('$ionicView.loaded', <span class="fstat-no" title="function not covered" >function(){</span></span>
@@ -136,7 +145,7 @@
 </div><!-- /wrapper -->
 <div class='footer quiet pad2 space-top1 center small'>
   Code coverage
-  generated by <a href="http://istanbul-js.org/" target="_blank">istanbul</a> at Wed Jun 07 2017 15:07:32 GMT+0200 (W. Europe Daylight Time)
+  generated by <a href="http://istanbul-js.org/" target="_blank">istanbul</a> at Tue Jun 13 2017 11:07:55 GMT+0200 (W. Europe Daylight Time)
 </div>
 </div>
 <script src="../../../../prettify.js"></script>

@@ -20,24 +20,24 @@
     </h1>
     <div class='clearfix'>
       <div class='fl pad1y space-right2'>
-        <span class="strong">16.67% </span>
+        <span class="strong">10.34% </span>
         <span class="quiet">Statements</span>
-        <span class='fraction'>3/18</span>
+        <span class='fraction'>3/29</span>
       </div>
       <div class='fl pad1y space-right2'>
         <span class="strong">0% </span>
         <span class="quiet">Branches</span>
-        <span class='fraction'>0/10</span>
+        <span class='fraction'>0/16</span>
       </div>
       <div class='fl pad1y space-right2'>
-        <span class="strong">20% </span>
+        <span class="strong">12.5% </span>
         <span class="quiet">Functions</span>
-        <span class='fraction'>1/5</span>
+        <span class='fraction'>1/8</span>
       </div>
       <div class='fl pad1y space-right2'>
-        <span class="strong">16.67% </span>
+        <span class="strong">10.34% </span>
         <span class="quiet">Lines</span>
-        <span class='fraction'>3/18</span>
+        <span class='fraction'>3/29</span>
       </div>
     </div>
   </div>
@@ -92,7 +92,30 @@
 47
 48
 49
-50</td><td class="line-coverage quiet"><span class="cline-any cline-yes">1×</span>
+50
+51
+52
+53
+54
+55
+56
+57
+58
+59
+60
+61
+62
+63
+64
+65
+66
+67
+68
+69
+70
+71
+72
+73</td><td class="line-coverage quiet"><span class="cline-any cline-yes">1×</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1×</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -104,6 +127,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -127,6 +151,28 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -150,9 +196,10 @@
             model: '=',
             required: '@',
             hideLabel: '&lt;',
-            minHeight: '&lt;'
+            minHeight: '&lt;',
+            forceScroll: '&lt;'
         },
-        controller: <span class="fstat-no" title="function not covered" >function ($timeout, $rootScope, Utility, $translate) {</span>
+        controller: <span class="fstat-no" title="function not covered" >function ($timeout, $rootScope, Utility, $translate, $ionicScrollDelegate, AppLogging) {</span>
 <span class="cstat-no" title="statement not covered" >            'ngInject';</span>
 <span class="cstat-no" title="statement not covered" >            var ctrl = this;</span>
 <span class="cstat-no" title="statement not covered" >            var element;</span>
@@ -174,16 +221,38 @@
                 }
             };
 &nbsp;
+<span class="cstat-no" title="statement not covered" >            ctrl.onFocus = <span class="fstat-no" title="function not covered" >function () {</span></span>
+<span class="cstat-no" title="statement not covered" >                if (ctrl.forceScroll) {</span>
+<span class="cstat-no" title="statement not covered" >                    if (!ctrl.keyboardShowing) {</span>
+<span class="cstat-no" title="statement not covered" >                        var element = document.getElementById(ctrl.textareaId);</span>
+<span class="cstat-no" title="statement not covered" >                        var distanceToTop = element.getBoundingClientRect().top - 100;</span>
+&nbsp;
+<span class="cstat-no" title="statement not covered" >                        if (distanceToTop &gt; 0) {</span>
+<span class="cstat-no" title="statement not covered" >                            $ionicScrollDelegate.scrollBy(0, distanceToTop, true); </span>//Force scroll up
+                        }
+                    }
+                }
+            };
+&nbsp;
 <span class="cstat-no" title="statement not covered" >            angular.element(document).ready(<span class="fstat-no" title="function not covered" >function () {</span></span>
 <span class="cstat-no" title="statement not covered" >                ctrl.updateTextareaSize();</span>
+&nbsp;
+<span class="cstat-no" title="statement not covered" >                window.addEventListener('native.keyboardshow', <span class="fstat-no" title="function not covered" >function () {</span></span>
+<span class="cstat-no" title="statement not covered" >                    ctrl.keyboardShowing = true;</span>
+                });
+&nbsp;
+<span class="cstat-no" title="statement not covered" >                window.addEventListener('native.keyboardhide', <span class="fstat-no" title="function not covered" >function () {</span></span>
+<span class="cstat-no" title="statement not covered" >                    ctrl.keyboardShowing = false;</span>
+                });
+&nbsp;
             });
         },
         template: [
             '&lt;label class="item item-input item-stacked-label" ng-if="!$ctrl.hideLabel"&gt;',
                 '&lt;span class="input-label" ng-bind="$ctrl.labelText" ng-class="{assertive:$ctrl.required &amp;&amp; !$ctrl.model.length}"&gt;&lt;/span&gt;',
-                '&lt;textarea id="{{$ctrl.textareaId}}" placeholder="{{$ctrl.placeholder}}" name="{{$ctrl.textareaId}}" cols="30" rows="auto" maxlength="1024" ng-model="$ctrl.model" ng-keyup="$ctrl.updateTextareaSize()" ng-required="$ctrl.required"&gt;&lt;/textarea&gt;',
+                '&lt;textarea id="{{$ctrl.textareaId}}" placeholder="{{$ctrl.placeholder}}" ng-focus="$ctrl.onFocus()" name="{{$ctrl.textareaId}}" cols="30" rows="auto" maxlength="1024" ng-model="$ctrl.model" ng-keyup="$ctrl.updateTextareaSize()" ng-required="$ctrl.required"&gt;&lt;/textarea&gt;',
             '&lt;/label&gt;',
-            '&lt;textarea ng-if="$ctrl.hideLabel" id="{{$ctrl.textareaId}}" placeholder="{{$ctrl.placeholder}}" name="{{$ctrl.textareaId}}" cols="30" rows="auto" maxlength="1024" ng-model="$ctrl.model" ng-keyup="$ctrl.updateTextareaSize()" ng-required="$ctrl.required"&gt;&lt;/textarea&gt;',
+            '&lt;textarea ng-if="$ctrl.hideLabel" id="{{$ctrl.textareaId}}" placeholder="{{$ctrl.placeholder}}" ng-focus="$ctrl.onFocus()" name="{{$ctrl.textareaId}}" cols="30" rows="auto" maxlength="1024" ng-model="$ctrl.model" ng-keyup="$ctrl.updateTextareaSize()" ng-required="$ctrl.required"&gt;&lt;/textarea&gt;',
         ].join('')
     };
 &nbsp;
@@ -196,7 +265,7 @@
 </div><!-- /wrapper -->
 <div class='footer quiet pad2 space-top1 center small'>
   Code coverage
-  generated by <a href="http://istanbul-js.org/" target="_blank">istanbul</a> at Wed Jun 07 2017 15:07:32 GMT+0200 (W. Europe Daylight Time)
+  generated by <a href="http://istanbul-js.org/" target="_blank">istanbul</a> at Tue Jun 13 2017 11:07:55 GMT+0200 (W. Europe Daylight Time)
 </div>
 </div>
 <script src="../../prettify.js"></script>

@@ -20,9 +20,9 @@
     </h1>
     <div class='clearfix'>
       <div class='fl pad1y space-right2'>
-        <span class="strong">13.64% </span>
+        <span class="strong">15% </span>
         <span class="quiet">Statements</span>
-        <span class='fraction'>6/44</span>
+        <span class='fraction'>6/40</span>
       </div>
       <div class='fl pad1y space-right2'>
         <span class="strong">0% </span>
@@ -35,9 +35,9 @@
         <span class='fraction'>1/11</span>
       </div>
       <div class='fl pad1y space-right2'>
-        <span class="strong">13.64% </span>
+        <span class="strong">15% </span>
         <span class="quiet">Lines</span>
-        <span class='fraction'>6/44</span>
+        <span class='fraction'>6/40</span>
       </div>
     </div>
   </div>
@@ -132,13 +132,7 @@
 87
 88
 89
-90
-91
-92
-93
-94
-95
-96</td><td class="line-coverage quiet"><span class="cline-any cline-yes">1×</span>
+90</td><td class="line-coverage quiet"><span class="cline-any cline-yes">1×</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1×</span>
@@ -163,7 +157,6 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -199,16 +192,11 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -257,9 +245,8 @@
 <span class="cstat-no" title="statement not covered" >                AppLogging.log('formCtrl', ctrl.formCtrl);</span>
 <span class="cstat-no" title="statement not covered" >                if (formIsInvalid()) {</span>
 <span class="cstat-no" title="statement not covered" >                    getUserConfirmation()</span>
-                        .then(<span class="fstat-no" title="function not covered" >function (confirmed) {</span>
+                        .then(<span class="fstat-no" title="function not covered" >function (confirmed) {                         </span>
 <span class="cstat-no" title="statement not covered" >                            if (confirmed) {</span>
-<span class="cstat-no" title="statement not covered" >                                Property.reset($state.current.data.registrationProp, true);</span>
 <span class="cstat-no" title="statement not covered" >                                saveAndGoBack(true);</span>
                             }
                         });
@@ -293,17 +280,12 @@
 <span class="cstat-no" title="statement not covered" >            $scope.$on('$stateChangeStart', <span class="fstat-no" title="function not covered" >function (event, toState, toParams, fromState, fromParams) {</span></span>
 <span class="cstat-no" title="statement not covered" >                if (formIsInvalid() &amp;&amp; !confirmed) {</span>
 <span class="cstat-no" title="statement not covered" >                    event.preventDefault();</span>
-<span class="cstat-no" title="statement not covered" >                    $state.go(fromState.name);</span>
 <span class="cstat-no" title="statement not covered" >                    getUserConfirmation()</span>
                         .then(<span class="fstat-no" title="function not covered" >function (confirm) {</span>
 <span class="cstat-no" title="statement not covered" >                            if (confirm) {</span>
 <span class="cstat-no" title="statement not covered" >                                confirmed = true;</span>
-<span class="cstat-no" title="statement not covered" >                                Property.reset($state.current.data.registrationProp, true);</span>
 <span class="cstat-no" title="statement not covered" >                                ctrl.saveAction();</span>
 <span class="cstat-no" title="statement not covered" >                                $state.go(toState.name);</span>
-                            } else {
-<span class="cstat-no" title="statement not covered" >                                $state.go($state.current, {}, {reload: true});</span>
-&nbsp;
                             }
                         });
                 } else <span class="cstat-no" title="statement not covered" >if (!confirmed) {</span>
@@ -334,7 +316,7 @@
 </div><!-- /wrapper -->
 <div class='footer quiet pad2 space-top1 center small'>
   Code coverage
-  generated by <a href="http://istanbul-js.org/" target="_blank">istanbul</a> at Wed Jun 07 2017 15:07:32 GMT+0200 (W. Europe Daylight Time)
+  generated by <a href="http://istanbul-js.org/" target="_blank">istanbul</a> at Tue Jun 13 2017 11:07:55 GMT+0200 (W. Europe Daylight Time)
 </div>
 </div>
 <script src="../../prettify.js"></script>

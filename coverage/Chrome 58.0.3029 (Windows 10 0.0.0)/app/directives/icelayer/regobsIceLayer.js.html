@@ -20,24 +20,24 @@
     </h1>
     <div class='clearfix'>
       <div class='fl pad1y space-right2'>
-        <span class="strong">3.66% </span>
+        <span class="strong">3.61% </span>
         <span class="quiet">Statements</span>
-        <span class='fraction'>3/82</span>
+        <span class='fraction'>3/83</span>
       </div>
       <div class='fl pad1y space-right2'>
         <span class="strong">0% </span>
         <span class="quiet">Branches</span>
-        <span class='fraction'>0/30</span>
+        <span class='fraction'>0/39</span>
       </div>
       <div class='fl pad1y space-right2'>
         <span class="strong">0% </span>
         <span class="quiet">Functions</span>
-        <span class='fraction'>0/22</span>
+        <span class='fraction'>0/20</span>
       </div>
       <div class='fl pad1y space-right2'>
-        <span class="strong">3.66% </span>
+        <span class="strong">3.61% </span>
         <span class="quiet">Lines</span>
-        <span class='fraction'>3/82</span>
+        <span class='fraction'>3/83</span>
       </div>
     </div>
   </div>
@@ -202,7 +202,26 @@
 157
 158
 159
-160</td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+160
+161
+162
+163
+164
+165
+166
+167
+168
+169
+170
+171
+172
+173
+174
+175
+176
+177
+178
+179</td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1×</span>
@@ -273,9 +292,28 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -333,12 +371,12 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -428,18 +466,37 @@ angular
 <span class="cstat-no" title="statement not covered" >                    $scope.modal.show();</span>
                 };
 &nbsp;
-<span class="cstat-no" title="statement not covered" >                $scope.add = <span class="fstat-no" title="function not covered" >function () {</span></span>
+<span class="cstat-no" title="statement not covered" >                $scope.add = <span class="fstat-no" title="function not covered" >function (form) {</span></span>
+<span class="cstat-no" title="statement not covered" >                    if (form.$invalid) {</span>
+<span class="cstat-no" title="statement not covered" >                        return;</span>
+                    }
+&nbsp;
 <span class="cstat-no" title="statement not covered" >                    if (!$scope.obsObject &amp;&amp; !$scope.iceLayer) {</span>
 <span class="cstat-no" title="statement not covered" >                        return;</span>
                     }
-<span class="cstat-no" title="statement not covered" >                    if (!$scope.editing) {</span>
-<span class="cstat-no" title="statement not covered" >                        $scope.obsObject.IceThicknessLayer = $scope.obsObject.IceThicknessLayer || [];</span>
-<span class="cstat-no" title="statement not covered" >                        $scope.obsObject.IceThicknessLayer.push($scope.iceLayer);</span>
+&nbsp;
+<span class="cstat-no" title="statement not covered" >                    var num = parseFloat($scope.data.thickness);</span>
+<span class="cstat-no" title="statement not covered" >                    if (!isNaN(num) &amp;&amp; num &gt;= 0 &amp;&amp; num &lt;= 10000) {</span>
+<span class="cstat-no" title="statement not covered" >                        $scope.iceLayer.IceLayerThickness = Utility.nDecimal(num / 100, 5);</span>
+                    } else {
+<span class="cstat-no" title="statement not covered" >                        $scope.iceLayer.IceLayerThickness = undefined;</span>
                     }
 &nbsp;
+&nbsp;
+<span class="cstat-no" title="statement not covered" >                    if (!$scope.editing) {</span>
+<span class="cstat-no" title="statement not covered" >                        $scope.obsObject.IceThicknessLayer = $scope.obsObject.IceThicknessLayer || [];</span>
+&nbsp;
+<span class="cstat-no" title="statement not covered" >                        if ($scope.iceLayer.IceLayerThickness &gt;= 0 &amp;&amp; $scope.iceLayer.IceLayerThickness &lt;= 10000) {</span>
+<span class="cstat-no" title="statement not covered" >                            $scope.obsObject.IceThicknessLayer.push($scope.iceLayer);</span>
+                        }
+                    }
+&nbsp;
+&nbsp;
+&nbsp;
+&nbsp;
 <span class="cstat-no" title="statement not covered" >                    calcSum();</span>
-<span class="cstat-no" title="statement not covered" >                    $scope.modal.hide();</span>
 <span class="cstat-no" title="statement not covered" >                    $scope.iceLayer = null;</span>
+<span class="cstat-no" title="statement not covered" >                    $scope.modal.hide();</span>
                 };
 &nbsp;
 <span class="fstat-no" title="function not covered" >                function calcSum() {</span>
@@ -492,16 +549,16 @@ angular
                         });
                 };
 &nbsp;
-<span class="cstat-no" title="statement not covered" >                $scope.thicknessChanged = <span class="fstat-no" title="function not covered" >function () {</span></span>
-<span class="cstat-no" title="statement not covered" >                    $timeout(<span class="fstat-no" title="function not covered" >function () {</span></span>
-<span class="cstat-no" title="statement not covered" >                        var num = parseFloat($scope.data.thickness);</span>
-<span class="cstat-no" title="statement not covered" >                        if (!isNaN(num)) {</span>
-<span class="cstat-no" title="statement not covered" >                            $scope.iceLayer.IceLayerThickness = Utility.nDecimal(num / 100, 5);</span>
-<span class="cstat-no" title="statement not covered" >                            calcSum();</span>
+                //$scope.thicknessChanged = function () {
+                //    $timeout(function () {
+                //        var num = parseFloat($scope.data.thickness);
+                //        if (!isNaN(num)) {
+                //            $scope.iceLayer.IceLayerThickness = Utility.nDecimal(num / 100, 5);
+                //            calcSum();
 &nbsp;
-                        }
-                    })
-                };
+                //        }
+                //    })
+                //};
 &nbsp;
 <span class="cstat-no" title="statement not covered" >                $scope.getLayerThicknessText = <span class="fstat-no" title="function not covered" >function (layer) {</span></span>
 <span class="cstat-no" title="statement not covered" >                    if (layer &amp;&amp; !isNaN(layer.IceLayerThickness))</span>
@@ -526,7 +583,7 @@ angular
 </div><!-- /wrapper -->
 <div class='footer quiet pad2 space-top1 center small'>
   Code coverage
-  generated by <a href="http://istanbul-js.org/" target="_blank">istanbul</a> at Wed Jun 07 2017 15:07:32 GMT+0200 (W. Europe Daylight Time)
+  generated by <a href="http://istanbul-js.org/" target="_blank">istanbul</a> at Tue Jun 13 2017 11:07:55 GMT+0200 (W. Europe Daylight Time)
 </div>
 </div>
 <script src="../../../prettify.js"></script>

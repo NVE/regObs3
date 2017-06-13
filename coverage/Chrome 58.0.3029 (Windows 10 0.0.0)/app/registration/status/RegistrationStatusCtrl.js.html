@@ -20,9 +20,9 @@
     </h1>
     <div class='clearfix'>
       <div class='fl pad1y space-right2'>
-        <span class="strong">1.41% </span>
+        <span class="strong">1.37% </span>
         <span class="quiet">Statements</span>
-        <span class='fraction'>1/71</span>
+        <span class='fraction'>1/73</span>
       </div>
       <div class='fl pad1y space-right2'>
         <span class="strong">0% </span>
@@ -35,9 +35,9 @@
         <span class='fraction'>0/24</span>
       </div>
       <div class='fl pad1y space-right2'>
-        <span class="strong">1.41% </span>
+        <span class="strong">1.37% </span>
         <span class="quiet">Lines</span>
-        <span class='fraction'>1/71</span>
+        <span class='fraction'>1/73</span>
       </div>
     </div>
   </div>
@@ -181,7 +181,8 @@
 136
 137
 138
-139</td><td class="line-coverage quiet"><span class="cline-any cline-yes">1×</span>
+139
+140</td><td class="line-coverage quiet"><span class="cline-any cline-yes">1×</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -200,9 +201,9 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -314,6 +315,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -327,18 +329,18 @@
 <span class="cstat-no" title="statement not covered" >        vm.cancelled = false;</span>
 &nbsp;
 <span class="cstat-no" title="statement not covered" >        vm.init = <span class="fstat-no" title="function not covered" >function () {</span></span>
+<span class="cstat-no" title="statement not covered" >            vm.loaded = false;</span>
+<span class="cstat-no" title="statement not covered" >            vm.isSending = true;</span>
+<span class="cstat-no" title="statement not covered" >            vm.cancelled = false;</span>
 <span class="cstat-no" title="statement not covered" >            Utility.setBackView('start');</span>
 <span class="cstat-no" title="statement not covered" >            vm.progressName = Utility.createGuid();</span>
-<span class="cstat-no" title="statement not covered" >            vm.completed = [];</span>
-<span class="cstat-no" title="statement not covered" >            vm.loaded = false;</span>
+<span class="cstat-no" title="statement not covered" >            vm.completed = [];       </span>
 <span class="cstat-no" title="statement not covered" >            Utility.clearRegistrationCacheViews().then(<span class="fstat-no" title="function not covered" >function () {</span></span>
 <span class="cstat-no" title="statement not covered" >                Registration.prepareRegistrationForSending().then(<span class="fstat-no" title="function not covered" >function () {</span></span>
 <span class="cstat-no" title="statement not covered" >                    vm.unsent = Registration.unsent;</span>
-<span class="cstat-no" title="statement not covered" >                    vm.isSending = vm.unsent.length &gt; 0;</span>
 <span class="cstat-no" title="statement not covered" >                    $ionicScrollDelegate.resize();</span>
 <span class="cstat-no" title="statement not covered" >                    $ionicScrollDelegate.scrollTop();</span>
 <span class="cstat-no" title="statement not covered" >                    vm.loaded = true;</span>
-&nbsp;
 <span class="cstat-no" title="statement not covered" >                    if (vm.unsent.length &gt; 0) {</span>
 <span class="cstat-no" title="statement not covered" >                        vm.send();</span>
                     } else {
@@ -360,8 +362,8 @@
         };
 &nbsp;
 <span class="cstat-no" title="statement not covered" >        vm.send = <span class="fstat-no" title="function not covered" >function () {</span></span>
-<span class="cstat-no" title="statement not covered" >            vm.cancelled = false;</span>
 <span class="cstat-no" title="statement not covered" >            vm.isSending = true;</span>
+<span class="cstat-no" title="statement not covered" >            vm.cancelled = false;            </span>
 <span class="cstat-no" title="statement not covered" >            vm.completed = [];</span>
 <span class="cstat-no" title="statement not covered" >            vm.downloadStatus = new RegObs.ProggressStatus();</span>
 <span class="cstat-no" title="statement not covered" >            vm.downloadStatus.setTotal(vm.unsent.length);</span>
@@ -453,6 +455,7 @@
 <span class="cstat-no" title="statement not covered" >        $scope.$on('$ionicView.enter', vm.init);</span>
 &nbsp;
 <span class="cstat-no" title="statement not covered" >        $scope.$on('$ionicView.beforeLeave', <span class="fstat-no" title="function not covered" >function () {</span></span>
+<span class="cstat-no" title="statement not covered" >            vm.loaded = false;</span>
 <span class="cstat-no" title="statement not covered" >            if (vm.cancelPromise &amp;&amp; vm.isSending) {</span>
 <span class="cstat-no" title="statement not covered" >                vm.cancelPromise.resolve();</span>
             }
@@ -463,7 +466,7 @@
 </div><!-- /wrapper -->
 <div class='footer quiet pad2 space-top1 center small'>
   Code coverage
-  generated by <a href="http://istanbul-js.org/" target="_blank">istanbul</a> at Wed Jun 07 2017 15:07:32 GMT+0200 (W. Europe Daylight Time)
+  generated by <a href="http://istanbul-js.org/" target="_blank">istanbul</a> at Tue Jun 13 2017 11:07:55 GMT+0200 (W. Europe Daylight Time)
 </div>
 </div>
 <script src="../../../prettify.js"></script>

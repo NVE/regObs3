@@ -20,24 +20,24 @@
     </h1>
     <div class='clearfix'>
       <div class='fl pad1y space-right2'>
-        <span class="strong">7.69% </span>
+        <span class="strong">7.14% </span>
         <span class="quiet">Statements</span>
-        <span class='fraction'>1/13</span>
+        <span class='fraction'>1/14</span>
       </div>
       <div class='fl pad1y space-right2'>
         <span class="strong">0% </span>
         <span class="quiet">Branches</span>
-        <span class='fraction'>0/6</span>
+        <span class='fraction'>0/14</span>
       </div>
       <div class='fl pad1y space-right2'>
         <span class="strong">0% </span>
         <span class="quiet">Functions</span>
-        <span class='fraction'>0/4</span>
+        <span class='fraction'>0/3</span>
       </div>
       <div class='fl pad1y space-right2'>
-        <span class="strong">7.69% </span>
+        <span class="strong">7.14% </span>
         <span class="quiet">Lines</span>
-        <span class='fraction'>1/13</span>
+        <span class='fraction'>1/14</span>
       </div>
     </div>
   </div>
@@ -68,21 +68,25 @@
 23
 24
 25
-26</td><td class="line-coverage quiet"><span class="cline-any cline-yes">1×</span>
+26
+27
+28</td><td class="line-coverage quiet"><span class="cline-any cline-yes">1×</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -97,25 +101,27 @@
     .module('RegObs')
     .controller('SnowSurfaceObservationCtrl', <span class="fstat-no" title="function not covered" >function ($scope, $state, $timeout, Utility, Registration, AppLogging) {</span>
 <span class="cstat-no" title="statement not covered" >        var vm = this;</span>
-<span class="cstat-no" title="statement not covered" >        vm.propChanged = <span class="fstat-no" title="function not covered" >function (prop){</span></span>
-<span class="cstat-no" title="statement not covered" >          $timeout(<span class="fstat-no" title="function not covered" >function(){</span></span>
 &nbsp;
-<span class="cstat-no" title="statement not covered" >            var numText = vm[prop];</span>
-<span class="cstat-no" title="statement not covered" >            var num = parseFloat(numText);</span>
-&nbsp;
-<span class="cstat-no" title="statement not covered" >            if(num){</span>
-<span class="cstat-no" title="statement not covered" >                vm.reg.SnowSurfaceObservation[prop] = Utility.nDecimal(num/100, 5);</span>
+<span class="cstat-no" title="statement not covered" >        $scope.$on('$regObs:beforeSave', <span class="fstat-no" title="function not covered" >function () {</span></span>
+<span class="cstat-no" title="statement not covered" >            if (vm.reg.SnowSurfaceObservation) {</span>
+<span class="cstat-no" title="statement not covered" >                if (vm.SnowDepth &gt;= 0 &amp;&amp; vm.SnowDepth &lt;= 1000) {</span>
+<span class="cstat-no" title="statement not covered" >                    vm.reg.SnowSurfaceObservation.SnowDepth = Utility.nDecimal(vm.SnowDepth / 100, 5);</span>
+                } else {
+<span class="cstat-no" title="statement not covered" >                    vm.reg.SnowSurfaceObservation.SnowDepth = undefined;</span>
+                }
+<span class="cstat-no" title="statement not covered" >                if (vm.NewSnowDepth24 &gt;= 0 &amp;&amp; vm.NewSnowDepth24 &lt;= 1000) {</span>
+<span class="cstat-no" title="statement not covered" >                    vm.reg.SnowSurfaceObservation.NewSnowDepth24 = Utility.nDecimal(vm.NewSnowDepth24 / 100, 5);</span>
+                } else {
+<span class="cstat-no" title="statement not covered" >                    vm.reg.SnowSurfaceObservation.NewSnowDepth24 = undefined;</span>
+                }
             }
-&nbsp;
-<span class="cstat-no" title="statement not covered" >            AppLogging.log(vm.reg.SnowSurfaceObservation);</span>
-          });
-        };
+        });
 &nbsp;
 &nbsp;
-<span class="cstat-no" title="statement not covered" >        $scope.$on( '$ionicView.loaded', <span class="fstat-no" title="function not covered" >function(){</span></span>
+<span class="cstat-no" title="statement not covered" >        $scope.$on('$ionicView.loaded', <span class="fstat-no" title="function not covered" >function () {</span></span>
 <span class="cstat-no" title="statement not covered" >            vm.reg = Registration.initPropertyAsObject($state.current.data.registrationProp);</span>
-<span class="cstat-no" title="statement not covered" >            vm.SnowDepth = vm.reg.SnowSurfaceObservation.SnowDepth ? Utility.twoDecimal(vm.reg.SnowSurfaceObservation.SnowDepth*100) : undefined;</span>
-<span class="cstat-no" title="statement not covered" >            vm.NewSnowDepth24 = vm.reg.SnowSurfaceObservation.NewSnowDepth24 ? Utility.twoDecimal(vm.reg.SnowSurfaceObservation.NewSnowDepth24*100) : undefined;</span>
+<span class="cstat-no" title="statement not covered" >            vm.SnowDepth = vm.reg.SnowSurfaceObservation.SnowDepth ? Utility.twoDecimal(vm.reg.SnowSurfaceObservation.SnowDepth * 100) : undefined;</span>
+<span class="cstat-no" title="statement not covered" >            vm.NewSnowDepth24 = vm.reg.SnowSurfaceObservation.NewSnowDepth24 ? Utility.twoDecimal(vm.reg.SnowSurfaceObservation.NewSnowDepth24 * 100) : undefined;</span>
         });
     });
 &nbsp;</pre></td></tr>
@@ -124,7 +130,7 @@
 </div><!-- /wrapper -->
 <div class='footer quiet pad2 space-top1 center small'>
   Code coverage
-  generated by <a href="http://istanbul-js.org/" target="_blank">istanbul</a> at Wed Jun 07 2017 15:07:32 GMT+0200 (W. Europe Daylight Time)
+  generated by <a href="http://istanbul-js.org/" target="_blank">istanbul</a> at Tue Jun 13 2017 11:07:55 GMT+0200 (W. Europe Daylight Time)
 </div>
 </div>
 <script src="../../../../prettify.js"></script>

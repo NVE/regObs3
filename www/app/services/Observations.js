@@ -237,17 +237,25 @@ angular
         };
 
         service._mergeRegistrations = function (destArr, existingRegistrations, removeDeleted) {
-            var keepLimit = moment(AppSettings.getObservationsFromDateISOString(), moment.ISO_8601);
-            existingRegistrations.forEach(function (item) {
-                var date = moment(item.DtObsTime, moment.ISO_8601); //strict parsing
-                if (!removeDeleted || date.isBefore(keepLimit)) { //only keep old values before new observation time to remove deleted items
-                    var newRegistration = destArr.filter(function (reg) { return reg.RegId === item.RegId });
-                    if (newRegistration.length === 0) {
-                        //Registration does not exist, push old value to new list
-                        destArr.push(item);
+            if (!angular.isArray(destArr)) {
+                destArr = [];
+            }
+            if (destArr.length === 0) {
+                destArr = existingRegistrations;
+            } else {
+                var newGeoHazardTid = destArr[0].GeoHazardTid;
+                var keepLimit = moment(AppSettings.getObservationsFromDateISOString(), moment.ISO_8601);
+                existingRegistrations.forEach(function (item) {
+                    var date = moment(item.DtObsTime, moment.ISO_8601); //strict parsing
+                    if (!removeDeleted || date.isBefore(keepLimit) || newGeoHazardTid !== item.GeoHazardTid) { //only keep old values before new observation time to remove deleted items
+                        var newRegistration = destArr.filter(function (reg) { return reg.RegId === item.RegId });
+                        if (newRegistration.length === 0) {
+                            //Registration does not exist, push old value to new list
+                            destArr.push(item);
+                        }
                     }
-                }
-            });
+                });
+            }
         };
 
         service._storeRegistrations = function (registrations) {

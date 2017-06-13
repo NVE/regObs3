@@ -20,9 +20,9 @@
     </h1>
     <div class='clearfix'>
       <div class='fl pad1y space-right2'>
-        <span class="strong">1.71% </span>
+        <span class="strong">1.68% </span>
         <span class="quiet">Statements</span>
-        <span class='fraction'>2/117</span>
+        <span class='fraction'>2/119</span>
       </div>
       <div class='fl pad1y space-right2'>
         <span class="strong">0% </span>
@@ -32,12 +32,12 @@
       <div class='fl pad1y space-right2'>
         <span class="strong">0% </span>
         <span class="quiet">Functions</span>
-        <span class='fraction'>0/30</span>
+        <span class='fraction'>0/31</span>
       </div>
       <div class='fl pad1y space-right2'>
-        <span class="strong">1.74% </span>
+        <span class="strong">1.71% </span>
         <span class="quiet">Lines</span>
-        <span class='fraction'>2/115</span>
+        <span class='fraction'>2/117</span>
       </div>
     </div>
   </div>
@@ -266,7 +266,12 @@
 221
 222
 223
-224</td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+224
+225
+226
+227
+228
+229</td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1×</span>
@@ -337,6 +342,11 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -495,230 +505,235 @@
 angular
     .module('RegObs')
     .directive('regobsAvalancheEvalProblem',
-<span class="fstat-no" title="function not covered" >        function regobsAvalancheEvalProblem($filter, $ionicModal, RegobsPopup, Registration, Utility, AppLogging, $translate) {</span>
-<span class="cstat-no" title="statement not covered" >            'ngInject';</span>
-<span class="cstat-no" title="statement not covered" >            return {</span>
-                link: link,
-                templateUrl: 'app/directives/avalancheevalproblem/regobsAvalancheEvalProblem.html',
-                scope: {},
-                restrict: 'EA'
+<span class="fstat-no" title="function not covered" >    function regobsAvalancheEvalProblem($filter, $ionicModal, RegobsPopup, Registration, Utility, AppLogging, $translate, $ionicScrollDelegate) {</span>
+<span class="cstat-no" title="statement not covered" >        'ngInject';</span>
+<span class="cstat-no" title="statement not covered" >        return {</span>
+            link: link,
+            templateUrl: 'app/directives/avalancheevalproblem/regobsAvalancheEvalProblem.html',
+            scope: {},
+            restrict: 'EA'
+        };
+&nbsp;
+<span class="fstat-no" title="function not covered" >        function link($scope) {</span>
+&nbsp;
+<span class="cstat-no" title="statement not covered" >            var viewArray, avalancheExtDict, avalCauseDict;</span>
+<span class="cstat-no" title="statement not covered" >            var indexEditing = -1;</span>
+<span class="cstat-no" title="statement not covered" >            $scope.reg = Registration.initPropertyAsArray('AvalancheEvalProblem2');</span>
+<span class="cstat-no" title="statement not covered" >            $scope.heightArray = [</span>
+                2500, 2400, 2300, 2200, 2100,
+                2000, 1900, 1800, 1700, 1600,
+                1500, 1400, 1300, 1200, 1100,
+                1000, 900, 800, 700, 600,
+                500, 400, 300, 200, 100, 0
+            ];
+&nbsp;
+<span class="cstat-no" title="statement not covered" >            var showConfirm = <span class="fstat-no" title="function not covered" >function () {</span></span>
+<span class="cstat-no" title="statement not covered" >                return RegobsPopup.confirm($translate.instant('DELETE_AVALANCHE_PROBLEM'),</span>
+                    $translate.instant('DELETE_AVALANCHE_PROBLEM_CONFIRM'));
             };
 &nbsp;
-<span class="fstat-no" title="function not covered" >            function link($scope) {</span>
+<span class="cstat-no" title="statement not covered" >            $scope.exposedHeight = <span class="fstat-no" title="function not covered" >function (where) {</span></span>
+<span class="cstat-no" title="statement not covered" >                var expHeight = $scope.obs.exposedHeight;</span>
+<span class="cstat-no" title="statement not covered" >                expHeight[where] = !expHeight[where];</span>
+<span class="cstat-no" title="statement not covered" >                var top = expHeight.top;</span>
+<span class="cstat-no" title="statement not covered" >                var mid = expHeight.mid;</span>
+<span class="cstat-no" title="statement not covered" >                var bot = expHeight.bot;</span>
 &nbsp;
-<span class="cstat-no" title="statement not covered" >                var viewArray, avalancheExtDict, avalCauseDict;</span>
-<span class="cstat-no" title="statement not covered" >                var indexEditing = -1;</span>
-<span class="cstat-no" title="statement not covered" >                $scope.reg = Registration.initPropertyAsArray('AvalancheEvalProblem2');</span>
-<span class="cstat-no" title="statement not covered" >                $scope.heightArray = [</span>
-                    2500, 2400, 2300, 2200, 2100,
-                    2000, 1900, 1800, 1700, 1600,
-                    1500, 1400, 1300, 1200, 1100,
-                    1000, 900, 800, 700, 600,
-                    500, 400, 300, 200, 100, 0
-                ];
+<span class="cstat-no" title="statement not covered" >                if (top &amp;&amp; mid &amp;&amp; bot) {</span>
+<span class="cstat-no" title="statement not covered" >                    $scope.obs.ExposedHeightComboTID = 0;</span>
+                } else <span class="cstat-no" title="statement not covered" >if (!top &amp;&amp; mid &amp;&amp; !bot) {</span>
+<span class="cstat-no" title="statement not covered" >                    $scope.obs.ExposedHeightComboTID = 4;</span>
+                } else <span class="cstat-no" title="statement not covered" >if (top &amp;&amp; !mid &amp;&amp; bot) {</span>
+<span class="cstat-no" title="statement not covered" >                    $scope.obs.ExposedHeightComboTID = 3;</span>
+                } else <span class="cstat-no" title="statement not covered" >if (bot) {</span>
+<span class="cstat-no" title="statement not covered" >                    $scope.obs.ExposedHeightComboTID = 2;</span>
+                } else <span class="cstat-no" title="statement not covered" >if (top) {</span>
+<span class="cstat-no" title="statement not covered" >                    $scope.obs.ExposedHeightComboTID = 1;</span>
+                } else {
+<span class="cstat-no" title="statement not covered" >                    $scope.obs.ExposedHeightComboTID = 0;</span>
+                }
+<span class="cstat-no" title="statement not covered" >                AppLogging.log($scope.obs);</span>
+<span class="cstat-no" title="statement not covered" >                $scope.obs.ExposedHeight2 = 0;</span>
+            };
 &nbsp;
-<span class="cstat-no" title="statement not covered" >                var showConfirm = <span class="fstat-no" title="function not covered" >function () {</span></span>
-<span class="cstat-no" title="statement not covered" >                    return RegobsPopup.confirm($translate.instant('DELETE_AVALANCHE_PROBLEM'),</span>
-                        $translate.instant('DELETE_AVALANCHE_PROBLEM_CONFIRM'));
-                };
-&nbsp;
-<span class="cstat-no" title="statement not covered" >                $scope.exposedHeight = <span class="fstat-no" title="function not covered" >function (where) {</span></span>
-<span class="cstat-no" title="statement not covered" >                    var expHeight = $scope.obs.exposedHeight;</span>
-<span class="cstat-no" title="statement not covered" >                    expHeight[where] = !expHeight[where];</span>
-<span class="cstat-no" title="statement not covered" >                    var top = expHeight.top;</span>
-<span class="cstat-no" title="statement not covered" >                    var mid = expHeight.mid;</span>
-<span class="cstat-no" title="statement not covered" >                    var bot = expHeight.bot;</span>
-&nbsp;
-<span class="cstat-no" title="statement not covered" >                    if(top &amp;&amp; mid &amp;&amp; bot) {</span>
-<span class="cstat-no" title="statement not covered" >                        $scope.obs.ExposedHeightComboTID = 0;</span>
-                    } else <span class="cstat-no" title="statement not covered" >if(!top &amp;&amp; mid &amp;&amp; !bot){</span>
-<span class="cstat-no" title="statement not covered" >                        $scope.obs.ExposedHeightComboTID = 4;</span>
-                    } else <span class="cstat-no" title="statement not covered" >if(top &amp;&amp; !mid &amp;&amp; bot) {</span>
-<span class="cstat-no" title="statement not covered" >                        $scope.obs.ExposedHeightComboTID = 3;</span>
-                    } else <span class="cstat-no" title="statement not covered" >if(bot) {</span>
-<span class="cstat-no" title="statement not covered" >                        $scope.obs.ExposedHeightComboTID = 2;</span>
-                    } else <span class="cstat-no" title="statement not covered" >if(top){</span>
-<span class="cstat-no" title="statement not covered" >                        $scope.obs.ExposedHeightComboTID = 1;</span>
-                    } else {
-<span class="cstat-no" title="statement not covered" >                        $scope.obs.ExposedHeightComboTID = 0;</span>
+<span class="cstat-no" title="statement not covered" >            $scope.new = <span class="fstat-no" title="function not covered" >function () {</span></span>
+<span class="cstat-no" title="statement not covered" >                indexEditing = -1;</span>
+<span class="cstat-no" title="statement not covered" >                $scope.exposition = [0, 0, 0, 0, 0, 0, 0, 0];</span>
+<span class="cstat-no" title="statement not covered" >                $scope.allExpositionsToggled = false;</span>
+<span class="cstat-no" title="statement not covered" >                $scope.editing = false;</span>
+<span class="cstat-no" title="statement not covered" >                $scope.obs = {</span>
+                    AvalCauseTID: null,
+                    exposedHeight: {
+                        'top': false,
+                        'mid': false,
+                        'bot': false
                     }
-<span class="cstat-no" title="statement not covered" >                    AppLogging.log($scope.obs);</span>
-<span class="cstat-no" title="statement not covered" >                    $scope.obs.ExposedHeight2 = 0;</span>
                 };
+<span class="cstat-no" title="statement not covered" >                $scope.setAvalancheExtArray();</span>
+<span class="cstat-no" title="statement not covered" >                loadAttributeValues();</span>
+<span class="cstat-no" title="statement not covered" >                $scope.modal.show();</span>
 &nbsp;
-<span class="cstat-no" title="statement not covered" >                $scope.new = <span class="fstat-no" title="function not covered" >function () {</span></span>
-<span class="cstat-no" title="statement not covered" >                    indexEditing = -1;</span>
+            };
+&nbsp;
+<span class="cstat-no" title="statement not covered" >            $scope.$on('modal.shown', <span class="fstat-no" title="function not covered" >function () {</span></span>
+<span class="cstat-no" title="statement not covered" >                $ionicScrollDelegate.scrollTop();</span>
+            });
+&nbsp;
+<span class="cstat-no" title="statement not covered" >            $scope.add = <span class="fstat-no" title="function not covered" >function () {</span></span>
+<span class="cstat-no" title="statement not covered" >                if (!$scope.editing) {</span>
+<span class="cstat-no" title="statement not covered" >                    $scope.reg.AvalancheEvalProblem2.push($scope.obs);</span>
+                }
+<span class="cstat-no" title="statement not covered" >                $scope.modal.hide();</span>
+            };
+&nbsp;
+<span class="cstat-no" title="statement not covered" >            $scope.edit = <span class="fstat-no" title="function not covered" >function (obs, index) {</span></span>
+<span class="cstat-no" title="statement not covered" >                indexEditing = index;</span>
+<span class="cstat-no" title="statement not covered" >                $scope.obs = obs;</span>
+<span class="cstat-no" title="statement not covered" >                loadValidExposition();</span>
+<span class="cstat-no" title="statement not covered" >                loadAttributeValues();</span>
+<span class="cstat-no" title="statement not covered" >                $scope.setAvalancheExtArray();</span>
+<span class="cstat-no" title="statement not covered" >                $scope.editing = true;</span>
+<span class="cstat-no" title="statement not covered" >                $scope.modal.show();</span>
+            };
+&nbsp;
+<span class="cstat-no" title="statement not covered" >            $scope.delete = <span class="fstat-no" title="function not covered" >function () {</span></span>
+<span class="cstat-no" title="statement not covered" >                showConfirm()</span>
+                    .then(<span class="fstat-no" title="function not covered" >function (response) {</span>
+<span class="cstat-no" title="statement not covered" >                        if (response) {</span>
+<span class="cstat-no" title="statement not covered" >                            $scope.reg.AvalancheEvalProblem2.splice(indexEditing, 1);</span>
+<span class="cstat-no" title="statement not covered" >                            $scope.modal.hide();</span>
+<span class="cstat-no" title="statement not covered" >                            indexEditing = -1;</span>
+                        }
+                    });
+            };
+&nbsp;
+<span class="cstat-no" title="statement not covered" >            $scope.toggleExposition = <span class="fstat-no" title="function not covered" >function (index) {</span></span>
+<span class="cstat-no" title="statement not covered" >                $scope.exposition[index] = $scope.exposition[index] === 1 ? 0 : 1;</span>
+<span class="cstat-no" title="statement not covered" >                updateValidExposition();</span>
+            };
+&nbsp;
+<span class="cstat-no" title="statement not covered" >            $scope.toggleAllExpositions = <span class="fstat-no" title="function not covered" >function () {</span></span>
+<span class="cstat-no" title="statement not covered" >                if ($scope.allExpositionsToggled) {</span>
 <span class="cstat-no" title="statement not covered" >                    $scope.exposition = [0, 0, 0, 0, 0, 0, 0, 0];</span>
-<span class="cstat-no" title="statement not covered" >                    $scope.allExpositionsToggled = false;</span>
-<span class="cstat-no" title="statement not covered" >                    $scope.editing = false;</span>
-<span class="cstat-no" title="statement not covered" >                    $scope.obs = {</span>
-                        AvalCauseTID: null,
-                        exposedHeight: {
-                            'top': false,
-                            'mid': false,
-                            'bot': false
-                        }
+                } else {
+<span class="cstat-no" title="statement not covered" >                    $scope.exposition = [1, 1, 1, 1, 1, 1, 1, 1];</span>
+                }
+<span class="cstat-no" title="statement not covered" >                $scope.allExpositionsToggled = !$scope.allExpositionsToggled;</span>
+<span class="cstat-no" title="statement not covered" >                updateValidExposition();</span>
+            };
+&nbsp;
+<span class="cstat-no" title="statement not covered" >            $scope.weakLayersCheckBoxFlagCreator = <span class="fstat-no" title="function not covered" >function () {</span></span>
+<span class="cstat-no" title="statement not covered" >                $scope.obs.AvalCauseAttributes = $scope.avalCauseAttributeFlags</span>
+                    .reduce(<span class="fstat-no" title="function not covered" >function (prevVal, curVal) {</span>
+<span class="cstat-no" title="statement not covered" >                        return prevVal + (curVal.val * curVal.Id);</span>
+                    }, 0);
+            };
+&nbsp;
+<span class="cstat-no" title="statement not covered" >            $scope.setAvalancheExtArray = <span class="fstat-no" title="function not covered" >function () {</span></span>
+<span class="cstat-no" title="statement not covered" >                var filteredViewArray = $filter('filter')(viewArray, { AvalCauseTID: $scope.obs.AvalCauseTID || 0 }, true).filter(<span class="fstat-no" title="function not covered" >function (item) {</span> <span class="cstat-no" title="statement not covered" >return item.AvalancheExtTID &gt; 0 }</span>);</span>
+<span class="cstat-no" title="statement not covered" >                AppLogging.log(filteredViewArray);</span>
+<span class="cstat-no" title="statement not covered" >                $scope.avalancheExtArray = filteredViewArray.map(<span class="fstat-no" title="function not covered" >function (val) {</span></span>
+<span class="cstat-no" title="statement not covered" >                    return {</span>
+                        Id: val.AvalancheExtTID,
+                        Name: avalancheExtDict[val.AvalancheExtTID + '']
                     };
-<span class="cstat-no" title="statement not covered" >                    $scope.setAvalancheExtArray();</span>
-<span class="cstat-no" title="statement not covered" >                    loadAttributeValues();</span>
-<span class="cstat-no" title="statement not covered" >                    $scope.modal.show();</span>
-                };
-&nbsp;
-<span class="cstat-no" title="statement not covered" >                $scope.add = <span class="fstat-no" title="function not covered" >function () {</span></span>
-<span class="cstat-no" title="statement not covered" >                    if (!$scope.editing) {</span>
-<span class="cstat-no" title="statement not covered" >                        $scope.reg.AvalancheEvalProblem2.push($scope.obs);</span>
-                    }
-<span class="cstat-no" title="statement not covered" >                    $scope.modal.hide();</span>
-                };
-&nbsp;
-<span class="cstat-no" title="statement not covered" >                $scope.edit = <span class="fstat-no" title="function not covered" >function (obs, index) {</span></span>
-<span class="cstat-no" title="statement not covered" >                    indexEditing = index;</span>
-<span class="cstat-no" title="statement not covered" >                    $scope.obs = obs;</span>
-<span class="cstat-no" title="statement not covered" >                    loadValidExposition();</span>
-<span class="cstat-no" title="statement not covered" >                    loadAttributeValues();</span>
-<span class="cstat-no" title="statement not covered" >                    $scope.setAvalancheExtArray();</span>
-<span class="cstat-no" title="statement not covered" >                    $scope.editing = true;</span>
-<span class="cstat-no" title="statement not covered" >                    $scope.modal.show();</span>
-                };
-&nbsp;
-<span class="cstat-no" title="statement not covered" >                $scope.delete = <span class="fstat-no" title="function not covered" >function () {</span></span>
-<span class="cstat-no" title="statement not covered" >                    showConfirm()</span>
-                        .then(<span class="fstat-no" title="function not covered" >function (response) {</span>
-<span class="cstat-no" title="statement not covered" >                            if (response) {</span>
-<span class="cstat-no" title="statement not covered" >                                $scope.reg.AvalancheEvalProblem2.splice(indexEditing, 1);</span>
-<span class="cstat-no" title="statement not covered" >                                $scope.modal.hide();</span>
-<span class="cstat-no" title="statement not covered" >                                indexEditing = -1;</span>
-                            }
-                        });
-                };
-&nbsp;
-<span class="cstat-no" title="statement not covered" >                $scope.toggleExposition = <span class="fstat-no" title="function not covered" >function (index) {</span></span>
-<span class="cstat-no" title="statement not covered" >                    $scope.exposition[index] = $scope.exposition[index] === 1 ? 0 : 1;</span>
-<span class="cstat-no" title="statement not covered" >                    updateValidExposition();</span>
-                };
-&nbsp;
-<span class="cstat-no" title="statement not covered" >                $scope.toggleAllExpositions = <span class="fstat-no" title="function not covered" >function () {</span></span>
-<span class="cstat-no" title="statement not covered" >                    if ($scope.allExpositionsToggled) {</span>
-<span class="cstat-no" title="statement not covered" >                        $scope.exposition = [0, 0, 0, 0, 0, 0, 0, 0];</span>
-                    } else {
-<span class="cstat-no" title="statement not covered" >                        $scope.exposition = [1, 1, 1, 1, 1, 1, 1, 1];</span>
-                    }
-<span class="cstat-no" title="statement not covered" >                    $scope.allExpositionsToggled = !$scope.allExpositionsToggled;</span>
-<span class="cstat-no" title="statement not covered" >                    updateValidExposition();</span>
-                };
-&nbsp;
-<span class="cstat-no" title="statement not covered" >                $scope.weakLayersCheckBoxFlagCreator = <span class="fstat-no" title="function not covered" >function () {</span></span>
-<span class="cstat-no" title="statement not covered" >                    $scope.obs.AvalCauseAttributes = $scope.avalCauseAttributeFlags</span>
-                        .reduce(<span class="fstat-no" title="function not covered" >function (prevVal, curVal) {</span>
-<span class="cstat-no" title="statement not covered" >                            return prevVal + (curVal.val * curVal.Id);</span>
-                        }, 0);
-                };
-&nbsp;
-<span class="cstat-no" title="statement not covered" >                $scope.setAvalancheExtArray = <span class="fstat-no" title="function not covered" >function () {</span></span>
-<span class="cstat-no" title="statement not covered" >                    var filteredViewArray = $filter('filter')(viewArray, { AvalCauseTID: $scope.obs.AvalCauseTID || 0 }, true).filter(<span class="fstat-no" title="function not covered" >function (item) {</span> <span class="cstat-no" title="statement not covered" >return item.AvalancheExtTID &gt; 0 }</span>);</span>
-<span class="cstat-no" title="statement not covered" >                    AppLogging.log(filteredViewArray);</span>
-<span class="cstat-no" title="statement not covered" >                    $scope.avalancheExtArray = filteredViewArray.map(<span class="fstat-no" title="function not covered" >function (val) {</span></span>
-<span class="cstat-no" title="statement not covered" >                        return {</span>
-                            Id: val.AvalancheExtTID,
-                            Name: avalancheExtDict[val.AvalancheExtTID + '']
-                        };
-                    });
-<span class="cstat-no" title="statement not covered" >                    AppLogging.log($scope.avalancheExtArray);</span>
-                };
-&nbsp;
-<span class="cstat-no" title="statement not covered" >                $scope.getDisplayName = <span class="fstat-no" title="function not covered" >function (obs) {</span></span>
-<span class="cstat-no" title="statement not covered" >                    if (!avalancheExtDict || !avalCauseDict) //dictionaries not loaded</span>
-<span class="cstat-no" title="statement not covered" >                        return '';</span>
-&nbsp;
-<span class="cstat-no" title="statement not covered" >                    var seperator = avalancheExtDict[obs.AvalancheExtTID]? ', ' : '';</span>
-<span class="cstat-no" title="statement not covered" >                    return (avalancheExtDict[obs.AvalancheExtTID] || '').trim() + seperator + (avalCauseDict[obs.AvalCauseTID] || '');</span>
-                };
-&nbsp;
-<span class="cstat-no" title="statement not covered" >                var loadModal = <span class="fstat-no" title="function not covered" >function () {</span></span>
-<span class="cstat-no" title="statement not covered" >                    var url = 'app/directives/avalancheevalproblem/newevalproblem.html';</span>
-<span class="cstat-no" title="statement not covered" >                    return $ionicModal</span>
-                        .fromTemplateUrl(url, {
-                            scope: $scope,
-                            animation: 'slide-in-up'
-                        }).then(<span class="fstat-no" title="function not covered" >function (modal) {</span>
-<span class="cstat-no" title="statement not covered" >                            $scope.modal = modal;</span>
-<span class="cstat-no" title="statement not covered" >                            return modal;</span>
-                        });
-                };
-&nbsp;
-<span class="cstat-no" title="statement not covered" >                var updateValidExposition = <span class="fstat-no" title="function not covered" >function () {</span></span>
-<span class="cstat-no" title="statement not covered" >                    $scope.obs.ValidExposition = $scope.exposition.join('');</span>
-                };
-&nbsp;
-<span class="cstat-no" title="statement not covered" >                var loadValidExposition = <span class="fstat-no" title="function not covered" >function () {</span></span>
-&nbsp;
-<span class="cstat-no" title="statement not covered" >                    $scope.allExpositionsToggled = $scope.obs.ValidExposition === '11111111';</span>
-&nbsp;
-<span class="cstat-no" title="statement not covered" >                    if($scope.obs.ValidExposition){</span>
-<span class="cstat-no" title="statement not covered" >                        $scope.exposition = $scope.obs.ValidExposition.split('')</span>
-                            .map(<span class="fstat-no" title="function not covered" >function (val) {</span>
-<span class="cstat-no" title="statement not covered" >                                return parseInt(val);</span>
-                            });
-                    } else {
-<span class="cstat-no" title="statement not covered" >                        $scope.exposition = [0,0,0,0,0,0,0,0];</span>
-                    }
-                };
-&nbsp;
-<span class="cstat-no" title="statement not covered" >                var loadAttributeValues = <span class="fstat-no" title="function not covered" >function () {</span></span>
-<span class="cstat-no" title="statement not covered" >                    var setAttributes = ($scope.obs &amp;&amp; $scope.obs.AvalCauseAttributes) || 0;</span>
-<span class="cstat-no" title="statement not covered" >                    for (var i = $scope.avalCauseAttributeFlags.length; i--;) {</span>
-<span class="cstat-no" title="statement not covered" >                        var flag = $scope.avalCauseAttributeFlags[i];</span>
-<span class="cstat-no" title="statement not covered" >                        if (flag.Id &lt;= setAttributes) {</span>
-<span class="cstat-no" title="statement not covered" >                            flag.val = 1;</span>
-<span class="cstat-no" title="statement not covered" >                            setAttributes -= flag.Id;</span>
-                        } else {
-<span class="cstat-no" title="statement not covered" >                            flag.val = 0;</span>
-                        }
-                    }
-                };
-&nbsp;
-<span class="cstat-no" title="statement not covered" >                Utility</span>
-                    .getViewRepositories()
-                    .then(<span class="fstat-no" title="function not covered" >function (KdvRepos) {</span>
-<span class="cstat-no" title="statement not covered" >                        viewArray = KdvRepos['AvalancheProblemMenu3V'];</span>
-                    });
-<span class="cstat-no" title="statement not covered" >                Utility</span>
-                    .getKdvRepositories()
-                    .then(<span class="fstat-no" title="function not covered" >function (repos) {</span>
-                        //Snow_AvalCauseAttributeFlags
-<span class="cstat-no" title="statement not covered" >                        $scope.avalCauseAttributeFlags = repos['Snow_AvalCauseAttributeFlags'];</span>
-&nbsp;
-<span class="cstat-no" title="statement not covered" >                        $scope.avalCauseKDV = repos['Snow_AvalCauseKDV'].filter(<span class="fstat-no" title="function not covered" >function(item){</span> <span class="cstat-no" title="statement not covered" >return item.Id &gt; 0 }</span>);</span>
-&nbsp;
-<span class="cstat-no" title="statement not covered" >                        avalancheExtDict = {};</span>
-<span class="cstat-no" title="statement not covered" >                        avalCauseDict = {};</span>
-<span class="cstat-no" title="statement not covered" >                        repos['Snow_AvalancheExtKDV'].forEach(<span class="fstat-no" title="function not covered" >function (val) {</span></span>
-<span class="cstat-no" title="statement not covered" >                            avalancheExtDict[val.Id] = val.Name;</span>
-                        });
-<span class="cstat-no" title="statement not covered" >                        $scope.avalCauseKDV.forEach(<span class="fstat-no" title="function not covered" >function (val) {</span></span>
-<span class="cstat-no" title="statement not covered" >                            avalCauseDict[val.Id] = val.Name;</span>
-                        });
-&nbsp;
-                    })
-                    .then(loadModal);
-&nbsp;
-<span class="cstat-no" title="statement not covered" >                $scope.$on('$ionicView.beforeLeave', <span class="fstat-no" title="function not covered" >function () {</span></span>
-<span class="cstat-no" title="statement not covered" >                    $scope.modal.hide();</span>
                 });
+<span class="cstat-no" title="statement not covered" >                AppLogging.log($scope.avalancheExtArray);</span>
+            };
 &nbsp;
-<span class="cstat-no" title="statement not covered" >                $scope.$on('$destroy', <span class="fstat-no" title="function not covered" >function() {</span></span>
-<span class="cstat-no" title="statement not covered" >                    $scope.modal.remove();</span>
+<span class="cstat-no" title="statement not covered" >            $scope.getDisplayName = <span class="fstat-no" title="function not covered" >function (obs) {</span></span>
+<span class="cstat-no" title="statement not covered" >                if (!avalancheExtDict || !avalCauseDict) //dictionaries not loaded</span>
+<span class="cstat-no" title="statement not covered" >                    return '';</span>
+&nbsp;
+<span class="cstat-no" title="statement not covered" >                var seperator = avalancheExtDict[obs.AvalancheExtTID] ? ', ' : '';</span>
+<span class="cstat-no" title="statement not covered" >                return (avalancheExtDict[obs.AvalancheExtTID] || '').trim() + seperator + (avalCauseDict[obs.AvalCauseTID] || '');</span>
+            };
+&nbsp;
+<span class="cstat-no" title="statement not covered" >            var loadModal = <span class="fstat-no" title="function not covered" >function () {</span></span>
+<span class="cstat-no" title="statement not covered" >                var url = 'app/directives/avalancheevalproblem/newevalproblem.html';</span>
+<span class="cstat-no" title="statement not covered" >                return $ionicModal</span>
+                    .fromTemplateUrl(url, {
+                        scope: $scope,
+                        animation: 'slide-in-up'
+                    }).then(<span class="fstat-no" title="function not covered" >function (modal) {</span>
+<span class="cstat-no" title="statement not covered" >                        $scope.modal = modal;</span>
+<span class="cstat-no" title="statement not covered" >                        return modal;</span>
+                    });
+            };
+&nbsp;
+<span class="cstat-no" title="statement not covered" >            var updateValidExposition = <span class="fstat-no" title="function not covered" >function () {</span></span>
+<span class="cstat-no" title="statement not covered" >                $scope.obs.ValidExposition = $scope.exposition.join('');</span>
+            };
+&nbsp;
+<span class="cstat-no" title="statement not covered" >            var loadValidExposition = <span class="fstat-no" title="function not covered" >function () {</span></span>
+&nbsp;
+<span class="cstat-no" title="statement not covered" >                $scope.allExpositionsToggled = $scope.obs.ValidExposition === '11111111';</span>
+&nbsp;
+<span class="cstat-no" title="statement not covered" >                if ($scope.obs.ValidExposition) {</span>
+<span class="cstat-no" title="statement not covered" >                    $scope.exposition = $scope.obs.ValidExposition.split('')</span>
+                        .map(<span class="fstat-no" title="function not covered" >function (val) {</span>
+<span class="cstat-no" title="statement not covered" >                            return parseInt(val);</span>
+                        });
+                } else {
+<span class="cstat-no" title="statement not covered" >                    $scope.exposition = [0, 0, 0, 0, 0, 0, 0, 0];</span>
+                }
+            };
+&nbsp;
+<span class="cstat-no" title="statement not covered" >            var loadAttributeValues = <span class="fstat-no" title="function not covered" >function () {</span></span>
+<span class="cstat-no" title="statement not covered" >                var setAttributes = ($scope.obs &amp;&amp; $scope.obs.AvalCauseAttributes) || 0;</span>
+<span class="cstat-no" title="statement not covered" >                for (var i = $scope.avalCauseAttributeFlags.length; i--;) {</span>
+<span class="cstat-no" title="statement not covered" >                    var flag = $scope.avalCauseAttributeFlags[i];</span>
+<span class="cstat-no" title="statement not covered" >                    if (flag.Id &lt;= setAttributes) {</span>
+<span class="cstat-no" title="statement not covered" >                        flag.val = 1;</span>
+<span class="cstat-no" title="statement not covered" >                        setAttributes -= flag.Id;</span>
+                    } else {
+<span class="cstat-no" title="statement not covered" >                        flag.val = 0;</span>
+                    }
+                }
+            };
+&nbsp;
+<span class="cstat-no" title="statement not covered" >            Utility</span>
+                .getViewRepositories()
+                .then(<span class="fstat-no" title="function not covered" >function (KdvRepos) {</span>
+<span class="cstat-no" title="statement not covered" >                    viewArray = KdvRepos['AvalancheProblemMenu3V'];</span>
                 });
+<span class="cstat-no" title="statement not covered" >            Utility</span>
+                .getKdvRepositories()
+                .then(<span class="fstat-no" title="function not covered" >function (repos) {</span>
+                    //Snow_AvalCauseAttributeFlags
+<span class="cstat-no" title="statement not covered" >                    $scope.avalCauseAttributeFlags = repos['Snow_AvalCauseAttributeFlags'];</span>
 &nbsp;
-            }
+<span class="cstat-no" title="statement not covered" >                    $scope.avalCauseKDV = repos['Snow_AvalCauseKDV'].filter(<span class="fstat-no" title="function not covered" >function (item) {</span> <span class="cstat-no" title="statement not covered" >return item.Id &gt; 0 }</span>);</span>
 &nbsp;
-        });</pre></td></tr>
+<span class="cstat-no" title="statement not covered" >                    avalancheExtDict = {};</span>
+<span class="cstat-no" title="statement not covered" >                    avalCauseDict = {};</span>
+<span class="cstat-no" title="statement not covered" >                    repos['Snow_AvalancheExtKDV'].forEach(<span class="fstat-no" title="function not covered" >function (val) {</span></span>
+<span class="cstat-no" title="statement not covered" >                        avalancheExtDict[val.Id] = val.Name;</span>
+                    });
+<span class="cstat-no" title="statement not covered" >                    $scope.avalCauseKDV.forEach(<span class="fstat-no" title="function not covered" >function (val) {</span></span>
+<span class="cstat-no" title="statement not covered" >                        avalCauseDict[val.Id] = val.Name;</span>
+                    });
+&nbsp;
+                })
+                .then(loadModal);
+&nbsp;
+<span class="cstat-no" title="statement not covered" >            $scope.$on('$ionicView.beforeLeave', <span class="fstat-no" title="function not covered" >function () {</span></span>
+<span class="cstat-no" title="statement not covered" >                $scope.modal.hide();</span>
+            });
+&nbsp;
+<span class="cstat-no" title="statement not covered" >            $scope.$on('$destroy', <span class="fstat-no" title="function not covered" >function () {</span></span>
+<span class="cstat-no" title="statement not covered" >                $scope.modal.remove();</span>
+            });
+&nbsp;
+        }
+&nbsp;
+    });</pre></td></tr>
 </table></pre>
 <div class='push'></div><!-- for sticky footer -->
 </div><!-- /wrapper -->
 <div class='footer quiet pad2 space-top1 center small'>
   Code coverage
-  generated by <a href="http://istanbul-js.org/" target="_blank">istanbul</a> at Wed Jun 07 2017 15:07:32 GMT+0200 (W. Europe Daylight Time)
+  generated by <a href="http://istanbul-js.org/" target="_blank">istanbul</a> at Tue Jun 13 2017 11:07:55 GMT+0200 (W. Europe Daylight Time)
 </div>
 </div>
 <script src="../../../prettify.js"></script>
