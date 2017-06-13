@@ -49,7 +49,7 @@
                         if (confirm) {
                             ctrl._confirmed = true;
                             callAction();
-                            $state.go(toState.name);
+                            $state.go(toState.name, toParams);
                         }
                     });
             } else {

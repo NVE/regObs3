@@ -62,7 +62,7 @@
                             if (confirm) {
                                 confirmed = true;
                                 ctrl.saveAction();
-                                $state.go(toState.name);
+                                $state.go(toState.name, toParams);
                             }
                         });
                 } else if (!confirmed) {

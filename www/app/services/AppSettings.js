@@ -135,7 +135,7 @@
                 services: serviceUrls[settings.data.env],
                 getLog: baseUrls[settings.data.env] + '/Log', // /{id}
                 search: baseUrls[settings.data.env] + '/Search/All',
-                getHelpTexts: baseUrls[settings.data.env] +'Helptext'
+                getHelpTexts: baseUrls[settings.data.env] +'/Helptext'
             };
         };
 

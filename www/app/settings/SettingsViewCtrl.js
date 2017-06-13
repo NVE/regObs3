@@ -1,6 +1,6 @@
 angular
     .module('RegObs')
-    .controller('SettingsViewCtrl', function ($scope, $timeout, $rootScope, $http, $state, $cordovaInAppBrowser, $ionicLoading, AppSettings, LocalStorage, ObsLocation, Registration, User, Utility, HeaderColor, RegobsPopup, AppLogging, PresistentStorage, OfflineMap, Map, $ionicScrollDelegate) {
+    .controller('SettingsViewCtrl', function ($scope, $timeout, $rootScope, $http, $state, $cordovaInAppBrowser, $ionicLoading, AppSettings, LocalStorage, ObsLocation, Registration, User, Utility, HeaderColor, RegobsPopup, AppLogging, PresistentStorage, OfflineMap, Map, $ionicScrollDelegate, HelpTexts) {
         var vm = this;
 
         vm.settings = AppSettings;
@@ -97,6 +97,8 @@ angular
             vm.refreshingKdv = true;
             Utility.refreshKdvElements()
                 .then(function () {
+                    return HelpTexts.updateHelpTexts();
+                }).then(function () {
                     RegobsPopup.alert('Suksess!', 'Nedtrekkslister har blitt oppdatert.');
                 })
                 .catch(function () {

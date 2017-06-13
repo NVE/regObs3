@@ -47,9 +47,15 @@
     };
 
     service.updateHelpTexts = function () {
-        $http.get(AppSettings.getEndPoints().getHelpTexts, { langKey: AppSettings.getCurrentLangKey() }, AppSettings.httpConfig)
+        var config = angular.copy(AppSettings.httpConfig);
+        config.params = { langKey: AppSettings.getCurrentLangKey() };
+        return $http.get(AppSettings.getEndPoints().getHelpTexts, config)
             .then(function (res) {
-                LocalStorage.set(service._getStorageKey(), JSON.stringify(res.data));
+                if (angular.isArray(res.data) && res.data.length > 0) {
+                    LocalStorage.set(service._getStorageKey(), JSON.stringify(res.data));
+                    return true;
+                }
+                return false;
             });
     };
 
