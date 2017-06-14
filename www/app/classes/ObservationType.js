@@ -96,15 +96,16 @@
                     if (angular.isFunction(hideDescription)) {
                         hideDescription = hideDescription(self.data.FullObject[prop], self.data);
                     }
+                    
 
                     if (hideDescription) {
                         result.push({ prop: prop, hasValue: hasValue, value: valueText, order: Object.keys(properties).indexOf(prop) });
                         checkCallback();
                     } else {
-                        var translationName = Utility.camelCaseToUnderscore(prop.replace('TID', ''));
-                        Translate.translateWithFallback(translationName, '')
+                        var title = displayFormat.title ? displayFormat.title : Utility.camelCaseToUnderscore(prop.replace('TID', ''));
+                        Translate.translateWithFallback(title, '')
                             .then(function (description) {
-                                result.push({ prop: prop, hasValue: hasValue, value: description + ': ' + valueText, order: Object.keys(properties).indexOf(prop) });
+                                result.push({ prop: prop, hasValue: hasValue, value: '<span class="observation-description">' +description + '</span>: ' + valueText, order: Object.keys(properties).indexOf(prop) });
                                 checkCallback();
                             });
                     }
@@ -131,6 +132,23 @@
                 resolve(result);
             });
         }
+    };
+
+    ObservationType.fromRegistration = function (registration, prop) {
+        if (!registration) throw Error('Registration must be set!');
+        if (!prop) throw Error('Property must be set!');
+        var reg = registration.data[prop];
+        if (!reg) return null;
+        var registrationTid = Utility.registrationTid(prop);
+        var definition = Utility.getObservationDefinition(registrationTid);
+
+        return new ObservationType(registration.data.GeoHazardTID, {
+            RegistrationName: definition.name,
+            RegistrationTid: registrationTid,
+            TypicalValue1: '',
+            TypicalValue2: '',
+            FullObject: angular.copy(reg)
+        });
     };
 
     return ObservationType;

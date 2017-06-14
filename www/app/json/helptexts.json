@@ -135,9 +135,9 @@
   {
     "ApplicationId": "1b83d144-6a2c-499b-8bdd-d40149212415",
     "RegistrationTID": 26,
-    "GeoHazardTID": 20,
+    "GeoHazardTID": 10,
     "LangKey": 1,
-    "Text": "Hvilken type jordskred har du observert? For varslingstjenesten er dette nyttig informasjon for å gjøre varslingen bedre.\n  \nEr det jordskred (har ikke gått i bekkeløp), er det flomskred (i bekkeløp), steinsprang (mest stein), leirskred (utglidninger i fine masser) eller noe annet? Det er også svært viktig å registrere når du antar skredet har gått, selv om dette kan være vanskelig å anslå dersom du faktisk ikke var tilstede da det skjedde.\n\nHvilke konsekvenser har jordskredet du har observert? Er det skade på hus, vei eller annen infrastruktur? Har det påvirket mennesker, dyr eller trafikk? Demmes bekk eller elv opp av skredmassene?\n  \nTenk at du vil opplyse andre som beveger seg i området om konsekvensene jordskredet har."
+    "Text": "Vi ønsker å samle inn så mye informasjon som mulig om ulykker, nestenulykker og andre hendelser knyttet til snøskred. Dette vil være en del av det forebyggende arbeidet med å unngå skredhendelser i framtiden.\n\nDu kan registrere fakta om selve skredet, om årsaken og forløpet, samt refleksjoner om hvordan skredet kunne vært unngått? Hvor mye informasjon du ønsker å legge til der er opp til deg. Husk å fokusere på læring og fakta, ikke spekuler eller fordel skyld.\n\n**NB**: Dersom du ønsker å være anonym kan du legge inn informasjonen som anonym bruker (dersom du har en bruker og er pålogget må du logge ut først)."
   },
   {
     "ApplicationId": "1b83d144-6a2c-499b-8bdd-d40149212415",
@@ -180,5 +180,19 @@
     "GeoHazardTID": 60,
     "LangKey": 1,
     "Text": "Her kan du registrere observert vannstand, i forhold til en kjent skala eller andre referansepunkt. Er det vann opp til dørklinka? Ta et bilde og referer til bildet med en kommentar her."
+  },
+  {
+    "ApplicationId": "1b83d144-6a2c-499b-8bdd-d40149212415",
+    "RegistrationTID": 62,
+    "GeoHazardTID": 60,
+    "LangKey": 1,
+    "Text": "Er det vann opp til dørklinka? Her kan du registrere målt eller markert vannstand, i forhold til en kjent skala eller andre referansepunkt.\n\nFå gjerne med hvor og når du har observert. Et bilde er alltid svært nyttig."
+  },
+  {
+    "ApplicationId": "1b83d144-6a2c-499b-8bdd-d40149212415",
+    "RegistrationTID": 71,
+    "GeoHazardTID": 20,
+    "LangKey": 1,
+    "Text": "Hvilken type jordskred har du observert? For varslingstjenesten er dette nyttig informasjon for å gjøre varslingen bedre.\n\nEr det jordskred (har ikke gått i bekkeløp), er det flomskred (i bekkeløp), steinsprang (mest stein), leirskred (utglidninger i fine masser) eller noe annet? Det er også svært viktig å registrere når du antar skredet har gått, selv om dette kan være vanskelig å anslå dersom du faktisk ikke var tilstede da det skjedde.\n\nHvilke konsekvenser har jordskredet du har observert? Er det skade på hus, vei eller annen infrastruktur? Har det påvirket mennesker, dyr eller trafikk? Demmes bekk eller elv opp av skredmassene?\n\nTenk at du vil opplyse andre som beveger seg i området om konsekvensene jordskredet har."
   }
 ]

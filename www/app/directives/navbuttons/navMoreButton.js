@@ -29,7 +29,9 @@
         };
 
         ctrl.$onDestroy = function () {
-            ctrl.topPopover.remove();
+            if (ctrl.topPopover) {
+                ctrl.topPopover.remove();
+            }
         };
     }
 });

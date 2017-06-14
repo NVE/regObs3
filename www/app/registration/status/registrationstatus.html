@@ -1,0 +1,73 @@
+﻿<ion-view view-title="{{'SEND_HEADER'|translate}}">
+    <ion-content class="padding">
+        <div class="status-wrapper" ng-if="vm.loaded">
+            <div ng-if="vm.isSending">
+                <h3>{{'SENDING_OBSERVATION'|translate}} {{(vm.completed.length >= vm.unsent.length ? vm.unsent.length : vm.completed.length + 1) }}/{{vm.unsent.length}}</h3>
+                <div class="status-description">
+                    {{'PLEASE_WAIT'|translate}}
+                </div>
+                <div class="center">
+                    <ion-spinner icon="dots" class="spinner-calm"></ion-spinner>
+                </div>
+                <div class="downloadprogress inline-block" pb-circle progress-key="{{vm.progressName}}" options="vm.progressOptions"></div>
+                <div class="status-footer">
+                    <button type="button" class="button button-block button-default status-footer-button" ng-click="vm.cancel()">{{'CANCEL'|translate}}*</button>
+                    <span class="unsent-badge-info">* {{'CANCEL_HELP_TEXT'|translate}}</span>
+                </div>
+            </div>
+            <div ng-if="!vm.isSending && !vm.cancelled">
+                <div class="status-icon"><i class="icon" ng-class="{'ion-checkmark-circled balanced':!vm.failed(), 'ion-close-circled assertive':vm.failed()}"></i></div>
+                <div ng-hide="vm.failed()">
+                    <h3 ng-show="vm.completed.length > 1">{{'OBSERVATIONS_SENT_CONFIRMATION_HEADER'|translate}}</h3>
+                    <h3 ng-show="vm.completed.length === 1">{{'OBSERVATION_SENT_CONFIRMATION_HEADER'|translate}}</h3>
+                    <div class="status-description">{{'OBSERVATION_SENT_CONFIRMATION_TEXT'|translate}} <span ng-show="vm.emailReceipt">{{'CONFIRM_EMAIL_SENT'|translate}}</span></div>
+                </div>
+                <div ng-show="vm.failed()">
+                    <h3 ng-show="vm.completed.length > 1">{{'OBSERVATIONS_FAILED_CONFIRMATION_HEADER'|translate}}</h3>
+                    <h3 ng-show="vm.completed.length === 1">{{'OBSERVATION_FAILED_CONFIRMATION_HEADER'|translate}}</h3>
+                    <div class="status-description" ng-show="vm.completed[0].error.status !== 400">
+                        {{'OBSERVATION_FAILED_CONFIRMATION_TEXT'|translate}} <a href="http://www.regobs.no/Home/About" target="_system">{{'TAKE_CONTACT'|translate}}</a>.
+                    </div>
+                    <div class="status-description" ng-show="vm.completed[0].error.status === 400">
+                        {{'OBSERVATION_FAILED_CONFIRMATION_TEXT_BAD_REQUEST_START'|translate}} <a href="http://www.regobs.no/Home/About" target="_system">{{'CONTACT'|translate|lowercase}}</a>{{'OBSERVATION_FAILED_CONFIRMATION_TEXT_BAD_REQUEST_END'|translate}}
+
+                        <div class="card">
+                            <div class="item item-divider">
+                                {{'TIME_2'|translate}}: {{vm.completed[0].error.time | regobsDate }}
+                            </div>
+                            <div class="item item-text-wrap">
+                                {{'REFERENCE'|translate}} ID: {{vm.completed[0].Id}}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div>
+                    <div ng-if="vm.completed.length > 1">
+                        <ion-list>
+                            <ion-item class="item-icon-left" ng-repeat="obs in vm.completed" ng-click="vm.onRegistrationClick(obs)">
+                                <i class="icon" ng-class="{'ion-close-circled assertive':obs.error, 'ion-checkmark-circled balanced':!obs.error}"></i>
+                                <span class="status-list-description">{{obs.DtObsTime | regobsDate }}</span>
+                                <span ng-show="obs.error" class="item-note">{{'SEND_FAILED'|translate}}</span>
+                                <span ng-hide="obs.error" class="item-note">{{'SEND_SUCCESS'|translate}}</span>
+                            </ion-item>
+                        </ion-list>
+                    </div>
+                    <div ng-show="vm.completed.length === 1 && !vm.failed() && vm.completed[0].RegId"><button type="button" class="button button-calm button-block status-footer-button spinner-right" ng-disabled="vm.loadingRegistration" ng-click="vm.onRegistrationClick(vm.completed[0])">{{'VIEW_OBSERVATION'|translate}} <ion-spinner ng-show="vm.loadingRegistration" icon="dots"></ion-spinner></button></div>
+                    <div ng-show="vm.failed()"><button type="button" class="button button-calm button-block status-footer-button" ng-click="vm.resendFailed()">{{'RETRY'|translate}}</button></div>
+                    <div><button type="button" class="button button-outline button-calm button-block status-footer-button" ng-click="vm.goToStart()">{{'GO_TO_FRONT_PAGE'|translate}}</button></div>
+                </div>
+            </div>
+            <div ng-if="!vm.isSending && vm.cancelled">
+                <div class="status-icon"><i class="icon ion-close-circled assertive"></i></div>
+                <h3>{{'SEND_CANCEL_HEADER'|translate}}</h3>
+                <div class="status-description">
+                    {{'SEND_CANCEL_HELP_TEXT'|translate}}
+                </div>
+                <div class="status-footer">
+                    <div ng-show="vm.failed()"><button type="button" class="button button-calm button-block status-footer-button" ng-click="vm.resendFailed()">{{'RETRY'|translate}}</button></div>
+                    <div><button type="button" class="button button-outline button-calm button-block status-footer-button" ng-click="vm.goToStart()">{{'GO_TO_FRONT_PAGE'|translate}}</button></div>
+                </div>
+            </div>
+        </div>
+    </ion-content>
+</ion-view>

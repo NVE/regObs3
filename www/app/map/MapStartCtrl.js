@@ -1,5 +1,5 @@
 ﻿angular.module('RegObs')
-    .controller('MapStartCtrl', function ($scope, $rootScope, $state, $ionicHistory, User, Map, AppSettings, Registration, AppLogging, Utility, $timeout, $ionicPopover, $cordovaInAppBrowser, Observations, RegobsPopup, UserLocation, $translate, Trip, Translate, OfflineMap) {
+    .controller('MapStartCtrl', function ($scope, $rootScope, $state, $ionicHistory, User, Map, AppSettings, Registration, AppLogging, Utility, $timeout, $ionicPopover, $cordovaInAppBrowser, Observations, RegobsPopup, UserLocation, $translate, Trip, Translate, OfflineMap, $ionicPopup) {
         var appVm = this;
 
         appVm.gpsCenterClick = Map.centerMapToUser;
@@ -9,12 +9,14 @@
             }
         };
 
+        appVm.registration = Registration;
+
         appVm.gotoRegistration = function () {
             Registration.createAndGoToNewRegistration();
         };
 
         appVm.hasRegistration = function () {
-            return !(Registration.isEmpty() && !Registration.unsent.length);
+            return Registration.hasStarted() || Registration.unsent.length > 0;
         };
 
         var popoverScope = {
@@ -39,7 +41,7 @@
                 Registration.createAndGoToNewRegistration();
             },
             showNewRegistration: function () {
-                return Registration.isEmpty();
+                return !Registration.hasStarted();
             },
             showTrip: function () {
                 return Trip.canStart();
@@ -88,13 +90,15 @@
         };
 
         $scope.$on('$ionicView.enter', function () {
-            $ionicHistory.clearHistory();
-
+            $ionicHistory.clearHistory();          
             appVm.setViewTitle();                
             Map.invalidateSize();
             Map.startWatch();
-            OfflineMap.getOfflineAreaBounds().then(function (result) {
-                Map.setOfflineAreaBounds(result);
+
+            document.addEventListener("deviceready", function () {
+                OfflineMap.getOfflineAreaBounds().then(function (result) {
+                    Map.setOfflineAreaBounds(result);
+                });
             });
         });
 
@@ -104,19 +108,36 @@
 
         appVm._checkObsWatch = $timeout(function () {
             if (Observations.checkIfObservationsShouldBeUpdated() && UserLocation.hasUserLocation() && Utility.hasGoodNetwork()) {
-                appVm._updateObservationsPopup = RegobsPopup
-                    .confirm($translate.instant('UPDATE_OBSERVATIONS_IN_MAP'),
-                        '<div class="text-center popup-icon"><i class="icon ion-loop"></i></div><p>' +
-                        $translate.instant('UPDATE_OBSERVATIONS_IN_MAP_HELP_TEXT') +
+                $translate(['UPDATE_OBSERVATIONS_IN_MAP', 'UPDATE_OBSERVATIONS_IN_MAP_HELP_TEXT', 'UPDATE_OBSERVATIONS_IN_MAP_HELP_TEXT_2', 'CANCEL', 'OK']).then(function (translations) {
+                    appVm._updateObservationsPopup = $ionicPopup.confirm({
+                        title: translations['UPDATE_OBSERVATIONS_IN_MAP'],
+                        template: '<div class="text-center popup-icon"><i class="icon ion-loop"></i></div><p>' +
+                        translations['UPDATE_OBSERVATIONS_IN_MAP_HELP_TEXT'] +
                         '</p><p>' +
-                        $translate.instant('UPDATE_OBSERVATIONS_IN_MAP_HELP_TEXT_2') +
-                        '</p>');
-
-                appVm._updateObservationsPopup.then(function (response) {
+                        translations['UPDATE_OBSERVATIONS_IN_MAP_HELP_TEXT_2'] +
+                        '</p>',
+                        buttons: [
+                            {
+                                text: translations['CANCEL'],
+                            },
+                            {
+                                text: translations['OK'],
+                                type: 'button-positive',
+                                onTap: function (e) {
+                                    // Returning a value will cause the promise to resolve with the given value.
+                                    return true;
+                                }
+                            }
+                        ]
+                    });
+                    appVm._updateObservationsPopup.then(function (response) {
                         if (response) {
                             Map.updateObservationsInMap();
                         }
                     });
+                });
+
+                
             }
         }, 10000);
 

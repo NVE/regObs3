@@ -183,10 +183,24 @@
         var newObservations = [{ RegId: 1, DtObsTime: '2017-02-18T00:00:00.000' }];
         var existingObservations = [{ RegId: 2, DtObsTime: '2017-02-18T00:00:05.000' }]; //this is after get observations from date, and should be in new result. So if it's not in new result, then it's deleted and sould not be added
 
-        Observations._mergeRegistrations(newObservations, existingObservations);
+        Observations._mergeRegistrations(newObservations, existingObservations, true);
         expect(newObservations.length).toEqual(1);
         expect(newObservations[0].RegId).toEqual(1);
     }));
+
+    it("_mergeRegistrations do not deletes existing items not in new registrations after get observations fetch limit when other geoHazardId", inject(function (Observations, AppSettings) {
+        spyOn(AppSettings, 'getObservationsFromDateISOString')
+            .and.callFake(function () {
+                return '2017-02-17T00:00:00.000';
+            });
+
+        var newObservations = [{ RegId: 1, GeoHazardTid: 10, DtObsTime: '2017-02-18T00:00:00.000' }];
+        var existingObservations = [{ RegId: 2, GeoHazardTid: 20, DtObsTime: '2017-02-18T00:00:05.000' }]; //this is after get observations from date, and should be in new result. So if it's not in new result, then it's deleted and sould not be added
+
+        Observations._mergeRegistrations(newObservations, existingObservations, true);
+        expect(newObservations.length).toEqual(2);
+    }));
+
 
     it("removeOldObservationsFromPresistantStorage should delete items that is older than 15 days", function (done) {
         inject(function (Observations, $q, $rootScope) {

@@ -42,6 +42,10 @@ angular
             $scope.addDangerObs = function () {
                 $scope.commentChanged();
                 if (!$scope.editing && !Utility.isEmpty($scope.dangerObs)) {
+                    if (!angular.isArray($scope.reg.DangerObs)) {
+                        $scope.reg.DangerObs = [];
+                    }
+
                     $scope.reg.DangerObs.push($scope.dangerObs);
                 }
                 $scope.modal.hide();

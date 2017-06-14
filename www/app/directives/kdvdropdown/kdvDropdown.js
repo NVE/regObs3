@@ -1,6 +1,6 @@
 angular
     .module('RegObs')
-    .directive('kdvDropdown', function (Utility) {
+    .directive('kdvDropdown', function (Utility, AppLogging) {
         'ngInject';
 
         var link = function (scope) {
@@ -44,10 +44,14 @@ angular
                 kdvKey: '@',
                 after: '=',
                 before: '=',
-                showZero: '<'
+                showZero: '<',
+                showAsRadio: '=',
+                changeHandler: '&'
             },
             link: link,
-            templateUrl: 'app/directives/kdvdropdown/kdvDropdown.html',
+            templateUrl: function (elem, attrs) {
+                return attrs.showAsRadio == 'true' ? 'app/directives/kdvdropdown/kdvRadio.html' : 'app/directives/kdvdropdown/kdvDropdown.html';
+            },
             replace: true
         }
 

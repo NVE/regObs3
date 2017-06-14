@@ -2,18 +2,31 @@
     <ion-nav-buttons side="right">
         <nav-saving-indicator></nav-saving-indicator>
     </ion-nav-buttons>
-    <ion-content ng-class="{'has-footer': vm.hasFooter()}", ng-show="vm.loaded">
-        <ion-list>
-            <regobs-position></regobs-position>
-            <regobs-time reg-object="vm.reg" reg-prop="DtObsTime" on-change="vm.save()"></regobs-time>
+    <ion-content ng-show="vm.loaded">
+        <ion-list class="regobs-menu-list">
+            <div class="item item-divider item-divider-calm">
+                {{'MY_OBSERVATION'|translate}}
+            </div>
+            <ion-item class="item-icon-right" ui-sref="confirmlocation">
+                <h2>{{'OBSERVATION_LOCATION'|translate}}</h2>
+                <p ng-show="vm.hasLocation()">{{vm.locationText()}}</p>
+                <i class="icon ion-checkmark-circled balanced regobs-menu-item-icon" ng-show="vm.hasLocation()"></i>
+                <i class="icon icon-accessory ion-chevron-right"></i>
+            </ion-item>
+            <ion-item class="item-icon-right" ui-sref="confirmtime">
+                <h2>{{'DATE_AND_TIME'|translate}}</h2>
+                <p ng-if="vm.reg.DtObsTime">{{vm.reg.DtObsTime | date:'d'}}. {{vm.reg.DtObsTime | date:'MMM' | uppercase | translate | lowercase}} {{vm.reg.DtObsTime | date:'yyyy'}}, {{vm.reg.DtObsTime | date:'HH:mm'}}</p>
+                <i class="icon ion-checkmark-circled balanced regobs-menu-item-icon" ng-show="vm.reg.DtObsTime"></i>
+                <i class="icon icon-accessory ion-chevron-right"></i>
+            </ion-item>
             <div ng-if="vm.reg.GeoHazardTID === 10" ng-include="'app/snow/snowregistration/snowregistration.html'"></div>
             <div ng-if="vm.reg.GeoHazardTID === 20" ng-include="'app/dirt/dirtregistration/dirtregistration.html'"></div>
             <div ng-if="vm.reg.GeoHazardTID === 60" ng-include="'app/water/waterregistration/waterregistration.html'"></div>
             <div ng-if="vm.reg.GeoHazardTID === 70" ng-include="'app/ice/iceregistration/iceregistration.html'"></div>
-            <regobs-menu-item title="Fritekst"
-                              condition="vm.propertyExists('GeneralObservation')"
+            <!--<regobs-menu-item title="{{'GENERAL_OBS'|translate}}"
+                              property="GeneralObservation"
                               state="generalobs">
-            </regobs-menu-item>
+            </regobs-menu-item>-->
         </ion-list>
     </ion-content>
     <registration-footer ng-cloak ng-if="vm.loaded"></registration-footer>

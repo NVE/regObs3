@@ -1,9 +1,12 @@
 <regobs-menu-item title="{{'DANGER_OBS'|translate}}"
-                  condition="vm.propertyExists('DangerObs')"
-                  state="dirtdangerobs"
-                  badge-text="vm.reg.DangerObs.length">
+                  property="DangerObs"
+                  state="dirtdangerobs">
 </regobs-menu-item>
 <regobs-menu-item title="{{'LAND_SLIDE_OBS'|translate}}"
-                  condition="vm.propertyExists('LandSlideObs')"
+                  property="LandSlideObs"
                   state="landslideobs">
+</regobs-menu-item>
+<regobs-menu-item title="{{'GENERAL_OBS'|translate}}"
+                  property="GeneralObservation" show-summary="false"
+                  state="generalobs">
 </regobs-menu-item>

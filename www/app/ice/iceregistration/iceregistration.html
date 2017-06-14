@@ -1,17 +1,20 @@
 <regobs-menu-item title="{{'ICE_COVER_OBS'|translate}}"
-                  condition="vm.propertyExists('IceCoverObs')"
+                  property="IceCoverObs"
                   state="icecoverobs">
 </regobs-menu-item>
 <regobs-menu-item title="{{'ICE_THICKNESS'|translate}}"
-                  condition="vm.propertyExists('IceThickness')"
+                  property="IceThickness"
                   state="icethickness">
 </regobs-menu-item>
 <regobs-menu-item title="{{'DANGER_OBS'|translate}}"
-                  condition="vm.propertyExists('DangerObs')"
-                  state="icedangerobs"
-                  badge-text="vm.reg.DangerObs.length">
+                  property="DangerObs"
+                  state="icedangerobs">
 </regobs-menu-item>
 <regobs-menu-item title="{{'INCIDENT'|translate}}"
-                  condition="vm.propertyExists('Incident')"
+                  property="Incident"
                   state="iceincident">
+</regobs-menu-item>
+<regobs-menu-item title="{{'GENERAL_OBS'|translate}}"
+                  property="GeneralObservation" show-summary="false"
+                  state="generalobs">
 </regobs-menu-item>

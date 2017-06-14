@@ -10,7 +10,7 @@
 
                 <regobs-number
                         field-name="lufttemperatur"
-                        label="{{'AIR_TEMPERATURE'|translate}} (C)"
+                        label="{{'AIR_TEMPERATURE'|translate}} (C)" min="-50" max="50"
                         help-text="{{'AIR_TEMPERATURE_HELP_TEXT'|translate}}"
                         model="vm.reg.WeatherObservation.AirTemperature"
                 ></regobs-number>
@@ -19,14 +19,14 @@
                         label="{{'WIND_SPEED'|translate}} (m/s)"
                         help-text="{{'AIR_TEMPERATURE_HELP_TEXT'|translate}}"
                         model="vm.reg.WeatherObservation.WindSpeed"
-                        min="0"
+                        min="0" max="50"
                 ></regobs-number>
                 <regobs-number
                         field-name="skydekke"
                         label="{{'CLOUD_COVER'|translate}} (%)"
                         help-text="{{'ONLY_ROUND_PERCENTAGE'|translate}}"
                         model="vm.reg.WeatherObservation.CloudCover"
-                        min="0"
+                        min="0" max="100"
                         step="1"
                         pattern="[0-9]*"
                 ></regobs-number>
@@ -49,7 +49,7 @@
             </ion-list>
             <regobs-image-list></regobs-image-list>
         </form>
-        <button type="button" ui-sref="help({page:'weatherobs'})" class="button button-positive button-block button-clear">
+        <button type="button" ui-sref="dynamichelp({registrationProp:'WeatherObservation'})"  class="button button-positive button-block button-clear">
             {{'HELP'|translate}}
         </button>
     </ion-content>

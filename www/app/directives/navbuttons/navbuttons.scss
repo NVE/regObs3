@@ -1,20 +1,118 @@
 ﻿.save-indicator {
-    line-height: 1.1;
+    position: relative;
+    top: 4px;
+}
+
+.save-popover {
+    height: 120px;
+}
+
+.save-popover .title {
+    text-align: left;   
+}
+
+.platform-android .save-popover .title {
+    font-size: 18px !important;
+}
+
+.save-popover .popover-arrow {
+    margin-left: -5px;
+}
+
+.save-popover ion-content {
+    padding-left: 10px;
+    padding-right: 10px;
+}
+
+
+.save-indicator-spinner {
+    display: block !important;
+    position: absolute;
+    right: 10px;
+    stroke: #fff;
+    fill: #fff;
+    opacity: 0;
+    -webkit-animation: fadeinout1 1s linear forwards;
+    animation: fadeinout1 1s linear forwards;
 }
 
 .save-indicator-text {
     display: inline-block !important;
     padding-right: 5px;
-}
-
-.save-indicator-text.ng-hide {
-    transition: 2s linear all;
     opacity: 0;
+    -webkit-animation: fadeinout2 5s linear forwards;
+    animation: fadeinout2 5s linear forwards;
 }
 
 .save-indicator-icon {
     position: relative;
     bottom: -4px;
     font-size: 22px;
-    padding-right: 5px;
+    padding-right: 10px;
+    opacity: 0;
+    -webkit-animation: fadeinout3 5s linear forwards;
+    animation: fadeinout3 5s linear forwards;
+}
+
+
+
+
+@-webkit-keyframes fadeinout1 {
+    0%, 100% {
+        opacity: 0;
+    }
+
+    50% {
+        opacity: 1;
+    }
+}
+
+@keyframes fadeinout1 {
+    0%,100% {
+        opacity: 0;
+    }
+
+    50% {
+        opacity: 1;
+    }
+}
+
+@-webkit-keyframes fadeinout2 {
+    20%,100% {
+        opacity: 0;
+    }
+
+    60% {
+        opacity: 1;
+    }
+}
+
+@keyframes fadeinout2 {
+    20%,100% {
+        opacity: 0;
+    }
+
+    60% {
+        opacity: 1;
+    }
+}
+
+@-webkit-keyframes fadeinout3 {
+    20% {
+        opacity: 0;
+    }
+
+    60%,100% {
+        opacity: 1;
+    }
+}
+
+@keyframes fadeinout3 {
+    20% {
+        opacity: 0;
+    }
+
+    60%,100% {
+        opacity: 1;
+    }
 }

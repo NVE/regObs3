@@ -2,7 +2,7 @@
   "name": "regObs",
   "private": true,
   "devDependencies": {
-    "ionic": "driftyco/ionic-bower#1.3.2",
+    "ionic": "driftyco/ionic-bower#1.3.3",
     "angular": "1.5.8",
     "angular-animate": "1.5.8",
     "angular-sanitize": "1.5.8",
@@ -71,6 +71,19 @@
     ],
     "ng-webworker": [
       "src/*.min.*"
+    ],
+    "ionic-close-popup": [
+      "ionic-close-popup.js"
+    ],
+    "raven-js": [
+      "dist/*.min.*",
+      "dist/plugins/angular.min.*"
+    ],
+    "showdown": [
+      "dist/*.*"
+    ],
+    "ng-showdown": [
+      "dist/*.*"
     ]
   },
   "dependencies": {
@@ -78,14 +91,17 @@
     "ga-localstorage": "*",
     "moment": "^2.15.2",
     "ngCordova": "0.1.27-alpha",
-    "ionic": "driftyco/ionic-bower#1.3.2",
+    "ionic": "driftyco/ionic-bower#1.3.3",
     "ion-floating-menu": "^1.0.5",
     "progressbar.js": "^1.0.1",
     "angular-progressbar": "^0.1.0",
     "angular-translate": "2.11.0",
     "angular-translate-loader-static-files": "^2.13.1",
     "leaflet.markercluster": "^1.0.0",
-    "ng-webworker": "^0.2.3"
+    "ng-webworker": "^0.2.3",
+    "ionic-close-popup": "^0.0.1",
+    "raven-js": "^3.15.0",
+    "ng-showdown": "^1.1.0"
   },
   "resolutions": {
     "angular-ui-router": "0.3.2",
