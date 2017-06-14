@@ -531,6 +531,10 @@ angular
             return geoHazardTid[mode];
         };
 
+        service.getGeoHazardTypes = function() {
+           return angular.copy(geoHazardTid);
+        };
+
         service.getCurrentGeoHazardName = function () {
             return $translate.instant(AppSettings.getAppMode().toUpperCase());
         };

@@ -75,11 +75,6 @@
 
                 ctrl._addSupportTiles();
 
-                var infotext = $translate.instant(AppSettings.getAppMode().toUpperCase());
-                var iconPostFix = AppSettings.getAppMode();
-                var infoControl = L.control.infoControl({ text: infotext, icon: 'nve-icon nve-icon-' + iconPostFix }).addTo(map);
-
-
                 ctrl._clusteredGroup = new RegObsClasses.MarkerClusterGroup().addTo(map);
 
                 var redMarker = L.AwesomeMarkers.icon({

@@ -1,4 +1,4 @@
-﻿.set-position-in-map-wrapper .nve-icon {
+﻿/*.set-position-in-map-wrapper .nve-icon {
     padding-left: 0px;
     height: 20px;
     width: 20px;
@@ -26,6 +26,10 @@
 .leaflet-info-container-wrapper span {
     position: relative;
     top: -3px;
+}*/
+
+.set-position-in-map-wrapper .geo-selector {
+    top: 10px !important;
 }
 
 .regobs-position-icon {

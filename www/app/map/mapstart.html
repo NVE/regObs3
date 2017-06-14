@@ -9,6 +9,7 @@
         <nav-more-button></nav-more-button>
     </ion-nav-buttons>
     <div ng-class="{'hasFooter': vm.hasRegistration()}">
+        <regobs-geo-selector></regobs-geo-selector>
         <div ng-if="!vm.mapSelectedItem">
             <ion-floating-button class="regobs-gps-center" button-color="#fff" icon-color="#444" icon="ion-pinpoint" click="vm.gpsCenterClick()" ng-show="vm.getFollowMode()">
             </ion-floating-button>
