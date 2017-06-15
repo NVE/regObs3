@@ -6,7 +6,12 @@
     <div class="map-search-icon map-search-close" ng-click="$ctrl.close()">
         <i class="icon ion-close"></i>
     </div>
-    <div class="search-item" ng-click="$ctrl.goToLocation(item)" ng-class="{'search-item-first':$index === 0}" ng-repeat="item in $ctrl.searchResults">
-        {{item.name}}<span class="search-item-description">, {{item.description}}</span>
+    <div class="search-item loading-item text-center" ng-show="$ctrl.loading">
+        <ion-spinner></ion-spinner>
     </div>
+    <ion-scroll class="map-search-results">
+        <div class="search-item" ng-hide="$ctrl.loading" ng-click="$ctrl.goToLocation(item)" ng-class="{'search-item-first':$index === 0}" ng-repeat="item in $ctrl.searchResults">
+            {{item.name}}<span class="search-item-description">, {{item.description}}</span>
+        </div>
+    </ion-scroll> 
 </div>

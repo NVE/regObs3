@@ -38,7 +38,7 @@
             if (item) {
                 if (item.options.setViewOnSelect) {
                     var pos = item.getLatLng();
-                    service._disableFollowMode();
+                    service.disableFollowMode();
                     map.panTo(pos); //pan map to selected item
                 }
                 service._updateSelectedItemDistance();
@@ -221,7 +221,7 @@
          * Disable center position to user on updated location
          * @returns {} 
          */
-        service._disableFollowMode = function () {
+        service.disableFollowMode = function () {
             $timeout(function () {
                 service._followMode = false;
             });
@@ -324,12 +324,12 @@
 
             map.on('dragstart', function () {
                 if (userMarker) { //Only disable follow mode on map drag if first location has been set (userMarker exists)
-                    service._disableFollowMode();
+                    service.disableFollowMode();
                 }
             });
             map.on('zoomstart', function () {
                 if (!service._isProgramaticZoom && userMarker) {
-                    service._disableFollowMode();
+                    service.disableFollowMode();
                 }
             });
 

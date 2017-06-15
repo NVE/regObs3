@@ -32,15 +32,21 @@
             ctrl.searchResults = [];
             
             ctrl.search = function () {
-                if (ctrl.searchText && ctrl.searchText.length > 2) {
+                if (ctrl.searchText && ctrl.searchText.length > 1) {
+                    ctrl.loading = true;
                     MapSearch.search(ctrl.searchText).then(function (result) {
-                        ctrl.searchResults = result;
+                        $timeout(function () {
+                            ctrl.searchResults = result;
+                            ctrl.loading = false;
+                        }); 
                     });
-                    //ctrl.searchResults = [{ id: 1, name: 'Test', description: 'Desc' }, { id: 2, name: 'Test2', description: 'Desc' }, { id: 3, name: 'Test3', description: 'Desc' }];
+                } else {
+                    ctrl.searchResults = [];
                 }
             };
 
             ctrl.goToLocation = function (item) {
+                Map.disableFollowMode();
                 Map.setView(item.latlng);
                 ctrl.close();
             };
