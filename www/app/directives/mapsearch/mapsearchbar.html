@@ -1,0 +1,12 @@
+﻿<div class="map-search open" ng-show="$ctrl.isVisible">
+    <div class="map-search-icon">
+        <i class="icon ion-ios-search-strong"></i>
+    </div>  
+    <input type="text" id="map-search-input" ng-keyup="$ctrl.search()" ng-model="$ctrl.searchText" class="map-search-input" placeholder="Søk etter sted" />
+    <div class="map-search-icon map-search-close" ng-click="$ctrl.close()">
+        <i class="icon ion-close"></i>
+    </div>
+    <div class="search-item" ng-click="$ctrl.goToLocation(item)" ng-class="{'search-item-first':$index === 0}" ng-repeat="item in $ctrl.searchResults">
+        {{item.name}}<span class="search-item-description">, {{item.description}}</span>
+    </div>
+</div>

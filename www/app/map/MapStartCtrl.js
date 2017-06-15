@@ -1,5 +1,5 @@
 ﻿angular.module('RegObs')
-    .controller('MapStartCtrl', function ($scope, $rootScope, $state, $ionicHistory, User, Map, AppSettings, Registration, AppLogging, Utility, $timeout, $ionicPopover, $cordovaInAppBrowser, Observations, RegobsPopup, UserLocation, $translate, Trip, Translate, OfflineMap, $ionicPopup) {
+    .controller('MapStartCtrl', function ($scope, $rootScope, $state, $ionicHistory, User, Map, AppSettings, Registration, AppLogging, Utility, $timeout, $ionicPopover, $cordovaInAppBrowser, Observations, RegobsPopup, UserLocation, $translate, Trip, Translate, OfflineMap, $ionicPopup, MapSearch) {
         var appVm = this;
 
         appVm.gpsCenterClick = Map.centerMapToUser;
@@ -90,7 +90,8 @@
         };
 
         $scope.$on('$ionicView.enter', function () {
-            $ionicHistory.clearHistory();          
+            $ionicHistory.clearHistory();
+
             appVm.setViewTitle();                
             Map.invalidateSize();
             Map.startWatch();
@@ -143,6 +144,7 @@
 
 
         $scope.$on('$ionicView.beforeLeave', function () {
+            MapSearch.hideSearchBar();
             Map.clearWatch();
             $timeout.cancel(appVm._checkObsWatch);
             if (appVm._updateObservationsPopup) {

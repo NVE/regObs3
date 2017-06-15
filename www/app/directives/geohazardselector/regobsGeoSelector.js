@@ -5,10 +5,11 @@ angular
         bindings: {
             readOnly: '<'
         },
-        controller: function (AppSettings, Utility) {
+        controller: function (AppSettings, Utility, $rootScope, $timeout, MapSearch) {
             'ngInject';
             var ctrl = this;
             ctrl.isOpen = false;
+
             ctrl.toggle = function () {
                 ctrl.isOpen = !ctrl.isOpen;
             };
@@ -28,5 +29,15 @@ angular
                 var id = types[propertyName];
                 ctrl.geoHazardTypes.push({ id: id, name: propertyName });
             };
+
+            ctrl.checkVisisble = function () {
+                $timeout(function () {
+                    ctrl.isVisible = !MapSearch.isVisible();
+                });
+            };
+
+            ctrl.checkVisisble();
+
+            $rootScope.$on('regobs:searchBarVisibleChange', ctrl.checkVisisble);
         }
     });

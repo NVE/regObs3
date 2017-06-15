@@ -1,0 +1,77 @@
+﻿.map-search {
+    position: absolute;
+    top: 50px;
+    right: 10px;
+    background-color: #fff;
+    opacity: 0.8;
+    z-index: 900;
+    border-radius: 5px;
+    width: 50px;
+}
+
+.map-search-backdrop {
+    z-index: 900;
+}
+
+.map-search-icon {
+    width: 50px;
+    height: 40px;
+    display: inline-block;
+    font-size: 26px;
+}
+
+.map-search-close {
+    position: absolute;
+    right: 0px;
+    top:0px;
+    font-size: 18px;
+}
+
+.map-search .icon {
+    position: relative;
+    left: 16px;
+    top: 8px;
+}
+
+.map-search .map-search-close i {
+    left: 24px;
+    top: 11px;
+}
+
+
+.map-search .search-item {
+    margin-left: 5px;
+    margin-right: 5px;
+    padding-top: 12px;
+    padding-bottom: 12px;
+    border-top: 1px solid rgb(190,189,189);
+    font-size: 16px;
+    padding-left: 50px;
+}
+
+.map-search .search-item-description {
+    font-size: 12px;
+}
+
+
+.map-search .search-item-first {
+    border-top: 1px solid #000;
+}
+
+.map-search.open {
+    left: 10px;
+    width: auto;
+}
+.map-search input {
+    display: inline;
+    width: 70%;
+    font-size: 16px;
+}
+
+.map-search input::placeholder {
+    font-style: italic;
+}
+
+.map-search input::-webkit-input-placeholder {
+    font-style: italic;
+}
