@@ -1,4 +1,5 @@
-﻿.map-search {
+﻿
+.map-search {
     position: absolute;
     top: 50px;
     right: 10px;
@@ -12,8 +13,33 @@
     top: 72px;
 }
 
-.map-search-backdrop {
-    z-index: 900;
+.search-bar-popup .popup {
+    position: absolute;
+    top: 50px;
+    background-color: rgba(255,255,255,0);
+    width: 100%;
+   
+}
+
+.search-bar-popup.popup-container.active .popup {
+    -webkit-animation-name: slideInRight;
+    animation-name: slideInRight;
+}
+
+.search-bar-popup .popup-body {
+    text-align: left !important;
+}
+
+.search-bar-popup .popup-head {
+    display: none;
+}
+
+.platform-ios .search-bar-popup .popup {
+    top: 72px;
+}
+
+.search-bar-popup .popup .map-search {
+    top: 0px;
 }
 
 .map-search-icon {
@@ -54,7 +80,7 @@
 
 .map-search .search-item.loading-item {
     padding-left: 0px;
-    border-top: 1px solid #000;
+    border-top: none;
 }
 
 
@@ -69,7 +95,13 @@
 
 
 .map-search .search-item-first {
+    border-top: none;
+}
+
+.map-search .search-item-divider {
     border-top: 1px solid #000;
+    margin-left: 5px;
+    margin-right: 5px;
 }
 
 .map-search.open {

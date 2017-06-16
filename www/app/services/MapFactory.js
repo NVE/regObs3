@@ -397,6 +397,18 @@
         };
 
         /**
+        * Pan to lat lng
+        * @param {} latlng
+        * @returns {}
+        */
+        service.panTo = function (latlng) {
+            if (map) {
+                map.panTo(latlng);
+            }
+        };
+
+
+        /**
          * Get center of map
          * @returns {} 
          */

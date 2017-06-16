@@ -2,26 +2,8 @@
     .module('RegObs')
     .component('regobsMapSearchBar', {
         templateUrl: 'app/directives/mapsearch/mapsearchbar.html',
-        controller: function (AppSettings, Utility, $ionicBackdrop, MapSearch, $rootScope, $timeout, $window, Map) {
+        controller: function (AppSettings, Utility, $ionicBackdrop, MapSearch, $rootScope, $timeout, $window, Map, $ionicScrollDelegate) {
             var ctrl = this;
-
-            ctrl.checkVisisble = function () {
-                $timeout(function () {
-                    ctrl.isVisible = MapSearch.isVisible();
-                    if (ctrl.isVisible) {
-                        $ionicBackdrop.retain();
-                        $timeout(function () {
-                            var element = $window.document.getElementById('map-search-input');
-                            if (element)
-                                element.focus();
-                        }, 100);
-                        
-
-                    } else {
-                        $ionicBackdrop.release();
-                    }
-                });
-            };
 
             ctrl.close = function () {
                 ctrl.searchText = '';
@@ -30,6 +12,21 @@
             };
 
             ctrl.searchResults = [];
+
+            ctrl.resetScroll = function () {
+                //var scrollHandle = $ionicScrollDelegate.$getByHandle('mapSearchResultScroll');
+                var instances = $ionicScrollDelegate.$getByHandle('mapSearchResultScroll')._instances;
+                var scrollHandle = instances.filter(function (element) {
+                    return (element['$$delegateHandle'] == name);
+                })[0];
+
+                if (scrollHandle) {
+                    $timeout(function () {
+                        scrollHandle.resize();
+                        scrollHandle.scrollTop();
+                    });
+                }
+            };
             
             ctrl.search = function () {
                 if (ctrl.searchText && ctrl.searchText.length > 1) {
@@ -38,21 +35,21 @@
                         $timeout(function () {
                             ctrl.searchResults = result;
                             ctrl.loading = false;
-                        }); 
+                            ctrl.resetScroll();
+                        });
                     });
                 } else {
                     ctrl.searchResults = [];
+                    ctrl.resetScroll();
                 }
             };
 
             ctrl.goToLocation = function (item) {
-                Map.disableFollowMode();
-                Map.setView(item.latlng);
-                ctrl.close();
+                $timeout(function () {
+                    Map.disableFollowMode();
+                    Map.panTo(item.latlng);
+                    ctrl.close();
+                }, 50); //A small delay to click               
             };
-
-            ctrl.checkVisisble();
-
-            $rootScope.$on('regobs:searchBarVisibleChange', ctrl.checkVisisble);
         }
     });
