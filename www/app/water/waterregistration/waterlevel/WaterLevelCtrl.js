@@ -53,7 +53,16 @@ angular
             }
         };
 
-        vm.reset = function () {          
+        vm.checkDate = function (date) {
+            if (Registration.data.DtObsTime && date) {
+                var isSame = moment(date).isSame(Registration.data.DtObsTime, 'day');
+                if (!isSame) {
+                    RegobsPopup.alert('WARNING', 'WARNING_TIME_TEXT');
+                }
+            }
+        };
+
+        vm.reset = function () {
             Property.reset($state.current.data.registrationProp);
         };
 
@@ -101,7 +110,7 @@ angular
             if (vm.reg.WaterLevel2.WaterLevelMeasurement && angular.isArray(vm.reg.WaterLevel2.WaterLevelMeasurement)) {
                 vm.reg.WaterLevel2.WaterLevelMeasurement.forEach(function (item) {
                     var clone = angular.copy(item);
-                    
+
                     if (clone.DtMeasurementTime && typeof (clone.DtMeasurementTime) !== typeof (Date)) {
                         clone.DtMeasurementTime = new Date(clone.DtMeasurementTime);
                     }
@@ -111,7 +120,7 @@ angular
             if (vm.WaterLevelMeasurement.length === 0) {
                 vm.WaterLevelMeasurement.push({});
             }
-            
+
             Utility.getKdvArray('Water_MarkingReferenceKDV').then(function (result) {
                 vm.markingKdvArray = result;
             });

@@ -26,16 +26,8 @@
             };
 
             scope.getText = function () {
-                return scope.text || 'Observasjonstidspunkt';
+                return scope.text || '';
             };
-
-            scope.$watch('regObject', function (newVal) {
-                if (scope.regObject) {
-                    scope.DtObsTime = new Date(scope.regObject[scope.regProp]);
-                }
-            });
-
-
         }
 
         return {
@@ -44,13 +36,14 @@
                 regObject: '=',
                 regProp: '@',
                 text: '@',
-                onChange: '&'
+                onChange: '&?',
+                onBlur: '&?'
             },
             link: link,
             template: [
                 '<label class="item item-input item-stacked-label">',
                 '<span class="input-label" ng-bind="::getText()" ng-class="{assertive:formCtrl[regProp].$invalid}"></span>',
-                '<input name="{{regProp}}" type="datetime-local" ng-change="timeChanged(DtObsTime)" ng-model="DtObsTime" required>',
+                '<input name="{{regProp}}" type="datetime-local" ng-change="timeChanged(DtObsTime)" ng-blur="onBlur()" ng-model="DtObsTime" required>',
                 '</label>'
             ].join('')
         };

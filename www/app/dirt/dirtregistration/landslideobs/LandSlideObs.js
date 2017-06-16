@@ -1,6 +1,6 @@
 angular
     .module('RegObs')
-    .controller('LandSlideObsCtrl', function ($scope, $state, $ionicModal, Registration, Utility) {
+    .controller('LandSlideObsCtrl', function ($scope, $state, $ionicModal, Registration, Utility, RegobsPopup) {
         var vm = this;
 
         var init = function() {
@@ -31,6 +31,23 @@ angular
         vm.openLandslideInMap = function () {
             vm.modal.show();
             $scope.$broadcast('openLandslideInMap');
+        };
+
+        vm._checkTime = function (prop) {
+            if (vm.reg && vm.reg.DtObsTime && prop) {
+                var isSame = moment(prop).isSame(vm.reg.DtObsTime, 'day');
+                if (!isSame) {
+                    RegobsPopup.alert('WARNING', 'WARNING_TIME_TEXT');
+                }
+            }
+        };
+
+        vm.checkDtLandSlideTime = function () {
+            vm._checkTime(vm.reg.LandSlideObs.DtLandSlideTime);
+        };
+
+        vm.checkDtLandSlideTimeEnd = function () {
+            vm._checkTime(vm.reg.LandSlideObs.DtLandSlideTimeEnd);
         };
 
 

@@ -8,7 +8,7 @@
         </div>
         <form name="avalancheForm" novalidate>
             <ion-list>
-                <regobs-time reg-object="vm.reg.AvalancheObs" reg-prop="DtAvalancheTime"
+                <regobs-time reg-object="vm.reg.AvalancheObs" reg-prop="DtAvalancheTime" on-blur="vm.checkAvalancheTime()"
                              text="{{'TIME_WHEN_AVALANCHE'|translate}}"></regobs-time>
                 <label class="item item-input item-stacked-label item-select">
                     <span class="input-label">

@@ -8,9 +8,9 @@
         </div>
         <form name="landslideForm" novalidate>
             <ion-list>
-                <regobs-time reg-object="vm.reg.LandSlideObs" reg-prop="DtLandSlideTime"
+                <regobs-time reg-object="vm.reg.LandSlideObs" reg-prop="DtLandSlideTime" on-blur="vm.checkDtLandSlideTime()"
                              text="{{'DT_LAND_SLIDE_TIME'|translate}}"></regobs-time>
-                <regobs-time reg-object="vm.reg.LandSlideObs" reg-prop="DtLandSlideTimeEnd"
+                <regobs-time reg-object="vm.reg.LandSlideObs" reg-prop="DtLandSlideTimeEnd" on-blur="vm.checkDtLandSlideTimeEnd()"
                              text="{{'DT_LAND_SLIDE_TIME_END'|translate}}"></regobs-time>
 
                 <kdv-dropdown

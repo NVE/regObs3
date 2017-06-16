@@ -37,7 +37,6 @@
                 } else {
                     Registration.save();
                 }
-
             };
 
             if (ctrl.formIsInvalid()) {
