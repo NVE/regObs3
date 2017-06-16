@@ -2,7 +2,7 @@
     .module('RegObs')
     .component('mapMenu', {
         templateUrl: 'app/directives/mapmenu/mapmenu.html',
-        controller: function (AppSettings, $state, OfflineMap, $cordovaInAppBrowser, $scope, Utility, $rootScope, $ionicSideMenuDelegate) {
+        controller: function (AppSettings, $state, OfflineMap, $cordovaInAppBrowser, $scope, Utility, $rootScope, $ionicSideMenuDelegate, User) {
             'ngInject';
             var ctrl = this;
            
@@ -14,6 +14,7 @@
                 }
                 AppSettings.save();
             };
+            
 
             ctrl.downloadMap = function () {
                 $ionicSideMenuDelegate.toggleLeft();
@@ -65,9 +66,14 @@
                 ctrl.daysBackArray = AppSettings.getDaysBackArrayForCurrentGeoHazard();
             };
 
+            ctrl.setUser = function () {
+                ctrl.user = User.getUser();
+            };
+
             ctrl.init = function() {
                 ctrl.settings = AppSettings.data;
                 ctrl.initDaysBackSettings();
+                ctrl.setUser();
             };
 
             $scope.$on('$regObs:appReset', function() {
@@ -76,6 +82,10 @@
 
             $scope.$on('$regobs.appModeChanged', function () {
                 ctrl.initDaysBackSettings();
+            });
+
+            $scope.$on('$regObs:userInfoSaved', function () {
+                ctrl.setUser();
             });
 
             ctrl.init();

@@ -1,6 +1,25 @@
 ﻿<ion-content>
     <ion-list>
         <ion-item class="item item-divider">
+            {{'USER_OPTIONS'|translate}}
+        </ion-item>
+        <ion-item class="item-icon-left item-icon-right item-text-wrap" ng-if="$ctrl.user.anonymous" ng-click="$ctrl.navigateTo('login')">
+            <i class="icon ion-locked smaller-item-icon"></i> {{'LOGIN'|translate}}
+            <i class="icon icon-accessory ion-chevron-right"></i>
+        </ion-item>
+        <ion-item class="item-icon-left item-icon-right item-text-wrap" ng-if="!$ctrl.user.anonymous"  ng-click="$ctrl.navigateTo('login')">
+            <i class="icon ion-locked smaller-item-icon"></i> {{$ctrl.user.email}}
+            <i class="icon icon-accessory ion-chevron-right"></i>
+        </ion-item>
+        <ion-item class="item-icon-left item-icon-right item-text-wrap" ng-if="!$ctrl.user.anonymous">
+            <i class="icon ion-eye smaller-item-icon"></i> Mine observasjoner
+            <i class="icon icon-accessory ion-chevron-right"></i>
+        </ion-item>
+        <ion-item class="item-icon-left item-icon-right item-text-wrap" ng-click="$ctrl.navigateTo('settings')">
+            <i class="icon ion-gear-a smaller-item-icon"></i> {{'SETTINGS'|translate}}
+            <i class="icon icon-accessory ion-chevron-right"></i>
+        </ion-item>
+        <ion-item class="item item-divider">
             {{'MAP_OPTIONS'|translate}}
         </ion-item>
         <ion-toggle class="item-icon-left" toggle-class="toggle-calm" ng-model="$ctrl.settings.showObservations" ng-change="$ctrl.onSettingsChanged()">
@@ -47,10 +66,6 @@
             <i class="icon ion-ios-information-outline"></i> {{'WIZARD'|translate}}
             <i class="icon icon-accessory ion-chevron-right"></i>
         </ion-item>
-        <!--<ion-item class="item-icon-left item-icon-right item-text-wrap" ng-click="$ctrl.navigateTo('help', { page:'maphelp' })">
-            <i class="icon ion-ios-help-outline"></i> {{'HELP'|translate}}
-            <i class="icon icon-accessory ion-chevron-right"></i>
-        </ion-item>-->
         <ion-item class="item-text-wrap">
             <div class="small-text">{{'MAP_BY'|translate}} <a href="http://kartverket.no/" target="_system" >©Kartverket</a></div>
             <div class="small-text">{{'SUPPORT_MAP_BY'|translate}} <a href="http://www.nve.no/" target="_system">©NVE</a></div>

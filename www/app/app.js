@@ -45,6 +45,11 @@
                 templateUrl: 'app/map/mapstart.html',
                 controller: 'MapStartCtrl as vm'
             })
+            .state('login', {
+                url: '/login',
+                templateUrl: 'app/login/loginview.html',
+                controller: 'LoginViewCtrl as vm'
+            })
             .state('settings', {
                 url: '/settings',
                 templateUrl: 'app/settings/settingsview.html',

@@ -1,6 +1,6 @@
 angular
     .module('RegObs')
-    .factory('User', function User($http, LocalStorage, AppSettings, RegobsPopup, AppLogging) {
+    .factory('User', function User($http, LocalStorage, AppSettings, RegobsPopup, AppLogging, $rootScope) {
         var service = this;
         var storageKey = 'regobsUser';
         var user;
@@ -25,6 +25,7 @@ angular
                 user.password = password;
                 service.save();
                 AppLogging.log("Logged in user", user);
+                $rootScope.$broadcast('$regObs:userLogin');
                 service.loggingIn = false;
 
             }, function (response) {
@@ -45,6 +46,7 @@ angular
         service.logOut = function () {
             user = makeAnonymousUser();
             service.save();
+            $rootScope.$broadcast('$regObs:userLogout');
         };
 
         service.getUser = function () {
@@ -64,6 +66,7 @@ angular
 
         service.save = function () {
             LocalStorage.setObject(storageKey, user);
+            $rootScope.$broadcast('$regObs:userInfoSaved');
         };
 
         service.load = function () {

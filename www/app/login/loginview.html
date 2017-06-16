@@ -1,0 +1,54 @@
+<ion-view view-title="{{'SETTINGS'|translate}}">
+    <ion-content>
+        <form ng-submit="vm.logIn()" ng-if="vm.userService.getUser().anonymous">
+            <div class="list">
+                <div ng-hide="vm.userService.loggingIn">
+                    <label class="item item-input">
+                        <i class="icon ion-email placeholder-icon"></i>
+                        <input type="email" placeholder="{{'EMAIL'|translate}}" ng-model="vm.username" />
+                    </label>
+                    <label class="item item-input">
+                        <i class="icon ion-key placeholder-icon"></i>
+                        <input type="password" name="password" placeholder="{{'PASSWORD'|translate}}" ng-model="vm.password" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" />
+                    </label>
+                    <div class="item">
+                        <button type="submit" class="button button-block button-calm">
+                            <span>{{'LOGIN'|translate}}</span>
+                        </button>
+                        <div class="row row-no-padding">
+                            <div class="col">
+                                <a href='' class="button button-small button-positive button-clear button-block"
+                                   ng-click="vm.openUrl('Account/PasswordRecovery?c=Home')">
+                                    {{'FORGOT_PASSWORD'|translate}}
+                                </a>
+
+                            </div>
+                            <div class="col">
+                                <a href='' class="button button-small button-positive button-clear button-block"
+                                   ng-click="vm.openUrl('Account/Register?c=Home')">
+                                    {{'REGISTER'|translate}}
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="item text-center" ng-show="vm.userService.loggingIn">
+                    <ion-spinner class="spinner" ng-if="vm.userService.loggingIn"></ion-spinner>
+                    <p>{{'LOGGING_IN'|translate}}</p>
+                </div>
+            </div>
+        </form>
+        <form ng-submit="vm.logOut()" ng-if="!vm.userService.getUser().anonymous">
+            <div class="list">
+                <div class="item">
+                    {{'LOGGED_IN_AS'|translate}} {{vm.userService.getUser().email}}
+                </div>
+                <div class="item">
+                    <button type="submit" class="button button-block button-calm">
+                        {{'LOGOUT'|translate}}
+                    </button>
+                </div>
+            </div>
+        </form>
+    </ion-content>
+</ion-view>

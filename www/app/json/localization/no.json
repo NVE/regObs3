@@ -505,5 +505,6 @@
   "STOP_TRIP_ERROR_TEXT": "Klarte ikke avslutte tur, dette kan skyldes at den allerede har blitt avsluttet på nett, eller på serveren.",
   "TRIP_AUTO_STOPPED": "Gårsdagens tur har automatisk blitt avsluttet.",
   "AVAL_CAUSE_ATTRIBUTES": "Ugunstige egenskaper på det svake laget",
-  "WARNING_TIME_TEXT": "Dato er forskjellig fra observasjonstidspunktet"
+  "WARNING_TIME_TEXT": "Dato er forskjellig fra observasjonstidspunktet",
+  "USER_OPTIONS": "Brukervalg"
 }

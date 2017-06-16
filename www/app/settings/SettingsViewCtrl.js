@@ -36,25 +36,6 @@ angular
             AppLogging.log('KDV UPDATE', newDate);
         }
 
-        vm.logIn = function () {
-            User.logIn(vm.username, vm.password).then(function () {
-                Utility.configureRaven();
-            });
-        };
-
-        vm.logOut = function () {
-            vm.username = '';
-            vm.password = '';
-            User.logOut();    
-            Utility.configureRaven();
-            //vm.user = User.getUser();
-        };
-
-        vm.openUrl = function (relUrl) {
-            var base = AppSettings.getEndPoints().services;
-            $cordovaInAppBrowser.open(base + relUrl, '_system');
-        };
-
         vm.clearAppStorage = function () {
             RegobsPopup.delete('Nullstill app?', 'Vil du slette lokalt lagret data og nullstille appen?', 'Nullstill').then(
                 function (res) {
