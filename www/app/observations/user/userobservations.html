@@ -1,0 +1,30 @@
+﻿<ion-view view-title="{{'MY_OBSERVATIONS'|translate}}">
+    <ion-content>
+        <ion-refresher pulling-text="{{'PULL_TO_REFRESH'|translate}}"
+                       on-refresh="vm.update()">
+        </ion-refresher>
+        <ion-list>
+            <div ng-repeat="obs in vm.observations | orderBy:'-DtObsTime'">
+                <ion-item class="item-icon-right item-icon-left observation-list-content" ui-sref="observationdetails({observation:obs})">
+                    <i class="icon ion-close-circled assertive"></i>
+                    <h2>{{obs.DtObsTime | date:'d/M HH:mm'}} &bull; Innsending feilet</h2>
+                    <!--<span style="font-size: 14px">{{obs.getObservationTypeDescription()}}</span>-->
+                    <!--<span class="item-note observation-list-distance">
+                        {{obs.getUserDistanceText()}} {{'AWAY'|translate}}
+                    </span>-->
+                    <p>Observasjonen ligger lagret lokalt</p>
+                    <i class="icon icon-accessory ion-chevron-right"></i>
+                </ion-item>
+            </div>
+            <div class="item item-text-wrap" ng-if="!vm.isLoading && vm.observations.length === 0">
+                <p>{{'NO_OBSERVATIONS'|translate}}</p>
+                <button type="button" class="button button-block button-calm" ng-click="vm.updateFromButton()">
+                    {{'UPDATE_OBSERVATIONS'|translate}}
+                </button>
+            </div>
+        </ion-list>
+        <ion-infinite-scroll on-infinite="vm.loadMore()"
+                             distance="1%">
+        </ion-infinite-scroll>
+    </ion-content>
+</ion-view>

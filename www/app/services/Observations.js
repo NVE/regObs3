@@ -236,6 +236,38 @@ angular
             });
         };
 
+        /**
+        * Get user registrations
+        */
+        service._getUserRegistrations = function (pageSize, page, cancel) {
+            return $q(function (resolve, reject) {
+                var user = User.getUser();
+                if (user.anonymous) {
+                    resolve([]);
+                } else {
+                    var httpConfig = AppSettings.httpConfig;
+                    httpConfig.timeout = cancel ? cancel.promise : AppSettings.httpConfig.timeout;
+                    $http.post(
+                        AppSettings.getEndPoints().search,
+                        {
+                            ObserverNickName: user.Nick,
+                            NumberOfRecords: pageSize,
+                            Offset: page
+                        },
+                        httpConfig)
+                        .then(function (result) {
+                            if (result.data) {
+                                resolve(result.data);
+                            } else {
+                                reject(new Error('Could not find json result data'));
+                            }
+                        })
+                        .catch(reject);
+                }
+            });
+        };
+
+
         service._mergeRegistrations = function (destArr, existingRegistrations, removeDeleted) {
             if (!angular.isArray(destArr)) {
                 destArr = [];
@@ -501,6 +533,18 @@ angular
                 return true;
             }
             return false;
+        };
+
+        /**
+        * Download user registrations
+        */
+        service.updateUserObservations = function (pageSize, page, onProgress, cancel) {
+            return service._getUserRegistrations(pageSize, page, cancel).then(function (result) {
+                   return result;
+                    //return service._downloadAllRegistrations(result, onProgress, cancel, true);
+                }).finally(function () {
+                    $rootScope.$broadcast('$regObs:userObservationsUpdated');
+                });
         };
 
         return service;

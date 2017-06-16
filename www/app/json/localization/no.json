@@ -506,5 +506,6 @@
   "TRIP_AUTO_STOPPED": "Gårsdagens tur har automatisk blitt avsluttet.",
   "AVAL_CAUSE_ATTRIBUTES": "Ugunstige egenskaper på det svake laget",
   "WARNING_TIME_TEXT": "Dato er forskjellig fra observasjonstidspunktet",
-  "USER_OPTIONS": "Brukervalg"
+  "USER_OPTIONS": "Brukervalg",
+  "MY_OBSERVATIONS": "Mine observasjoner"
 }

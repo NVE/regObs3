@@ -88,6 +88,12 @@
                 controller: 'ObservationListCtrl as vm'
             })
 
+            .state('userobservations', {
+                url: '/userobservations',
+                templateUrl: 'app/observations/user/userobservations.html',
+                controller: 'UserObservationsCtrl as vm'
+            })
+
             .state('confirmlocation', {
                 url: '/confirmlocation',
                 templateUrl: 'app/registration/location/confirmlocation.html',
