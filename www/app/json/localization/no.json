@@ -507,5 +507,6 @@
   "AVAL_CAUSE_ATTRIBUTES": "Ugunstige egenskaper på det svake laget",
   "WARNING_TIME_TEXT": "Dato er forskjellig fra observasjonstidspunktet",
   "USER_OPTIONS": "Brukervalg",
-  "MY_OBSERVATIONS": "Mine observasjoner"
+  "MY_OBSERVATIONS": "Mine observasjoner",
+  "UPDATE_MY_OBSERVATIONS": "Laster ned dine observasjoner"
 }

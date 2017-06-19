@@ -343,9 +343,6 @@
 
             $rootScope.$on('$regObs:registrationSaved', function () {
                 service.refresh();
-                $timeout(function () {
-                    map.invalidateSize(); //Footer bar could have been removed, invalidate map size
-                }, 50);
             });
 
             $rootScope.$on('$regObs:appSettingsChanged', function () {
@@ -449,6 +446,17 @@
             }
         };
 
+        service.getSearchRadius = function (map) {
+            var bounds = map.getBounds();
+            var radius = Utility.getRadiusFromBounds(bounds);
+            var settingsRaduis = AppSettings.data.searchRange;
+            if (settingsRaduis > radius) {
+                radius = settingsRaduis;
+            }
+            return radius;
+        };
+
+
         /**
          * Update observation tat is stored in presistant storage
          * @returns {} 
@@ -457,7 +465,7 @@
             if (!map) throw new Error('Map not initialized!');
 
             var center = map.getCenter();
-            var radius = Utility.getSearchRadius(map);
+            var radius = service.getSearchRadius(map);
             var geoHazardTid = Utility.getCurrentGeoHazardTid();
 
             service.clearSelectedMarkers();
@@ -560,9 +568,6 @@
             Registration.clearExistingNewRegistrations()
                 .then(function () {
                     service._removeObservations(); //clear all markers
-                    //if (AppSettings.data.showPreviouslyUsedPlaces) {
-                    //    service._drawStoredLocations();
-                    //}
                     if (AppSettings.data.showObservations) {
                         service._drawObservations();
                     }
@@ -607,12 +612,16 @@
             service._active = false;
         };
 
+        service._isMapVisisble = function () {
+            return $state.current.name === 'start';
+        };
+
         /**
          * Invalidate map size (redraws map)
          * @returns {} 
          */
         service.invalidateSize = function () {
-            if (map) {
+            if (map && service._isMapVisisble()) {
                 map.invalidateSize();
             }
         };

@@ -23,6 +23,21 @@ angular
             });
         };
 
+        service.getStoredUserObservations = function () {           
+            return service._getRegistrationsFromPresistantStorage().then(function (result) {
+                var user = User.getUser();
+                if (user.anonymous) {
+                    return [];
+                } else {
+                    result = result.filter(function (reg) {
+                        return reg.NickName === user.Nick;
+                    });
+                    return result;
+                }
+            });
+        };
+
+
         service._getLocationStorageKey = function () {
             return locationsStorageKey + '_' + AppSettings.data.env.replace(/ /g, '');
         };
@@ -239,7 +254,7 @@ angular
         /**
         * Get user registrations
         */
-        service._getUserRegistrations = function (pageSize, page, cancel) {
+        service._getUserRegistrations = function (cancel) {
             return $q(function (resolve, reject) {
                 var user = User.getUser();
                 if (user.anonymous) {
@@ -251,8 +266,7 @@ angular
                         AppSettings.getEndPoints().search,
                         {
                             ObserverNickName: user.Nick,
-                            NumberOfRecords: pageSize,
-                            Offset: page
+                            NumberOfRecords: 100
                         },
                         httpConfig)
                         .then(function (result) {
@@ -538,10 +552,9 @@ angular
         /**
         * Download user registrations
         */
-        service.updateUserObservations = function (pageSize, page, onProgress, cancel) {
-            return service._getUserRegistrations(pageSize, page, cancel).then(function (result) {
-                   return result;
-                    //return service._downloadAllRegistrations(result, onProgress, cancel, true);
+        service.updateUserObservations = function (onProgress, cancel) {
+            return service._getUserRegistrations(cancel).then(function (result) {
+                    return service._downloadAllRegistrations(result, onProgress, cancel, false);
                 }).finally(function () {
                     $rootScope.$broadcast('$regObs:userObservationsUpdated');
                 });

@@ -1,64 +1,61 @@
 ﻿angular
     .module('RegObs')
-    .controller('UserObservationsCtrl', function ($scope, Observations, Registration) {
+    .controller('UserObservationsCtrl', function ($scope, Observations, Registration, Observation, Utility, RegobsPopup) {
         var vm = this;
 
         vm.observations = [];
-        vm.pageSize = 20;
-        vm.page = 0;
+        vm.isLoading = false;
 
-        vm.isLoading = true;
+        vm._findById = function (id) {
+            var found = vm.observations.filter(function (item) {
+                return item.Id === id;
+            });
+            if (found.length > 0) {
+                return found[0];
+            } else {
+                return null;
+            }
+        };
+
+        vm._addUnsentObservations = function () {
+            if (angular.isArray(Registration.unsent)) {
+                Registration.unsent.forEach(function (item) {
+                    if (!vm._findById(item.Id)) {
+                        var obs = angular.copy(item);
+                        obs.isLocal = true;
+                        vm.observations.push(obs);
+                    }
+                });
+            }
+        };
+
+        vm._updateObservationsFromServer = function () {
+            var workFunc = function (onProgress, cancel) {
+                return Observations.updateUserObservations(onProgress, cancel);
+            };
+            return RegobsPopup.downloadProgress('UPDATE_MY_OBSERVATIONS', workFunc, { longTimoutMessageDelay: 20, closeOnComplete: true });
+        };
+
+
+        vm.getGeoHazardName = function (item) {
+            return Utility.getGeoHazardType(item.GeoHazardTid);
+        };
 
         vm.update = function () {
-            vm.page = 0;
+            vm.isLoading = true;
             vm.observations = [];
-            vm.isLoading = true;
-            vm.redraw();
-            //Map.updateObservationsInMap().then(vm.redraw);
-        };
-
-        vm.loadMore = function () {
-            vm.page++;
-            vm.isLoading = true;
-            vm.redraw();
-        };
-
-        vm.updateFromButton = function () {
-            vm.update();
-        };
-
-        vm.redraw = function () {
-            vm.isLoading = true;
-
-            var unsavedObservations = Registration.unsent;
-            //vm.observations = unsavedObservations;
-            Observations.updateUserObservations(vm.pageSize, vm.page).then(function (result) {
-                //vm.observations = result.Results;
-                //angular.merge(vm.observations, result.Results);
-                vm.observations = vm.observations.concat(result.Results);
-
+            vm._addUnsentObservations();
+            vm._updateObservationsFromServer().then(Observations.getStoredUserObservations).then(function (userObservations){
+                vm.observations = vm.observations.concat(userObservations.map(function (item) { return Observation.fromJson(item); }));
+            }).finally(function () {
                 $scope.$broadcast('scroll.refreshComplete');
-                $scope.$broadcast('scroll.infiniteScrollComplete');
                 vm.isLoading = false;
             });
-
-            //$scope.$broadcast('scroll.refreshComplete');
-            //vm.isLoading = false;
-
-            
-
-            //Map.getObservationsWithinViewBounds()
-            //    .then(function (result) {
-            //        vm.observations = result;
-            //    }).finally(function () {
-            //        // Stop the ion-refresher from spinning
-            //        $scope.$broadcast('scroll.refreshComplete');
-            //        vm.isLoading = false;
-            //    });
         };
 
-        $scope.$on('$ionicView.enter',
+        $scope.$on('$ionicView.loaded',
             function () {
-                vm.redraw();
+                vm.update();
             });
+
     });

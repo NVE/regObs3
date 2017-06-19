@@ -5,12 +5,6 @@ angular
 
         vm.settings = AppSettings;
         vm.userService = User;
-        vm.showAdvancedSettings = false;
-
-        vm.toggleAdvancedSettings = function() {
-            vm.showAdvancedSettings = !vm.showAdvancedSettings;
-            $ionicScrollDelegate.resize();
-        };
 
         vm.hasObserverGroups = function () {
             var group = User.getUser().ObserverGroup;

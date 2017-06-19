@@ -1,5 +1,5 @@
 <div class="geo-selector" ng-class="{'selectable':!$ctrl.readOnly}" ng-show="$ctrl.isVisible">
-    <div ng-click="$ctrl.toggle()" ng-class="{'geo-item':!$ctrl.readOnly}">
+    <div ng-click="$ctrl.toggle()" class="geo-item">
         <i class="nve-icon nve-icon-{{$ctrl.getCurrentAppMode()}}"></i><span class="geo-item-name">{{$ctrl.getCurrentAppMode()|uppercase|translate}}</span><i ng-show="!$ctrl.readOnly" class="select-geo-toggle icon ion-chevron-down" ng-class="{'ion-chevron-down': !$ctrl.isOpen, 'ion-chevron-up':$ctrl.isOpen}"></i>
     </div>
     <div ng-if="!$ctrl.readOnly && $ctrl.isOpen">

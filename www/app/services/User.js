@@ -70,7 +70,7 @@ angular
         };
 
         service.load = function () {
-            user = LocalStorage.getAndSetObject(storageKey, 'password', makeAnonymousUser());
+            user = LocalStorage.getAndSetObject(storageKey, 'email', makeAnonymousUser());
         };
 
         service.load();

@@ -6,7 +6,6 @@
     opacity: 0.8;
     z-index: 900;
     border-radius: 5px;
-    padding: 5px;
 }
 
 .platform-ios .geo-selector {
@@ -18,10 +17,7 @@
 }
 
 .geo-item {
-    padding-left: 5px;
-    padding-top: 5px;
-    padding-bottom: 5px;
-    padding-right: 5px;
+    padding: 10px;
 }
 
 .geo-item-name {

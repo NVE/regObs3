@@ -513,6 +513,31 @@ ion-popover-view.wider {
     background: url(../img/ikon_snoskred.svg) left/40px no-repeat;
 }
 
+.nve-icon.nve-list-icon {
+    padding-left: 0px;
+    height: 32px;
+    width: 32px;
+    display: block;
+    top: auto;
+}
+
+.nve-icon.nve-list-icon.nve-icon-snow {
+    background: url(../img/ikon_snoskred.svg) left/32px no-repeat;
+}
+
+.nve-icon.nve-list-icon.nve-icon-water {
+    background: url(../img/ikon_flom.svg) left/32px no-repeat;
+}
+
+.nve-icon.nve-list-icon.nve-icon-ice {
+    background: url(../img/ikon_isvarsler2.svg) left/32px no-repeat;
+}
+
+.nve-icon.nve-list-icon.nve-icon-dirt {
+    background: url(../img/ikon_jordskred.svg) left/32px no-repeat;
+}
+
+
 .spinner-small svg {
     width: 18px;
     height: 18px;

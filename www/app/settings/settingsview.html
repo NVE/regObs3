@@ -2,9 +2,9 @@
     <ion-content>
         <ion-list>
             <label class="item item-input item-select" ng-show="!vm.userService.getUser().anonymous && vm.hasObserverGroups()">
-                <div class="input-label">
+                <span class="input-label">
                     {{'GROUP'|translate}}
-                </div>
+                </span>
                 <select ng-model="vm.userService.getUser().chosenObserverGroup" ng-change="vm.userService.save()"
                         ng-options="key as value for (key , value) in vm.userService.getUser().ObserverGroup">
                     <option value="">{{'CHOOSE_GROUP'|translate}}</option>
@@ -19,39 +19,35 @@
                         ng-hide="vm.userService.getUser().anonymous">
                 {{'SEND_EMAIL_RECIEPT'|translate}}
             </ion-toggle>
-            <ion-item>
-                <button type="button" class="button button-block button-clear button-positive icon-left ion-chevron-down" ng-class="{'ion-chevron-down':!vm.showAdvancedSettings, 'ion-chevron-up':vm.showAdvancedSettings}" ng-click="vm.toggleAdvancedSettings()"><span ng-hide="vm.showAdvancedSettings">{{'SHOW'|translate}}</span><span ng-show="vm.showAdvancedSettings">{{'HIDE'|translate}}</span> {{'ADVANCED_SETTINGS'|translate|lowercase}}</button>
+
+            <ion-item class="item-divider">
+                {{'ADVANCED_SETTINGS'|translate}}
             </ion-item>
-            <div ng-show="vm.showAdvancedSettings">
-                <ion-item class="item-divider">
-                    {{'ADVANCED_SETTINGS'|translate}}
-                </ion-item>
-                <ion-toggle ng-model="vm.settings.data.compass"
-                            ng-change="vm.settings.save()"
-                            toggle-class="toggle-calm">
-                    {{'ACTIVATE_COMPASS'|translate}}
-                </ion-toggle>
+            <ion-toggle ng-model="vm.settings.data.compass"
+                        ng-change="vm.settings.save()"
+                        toggle-class="toggle-calm">
+                {{'ACTIVATE_COMPASS'|translate}}
+            </ion-toggle>
 
-                <label class="item item-input item-select">
-                    <div class="input-label">
-                        {{'APP_MODE'|translate}}
-                    </div>
-                    <select ng-model="vm.settings.data.env" ng-change="vm.envChanged()"
-                            ng-options="env for env in vm.settings.getEnvironments()"></select>
-                </label>
+            <label class="item item-input item-select">
+                <span class="input-label">
+                    {{'APP_MODE'|translate}}
+                </span>
+                <select ng-model="vm.settings.data.env" ng-change="vm.envChanged()"
+                        ng-options="env for env in vm.settings.getEnvironments()"></select>
+            </label>
 
-                <ion-item class="text-center">
-                    <button type="button" ng-click="vm.refreshKdvElements()" class="button button-block icon-left ion-refresh">
-                        {{'UPDATE_KDV_ELEMENTS'|translate}} <ion-spinner class="spinner spinner-fix" ng-if="vm.refreshingKdv"></ion-spinner>
-                    </button>
-                    <p>{{'UPDATED'|translate}} {{vm.kdvUpdated}}</p>
-                </ion-item>
-                <ion-item class="item-borderless">
-                    <button type="button" ng-click="vm.clearAppStorage()" class="button button-block icon-left ion-medkit">
-                        {{'RESET_APP'|translate}}
-                    </button>
-                </ion-item>
-            </div>
+            <ion-item class="text-center">
+                <button type="button" ng-click="vm.refreshKdvElements()" class="button button-block icon-left ion-refresh">
+                    {{'UPDATE_KDV_ELEMENTS'|translate}} <ion-spinner class="spinner spinner-fix" ng-if="vm.refreshingKdv"></ion-spinner>
+                </button>
+                <p>{{'UPDATED'|translate}} {{vm.kdvUpdated}}</p>
+            </ion-item>
+            <ion-item class="item-borderless">
+                <button type="button" ng-click="vm.clearAppStorage()" class="button button-block icon-left ion-medkit">
+                    {{'RESET_APP'|translate}}
+                </button>
+            </ion-item>
             <ion-item class="item-borderless">
                 <button type="button" ui-sref="help({page:'settings'})" class="button button-block button-clear button-positive">{{'HELP'|translate}}</button>
             </ion-item>

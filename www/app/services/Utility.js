@@ -886,16 +886,6 @@ angular
             return parseInt((bounds.getNorthWest().distanceTo(bounds.getSouthEast()) / 2).toFixed(0));
         };
 
-        service.getSearchRadius = function (map) {
-            var bounds = map.getBounds();
-            var radius = service.getRadiusFromBounds(bounds);
-            var settingsRaduis = AppSettings.data.searchRange;
-            if (settingsRaduis > radius) {
-                radius = settingsRaduis;
-            }
-            return radius;
-        };
-
         service.formatLatLng = function (lat, lng, decimals) {
             return $filter('number')(lat, decimals || 5) + ', ' + $filter('number')(lng, decimals || 5);
         };

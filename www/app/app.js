@@ -117,6 +117,7 @@
                 url: '/registrationstatus',
                 templateUrl: 'app/registration/status/registrationstatus.html',
                 controller: 'RegistrationStatusCtrl as vm',
+                params: { observation: null },
                 cache: false
             })
 

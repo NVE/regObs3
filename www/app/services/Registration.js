@@ -335,7 +335,7 @@ angular
                     RegobsPopup.confirm(translations['NOT_LOGGED_IN'], translations['NOT_LOGGED_IN_DESCRIPTION'], translations['LOGIN'], translations['CANCEL'])
                         .then(function (confirmed) {
                             if (confirmed) {
-                                $state.go('settings');
+                                $state.go('login');
                             }
                         });
                 });
