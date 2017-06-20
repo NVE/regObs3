@@ -456,7 +456,7 @@ angular
                 }
             },
             GeneralObservation: {
-                name: "Fritekst",
+                name: "Notater",
                 RegistrationTID: "10",
                 properties: {
                     ObsComment: { displayFormat: { hideDescription: true } }

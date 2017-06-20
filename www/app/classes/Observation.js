@@ -145,6 +145,13 @@ angular.module('RegObs').factory('Observation', function (MapSelectableItem, App
     };
 
     /**
+    * Get dtObsTime as Date
+    */
+    Observation.prototype.getDtObsTime = function () {
+        return moment(this.DtObsTime, moment.ISO_8601).toDate();
+    };
+
+    /**
      * Get days until expiery of this observation. For example if days back is 3 days, the observation expires 3 days back from now
      * @returns {} 
      */

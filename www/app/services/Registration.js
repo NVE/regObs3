@@ -464,8 +464,8 @@ angular
                 }
 
                 function cleanupObsLocation(location) {
-                    delete location.place;
-                    delete location.Name;
+                    //delete location.place;
+                    //delete location.Name;
                     if (location.ObsLocationId) {
                         delete location.Latitude;
                         delete location.Longitude;

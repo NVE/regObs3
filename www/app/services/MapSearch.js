@@ -88,7 +88,7 @@
         */
         service._mapItem = function (item) {
             var latlng = (L.Projection.Mercator.unproject({ x: item.aust, y: item.nord }));
-            return { id: item.ssrId, name: item.stedsnavn, description: item.navnetype + ', ' + item.kommunenavn + ', ' + item.fylkesnavn, type: item.navnetype, latlng: latlng };
+            return { id: item.ssrId, name: item.stedsnavn, description: item.navnetype + ', ' + item.kommunenavn + ' (' + item.fylkesnavn +')', type: item.navnetype, latlng: latlng };
         };
 
         /**

@@ -21,4 +21,8 @@ angular.module('RegObs')
             ga_storage._trackPageview(appVm.currentState.name);
             $ionicSideMenuDelegate.edgeDragThreshold(25);
         });
+
+        $scope.$on('$regObs:registrationSaved', function () {
+            $ionicHistory.clearCache(['userobservations']);
+        });
     });

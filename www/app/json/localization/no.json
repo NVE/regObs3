@@ -456,7 +456,7 @@
   "SEND_HEADER": "Innsending",
   "SENDING_OBSERVATION": "Sender inn observasjon",
   "VIEW_OBSERVATION": "Se observasjon",
-  "RETRY": "Prøv igjen",
+  "RETRY": "Prøv å send inn igjen",
   "GO_TO_FRONT_PAGE": "Gå tilbake til forsiden",
   "NOT_LOGGED_IN": "Du er ikke innlogget",
   "NOT_LOGGED_IN_DESCRIPTION": "Du må logge inn for å kunne sende inn observasjoner",
@@ -508,5 +508,9 @@
   "WARNING_TIME_TEXT": "Dato er forskjellig fra observasjonstidspunktet",
   "USER_OPTIONS": "Brukervalg",
   "MY_OBSERVATIONS": "Mine observasjoner",
-  "UPDATE_MY_OBSERVATIONS": "Laster ned dine observasjoner"
+  "UPDATE_MY_OBSERVATIONS": "Laster ned dine observasjoner",
+  "USER_OBSERVATIONS_FAILED_TEXT": " Innsending feilet. Prøv å sende inn på nytt.",
+  "ERROR_SENDING_OBSERVATION": "Feil ved innsending av observasjonen fra",
+  "DELETE_OBSERVATION": "Slett observasjon",
+  "DELETE_UNSENT_OBSERVATION_CONFIRM_TEXT": "Er du sikker på du vil slette observasjon som ikke er sendt inn?"
 }

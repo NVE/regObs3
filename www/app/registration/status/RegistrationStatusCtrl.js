@@ -1,6 +1,6 @@
 ﻿angular
     .module('RegObs')
-    .controller('RegistrationStatusCtrl', function RegistrationStatusCtrl($scope, Registration, $ionicPopup, $state, $stateParams, Utility, $pbService, $http, AppSettings, $timeout, $q, Observations, Observation, $rootScope, $ionicScrollDelegate, $ionicHistory) {
+    .controller('RegistrationStatusCtrl', function RegistrationStatusCtrl($scope, Registration, $ionicPopup, $state, $stateParams, Utility, $pbService, $http, AppSettings, $timeout, $q, Observations, Observation, $rootScope, $ionicScrollDelegate, $ionicHistory, AppLogging, RegobsPopup) {
         var vm = this;
         vm.loaded = false;
         vm.cancelled = false;
@@ -26,7 +26,7 @@
                         if (vm.unsent.length > 0) {
                             vm.send();
                         } else {
-                            $state.go('start');
+                            vm.goToStart();
                         }
                     });
                 });
@@ -125,17 +125,26 @@
         };
 
         vm.goToStart = function () {
-            $state.go('start');
+            Utility.setBackView('start');
+            $ionicHistory.goBack();
         };
 
         vm.resendFailed = function () {
             vm.unsent = Registration.unsent;
-            if ($stateParams.observation) {
-                vm.unsent = vm.unsent.filter(function (item) {
-                    return item.id === $stateParams.observation.id;
-                });
-            }
             vm.send();
+        };
+
+        vm.deleteUnsent = function (item) {
+            RegobsPopup.delete('DELETE_OBSERVATION', 'DELETE_UNSENT_OBSERVATION_CONFIRM_TEXT')
+                .then(function (response) {
+                    if (response) {
+                        Registration.unsent = Registration.unsent.filter(function (reg) {
+                            return reg.id !== item.id;
+                        });
+                        Registration.save();
+                        vm.goToStart();
+                    }
+                });
         };
 
         vm.cancel = function () {
