@@ -217,6 +217,7 @@ angular
             delete clone.Id;
             delete clone.GeoHazardTID;
             delete clone.DtObsTime;
+            delete clone.ObserverGroupID;
             return Utility.isEmpty(clone);
         };
 
@@ -420,7 +421,7 @@ angular
 
                             angular.extend(data, {
                                 "ObserverGuid": user.Guid,
-                                "ObserverGroupID": user.chosenObserverGroup || null,
+                                //"ObserverGroupID": user.chosenObserverGroup || null,
                                 "Email": user.anonymous ? false : !!AppSettings.data.emailReceipt,
                                 "ObsLocation": location
                             });

@@ -823,3 +823,63 @@ regobs-comment textarea::-webkit-input-placeholder {
 .smaller-item-icon {
     font-size: 26px !important;
 }
+
+.info-panel {
+    padding-left: 18%;
+    padding-right: 18%;
+    padding-top: 5%;
+    text-align: center;
+}
+
+.info-panel h3 {
+    margin-bottom: 20px;
+}
+
+.info-panel p {
+    margin-bottom: 20px;
+}
+
+.legal-icon.round-grey-background {
+    display: inline-block;
+    width: 70px;
+    height: 70px;
+    background-color: $greyBackground;
+    border-radius: 50%;
+    position: relative;
+    font-size: 36px;
+}
+
+.legal-icon:after {
+    content: '\00a7';
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    margin-left: -5px;
+    margin-top: -5px;
+}
+
+.legal-icon.round-grey-background:after {
+    margin-left: -8px;
+    margin-top: -11px;
+}
+
+.legal-icon.legal-icon-outline {
+    display: inline-block;
+    width: 27px;
+    height: 27px;
+    border-color: #000;
+    border-width: 1px;
+    border-style: solid;
+    border-radius: 50%;
+    font-size: 20px;
+}
+
+.legal-icon.legal-icon-outline:after {
+    margin-left: -5px;
+    margin-top: -11px;
+}
+
+.item-icon-left .legal-icon.legal-icon-outline {
+    top: 12px;
+    left: 13px;
+}

@@ -1,6 +1,6 @@
 angular
     .module('RegObs')
-    .directive('regobsAlbum', function ($ionicPlatform, $cordovaCamera, $state, Pictures) {
+    .directive('regobsAlbum', function ($ionicPlatform, $cordovaCamera, $state, Pictures, AppSettings) {
         'ngInject';
         return {
             link: link,
@@ -22,27 +22,32 @@ angular
             scope.click = window.Camera && function () {
                     $ionicPlatform.ready(function() {
                         scope.imgLoading = true;
-                        var options = {
-                            quality: 40,
-                            destinationType: Camera.DestinationType.FILE_URI,
-                            sourceType: Camera.PictureSourceType.PHOTOLIBRARY,
-                            allowEdit: false,
-                            encodingType: Camera.EncodingType.JPEG,
-                            targetWidth: 1200,
-                            targetHeight: 1200,
-                            popoverOptions: CameraPopoverOptions,
-                            correctOrientation:true
-                        };
+                        //var options = {
+                        //    quality: 40,
+                        //    destinationType: Camera.DestinationType.FILE_URI,
+                        //    sourceType: Camera.PictureSourceType.PHOTOLIBRARY,
+                        //    allowEdit: false,
+                        //    encodingType: Camera.EncodingType.JPEG,
+                        //    targetWidth: AppSettings.imageSize,
+                        //    targetHeight: AppSettings.imageSize,
+                        //    popoverOptions: CameraPopoverOptions,
+                        //    correctOrientation:true
+                        //};
 
-                        $cordovaCamera.getPicture(options).then(function(uri){
-                            Pictures.addPicture($state.current.data.registrationProp, uri);
-                            //image.src = "data:image/jpeg;base64," + imageData;
-                            scope.imgLoading = false;
+                        //$cordovaCamera.getPicture(options).then(function(uri){
+                        //    Pictures.addPicture($state.current.data.registrationProp, uri);
+                        //    //image.src = "data:image/jpeg;base64," + imageData;
+                        //    scope.imgLoading = false;
 
-                        }, function(err) {
+                        //}, function(err) {
+                        //    scope.imgLoading = false;
+                        //    // error
+                        //});
+
+                        Pictures.getAlbumPicture($state.current.data.registrationProp).then(function () {
                             scope.imgLoading = false;
-                            // error
                         });
+
                     });
                 }
 

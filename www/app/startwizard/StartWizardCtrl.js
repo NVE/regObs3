@@ -7,13 +7,14 @@ angular.module('RegObs')
         };
 
         vm.setAppMode = function (mode) {
+            var firstLoad = !AppSettings.hasSetAppMode();
             AppSettings.setAppMode(mode);
             $ionicHistory.clearHistory();
             $ionicHistory.nextViewOptions({
                 disableBack: true,
                 historyRoot: true
             });
-            $state.go('start');
+            $state.go('start', { showLegalPopup: firstLoad});
         };
 
         vm.nextInfoClick = function () {

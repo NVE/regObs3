@@ -1,34 +1,21 @@
 <ion-view view-title="{{'SETTINGS'|translate}}">
     <ion-content>
         <ion-list>
-            <label class="item item-input item-select" ng-show="!vm.userService.getUser().anonymous && vm.hasObserverGroups()">
-                <span class="input-label">
-                    {{'GROUP'|translate}}
-                </span>
-                <select ng-model="vm.userService.getUser().chosenObserverGroup" ng-change="vm.userService.save()"
-                        ng-options="key as value for (key , value) in vm.userService.getUser().ObserverGroup">
-                    <option value="">{{'CHOOSE_GROUP'|translate}}</option>
-                </select>
-            </label>
-            <ion-item ng-show="!vm.userService.getUser().anonymous && !vm.hasObserverGroups()">
-                {{'NO_GROUPS_INFO'|translate}}
-            </ion-item>
             <ion-toggle ng-model="vm.settings.data.emailReceipt"
                         ng-change="vm.settings.save()"
                         toggle-class="toggle-calm"
                         ng-hide="vm.userService.getUser().anonymous">
                 {{'SEND_EMAIL_RECIEPT'|translate}}
-            </ion-toggle>
-
-            <ion-item class="item-divider">
-                {{'ADVANCED_SETTINGS'|translate}}
-            </ion-item>
+            </ion-toggle>         
             <ion-toggle ng-model="vm.settings.data.compass"
                         ng-change="vm.settings.save()"
                         toggle-class="toggle-calm">
                 {{'ACTIVATE_COMPASS'|translate}}
             </ion-toggle>
 
+            <ion-item class="item-divider">
+                {{'ADVANCED_SETTINGS'|translate}}
+            </ion-item>
             <label class="item item-input item-select">
                 <span class="input-label">
                     {{'APP_MODE'|translate}}

@@ -12,8 +12,8 @@
                 sourceType: Camera.PictureSourceType.CAMERA,
                 allowEdit: false,
                 encodingType: Camera.EncodingType.JPEG,
-                targetWidth: 1200,
-                targetHeight: 1200,
+                targetWidth: AppSettings.imageSize,
+                targetHeight: AppSettings.imageSize,
                 popoverOptions: CameraPopoverOptions,
                 saveToPhotoAlbum: true,
                 correctOrientation: true

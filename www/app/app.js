@@ -43,7 +43,8 @@
             .state('start', {
                 url: '/start',
                 templateUrl: 'app/map/mapstart.html',
-                controller: 'MapStartCtrl as vm'
+                controller: 'MapStartCtrl as vm',
+                params: { showLegalPopup: null }
             })
             .state('login', {
                 url: '/login',
@@ -105,6 +106,12 @@
                 url: '/confirmtime',
                 templateUrl: 'app/registration/time/confirmtime.html',
                 controller: 'ConfirmTimeCtrl as vm'
+            })
+
+            .state('setgroup', {
+                url: '/setgroup',
+                templateUrl: 'app/registration/group/group.html',
+                controller: 'SetGroupCtrl as vm'
             })
 
             .state('newregistration', {

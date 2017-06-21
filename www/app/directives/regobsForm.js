@@ -27,7 +27,7 @@
                 return;
             }
 
-            if ($state.current.data.registrationProp && !Registration.propertyExists($state.current.data.registrationProp) && !Pictures.hasPictures($state.current.data.registrationProp)) {
+            if ($state.current.data && $state.current.data.registrationProp && !Registration.propertyExists($state.current.data.registrationProp) && !Pictures.hasPictures($state.current.data.registrationProp)) {
                 return; //Do not save empty registration, because it is cleaned up in AppCtrl
             }
 

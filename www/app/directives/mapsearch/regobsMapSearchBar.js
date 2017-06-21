@@ -51,5 +51,11 @@
                     ctrl.close();
                 }, 50); //A small delay to click               
             };
+
+            //$timeout(function () {
+            //    var element = $window.document.getElementById('map-search-input');
+            //    if (element)
+            //        element.focus();
+            //}, 100);
         }
     });

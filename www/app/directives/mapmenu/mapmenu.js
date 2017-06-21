@@ -2,7 +2,7 @@
     .module('RegObs')
     .component('mapMenu', {
         templateUrl: 'app/directives/mapmenu/mapmenu.html',
-        controller: function (AppSettings, $state, OfflineMap, $cordovaInAppBrowser, $scope, Utility, $rootScope, $ionicSideMenuDelegate, User) {
+        controller: function (AppSettings, $state, OfflineMap, $cordovaInAppBrowser, $scope, Utility, $rootScope, $ionicSideMenuDelegate, User, RegobsPopup) {
             'ngInject';
             var ctrl = this;
            
@@ -34,6 +34,8 @@
                 $ionicSideMenuDelegate.toggleLeft(); 
                 $state.go(page, options);
             };
+
+            ctrl.openLegalInfo = RegobsPopup.showLegalInfo;
 
             ctrl.getMapsForCurrentAppMode = function() {
                 return ctrl.settings.maps.filter(function(item) {

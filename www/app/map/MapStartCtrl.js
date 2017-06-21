@@ -1,5 +1,5 @@
 ﻿angular.module('RegObs')
-    .controller('MapStartCtrl', function ($scope, $rootScope, $state, $ionicHistory, User, Map, AppSettings, Registration, AppLogging, Utility, $timeout, $ionicPopover, $cordovaInAppBrowser, Observations, RegobsPopup, UserLocation, $translate, Trip, Translate, OfflineMap, $ionicPopup, MapSearch) {
+    .controller('MapStartCtrl', function ($scope, $stateParams, $rootScope, $state, $ionicHistory, User, Map, AppSettings, Registration, AppLogging, Utility, $timeout, $ionicPopover, $cordovaInAppBrowser, Observations, RegobsPopup, UserLocation, $translate, Trip, Translate, OfflineMap, $ionicPopup, MapSearch) {
         var appVm = this;
 
         appVm.gpsCenterClick = Map.centerMapToUser;
@@ -74,25 +74,8 @@
 
         appVm.getFollowMode = Map.getFollowMode;
 
-        appVm.viewTitle = 'regObs';
-
-        appVm.setViewTitle = function () {
-            appVm.viewTitle = 'regObs';
-            var currentAppMode = AppSettings.getAppMode();
-            if (currentAppMode) { 
-                Translate.translateWithFallback(currentAppMode.toUpperCase(), '').then(function (result) {
-                    $timeout(function () {
-                        var title = 'regObs' + (result ? ' / ' + result : '');
-                        appVm.viewTitle = title;
-                    });
-                });
-            }
-        };
-
         $scope.$on('$ionicView.enter', function () {
-            $ionicHistory.clearHistory();
-
-            appVm.setViewTitle();                
+            $ionicHistory.clearHistory();              
             Map.invalidateSize();
             Map.startWatch();
 
@@ -103,50 +86,58 @@
             });
         });
 
-        $scope.$on('$regobs.appModeChanged', function () {
-            appVm.setViewTitle();
-        });
-
-        appVm._checkObsWatch = $timeout(function () {
-            if (Observations.checkIfObservationsShouldBeUpdated() && UserLocation.hasUserLocation() && Utility.hasGoodNetwork()) {
-                $translate(['UPDATE_OBSERVATIONS_IN_MAP', 'UPDATE_OBSERVATIONS_IN_MAP_HELP_TEXT', 'UPDATE_OBSERVATIONS_IN_MAP_HELP_TEXT_2', 'CANCEL', 'OK']).then(function (translations) {
-                    appVm._updateObservationsPopup = $ionicPopup.confirm({
-                        title: translations['UPDATE_OBSERVATIONS_IN_MAP'],
-                        template: '<div class="text-center popup-icon"><i class="icon ion-loop"></i></div><p>' +
-                        translations['UPDATE_OBSERVATIONS_IN_MAP_HELP_TEXT'] +
-                        '</p><p>' +
-                        translations['UPDATE_OBSERVATIONS_IN_MAP_HELP_TEXT_2'] +
-                        '</p>',
-                        buttons: [
-                            {
-                                text: translations['CANCEL'],
-                            },
-                            {
-                                text: translations['OK'],
-                                type: 'button-positive',
-                                onTap: function (e) {
-                                    // Returning a value will cause the promise to resolve with the given value.
-                                    return true;
+        appVm._setObsWatchTimer = function () {
+            appVm._checkObsWatch = $timeout(function () {
+                if (Observations.checkIfObservationsShouldBeUpdated() && UserLocation.hasUserLocation() && Utility.hasGoodNetwork()) {
+                    $translate(['UPDATE_OBSERVATIONS_IN_MAP', 'UPDATE_OBSERVATIONS_IN_MAP_HELP_TEXT', 'UPDATE_OBSERVATIONS_IN_MAP_HELP_TEXT_2', 'CANCEL', 'OK']).then(function (translations) {
+                        appVm._updateObservationsPopup = $ionicPopup.confirm({
+                            title: translations['UPDATE_OBSERVATIONS_IN_MAP'],
+                            template: '<div class="text-center popup-icon"><i class="icon ion-loop"></i></div><p>' +
+                            translations['UPDATE_OBSERVATIONS_IN_MAP_HELP_TEXT'] +
+                            '</p><p>' +
+                            translations['UPDATE_OBSERVATIONS_IN_MAP_HELP_TEXT_2'] +
+                            '</p>',
+                            buttons: [
+                                {
+                                    text: translations['CANCEL'],
+                                },
+                                {
+                                    text: translations['OK'],
+                                    type: 'button-positive',
+                                    onTap: function (e) {
+                                        // Returning a value will cause the promise to resolve with the given value.
+                                        return true;
+                                    }
                                 }
+                            ]
+                        });
+                        appVm._updateObservationsPopup.then(function (response) {
+                            if (response) {
+                                Map.updateObservationsInMap();
                             }
-                        ]
+                        });
                     });
-                    appVm._updateObservationsPopup.then(function (response) {
-                        if (response) {
-                            Map.updateObservationsInMap();
-                        }
-                    });
-                });
 
-                
-            }
-        }, 10000);
+
+                }
+            }, 10000);
+        }
+
+        if ($stateParams.showLegalPopup){
+            RegobsPopup.showLegalInfo().then(function () {
+                appVm._setObsWatchTimer();
+            });
+        } else {
+            appVm._setObsWatchTimer();
+        }
 
 
         $scope.$on('$ionicView.beforeLeave', function () {
             MapSearch.hideSearchBar();
             Map.clearWatch();
-            $timeout.cancel(appVm._checkObsWatch);
+            if (appVm._checkObsWatch) {
+                $timeout.cancel(appVm._checkObsWatch);
+            }
             if (appVm._updateObservationsPopup) {
                 appVm._updateObservationsPopup.close();
             }

@@ -1,15 +1,10 @@
 angular
     .module('RegObs')
-    .controller('SettingsViewCtrl', function ($scope, $timeout, $rootScope, $http, $state, $cordovaInAppBrowser, $ionicLoading, AppSettings, LocalStorage, ObsLocation, Registration, User, Utility, HeaderColor, RegobsPopup, AppLogging, PresistentStorage, OfflineMap, Map, $ionicScrollDelegate, HelpTexts) {
+    .controller('SettingsViewCtrl', function ($scope, $timeout, $rootScope, $http, $state, $cordovaInAppBrowser, $ionicLoading, AppSettings, LocalStorage, ObsLocation, Registration, User, Utility, HeaderColor, RegobsPopup, AppLogging, PresistentStorage, OfflineMap, Map, $ionicScrollDelegate, HelpTexts, $ionicHistory) {
         var vm = this;
 
         vm.settings = AppSettings;
         vm.userService = User;
-
-        vm.hasObserverGroups = function () {
-            var group = User.getUser().ObserverGroup;
-            return !Utility.isEmpty(group);
-        };
 
         vm.kdvUpdated = kdvUpdatedTime(null, LocalStorage.get('kdvUpdated'));
 
@@ -58,9 +53,8 @@ angular
                             HeaderColor.init();
                             ObsLocation.init();
                             Map.refresh();
-                            vm.username = '';
-                            vm.password = '';
                             $ionicLoading.hide();
+                            $ionicHistory.clearCache();
                             $rootScope.$broadcast('$regObs:appReset');
                             $state.go('wizard');
                         });
@@ -88,7 +82,7 @@ angular
         };
 
         vm.envChanged = function () {
-            vm.logOut();
+            User.logOut();
             AppSettings.save();
             HeaderColor.init();
             Map.refresh();

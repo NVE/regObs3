@@ -4,7 +4,7 @@
             {{'USER_OPTIONS'|translate}}
         </ion-item>
         <ion-item class="item-icon-left item-icon-right item-text-wrap" ng-if="$ctrl.user.anonymous" ng-click="$ctrl.navigateTo('login')">
-            <i class="icon ion-locked smaller-item-icon"></i> {{'LOGIN'|translate}}
+            <i class="icon ion-unlocked smaller-item-icon"></i> {{'LOGIN'|translate}}
             <i class="icon icon-accessory ion-chevron-right"></i>
         </ion-item>
         <ion-item class="item-icon-left item-icon-right item-text-wrap" ng-if="!$ctrl.user.anonymous"  ng-click="$ctrl.navigateTo('login')">
@@ -62,6 +62,10 @@
                 </div>
             </div>
         </div>
+        <ion-item class="item-icon-left item-icon-right item-text-wrap" ng-click="$ctrl.openLegalInfo()">
+            <i class="icon legal-icon legal-icon-outline"></i> {{'ABOUT_DATA_HEADER'|translate}}
+            <i class="icon icon-accessory ion-chevron-right"></i>
+        </ion-item>
         <ion-item class="item-icon-left item-icon-right item-text-wrap" ng-click="$ctrl.navigateTo('wizard')">
             <i class="icon ion-ios-information-outline"></i> {{'WIZARD'|translate}}
             <i class="icon icon-accessory ion-chevron-right"></i>
