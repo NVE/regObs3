@@ -15,8 +15,8 @@
             </div>
             <div class="map-detail-wrapper">
                 <div class="map-detail-left-column">
-                    <div class="awesome-marker awesome-marker-icon-red map-detail-position">
-                        <i class="ion ion-record icon-white"></i>
+                    <div class="awesome-marker awesome-marker-icon-{{$ctrl.getMarkerColor()}} map-detail-position">
+                        <i class="ion {{$ctrl.getMarkerIcon()}} icon-white {{$ctrl.getMarkerExtraClasses()}}"></i>
                     </div>
                     <div class="map-detail-line-wrapper">
                         <svg width="4px" height="15px" viewBox="0 0 4 15">
@@ -31,8 +31,11 @@
                         </svg>
                     </div>
                     <div>
-                        <div class="leaflet-usermarker-small map-detail-position">
+                        <div ng-if="!$ctrl.fromPosition" class="leaflet-usermarker-small map-detail-position">
                             <i class="pulse"></i>
+                        </div>
+                        <div ng-if="$ctrl.fromPosition" class="awesome-marker awesome-marker-icon-red map-detail-position">
+                            <i class="ion ion-record icon-white"></i>
                         </div>
                     </div>
 

@@ -836,7 +836,7 @@ regobs-comment textarea::-webkit-input-placeholder {
 }
 
 .info-panel p {
-    margin-bottom: 20px;
+    margin-bottom: 14px;
 }
 
 .legal-icon.round-grey-background {
@@ -852,14 +852,14 @@ regobs-comment textarea::-webkit-input-placeholder {
 .legal-icon:after {
     content: '\00a7';
     position: absolute;
-    left: 50%;
+    left: 0;
+    right: 0;
     top: 50%;
-    margin-left: -5px;
+    text-align: center;
     margin-top: -5px;
 }
 
 .legal-icon.round-grey-background:after {
-    margin-left: -8px;
     margin-top: -11px;
 }
 
@@ -871,15 +871,18 @@ regobs-comment textarea::-webkit-input-placeholder {
     border-width: 1px;
     border-style: solid;
     border-radius: 50%;
-    font-size: 20px;
+    font-size: 14px;
 }
 
 .legal-icon.legal-icon-outline:after {
-    margin-left: -5px;
     margin-top: -11px;
 }
 
 .item-icon-left .legal-icon.legal-icon-outline {
     top: 12px;
     left: 13px;
+}
+
+.large-map-icon {
+    font-size: 20px !important;
 }

@@ -514,7 +514,7 @@
   "DELETE_OBSERVATION": "Slett observasjon",
   "DELETE_UNSENT_OBSERVATION_CONFIRM_TEXT": "Er du sikker på du vil slette observasjon som ikke er sendt inn?",
   "ABOUT_DATA_HEADER": "Om data i regObs",
-  "ABOUT_DATA_INFO": "Data på regObs produseres av brukerne av regObs og foreligger \"som , den er\". Den kan inneholde feil og utelatelser. NVE gir ingen garantier for informasjonens aktualitet og tar ikke ansvar for at data kan gi feil eller villedende informasjon. Antall stjerner (1-5) beskriver kompetansenivået til den som leverer observasjoner. Uten stjerner er kompetansen ukjent eller lav.",
+  "ABOUT_DATA_INFO": "Data på regObs produseres av brukerne av regObs og foreligger \"som den er\". Den kan inneholde feil og utelatelser. NVE gir ingen garantier for informasjonens aktualitet og tar ikke ansvar for at data kan gi feil eller villedende informasjon. Antall stjerner (1-5) beskriver kompetansenivået til den som leverer observasjoner. Uten stjerner er kompetansen ukjent eller lav.",
   "SHARE_OBSERVATION_WITH_GROUP": "Del observasjonen med gruppe",
   "SHARE_OBSERVATION_WITH": "Del observasjonen med",
   "LOGIN_HEADER": "Innlogging"

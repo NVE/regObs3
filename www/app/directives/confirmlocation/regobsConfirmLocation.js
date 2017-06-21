@@ -7,7 +7,11 @@
             positionDescription: '@',
             startPosition: '<',
             showPreviouslyUsedLocations: '<',
-            startZoom: '<'
+            startZoom: '<',
+            observationMarkerIcon: '<',
+            fromPosition: '<',
+            fromPostionDescription: '@',
+            extraMarkers: '<'
         },
         templateUrl: 'app/directives/confirmlocation/confirmlocation.html',
         controller: function ($document, Map, $rootScope, $scope, $translate, AppSettings, AppLogging, $timeout, RegObsClasses, $filter, Utility, ObsLocation, UserLocation, $http, $q, Observations, $state, $ionicHistory, $stateParams, Registration) {
@@ -77,14 +81,35 @@
 
                 ctrl._clusteredGroup = new RegObsClasses.MarkerClusterGroup().addTo(map);
 
-                var redMarker = L.AwesomeMarkers.icon({
+                var markerIcon = L.AwesomeMarkers.icon({
                     icon: 'record',
                     prefix: 'ion',
                     markerColor: 'red'
                 });
                 //var redMarker = L.regobsMarker({ showCircle: true });
 
-                marker = L.marker(ctrl._getStartPosition(), { icon: redMarker }).addTo(map);
+                if (ctrl.observationMarkerIcon) {
+                    markerIcon = ctrl.observationMarkerIcon;
+                }
+
+                if (ctrl.extraMarkers && angular.isArray(ctrl.extraMarkers)) {
+                    ctrl.extraMarkers.forEach(function (m) {
+                        m.addTo(map);
+                    });
+                }
+
+                marker = L.marker(ctrl._getStartPosition(), { icon: markerIcon }).addTo(map);
+
+                if (ctrl.fromPosition) {
+                    ctrl._fromMarker = L.marker(ctrl.fromPosition, {
+                        icon: L.AwesomeMarkers.icon({
+                            icon: 'record',
+                            prefix: 'ion',
+                            markerColor: 'red'
+                        })
+                    }).addTo(map);
+                    ctrl._updateDistance();
+                }
 
                 marker.setZIndexOffset(1500);
 
@@ -128,6 +153,31 @@
                 }
                 return Map.getCenter();
             };
+
+            ctrl.getMarkerColor = function () {
+                var color = 'red';
+                if (marker && marker.options && marker.options.icon && marker.options.icon.options && marker.options.icon.options.markerColor) {
+                    color = marker.options.icon.options.markerColor;
+                }
+                return color;
+            };
+
+            ctrl.getMarkerIcon = function () {
+                var icon = 'record';
+                if (marker && marker.options && marker.options.icon && marker.options.icon.options && marker.options.icon.options.icon) {
+                    icon = marker.options.icon.options.icon;
+                }
+                return 'ion-' + icon;
+            };
+
+            ctrl.getMarkerExtraClasses = function () {
+                var extraClasses = '';
+                if (marker && marker.options && marker.options.icon && marker.options.icon.options && marker.options.icon.options.extraClasses) {
+                    extraClasses = marker.options.icon.options.extraClasses;
+                }
+                return extraClasses;
+            };
+
 
             ctrl._updateLocationText = function () {
                 if (ctrl._locationTextTimeout) {
@@ -207,8 +257,14 @@
 
             var pathLine;
             ctrl._updateDistanceLine = function () {
-                if (userMarker) {
-                    var path = [marker.getLatLng(), userMarker.getLatLng()];
+                var path = null;
+                if (ctrl._fromMarker) {
+                    path = [marker.getLatLng(), ctrl._fromMarker.getLatLng()];
+                }
+                else if (userMarker) {
+                    path = [marker.getLatLng(), userMarker.getLatLng()];
+                }
+                if (path) {
                     if (!pathLine) {
                         pathLine = L.polyline(path, { color: 'black', weight: 6, opacity: .9, dashArray: "1,12" }).addTo(map);
                     } else {
@@ -231,8 +287,13 @@
 
 
             ctrl._updateDistanceText = function () {
-                if (userMarker) {
-                    var distance = userMarker.getLatLng().distanceTo(marker.getLatLng());
+                var distance = undefined;
+                if (ctrl._fromMarker) {
+                    distance = ctrl._fromMarker.getLatLng().distanceTo(marker.getLatLng());
+                } else if (userMarker) {
+                    distance = userMarker.getLatLng().distanceTo(marker.getLatLng());
+                }
+                if (distance !== undefined) {
                     ctrl.distanceText = Utility.getDistanceText(distance);
                 }
             };
@@ -384,7 +445,7 @@
                     ctrl.loadMap();
                 }
             };
-           
+
         }
     };
 

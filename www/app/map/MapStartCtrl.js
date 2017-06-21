@@ -123,10 +123,12 @@
             }, 10000);
         }
 
-        if ($stateParams.showLegalPopup){
-            RegobsPopup.showLegalInfo().then(function () {
-                appVm._setObsWatchTimer();
-            });
+        if ($stateParams.showLegalPopup) {
+            $timeout(function () {
+                RegobsPopup.showLegalInfo().then(function () {
+                    appVm._setObsWatchTimer();
+                });
+            }, 1000);
         } else {
             appVm._setObsWatchTimer();
         }

@@ -21,8 +21,7 @@ angular
             return $http.get(endpoints.getObserver, config).then(function (response) {
                 user = JSON.parse(response.data.Data);
                 user.email = username;
-                user.chosenObserverGroup = null;
-                //user.password = password;
+                user.password = password;
                 service.save();
                 AppLogging.log("Logged in user", user);
                 $rootScope.$broadcast('$regObs:userLogin');
@@ -70,7 +69,7 @@ angular
         };
 
         service.load = function () {
-            user = LocalStorage.getAndSetObject(storageKey, 'email', makeAnonymousUser());
+            user = LocalStorage.getAndSetObject(storageKey, 'password', makeAnonymousUser());
         };
 
         service.load();
