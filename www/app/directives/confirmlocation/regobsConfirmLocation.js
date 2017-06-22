@@ -10,7 +10,7 @@
             startZoom: '<',
             observationMarkerIcon: '<',
             fromPosition: '<',
-            fromPostionDescription: '@',
+            fromPositionDescription: '@',
             extraMarkers: '<'
         },
         templateUrl: 'app/directives/confirmlocation/confirmlocation.html',

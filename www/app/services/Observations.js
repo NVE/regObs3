@@ -30,7 +30,7 @@ angular
                     return [];
                 } else {
                     result = result.filter(function (reg) {
-                        return reg.NickName === user.Nick;
+                        return reg.ObserverId === user.Id;
                     });
                     return result;
                 }
@@ -265,7 +265,7 @@ angular
                     $http.post(
                         AppSettings.getEndPoints().search,
                         {
-                            ObserverNickName: user.Nick,
+                            ObserverId: user.Id,
                             NumberOfRecords: 100
                         },
                         httpConfig)

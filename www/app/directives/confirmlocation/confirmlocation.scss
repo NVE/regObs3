@@ -76,6 +76,19 @@
     left: -1px;
 }
 
+.map-detail-position.smaller {
+    -webkit-transform: scale(0.7);
+    transform: scale(0.7);
+}
+
+.map-detail-position.smaller.bottom {
+    top: -10px;
+}
+
+.map-detail-position.smaller.top {
+    top: 2px;
+}
+
 .map-detail-top-box {
     position: relative;
 }

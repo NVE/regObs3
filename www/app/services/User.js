@@ -18,8 +18,8 @@ angular
                 timeout: AppSettings.httpConfig && AppSettings.httpConfig.timeout ? AppSettings.httpConfig.timeout : 15000,
                 cache: false
             };
-            return $http.get(endpoints.getObserver, config).then(function (response) {
-                user = JSON.parse(response.data.Data);
+            return $http.post(endpoints.login, {}, config).then(function (response) {
+                user = response.data;
                 user.email = username;
                 user.password = password;
                 service.save();

@@ -122,7 +122,7 @@
         };
         settings.getEndPoints = function () {
             return {
-                getObserver: baseUrls[settings.data.env] + '/Account/GetObserver', //Header Authorization: Basic btoa('user':'pass')
+                login: baseUrls[settings.data.env] + '/Account/Login', //Header Authorization: Basic btoa('user':'pass')
                 getObserverGroups: baseUrls[settings.data.env] + '/Account/GetObserverGroups', //?guid=xxxxxxxx-xxxx-4xxx-xxxxx-xxxxxxxxxxxx,
                 getObservationsWithinRadius: baseUrls[settings.data.env] + '/Observations/GetObservationsWithinRadius',
                 getLocationsWithinRadius: baseUrls[settings.data.env] + '/Location/WithinRadius',
