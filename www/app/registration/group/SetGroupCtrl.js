@@ -10,9 +10,14 @@
             ctrl.groups = [];
             if (!user.anonymous) {
                 var groups = user.ObserverGroup;
-                for (var g in groups) {
-                    ctrl.groups.push({ Id: g, Name: groups[g] });
-                };
+                if (angular.isArray(groups)) {
+                    ctrl.groups = groups;
+                } else {
+                    //API backward compatibility for ObserverGroup
+                    for (var g in groups) {
+                        ctrl.groups.push({ Id: g, Name: groups[g] });
+                    };
+                }
             }
         };
 

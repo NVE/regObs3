@@ -30,7 +30,11 @@ angular
                     return [];
                 } else {
                     result = result.filter(function (reg) {
-                        return reg.ObserverId === user.Id;
+                        if (user.Id) {
+                            return reg.ObserverId === user.Id;
+                        } else {
+                            return reg.NickName === user.Nick; //API backward compatibility
+                        }
                     });
                     return result;
                 }
@@ -266,6 +270,7 @@ angular
                         AppSettings.getEndPoints().search,
                         {
                             ObserverId: user.Id,
+                            ObserverNickName: user.Id ? null :  user.Nick, //API backward compatibility
                             NumberOfRecords: 100
                         },
                         httpConfig)

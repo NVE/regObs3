@@ -406,7 +406,7 @@
                 var obsLoc = {
                     Latitude: latlng.lat.toString(),
                     Longitude: latlng.lng.toString(),
-                    Uncertainty: accuracy,
+                    Uncertainty: parseInt(accuracy),
                     UTMSourceTID: ctrl.updateMarkerToGpsLocation ? ObsLocation.source.fetchedFromGPS : ObsLocation.source.clickedInMap
                 };
 

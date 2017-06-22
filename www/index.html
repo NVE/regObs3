@@ -57,7 +57,7 @@
             e = e || window.event;
             var element = e.target || e.srcElement;
 
-            if (element.tagName === 'A' && element.target === '_system') {
+            if (element.tagName === 'A' && element.target === '_system' || element.target === '_blank') {
                 window.open(element.href, "_system");
                 return false; // prevent default action and stop event propagation. This will cause inappbrowser to be used
             }
@@ -81,7 +81,5 @@
             </ion-nav-bar>
             <ion-nav-view></ion-nav-view>
         </ion-side-menu-content>
-    </ion-side-menus>
-    <!--<regobs-map-search-bar></regobs-map-search-bar>-->
 </body>
 </html>

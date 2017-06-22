@@ -13,6 +13,7 @@
         </ion-item>
         <ion-item class="item-icon-left item-icon-right item-text-wrap" ng-if="!$ctrl.user.anonymous" ng-click="$ctrl.navigateTo('userobservations')">
             <i class="icon ion-eye smaller-item-icon"></i> {{'MY_OBSERVATIONS'|translate}}
+            <span class="badge badge-assertive" ng-if="$ctrl.RegistrationService.unsent.length">{{$ctrl.RegistrationService.unsent.length}}</span>
             <i class="icon icon-accessory ion-chevron-right"></i>
         </ion-item>
         <ion-item class="item-icon-left item-icon-right item-text-wrap" ng-click="$ctrl.navigateTo('settings')">

@@ -2,7 +2,7 @@
     .module('RegObs')
     .component('mapMenu', {
         templateUrl: 'app/directives/mapmenu/mapmenu.html',
-        controller: function (AppSettings, $state, OfflineMap, $cordovaInAppBrowser, $scope, Utility, $rootScope, $ionicSideMenuDelegate, User, RegobsPopup) {
+        controller: function (AppSettings, $state, OfflineMap, $cordovaInAppBrowser, $scope, Utility, $rootScope, $ionicSideMenuDelegate, User, RegobsPopup, Registration) {
             'ngInject';
             var ctrl = this;
            
@@ -28,6 +28,9 @@
                    $state.go('offlinemapoverview');
                });
             };
+
+            ctrl.RegistrationService = Registration;
+
 
             //Fix because of bug in menu-close and ui-sref on menu item resets back-state and back button is sometimes missing
             ctrl.navigateTo = function (page, options) {

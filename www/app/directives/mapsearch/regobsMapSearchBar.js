@@ -47,15 +47,9 @@
             ctrl.goToLocation = function (item) {
                 $timeout(function () {
                     Map.disableFollowMode();
-                    Map.panTo(item.latlng);
+                    Map.setView(item.latlng);
                     ctrl.close();
-                }, 50); //A small delay to click               
+                }, 50); //A small delay to click so user see click effect               
             };
-
-            //$timeout(function () {
-            //    var element = $window.document.getElementById('map-search-input');
-            //    if (element)
-            //        element.focus();
-            //}, 100);
         }
     });

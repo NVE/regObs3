@@ -26,6 +26,7 @@
 .user-observation-list .unsent-item .item-content {
     background-color: #F2F2F2;
     padding-bottom: 5px;
+    padding-right: 30px;
 }
 
 .user-observation-list .unsent-item .unsent-item-error-message i {
@@ -46,4 +47,5 @@
     font-size: 12px;
     font-weight: 500;
     margin-top: 2px;
+    white-space: normal;
 }
