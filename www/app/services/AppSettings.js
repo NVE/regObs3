@@ -28,7 +28,7 @@
         };
 
         var baseUrls = {
-            'regObs': 'https://api.nve.no/hydrology/regobs/webapi_v3.1.0',
+            'regObs': 'https://api.nve.no/hydrology/regobs/webapi_v3.2.0',
             'demo regObs': 'https://api.nve.no/hydrology/demo/regobs/webapi_v3.2',           
             'test regObs': 'http://tst-h-web03.nve.no/regobswebapi'
             //'test regObs': 'http://localhost:40001'
