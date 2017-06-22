@@ -6,24 +6,28 @@ angular
         vm.settings = AppSettings;
         vm.userService = User;
 
-        vm.kdvUpdated = kdvUpdatedTime(null, LocalStorage.get('kdvUpdated'));
+        
 
         Utility.getVersion().then(function (result) {
             vm.version = result;
         });
 
-        $scope.$on('kdvUpdated', kdvUpdatedTime);
+        
 
-        function kdvUpdatedTime(event, newDate) {
+        vm._setKdvUpdatedTime = function () {
             $timeout(function () {
-                if (newDate) {
-                    vm.kdvUpdated = moment(parseInt(newDate)).format('DD.MM, [kl.] HH:mm');
+                var storedTime = LocalStorage.get('kdvUpdated');
+                if (storedTime) {
+                    vm.kdvUpdated = moment(parseInt(LocalStorage.get('kdvUpdated'))).format('DD.MM, [kl.] HH:mm');
                 } else {
                     vm.kdvUpdated = '';
                 }
             });
-            AppLogging.log('KDV UPDATE', newDate);
-        }
+        };
+
+        vm._setKdvUpdatedTime();
+
+        $scope.$on('kdvUpdated', vm._setKdvUpdatedTime);
 
         vm.clearAppStorage = function () {
             RegobsPopup.delete('Nullstill app?', 'Vil du slette lokalt lagret data og nullstille appen?', 'Nullstill').then(
@@ -75,8 +79,7 @@ angular
                 })
                 .finally(function () {
                     vm.refreshingKdv = false;
-                    vm.kdvUpdated = new Date(parseInt(LocalStorage.get('kdvUpdated')));
-                    AppLogging.log(vm.kdvUpdated);
+                    vm._setKdvUpdatedTime();
                 });
 
         };
