@@ -1,12 +1,13 @@
 <ion-view view-title="{{'GENERAL_OBS'|translate}}">
     <ion-content class="has-footer">
-        <ion-list>
-            <regobs-comment
-                    placeholder="{{'GENERAL_OBS_HELP_TEXT'|translate}}"
-                    model="vm.reg.GeneralObservation.ObsComment"
-            ></regobs-comment>
-        </ion-list>
-        <regobs-image-list></regobs-image-list>
+        <regobs-form name="generalobsform">
+            <ion-list>
+                <regobs-comment placeholder="{{'GENERAL_OBS_HELP_TEXT'|translate}}"
+                                model="vm.reg.GeneralObservation.ObsComment"></regobs-comment>
+            </ion-list>
+            <regobs-image-list></regobs-image-list>
+            <div class="padding"><button type="submit" class="button button-block button-calm">{{"SAVE"|translate}}</button></div>
+        </regobs-form>
         <button type="button" ui-sref="dynamichelp({registrationProp:'GeneralObservation'})" class="button button-positive button-block button-clear">
             {{'HELP'|translate}}
         </button>
