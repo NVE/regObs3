@@ -43,8 +43,7 @@
             .state('start', {
                 url: '/start',
                 templateUrl: 'app/map/mapstart.html',
-                controller: 'MapStartCtrl as vm',
-                params: { showLegalPopup: null }
+                controller: 'MapStartCtrl as vm'
             })
             .state('login', {
                 url: '/login',
@@ -255,15 +254,6 @@
             })
 
             //VANN
-            .state('waterdangerobs', {
-                //Faretegn
-                url: '/waterdangerobs',
-                templateUrl: 'app/water/waterregistration/waterdangerobs/waterdangerobs.html',
-                controller: 'WaterDangerObsCtrl as vm',
-                data: {
-                    registrationProp: 'DangerObs'
-                }
-            })
             .state('waterlevel', {
                 //Faretegn
                 url: '/waterlevel',
@@ -271,15 +261,6 @@
                 controller: 'WaterLevelCtrl as vm',
                 data: {
                     registrationProp: 'WaterLevel2'
-                }
-            })
-            .state('waterincident', {
-                //Faretegn
-                url: '/waterincident',
-                templateUrl: 'app/water/waterregistration/waterincident/waterincident.html',
-                controller: 'WaterIncidentCtrl as vm',
-                data: {
-                    registrationProp: 'Incident'
                 }
             })
 
@@ -347,13 +328,15 @@
                 templateUrl: function (stateParams) {
                     return 'app/help/' + stateParams.page + '.html';
                 },
-                controller: 'HelpCtrl as vm'
+                controller: 'HelpCtrl as vm',
+                data: { skipValidation: true }
             })
 
             .state('dynamichelp', {
                 url: '/dynamichelp/:registrationProp',
                 templateUrl: 'app/help/dynamichelp.html',
-                controller: 'HelpCtrl as vm'
+                controller: 'HelpCtrl as vm',
+                data: { skipValidation: true }
             });
     };
 

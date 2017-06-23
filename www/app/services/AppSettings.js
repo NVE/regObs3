@@ -67,7 +67,7 @@
         settings.mapFolder = 'maps';
         settings.debugTiles = false; //Turn on to debug offline/fallback/tiles
         settings.maxObservationsToFetch = 1000; //Max observations to fetch from webservice
-        settings.imageSize = 2400;
+        settings.imageSize = 1800;
 
         settings.tiles = [
             { name: 'topo', description: 'TOPO_MAP_DESCRIPTION', maxDownloadLimit: 1500, avgTileSize: 17248, url: 'http://opencache.statkart.no/gatekeeper/gk/gk.open_gmaps?layers=matrikkel_bakgrunn&zoom={z}&x={x}&y={y}&format=image/jpeg', embeddedUrl: 'map/topo_{z}_{x}_{y}.jpg', embeddedMaxZoom: 9 },

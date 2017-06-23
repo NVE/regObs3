@@ -5,7 +5,7 @@
         goBack: '<',
         backState: '@'
     },
-    controller: function ($state, Property, $scope, RegobsPopup, $ionicHistory, $q, Registration, Pictures) {
+    controller: function ($state, Property, $scope, RegobsPopup, $ionicHistory, $q, Registration, Pictures, AppLogging) {
         var ctrl = this;
         ctrl.name = ctrl.name || 'regobsform';
         ctrl._confirmed = false;
@@ -26,12 +26,21 @@
             if (ctrl._confirmed) {
                 return;
             }
-
-            if ($state.current.data && $state.current.data.registrationProp && !Registration.propertyExists($state.current.data.registrationProp) && !Pictures.hasPictures($state.current.data.registrationProp)) {
-                return; //Do not save empty registration, because it is cleaned up in AppCtrl
+            if (toState && toState.data && toState.data.skipValidation) {
+                return;
             }
 
             var callAction = function () {
+                var errors = $scope[ctrl.name].$error;
+                if (errors.required) {
+                    //Required elements must be set, otherwhise entire form is invalid!
+                    AppLogging.log('required element found! Reset registration prop');
+                    var currentProp = ($state.current.data || {}).registrationProp;
+                    if (currentProp) {
+                        delete Registration.data[currentProp];
+                    }
+                }
+
                 if (angular.isFunction(ctrl.saveAction)) {
                     ctrl.saveAction();
                 } else {
@@ -57,14 +66,14 @@
         };
 
         ctrl.post = function () {
-            if (ctrl.goBack === undefined || ctrl.goBack === true) {
+            if (ctrl.goBack === false) {
+                ctrl.checkFormAndSave();
+            } else {               
                 if (ctrl.backState) {
                     $state.go(ctrl.backState);
                 } else {
                     $ionicHistory.goBack();
                 }
-            } else {
-                ctrl.checkFormAndSave();
             }
         };
 

@@ -6,7 +6,7 @@
                 {{'SET_POSITION_IN_MAP'|translate}}
             </button>
         </div>
-        <form name="landslideForm" novalidate>
+        <regobs-form name="landslideForm">
             <ion-list>
                 <regobs-time reg-object="vm.reg.LandSlideObs" reg-prop="DtLandSlideTime" on-blur="vm.checkDtLandSlideTime()"
                              text="{{'DT_LAND_SLIDE_TIME'|translate}}"></regobs-time>
@@ -49,7 +49,8 @@
                 <regobs-url model="vm.reg.LandSlideObs" property="Urls" ></regobs-url>
             </ion-list>
             <regobs-image-list></regobs-image-list>
-        </form>
+            <div class="padding"><button type="submit" class="button button-block button-calm">{{"SAVE"|translate}}</button></div>
+        </regobs-form>
         <button type="button" ui-sref="dynamichelp({registrationProp:'LandSlideObs'})" class="button button-positive button-block button-clear">
             {{'HELP'|translate}}
         </button>

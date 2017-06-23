@@ -6,35 +6,35 @@
         <button type="button" class="button button-clear button-calm" ng-click="addDangerObs()">OK</button>
     </ion-header-bar>
     <ion-content>
-        <form name="newDangerObsForm" novalidate>
-            <ion-list>
-                <ion-checkbox ng-model="noDangerSign.val" ng-change="toggleNoDangerSign()">Ingen faretegn observert
-                </ion-checkbox>
+        <ion-list>
+            <ion-checkbox ng-model="noDangerSign.val" ng-change="toggleNoDangerSign()">
+                Ingen faretegn observert
+            </ion-checkbox>
 
-                <label class="item item-input item-stacked-label item-select" ng-hide="noDangerSign.val">
+            <label class="item item-input item-stacked-label item-select" ng-hide="noDangerSign.val">
                 <span class="input-label">
                     Faretegn
                 </span>
-                    <select ng-model="dangerObs.DangerSignTID"
-                            ng-options="sign.Id as sign.Name for sign in dangerSignKdvArray"
-                            ng-change="dangerSignChanged()">
-                        <option value=""></option>
-                    </select>
-                </label>
+                <select ng-model="dangerObs.DangerSignTID"
+                        ng-options="sign.Id as sign.Name for sign in dangerSignKdvArray"
+                        ng-change="dangerSignChanged()">
+                    <option value=""></option>
+                </select>
+            </label>
 
-                <label class="item item-input item-stacked-label item-select">
+            <label class="item item-input item-stacked-label item-select">
                 <span class="input-label">
                     Område
                 </span>
-                    <select ng-model="dangerObs.tempArea"
-                            ng-options="area for area in areaArray"
-                            ng-change="commentChanged()">
-                        <option value=""></option>
-                    </select>
-                </label>
+                <select ng-model="dangerObs.tempArea"
+                        ng-options="area for area in areaArray"
+                        ng-change="commentChanged()">
+                    <option value=""></option>
+                </select>
+            </label>
 
-                <label class="item item-input item-stacked-label">
-                    <span class="input-label">Kommentar</span>
+            <label class="item item-input item-stacked-label">
+                <span class="input-label">Kommentar</span>
                 <textarea placeholder="Her kan du gi ytterligere beskrivelse av faretegnet"
                           name="comment"
                           id="dangerobs_text"
@@ -42,17 +42,16 @@
                           maxlength="1024"
                           ng-model="dangerObs.tempComment"
                           ng-change="commentChanged()"></textarea>
-                </label>
+            </label>
 
-            </ion-list>
-            <div class="padding">
-                <regobs-save-button ng-click="addDangerObs()" save-action=""></regobs-save-button>
-
-                <button type="button" class="button button-block button-assertive button-clear"
-                        ng-click="deleteDangerObs()"
-                        ng-show="editing">Slett
-                </button>
-            </div>
-        </form>
+        </ion-list>
+        <div class="padding">
+            <button type="button" ng-click="addDangerObs()" class="button button-block button-calm">{{"SAVE"|translate}}</button>
+            <button type="button" class="button button-block button-assertive button-clear"
+                    ng-click="deleteDangerObs()"
+                    ng-show="editing">
+                Slett
+            </button>
+        </div>
     </ion-content>
 </ion-modal-view>

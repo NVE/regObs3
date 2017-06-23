@@ -13,19 +13,13 @@ angular
                 '<label class="item item-input item-input-inset">',
                     '<textarea cols="30" rows="3" placeholder="Bildekommentar" ng-model="pic.PictureComment"></textarea>',
                 '</label>',
-            '</div>',
-            '<div class="padding"><regobs-save-button save-action="saveAction()" go-back="true"></regobs-save-button></div>'
+            '</div>'
             ].join('')
         };
 
         function link(scope){
             scope.pictureService = Pictures;
             scope.registrationProp = $state.current.data.registrationProp;
-
-            scope.saveAction = function(){
-                Registration.save();
-            }
-
         }
 
     });

@@ -24,7 +24,7 @@
                 <button type="button" ng-click="vm.refreshKdvElements()" class="button button-block icon-left ion-refresh">
                     {{'UPDATE_KDV_ELEMENTS'|translate}} <ion-spinner class="spinner spinner-fix" ng-if="vm.refreshingKdv"></ion-spinner>
                 </button>
-                <p>{{'UPDATED'|translate}} {{vm.kdvUpdated}}</p>
+                <p ng-show="vm.kdvUpdated">{{'UPDATED'|translate}} {{vm.kdvUpdated}}</p>
             </ion-item>
             <ion-item class="item-borderless">
                 <button type="button" ng-click="vm.clearAppStorage()" class="button button-block icon-left ion-medkit">

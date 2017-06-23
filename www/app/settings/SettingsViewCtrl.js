@@ -56,7 +56,6 @@ angular
                             Registration.load();
                             HeaderColor.init();
                             ObsLocation.init();
-                            Map.refresh();
                             $ionicLoading.hide();
                             $ionicHistory.clearCache();
                             $rootScope.$broadcast('$regObs:appReset');

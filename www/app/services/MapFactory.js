@@ -17,6 +17,7 @@
         service._lastViewBounds = null;
         service._offlinemaps = [];
         service._active = false;
+        service._listeners = [];
 
 
         /**
@@ -70,7 +71,7 @@
 
         /**
          * Unselect all markers
-         * @param {MapSelectableItem} exept Unselect all except this item
+         * @param {MapSelectableItem} except Unselect all except this item
          */
         service._unselectAllMarkers = function (except) {
             var unselectFunc = function (arr) {
@@ -87,7 +88,7 @@
 
         /**
          * Get Marker by id
-         * @param {String} id 
+         * @param {String} id marker id
          * @returns {MapSelectableItem} marker
          */
         service._getMarker = function (id) {
@@ -143,8 +144,8 @@
 
         /**
          * Refresh user position in map
-         * @param {} position 
-         * @returns {} 
+         * @param {object} position User position
+         * @returns {void}
          */
         service._refreshUserMarker = function (position) {
             if (position) {
@@ -166,7 +167,7 @@
 
         /**
          * Remove all tile layers
-         * @returns {} 
+         * @returns {void} 
          */
         service._removeAllTiles = function () {
             service._checkIfInitialized();
@@ -177,8 +178,8 @@
 
         /**
          * Get tile index for tile name
-         * @param {} name 
-         * @returns {} 
+         * @param {string} name Name of tile
+         * @returns {number} tile index
          */
         service._getTileIndex = function (name) {
             for (var i = 0; i < AppSettings.tiles.length; i++) {
@@ -191,8 +192,8 @@
 
         /**
          * Get tile by name
-         * @param {} name 
-         * @returns {} 
+         * @param {string} name Name of tile
+         * @returns {L.Layer} Tile layer
          */
         service.getTileByName = function (name) {
             var index = service._getTileIndex(name);
@@ -201,9 +202,9 @@
 
         /**
          * Add tile to map
-         * @param {} name 
-         * @param {} opacity 
-         * @returns {} 
+         * @param {string} name Tile name
+         * @param {number} opacity Opacity
+         * @returns {void} 
          */
         service._addTile = function (name, opacity) {
             if (layerGroups.tiles) {
@@ -219,7 +220,7 @@
 
         /**
          * Disable center position to user on updated location
-         * @returns {} 
+         * @returns {void}
          */
         service.disableFollowMode = function () {
             $timeout(function () {
@@ -234,19 +235,28 @@
 
         /**
          * GPS position updated
-         * @param {} position 
-         * @returns {} 
+         * @param {L.LocationEvent} position Position update
+         * @returns {void} 
          */
         service._onPositionUpdate = function (position) {
             UserLocation.setLastUserLocation(position);
             service._refreshUserMarker(position);
-            var latlng = new L.LatLng(position.latitude, position.longitude);
             service._updateSelectedItemDistance();
         };
 
+
+        /**
+        * @typedef {Object} LayerGroup
+        * @property {L.Layer} tiles Tiles layer group
+        * @property {RegObsClasses.MarkerClusterGroup} observations Marker cluster layer group
+        * @property {L.LayerGroup} offlinemaps Offline map layer group
+        * @property {L.LayerGroup} user User layer group
+        */
+
         /**
          * Create layer groups
-         * @returns {} 
+         * @param {L.map} mapToAdd Map object
+         * @returns {LayerGroup} Layer groups
          */
         service.createLayerGroups = function (mapToAdd) {
             var lg = { //Layers are added in order
@@ -261,7 +271,7 @@
 
         /**
          * Calculate where to center map on startup
-         * @returns {} 
+         * @returns {array} LatLng
          */
         service._calculateMapStartCenter = function () {
             if (ObsLocation.isSet()) {
@@ -277,7 +287,7 @@
 
         /**
          * Could location be set manually?
-         * @returns {} 
+         * @returns {boolean} Is possible to set location manually 
          */
         service._isSetLocationManuallyPossible = function () {
             return Registration.isEmpty() || !ObsLocation.isSet();
@@ -290,10 +300,13 @@
 
         /**
          * Main method for creating map
-         * @param {} elem 
-         * @returns {} 
+         * @param {external:Node} elem Dom element
+         * @returns {void} 
          */
         service.createMap = function (elem) {
+            userMarker = undefined; //reset if existing
+            service._followMode = true;
+
             var center = service._calculateMapStartCenter();
             map = L.map(elem, {
                 center: center,
@@ -341,23 +354,23 @@
 
             L.control.scale({ imperial: false }).addTo(map);
 
-            $rootScope.$on('$regObs:registrationSaved', function () {
+            service._listeners.push($rootScope.$on('$regObs:registrationSaved', function () {
                 service.refresh();
-            });
+            }));
 
-            $rootScope.$on('$regObs:appSettingsChanged', function () {
+            service._listeners.push($rootScope.$on('$regObs:appSettingsChanged', function () {
                 service.refresh();
-            });
+            }));
 
-            $rootScope.$on('$regObs:registrationReset', function () {
+            service._listeners.push($rootScope.$on('$regObs:registrationReset', function () {
                 $timeout(function () {
                     service.clearSelectedMarkers();
                 });
-            });
+            }));
 
-            $rootScope.$on('$regObs:observationsUpdated', function () {
+            service._listeners.push($rootScope.$on('$regObs:observationsUpdated', function () {
                 service.refresh();
-            });
+            }));
 
             service._isInitialized = true; //map is created!
 
@@ -373,9 +386,24 @@
             return map;
         };
 
+        service.reset = function () {
+            service._listeners.forEach(function (item) {
+                item(); //unregister listener
+            });
+            service._listeners = [];
+            userMarker = undefined;
+
+            if (map) {
+                map.off();
+                map.remove();
+                map = undefined;
+            }
+            service._isInitialized = false;
+        };
+
         /**
          * Clear selected marker
-         * @returns {} 
+         * @returns {void} 
          */
         service.clearSelectedMarkers = function () {
             service._unselectAllMarkers();

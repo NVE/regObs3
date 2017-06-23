@@ -1,10 +1,13 @@
 <ion-view view-title="{{'AVALANCHE_EVAL_PROBLEM'|translate}}">
     <ion-content class="has-footer">
-        <regobs-avalanche-eval-problem></regobs-avalanche-eval-problem>
-        <regobs-image-list></regobs-image-list>
-        <button type="button" ui-sref="dynamichelp({registrationProp:'AvalancheEvalProblem2'})" class="button button-positive button-block button-clear">
-            {{'HELP'|translate}}
-        </button>
+        <regobs-form name="avalancheevalproblemform">
+            <regobs-avalanche-eval-problem></regobs-avalanche-eval-problem>
+            <regobs-image-list></regobs-image-list>
+            <div class="padding"><button type="submit" class="button button-block button-calm">{{"SAVE"|translate}}</button></div>
+            <button type="button" ui-sref="dynamichelp({registrationProp:'AvalancheEvalProblem2'})" class="button button-positive button-block button-clear">
+                {{'HELP'|translate}}
+            </button>
+        </regobs-form>
     </ion-content>
     <form-footer></form-footer>
 </ion-view>

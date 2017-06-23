@@ -1,6 +1,6 @@
 <ion-view view-title="{{'SNOW_SURFACE_TITLE'|translate}}">
     <ion-content class="has-footer">
-        <form name="snowSurfaceForm" novalidate>
+        <regobs-form name="snowSurfaceForm">
             <ion-list>
                 <regobs-number
                         field-name="snødybde"
@@ -76,7 +76,8 @@
 
             </ion-list>
             <regobs-image-list></regobs-image-list>
-        </form>
+            <div class="padding"><button type="submit" class="button button-block button-calm">{{"SAVE"|translate}}</button></div>
+        </regobs-form>
         <button type="button" ui-sref="dynamichelp({registrationProp:'SnowSurfaceObservation'})"
                 class="button button-positive button-block button-clear">
             {{'HELP'|translate}}

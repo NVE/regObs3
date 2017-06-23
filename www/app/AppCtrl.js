@@ -6,12 +6,11 @@ angular.module('RegObs')
             HeaderColor.init();
         });
 
-        $scope.$on('$stateChangeStart', function (event, toState, toParams, fromState, fromParams) {
+        $scope.$on('$regObs:beforeSave', function () {
             var currentProp = ($state.current.data || {}).registrationProp;
             if (currentProp && !Registration.propertyExists(currentProp) && !Pictures.hasPictures(currentProp)) {
                 AppLogging.log('DELETE empty registration for: ' + currentProp + ' current registration: ' + JSON.stringify(Registration.data));
                 delete Registration.data[currentProp];
-                Registration.save();
             }
         });
 

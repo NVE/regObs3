@@ -1,6 +1,6 @@
 <ion-view view-title="{{'WEATHER'|translate}}">
     <ion-content class="has-footer">
-        <form name="snowWeatherForm" novalidate>
+        <regobs-form name="snowWeatherForm">
             <ion-list>
                 <kdv-dropdown
                         title="PRECIPITATION"
@@ -48,7 +48,8 @@
 
             </ion-list>
             <regobs-image-list></regobs-image-list>
-        </form>
+            <div class="padding"><button type="submit" class="button button-block button-calm">{{"SAVE"|translate}}</button></div>
+        </regobs-form>
         <button type="button" ui-sref="dynamichelp({registrationProp:'WeatherObservation'})"  class="button button-positive button-block button-clear">
             {{'HELP'|translate}}
         </button>

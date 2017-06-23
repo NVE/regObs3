@@ -1,7 +1,7 @@
 (function () {
     'use strict';
 
-    function PicturesService(Registration, RegobsPopup, Utility, AppSettings, $cordovaCamera, $cordovaDeviceOrientation, $q, $translate, $ionicPopup, IonicClosePopupService) {
+    function PicturesService(Registration, RegobsPopup, Utility, AppSettings, $cordovaCamera, $cordovaDeviceOrientation, $q, $translate, $ionicPopup, IonicClosePopupService, AppLogging) {
         'ngInject';
         var Pictures = this;
 

@@ -110,6 +110,7 @@ angular
                             }, 1000);
                         }
 
+                        scope.closeOnComplete = result.closeOnComplete;
                         scope.progressOptions = result.progressOptions;
                         scope.cancelDownload = function () {
                             cancelUpdatePromise.resolve();

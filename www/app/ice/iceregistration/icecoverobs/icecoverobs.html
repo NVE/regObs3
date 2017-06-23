@@ -1,6 +1,6 @@
 <ion-view view-title="{{'ICE_COVER_OBS'|translate}}">
     <ion-content class="has-footer">
-        <form name="iceCoverForm" novalidate>
+        <regobs-form name="iceCoverForm">
             <ion-list>
                 <kdv-dropdown
                         title="{{'ICE_COVER'|translate}}*"
@@ -33,7 +33,8 @@
 
             </ion-list>
             <regobs-image-list></regobs-image-list>
-        </form>
+            <div class="padding"><button type="submit" class="button button-block button-calm">{{"SAVE"|translate}}</button></div>
+        </regobs-form>
         <button type="button" ui-sref="dynamichelp({registrationProp:'IceCoverObs'})" class="button button-positive button-block button-clear">
             {{'HELP'|translate}}
         </button>

@@ -93,6 +93,8 @@
                 ctrl.setUser();
             });
 
-            ctrl.init();
+            ctrl.$onInit = function () {
+                ctrl.init();
+            }; 
         }
     });
