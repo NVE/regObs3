@@ -19,16 +19,6 @@
         service._active = false;
         service._listeners = [];
 
-
-        /**
-         * Check if map is initialized, else throw error
-         * @throws {Error} when not initialized
-         */
-        service._checkIfInitialized = function () {
-            if (!service._isInitialized)
-                throw Error('Map is not initialized! Please call createMap functon on map element...');
-        };
-
         /**
          * Set selected item
          * @param {MapSelectableItem} item Item to set as selected
@@ -138,8 +128,9 @@
          * Remove all observations in map
          */
         service._removeObservations = function () {
-            service._checkIfInitialized();
-            layerGroups.observations.clearLayers();
+            if (layerGroups && layerGroups.observations) {
+                layerGroups.observations.clearLayers();
+            }
         };
 
         /**
@@ -170,9 +161,10 @@
          * @returns {void} 
          */
         service._removeAllTiles = function () {
-            service._checkIfInitialized();
-            for (var i = 1; i < tiles.length; i++) {
-                layerGroups.tiles.removeLayer(tiles[i]);
+            if (angular.isArray(tiles) && layerGroups && layerGroups.tiles) {
+                for (var i = 1; i < tiles.length; i++) {
+                    layerGroups.tiles.removeLayer(tiles[i]);
+                }
             }
         };
 
