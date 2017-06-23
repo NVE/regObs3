@@ -47,7 +47,7 @@
             ctrl.goToLocation = function (item) {
                 $timeout(function () {
                     Map.disableFollowMode();
-                    Map.setView(item.latlng);
+                    Map.flyTo(item.latlng);
                     ctrl.close();
                 }, 50); //A small delay to click so user see click effect               
             };

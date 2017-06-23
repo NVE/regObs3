@@ -410,7 +410,9 @@
          */
         service.setView = function (latlng, zoom) {
             service._isProgramaticZoom = true;
-            map.setView(latlng, zoom || service._zoomToViewOnFirstLocation);
+            if (map) {
+                map.setView(latlng, zoom || service._zoomToViewOnFirstLocation);
+            }
         };
 
         /**
@@ -421,6 +423,16 @@
         service.panTo = function (latlng) {
             if (map) {
                 map.panTo(latlng);
+            }
+        };
+
+        /**
+        * Fly to lat lng position (smoother animation)
+        */
+        service.flyTo = function (latlng, zoom) {
+            service._isProgramaticZoom = true;
+            if (map) {
+                map.flyTo(latlng, zoom || service._zoomToViewOnFirstLocation);
             }
         };
 
