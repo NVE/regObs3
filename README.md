@@ -24,14 +24,14 @@ In Ionic View app on device:
 2. Log into your ionic.io accout
 3. Open ionic view and click download files, and view app
 
-	Please note that many plugins is not compatible with Ionic View, so it is not recommended to use this for more then internal testing.
+Please note that many plugins is not compatible with Ionic View, so it is not recommended to use this for more then internal testing.
 
 
 ## App token
 To use the regObs API, you need a valid app token. Request one from the regobs team. When you have a valid app token, create file `secret.json` in the folder `www/app/json`. The file should have the following format:
 
     {
-    	"apiKey": "your app token here"
+		"apiKey": "your app token here"
     }
 
 ## NVE keystore
@@ -67,7 +67,32 @@ Read more about installation and setup [here](https://taco.visualstudio.com/)
 * Set up Mac IP address and port number in `Visual Studio -> Tools -> Options -> Tools for Apache Cordova -> IOS Configuration`.
 * After build you can open xcode project from the cordova/build/tasks/build number directory and debug on device.
 * Archive build and upload to iTunes [directly from xcode or use Application Loader](https://developer.apple.com/library/content/documentation/LanguagesUtilities/Conceptual/iTunesConnect_Guide/Chapters/UploadingBinariesforanApp.html).
-* APK's for Android is automatically signed if you have a valid `nve.keystore` file in the root of the project and also `build.json` configuration file. Ask the regObs-management to get a valid keystore and build.json configuration.
+* APK's for Android is automatically signed if you have a valid `nve.keystore` file in the root of the project and also `build.json` configuration file.
+* Add `build.json` to project root directory:
+
+	{
+	  "android": {
+		"release": {
+		  "alias": "regobs",
+		  "keystore": "nve.keystore",
+		  "keystoreType": "",
+		  "password": "[insert keystore password]",
+		  "storePassword": "[insert keystore password]"
+		}
+	  },
+	  "ios": {
+		"debug": {
+		  "developmentTeam": "43L5B5X2PE",
+		  "codeSignIdentity": "iPhone Developer"
+		},
+		"release": {
+		  "developmentTeam": "43L5B5X2PE",
+		  "codeSignIdentity": "iPhone Developer",
+		  "packageType": "app-store"
+		}
+	  }
+	}
+
 
 ## How to Alfa and Beta-test the app before deploying to production
 
