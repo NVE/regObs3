@@ -10,6 +10,7 @@
 
         /**
         * Is search bar visible?
+        * @returns {boolean} True if search bar is visisble
         */
         service.isVisible = function () {
             return service._searchBarVisisble;
@@ -46,12 +47,16 @@
             if (service._cancelPromise) {
                 service._cancelPromise.resolve();
             }
-        }
+        };
 
 
         /**
         * Search place by name
         * Returns promise with array of search result
+        * @param {string} name Name to search for
+        * @param {number} maxResults Max number of results to return
+        * @param {boolean} exactFirst Return exact matches first
+        * @returns {promise} Search result promise
         */
         service.search = function (name, maxResults, exactFirst) {
             service.cancelSearch(); //Cancel last search if still running
@@ -68,6 +73,8 @@
 
         /**
         * Remove duplicated from list
+        * @param {Array} inArray Array of objects
+        * @returns {Array} Array with duplicates on ssrId removed
         */
         service._removeDuplicates = function (inArray) {
             var arr = [];
@@ -81,10 +88,12 @@
                 });
             }
             return arr;
-        }
+        };
 
         /**
         * Map kartverk item to generic search result item
+        * @param {{ssrId: number, aust: number, nord: number, stedsnavn: string, navnetype: string, kommunenavn: string, fylkesnavn: string, navnetype: string }} item kartverk item
+        * @returns {{id:number, name: string, description: string, type: string, latlng: L.LatLng}} Mapped item to more generic search result
         */
         service._mapItem = function (item) {
             var latlng = (L.Projection.Mercator.unproject({ x: item.aust, y: item.nord }));
@@ -93,6 +102,8 @@
 
         /**
         * Process service call result
+        * @param {Array} result Search result from service
+        * @returns {Array} Processed result
         */
         service._processSearchResults = function (result) {
             if (result && result.data && result.data.stedsnavn) {
@@ -108,6 +119,11 @@
 
         /**
         * Internal http call service
+        * @param {string} name Name of place to search for
+        * @param {number} maxResults Max items to return
+        * @param {boolean} exactFirst Exact results first
+        * @param {promise} timeout Timout promise
+        * @returns {promise} Promise http call
         */
         service._callSearch = function (name, maxResults, exactFirst, timeout) {
             return $http.get(service._searchUrl + '?navn=' + name + '*&antPerSide=' + maxResults + '&eksakteForst=' + exactFirst + '&epsgKode=3395',

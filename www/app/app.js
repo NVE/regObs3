@@ -338,7 +338,7 @@
                 controller: 'HelpCtrl as vm',
                 data: { skipValidation: true }
             });
-    };
+    }
 
     function setup($ionicPlatform, Utility, AppLogging, Registration, Observations, OfflineMap, $http, User, HelpTexts) {
         'ngInject';

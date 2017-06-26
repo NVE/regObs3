@@ -404,9 +404,9 @@
 
         /**
          * Set view and zoom to level
-         * @param {} latlng 
-         * @param {} zoom 
-         * @returns {} 
+         * @param {L.LatLng} latlng Set view to this lat lng coordinate
+         * @param {number} zoom  Set zoom. If empty use default map zoom.
+         * @returns {void} 
          */
         service.setView = function (latlng, zoom) {
             service._isProgramaticZoom = true;
@@ -416,9 +416,9 @@
         };
 
         /**
-        * Pan to lat lng
-        * @param {} latlng
-        * @returns {}
+        * Pan to lat lng without zooming
+        * @param {L.LatLng} latlng Coordinate to pan to (no zooming).
+        * @returns {void}
         */
         service.panTo = function (latlng) {
             if (map) {
@@ -428,6 +428,9 @@
 
         /**
         * Fly to lat lng position (smoother animation)
+        * @param {L.LatLng} latlng Coordinate to fly to
+        * @param {number} zoom Zoom to this level when fly in.
+        * @returns {void}
         */
         service.flyTo = function (latlng, zoom) {
             service._isProgramaticZoom = true;
@@ -439,7 +442,7 @@
 
         /**
          * Get center of map
-         * @returns {} 
+         * @returns {void} 
          */
         service.getCenter = function () {
             return map.getCenter();
@@ -447,7 +450,7 @@
 
         /**
          * Get map zoom
-         * @returns {} 
+         * @returns {number} Map zoom level 
          */
         service.getZoom = function () {
             if (!map) return service._zoomToViewOnFirstLocation;
@@ -456,7 +459,7 @@
 
         /**
          * Get all tiles
-         * @returns {} 
+         * @returns {Array<RegObsClasses.RegObsTileLayer>} Array of tiles layers
          */
         service.getTiles = function () {
             return tiles;
@@ -464,7 +467,7 @@
 
         /**
          * Set follow mode and center map to user position
-         * @returns {} 
+         * @returns {void}
          */
         service.centerMapToUser = function () {
             service._followMode = true;
@@ -491,7 +494,7 @@
 
         /**
          * Update observation tat is stored in presistant storage
-         * @returns {} 
+         * @returns {promise} Download observations promise 
          */
         service.updateObservationsInMap = function () {
             if (!map) throw new Error('Map not initialized!');
@@ -522,9 +525,9 @@
 
         /**
          * Is position within map bounds?
-         * @param {} lat 
-         * @param {} lng 
-         * @returns {} 
+         * @param {number} lat  Latitude
+         * @param {number} lng Longitude
+         * @returns {boolean} True if position is within view bounds 
          */
         service.isPositionWithinMapBounds = function (lat, lng) {
             if (service._lastViewBounds && lat && lng) {
@@ -540,7 +543,7 @@
 
         /**
          * Redraw map with tiles only visible for current geohazard
-         * @returns {} 
+         * @returns {void} 
          */
         service._redrawTilesForThisGeoHazard = function () {
             service._removeAllTiles();
@@ -561,7 +564,7 @@
 
         /**
          * Check if selected marker should med unselected if geohazard settings has been changed
-         * @returns {} 
+         * @returns {void} 
          */
         service._checkSelectedItemGeoHazard = function () {
             if (service._selectedItem && service._selectedItem.getGeoHazardId() !== Utility.getCurrentGeoHazardTid()) {
@@ -588,7 +591,7 @@
 
         /**
          * Refresh map an redraw layers and markers as set in settings
-         * @returns {} 
+         * @returns {void} 
          */
         service.refresh = function () {
             AppLogging.log('Map refresh');
@@ -609,7 +612,7 @@
 
         /**
          * Start watching gps position
-         * @returns {} 
+         * @returns {void} 
          */
         service.startWatch = function () {
             if (map) {
@@ -630,7 +633,7 @@
 
         /**
          * Clear gps position watch
-         * @returns {} 
+         * @returns {void} 
          */
         service.clearWatch = function () {
             if (map) {
@@ -650,7 +653,7 @@
 
         /**
          * Invalidate map size (redraws map)
-         * @returns {} 
+         * @returns {void} 
          */
         service.invalidateSize = function () {
             if (map && service._isMapVisisble()) {
@@ -660,10 +663,10 @@
 
         /**
          * Calculate list of xyz map pieces that is needed for current bounds
-         * @param {} bounds 
-         * @param {} zoomMin 
-         * @param {} zoomMax ref
-         * @returns {} 
+         * @param {L.LatLngBounds} bounds Bounds to calculate from
+         * @param {number} zoomMin Min zoom level
+         * @param {number} zoomMax Max zoom level
+         * @returns {Array} xyz list
          */
         service.calculateXYZListFromBounds = function (bounds, zoomMin, zoomMax) {
             if (!tiles) return [];
@@ -672,10 +675,10 @@
 
         /**
          * Calculate size of all map pieces that is needed for current bounds
-         * @param {} bounds 
-         * @param {} zoomMin 
-         * @param {} zoomMax 
-         * @returns {} 
+         * @param {L.LatLngBounds} bounds Bounds to calculate from
+         * @param {number} zoomMin Min zoom level
+         * @param {number} zoomMax Max zoom level
+         * @returns {number} Number of tiles
          */
         service.calculateXYZSizeFromBounds = function (bounds, zoomMin, zoomMax) {
             if (!map || !tiles) return 0;
@@ -685,7 +688,7 @@
 
         /**
          * Get all observations that is within view bounds of map
-         * @returns {} 
+         * @returns {Array<RegObsClasses.Observation>} Array of observations
          */
         service.getObservationsWithinViewBounds = function () {
             return Observations.getStoredObservations(Utility.getCurrentGeoHazardTid(), true)

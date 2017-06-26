@@ -17,7 +17,7 @@
                 //var scrollHandle = $ionicScrollDelegate.$getByHandle('mapSearchResultScroll');
                 var instances = $ionicScrollDelegate.$getByHandle('mapSearchResultScroll')._instances;
                 var scrollHandle = instances.filter(function (element) {
-                    return (element['$$delegateHandle'] == name);
+                    return (element['$$delegateHandle'] === name);
                 })[0];
 
                 if (scrollHandle) {

@@ -25,7 +25,7 @@ angular
 
             return {
                 "Id": Utility.createGuid(),
-                "GeoHazardTID": Utility.geoHazardTid(type),
+                "GeoHazardTID": Utility.geoHazardTid(type)
                 //Dette må genereres
                 //"DtObsTime": new Date().toISOString()
                 //Kommenter inn dette dersom en har lyst til å teste bilder (ellers må det testes på device)
@@ -35,7 +35,7 @@ angular
                  PictureComment: ''
                  }]*/
             };
-        };
+        }
 
         Registration.getNewRegistrations = function () {
             var key = newStorageKey + '_' + AppSettings.data.env.replace(/ /g, '');
@@ -210,7 +210,7 @@ angular
                 }
                 return count;
             }
-        }
+        };
 
         Registration.isEmpty = function () {
             var clone = angular.copy(Registration.data);
@@ -245,7 +245,7 @@ angular
                     Longitude: lastPos.longitude.toString(),
                     Uncertainty: lastPos.accuracy.toString(),
                     UTMSourceTID: ObsLocation.source.fetchedFromGPS
-                }
+                };
                 ObsLocation.set(obsLoc);
             }
         };
@@ -352,7 +352,7 @@ angular
                 return false;
             }
             return true;
-        }
+        };
 
 
         Registration.send = function (force) {
@@ -399,7 +399,7 @@ angular
 
         Registration.hasImageForRegistration = function (prop) {
             var registrationTid = Utility.registrationTid(prop);
-            return Registration.data.Picture && Registration.data.Picture.filter(function (item) { return item.RegistrationTID === registrationTid }).length > 0;
+            return Registration.data.Picture && Registration.data.Picture.filter(function (item) { return item.RegistrationTID === registrationTid; }).length > 0;
         };
 
         Registration.prepareRegistrationForSending = function () {
@@ -422,7 +422,7 @@ angular
                     cleanupIncidenct(data.Incident);
                     cleanupWaterLevel2(data.WaterLevel2)
                         .then(function () {
-                            return cleanupDamageObs(data.DamageObs)
+                            return cleanupDamageObs(data.DamageObs);
                         })
                         .then(function () {
                             delete data.avalChoice;
@@ -503,7 +503,7 @@ angular
                         var checkCallbacks = function () {
                             if (callbacks === total) {
                                 resolve();
-                            };
+                            }
                         };
 
                         arr.forEach(function (m) {
@@ -520,7 +520,7 @@ angular
                             }
                         });
                     });
-                };
+                }
 
                 function cleanupWaterLevel2(waterLevel) {
                     return $q(function (resolve) {
@@ -530,7 +530,7 @@ angular
                             resizePictures(waterLevel.WaterLevelMeasurement).then(resolve);
                         }
                     });
-                };
+                }
 
                 function cleanupDamageObs(damageObs) {
                     return $q(function (resolve) {
@@ -543,7 +543,7 @@ angular
                             resizePictures(damageObs).then(resolve);
                         }
                     });
-                };
+                }
 
             });
         };
