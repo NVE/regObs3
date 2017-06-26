@@ -250,6 +250,16 @@ angular
             }
         };
 
+        Registration._storeCompletedAsNewRegistrations = function (completed) {
+            if (angular.isArray(completed)) {
+                var key = newStorageKey + '_' + AppSettings.data.env.replace(/ /g, '');
+                var completedWithValidRegId = completed.filter(function (item) {
+                    return item.RegId && item.RegId > 0;
+                });
+                LocalStorage.setObject(key, completedWithValidRegId);
+            }
+        };
+
 
         Registration.post = function (onItemCompleteCallback, cancelPromise) {
             return $q(function (resolve) {
@@ -275,8 +285,7 @@ angular
                             Registration.unsent = failed;
                             Registration.save();
 
-                            var key = newStorageKey + '_' + AppSettings.data.env.replace(/ /g, '');
-                            LocalStorage.setObject(key, completed);
+                            Registration._storeCompletedAsNewRegistrations(completed);
 
                             resolve({ completed: completed, failed: failed });
                         }
