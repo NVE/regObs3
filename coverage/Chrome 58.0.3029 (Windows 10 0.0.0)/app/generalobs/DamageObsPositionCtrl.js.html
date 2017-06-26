@@ -20,24 +20,24 @@
     </h1>
     <div class='clearfix'>
       <div class='fl pad1y space-right2'>
-        <span class="strong">5.88% </span>
+        <span class="strong">3.57% </span>
         <span class="quiet">Statements</span>
-        <span class='fraction'>1/17</span>
+        <span class='fraction'>1/28</span>
       </div>
       <div class='fl pad1y space-right2'>
         <span class="strong">0% </span>
         <span class="quiet">Branches</span>
-        <span class='fraction'>0/6</span>
+        <span class='fraction'>0/18</span>
       </div>
       <div class='fl pad1y space-right2'>
         <span class="strong">0% </span>
         <span class="quiet">Functions</span>
-        <span class='fraction'>0/3</span>
+        <span class='fraction'>0/5</span>
       </div>
       <div class='fl pad1y space-right2'>
-        <span class="strong">5.88% </span>
+        <span class="strong">3.57% </span>
         <span class="quiet">Lines</span>
-        <span class='fraction'>1/17</span>
+        <span class='fraction'>1/28</span>
       </div>
     </div>
   </div>
@@ -71,7 +71,29 @@
 26
 27
 28
-29</td><td class="line-coverage quiet"><span class="cline-any cline-yes">1×</span>
+29
+30
+31
+32
+33
+34
+35
+36
+37
+38
+39
+40
+41
+42
+43
+44
+45
+46
+47
+48
+49
+50
+51</td><td class="line-coverage quiet"><span class="cline-any cline-yes">1×</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -79,8 +101,10 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -91,7 +115,27 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -106,6 +150,12 @@
 &nbsp;
 <span class="cstat-no" title="statement not covered" >        vm.damageObs = $stateParams.damageObs;</span>
 &nbsp;
+<span class="cstat-no" title="statement not covered" >        vm.damageMarker = L.AwesomeMarkers.icon({</span>
+            icon: 'ios-bolt-outline',
+            prefix: 'ion',
+            markerColor: 'blue',
+            extraClasses: 'large-map-icon'
+        });
 <span class="cstat-no" title="statement not covered" >        vm._getStartPosition = <span class="fstat-no" title="function not covered" >function () {</span></span>
 <span class="cstat-no" title="statement not covered" >            if (vm.damageObs.DamagePosition) {</span>
 <span class="cstat-no" title="statement not covered" >                return vm.damageObs.DamagePosition;</span>
@@ -121,6 +171,22 @@
 <span class="cstat-no" title="statement not covered" >            return null;</span>
         };
 &nbsp;
+<span class="cstat-no" title="statement not covered" >        vm._getExtraMarksers = <span class="fstat-no" title="function not covered" >function () {</span></span>
+<span class="cstat-no" title="statement not covered" >            var markers = [];</span>
+<span class="cstat-no" title="statement not covered" >            if (Registration.data.DamageObs &amp;&amp; angular.isArray(Registration.data.DamageObs)) {</span>
+<span class="cstat-no" title="statement not covered" >                Registration.data.DamageObs.forEach(<span class="fstat-no" title="function not covered" >function (item) {</span></span>
+<span class="cstat-no" title="statement not covered" >                    if (item.DamageTypeTID !== vm.damageObs.DamageTypeTID &amp;&amp; item.DamagePosition &amp;&amp; item.DamagePosition.Latitude &amp;&amp; item.DamagePosition.Longitude) {</span>
+<span class="cstat-no" title="statement not covered" >                        markers.push(L.marker(L.latLng(item.DamagePosition.Latitude, item.DamagePosition.Longitude), { icon: vm.damageMarker }));</span>
+                    }
+                });
+            }
+<span class="cstat-no" title="statement not covered" >            return markers;</span>
+        };
+&nbsp;
+<span class="cstat-no" title="statement not covered" >        vm.obsLocation = ObsLocation.get();</span>
+<span class="cstat-no" title="statement not covered" >        vm.fromPosition = vm.obsLocation ? L.latLng(vm.obsLocation.Latitude, vm.obsLocation.Longitude) : null;</span>
+<span class="cstat-no" title="statement not covered" >        vm.extraMarkers = vm._getExtraMarksers();</span>
+&nbsp;
 <span class="cstat-no" title="statement not covered" >        vm.startposition = vm._getStartPosition();</span>
 &nbsp;
 <span class="cstat-no" title="statement not covered" >        vm.save = <span class="fstat-no" title="function not covered" >function (pos) {          </span></span>
@@ -133,7 +199,7 @@
 </div><!-- /wrapper -->
 <div class='footer quiet pad2 space-top1 center small'>
   Code coverage
-  generated by <a href="http://istanbul-js.org/" target="_blank">istanbul</a> at Tue Jun 13 2017 11:07:55 GMT+0200 (W. Europe Daylight Time)
+  generated by <a href="http://istanbul-js.org/" target="_blank">istanbul</a> at Mon Jun 26 2017 12:28:20 GMT+0200 (W. Europe Daylight Time)
 </div>
 </div>
 <script src="../../prettify.js"></script>

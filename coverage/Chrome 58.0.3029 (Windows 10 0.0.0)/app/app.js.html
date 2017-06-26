@@ -20,14 +20,14 @@
     </h1>
     <div class='clearfix'>
       <div class='fl pad1y space-right2'>
-        <span class="strong">67.65% </span>
+        <span class="strong">57.58% </span>
         <span class="quiet">Statements</span>
-        <span class='fraction'>23/34</span>
+        <span class='fraction'>19/33</span>
       </div>
       <div class='fl pad1y space-right2'>
-        <span class="strong">64.29% </span>
+        <span class="strong">35.71% </span>
         <span class="quiet">Branches</span>
-        <span class='fraction'>9/14</span>
+        <span class='fraction'>5/14</span>
       </div>
       <div class='fl pad1y space-right2'>
         <span class="strong">57.14% </span>
@@ -35,9 +35,9 @@
         <span class='fraction'>4/7</span>
       </div>
       <div class='fl pad1y space-right2'>
-        <span class="strong">67.65% </span>
+        <span class="strong">57.58% </span>
         <span class="quiet">Lines</span>
-        <span class='fraction'>23/34</span>
+        <span class='fraction'>19/33</span>
       </div>
     </div>
   </div>
@@ -418,7 +418,11 @@
 373
 374
 375
-376</td><td class="line-coverage quiet"><span class="cline-any cline-yes">1×</span>
+376
+377
+378
+379
+380</td><td class="line-coverage quiet"><span class="cline-any cline-yes">1×</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1×</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -758,19 +762,17 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1×</span>
 <span class="cline-any cline-yes">55×</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">55×</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">55×</span>
-<span class="cline-any cline-yes">40×</span>
-<span class="cline-any cline-yes">40×</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">55×</span>
 <span class="cline-any cline-yes">55×</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -784,6 +786,12 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -840,6 +848,11 @@
                 templateUrl: 'app/map/mapstart.html',
                 controller: 'MapStartCtrl as vm'
             })
+            .state('login', {
+                url: '/login',
+                templateUrl: 'app/login/loginview.html',
+                controller: 'LoginViewCtrl as vm'
+            })
             .state('settings', {
                 url: '/settings',
                 templateUrl: 'app/settings/settingsview.html',
@@ -878,6 +891,12 @@
                 controller: 'ObservationListCtrl as vm'
             })
 &nbsp;
+            .state('userobservations', {
+                url: '/userobservations',
+                templateUrl: 'app/observations/user/userobservations.html',
+                controller: 'UserObservationsCtrl as vm'
+            })
+&nbsp;
             .state('confirmlocation', {
                 url: '/confirmlocation',
                 templateUrl: 'app/registration/location/confirmlocation.html',
@@ -891,6 +910,12 @@
                 controller: 'ConfirmTimeCtrl as vm'
             })
 &nbsp;
+            .state('setgroup', {
+                url: '/setgroup',
+                templateUrl: 'app/registration/group/group.html',
+                controller: 'SetGroupCtrl as vm'
+            })
+&nbsp;
             .state('newregistration', {
                 url: '/newregistration',
                 templateUrl: 'app/registration/registration.html',
@@ -901,6 +926,7 @@
                 url: '/registrationstatus',
                 templateUrl: 'app/registration/status/registrationstatus.html',
                 controller: 'RegistrationStatusCtrl as vm',
+                params: { observation: null },
                 cache: false
             })
 &nbsp;
@@ -1031,15 +1057,6 @@
             })
 &nbsp;
             //VANN
-            .state('waterdangerobs', {
-                //Faretegn
-                url: '/waterdangerobs',
-                templateUrl: 'app/water/waterregistration/waterdangerobs/waterdangerobs.html',
-                controller: 'WaterDangerObsCtrl as vm',
-                data: {
-                    registrationProp: 'DangerObs'
-                }
-            })
             .state('waterlevel', {
                 //Faretegn
                 url: '/waterlevel',
@@ -1047,15 +1064,6 @@
                 controller: 'WaterLevelCtrl as vm',
                 data: {
                     registrationProp: 'WaterLevel2'
-                }
-            })
-            .state('waterincident', {
-                //Faretegn
-                url: '/waterincident',
-                templateUrl: 'app/water/waterregistration/waterincident/waterincident.html',
-                controller: 'WaterIncidentCtrl as vm',
-                data: {
-                    registrationProp: 'Incident'
                 }
             })
 &nbsp;
@@ -1123,29 +1131,27 @@
                 templateUrl: <span class="fstat-no" title="function not covered" >function (stateParams) {</span>
 <span class="cstat-no" title="statement not covered" >                    return 'app/help/' + stateParams.page + '.html';</span>
                 },
-                controller: 'HelpCtrl as vm'
+                controller: 'HelpCtrl as vm',
+                data: { skipValidation: true }
             })
 &nbsp;
             .state('dynamichelp', {
                 url: '/dynamichelp/:registrationProp',
                 templateUrl: 'app/help/dynamichelp.html',
-                controller: 'HelpCtrl as vm'
+                controller: 'HelpCtrl as vm',
+                data: { skipValidation: true }
             });
-    };
+    }
 &nbsp;
     function setup($ionicPlatform, Utility, AppLogging, Registration, Observations, OfflineMap, $http, User, HelpTexts) {
         'ngInject';
 &nbsp;
         $ionicPlatform.ready(function () {
 &nbsp;
-            if (Utility.hasGoodNetwork() &amp;&amp; Utility.shouldUpdateKdvElements()) {
-                Utility.refreshKdvElements();
-                HelpTexts.updateHelpTexts();
-            }
+           
 &nbsp;
             // Hide the accessory bar by default (remove this to show the accessory bar above the keyboard
             // for form inputs)*/
-            AppLogging.debug('Ionic platform ready');
             <span class="missing-if-branch" title="if path not taken" >I</span>if (window.cordova &amp;&amp; <span class="branch-1 cbranch-no" title="branch not covered" >window.cordova.plugins.Keyboard)</span> {
 <span class="cstat-no" title="statement not covered" >                cordova.plugins.Keyboard.hideKeyboardAccessoryBar(false);</span>
 <span class="cstat-no" title="statement not covered" >                cordova.plugins.Keyboard.disableScroll(true);</span>
@@ -1159,6 +1165,12 @@
 <span class="cstat-no" title="statement not covered" >                Utility.configureRaven();</span>
 <span class="cstat-no" title="statement not covered" >                Registration.clearNewRegistrations();</span>
 <span class="cstat-no" title="statement not covered" >                Observations.removeOldObservationsFromPresistantStorage(); </span>//cleanup old observations on startup
+&nbsp;
+<span class="cstat-no" title="statement not covered" >                if (Utility.hasGoodNetwork() &amp;&amp; Utility.shouldUpdateKdvElements()) {</span>
+<span class="cstat-no" title="statement not covered" >                    Utility.refreshKdvElements();</span>
+<span class="cstat-no" title="statement not covered" >                    HelpTexts.updateHelpTexts();</span>
+                }              
+                
 <span class="cstat-no" title="statement not covered" >                OfflineMap.checkUncompleteDownloads(); </span>//Check if any uncomplete downloads and continue download progress
             });
         });
@@ -1174,7 +1186,7 @@
 </div><!-- /wrapper -->
 <div class='footer quiet pad2 space-top1 center small'>
   Code coverage
-  generated by <a href="http://istanbul-js.org/" target="_blank">istanbul</a> at Tue Jun 13 2017 11:07:55 GMT+0200 (W. Europe Daylight Time)
+  generated by <a href="http://istanbul-js.org/" target="_blank">istanbul</a> at Mon Jun 26 2017 12:28:20 GMT+0200 (W. Europe Daylight Time)
 </div>
 </div>
 <script src="../prettify.js"></script>

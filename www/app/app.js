@@ -345,14 +345,10 @@
 
         $ionicPlatform.ready(function () {
 
-            if (Utility.hasGoodNetwork() && Utility.shouldUpdateKdvElements()) {
-                Utility.refreshKdvElements();
-                HelpTexts.updateHelpTexts();
-            }
+           
 
             // Hide the accessory bar by default (remove this to show the accessory bar above the keyboard
             // for form inputs)*/
-            AppLogging.debug('Ionic platform ready');
             if (window.cordova && window.cordova.plugins.Keyboard) {
                 cordova.plugins.Keyboard.hideKeyboardAccessoryBar(false);
                 cordova.plugins.Keyboard.disableScroll(true);
@@ -366,6 +362,12 @@
                 Utility.configureRaven();
                 Registration.clearNewRegistrations();
                 Observations.removeOldObservationsFromPresistantStorage(); //cleanup old observations on startup
+
+                if (Utility.hasGoodNetwork() && Utility.shouldUpdateKdvElements()) {
+                    Utility.refreshKdvElements();
+                    HelpTexts.updateHelpTexts();
+                }              
+                
                 OfflineMap.checkUncompleteDownloads(); //Check if any uncomplete downloads and continue download progress
             });
         });

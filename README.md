@@ -72,11 +72,17 @@ Read more about installation and setup [here](https://taco.visualstudio.com/)
 ## How to Alfa and Beta-test the app before deploying to production
 
 ### Testing iOS devices
-* Alfa-testers are iTunes Connect users set up on the NVE iTunes account. These users is listed under iTunes Connect Users in TestFlight.
-* Beta testers is external tester that can be added directly to the "External Testers" group in TestFlight.
+* Alfa-testers are `iTunes Connect` users set up on the `NVE iTunes account`. These users is listed under `iTunes Connect Users` in `TestFlight`.
+* Beta testers is external tester that can be added directly to the `External Testers` group in `TestFlight`.
 * Please note that a new version that is uploaded to Beta program (External testers) needs to be reviewed before testing. This normally takes around 24 hours.
 
 ### Testing Android devices
 * Upload release APK to Alfa to start internal alfa-testing. Only users in test-users list is allowed to download alfa-version from play store.
-* To join the Beta program, any user that follows [this link](https://play.google.com/apps/testing/no.nlink.nve) can join the test program. The user will see "Beta tester" in google Play when installing the app.
+* To join the Beta program, any user that follows [this link](https://play.google.com/apps/testing/no.nlink.nve) can join the test program. The user will see `Beta tester` in `Google Play` when installing the app.
 
+## How to run unit tests
+* Unit tests are set up using [karma](https://karma-runner.github.io/1.0/index.html) and [jasmine](https://jasmine.github.io/).
+* Unit tests are located in the `\tests\unittests` folder.
+* Karma configuration is in `karma.conf.js`.
+* Run unit tests by staring gulp task `test`. Code coverage will be generated in the `coverage` folder.
+* Support for Appium tests is also added, but no tests are yet written. Read more [here](https://taco.visualstudio.com/en-us/docs/uitest-05-designing-tests/)

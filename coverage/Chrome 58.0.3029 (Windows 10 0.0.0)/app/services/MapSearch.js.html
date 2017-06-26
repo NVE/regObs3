@@ -1,0 +1,473 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <title>Code coverage report for app\services\MapSearch.js</title>
+    <meta charset="utf-8" />
+    <link rel="stylesheet" href="../../prettify.css" />
+    <link rel="stylesheet" href="../../base.css" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <style type='text/css'>
+        .coverage-summary .sorter {
+            background-image: url(../../sort-arrow-sprite.png);
+        }
+    </style>
+</head>
+<body>
+<div class='wrapper'>
+  <div class='pad1'>
+    <h1>
+      <a href="../../index.html">all files</a> / <a href="index.html">app/services/</a> MapSearch.js
+    </h1>
+    <div class='clearfix'>
+      <div class='fl pad1y space-right2'>
+        <span class="strong">2.08% </span>
+        <span class="quiet">Statements</span>
+        <span class='fraction'>1/48</span>
+      </div>
+      <div class='fl pad1y space-right2'>
+        <span class="strong">0% </span>
+        <span class="quiet">Branches</span>
+        <span class='fraction'>0/19</span>
+      </div>
+      <div class='fl pad1y space-right2'>
+        <span class="strong">0% </span>
+        <span class="quiet">Functions</span>
+        <span class='fraction'>0/12</span>
+      </div>
+      <div class='fl pad1y space-right2'>
+        <span class="strong">2.08% </span>
+        <span class="quiet">Lines</span>
+        <span class='fraction'>1/48</span>
+      </div>
+    </div>
+  </div>
+  <div class='status-line low'></div>
+<pre><table class="coverage">
+<tr><td class="line-count quiet">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31
+32
+33
+34
+35
+36
+37
+38
+39
+40
+41
+42
+43
+44
+45
+46
+47
+48
+49
+50
+51
+52
+53
+54
+55
+56
+57
+58
+59
+60
+61
+62
+63
+64
+65
+66
+67
+68
+69
+70
+71
+72
+73
+74
+75
+76
+77
+78
+79
+80
+81
+82
+83
+84
+85
+86
+87
+88
+89
+90
+91
+92
+93
+94
+95
+96
+97
+98
+99
+100
+101
+102
+103
+104
+105
+106
+107
+108
+109
+110
+111
+112
+113
+114
+115
+116
+117
+118
+119
+120
+121
+122
+123
+124
+125
+126
+127
+128
+129
+130
+131
+132
+133
+134
+135
+136
+137</td><td class="line-coverage quiet"><span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">﻿angular
+    .module('RegObs')
+    .factory('MapSearch', <span class="fstat-no" title="function not covered" >function ($rootScope, $http, AppLogging, $q, $ionicPopup, IonicClosePopupService) {</span>
+<span class="cstat-no" title="statement not covered" >        var service = this;</span>
+&nbsp;
+<span class="cstat-no" title="statement not covered" >        service._searchUrl = 'https://ws.geonorge.no/SKWS3Index/ssr/sok';</span>
+<span class="cstat-no" title="statement not covered" >        service._defaultMaxResult = 30;</span>
+<span class="cstat-no" title="statement not covered" >        service._defaultExactFirst = true;</span>
+<span class="cstat-no" title="statement not covered" >        service._searchBarVisisble = false;</span>
+&nbsp;
+        /**
+        * Is search bar visible?
+        * @returns {boolean} True if search bar is visisble
+        */
+<span class="cstat-no" title="statement not covered" >        service.isVisible = <span class="fstat-no" title="function not covered" >function () {</span></span>
+<span class="cstat-no" title="statement not covered" >            return service._searchBarVisisble;</span>
+        };
+&nbsp;
+        /**
+        * Show search bar
+        */
+<span class="cstat-no" title="statement not covered" >        service.showSearchBar = <span class="fstat-no" title="function not covered" >function () {</span></span>
+<span class="cstat-no" title="statement not covered" >            service._searchBarVisisble = true;</span>
+<span class="cstat-no" title="statement not covered" >            service.popup = $ionicPopup.show({ cssClass: 'search-bar-popup', template:'&lt;regobs-map-search-bar&gt;&lt;/regobs-map-search-bar&gt;'});</span>
+<span class="cstat-no" title="statement not covered" >            IonicClosePopupService.register(service.popup);</span>
+<span class="cstat-no" title="statement not covered" >            $rootScope.$broadcast('regobs:searchBarVisibleChange');</span>
+&nbsp;
+<span class="cstat-no" title="statement not covered" >            service.popup.then(service.hideSearchBar);</span>
+        };
+&nbsp;
+        /**
+        * Hide search bar
+        */
+<span class="cstat-no" title="statement not covered" >        service.hideSearchBar = <span class="fstat-no" title="function not covered" >function () {</span></span>
+<span class="cstat-no" title="statement not covered" >            service.cancelSearch();</span>
+<span class="cstat-no" title="statement not covered" >            service._searchBarVisisble = false;</span>
+<span class="cstat-no" title="statement not covered" >            if (service.popup) {</span>
+<span class="cstat-no" title="statement not covered" >                service.popup.close();</span>
+            }
+<span class="cstat-no" title="statement not covered" >            $rootScope.$broadcast('regobs:searchBarVisibleChange');</span>
+        };
+&nbsp;
+        /**
+        * Cancel current search
+        */
+<span class="cstat-no" title="statement not covered" >        service.cancelSearch = <span class="fstat-no" title="function not covered" >function () {</span></span>
+<span class="cstat-no" title="statement not covered" >            if (service._cancelPromise) {</span>
+<span class="cstat-no" title="statement not covered" >                service._cancelPromise.resolve();</span>
+            }
+        };
+&nbsp;
+&nbsp;
+        /**
+        * Search place by name
+        * Returns promise with array of search result
+        * @param {string} name Name to search for
+        * @param {number} maxResults Max number of results to return
+        * @param {boolean} exactFirst Return exact matches first
+        * @returns {promise} Search result promise
+        */
+<span class="cstat-no" title="statement not covered" >        service.search = <span class="fstat-no" title="function not covered" >function (name, maxResults, exactFirst) {</span></span>
+<span class="cstat-no" title="statement not covered" >            service.cancelSearch(); </span>//Cancel last search if still running
+<span class="cstat-no" title="statement not covered" >            service._cancelPromise = $q.defer();</span>
+&nbsp;
+<span class="cstat-no" title="statement not covered" >            return service._callSearch(name,</span>
+                maxResults === undefined ? service._defaultMaxResult : maxResults,
+                exactFirst === undefined ? service._defaultExactFirst : exactFirst,
+                service._cancelPromise.promise)
+                .then(service._processSearchResults);
+        };
+&nbsp;
+        /******************************************** Internal helper methods **************************************/
+&nbsp;
+        /**
+        * Remove duplicated from list
+        * @param {Array} inArray Array of objects
+        * @returns {Array} Array with duplicates on ssrId removed
+        */
+<span class="cstat-no" title="statement not covered" >        service._removeDuplicates = <span class="fstat-no" title="function not covered" >function (inArray) {</span></span>
+<span class="cstat-no" title="statement not covered" >            var arr = [];</span>
+<span class="cstat-no" title="statement not covered" >            if (angular.isArray(inArray)) {</span>
+<span class="cstat-no" title="statement not covered" >                inArray.forEach(<span class="fstat-no" title="function not covered" >function (place) {</span></span>
+<span class="cstat-no" title="statement not covered" >                    if (arr.filter(<span class="fstat-no" title="function not covered" >function (item) {</span></span>
+<span class="cstat-no" title="statement not covered" >                        return item.ssrId === place.ssrId;</span>
+                    }).length === 0) {
+<span class="cstat-no" title="statement not covered" >                        arr.push(place);</span>
+                    }
+                });
+            }
+<span class="cstat-no" title="statement not covered" >            return arr;</span>
+        };
+&nbsp;
+        /**
+        * Map kartverk item to generic search result item
+        * @param {{ssrId: number, aust: number, nord: number, stedsnavn: string, navnetype: string, kommunenavn: string, fylkesnavn: string, navnetype: string }} item kartverk item
+        * @returns {{id:number, name: string, description: string, type: string, latlng: L.LatLng}} Mapped item to more generic search result
+        */
+<span class="cstat-no" title="statement not covered" >        service._mapItem = <span class="fstat-no" title="function not covered" >function (item) {</span></span>
+<span class="cstat-no" title="statement not covered" >            var latlng = (L.Projection.Mercator.unproject({ x: item.aust, y: item.nord }));</span>
+<span class="cstat-no" title="statement not covered" >            return { id: item.ssrId, name: item.stedsnavn, description: item.navnetype + ', ' + item.kommunenavn + ' (' + item.fylkesnavn +')', type: item.navnetype, latlng: latlng };</span>
+        };
+&nbsp;
+        /**
+        * Process service call result
+        * @param {Array} result Search result from service
+        * @returns {Array} Processed result
+        */
+<span class="cstat-no" title="statement not covered" >        service._processSearchResults = <span class="fstat-no" title="function not covered" >function (result) {</span></span>
+<span class="cstat-no" title="statement not covered" >            if (result &amp;&amp; result.data &amp;&amp; result.data.stedsnavn) {</span>
+<span class="cstat-no" title="statement not covered" >                if (!angular.isArray(result.data.stedsnavn)) {</span>
+<span class="cstat-no" title="statement not covered" >                    result.data.stedsnavn = [result.data.stedsnavn];</span>
+                }
+<span class="cstat-no" title="statement not covered" >                var arr = service._removeDuplicates(result.data.stedsnavn);</span>
+<span class="cstat-no" title="statement not covered" >                return arr.map(service._mapItem);</span>
+            } else {
+<span class="cstat-no" title="statement not covered" >                return [];</span>
+            }
+        };
+&nbsp;
+        /**
+        * Internal http call service
+        * @param {string} name Name of place to search for
+        * @param {number} maxResults Max items to return
+        * @param {boolean} exactFirst Exact results first
+        * @param {promise} timeout Timout promise
+        * @returns {promise} Promise http call
+        */
+<span class="cstat-no" title="statement not covered" >        service._callSearch = <span class="fstat-no" title="function not covered" >function (name, maxResults, exactFirst, timeout) {</span></span>
+<span class="cstat-no" title="statement not covered" >            return $http.get(service._searchUrl + '?navn=' + name + '*&amp;antPerSide=' + maxResults + '&amp;eksakteForst=' + exactFirst + '&amp;epsgKode=3395',</span>
+                { timeout: timeout });
+        };
+&nbsp;
+        /******************************************** End Internal helper methods **************************************/
+&nbsp;
+<span class="cstat-no" title="statement not covered" >        return service;</span>
+&nbsp;
+    });</pre></td></tr>
+</table></pre>
+<div class='push'></div><!-- for sticky footer -->
+</div><!-- /wrapper -->
+<div class='footer quiet pad2 space-top1 center small'>
+  Code coverage
+  generated by <a href="http://istanbul-js.org/" target="_blank">istanbul</a> at Mon Jun 26 2017 12:28:20 GMT+0200 (W. Europe Daylight Time)
+</div>
+</div>
+<script src="../../prettify.js"></script>
+<script>
+window.onload = function () {
+        if (typeof prettyPrint === 'function') {
+            prettyPrint();
+        }
+};
+</script>
+<script src="../../sorter.js"></script>
+</body>
+</html>
