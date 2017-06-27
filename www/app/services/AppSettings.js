@@ -211,6 +211,7 @@
             var settingsKey = 'showObservationsDaysBack' + currentAppMode;
             settings.data[settingsKey] = value;
             settings.save();
+            $rootScope.$broadcast('$regobs:viewObservationsDaysBackChanged', value);
         };
 
 

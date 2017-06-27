@@ -8,16 +8,15 @@
             userMarker, //Leaflet marker for user position
             tiles = []; //Map tiles      
 
-        service._isInitialized = false; //Is map initialized. Map should allways be initialized on startup, else you will get NotInitialized error for alot of methods
         service._isProgramaticZoom = false; //Is currently programatic zoom
         service._zoomToViewOnFirstLocation = 14; //Zoom to this level when first location is found
         service._selectedItem = null; //Map selected item, this could be observations, nearby places or location marker
         service._defaultCenter = [62.5, 10]; //default map center when no observation or user location
         service._followMode = true; //Follow user position, or has user manually dragged or zoomed map?
-        service._lastViewBounds = null;
-        service._offlinemaps = [];
-        service._active = false;
-        service._listeners = [];
+        service._lastViewBounds = null; //Map last view bounds
+        service._offlinemaps = []; //Array of offline maps (red lines)
+        service._active = false; //Is map active?
+        service._listeners = []; //Map event listeners
 
         /**
          * Set selected item
@@ -221,6 +220,9 @@
 
         };
 
+        /**
+        * @returns {boolean} True when map is centered to user position when user position updates
+        */
         service.getFollowMode = function () {
             return service._followMode;
         };
@@ -285,8 +287,14 @@
             return Registration.isEmpty() || !ObsLocation.isSet();
         };
 
+        /**
+        * Update latest view bounds to current map bounds
+        * @returns {void}
+        */
         service._updateViewBounds = function () {
-            service._lastViewBounds = map.getBounds();
+            if(map){
+                service._lastViewBounds = map.getBounds();
+            }
         };
 
 
@@ -354,6 +362,10 @@
                 service.refresh();
             }));
 
+            service._listeners.push($rootScope.$on('$regobs:viewObservationsDaysBackChanged', function () {
+                service.updateObservationsInMap();
+            }));
+
             service._listeners.push($rootScope.$on('$regObs:registrationReset', function () {
                 $timeout(function () {
                     service.clearSelectedMarkers();
@@ -363,8 +375,6 @@
             service._listeners.push($rootScope.$on('$regObs:observationsUpdated', function () {
                 service.refresh();
             }));
-
-            service._isInitialized = true; //map is created!
 
             service._updateViewBounds();
             service.refresh();
@@ -378,6 +388,10 @@
             return map;
         };
 
+        /**
+        * Reset and destroy map
+        * @returns {void}
+        */
         service.reset = function () {
             service._listeners.forEach(function (item) {
                 item(); //unregister listener
@@ -390,7 +404,6 @@
                 map.remove();
                 map = undefined;
             }
-            service._isInitialized = false;
         };
 
         /**
@@ -401,6 +414,7 @@
             service._unselectAllMarkers();
             service._setSelectedItem(null);
         };
+
 
         /**
          * Set view and zoom to level
@@ -481,6 +495,11 @@
             }
         };
 
+        /**
+        * Get search radus for current map bounds
+        * @param {L.Map} map Current map to compute radius for
+        * @returns {number} radius
+        */
         service.getSearchRadius = function (map) {
             var bounds = map.getBounds();
             var radius = Utility.getRadiusFromBounds(bounds);
@@ -497,30 +516,22 @@
          * @returns {promise} Download observations promise 
          */
         service.updateObservationsInMap = function () {
-            if (!map) throw new Error('Map not initialized!');
+            if (map) {
+                var center = map.getCenter();
+                var radius = service.getSearchRadius(map);
+                var geoHazardTid = Utility.getCurrentGeoHazardTid();
 
-            var center = map.getCenter();
-            var radius = service.getSearchRadius(map);
-            var geoHazardTid = Utility.getCurrentGeoHazardTid();
-
-            service.clearSelectedMarkers();
-            var workFunc = function (onProgress, cancel) {
-                return Observations.updateObservationsWithinRadius(center.lat,
-                    center.lng,
-                    radius,
-                    geoHazardTid,
-                    onProgress,
-                    cancel);
-            };
-
-            ////Turn on observations and nearby places when updated from map (youtrack: rOa-40)
-            //if (!AppSettings.data.showObservations || !AppSettings.data.showPreviouslyUsedPlaces) {
-            //    AppSettings.data.showObservations = true;
-            //    AppSettings.data.showPreviouslyUsedPlaces = true;
-            //    AppSettings.save();
-            //}
-
-            return RegobsPopup.downloadProgress('UPDATE_MAP_OBSERVATIONS', workFunc, { longTimoutMessageDelay: 20, closeOnComplete: true });
+                service.clearSelectedMarkers();
+                var workFunc = function (onProgress, cancel) {
+                    return Observations.updateObservationsWithinRadius(center.lat,
+                        center.lng,
+                        radius,
+                        geoHazardTid,
+                        onProgress,
+                        cancel);
+                };
+                return RegobsPopup.downloadProgress('UPDATE_MAP_OBSERVATIONS', workFunc, { longTimoutMessageDelay: 20, closeOnComplete: true });
+            }
         };
 
         /**
@@ -537,6 +548,10 @@
             return false;
         };
 
+        /**
+        * Get last view bounds
+        * @returns {L.LatLngBounds}
+        */
         service.getLastViewBounds = function () {
             return service._lastViewBounds;
         };
@@ -573,12 +588,21 @@
         };
 
 
+        /**
+        * Set offline are bounds
+        * @param {Array} offlineMapsBoundsArray Array of offline map bounds
+        * @returns {void}
+        */
         service.setOfflineAreaBounds = function (offlineMapsBoundsArray) {
             if (!angular.isArray(offlineMapsBoundsArray)) throw Error('offlineMapsBoundsArray must be an array!');
             service._offlinemaps = offlineMapsBoundsArray;
             service._redrawOfflineMapLines();
         };
 
+        /**
+        * Redraw offline map bounds (red lines)
+        * @returns {void}
+        */
         service._redrawOfflineMapLines = function () {
             if (layerGroups.offlinemaps) {
                 layerGroups.offlinemaps.clearLayers();
@@ -647,6 +671,10 @@
             service._active = false;
         };
 
+        /**
+        * Is main map page visible?
+        * @returns {boolean} True if map page is visisble
+        */
         service._isMapVisisble = function () {
             return $state.current.name === 'start';
         };
