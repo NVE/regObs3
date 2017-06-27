@@ -1,4 +1,4 @@
-<ion-view view-title="Fritekst">
+<ion-view view-title="{{'GENERAL_OBS'|translate}}">
     <ion-content class="has-footer">
         <ion-list>
             <regobs-comment
@@ -7,7 +7,7 @@
             ></regobs-comment>
         </ion-list>
         <regobs-image-list></regobs-image-list>
-        <button type="button" ui-sref="help({page:'generalobservation'})" class="button button-positive button-block button-clear">
+        <button type="button" ui-sref="dynamichelp({registrationProp:'GeneralObservation'})" class="button button-positive button-block button-clear">
             {{'HELP'|translate}}
         </button>
     </ion-content>

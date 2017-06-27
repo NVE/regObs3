@@ -17,16 +17,6 @@
         expect(error.message).toEqual("Could not create Observation. Invalid json!");
     }));
 
-    it("test Observation: json parse validates has RegId", inject(function (Observation) {
-        var error;
-        try {
-            Observation.fromJson({});
-        } catch (e) {
-            error = e;
-        }
-        expect(error.message).toEqual("Could not create Observation. Invalid json!");
-    }));
-
     it("test Observation: joson parse RegId correct", inject(function (Observation) {
         var obs = Observation.fromJson(testJson);
         expect(obs.RegId).toEqual(103789);

@@ -1,10 +1,10 @@
 angular
     .module('RegObs')
-    .factory('ObsLocation', function ($http, $ionicPlatform, $cordovaGeolocation, AppSettings, LocalStorage, AppLogging, $rootScope, UserLocation) {
+    .factory('ObsLocation', function ($http, $ionicPlatform, $cordovaGeolocation, AppSettings, LocalStorage, AppLogging, $rootScope, UserLocation, Utility) {
         var ObsLocation = this;
         var storageKey = 'regobsLocation';
 
-        function init() {
+        ObsLocation.init = function() {
             ObsLocation.fetching = false;
             ObsLocation.data = LocalStorage.getObject(storageKey);
             ObsLocation.source = {
@@ -26,6 +26,29 @@ angular
         ObsLocation.remove = function () {
             ObsLocation.data = {};
             save();
+        };
+
+        ObsLocation.getDescription = function () {
+            if (ObsLocation.isSet()) {
+                if (ObsLocation.data.ObsLocationId) {
+                    return ObsLocation.data.Name;
+                }
+                if (ObsLocation.data.place) {
+                    var arr = [];
+                    if (ObsLocation.data.place.Navn) {
+                        arr.push(ObsLocation.data.place.Navn);
+                    }
+                    if (ObsLocation.data.place.Fylke) {
+                        arr.push(ObsLocation.data.place.Fylke);
+                    }
+                    return arr.join(' / ');
+                }
+                if (ObsLocation.data.Latitude && ObsLocation.data.Longitude) {
+                    //return Utility.ddToDms(ObsLocation.data.Latitude, ObsLocation.data.Longitude);
+                    return Utility.formatLatLng(ObsLocation.data.Latitude, ObsLocation.data.Longitude);
+                }
+            }
+            return 'UNKNOWN_POSITION';
         };
 
         ObsLocation.get = function () {
@@ -79,7 +102,8 @@ angular
             $http.get(AppSettings.getEndPoints().getLocationName, {
                 params: {
                     latitude: loc.Latitude,
-                    longitude: loc.Longitude
+                    longitude: loc.Longitude,
+                    geoHazardId: Utility.getCurrentGeoHazardTid()
                 },
                 timeout: AppSettings.httpConfig.timeout
             }).then(function (response) {
@@ -94,7 +118,7 @@ angular
             $rootScope.$broadcast('$regObs:obsLocationSaved');
         }
 
-        init();
+        ObsLocation.init();
 
         return ObsLocation;
     });

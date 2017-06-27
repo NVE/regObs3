@@ -27,7 +27,7 @@
             storageKey, 'data', angular.copy(defaultModel)
         );
 
-        Trip._getTripLocation = function() {
+        Trip._getTripLocation = function () {
             if (ObsLocation.isSet()) {
                 return {
                     latitude: ObsLocation.data.Latitude,
@@ -39,17 +39,17 @@
             return null;
         };
 
-        Trip.canStart = function() {
+        Trip.canStart = function () {
             return AppSettings.getAppMode() === 'snow' && !Trip.model.started && !User.getUser().anonymous;
         };
 
 
-        Trip.start = function (type, tripId, expectedMin, comment) {
+        Trip.start = function (type, tripId, expectedMin, comment, cancelPromise) {
             if (User.getUser().anonymous) {
-                return RegobsPopup.alert('Ikke innlogget', 'Vennligst logg inn for å melde tur.');
+                return RegobsPopup.alert('NOT_LOGGED_IN', 'NOT_LOGGED_IN_TRIP_MESSAGE');
             }
             if (!(tripId && expectedMin)) {
-                return RegobsPopup.alert('Vennligst fyll ut felter', 'Både turtype og forventet klokkeslett for innsending av observasjoner må være satt for å melde tur.');
+                return RegobsPopup.alert('PLEASE_FILL_FORM', 'PLEASE_FILL_FORM_MESSAGE');
             }
             var loc = Trip._getTripLocation();
             if (loc) {
@@ -67,41 +67,36 @@
                 };
                 save();
 
+                var settings = angular.copy(AppSettings.httpConfig);
+                if (cancelPromise) {
+                    settings.timeout = cancelPromise.promise;
+                }
 
-                RegobsPopup.confirm('Bekreft innsending', 'Vil du melde inn denne turen?')
-                    .then(function (confirm) {
-                        if (confirm) {
-                            Trip.sending = true;
-                            $rootScope.$broadcast('$regobs.tripSending');
-                            return $http.post(AppSettings.getEndPoints().trip, Trip.model.data, AppSettings.httpConfig);
-                        }
-                    })
-                    .then(function (http) {
-                        if (http) {
-                            
+                Trip.sending = true;
+                $rootScope.$broadcast('$regobs.tripSending');
+                return $http.post(AppSettings.getEndPoints().trip, Trip.model.data, settings)
+                    .then(function () {
                             Trip.model.started = true;
                             save();
                             $rootScope.$broadcast('$regobs.tripStarted');
-                            
-                            
-                        }
                     })
-                    .catch(function () {
-                        RegobsPopup.alert('Feilmelding', 'Klarte ikke starte tur.');
+                    .catch(function (httpResponse) {
+                        if (httpResponse.status !== 0) {
+                            RegobsPopup.alert('ERROR', 'TRIP_ERROR_MESSAGE');
+                        }
                         Trip.model.started = false;
                         save();
                     })
                     .finally(function () {
                         Trip.sending = false;
                     });
-
             } else {
-                RegobsPopup.alert('Posisjon ikke satt', 'Posisjon må være satt for å starte tur');
+                return RegobsPopup.alert('NO_POSITION', 'NO_TRIP_POSITION');
             }
         };
 
         Trip.stop = function () {
-            return RegobsPopup.confirm('Bekreft innsending', 'Vil du avslutte denne turen?')
+            return RegobsPopup.confirm('CONFIRM_SEND', 'STOP_TRIP')
                 .then(function (confirm) {
                     if (confirm) {
                         Trip.sending = true;
@@ -112,11 +107,11 @@
                 .then(function (httpPromise) {
                     if (httpPromise) {
                         stop();
-                        return RegobsPopup.alert('Tur stoppet', 'Tur avsluttet!');
+                        return RegobsPopup.alert('TRIP_STOPPED', 'TRIP_STOPPED_TEXT');
                     }
                 })
                 .catch(function () {
-                    RegobsPopup.alert('Feilmelding', 'Klarte ikke avslutte tur, dette kan skyldes at den allerede har blitt avsluttet på nett, eller på serveren.');
+                    RegobsPopup.alert('ERROR', 'STOP_TRIP_ERROR_TEXT');
                     stop();
                 })
                 .finally(function () {
@@ -134,7 +129,7 @@
 
             if (Trip.model.time && now.getDay() !== modelTime.getDay()) {
                 stop();
-                return RegobsPopup.alert('Tur stoppet', 'Gårsdagens tur har automatisk blitt avsluttet.');
+                return RegobsPopup.alert('TRIP_STOPPED', 'TRIP_AUTO_STOPPED');
             }
         };
 

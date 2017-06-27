@@ -1,51 +1,59 @@
 angular
     .module('RegObs')
-    .factory('RegobsPopup', function ($ionicPopup, $rootScope, $q, $pbService, $timeout, AppLogging, Translate, moment, $interval) {
+    .factory('RegobsPopup', function ($ionicPopup, $rootScope, $q, $pbService, $timeout, AppLogging, Translate, $translate, moment, $interval) {
         var RegobsPopup = this;
 
         RegobsPopup.delete = function (title, text, confirmText) {
-            return $ionicPopup.confirm({
-                title: title,
-                template: text,
-                buttons: [
-                    { text: 'Avbryt' },
-                    {
-                        text: confirmText || 'Slett',
-                        type: 'button-assertive',
-                        onTap: function (e) {
-                            // Returning a value will cause the promise to resolve with the given value.
-                            return true;
+            return $translate(['CANCEL', 'DELETE', title, text, confirmText]).then(function (translations) {
+                return $ionicPopup.confirm({
+                    title: translations[title] || title,
+                    template: translations[text] || text,
+                    buttons: [
+                        { text: translations['CANCEL'] },
+                        {
+                            text: translations[confirmText] || confirmText || translations['DELETE'],
+                            type: 'button-assertive',
+                            onTap: function (e) {
+                                // Returning a value will cause the promise to resolve with the given value.
+                                return true;
+                            }
                         }
-                    }
-                ]
-            });
+                    ]
+                });
+            });   
         };
 
         RegobsPopup.confirm = function (title, text, confirmText, cancelText, cancelType) {
-            return $ionicPopup.confirm({
-                title: title,
-                template: text,
-                buttons: [
-                    {
-                        text: cancelText || 'Avbryt',
-                        type: cancelType || ''
-                    },
-                    {
-                        text: confirmText || 'OK',
-                        type: 'button-positive',
-                        onTap: function (e) {
-                            // Returning a value will cause the promise to resolve with the given value.
-                            return true;
+            var _confirmText = confirmText || 'OK';
+            var _cancelText = cancelText || 'CANCEL';
+            return $translate([title, text, _confirmText, _cancelText]).then(function (translations) {
+                return $ionicPopup.confirm({
+                    title: translations[title],
+                    template: translations[text],
+                    buttons: [
+                        {
+                            text: translations[_cancelText],
+                            type: cancelType || ''
+                        },
+                        {
+                            text: translations[_confirmText],
+                            type: 'button-positive',
+                            onTap: function (e) {
+                                // Returning a value will cause the promise to resolve with the given value.
+                                return true;
+                            }
                         }
-                    }
-                ]
+                    ]
+                });
             });
         };
 
         RegobsPopup.alert = function (title, text) {
-            return $ionicPopup.alert({
-                title: title,
-                template: text
+            return $translate([title, text]).then(function (translations) {
+                return $ionicPopup.alert({
+                    title: translations[title] || title,
+                    template: translations[text] || text
+                });
             });
         };
 
@@ -75,13 +83,13 @@ angular
                                     circle.path.setAttribute('stroke-width', state.width);
                                     var text =
                                         '<i class="icon ion-ios-cloud-download"></i><div class="downloadprogress-percent">' +
-                                            scope.downloadStatus.getPercentFormated() +
-                                            '</div><div class="downloadprogress-value">(' +
-                                            scope.downloadStatus.getDone() +
-                                            '/' +
-                                            scope.downloadStatus.getTotal() +
-                                            ')' +
-                                            '</div>';
+                                        scope.downloadStatus.getPercentFormated() +
+                                        '</div><div class="downloadprogress-value">(' +
+                                        scope.downloadStatus.getDone() +
+                                        '/' +
+                                        scope.downloadStatus.getTotal() +
+                                        ')' +
+                                        '</div>';
                                     circle.setText(text);
                                 }
                             }
@@ -95,11 +103,11 @@ angular
 
                         var checkProgress = null;
                         if (result.longTimoutMessageDelay > 0) {
-                            checkProgress = $interval(function() {
-                                    var diff = moment().diff(lastProgress, 'seconds');
-                                    AppLogging.log('progressdiff: ' + diff);
-                                    scope.showLongDownloadMessage = diff > result.longTimoutMessageDelay;
-                                }, 1000);
+                            checkProgress = $interval(function () {
+                                var diff = moment().diff(lastProgress, 'seconds');
+                                AppLogging.log('progressdiff: ' + diff);
+                                scope.showLongDownloadMessage = diff > result.longTimoutMessageDelay;
+                            }, 1000);
                         }
 
                         scope.progressOptions = result.progressOptions;

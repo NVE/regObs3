@@ -1,0 +1,85 @@
+﻿.damage-details-wrapper {
+    position: relative;
+    top: -9px;
+    margin-bottom: -12px;
+    padding-left: 5px;
+    padding-right: 5px;
+    padding-top: 10px;
+    padding-bottom: 10px;
+}
+
+.damage-details .item {
+    border: none;
+    margin-bottom: 0px;
+    margin-top: 0px;
+    background: none;
+}
+
+.damage-details {
+    border: 1px solid #ddd;
+    margin: -1px;
+    background-color: #fff;
+    position: relative;
+}
+
+.damage-detail-arrow-box {
+    border: 2px solid #329CCA;
+    padding: 2px;
+    background-color: rgba(50,156,202,0.07);
+}
+
+.damage-detail-arrow {
+    width: 15px;
+    height: 15px;
+    border: 2px solid #329CCA;
+    -webkit-transform: rotate(45deg);
+    -moz-transform: rotate(45deg);
+    -o-transform: rotate(45deg);
+    -ms-transform: rotate(45deg);
+    transform: rotate(45deg);
+    position: absolute;
+    top: 3px;
+    left: 19px;
+    z-index: 10;
+}
+
+.damage-detail-cover {
+    top: 6px;
+    left: 19px;
+    width: 15px;
+    height: 15px;
+    border: 2px solid transparent;
+    position: absolute;
+    background-color: #F1F8FB;
+    z-index: 11;
+    -webkit-transform: rotate(45deg);
+    -moz-transform: rotate(45deg);
+    -o-transform: rotate(45deg);
+    -ms-transform: rotate(45deg);
+    transform: rotate(45deg);
+}
+
+.damage-detail-arrow-box .item-icon-left.item-stacked-label .icon {
+    display: inline-block;
+    position: relative;
+    left: -5px;
+    top: -5px;
+    padding-right: 2px;
+}
+
+.damage-detail-arrow-box .item-icon-left.item-stacked-label {
+    padding-bottom: 6px;
+}
+
+.input-stacked-icon-wrapper {
+    padding-top: 2px;
+}
+
+.damage-detail-arrow-box regobs-comment textarea {
+    width: 100%;
+}
+
+
+.damage-detail-arrow-box .item:not(:first-child) {
+    border-top: 1px solid #ddd;
+}

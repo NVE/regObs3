@@ -1,6 +1,6 @@
 angular
     .module('RegObs')
-    .controller('SettingsViewCtrl', function ($scope, $timeout, $rootScope, $http, $state, $cordovaInAppBrowser, $ionicLoading, AppSettings, LocalStorage, ObsLocation, Registration, User, Utility, HeaderColor, RegobsPopup, AppLogging, PresistentStorage, OfflineMap, Map, $ionicScrollDelegate) {
+    .controller('SettingsViewCtrl', function ($scope, $timeout, $rootScope, $http, $state, $cordovaInAppBrowser, $ionicLoading, AppSettings, LocalStorage, ObsLocation, Registration, User, Utility, HeaderColor, RegobsPopup, AppLogging, PresistentStorage, OfflineMap, Map, $ionicScrollDelegate, HelpTexts) {
         var vm = this;
 
         vm.settings = AppSettings;
@@ -19,11 +19,9 @@ angular
 
         vm.kdvUpdated = kdvUpdatedTime(null, LocalStorage.get('kdvUpdated'));
 
-        $http.get('app/json/version.json')
-            .then(function (res) {
-                AppLogging.log(res);
-                vm.version = res.data;
-            });
+        Utility.getVersion().then(function (result) {
+            vm.version = result;
+        });
 
         $scope.$on('kdvUpdated', kdvUpdatedTime);
 
@@ -39,13 +37,16 @@ angular
         }
 
         vm.logIn = function () {
-            User.logIn(vm.username, vm.password);
+            User.logIn(vm.username, vm.password).then(function () {
+                Utility.configureRaven();
+            });
         };
 
         vm.logOut = function () {
             vm.username = '';
             vm.password = '';
-            User.logOut();
+            User.logOut();    
+            Utility.configureRaven();
             //vm.user = User.getUser();
         };
 
@@ -78,7 +79,9 @@ angular
                         .then(function () {
                             AppSettings.load();
                             User.load();
+                            Registration.load();
                             HeaderColor.init();
+                            ObsLocation.init();
                             Map.refresh();
                             vm.username = '';
                             vm.password = '';
@@ -94,6 +97,8 @@ angular
             vm.refreshingKdv = true;
             Utility.refreshKdvElements()
                 .then(function () {
+                    return HelpTexts.updateHelpTexts();
+                }).then(function () {
                     RegobsPopup.alert('Suksess!', 'Nedtrekkslister har blitt oppdatert.');
                 })
                 .catch(function () {
@@ -112,6 +117,7 @@ angular
             AppSettings.save();
             HeaderColor.init();
             Map.refresh();
+            Utility.configureRaven();
             $rootScope.$broadcast('$regObs:appEnvChanged');
         };
 

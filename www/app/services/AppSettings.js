@@ -21,20 +21,22 @@
             maps: [
                 { geoHazardTid: 10, tiles: [{ name: 'steepness', opacity: 0.5, visible: true }] },
                 { geoHazardTid: 70, tiles: [{ name: 'ice', opacity: 0.5, visible: true }] },
-                { geoHazardTid: 60, tiles: [{ name: 'flood', opacity: 0.5, visible: true }] }
+                { geoHazardTid: 60, tiles: [{ name: 'flood', opacity: 0.5, visible: true }] },
+                //{ geoHazardTid: 20, tiles: [{ name: 'quickclay', opacity: 0.5, visible: true }] }
             ],
             showObservations: true
         };
 
         var baseUrls = {
-            'regObs': 'https://api.nve.no/hydrology/regobs/webapi_v3.1.0',
-            'demo regObs': 'https://api.nve.no/hydrology/demo/regobs/webapi',
+            'regObs': 'https://api.nve.no/hydrology/regobs/webapi_v3.2.0',
+            'demo regObs': 'https://api.nve.no/hydrology/demo/regobs/webapi_v3.2/',           
             'test regObs': 'http://tst-h-web03.nve.no/regobswebapi'
+            //'test regObs': 'http://localhost:40001'
         };
 
         var serviceUrls = {
             'regObs': 'https://api.nve.no/hydrology/regobs/v3.1.0/',
-            'demo regObs' : 'http://stg-h-web03.nve.no/RegObsServices/',
+            'demo regObs': 'http://stg-h-web03.nve.no/RegObsServices/',
             'test regObs': 'http://tst-h-web03.nve.no/regobsservices_test/'
         };
 
@@ -43,7 +45,7 @@
                 .then(function(response) {
                     var headers = {
                         regObs_apptoken: response.data.apiKey,
-                        ApiJsonVersion: '3.1.0'
+                        ApiJsonVersion: '3.2.0'
                     };
 
                     settings.httpConfig = {
@@ -65,12 +67,14 @@
         settings.mapFolder = 'maps';
         settings.debugTiles = false; //Turn on to debug offline/fallback/tiles
         settings.maxObservationsToFetch = 1000; //Max observations to fetch from webservice
+        settings.imageSize = 2400;
 
         settings.tiles = [
             { name: 'topo', description: 'TOPO_MAP_DESCRIPTION', maxDownloadLimit: 1500, avgTileSize: 17248, url: 'http://opencache.statkart.no/gatekeeper/gk/gk.open_gmaps?layers=matrikkel_bakgrunn&zoom={z}&x={x}&y={y}&format=image/jpeg', embeddedUrl: 'map/topo_{z}_{x}_{y}.jpg', embeddedMaxZoom: 9 },
             { name: 'steepness', description: 'STEEPNESS_MAP_DESCRIPTION', labelTemplate: 'app/map/tilelabels/tilelabelsteepness.html', geoHazardTid: 10, avgTileSize: 4247, url: 'http://gis3.nve.no/arcgis/rest/services/wmts/Bratthet/MapServer/tile/{z}/{y}/{x}' },
             { name: 'ice', description: 'WEAKENED_ICE_MAP_DESCRIPTION', labelTemplate: 'app/map/tilelabels/tilelabelice.html', geoHazardTid: 70, avgTileSize: 1477, url: 'http://gis3.nve.no/arcgis/rest/services/wmts/SvekketIs/MapServer/tile/{z}/{y}/{x}' },
-            { name: 'flood', description: 'FLOOD_ZONES_MAP_DESCRIPTION', labelTemplate: 'app/map/tilelabels/tilelabelflood.html', geoHazardTid: 60, avgTileSize: 1230, url: 'http://gis3.nve.no/arcgis/rest/services/wmts/Flomsoner1/MapServer/tile/{z}/{y}/{x}' }
+            { name: 'flood', description: 'FLOOD_ZONES_MAP_DESCRIPTION', labelTemplate: 'app/map/tilelabels/tilelabelflood.html', geoHazardTid: 60, avgTileSize: 1230, url: 'http://gis3.nve.no/arcgis/rest/services/wmts/Flomsoner1/MapServer/tile/{z}/{y}/{x}' },
+            //{ name: 'quickclay', description: 'CLAY_ZONES_MAP_DESCRIPTION', labelTemplate: 'app/map/tilelabels/tilelabelclay.html', geoHazardTid: 20, avgTileSize: 1230, url: 'http://gis2.nve.no/arcgis/rest/services/wmts/Kvikkleire_Jordskred/MapServer/tile/{z}/{y}/{x}' }
         ];
 
         settings.mapTileUrl = function () {
@@ -123,12 +127,15 @@
                 getObservationsWithinRadius: baseUrls[settings.data.env] + '/Observations/GetObservationsWithinRadius',
                 getLocationsWithinRadius: baseUrls[settings.data.env] + '/Location/WithinRadius',
                 getRegistrationsWithinRadius: baseUrls[settings.data.env] + '/Search/WithinRadius', //POST json {"GeoHazards": [10],"LangKey" : 1,"FromDate": "2013-01-03","ToDate": "2017-01-03","Latitude": 59.927032,"Longtitude": 10.710034,"Radius": 40000,"ReturnCount": 100}
-                getDropdowns: baseUrls[settings.data.env] + '/kdvelements',
+                getDropdowns: baseUrls[settings.data.env] + '/kdvelements/getkdvs', //?langkey=1
                 getLocationName: baseUrls[settings.data.env] + '/Location/GetName', //?latitude=11.11&longitude=11.11&geoHazardId=15
-                postRegistration: baseUrls[settings.data.env] + '/registration', //Headers: regObs_apptoken, ApiJsonVersion
-                getRegistration: baseUrls[settings.data.env] + '/search/avalanche',
+                postRegistration: baseUrls[settings.data.env] + '/Registration/Insert', //Headers: regObs_apptoken, ApiJsonVersion
+                //getRegistration: baseUrls[settings.data.env] + '/search/avalanche',
                 trip: baseUrls[settings.data.env] + '/trip', //POST= Start, PUT= Stop(object with DeviceGuid), Headers: regObs_apptoken, ApiJsonVersion
-                services: serviceUrls[settings.data.env]
+                services: serviceUrls[settings.data.env],
+                getLog: baseUrls[settings.data.env] + '/Log', // /{id}
+                search: baseUrls[settings.data.env] + '/Search/All',
+                getHelpTexts: baseUrls[settings.data.env] +'/Helptext'
             };
         };
 
@@ -164,7 +171,6 @@
 
         settings.getWebImageUrl = function (id) {
             return settings.getEndPoints().services + 'Image/medium/' + id;
-            //return settings.getWebRoot() + 'Picture/image/' + id;
         };
 
         settings.imageRootFolder = 'picture';
@@ -215,8 +221,7 @@
         settings.getEnvClass = function () {
             return settings.data.env === 'regObs' ? 'bar-dark' : (settings.data.env === 'demo regObs' ? 'bar-assertive' : 'bar-calm');
         };
-
-
+               
         settings.getDaysBackSettings = function () {
             return {
                 snow: [{ name: 'TODAYS_OBSERATIONS', value: 0 },{ name: 'ONE_DAY_BACK', value: 1 }, { name: 'TWO_DAYS_BACK', value: 2 }, { name: 'THREE_DAYS_BACK', value: 3, default: true }, { name: 'ONE_WEEK_BACK', value: 7 }, { name: 'TWOO_WEEKS_BACK', value: 14 }],

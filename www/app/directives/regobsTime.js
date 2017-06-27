@@ -1,4 +1,4 @@
-angular
+﻿angular
     .module('RegObs')
     .directive('regobsTime', function ($timeout, AppLogging) {
         function link(scope, elem, attrs, formCtrl) {
@@ -44,13 +44,13 @@ angular
                 regObject: '=',
                 regProp: '@',
                 text: '@',
-                onChange:'&'
+                onChange: '&'
             },
             link: link,
             template: [
                 '<label class="item item-input item-stacked-label">',
-                    '<span class="input-label" ng-bind="::getText()" ng-class="{assertive:formCtrl[regProp].$invalid}"></span>',
-                    '<input name="{{regProp}}" type="datetime-local" ng-change="timeChanged(DtObsTime)" ng-model="DtObsTime" required>',
+                '<span class="input-label" ng-bind="::getText()" ng-class="{assertive:formCtrl[regProp].$invalid}"></span>',
+                '<input name="{{regProp}}" type="datetime-local" ng-change="timeChanged(DtObsTime)" ng-model="DtObsTime" required>',
                 '</label>'
             ].join('')
         };

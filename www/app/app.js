@@ -1,43 +1,11 @@
 (function () {
     "use strict";
-
-    angular.module('RegObs', ['ionic', 'ngCordova', 'ion-floating-menu', 'angularProgressbar', 'pascalprecht.translate', 'ngWebworker'])
+    angular.module('RegObs', ['ionic', 'ngCordova', 'ion-floating-menu', 'angularProgressbar', 'pascalprecht.translate', 'ngWebworker', 'ionic.closePopup', 'ngRaven', 'ng-showdown'])
         .config(providers)
         .run(setup);
 
     function providers($provide, $stateProvider, $urlRouterProvider, $ionicConfigProvider, AppSettingsProvider, $translateProvider, UserProvider, UtilityProvider) {
         'ngInject';
-
-        var utils = UtilityProvider.$get();
-        if (!utils.isRippleEmulator()) {
-            $provide.decorator('$exceptionHandler', ['$delegate',
-                function ($delegate) {
-                    return function (exception, cause) {
-                        if (ga_storage) {
-                            var userService = UserProvider.$get();
-                            var appSettings = AppSettingsProvider.$get();
-                            var user = userService.getUser();
-                            var userText = 'Anonymous user';
-                            if (!user.anonymous) {
-                                userText = 'User: ' + user.Guid + ' Nick: ' + user.Nick;
-                            }
-
-                            var initInjector = angular.injector(['ng']);
-                            var $http = initInjector.get('$http');
-
-                            $http.get('app/json/version.json').then(function (version) {
-                                var label = 'Error ' + appSettings.data.env + ' ' + version.data.version + ' ' + version.data.build;
-                                var action = ((cause || '') + ' ' + exception.message).trim();
-                                var stack = userText + ' Stack: ' + exception.stack.replace(/(\r\n|\n|\r)/gm, "\n ○ ");
-                                ga_storage._trackEvent(label, action, stack);
-                            });
-                        }
-                        $delegate(exception, cause);
-                    };
-                }
-            ]);
-        }
-
 
         if (ionic.Platform.isAndroid()) {
             $ionicConfigProvider.scrolling.jsScrolling(false);
@@ -62,6 +30,7 @@
             $urlRouterProvider.otherwise('/start');
         }
 
+        $ionicConfigProvider.views.swipeBackEnabled(false); //turn off swipe back (map interactions often swipes back)
         $ionicConfigProvider.backButton.previousTitleText(false).text('&emsp;&emsp;'); //Increase the touch target area on back button
 
         $stateProvider
@@ -114,12 +83,31 @@
                 controller: 'ObservationListCtrl as vm'
             })
 
+            .state('confirmlocation', {
+                url: '/confirmlocation',
+                templateUrl: 'app/registration/location/confirmlocation.html',
+                controller: 'ConfirmLocationCtrl as vm',
+                cache: false
+            })
+
+            .state('confirmtime', {
+                url: '/confirmtime',
+                templateUrl: 'app/registration/time/confirmtime.html',
+                controller: 'ConfirmTimeCtrl as vm'
+            })
+
             .state('newregistration', {
                 url: '/newregistration',
                 templateUrl: 'app/registration/registration.html',
                 controller: 'RegistrationCtrl as vm'
             })
 
+            .state('registrationstatus', {
+                url: '/registrationstatus',
+                templateUrl: 'app/registration/status/registrationstatus.html',
+                controller: 'RegistrationStatusCtrl as vm',
+                cache: false
+            })
 
             //SNØ
             .state('snowtrip', {
@@ -263,7 +251,7 @@
                 templateUrl: 'app/water/waterregistration/waterlevel/waterlevel.html',
                 controller: 'WaterLevelCtrl as vm',
                 data: {
-                    registrationProp: 'WaterLevel'
+                    registrationProp: 'WaterLevel2'
                 }
             })
             .state('waterincident', {
@@ -306,22 +294,58 @@
                     registrationProp: 'GeneralObservation'
                 }
             })
+
+            .state('generalobs2', {
+                //Fritekst
+                url: '/generalobs2',
+                templateUrl: 'app/generalobs/generalobs2.html',
+                controller: 'GeneralObsCtrl2 as vm',
+                data: {
+                    registrationProp: 'GeneralObservation'
+                }
+            })
+
+            .state('damageobs', {
+                //Fritekst
+                url: '/damageobs',
+                templateUrl: 'app/generalobs/damageobs.html',
+                controller: 'DamageObsCtrl as vm',
+                data: {
+                    registrationProp: 'DamageObs'
+                }
+            })
+
+            .state('confirmdamagelocation', {
+                url: '/confirmdamagelocation',
+                templateUrl: 'app/generalobs/damageobsposition.html',
+                controller: 'DamageObsPositionCtrl as vm',
+                params: { damageObs: null },
+                cache: false
+            })
+
             .state('help', {
                 url: '/help/:page',
                 templateUrl: function (stateParams) {
                     return 'app/help/' + stateParams.page + '.html';
                 },
                 controller: 'HelpCtrl as vm'
+            })
+
+            .state('dynamichelp', {
+                url: '/dynamichelp/:registrationProp',
+                templateUrl: 'app/help/dynamichelp.html',
+                controller: 'HelpCtrl as vm'
             });
     };
 
-    function setup($ionicPlatform, Utility, AppLogging, Registration, Observations, OfflineMap) {
+    function setup($ionicPlatform, Utility, AppLogging, Registration, Observations, OfflineMap, $http, User, HelpTexts) {
         'ngInject';
 
         $ionicPlatform.ready(function () {
 
             if (Utility.hasGoodNetwork() && Utility.shouldUpdateKdvElements()) {
                 Utility.refreshKdvElements();
+                HelpTexts.updateHelpTexts();
             }
 
             // Hide the accessory bar by default (remove this to show the accessory bar above the keyboard
@@ -337,6 +361,7 @@
             }
 
             document.addEventListener("deviceready", function () {
+                Utility.configureRaven();
                 Registration.clearNewRegistrations();
                 Observations.removeOldObservationsFromPresistantStorage(); //cleanup old observations on startup
                 OfflineMap.checkUncompleteDownloads(); //Check if any uncomplete downloads and continue download progress

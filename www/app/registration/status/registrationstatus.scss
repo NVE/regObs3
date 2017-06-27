@@ -1,0 +1,36 @@
+﻿.status-icon {
+    font-size: 64px;
+    padding-bottom: 20px;
+    padding-top: 20px;
+}
+
+.status-description {
+    padding-left: 10px;
+    padding-right: 10px;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    color: #666;
+    font-size: 14px;
+    line-height: 22px;
+}
+
+.status-wrapper {
+    text-align: center;
+    padding: 10px;
+}
+
+.status-footer {
+    /*position: absolute;
+    bottom: 10px;
+    left: 9px;
+    right: 9px;*/
+}
+
+.status-footer-button {
+    margin-top: 20px !important;
+}
+
+.status-list-description {
+    float: left;
+    padding-left: 10px;
+}

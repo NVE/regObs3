@@ -4,18 +4,21 @@ angular
 
         var vm = this;
 
-        vm.propChanged = function (prop){
-            $timeout(function(){
-                var num = parseFloat(vm[prop]);
-
-                if(!isNaN(num)){
-                    AppLogging.log(num);
-                    vm.reg.IceThickness[prop] = Utility.nDecimal(num/100, 5);
-
-                    AppLogging.log('IceThicknessSum', vm.IceThicknessSum);
+        $scope.$on('$regObs:beforeSave', function () {
+            if (vm.reg.IceThickness) {
+                if (vm.SnowDepth >= 0 && vm.SnowDepth <= 10000) {
+                    vm.reg.IceThickness.SnowDepth = Utility.nDecimal(vm.SnowDepth / 100, 5);
+                } else {
+                    vm.reg.IceThickness.SnowDepth = undefined;
                 }
-            });
-        };
+                if (vm.SlushSnow >= 0 && vm.SlushSnow <= 10000) {
+                    vm.reg.IceThickness.SlushSnow = Utility.nDecimal(vm.SlushSnow / 100, 5);
+                } else {
+                    vm.reg.IceThickness.SlushSnow = undefined;
+                }
+            }
+        });
+
 
 
         $scope.$on('$ionicView.loaded', function(){

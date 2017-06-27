@@ -1,0 +1,51 @@
+﻿<ion-view view-title="{{'GENERAL_OBS_PICTURES'|translate}}" class="grey-view">
+    <ion-nav-buttons side="right">
+        <nav-saving-indicator></nav-saving-indicator>
+    </ion-nav-buttons>
+    <ion-content>
+        <regobs-form back-state="newregistration">
+            <ion-list>
+                <div class="item item-divider item-divider-calm">
+                    <div><i class="icon ion-image"></i> {{'ADD_OBSERVATION_IMAGES'|translate}}</div>
+                    <p>{{'ADD_OBSERVATION_IMAGES_DESCRIPTION'|translate}}.</p>
+                </div>
+                <div class="item" ng-repeat="pic in vm.getPictures()">
+                    <div class="border-thin item-image no-bottom-margin">
+                        <img ng-src="{{pic.PictureImageBase64}}">
+                        <div class="padding">
+                            <div class="input-label normalcase">{{'IMAGE_DESCRIPTION'|translate}}:</div>
+                            <regobs-comment force-scroll="true" class="bordered" hide-label="true" placeholder="{{'IMAGE_DESCRIPTION_PLACEHOLDER'|translate}}" model="pic.PictureComment"></regobs-comment>
+                        </div>
+                        <i class="icon icon-remove-image ion-close-round" ng-click="vm.removeImage(pic)"></i>
+                    </div>
+                </div>
+                <div class="item item-divider" ng-if="vm.getPictures().length > 0">
+                    &nbsp;
+                </div>
+                <div class="item text-center" on-tap="vm.addPicture()">
+                    <i class="icon ion-image small-icon add-image-icon"></i> + {{'ADD_IMAGES'|translate}}
+                </div>
+                <div class="item item-divider item-divider-calm">
+                    <div><i class="icon ion-compose"></i>{{'ADD_OBSERVATION_NOTES'|translate}}</div>
+                </div>
+                <regobs-comment class="item item-input" placeholder="{{'ADD_OBSERVATION_NOTES_PLACEHOLDER'|translate}}"
+                                model="vm.reg.GeneralObservation.ObsComment" min-height="100" hide-label="true"></regobs-comment>
+                <div class="regobs-next-prev-footer">
+                    <div class="regobs-next-prev-footer-content">
+                        <button type="button" class="button button-large button-outline button-calm icon-left ion-android-arrow-back prev-button" ui-sref="damageobs">{{'PREVIOUS'|translate}}</button>
+                        <button type="button" class="button button-large button-calm icon-right ion-android-arrow-forward next-button" ui-sref="newregistration">{{'NEXT'|translate}}</button>
+                        <div>
+                            <button type="submit" class="button button-large button-block button-grey button-outline"><i class="icon ion-eye"></i>&nbsp;&nbsp;{{'VIEW_MY_OBSERVATION'|translate}}</button>
+                        </div>
+                        <button type="button" ng-click="vm.reset()" class="button button-positive button-block button-clear ion-android-close">
+                            {{'CLEAR'|translate}}
+                        </button>
+                    </div>
+                </div>
+            </ion-list>
+            <!--<button type="button" ui-sref="help({page:'generalobservation'})" class="button button-positive button-block button-clear">
+                {{'HELP'|translate}}
+            </button>-->
+        </regobs-form>
+    </ion-content>
+</ion-view>

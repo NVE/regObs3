@@ -16,7 +16,7 @@ angular
                 AppLogging.log('registrations after geoHazard filter: ' + result.length);
                 if (validateObservationDate) {
                     result = service._cleanupRegistrations(result, true);
-                    AppLogging.log('registrations after date cleanup: ' +result.length);
+                    AppLogging.log('registrations after date cleanup: ' + result.length);
                 }
 
                 return result;
@@ -85,11 +85,11 @@ angular
                 }
 
                 $http.get(
-                        AppSettings.getEndPoints().getLocationsWithinRadius,
-                        {
-                            params: params,
-                            timeout: canceller ? canceller.promise : AppSettings.httpConfig.timeout
-                        })
+                    AppSettings.getEndPoints().getLocationsWithinRadius,
+                    {
+                        params: params,
+                        timeout: canceller ? canceller.promise : AppSettings.httpConfig.timeout
+                    })
                     .then(function (result) {
                         if (result.data) {
                             AppLogging.log('updateNearbyLocations got result, processing data');
@@ -173,7 +173,7 @@ angular
             });
         };
 
-        var saveRegistrationPictures = function (registration, progress, onProgress, cancel) {
+        service._saveRegistrationPictures = function (registration, progress, onProgress, cancel) {
             var tasks = [];
             registration.Pictures.forEach(function (item) {
                 var pictureId = item.TypicalValue2;
@@ -182,22 +182,49 @@ angular
             return $q.all(tasks);
         };
 
+
+        service.getRegistrationsById = function (regId, onProgress, cancel) {
+            var httpConfig = AppSettings.httpConfig;
+            httpConfig.timeout = cancel ? cancel.promise : AppSettings.httpConfig.timeout;
+            return $http.post(
+                AppSettings.getEndPoints().search,
+                {
+                    RegId: regId,
+                    LangKey: AppSettings.getCurrentLangKey()
+                },
+                httpConfig
+            ).then(function (result) {
+                var registrations = service._getRegistrationResults(result.data);
+                return service._downloadAllRegistrations(registrations, onProgress, cancel, false).then(function () { return registrations; });
+            }).then(function (result) {
+                return $q(function (resolve, reject) {
+                    $rootScope.$broadcast('$regObs:observationsUpdated');
+                    if (result.length > 0) {
+                        resolve(result[0]);
+                    } else {
+                        reject('Registration not found');
+                    }
+                });
+            });
+        };
+
+
         service._getRegistrationsWithinRadius = function (latitude, longitude, range, geohazardId, cancel) {
             return $q(function (resolve, reject) {
                 var httpConfig = AppSettings.httpConfig;
                 httpConfig.timeout = cancel ? cancel.promise : AppSettings.httpConfig.timeout;
                 $http.post(
-                        AppSettings.getEndPoints().getRegistrationsWithinRadius,
-                        {
-                            GeoHazards: [geohazardId],
-                            Latitude: latitude,
-                            Longitude: longitude,
-                            Radius: range,
-                            FromDate: AppSettings.getObservationsFromDateISOString(),
-                            LangKey: AppSettings.getCurrentLangKey(),
-                            ReturnCount: AppSettings.maxObservationsToFetch
-                        },
-                        httpConfig)
+                    AppSettings.getEndPoints().getRegistrationsWithinRadius,
+                    {
+                        GeoHazards: [geohazardId],
+                        Latitude: latitude,
+                        Longitude: longitude,
+                        Radius: range,
+                        FromDate: AppSettings.getObservationsFromDateISOString(),
+                        LangKey: AppSettings.getCurrentLangKey(),
+                        ReturnCount: AppSettings.maxObservationsToFetch
+                    },
+                    httpConfig)
                     .then(function (result) {
                         if (result.data) {
                             resolve(result.data);
@@ -209,18 +236,26 @@ angular
             });
         };
 
-        service._mergeRegistrations = function (destArr, existingRegistrations) {
-            var keepLimit = moment(AppSettings.getObservationsFromDateISOString(), moment.ISO_8601);
-            existingRegistrations.forEach(function (item) {
-                var date = moment(item.DtObsTime, moment.ISO_8601); //strict parsing
-                if (date.isBefore(keepLimit)) { //only keep old values before new observation time to remove deleted items
-                    var newRegistration = destArr.filter(function (reg) { return reg.RegId === item.RegId });
-                    if (newRegistration.length === 0) {
-                        //Registration does not exist, push old value to new list
-                        destArr.push(item);
+        service._mergeRegistrations = function (destArr, existingRegistrations, removeDeleted) {
+            if (!angular.isArray(destArr)) {
+                destArr = [];
+            }
+            if (destArr.length === 0) {
+                destArr = existingRegistrations;
+            } else {
+                var newGeoHazardTid = destArr[0].GeoHazardTid;
+                var keepLimit = moment(AppSettings.getObservationsFromDateISOString(), moment.ISO_8601);
+                existingRegistrations.forEach(function (item) {
+                    var date = moment(item.DtObsTime, moment.ISO_8601); //strict parsing
+                    if (!removeDeleted || date.isBefore(keepLimit) || newGeoHazardTid !== item.GeoHazardTid) { //only keep old values before new observation time to remove deleted items
+                        var newRegistration = destArr.filter(function (reg) { return reg.RegId === item.RegId });
+                        if (newRegistration.length === 0) {
+                            //Registration does not exist, push old value to new list
+                            destArr.push(item);
+                        }
                     }
-                }
-            });
+                });
+            }
         };
 
         service._storeRegistrations = function (registrations) {
@@ -232,11 +267,11 @@ angular
             return PresistentStorage.storeFile(path, JSON.stringify(registrations));
         };
 
-        service.saveNewRegistrationsToPresistantStorage = function (registrations) {
-            AppLogging.log('saving ' + registrations.length +' new registrations');
+        service.saveNewRegistrationsToPresistantStorage = function (registrations, removeDeleted) {
+            AppLogging.log('saving ' + registrations.length + ' new registrations');
             var mergeExistingRegistrations = function (existingRegistrations) {
                 AppLogging.log('merging in ' + existingRegistrations.length + ' existingRegistrations registrations');
-                service._mergeRegistrations(registrations, existingRegistrations);
+                service._mergeRegistrations(registrations, existingRegistrations, removeDeleted);
                 AppLogging.log('save after merge ' + registrations.length + ' registrations');
                 return service._storeRegistrations(registrations);
             };
@@ -329,11 +364,11 @@ angular
                 var task = function () {
                     return $q(function (resolve) {
                         PresistentStorage.checkIfFileExsists(path)
-                       .then(function () {
-                           return PresistentStorage.removeFile(path);
-                       })
-                       .then(resolve) //deleted complete, resolve
-                       .catch(resolve); //file does not exist or could not be deleted, resolve
+                            .then(function () {
+                                return PresistentStorage.removeFile(path);
+                            })
+                            .then(resolve) //deleted complete, resolve
+                            .catch(resolve); //file does not exist or could not be deleted, resolve
                     });
                 };
                 tasks.push(task);
@@ -349,7 +384,7 @@ angular
         service._deleteAllInvalidRegistrationImages = function (registrations) {
             var tasks = [];
             registrations.forEach(function (item) {
-               tasks.push(service._deleteAllImagesForRegistration(item));
+                tasks.push(service._deleteAllImagesForRegistration(item));
             });
             return $q.all(tasks);
         };
@@ -359,7 +394,7 @@ angular
          * @param {} registrations 
          * @returns {} 
          */
-        service._findOldItemsToDelete = function(registrations, daysBack) {
+        service._findOldItemsToDelete = function (registrations, daysBack) {
             var keep = [];
             var old = [];
 
@@ -371,7 +406,7 @@ angular
                 }
             });
 
-            return {keep: keep, old: old};
+            return { keep: keep, old: old };
         }
 
 
@@ -393,6 +428,37 @@ angular
                 });
         };
 
+        service._getRegistrationResults = function (result) {
+            var registrations = result.Results;
+            if (registrations === undefined) {
+                registrations = result; //backward copatibility for old api
+            }
+            return registrations;
+        }
+
+        service._downloadAllRegistrations = function (result, onProgress, cancel, removeDeleted) {
+            var registrations = service._getRegistrationResults(result);
+            var progress = new RegObs.ProggressStatus();
+            var total = 0;
+            registrations.forEach(function (item) {
+                total += item.Pictures.length; //Download picture progress
+            });
+            progress.setTotal(total);
+            if (onProgress) {
+                onProgress(progress);
+            }
+
+            return service.saveNewRegistrationsToPresistantStorage(registrations, removeDeleted)
+                .then(function () {
+                    var tasks = [];
+                    registrations.forEach(function (item) {
+                        tasks.push(service._saveRegistrationPictures(item, progress, onProgress, cancel));
+                    });
+
+                    return $q.all(tasks);
+                });
+        };
+
         /**
          * Update observations within radius
          * @param {} latitude 
@@ -405,50 +471,20 @@ angular
          * @returns {} 
          */
         service.updateObservationsWithinRadius = function (latitude, longitude, range, geohazardId, onProgress, cancel) {
-            var downloadAllRegistrations = function (registrations) {
-                var progress = new RegObs.ProggressStatus();
-                var total = 0;
-                registrations.forEach(function (item) {
-                    total += item.Pictures.length; //Download picture progress
-                });
-                progress.setTotal(total);
-                if (onProgress) {
-                    onProgress(progress);
-                }
-
-                return service.saveNewRegistrationsToPresistantStorage(registrations)
-                    .then(function () {
-                        var tasks = [];
-                        registrations.forEach(function (item) {
-                            tasks.push(saveRegistrationPictures(item, progress, onProgress, cancel));
-                        });
-
-                        return $q.all(tasks);
-                    });
-            };
-
-            //var testAndUpdateNearbyLocations = function() {
-            //    if (AppSettings.data.showPreviouslyUsedPlaces) {
-            //        return service.updateNearbyLocations(latitude, longitude, range, geohazardId, cancel);
-            //    } else {
-            //        return $q(function(resolve) {
-            //            resolve();
-            //        });
-            //    }
-            //};
-
             return service.removeOldObservationsFromPresistantStorage()
-            .then(function () {
-                return service._getRegistrationsWithinRadius(latitude,
-                    longitude,
-                    range,
-                    geohazardId,
-                    cancel);
-            }).then(downloadAllRegistrations).finally(function () {
-                AppLogging.log('All registrations saved');
-                LocalStorage.set(observationUpdatedStorageKey, moment().toISOString());
-                $rootScope.$broadcast('$regObs:observationsUpdated');
-            });
+                .then(function () {
+                    return service._getRegistrationsWithinRadius(latitude,
+                        longitude,
+                        range,
+                        geohazardId,
+                        cancel);
+                }).then(function (result) {
+                    return service._downloadAllRegistrations(result, onProgress, cancel, true);
+                }).finally(function () {
+                    AppLogging.log('All registrations saved');
+                    LocalStorage.set(observationUpdatedStorageKey, moment().toISOString());
+                    $rootScope.$broadcast('$regObs:observationsUpdated');
+                });
         };
 
         /**

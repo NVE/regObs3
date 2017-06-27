@@ -3,7 +3,7 @@
  */
 angular
     .module('RegObs')
-    .factory('Utility', function Utility($http, $q, $rootScope, AppSettings, User, LocalStorage, AppLogging, $translate, $cordovaNetwork, moment, $filter) {
+    .factory('Utility', function Utility($http, $q, $rootScope, AppSettings, User, LocalStorage, AppLogging, $translate, $cordovaNetwork, moment, $filter, $ionicHistory, Raven, $state) {
         var service = this;
 
         var canvas;
@@ -50,10 +50,25 @@ angular
             return service.getWindDirectionText(direction, true);
         };
 
-        service.getExposionHeightText = function (item, data) {
-            AppLogging.log('data.FullObject.ExposedHeightComboTID: ' + data.FullObject.ExposedHeightComboTID);
-            AppLogging.log('data.FullObject: ' + JSON.stringify(data.FullObject));
+        service.getAvalCauseAttributes = function (item, data) {
+            var arr = [];
+            var pushIfNotEmpty = function (items) {
+                items.forEach(function (item) {
+                    if (item) {
+                        arr.push(item.trim());
+                    }
+                });
+            };
+            pushIfNotEmpty([data.FullObject.AvalCauseAttributeCrystalTName,
+            data.FullObject.AvalCauseAttributeLightTName,
+            data.FullObject.AvalCauseAttributeSoftTName,
+            data.FullObject.AvalCauseAttributeThinTName
+            ]);
 
+            return arr.join('&nbsp;&bull;&nbsp;');
+        };
+
+        service.getExposionHeightText = function (item, data) {
             var getValue = function (item) {
                 if (item === undefined || item === null) {
                     return 'ukjent';
@@ -67,12 +82,12 @@ angular
                 case 2:
                     return 'Under ' + getValue(data.FullObject.ExposedHeight1) + ' moh';
                 case 3:
-                    return 'Ikke mellom ' + getValue(data.FullObject.ExposedHeight1) + ' - ' + getValue(data.FullObject.ExposedHeight2) +' moh';
+                    return 'Ikke mellom ' + getValue(data.FullObject.ExposedHeight1) + ' - ' + getValue(data.FullObject.ExposedHeight2) + ' moh';
                 case 4:
-                    return 'Mellom ' + getValue(data.FullObject.ExposedHeight1) + ' - ' + getValue(data.FullObject.ExposedHeight2) +' moh';
+                    return 'Mellom ' + getValue(data.FullObject.ExposedHeight1) + ' - ' + getValue(data.FullObject.ExposedHeight2) + ' moh';
             }
 
-            return getValue(data.FullObject.ExposedHeight1) +' moh';
+            return getValue(data.FullObject.ExposedHeight1) + ' moh';
         };
 
         /**
@@ -104,8 +119,14 @@ angular
         service.formatUrls = function (arr) {
             var result = [];
             arr.forEach(function (url) {
-                var urlDesc = url.UrlDescription || url.UrlLine;
-                result.push('<a target="_system" href="' + url.UrlLine + '">' + urlDesc + '</a>');
+                if (url.UrlLine && angular.isString(url.UrlLine)) {
+                    var urlDesc = url.UrlDescription || url.UrlLine;
+                    if (!url.UrlLine.toLowerCase().startsWith('http')) {
+                        url.UrlLine = 'http://' + url.UrlLine;
+                    }
+
+                    result.push('<a target="_system" href="' + url.UrlLine + '">' + urlDesc + '</a>');
+                }
             });
             return result.join(', ');
         };
@@ -119,7 +140,7 @@ angular
 
             if (fullObject.FractureDepth) {
                 result += '@';
-                result += $filter('number')(fullObject.FractureDepth * 100, 0) + 'cm';
+                result += $filter('number')(fullObject.FractureDepth * 100, 0).replace(',', '.') + 'cm';
             }
             if (fullObject.ComprTestFractureTID > 0) {
                 result += fullObject.ComprTestFractureTName;
@@ -130,6 +151,91 @@ angular
         service.showStabilityTest = function (fullObject) {
             return fullObject.PropagationTID > 0 || fullObject.TapsFracture > 0 || fullObject.FractureDepth > 0 || fullObject.ComprTestFractureTID > 0;
         };
+
+
+        service._pushKdvDescription = function (tidValue, arr, prepos, kdvname, condition) {
+            return $q(function (resolve) {
+                if (tidValue && (condition === undefined || condition === true)) {
+                    if (prepos) {
+                        arr.push(prepos);
+                    }
+                    service.getKdvValue(kdvname, tidValue).then(function (result) {
+                        if (result && result.Name) {
+                            arr.push(result.Name.toLowerCase());
+                        }
+                        resolve();
+                    });
+                } else {
+                    resolve();
+                }
+            });
+        };
+
+        service.formatWaterLevelMethod = function (fullObject) {
+            return $q(function (resolve) {
+                $translate(['MARKING', 'WATER_MEASUREMENT', 'ON_IN', 'WITH', 'RELATIVE_TO']).then(function (translations) {
+                    var arr = [];
+                    if (fullObject.WaterLevelMethodTID) {
+                        arr.push(fullObject.WaterLevelMethodTID === 1 ? translations['MARKING'] : translations['WATER_MEASUREMENT']);
+                        service._pushKdvDescription(fullObject.MarkingReferenceTID, arr, translations['ON_IN'], 'Water_MarkingReferenceKDV', fullObject.WaterLevelMethodTID === 1)
+                            .then(function () {
+                                return service._pushKdvDescription(fullObject.MarkingTypeTID, arr, translations['WITH'], 'Water_MarkingTypeKDV', fullObject.WaterLevelMethodTID === 1);
+                            })
+                            .then(function () {
+                                if (fullObject.WaterLevelMethodTID === 2 && fullObject.MeasurementTypeTID === 1) {
+                                    arr.push(translations['RELATIVE_TO']);
+                                }
+                                return service._pushKdvDescription(fullObject.MeasurementReferenceTID, arr, '', 'Water_MeasurementReferenceKDV', fullObject.WaterLevelMethodTID === 2);
+                            })
+                            .then(function () {
+                                return service._pushKdvDescription(fullObject.MeasurementTypeTID, arr, translations['WITH'], 'Water_MeasurementTypeKDV', fullObject.WaterLevelMethodTID === 2 && fullObject.MeasurementTypeTID > 1);
+                            })
+                            .then(function () {
+                                resolve(arr.join(' '));
+                            });
+                    } else {
+                        resolve(arr.join(' '));
+                    }
+                });
+            });
+        };
+
+        service.formatWaterLevelMeasurement = function (fullObject) {
+            var result = [];
+            if (fullObject && fullObject.WaterLevelMeasurement && angular.isArray(fullObject.WaterLevelMeasurement)) {
+                fullObject.WaterLevelMeasurement.forEach(function (item) {
+                    var str = '<div class="water-level-measurement">';
+                    str += '<span class="observation-description">' + (fullObject.WaterLevelMethodTID === 1 ? $translate.instant('MARKING_SHORT') : $translate.instant('MEASUREMENT'));
+                    str += ' ' + (result.length + 1) + '</span>: ';
+                    if (item.DtMeasurementTime) {
+                        str += service.formatDateAndTime(item.DtMeasurementTime);
+                    }
+                    if (item.WaterLevelValue) {
+                        str += ', ' + $filter('number')(item.WaterLevelValue, 2) + ' m';
+                    }
+                    if (!service.isEmpty(item.Comment)) {
+                        str += '<div class="water-level-comment-summary">' + item.Comment + '</div>';
+                    }
+
+                    if (item.Pictures && angular.isArray(item.Pictures) && item.Pictures.filter(function (pic) { return pic.PictureImageBase64 !== undefined }).length > 0) {
+                        str += '<div class="registration-image-thumbs">';
+                        item.Pictures.forEach(function (item) {
+                            if (item.PictureImageBase64) {
+                                str += '<img src="' + item.PictureImageBase64 + '" width="50" />';
+                            }
+                        });
+                        str += '</div>';
+                    }
+                    str += ('</div>');
+
+                    result.push(str);
+
+                });
+            }
+
+            return result.join('');
+        };
+
 
         //Brukt der det er bilder (RegistrationTID)
         var OBSERVATIONS = {
@@ -156,8 +262,8 @@ angular
                 name: "Snødekke",
                 RegistrationTID: "22",
                 properties: {
-                    SnowDepth: { displayFormat: { valueFormat: function (item) { return $filter('number')(item * 100, 0) + ' cm' } } },
-                    NewSnowDepth24: { displayFormat: { valueFormat: function (item) { return $filter('number')(item * 100, 0) + ' cm' } } },
+                    SnowDepth: { displayFormat: { valueFormat: function (item) { return $filter('number')(item * 100, 0).replace(',', '.') + ' cm' } } },
+                    NewSnowDepth24: { displayFormat: { valueFormat: function (item) { return $filter('number')(item * 100, 0).replace(',', '.') + ' cm' } } },
                     NewSnowLine: { displayFormat: { valueFormat: function (item) { return item + ' moh' } } },
                     Snowline: { displayFormat: { valueFormat: function (item) { return item + ' moh' } } },
                     HeightLimitLayeredSnow: { displayFormat: { valueFormat: function (item) { return item + ' moh' } } },
@@ -247,6 +353,14 @@ angular
                     AvalancheExtTID: {},
                     AvalCauseTID: {},
                     AvalCauseDepthTID: {},
+                    AvalCauseAttributes: {
+                        displayFormat: {
+                            condition: function (item, data) {
+                                return data.FullObject.AvalCauseAttributeCrystalTName || data.FullObject.AvalCauseAttributeLightTName || data.FullObject.AvalCauseAttributeSoftTName || data.FullObject.AvalCauseAttributeThinTName;
+                            },
+                            valueFormat: service.getAvalCauseAttributes
+                        }
+                    },
                     AvalTriggerSimpleTID: {},
                     AvalProbabilityTID: {},
                     DestructiveSizeTID: {},
@@ -285,20 +399,20 @@ angular
                 name: "Snø og istykkelse",
                 RegistrationTID: "50",
                 properties: {
-                    SnowDepth: { displayFormat: { valueFormat: function (item) { return $filter('number')(item * 100, 0) + ' cm' } } },
-                    SlushSnow: { displayFormat: { valueFormat: function (item) { return $filter('number')(item * 100, 0) + ' cm' } } },
+                    SnowDepth: { displayFormat: { title: 'DRY_SNOW_BEFORE_DRILL', valueFormat: function (item) { return $filter('number')(item * 100, 0).replace(',', '.') + ' cm' } } },
+                    SlushSnow: { displayFormat: { valueFormat: function (item) { return $filter('number')(item * 100, 0).replace(',', '.') + ' cm' } } },
                     IceThicknessLayers: {
                         displayFormat: {
                             valueFormat: function (item) {
                                 var result = [];
                                 item.forEach(function (layer) {
-                                    result.push($filter('number')((layer.IceLayerThickness || 0) * 100, 0) + ' cm ' + layer.IceLayerTName);
+                                    result.push($filter('number')((layer.IceLayerThickness || 0) * 100, 0).replace(',', '.') + ' cm ' + layer.IceLayerTName);
                                 });
                                 return result.join(', ');
                             }
                         }
                     },
-                    IceThicknessSum: { displayFormat: { valueFormat: function (item) { return $filter('number')(item * 100, 0) + ' cm' } } },
+                    IceThicknessSum: { displayFormat: { valueFormat: function (item) { return $filter('number')(item * 100, 0).replace(',', '.') + ' cm' } } },
                     Comment: { displayFormat: { hideDescription: true } }
                 }
             },
@@ -310,6 +424,19 @@ angular
                     WaterLevelRefTID: {},
                     MeasuredDischarge: { displayFormat: { valueFormat: function (item) { return item + ' m³' } } },
                     Comment: { displayFormat: { hideDescription: true } }
+                }
+            },
+            WaterLevel2: {
+                name: "Vannstand",
+                RegistrationTID: "62",
+                properties: {
+                    WaterLevelStateTID: {},
+                    WaterAstrayTID: {},
+                    ObservationTimingTID: {},
+                    WaterLevelMethodTID: { displayFormat: { valueFormat: function (item, data) { return service.formatWaterLevelMethod(data.FullObject) } } },
+                    Comment: {},
+                    MeasuringToolDescription: {},
+                    WaterLevelMeasurement: { displayFormat: { hideDescription: true, valueFormat: function (item, data) { return service.formatWaterLevelMeasurement(data.FullObject) } } }
                 }
             },
             LandSlideObs: {
@@ -330,7 +457,19 @@ angular
             },
             GeneralObservation: {
                 name: "Fritekst",
-                RegistrationTID: "10"
+                RegistrationTID: "10",
+                properties: {
+                    ObsComment: { displayFormat: { hideDescription: true } }
+                }
+            },
+            DamageObs: { //Has custom summary component in registration summary: directives/registrationdetail/summary/damageObsSummary.js
+                name: "Skader",
+                RegistrationTID: "14",
+                properties: {
+                    DamageTypeTID: { displayFormat: { hideDescription: true } },
+                    DamagePosition: { displayFormat: { valueFormat: function (item) { return service.formatLatLng(item.Latitude, item.Longitude); } } },
+                    Comment: { displayFormat: { hideDescription: true } }
+                },
             }
         };
 
@@ -364,6 +503,7 @@ angular
         };
 
         service.geoHazardNames = function (tid) {
+            if (!tid) return '';
             return $translate.instant(service.getGeoHazardType(tid).toUpperCase());
         };
 
@@ -428,7 +568,7 @@ angular
 
             AppLogging.log('Last update', lastUpdate);
             if (isNaN(lastUpdate)) {
-                lastUpdate = new Date('2016-01-01');          
+                lastUpdate = new Date('2016-01-01');
             } else {
                 lastUpdate = new Date(parseInt(lastUpdate));
             }
@@ -442,13 +582,9 @@ angular
         };
 
         service._getDropdownsFromApi = function () {
-            return $http.get(AppSettings.getEndPoints().getDropdowns, AppSettings.httpConfig)
+            return $http.get(AppSettings.getEndPoints().getDropdowns, { langkey: AppSettings.getCurrentLangKey() }, AppSettings.httpConfig)
                 .then(function (res) {
-                    if (res.data && res.data.Data) {
-                        return JSON.parse(res.data.Data);
-                    } else {
-                        throw new Error('Could not get kdv elements from API');
-                    }
+                    return res.data;
                 });
         };
 
@@ -485,7 +621,7 @@ angular
                     return service.getKdvElements().then(function (response) { //Getting old values to update
                         var oldKdvElements = response.data;
                         //remove items missing in new elements (deleted items)
-                        service._removeDeletedKdvElements(oldKdvElements, newKdvElements);              
+                        service._removeDeletedKdvElements(oldKdvElements, newKdvElements);
                         var mergedElements = angular.merge(oldKdvElements, newKdvElements);
                         service._saveKdvElements(mergedElements);
                     });
@@ -572,7 +708,18 @@ angular
                 if (obj.length === 0) {
                     return true;
                 } else {
-                    return false;
+                    var any = [];
+                    obj.forEach(function (item) {
+                        if (item) {
+                            var dataJson = angular.toJson(item);
+                            var obj = JSON.parse(dataJson);
+                            if (!service.isEmpty(obj)) {
+                                any.push(obj);
+                            }
+                        }
+                    });
+
+                    return any.length === 0;
                 }
             }
 
@@ -634,15 +781,14 @@ angular
 
         service.resizeAllImages = function (data) {
             var deferred = $q.defer();
-            var picturePresent, i, reg;
-            if (data && data.Registrations) {
-                picturePresent = 0;
-                for (i = 0; i < data.Registrations.length; i++) {
-                    reg = data.Registrations[i];
-                    if (reg.Picture) {
+            var picturePresent = 0, i, reg;
+            if (angular.isArray(data)) {
+                for (i = 0; i < data.length; i++) {
+                    reg = data[i];
+                    if (reg.Picture && angular.isArray(reg.Picture)) {
                         picturePresent += reg.Picture.length;
                         reg.Picture.forEach(function (pic) {
-                            service.resizeImage(1200, pic.PictureImageBase64, function (imageData) {
+                            service.resizeImage(AppSettings.imageSize, pic.PictureImageBase64, function (imageData) {
                                 pic.PictureImageBase64 = imageData;
                                 picturePresent = picturePresent - 1;
                                 if (!picturePresent) {
@@ -654,6 +800,7 @@ angular
                     }
                 }
             }
+
 
             if (!picturePresent) {
                 deferred.resolve(data);
@@ -745,7 +892,119 @@ angular
             return radius;
         };
 
+        service.formatLatLng = function (lat, lng, decimals) {
+            return $filter('number')(lat, decimals || 5) + ', ' + $filter('number')(lng, decimals || 5);
+        };
 
+        /**
+        * Format lat lng as degrees, minutes, seconds
+        */
+        service.ddToDms = function (lat, lng) {
+            var _lat, _lng, latResult, lngResult, dmsResult;
+
+            if (typeof lat === 'string') {
+                _lat = parseFloat(lat);
+            } else {
+                _lat = lat;
+            }
+            if (typeof lng === 'string') {
+                _lng = parseFloat(lng);
+            } else {
+                _lng = lng;
+            }
+
+            // Call to getDms(lat) function for the coordinates of Latitude in DMS.
+            // The result is stored in latResult variable.
+            latResult = service._getDms(_lat);
+            latResult += (_lat >= 0) ? 'N' : 'S';
+
+
+            // Call to getDms(lng) function for the coordinates of Longitude in DMS.
+            // The result is stored in lngResult variable.
+            lngResult = service._getDms(_lng);
+            lngResult += (_lng >= 0) ? 'E' : 'W';
+
+            // Joining both variables and separate them with a space.
+            dmsResult = latResult + ', ' + lngResult;
+
+            // Return the resultant string
+            return dmsResult;
+        };
+
+        service._getDms = function (val) {
+
+            var valDeg, valMin, valSec, result;
+
+            val = Math.abs(val);
+
+            valDeg = Math.floor(val);
+            result = valDeg + "º";
+
+            valMin = Math.floor((val - valDeg) * 60);
+            result += valMin + "'";
+
+            valSec = Math.round((val - valDeg - valMin / 60) * 3600 * 1000) / 1000;
+            result += valSec + '"';
+
+            return result;
+        };
+
+        service.setBackView = function (name) {
+            var backName = name || 'start';
+            var historyId = $ionicHistory.currentHistoryId();
+            var history = $ionicHistory.viewHistory().histories[historyId];
+            var found = false;
+            for (var i = history.stack.length - 1; i >= 0; i--) {
+                if (history.stack[i].stateName === backName) {
+                    found = true;
+                    $ionicHistory.backView(history.stack[i]);
+                }
+            }
+        };
+
+        service.formatDate = function (date) {
+            return $filter('date')(date, 'd') + '. ' + $filter('lowercase')($filter('translate')($filter('uppercase')($filter('date')(date, 'MMM')))) + ' ' + $filter('date')(date, 'yyyy');
+        };
+
+        service.formatDateAndTime = function (date) {
+            return service.formatDate(date) + ', ' + $filter('date')(date, 'HH:mm');
+        };
+
+        service.getVersion = function () {
+            return $http.get('app/json/version.json')
+                .then(function (res) {
+                    return res.data;
+                });
+        };
+
+        service.configureRaven = function () {
+            service.getVersion().then(function (version) {
+                Raven.setShouldSendCallback(function () { return /*AppSettings.data.env !== 'test regObs' &&*/ !service.isRippleEmulator() });
+                Raven.setEnvironment(AppSettings.data.env);
+                Raven.setRelease(version.version + ' - ' + version.build);
+
+                var user = User.getUser();
+                if (!user.anonymous) {
+                    Raven.setUserContext({
+                        email: user.email,
+                        id: user.Guid
+                    })
+                }
+            });
+        };
+
+        service.clearRegistrationCacheViews = function () {
+            var states = $state.get();
+            var registrationStates = states.filter(function (item) {
+                return item.data && item.data.registrationProp; //Clearing all registration views from cache
+            });
+            var cacheToClear = ['newregistration', 'confirmlocation', 'confirmtime'];
+            registrationStates.forEach(function (item) {
+                cacheToClear.push(item.name);
+            });
+
+            return $ionicHistory.clearCache(cacheToClear);
+        };
 
         return service;
 

@@ -65,18 +65,37 @@ angular
                     $scope.modal.show();
                 };
 
-                $scope.add = function () {
+                $scope.add = function (form) {
+                    if (form.$invalid) {
+                        return;
+                    }
+
                     if (!$scope.obsObject && !$scope.iceLayer) {
                         return;
                     }
-                    if (!$scope.editing) {
-                        $scope.obsObject.IceThicknessLayer = $scope.obsObject.IceThicknessLayer || [];
-                        $scope.obsObject.IceThicknessLayer.push($scope.iceLayer);
+
+                    var num = parseFloat($scope.data.thickness);
+                    if (!isNaN(num) && num >= 0 && num <= 10000) {
+                        $scope.iceLayer.IceLayerThickness = Utility.nDecimal(num / 100, 5);
+                    } else {
+                        $scope.iceLayer.IceLayerThickness = undefined;
                     }
 
+
+                    if (!$scope.editing) {
+                        $scope.obsObject.IceThicknessLayer = $scope.obsObject.IceThicknessLayer || [];
+
+                        if ($scope.iceLayer.IceLayerThickness >= 0 && $scope.iceLayer.IceLayerThickness <= 10000) {
+                            $scope.obsObject.IceThicknessLayer.push($scope.iceLayer);
+                        }
+                    }
+
+
+
+
                     calcSum();
-                    $scope.modal.hide();
                     $scope.iceLayer = null;
+                    $scope.modal.hide();
                 };
 
                 function calcSum() {
@@ -129,16 +148,16 @@ angular
                         });
                 };
 
-                $scope.thicknessChanged = function () {
-                    $timeout(function () {
-                        var num = parseFloat($scope.data.thickness);
-                        if (!isNaN(num)) {
-                            $scope.iceLayer.IceLayerThickness = Utility.nDecimal(num / 100, 5);
-                            calcSum();
+                //$scope.thicknessChanged = function () {
+                //    $timeout(function () {
+                //        var num = parseFloat($scope.data.thickness);
+                //        if (!isNaN(num)) {
+                //            $scope.iceLayer.IceLayerThickness = Utility.nDecimal(num / 100, 5);
+                //            calcSum();
 
-                        }
-                    })
-                };
+                //        }
+                //    })
+                //};
 
                 $scope.getLayerThicknessText = function (layer) {
                     if (layer && !isNaN(layer.IceLayerThickness))

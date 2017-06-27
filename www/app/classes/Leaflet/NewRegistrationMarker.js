@@ -1,4 +1,4 @@
-﻿angular.module('RegObs').factory('NewRegistrationMarker', function (MapSelectableItem, Utility, $rootScope) {
+﻿angular.module('RegObs').factory('NewRegistrationMarker', function (MapSelectableItem, Utility, $rootScope, $translate, Observations, Registration, Observation, $state) {
 
     /**
      * Stored location marker
@@ -67,7 +67,7 @@
         },
 
         getHeader: function () {
-            return 'Ny registrering';
+            return $translate.instant('NEW_REGISTRATION');
         },
 
         //getDescription: function() {
@@ -75,7 +75,12 @@
         //},
 
         onClick: function () {
-            $rootScope.$broadcast('$regObs:updateObservations', this.registration);
+            //$rootScope.$broadcast('$regObs:updateObservations', this.registration);
+            Observations.getRegistrationsById(this.registration.RegId).then(function (result) {
+                return Registration.clearExistingNewRegistrations().then(function () {
+                    $state.go('observationdetails', { observation: Observation.fromJson(result) });
+                });
+            })
         }
     });
 

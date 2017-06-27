@@ -11,7 +11,6 @@
                         max="1000"
                         step="1"
                         pattern="[0-9]*"
-                        change-handler="vm.propChanged('SnowDepth')"
                 ></regobs-number>
                 <regobs-number
                         field-name="nysnødybde"
@@ -22,7 +21,6 @@
                         max="1000"
                         step="1"
                         pattern="[0-9]*"
-                        change-handler="vm.propChanged('NewSnowDepth24')"
                 ></regobs-number>
                 <regobs-number
                         field-name="nysnøgrense"
@@ -30,7 +28,7 @@
                         help-text="{{'METERS_ABOVE_SEA_LEVEL'|translate}}"
                         model="vm.reg.SnowSurfaceObservation.NewSnowLine"
                         min="0"
-                        max="3000"
+                        max="9999"
                         step="1"
                         pattern="[0-9]*"
                 ></regobs-number>
@@ -40,7 +38,7 @@
                         help-text="{{'METERS_ABOVE_SEA_LEVEL'|translate}}"
                         model="vm.reg.SnowSurfaceObservation.SnowLine"
                         min="0"
-                        max="3000"
+                        max="9999"
                         step="1"
                         pattern="[0-9]*"
                 ></regobs-number>
@@ -50,7 +48,7 @@
                         help-text="{{'HEIGHT_LIMIT_LAYERED_SNOW_HELP_TEXT'|translate}}"
                         model="vm.reg.SnowSurfaceObservation.HeightLimitLayeredSnow"
                         min="0"
-                        max="3000"
+                        max="9999"
                         step="1"
                         pattern="[0-9]*"
                 ></regobs-number>
@@ -79,7 +77,7 @@
             </ion-list>
             <regobs-image-list></regobs-image-list>
         </form>
-        <button type="button" ui-sref="help({page:'snowsurfaceobservation'})"
+        <button type="button" ui-sref="dynamichelp({registrationProp:'SnowSurfaceObservation'})"
                 class="button button-positive button-block button-clear">
             {{'HELP'|translate}}
         </button>

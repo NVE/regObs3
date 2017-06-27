@@ -1,0 +1,63 @@
+﻿<div class="set-position-in-map-wrapper">
+    <div class="set-position-in-map">
+        <div id="confirm-map" class="regobs-map" data-tap-disabled="true"></div>
+    </div>
+    <div class="mark-position-in-map-info" ng-class="{'show-details':$ctrl.showDetails}">
+        <div class="set-position-button-wrapper">
+            <button class="button button-block button-calm set-position-button" ng-click="$ctrl.savePositionClick()">{{'CONFIRM'|translate}} {{$ctrl.positionDescription | lowercase}}</button>
+        </div>
+        <div class="map-detail-text">
+            <div class="text-center" ng-click="$ctrl.toggleDetails()">
+                <div ng-show="!$ctrl.showDetails">{{'SHOW'|translate}} {{'DETAILS'|translate|lowercase}}</div>
+                <div ng-show="$ctrl.showDetails">{{'HIDE'|translate}} {{'DETAILS'|translate|lowercase}}</div>
+                <i class="icon ion-chevron-up" ng-class="{'ion-chevron-up':!$ctrl.showDetails, 'ion-chevron-down': $ctrl.showDetails}"></i>
+            </div>
+            <div class="map-detail-wrapper">
+                <div class="map-detail-left-column">
+                    <div class="awesome-marker awesome-marker-icon-red map-detail-position">
+                        <i class="ion ion-record icon-white"></i>
+                    </div>
+                    <div class="map-detail-line-wrapper">
+                        <svg width="4px" height="15px" viewBox="0 0 4 15">
+                            <line x1="1" x2="1" y1="2" y2="14" stroke="#000" stroke-width="2" stroke-linecap="round" stroke-dasharray="1,4"></line>
+                        </svg>
+                    </div>
+
+                    <div>{{$ctrl.distanceText}}</div>
+                    <div class="map-detail-line-wrapper">
+                        <svg width="4px" height="15px" viewBox="0 0 4 15">
+                            <line x1="1" x2="1" y1="2" y2="14" stroke="#000" stroke-width="2" stroke-linecap="round" stroke-dasharray="1,4"></line>
+                        </svg>
+                    </div>
+                    <div>
+                        <div class="leaflet-usermarker-small map-detail-position">
+                            <i class="pulse"></i>
+                        </div>
+                    </div>
+
+                </div>
+                <div class="map-detail-right-column">
+                    <div class="map-detail-top-box">
+                        <div class="arrow-box-arrow"></div>
+                        <div class="arrow-box-arrow-cover"></div>
+                        <div class="arrow-box">
+                            <div class="map-description-label uppercase" ng-show="$ctrl.positionDescription">{{$ctrl.positionDescription}}</div>
+                            <div ng-if="$ctrl.locationText && !$ctrl.place"><strong>{{$ctrl.locationText.Navn}}<span ng-if="$ctrl.locationText.Fylke"> / {{$ctrl.locationText.Fylke}}</span></strong></div>
+                            <div ng-if="$ctrl.place"><strong>{{$ctrl.place.getHeader()}}</strong></div>
+                            <div class="map-description-small-label">{{$ctrl.getMarkerLatLngText()}}</div>
+                        </div>
+                    </div>
+                    <div class="map-detail-bottom-box">
+                        <div class="arrow-box-arrow"></div>
+                        <div class="arrow-box-arrow-cover"></div>
+                        <div class="arrow-box">
+                            <div class="map-description-label uppercase">{{'YOUR_POSITION'|translate}}</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<ion-floating-button class="regobs-position-reset" ng-class="{'show-details':$ctrl.showDetails}" button-color="#fff" icon-color="#444" icon="ion-pinpoint" click="$ctrl.resetToGps()">
+</ion-floating-button>
