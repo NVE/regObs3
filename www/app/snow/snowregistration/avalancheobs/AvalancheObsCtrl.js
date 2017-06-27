@@ -1,6 +1,6 @@
 angular
     .module('RegObs')
-    .controller('AvalancheObsCtrl', function ($scope, $ionicModal, Registration) {
+    .controller('AvalancheObsCtrl', function ($scope, $ionicModal, Registration, RegobsPopup) {
         var vm = this;
 
         var loadModal = function () {
@@ -62,6 +62,15 @@ angular
             vm.modal.show();
             $scope.$broadcast('openLandslideInMap');
         };
+
+        vm.checkAvalancheTime = function () {
+            if (vm.reg && vm.reg.DtObsTime && vm.reg.AvalancheObs && vm.reg.AvalancheObs.DtAvalancheTime) {
+                var isSame = moment(vm.reg.AvalancheObs.DtAvalancheTime).isSame(vm.reg.DtObsTime, 'day');
+                if (!isSame) {
+                    RegobsPopup.alert('WARNING', 'WARNING_TIME_TEXT');
+                }
+            }
+        }
 
         $scope.$on('$ionicView.loaded', function(){
 

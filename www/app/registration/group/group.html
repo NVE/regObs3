@@ -1,0 +1,24 @@
+﻿<ion-view view-title="{{'SHARE_OBSERVATION_WITH_GROUP'|translate}}" class="grey-view">
+    <ion-content>
+        <regobs-form>
+            <ion-list>
+                <div class="item item-divider item-divider-calm">
+                    {{'SHARE_OBSERVATION_WITH'|translate}}
+                </div>
+                <div ng-repeat="group in vm.groups">
+                    <ion-radio class="radio-left radio-calm" ng-model="vm.reg.ObserverGroupID" name="ObserverGroup" ng-value="group.Id">
+                        {{group.Name}}
+                    </ion-radio>
+                </div>
+            </ion-list>
+            <div class="regobs-next-prev-footer">
+                <div class="regobs-next-prev-footer-content">
+                    <button type="submit" class="button button-block button-calm">{{'SAVE'|translate}}</button>
+                    <button type="button" ng-click="vm.reset()" class="button button-positive button-block button-clear ion-android-close">
+                        {{'CLEAR'|translate}}
+                    </button>
+                </div>
+            </div>
+        </regobs-form>
+    </ion-content>
+</ion-view>

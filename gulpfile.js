@@ -96,7 +96,7 @@ gulp.task('scripts', function (done) {
 
 gulp.task('watch', function() {
     gulp.watch(paths.sass, ['sass']);
-    gulp.watch(paths.js, ['run-scripts-and-update-config']);
+    gulp.watch(paths.js, ['scripts','run-scripts-and-update-config']);
 });
 
 gulp.task('install', ['git-check'], function() {

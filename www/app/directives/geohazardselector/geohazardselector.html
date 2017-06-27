@@ -1,0 +1,10 @@
+<div class="geo-selector" ng-class="{'selectable':!$ctrl.readOnly}" ng-show="$ctrl.isVisible">
+    <div ng-click="$ctrl.toggle()" class="geo-item">
+        <i class="nve-icon nve-icon-{{$ctrl.getCurrentAppMode()}}"></i><span class="geo-item-name">{{$ctrl.getCurrentAppMode()|uppercase|translate}}</span><i ng-show="!$ctrl.readOnly" class="select-geo-toggle icon ion-chevron-down" ng-class="{'ion-chevron-down': !$ctrl.isOpen, 'ion-chevron-up':$ctrl.isOpen}"></i>
+    </div>
+    <div ng-if="!$ctrl.readOnly && $ctrl.isOpen">
+        <div class="geo-item geo-selectable-item" ng-click="$ctrl.changeAppMode(item.name)" ng-repeat="item in $ctrl.geoHazardTypes track by item.id" ng-if="item.name !== $ctrl.getCurrentAppMode()">
+            <i class="nve-icon nve-icon-{{item.name}}"></i><span class="geo-item-name">{{item.name|uppercase|translate}}</span>
+        </div>
+    </div>
+</div>

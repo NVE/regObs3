@@ -62,8 +62,7 @@ angular
                 };
 
                 var showConfirm = function () {
-                    return RegobsPopup.confirm($translate.instant('DELETE_AVALANCHE_ACTIVITY'),
-                        $translate.instant('DELETE_AVALANCHE_ACTIVITY_CONFIRM'));
+                    return RegobsPopup.confirm('DELETE_AVALANCHE_ACTIVITY', 'DELETE_AVALANCHE_ACTIVITY_CONFIRM');
                 };
 
                 $scope.estimatedNumChanged = function () {
@@ -90,6 +89,15 @@ angular
 
                         $scope.obs.DtStart = start.toISOString();
                         $scope.obs.DtEnd = end.toISOString();
+                    }
+                };
+
+                $scope.checkDate = function () {
+                    if ($scope.reg && $scope.reg.DtObsTime && $scope.obs.DtStart) {
+                        var isSame = moment($scope.obs.DtStart).isSame($scope.reg.DtObsTime, 'day');
+                        if (!isSame) {
+                            RegobsPopup.alert('WARNING', 'WARNING_TIME_TEXT');
+                        }
                     }
                 };
 

@@ -23,8 +23,13 @@
                     <div class="status-description">{{'OBSERVATION_SENT_CONFIRMATION_TEXT'|translate}} <span ng-show="vm.emailReceipt">{{'CONFIRM_EMAIL_SENT'|translate}}</span></div>
                 </div>
                 <div ng-show="vm.failed()">
-                    <h3 ng-show="vm.completed.length > 1">{{'OBSERVATIONS_FAILED_CONFIRMATION_HEADER'|translate}}</h3>
-                    <h3 ng-show="vm.completed.length === 1">{{'OBSERVATION_FAILED_CONFIRMATION_HEADER'|translate}}</h3>
+                    <div ng-if="vm.isStoredObservation()">
+                        <h3>{{'ERROR_SENDING_OBSERVATION'|translate}} {{vm.completed[0].DtObsTime | regobsDate }}</h3>
+                    </div>
+                    <div ng-if="!vm.isStoredObservation()">
+                        <h3 ng-show="vm.completed.length > 1">{{'OBSERVATIONS_FAILED_CONFIRMATION_HEADER'|translate}}</h3>
+                        <h3 ng-show="vm.completed.length === 1">{{'OBSERVATION_FAILED_CONFIRMATION_HEADER'|translate}}</h3>
+                    </div>
                     <div class="status-description" ng-show="vm.completed[0].error.status !== 400">
                         {{'OBSERVATION_FAILED_CONFIRMATION_TEXT'|translate}} <a href="http://www.regobs.no/Home/About" target="_system">{{'TAKE_CONTACT'|translate}}</a>.
                     </div>
@@ -54,7 +59,8 @@
                     </div>
                     <div ng-show="vm.completed.length === 1 && !vm.failed() && vm.completed[0].RegId"><button type="button" class="button button-calm button-block status-footer-button spinner-right" ng-disabled="vm.loadingRegistration" ng-click="vm.onRegistrationClick(vm.completed[0])">{{'VIEW_OBSERVATION'|translate}} <ion-spinner ng-show="vm.loadingRegistration" icon="dots"></ion-spinner></button></div>
                     <div ng-show="vm.failed()"><button type="button" class="button button-calm button-block status-footer-button" ng-click="vm.resendFailed()">{{'RETRY'|translate}}</button></div>
-                    <div><button type="button" class="button button-outline button-calm button-block status-footer-button" ng-click="vm.goToStart()">{{'GO_TO_FRONT_PAGE'|translate}}</button></div>
+                    <div ng-show="vm.failed() && vm.completed.length === 1"><button type="button" class="button button-assertive button-block status-footer-button" ng-click="vm.deleteUnsent(vm.completed[0])">{{'DELETE'|translate}} {{'OBSERVATION'|translate|lowercase}}</button></div>
+                    <div ng-hide="vm.isStoredObservation()"><button type="button" class="button button-outline button-calm button-block status-footer-button" ng-click="vm.goToStart()">{{'GO_TO_FRONT_PAGE'|translate}}</button></div>
                 </div>
             </div>
             <div ng-if="!vm.isSending && vm.cancelled">
@@ -65,7 +71,7 @@
                 </div>
                 <div class="status-footer">
                     <div ng-show="vm.failed()"><button type="button" class="button button-calm button-block status-footer-button" ng-click="vm.resendFailed()">{{'RETRY'|translate}}</button></div>
-                    <div><button type="button" class="button button-outline button-calm button-block status-footer-button" ng-click="vm.goToStart()">{{'GO_TO_FRONT_PAGE'|translate}}</button></div>
+                    <div ng-hide="vm.isStoredObservation()"><button type="button" class="button button-outline button-calm button-block status-footer-button" ng-click="vm.goToStart()">{{'GO_TO_FRONT_PAGE'|translate}}</button></div>
                 </div>
             </div>
         </div>

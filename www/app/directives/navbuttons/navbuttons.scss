@@ -31,9 +31,6 @@
     right: 10px;
     stroke: #fff;
     fill: #fff;
-    opacity: 0;
-    -webkit-animation: fadeinout1 1s linear forwards;
-    animation: fadeinout1 1s linear forwards;
 }
 
 .save-indicator-text {
@@ -52,29 +49,6 @@
     opacity: 0;
     -webkit-animation: fadeinout3 5s linear forwards;
     animation: fadeinout3 5s linear forwards;
-}
-
-
-
-
-@-webkit-keyframes fadeinout1 {
-    0%, 100% {
-        opacity: 0;
-    }
-
-    50% {
-        opacity: 1;
-    }
-}
-
-@keyframes fadeinout1 {
-    0%,100% {
-        opacity: 0;
-    }
-
-    50% {
-        opacity: 1;
-    }
 }
 
 @-webkit-keyframes fadeinout2 {

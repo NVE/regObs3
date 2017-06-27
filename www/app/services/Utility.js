@@ -456,7 +456,7 @@ angular
                 }
             },
             GeneralObservation: {
-                name: "Fritekst",
+                name: "Notater",
                 RegistrationTID: "10",
                 properties: {
                     ObsComment: { displayFormat: { hideDescription: true } }
@@ -529,6 +529,10 @@ angular
         service.getCurrentGeoHazardTid = function () {
             var mode = AppSettings.getAppMode();
             return geoHazardTid[mode];
+        };
+
+        service.getGeoHazardTypes = function() {
+           return angular.copy(geoHazardTid);
         };
 
         service.getCurrentGeoHazardName = function () {
@@ -880,16 +884,6 @@ angular
 
         service.getRadiusFromBounds = function (bounds) {
             return parseInt((bounds.getNorthWest().distanceTo(bounds.getSouthEast()) / 2).toFixed(0));
-        };
-
-        service.getSearchRadius = function (map) {
-            var bounds = map.getBounds();
-            var radius = service.getRadiusFromBounds(bounds);
-            var settingsRaduis = AppSettings.data.searchRange;
-            if (settingsRaduis > radius) {
-                radius = settingsRaduis;
-            }
-            return radius;
         };
 
         service.formatLatLng = function (lat, lng, decimals) {

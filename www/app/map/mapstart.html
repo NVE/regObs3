@@ -1,14 +1,16 @@
-﻿<ion-view view-title={{vm.viewTitle}}>
+﻿<ion-view view-title="regObs">
     <ion-nav-buttons side="left" ng-cloak>
         <!-- Toggle left side menu -->
-        <button ng-cloak menu-toggle="left" class="button button-icon icon ion-map"></button>
+        <button ng-cloak menu-toggle="left" class="button button-icon icon ion-navicon-round"></button>
     </ion-nav-buttons>
     <ion-nav-buttons side="right" ng-cloak>
         <nav-trip-button></nav-trip-button>
         <user-logout-button></user-logout-button>
-        <nav-more-button></nav-more-button>
+        <!--<nav-more-button></nav-more-button>-->
     </ion-nav-buttons>
     <div ng-class="{'hasFooter': vm.hasRegistration()}">
+        <regobs-geo-selector></regobs-geo-selector>
+        <regobs-map-search-trigger></regobs-map-search-trigger>
         <div ng-if="!vm.mapSelectedItem">
             <ion-floating-button class="regobs-gps-center" button-color="#fff" icon-color="#444" icon="ion-pinpoint" click="vm.gpsCenterClick()" ng-show="vm.getFollowMode()">
             </ion-floating-button>
@@ -57,3 +59,4 @@
         </div>
     </ion-footer-bar>
 </ion-view>
+

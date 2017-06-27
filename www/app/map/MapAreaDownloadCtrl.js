@@ -173,7 +173,7 @@
             };
 
             var startDownload = function() {
-                RegobsPopup.downloadProgress($translate.instant('UPDATE_OFFLINE_MAP'),
+                RegobsPopup.downloadProgress('UPDATE_OFFLINE_MAP',
                         downloadMap,
                         { closeOnComplete: false })
                     .then(navigate)
@@ -181,7 +181,7 @@
             }
 
             if (vm.zoomlevel() < vm.recommendedZoom) {
-                RegobsPopup.confirm($translate.instant('WARNING'), $translate.instant('MAP_DETAIL_LOW_WARNING'), $translate.instant('MAP_DETAIL_LOW_WARNING_OK_BUTTON'))
+                RegobsPopup.confirm('WARNING', 'MAP_DETAIL_LOW_WARNING', 'MAP_DETAIL_LOW_WARNING_OK_BUTTON')
                     .then(function(result) {
                         if (result) {
                             startDownload();

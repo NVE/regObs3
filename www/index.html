@@ -57,7 +57,7 @@
             e = e || window.event;
             var element = e.target || e.srcElement;
 
-            if (element.tagName === 'A' && element.target === '_system') {
+            if (element.tagName === 'A' && element.target === '_system' || element.target === '_blank') {
                 window.open(element.href, "_system");
                 return false; // prevent default action and stop event propagation. This will cause inappbrowser to be used
             }
@@ -76,13 +76,10 @@
         <ion-side-menu-content>
             <!-- Main content, usually <ion-nav-view> -->
             <ion-nav-bar ng-cloak>
-                <!--<ion-nav-back-button ng-cloak default-nav-back-button ng-click="goBack()">
                     {{ backTitle() | translate }}
-                </ion-nav-back-button>-->
                 <ion-nav-back-button></ion-nav-back-button>
             </ion-nav-bar>
             <ion-nav-view></ion-nav-view>
         </ion-side-menu-content>
-    </ion-side-menus>
 </body>
 </html>

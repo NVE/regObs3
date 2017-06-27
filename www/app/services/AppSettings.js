@@ -29,7 +29,7 @@
 
         var baseUrls = {
             'regObs': 'https://api.nve.no/hydrology/regobs/webapi_v3.2.0',
-            'demo regObs': 'https://api.nve.no/hydrology/demo/regobs/webapi_v3.2/',           
+            'demo regObs': 'https://api.nve.no/hydrology/demo/regobs/webapi_v3.2',           
             'test regObs': 'http://tst-h-web03.nve.no/regobswebapi'
             //'test regObs': 'http://localhost:40001'
         };
@@ -67,7 +67,7 @@
         settings.mapFolder = 'maps';
         settings.debugTiles = false; //Turn on to debug offline/fallback/tiles
         settings.maxObservationsToFetch = 1000; //Max observations to fetch from webservice
-        settings.imageSize = 2400;
+        settings.imageSize = 1800;
 
         settings.tiles = [
             { name: 'topo', description: 'TOPO_MAP_DESCRIPTION', maxDownloadLimit: 1500, avgTileSize: 17248, url: 'http://opencache.statkart.no/gatekeeper/gk/gk.open_gmaps?layers=matrikkel_bakgrunn&zoom={z}&x={x}&y={y}&format=image/jpeg', embeddedUrl: 'map/topo_{z}_{x}_{y}.jpg', embeddedMaxZoom: 9 },
@@ -122,7 +122,7 @@
         };
         settings.getEndPoints = function () {
             return {
-                getObserver: baseUrls[settings.data.env] + '/Account/GetObserver', //Header Authorization: Basic btoa('user':'pass')
+                login: baseUrls[settings.data.env] + '/Account/Login', //Header Authorization: Basic btoa('user':'pass')
                 getObserverGroups: baseUrls[settings.data.env] + '/Account/GetObserverGroups', //?guid=xxxxxxxx-xxxx-4xxx-xxxxx-xxxxxxxxxxxx,
                 getObservationsWithinRadius: baseUrls[settings.data.env] + '/Observations/GetObservationsWithinRadius',
                 getLocationsWithinRadius: baseUrls[settings.data.env] + '/Location/WithinRadius',
@@ -211,6 +211,7 @@
             var settingsKey = 'showObservationsDaysBack' + currentAppMode;
             settings.data[settingsKey] = value;
             settings.save();
+            $rootScope.$broadcast('$regobs:viewObservationsDaysBackChanged', value);
         };
 
 

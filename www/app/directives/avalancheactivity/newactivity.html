@@ -15,7 +15,7 @@
                     <span class="input-label">
                         {{'DATE'|translate}}
                     </span>
-                    <input type="date" ng-model="dates.DtStart" ng-change="dateChanged()">
+                    <input type="date" ng-model="dates.DtStart" ng-change="dateChanged()" ng-blur="checkDate()">
                 </label>
                 <label class="item item-input item-stacked-label item-select">
                     <span class="input-label">

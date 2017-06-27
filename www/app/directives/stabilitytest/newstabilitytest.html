@@ -46,8 +46,7 @@
                 <regobs-comment model="stabilityTest.Comment"></regobs-comment>
             </ion-list>
             <div class="padding">
-                <regobs-save-button ng-click="addStabilityTest()" save-action=""></regobs-save-button>
-
+                <button type="button" ng-click="addStabilityTest()" ng-disabled="newStabilityTestForm.$invalid" class="button button-block button-calm">{{"SAVE"|translate}}</button>
                 <button type="button" class="button button-block button-assertive button-clear"
                         ng-click="deleteStabilityTest()"
                         ng-show="editing">

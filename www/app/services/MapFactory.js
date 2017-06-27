@@ -8,25 +8,15 @@
             userMarker, //Leaflet marker for user position
             tiles = []; //Map tiles      
 
-        service._isInitialized = false; //Is map initialized. Map should allways be initialized on startup, else you will get NotInitialized error for alot of methods
         service._isProgramaticZoom = false; //Is currently programatic zoom
         service._zoomToViewOnFirstLocation = 14; //Zoom to this level when first location is found
         service._selectedItem = null; //Map selected item, this could be observations, nearby places or location marker
         service._defaultCenter = [62.5, 10]; //default map center when no observation or user location
         service._followMode = true; //Follow user position, or has user manually dragged or zoomed map?
-        service._lastViewBounds = null;
-        service._offlinemaps = [];
-        service._active = false;
-
-
-        /**
-         * Check if map is initialized, else throw error
-         * @throws {Error} when not initialized
-         */
-        service._checkIfInitialized = function () {
-            if (!service._isInitialized)
-                throw Error('Map is not initialized! Please call createMap functon on map element...');
-        };
+        service._lastViewBounds = null; //Map last view bounds
+        service._offlinemaps = []; //Array of offline maps (red lines)
+        service._active = false; //Is map active?
+        service._listeners = []; //Map event listeners
 
         /**
          * Set selected item
@@ -38,7 +28,7 @@
             if (item) {
                 if (item.options.setViewOnSelect) {
                     var pos = item.getLatLng();
-                    service._disableFollowMode();
+                    service.disableFollowMode();
                     map.panTo(pos); //pan map to selected item
                 }
                 service._updateSelectedItemDistance();
@@ -70,7 +60,7 @@
 
         /**
          * Unselect all markers
-         * @param {MapSelectableItem} exept Unselect all except this item
+         * @param {MapSelectableItem} except Unselect all except this item
          */
         service._unselectAllMarkers = function (except) {
             var unselectFunc = function (arr) {
@@ -87,7 +77,7 @@
 
         /**
          * Get Marker by id
-         * @param {String} id 
+         * @param {String} id marker id
          * @returns {MapSelectableItem} marker
          */
         service._getMarker = function (id) {
@@ -137,14 +127,15 @@
          * Remove all observations in map
          */
         service._removeObservations = function () {
-            service._checkIfInitialized();
-            layerGroups.observations.clearLayers();
+            if (layerGroups && layerGroups.observations) {
+                layerGroups.observations.clearLayers();
+            }
         };
 
         /**
          * Refresh user position in map
-         * @param {} position 
-         * @returns {} 
+         * @param {object} position User position
+         * @returns {void}
          */
         service._refreshUserMarker = function (position) {
             if (position) {
@@ -166,19 +157,20 @@
 
         /**
          * Remove all tile layers
-         * @returns {} 
+         * @returns {void} 
          */
         service._removeAllTiles = function () {
-            service._checkIfInitialized();
-            for (var i = 1; i < tiles.length; i++) {
-                layerGroups.tiles.removeLayer(tiles[i]);
+            if (angular.isArray(tiles) && layerGroups && layerGroups.tiles) {
+                for (var i = 1; i < tiles.length; i++) {
+                    layerGroups.tiles.removeLayer(tiles[i]);
+                }
             }
         };
 
         /**
          * Get tile index for tile name
-         * @param {} name 
-         * @returns {} 
+         * @param {string} name Name of tile
+         * @returns {number} tile index
          */
         service._getTileIndex = function (name) {
             for (var i = 0; i < AppSettings.tiles.length; i++) {
@@ -191,8 +183,8 @@
 
         /**
          * Get tile by name
-         * @param {} name 
-         * @returns {} 
+         * @param {string} name Name of tile
+         * @returns {L.Layer} Tile layer
          */
         service.getTileByName = function (name) {
             var index = service._getTileIndex(name);
@@ -201,9 +193,9 @@
 
         /**
          * Add tile to map
-         * @param {} name 
-         * @param {} opacity 
-         * @returns {} 
+         * @param {string} name Tile name
+         * @param {number} opacity Opacity
+         * @returns {void} 
          */
         service._addTile = function (name, opacity) {
             if (layerGroups.tiles) {
@@ -219,34 +211,46 @@
 
         /**
          * Disable center position to user on updated location
-         * @returns {} 
+         * @returns {void}
          */
-        service._disableFollowMode = function () {
+        service.disableFollowMode = function () {
             $timeout(function () {
                 service._followMode = false;
             });
 
         };
 
+        /**
+        * @returns {boolean} True when map is centered to user position when user position updates
+        */
         service.getFollowMode = function () {
             return service._followMode;
         };
 
         /**
          * GPS position updated
-         * @param {} position 
-         * @returns {} 
+         * @param {L.LocationEvent} position Position update
+         * @returns {void} 
          */
         service._onPositionUpdate = function (position) {
             UserLocation.setLastUserLocation(position);
             service._refreshUserMarker(position);
-            var latlng = new L.LatLng(position.latitude, position.longitude);
             service._updateSelectedItemDistance();
         };
 
+
+        /**
+        * @typedef {Object} LayerGroup
+        * @property {L.Layer} tiles Tiles layer group
+        * @property {RegObsClasses.MarkerClusterGroup} observations Marker cluster layer group
+        * @property {L.LayerGroup} offlinemaps Offline map layer group
+        * @property {L.LayerGroup} user User layer group
+        */
+
         /**
          * Create layer groups
-         * @returns {} 
+         * @param {L.map} mapToAdd Map object
+         * @returns {LayerGroup} Layer groups
          */
         service.createLayerGroups = function (mapToAdd) {
             var lg = { //Layers are added in order
@@ -261,7 +265,7 @@
 
         /**
          * Calculate where to center map on startup
-         * @returns {} 
+         * @returns {array} LatLng
          */
         service._calculateMapStartCenter = function () {
             if (ObsLocation.isSet()) {
@@ -277,23 +281,32 @@
 
         /**
          * Could location be set manually?
-         * @returns {} 
+         * @returns {boolean} Is possible to set location manually 
          */
         service._isSetLocationManuallyPossible = function () {
             return Registration.isEmpty() || !ObsLocation.isSet();
         };
 
+        /**
+        * Update latest view bounds to current map bounds
+        * @returns {void}
+        */
         service._updateViewBounds = function () {
-            service._lastViewBounds = map.getBounds();
+            if(map){
+                service._lastViewBounds = map.getBounds();
+            }
         };
 
 
         /**
          * Main method for creating map
-         * @param {} elem 
-         * @returns {} 
+         * @param {external:Node} elem Dom element
+         * @returns {void} 
          */
         service.createMap = function (elem) {
+            userMarker = undefined; //reset if existing
+            service._followMode = true;
+
             var center = service._calculateMapStartCenter();
             map = L.map(elem, {
                 center: center,
@@ -324,12 +337,12 @@
 
             map.on('dragstart', function () {
                 if (userMarker) { //Only disable follow mode on map drag if first location has been set (userMarker exists)
-                    service._disableFollowMode();
+                    service.disableFollowMode();
                 }
             });
             map.on('zoomstart', function () {
                 if (!service._isProgramaticZoom && userMarker) {
-                    service._disableFollowMode();
+                    service.disableFollowMode();
                 }
             });
 
@@ -341,28 +354,27 @@
 
             L.control.scale({ imperial: false }).addTo(map);
 
-            $rootScope.$on('$regObs:registrationSaved', function () {
+            service._listeners.push($rootScope.$on('$regObs:registrationSaved', function () {
                 service.refresh();
-                $timeout(function () {
-                    map.invalidateSize(); //Footer bar could have been removed, invalidate map size
-                }, 50);
-            });
+            }));
 
-            $rootScope.$on('$regObs:appSettingsChanged', function () {
+            service._listeners.push($rootScope.$on('$regObs:appSettingsChanged', function () {
                 service.refresh();
-            });
+            }));
 
-            $rootScope.$on('$regObs:registrationReset', function () {
+            service._listeners.push($rootScope.$on('$regobs:viewObservationsDaysBackChanged', function () {
+                service.updateObservationsInMap();
+            }));
+
+            service._listeners.push($rootScope.$on('$regObs:registrationReset', function () {
                 $timeout(function () {
                     service.clearSelectedMarkers();
                 });
-            });
+            }));
 
-            $rootScope.$on('$regObs:observationsUpdated', function () {
+            service._listeners.push($rootScope.$on('$regObs:observationsUpdated', function () {
                 service.refresh();
-            });
-
-            service._isInitialized = true; //map is created!
+            }));
 
             service._updateViewBounds();
             service.refresh();
@@ -377,28 +389,74 @@
         };
 
         /**
+        * Reset and destroy map
+        * @returns {void}
+        */
+        service.reset = function () {
+            service._listeners.forEach(function (item) {
+                item(); //unregister listener
+            });
+            service._listeners = [];
+            userMarker = undefined;
+
+            if (map) {
+                map.off();
+                map.remove();
+                map = undefined;
+            }
+        };
+
+        /**
          * Clear selected marker
-         * @returns {} 
+         * @returns {void} 
          */
         service.clearSelectedMarkers = function () {
             service._unselectAllMarkers();
             service._setSelectedItem(null);
         };
 
+
         /**
          * Set view and zoom to level
-         * @param {} latlng 
-         * @param {} zoom 
-         * @returns {} 
+         * @param {L.LatLng} latlng Set view to this lat lng coordinate
+         * @param {number} zoom  Set zoom. If empty use default map zoom.
+         * @returns {void} 
          */
         service.setView = function (latlng, zoom) {
             service._isProgramaticZoom = true;
-            map.setView(latlng, zoom || service._zoomToViewOnFirstLocation);
+            if (map) {
+                map.setView(latlng, zoom || service._zoomToViewOnFirstLocation);
+            }
         };
 
         /**
+        * Pan to lat lng without zooming
+        * @param {L.LatLng} latlng Coordinate to pan to (no zooming).
+        * @returns {void}
+        */
+        service.panTo = function (latlng) {
+            if (map) {
+                map.panTo(latlng);
+            }
+        };
+
+        /**
+        * Fly to lat lng position (smoother animation)
+        * @param {L.LatLng} latlng Coordinate to fly to
+        * @param {number} zoom Zoom to this level when fly in.
+        * @returns {void}
+        */
+        service.flyTo = function (latlng, zoom) {
+            service._isProgramaticZoom = true;
+            if (map) {
+                map.flyTo(latlng, zoom || service._zoomToViewOnFirstLocation);
+            }
+        };
+
+
+        /**
          * Get center of map
-         * @returns {} 
+         * @returns {void} 
          */
         service.getCenter = function () {
             return map.getCenter();
@@ -406,7 +464,7 @@
 
         /**
          * Get map zoom
-         * @returns {} 
+         * @returns {number} Map zoom level 
          */
         service.getZoom = function () {
             if (!map) return service._zoomToViewOnFirstLocation;
@@ -415,7 +473,7 @@
 
         /**
          * Get all tiles
-         * @returns {} 
+         * @returns {Array<RegObsClasses.RegObsTileLayer>} Array of tiles layers
          */
         service.getTiles = function () {
             return tiles;
@@ -423,7 +481,7 @@
 
         /**
          * Set follow mode and center map to user position
-         * @returns {} 
+         * @returns {void}
          */
         service.centerMapToUser = function () {
             service._followMode = true;
@@ -438,41 +496,49 @@
         };
 
         /**
+        * Get search radus for current map bounds
+        * @param {L.Map} map Current map to compute radius for
+        * @returns {number} radius
+        */
+        service.getSearchRadius = function (map) {
+            var bounds = map.getBounds();
+            var radius = Utility.getRadiusFromBounds(bounds);
+            var settingsRaduis = AppSettings.data.searchRange;
+            if (settingsRaduis > radius) {
+                radius = settingsRaduis;
+            }
+            return radius;
+        };
+
+
+        /**
          * Update observation tat is stored in presistant storage
-         * @returns {} 
+         * @returns {promise} Download observations promise 
          */
         service.updateObservationsInMap = function () {
-            if (!map) throw new Error('Map not initialized!');
+            if (map) {
+                var center = map.getCenter();
+                var radius = service.getSearchRadius(map);
+                var geoHazardTid = Utility.getCurrentGeoHazardTid();
 
-            var center = map.getCenter();
-            var radius = Utility.getSearchRadius(map);
-            var geoHazardTid = Utility.getCurrentGeoHazardTid();
-
-            service.clearSelectedMarkers();
-            var workFunc = function (onProgress, cancel) {
-                return Observations.updateObservationsWithinRadius(center.lat,
-                    center.lng,
-                    radius,
-                    geoHazardTid,
-                    onProgress,
-                    cancel);
-            };
-
-            ////Turn on observations and nearby places when updated from map (youtrack: rOa-40)
-            //if (!AppSettings.data.showObservations || !AppSettings.data.showPreviouslyUsedPlaces) {
-            //    AppSettings.data.showObservations = true;
-            //    AppSettings.data.showPreviouslyUsedPlaces = true;
-            //    AppSettings.save();
-            //}
-
-            return RegobsPopup.downloadProgress('UPDATE_MAP_OBSERVATIONS', workFunc, { longTimoutMessageDelay: 20, closeOnComplete: true });
+                service.clearSelectedMarkers();
+                var workFunc = function (onProgress, cancel) {
+                    return Observations.updateObservationsWithinRadius(center.lat,
+                        center.lng,
+                        radius,
+                        geoHazardTid,
+                        onProgress,
+                        cancel);
+                };
+                return RegobsPopup.downloadProgress('UPDATE_MAP_OBSERVATIONS', workFunc, { longTimoutMessageDelay: 20, closeOnComplete: true });
+            }
         };
 
         /**
          * Is position within map bounds?
-         * @param {} lat 
-         * @param {} lng 
-         * @returns {} 
+         * @param {number} lat  Latitude
+         * @param {number} lng Longitude
+         * @returns {boolean} True if position is within view bounds 
          */
         service.isPositionWithinMapBounds = function (lat, lng) {
             if (service._lastViewBounds && lat && lng) {
@@ -482,13 +548,17 @@
             return false;
         };
 
+        /**
+        * Get last view bounds
+        * @returns {L.LatLngBounds}
+        */
         service.getLastViewBounds = function () {
             return service._lastViewBounds;
         };
 
         /**
          * Redraw map with tiles only visible for current geohazard
-         * @returns {} 
+         * @returns {void} 
          */
         service._redrawTilesForThisGeoHazard = function () {
             service._removeAllTiles();
@@ -509,7 +579,7 @@
 
         /**
          * Check if selected marker should med unselected if geohazard settings has been changed
-         * @returns {} 
+         * @returns {void} 
          */
         service._checkSelectedItemGeoHazard = function () {
             if (service._selectedItem && service._selectedItem.getGeoHazardId() !== Utility.getCurrentGeoHazardTid()) {
@@ -518,12 +588,21 @@
         };
 
 
+        /**
+        * Set offline are bounds
+        * @param {Array} offlineMapsBoundsArray Array of offline map bounds
+        * @returns {void}
+        */
         service.setOfflineAreaBounds = function (offlineMapsBoundsArray) {
             if (!angular.isArray(offlineMapsBoundsArray)) throw Error('offlineMapsBoundsArray must be an array!');
             service._offlinemaps = offlineMapsBoundsArray;
             service._redrawOfflineMapLines();
         };
 
+        /**
+        * Redraw offline map bounds (red lines)
+        * @returns {void}
+        */
         service._redrawOfflineMapLines = function () {
             if (layerGroups.offlinemaps) {
                 layerGroups.offlinemaps.clearLayers();
@@ -536,7 +615,7 @@
 
         /**
          * Refresh map an redraw layers and markers as set in settings
-         * @returns {} 
+         * @returns {void} 
          */
         service.refresh = function () {
             AppLogging.log('Map refresh');
@@ -548,9 +627,6 @@
             Registration.clearExistingNewRegistrations()
                 .then(function () {
                     service._removeObservations(); //clear all markers
-                    //if (AppSettings.data.showPreviouslyUsedPlaces) {
-                    //    service._drawStoredLocations();
-                    //}
                     if (AppSettings.data.showObservations) {
                         service._drawObservations();
                     }
@@ -560,7 +636,7 @@
 
         /**
          * Start watching gps position
-         * @returns {} 
+         * @returns {void} 
          */
         service.startWatch = function () {
             if (map) {
@@ -581,7 +657,7 @@
 
         /**
          * Clear gps position watch
-         * @returns {} 
+         * @returns {void} 
          */
         service.clearWatch = function () {
             if (map) {
@@ -596,21 +672,29 @@
         };
 
         /**
+        * Is main map page visible?
+        * @returns {boolean} True if map page is visisble
+        */
+        service._isMapVisisble = function () {
+            return $state.current.name === 'start';
+        };
+
+        /**
          * Invalidate map size (redraws map)
-         * @returns {} 
+         * @returns {void} 
          */
         service.invalidateSize = function () {
-            if (map) {
+            if (map && service._isMapVisisble()) {
                 map.invalidateSize();
             }
         };
 
         /**
          * Calculate list of xyz map pieces that is needed for current bounds
-         * @param {} bounds 
-         * @param {} zoomMin 
-         * @param {} zoomMax ref
-         * @returns {} 
+         * @param {L.LatLngBounds} bounds Bounds to calculate from
+         * @param {number} zoomMin Min zoom level
+         * @param {number} zoomMax Max zoom level
+         * @returns {Array} xyz list
          */
         service.calculateXYZListFromBounds = function (bounds, zoomMin, zoomMax) {
             if (!tiles) return [];
@@ -619,10 +703,10 @@
 
         /**
          * Calculate size of all map pieces that is needed for current bounds
-         * @param {} bounds 
-         * @param {} zoomMin 
-         * @param {} zoomMax 
-         * @returns {} 
+         * @param {L.LatLngBounds} bounds Bounds to calculate from
+         * @param {number} zoomMin Min zoom level
+         * @param {number} zoomMax Max zoom level
+         * @returns {number} Number of tiles
          */
         service.calculateXYZSizeFromBounds = function (bounds, zoomMin, zoomMax) {
             if (!map || !tiles) return 0;
@@ -632,7 +716,7 @@
 
         /**
          * Get all observations that is within view bounds of map
-         * @returns {} 
+         * @returns {Array<RegObsClasses.Observation>} Array of observations
          */
         service.getObservationsWithinViewBounds = function () {
             return Observations.getStoredObservations(Utility.getCurrentGeoHazardTid(), true)

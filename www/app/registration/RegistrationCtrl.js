@@ -1,6 +1,6 @@
 ﻿angular
     .module('RegObs')
-    .controller('RegistrationCtrl', function SnowRegistrationCtrl($scope, Registration, Utility, Property, $ionicHistory, ObsLocation, AppLogging, ObservationType) {
+    .controller('RegistrationCtrl', function SnowRegistrationCtrl($scope, User, Registration, Utility, Property, $ionicHistory, ObsLocation, AppLogging, ObservationType) {
         var vm = this;
         vm.hasFooter = function () {
             return Registration.showSend();
@@ -31,10 +31,21 @@
             return ObsLocation.getDescription();
         };
 
+        vm.getObserverGroupName = function () {
+            if (!vm.reg.ObserverGroupID)
+                return '';
+            var groups = User.getUser().ObserverGroup;
+            return groups[vm.reg.ObserverGroupID] || '';
+        };
+
 
         $scope.$on('$ionicView.enter', function () {
             Utility.setBackView('start');
             vm.reg = Registration.data;
+
+            var group = User.getUser().ObserverGroup;
+            vm.hasObserverGroups = !Utility.isEmpty(group);
+
             vm.loaded = true;
         });
 

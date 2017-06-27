@@ -2,7 +2,7 @@
     .module('RegObs')
     .component('mapMenu', {
         templateUrl: 'app/directives/mapmenu/mapmenu.html',
-        controller: function (AppSettings, $state, OfflineMap, $cordovaInAppBrowser, $scope, Utility, $rootScope, $ionicSideMenuDelegate) {
+        controller: function (AppSettings, $state, OfflineMap, $cordovaInAppBrowser, $scope, Utility, $rootScope, $ionicSideMenuDelegate, User, RegobsPopup, Registration) {
             'ngInject';
             var ctrl = this;
            
@@ -14,6 +14,7 @@
                 }
                 AppSettings.save();
             };
+            
 
             ctrl.downloadMap = function () {
                 $ionicSideMenuDelegate.toggleLeft();
@@ -28,11 +29,16 @@
                });
             };
 
+            ctrl.RegistrationService = Registration;
+
+
             //Fix because of bug in menu-close and ui-sref on menu item resets back-state and back button is sometimes missing
             ctrl.navigateTo = function (page, options) {
                 $ionicSideMenuDelegate.toggleLeft(); 
                 $state.go(page, options);
             };
+
+            ctrl.openLegalInfo = RegobsPopup.showLegalInfo;
 
             ctrl.getMapsForCurrentAppMode = function() {
                 return ctrl.settings.maps.filter(function(item) {
@@ -65,9 +71,14 @@
                 ctrl.daysBackArray = AppSettings.getDaysBackArrayForCurrentGeoHazard();
             };
 
+            ctrl.setUser = function () {
+                ctrl.user = User.getUser();
+            };
+
             ctrl.init = function() {
                 ctrl.settings = AppSettings.data;
                 ctrl.initDaysBackSettings();
+                ctrl.setUser();
             };
 
             $scope.$on('$regObs:appReset', function() {
@@ -78,6 +89,12 @@
                 ctrl.initDaysBackSettings();
             });
 
-            ctrl.init();
+            $scope.$on('$regObs:userInfoSaved', function () {
+                ctrl.setUser();
+            });
+
+            ctrl.$onInit = function () {
+                ctrl.init();
+            }; 
         }
     });

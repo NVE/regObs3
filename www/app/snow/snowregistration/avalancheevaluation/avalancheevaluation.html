@@ -1,6 +1,6 @@
 <ion-view view-title="{{'AVALANCHE_EVALUATION_TITLE'|translate}}">
     <ion-content class="has-footer">
-        <form name="avalancheEvaluationForm" novalidate>
+        <regobs-form name="avalancheEvaluationForm">
             <ion-list>
                 <label class="item item-input item-stacked-label">
                     <span class="input-label">{{'EVALUATION'|translate}}</span>
@@ -36,7 +36,8 @@
                 ></regobs-comment>
             </ion-list>
             <regobs-image-list></regobs-image-list>
-        </form>
+            <div class="padding"><button type="submit" class="button button-block button-calm">{{"SAVE"|translate}}</button></div>
+        </regobs-form>
         <button type="button" ui-sref="dynamichelp({registrationProp:'AvalancheEvaluation3'})" class="button button-positive button-block button-clear">
             {{'HELP'|translate}}
         </button>

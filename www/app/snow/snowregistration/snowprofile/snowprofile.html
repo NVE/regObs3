@@ -1,13 +1,14 @@
 <ion-view view-title="{{'SNOW_PROFILE'|translate}}">
     <ion-content class="has-footer">
-        <form name="snowProfileForm" novalidate>
+        <regobs-form name="snowProfileForm">
             <ion-list>
                 <ion-item class="item-text-wrap">
                     {{'SNOW_PROFILE_HELP_TEXT'|translate}}
                 </ion-item>
             </ion-list>
             <regobs-image-list></regobs-image-list>
-        </form>
+            <div class="padding"><button type="submit" class="button button-block button-calm">{{"SAVE"|translate}}</button></div>
+        </regobs-form>
         <button type="button" ui-sref="dynamichelp({registrationProp:'SnowProfile'})" class="button button-positive button-block button-clear">
             {{'HELP'|translate}}
         </button>

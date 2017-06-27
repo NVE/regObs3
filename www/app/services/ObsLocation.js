@@ -60,7 +60,7 @@ angular
                 ObsLocation.data = {
                     Latitude: loc.Latitude.toString(),
                     Longitude: loc.Longitude.toString(),
-                    Uncertainty: loc.Uncertainty.toString(),
+                    Uncertainty: (loc.Uncertainty ? parseInt(loc.Uncertainty) : 0).toString(),
                     UTMSourceTID: loc.UTMSourceTID
                 };
 
