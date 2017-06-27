@@ -8,10 +8,6 @@
                 var location = ObsLocation.get();
                 return location;
             }
-            if (UserLocation.hasUserLocation()) {
-                var lastPosition = UserLocation.getLastUserLocation();
-                return { Latitude: lastPosition.latitude, Longitude: lastPosition.longitude };
-            }
             return null;
         };
 

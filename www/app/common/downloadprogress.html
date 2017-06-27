@@ -14,5 +14,5 @@
             {{"CANCEL" | translate}} <ion-spinner class="button-spinner" ng-show="isProcessing()"></ion-spinner>
         </div>
     </button>
-    <button type="button" class="button button-calm" ng-show="complete" ng-click="closePopup()">{{"OK" | translate}}</button>
+    <button type="button" class="button button-calm" ng-show="complete && !closeOnComplete" ng-click="closePopup()">{{"OK" | translate}}</button>
 </div>

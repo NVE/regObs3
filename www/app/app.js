@@ -45,6 +45,11 @@
                 templateUrl: 'app/map/mapstart.html',
                 controller: 'MapStartCtrl as vm'
             })
+            .state('login', {
+                url: '/login',
+                templateUrl: 'app/login/loginview.html',
+                controller: 'LoginViewCtrl as vm'
+            })
             .state('settings', {
                 url: '/settings',
                 templateUrl: 'app/settings/settingsview.html',
@@ -83,6 +88,12 @@
                 controller: 'ObservationListCtrl as vm'
             })
 
+            .state('userobservations', {
+                url: '/userobservations',
+                templateUrl: 'app/observations/user/userobservations.html',
+                controller: 'UserObservationsCtrl as vm'
+            })
+
             .state('confirmlocation', {
                 url: '/confirmlocation',
                 templateUrl: 'app/registration/location/confirmlocation.html',
@@ -96,6 +107,12 @@
                 controller: 'ConfirmTimeCtrl as vm'
             })
 
+            .state('setgroup', {
+                url: '/setgroup',
+                templateUrl: 'app/registration/group/group.html',
+                controller: 'SetGroupCtrl as vm'
+            })
+
             .state('newregistration', {
                 url: '/newregistration',
                 templateUrl: 'app/registration/registration.html',
@@ -106,6 +123,7 @@
                 url: '/registrationstatus',
                 templateUrl: 'app/registration/status/registrationstatus.html',
                 controller: 'RegistrationStatusCtrl as vm',
+                params: { observation: null },
                 cache: false
             })
 
@@ -236,15 +254,6 @@
             })
 
             //VANN
-            .state('waterdangerobs', {
-                //Faretegn
-                url: '/waterdangerobs',
-                templateUrl: 'app/water/waterregistration/waterdangerobs/waterdangerobs.html',
-                controller: 'WaterDangerObsCtrl as vm',
-                data: {
-                    registrationProp: 'DangerObs'
-                }
-            })
             .state('waterlevel', {
                 //Faretegn
                 url: '/waterlevel',
@@ -252,15 +261,6 @@
                 controller: 'WaterLevelCtrl as vm',
                 data: {
                     registrationProp: 'WaterLevel2'
-                }
-            })
-            .state('waterincident', {
-                //Faretegn
-                url: '/waterincident',
-                templateUrl: 'app/water/waterregistration/waterincident/waterincident.html',
-                controller: 'WaterIncidentCtrl as vm',
-                data: {
-                    registrationProp: 'Incident'
                 }
             })
 
@@ -328,29 +328,27 @@
                 templateUrl: function (stateParams) {
                     return 'app/help/' + stateParams.page + '.html';
                 },
-                controller: 'HelpCtrl as vm'
+                controller: 'HelpCtrl as vm',
+                data: { skipValidation: true }
             })
 
             .state('dynamichelp', {
                 url: '/dynamichelp/:registrationProp',
                 templateUrl: 'app/help/dynamichelp.html',
-                controller: 'HelpCtrl as vm'
+                controller: 'HelpCtrl as vm',
+                data: { skipValidation: true }
             });
-    };
+    }
 
     function setup($ionicPlatform, Utility, AppLogging, Registration, Observations, OfflineMap, $http, User, HelpTexts) {
         'ngInject';
 
         $ionicPlatform.ready(function () {
 
-            if (Utility.hasGoodNetwork() && Utility.shouldUpdateKdvElements()) {
-                Utility.refreshKdvElements();
-                HelpTexts.updateHelpTexts();
-            }
+           
 
             // Hide the accessory bar by default (remove this to show the accessory bar above the keyboard
             // for form inputs)*/
-            AppLogging.debug('Ionic platform ready');
             if (window.cordova && window.cordova.plugins.Keyboard) {
                 cordova.plugins.Keyboard.hideKeyboardAccessoryBar(false);
                 cordova.plugins.Keyboard.disableScroll(true);
@@ -364,6 +362,12 @@
                 Utility.configureRaven();
                 Registration.clearNewRegistrations();
                 Observations.removeOldObservationsFromPresistantStorage(); //cleanup old observations on startup
+
+                if (Utility.hasGoodNetwork() && Utility.shouldUpdateKdvElements()) {
+                    Utility.refreshKdvElements();
+                    HelpTexts.updateHelpTexts();
+                }              
+                
                 OfflineMap.checkUncompleteDownloads(); //Check if any uncomplete downloads and continue download progress
             });
         });

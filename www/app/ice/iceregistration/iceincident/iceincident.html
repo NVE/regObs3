@@ -1,9 +1,10 @@
 <ion-view view-title="{{'INCIDENT'|translate}}">
     <ion-content class="has-footer">
-        <form name="iceIncidentForm" novalidate>
+        <regobs-form name="iceIncidentForm">
             <regobs-incident activity-influenced-kdv="Ice_ActivityInfluencedKDV"></regobs-incident>
             <regobs-image-list></regobs-image-list>
-        </form>
+            <div class="padding"><button type="submit" class="button button-block button-calm">{{"SAVE"|translate}}</button></div>
+        </regobs-form>
         <button type="button" ui-sref="dynamichelp({registrationProp:'Incident'})" class="button button-positive button-block button-clear">
             {{'HELP'|translate}}
         </button>

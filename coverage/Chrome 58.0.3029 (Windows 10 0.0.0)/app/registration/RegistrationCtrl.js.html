@@ -20,24 +20,24 @@
     </h1>
     <div class='clearfix'>
       <div class='fl pad1y space-right2'>
-        <span class="strong">4% </span>
+        <span class="strong">3.13% </span>
         <span class="quiet">Statements</span>
-        <span class='fraction'>1/25</span>
+        <span class='fraction'>1/32</span>
       </div>
       <div class='fl pad1y space-right2'>
         <span class="strong">0% </span>
         <span class="quiet">Branches</span>
-        <span class='fraction'>0/4</span>
+        <span class='fraction'>0/8</span>
       </div>
       <div class='fl pad1y space-right2'>
         <span class="strong">0% </span>
         <span class="quiet">Functions</span>
-        <span class='fraction'>0/10</span>
+        <span class='fraction'>0/11</span>
       </div>
       <div class='fl pad1y space-right2'>
-        <span class="strong">4% </span>
+        <span class="strong">3.13% </span>
         <span class="quiet">Lines</span>
-        <span class='fraction'>1/25</span>
+        <span class='fraction'>1/32</span>
       </div>
     </div>
   </div>
@@ -92,7 +92,18 @@
 47
 48
 49
-50</td><td class="line-coverage quiet"><span class="cline-any cline-yes">1×</span>
+50
+51
+52
+53
+54
+55
+56
+57
+58
+59
+60
+61</td><td class="line-coverage quiet"><span class="cline-any cline-yes">1×</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -125,10 +136,21 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -143,7 +165,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">﻿angular
     .module('RegObs')
-    .controller('RegistrationCtrl', <span class="fstat-no" title="function not covered" >function SnowRegistrationCtrl($scope, Registration, Utility, Property, $ionicHistory, ObsLocation, AppLogging, ObservationType) {</span>
+    .controller('RegistrationCtrl', <span class="fstat-no" title="function not covered" >function SnowRegistrationCtrl($scope, User, Registration, Utility, Property, $ionicHistory, ObsLocation, AppLogging, ObservationType) {</span>
 <span class="cstat-no" title="statement not covered" >        var vm = this;</span>
 <span class="cstat-no" title="statement not covered" >        vm.hasFooter = <span class="fstat-no" title="function not covered" >function () {</span></span>
 <span class="cstat-no" title="statement not covered" >            return Registration.showSend();</span>
@@ -174,10 +196,21 @@
 <span class="cstat-no" title="statement not covered" >            return ObsLocation.getDescription();</span>
         };
 &nbsp;
+<span class="cstat-no" title="statement not covered" >        vm.getObserverGroupName = <span class="fstat-no" title="function not covered" >function () {</span></span>
+<span class="cstat-no" title="statement not covered" >            if (!vm.reg.ObserverGroupID)</span>
+<span class="cstat-no" title="statement not covered" >                return '';</span>
+<span class="cstat-no" title="statement not covered" >            var groups = User.getUser().ObserverGroup;</span>
+<span class="cstat-no" title="statement not covered" >            return groups[vm.reg.ObserverGroupID] || '';</span>
+        };
+&nbsp;
 &nbsp;
 <span class="cstat-no" title="statement not covered" >        $scope.$on('$ionicView.enter', <span class="fstat-no" title="function not covered" >function () {</span></span>
 <span class="cstat-no" title="statement not covered" >            Utility.setBackView('start');</span>
 <span class="cstat-no" title="statement not covered" >            vm.reg = Registration.data;</span>
+&nbsp;
+<span class="cstat-no" title="statement not covered" >            var group = User.getUser().ObserverGroup;</span>
+<span class="cstat-no" title="statement not covered" >            vm.hasObserverGroups = !Utility.isEmpty(group);</span>
+&nbsp;
 <span class="cstat-no" title="statement not covered" >            vm.loaded = true;</span>
         });
 &nbsp;
@@ -196,7 +229,7 @@
 </div><!-- /wrapper -->
 <div class='footer quiet pad2 space-top1 center small'>
   Code coverage
-  generated by <a href="http://istanbul-js.org/" target="_blank">istanbul</a> at Tue Jun 13 2017 11:07:55 GMT+0200 (W. Europe Daylight Time)
+  generated by <a href="http://istanbul-js.org/" target="_blank">istanbul</a> at Mon Jun 26 2017 12:28:20 GMT+0200 (W. Europe Daylight Time)
 </div>
 </div>
 <script src="../../prettify.js"></script>

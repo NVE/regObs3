@@ -1,6 +1,6 @@
 angular
     .module('RegObs')
-    .factory('RegobsPopup', function ($ionicPopup, $rootScope, $q, $pbService, $timeout, AppLogging, Translate, $translate, moment, $interval) {
+    .factory('RegobsPopup', function ($ionicPopup, $rootScope, $q, $pbService, $timeout, AppLogging, Translate, $translate, moment, $interval, $ionicModal) {
         var RegobsPopup = this;
 
         RegobsPopup.delete = function (title, text, confirmText) {
@@ -110,6 +110,7 @@ angular
                             }, 1000);
                         }
 
+                        scope.closeOnComplete = result.closeOnComplete;
                         scope.progressOptions = result.progressOptions;
                         scope.cancelDownload = function () {
                             cancelUpdatePromise.resolve();
@@ -171,6 +172,32 @@ angular
                         workFunction(progressFunc, cancelUpdatePromise).then(onComplete).catch(onError);
                     });
                 });
+        };
+
+        RegobsPopup.showLegalInfo = function () {
+            return $q(function (resolve) {
+                var scope = $rootScope.$new();
+                scope.$on('$destroy', function () {
+                    if (scope.modal) {
+                        scope.modal.remove();
+                    }
+                });
+
+                scope.close = function () {
+                    scope.modal.hide();
+                    scope.$destroy();
+                    resolve();
+                };
+
+                $ionicModal
+                    .fromTemplateUrl('app/common/legal.html', {
+                        scope: scope,
+                        animation: 'slide-in-up'
+                    }).then(function (modal) {
+                        scope.modal = modal;
+                        scope.modal.show();
+                    });
+            });
         };
 
         return RegobsPopup;

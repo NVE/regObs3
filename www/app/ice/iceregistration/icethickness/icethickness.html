@@ -1,6 +1,6 @@
 <ion-view view-title="{{'ICE_THICKNESS'|translate}}">
     <ion-content class="has-footer">
-        <form name="iceThicknessForm" novalidate>
+        <regobs-form name="iceThicknessForm">
             <ion-list>
                 <regobs-number
                         field-name="tørrSnøFørBoring"
@@ -27,7 +27,8 @@
                 ></regobs-comment>
             </ion-list>
             <regobs-image-list></regobs-image-list>
-        </form>
+            <div class="padding"><button type="submit" class="button button-block button-calm">{{"SAVE"|translate}}</button></div>
+        </regobs-form>
         <button type="button" ui-sref="dynamichelp({registrationProp:'IceThickness'})" class="button button-positive button-block button-clear">
             {{'HELP'|translate}}
         </button>

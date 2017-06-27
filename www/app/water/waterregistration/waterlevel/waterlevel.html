@@ -75,7 +75,7 @@
                     </div>
                     <label class="item item-input item-stacked-label no-border input-time-right">
                         <span class="input-label" ng-class="{assertive:((m.Pictures.length > 0 || m.Comment.length > 0 || m.WaterLevelValue > 0) && !m.DtMeasurementTime)}">{{'TIME'|translate}}</span>
-                        <input name="{{'DtMeasurementTime_' +$index }}" type="datetime-local" ng-model="m.DtMeasurementTime" ng-required="m.Pictures.length > 0 || m.Comment.length > 0 || m.WaterLevelValue > 0">
+                        <input name="{{'DtMeasurementTime_' +$index }}" type="datetime-local" ng-blur="vm.checkDate(m.DtMeasurementTime)" ng-model="m.DtMeasurementTime" ng-required="m.Pictures.length > 0 || m.Comment.length > 0 || m.WaterLevelValue > 0">
                     </label>
                     <div class="item" ng-repeat="pic in m.Pictures">
                         <div class="border-thin item-image no-bottom-margin">
@@ -116,9 +116,6 @@
                 </div>
             </ion-list>
         </regobs-form>
-        <!--<button type="button" ui-sref="help({page:'waterlevel'})" class="button button-positive button-block button-clear">
-            {{'HELP'|translate}}
-        </button>-->
     </ion-content>
 </ion-view>
 

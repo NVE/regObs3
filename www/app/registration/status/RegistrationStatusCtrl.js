@@ -1,30 +1,40 @@
 ﻿angular
     .module('RegObs')
-    .controller('RegistrationStatusCtrl', function RegistrationStatusCtrl($scope, Registration, $ionicPopup, $state, Utility, $pbService, $http, AppSettings, $timeout, $q, Observations, Observation, $rootScope, $ionicScrollDelegate, $ionicHistory) {
+    .controller('RegistrationStatusCtrl', function RegistrationStatusCtrl($scope, Registration, $ionicPopup, $state, $stateParams, Utility, $pbService, $http, AppSettings, $timeout, $q, Observations, Observation, $rootScope, $ionicScrollDelegate, $ionicHistory, AppLogging, RegobsPopup) {
         var vm = this;
         vm.loaded = false;
         vm.cancelled = false;
 
         vm.init = function () {
             vm.loaded = false;
-            vm.isSending = true;
-            vm.cancelled = false;
-            Utility.setBackView('start');
-            vm.progressName = Utility.createGuid();
-            vm.completed = [];       
-            Utility.clearRegistrationCacheViews().then(function () {
-                Registration.prepareRegistrationForSending().then(function () {
-                    vm.unsent = Registration.unsent;
-                    $ionicScrollDelegate.resize();
-                    $ionicScrollDelegate.scrollTop();
-                    vm.loaded = true;
-                    if (vm.unsent.length > 0) {
-                        vm.send();
-                    } else {
-                        $state.go('start');
-                    }
+
+            if ($stateParams.observation) {
+                vm.completed = [$stateParams.observation];
+                vm.loaded = true;
+            } else {
+                vm.isSending = true;
+                vm.cancelled = false;
+                
+                vm.progressName = Utility.createGuid();
+                vm.completed = [];
+                Utility.clearRegistrationCacheViews().then(function () {
+                    Registration.prepareRegistrationForSending().then(function () {
+                        vm.unsent = Registration.unsent;
+                        $ionicScrollDelegate.resize();
+                        $ionicScrollDelegate.scrollTop();
+                        vm.loaded = true;
+                        if (vm.unsent.length > 0) {
+                            vm.send();
+                        } else {
+                            vm.goToStart();
+                        }
+                    });
                 });
-            });
+            }
+        };
+
+        vm.isStoredObservation = function () {
+            return true && $stateParams.observation;
         };
 
         vm.emailReceipt = AppSettings.data.emailReceipt;
@@ -40,7 +50,8 @@
 
         vm.send = function () {
             vm.isSending = true;
-            vm.cancelled = false;            
+            vm.cancelled = false; 
+            Utility.setBackView('start');
             vm.completed = [];
             vm.downloadStatus = new RegObs.ProggressStatus();
             vm.downloadStatus.setTotal(vm.unsent.length);
@@ -114,12 +125,26 @@
         };
 
         vm.goToStart = function () {
-            $state.go('start');
+            Utility.setBackView('start');
+            $ionicHistory.goBack();
         };
 
         vm.resendFailed = function () {
             vm.unsent = Registration.unsent;
             vm.send();
+        };
+
+        vm.deleteUnsent = function (item) {
+            RegobsPopup.delete('DELETE_OBSERVATION', 'DELETE_UNSENT_OBSERVATION_CONFIRM_TEXT')
+                .then(function (response) {
+                    if (response) {
+                        Registration.unsent = Registration.unsent.filter(function (reg) {
+                            return reg.id !== item.id;
+                        });
+                        Registration.save();
+                        vm.goToStart();
+                    }
+                });
         };
 
         vm.cancel = function () {

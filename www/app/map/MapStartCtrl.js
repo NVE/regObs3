@@ -1,5 +1,5 @@
 ﻿angular.module('RegObs')
-    .controller('MapStartCtrl', function ($scope, $rootScope, $state, $ionicHistory, User, Map, AppSettings, Registration, AppLogging, Utility, $timeout, $ionicPopover, $cordovaInAppBrowser, Observations, RegobsPopup, UserLocation, $translate, Trip, Translate, OfflineMap, $ionicPopup) {
+    .controller('MapStartCtrl', function ($scope, $stateParams, $rootScope, $state, $ionicHistory, User, Map, AppSettings, Registration, AppLogging, Utility, $timeout, $ionicPopover, $cordovaInAppBrowser, Observations, RegobsPopup, UserLocation, $translate, Trip, Translate, OfflineMap, $ionicPopup, MapSearch) {
         var appVm = this;
 
         appVm.gpsCenterClick = Map.centerMapToUser;
@@ -74,24 +74,8 @@
 
         appVm.getFollowMode = Map.getFollowMode;
 
-        appVm.viewTitle = 'regObs';
-
-        appVm.setViewTitle = function () {
-            appVm.viewTitle = 'regObs';
-            var currentAppMode = AppSettings.getAppMode();
-            if (currentAppMode) { 
-                Translate.translateWithFallback(currentAppMode.toUpperCase(), '').then(function (result) {
-                    $timeout(function () {
-                        var title = 'regObs' + (result ? ' / ' + result : '');
-                        appVm.viewTitle = title;
-                    });
-                });
-            }
-        };
-
         $scope.$on('$ionicView.enter', function () {
-            $ionicHistory.clearHistory();          
-            appVm.setViewTitle();                
+            $ionicHistory.clearHistory();
             Map.invalidateSize();
             Map.startWatch();
 
@@ -100,10 +84,6 @@
                     Map.setOfflineAreaBounds(result);
                 });
             });
-        });
-
-        $scope.$on('$regobs.appModeChanged', function () {
-            appVm.setViewTitle();
         });
 
         appVm._checkObsWatch = $timeout(function () {
@@ -137,17 +117,28 @@
                     });
                 });
 
-                
+
             }
         }, 10000);
 
 
-        $scope.$on('$ionicView.beforeLeave', function () {
+        appVm._stopWatches = function () {
+            MapSearch.hideSearchBar();
             Map.clearWatch();
-            $timeout.cancel(appVm._checkObsWatch);
+            if (appVm._checkObsWatch) {
+                $timeout.cancel(appVm._checkObsWatch);
+            }
             if (appVm._updateObservationsPopup) {
                 appVm._updateObservationsPopup.close();
             }
+        };
+
+        $scope.$on('$ionicView.beforeLeave', appVm._stopWatches);
+
+        $scope.$on('$ionicView.unloaded', function () {
+            AppLogging.log('Map unloaded');
+            appVm._stopWatches();
+            Map.reset();
         });
 
         $scope.$on('$regObs:mapItemSelected', function (event, item) {

@@ -1,0 +1,44 @@
+﻿<ion-view view-title="{{'MY_OBSERVATIONS'|translate}}">
+    <ion-content>
+        <ion-refresher pulling-text="{{'PULL_TO_REFRESH'|translate}}"
+                       on-refresh="vm.update()">
+        </ion-refresher>
+        <ion-list class="user-observation-list">
+            <div ng-repeat="obs in vm.observations | orderBy:'-getDtObsTime()'">
+                <ion-item ng-if="obs.isLocal" class="item-icon-right item-icon-left unsent-item" ui-sref="registrationstatus({observation:obs})">
+                    <div class="geo-hazard-icon-description">
+                        <i class="icon nve-icon nve-list-icon nve-icon-{{vm.getGeoHazardName(obs)}}"></i>
+                        <div class="geo-hazard-icon-description-text">{{vm.getGeoHazardName(obs) | uppercase | translate}}</div>
+                    </div>    
+                    <h2>{{obs.DtObsTime | date:'d/M HH:mm'}}, <span ng-if="obs.LocationName">{{obs.LocationName | capitalize}}</span><span ng-if="obs.MunicipalName && !obs.LocationName">{{obs.MunicipalName | capitalize}}, </span><span ng-if="obs.ForecastRegionName && !obs.LocationName">{{obs.ForecastRegionName | capitalize}}</span></h2>
+                    <p>{{obs.getObservationTypeDescription()}}</p>
+                    <span ng-repeat="pic in obs.getImages()">
+                        <img height="40" ng-src="{{pic.url}}" />
+                    </span>
+                    <div class="unsent-item-error-message">
+                        <i class="icon ion-close-circled assertive"></i> {{'USER_OBSERVATIONS_FAILED_TEXT'|translate}}
+                    </div>
+                    <i class="icon icon-accessory ion-chevron-right"></i>
+                </ion-item>
+                <ion-item ng-if="!obs.isLocal" class="item-icon-right item-icon-left" ui-sref="observationdetails({observation:obs})">
+                    <div class="geo-hazard-icon-description">
+                        <i class="icon nve-icon nve-list-icon nve-icon-{{vm.getGeoHazardName(obs)}}"></i>
+                        <div class="geo-hazard-icon-description-text">{{vm.getGeoHazardName(obs) | uppercase | translate}}</div>
+                    </div>                  
+                    <h2>{{obs.DtObsTime | date:'d/M HH:mm'}}, <span ng-if="obs.LocationName">{{obs.LocationName | capitalize}}</span><span ng-if="obs.MunicipalName && !obs.LocationName">{{obs.MunicipalName | capitalize}}, </span><span ng-if="obs.ForecastRegionName && !obs.LocationName">{{obs.ForecastRegionName | capitalize}}</span></h2>
+                    <p>{{obs.getObservationTypeDescription()}}</p>
+                    <span ng-repeat="pic in obs.getImages()">
+                        <img height="40" ng-src="{{pic.url}}" />   
+                    </span>
+                    <i class="icon icon-accessory ion-chevron-right"></i>
+                </ion-item>
+            </div>
+            <div class="item item-text-wrap" ng-if="!vm.isLoading && vm.observations.length === 0">
+                <p>{{'NO_OBSERVATIONS'|translate}}</p>
+                <button type="button" class="button button-block button-calm" ng-click="vm.update()">
+                    {{'UPDATE_OBSERVATIONS'|translate}}
+                </button>
+            </div>
+        </ion-list>
+    </ion-content>
+</ion-view>

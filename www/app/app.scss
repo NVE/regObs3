@@ -513,6 +513,31 @@ ion-popover-view.wider {
     background: url(../img/ikon_snoskred.svg) left/40px no-repeat;
 }
 
+.nve-icon.nve-list-icon {
+    padding-left: 0px;
+    height: 32px;
+    width: 32px;
+    display: block;
+    top: auto;
+}
+
+.nve-icon.nve-list-icon.nve-icon-snow {
+    background: url(../img/ikon_snoskred.svg) left/32px no-repeat;
+}
+
+.nve-icon.nve-list-icon.nve-icon-water {
+    background: url(../img/ikon_flom.svg) left/32px no-repeat;
+}
+
+.nve-icon.nve-list-icon.nve-icon-ice {
+    background: url(../img/ikon_isvarsler2.svg) left/32px no-repeat;
+}
+
+.nve-icon.nve-list-icon.nve-icon-dirt {
+    background: url(../img/ikon_jordskred.svg) left/32px no-repeat;
+}
+
+
 .spinner-small svg {
     width: 18px;
     height: 18px;
@@ -784,4 +809,100 @@ regobs-comment textarea::-webkit-input-placeholder {
 .button-calm.spinner-right .spinner {
     stroke: #fff;
     fill: #fff;
+}
+
+.text-bold {
+    font-weight: 700;
+}
+
+.small-header-button {
+    padding-left: 10px !important;
+    padding-right: 10px !important;
+}
+
+.smaller-item-icon {
+    font-size: 26px !important;
+}
+
+.info-panel {
+    padding-left: 18%;
+    padding-right: 18%;
+    padding-top: 10%;
+    text-align: center;
+}
+
+.info-panel h3 {
+    margin-bottom: 20px;
+}
+
+.info-panel p {
+    margin-bottom: 30px;
+}
+
+.legal-icon.round-grey-background {
+    display: inline-block;
+    width: 70px;
+    height: 70px;
+    background-color: $greyBackground;
+    border-radius: 50%;
+    position: relative;
+    font-size: 36px;
+}
+
+.legal-icon:after {
+    content: '\00a7';
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 50%;
+    text-align: center;
+    margin-top: -5px;
+}
+
+.legal-icon.round-grey-background:after {
+    margin-top: -11px;
+}
+
+.legal-icon.legal-icon-outline {
+    display: inline-block;
+    width: 27px;
+    height: 27px;
+    border-color: #000;
+    border-width: 1px;
+    border-style: solid;
+    border-radius: 50%;
+    font-size: 14px;
+}
+
+.legal-icon.legal-icon-outline:after {
+    margin-top: -11px;
+}
+
+.item-icon-left .legal-icon.legal-icon-outline {
+    top: 12px;
+    left: 13px;
+}
+
+.large-map-icon {
+    font-size: 20px !important;
+}
+
+
+//Some bug that makes the copy/paste not work for inputs
+input, textarea {
+    -webkit-user-select: auto !important;
+    -khtml-user-select: auto !important;
+    -moz-user-select: auto !important;
+    -ms-user-select: auto !important;
+    -o-user-select: auto !important;
+    user-select: auto !important;
+}
+.backdrop {
+    display: none;
+}
+.backdrop.visible {
+    display: block;
+}
+.loading-container:not(.visible) {
+    display: none;
 }

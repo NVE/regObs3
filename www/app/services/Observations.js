@@ -23,6 +23,25 @@ angular
             });
         };
 
+        service.getStoredUserObservations = function () {           
+            return service._getRegistrationsFromPresistantStorage().then(function (result) {
+                var user = User.getUser();
+                if (user.anonymous) {
+                    return [];
+                } else {
+                    result = result.filter(function (reg) {
+                        if (user.Id) {
+                            return reg.ObserverId === user.Id;
+                        } else {
+                            return reg.NickName === user.Nick; //API backward compatibility
+                        }
+                    });
+                    return result;
+                }
+            });
+        };
+
+
         service._getLocationStorageKey = function () {
             return locationsStorageKey + '_' + AppSettings.data.env.replace(/ /g, '');
         };
@@ -235,6 +254,38 @@ angular
                     .catch(reject);
             });
         };
+
+        /**
+        * Get user registrations
+        */
+        service._getUserRegistrations = function (cancel) {
+            return $q(function (resolve, reject) {
+                var user = User.getUser();
+                if (user.anonymous) {
+                    resolve([]);
+                } else {
+                    var httpConfig = AppSettings.httpConfig;
+                    httpConfig.timeout = cancel ? cancel.promise : AppSettings.httpConfig.timeout;
+                    $http.post(
+                        AppSettings.getEndPoints().search,
+                        {
+                            ObserverId: user.Id,
+                            ObserverNickName: user.Id ? null :  user.Nick, //API backward compatibility
+                            NumberOfRecords: 100
+                        },
+                        httpConfig)
+                        .then(function (result) {
+                            if (result.data) {
+                                resolve(result.data);
+                            } else {
+                                reject(new Error('Could not find json result data'));
+                            }
+                        })
+                        .catch(reject);
+                }
+            });
+        };
+
 
         service._mergeRegistrations = function (destArr, existingRegistrations, removeDeleted) {
             if (!angular.isArray(destArr)) {
@@ -501,6 +552,17 @@ angular
                 return true;
             }
             return false;
+        };
+
+        /**
+        * Download user registrations
+        */
+        service.updateUserObservations = function (onProgress, cancel) {
+            return service._getUserRegistrations(cancel).then(function (result) {
+                    return service._downloadAllRegistrations(result, onProgress, cancel, false);
+                }).finally(function () {
+                    $rootScope.$broadcast('$regObs:userObservationsUpdated');
+                });
         };
 
         return service;

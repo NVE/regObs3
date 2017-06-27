@@ -20,24 +20,24 @@
     </h1>
     <div class='clearfix'>
       <div class='fl pad1y space-right2'>
-        <span class="strong">1.35% </span>
+        <span class="strong">1.27% </span>
         <span class="quiet">Statements</span>
-        <span class='fraction'>1/74</span>
+        <span class='fraction'>1/79</span>
       </div>
       <div class='fl pad1y space-right2'>
         <span class="strong">0% </span>
         <span class="quiet">Branches</span>
-        <span class='fraction'>0/40</span>
+        <span class='fraction'>0/46</span>
       </div>
       <div class='fl pad1y space-right2'>
         <span class="strong">0% </span>
         <span class="quiet">Functions</span>
-        <span class='fraction'>0/21</span>
+        <span class='fraction'>0/22</span>
       </div>
       <div class='fl pad1y space-right2'>
-        <span class="strong">1.35% </span>
+        <span class="strong">1.27% </span>
         <span class="quiet">Lines</span>
-        <span class='fraction'>1/74</span>
+        <span class='fraction'>1/79</span>
       </div>
     </div>
   </div>
@@ -176,7 +176,16 @@
 131
 132
 133
-134</td><td class="line-coverage quiet"><span class="cline-any cline-yes">1×</span>
+134
+135
+136
+137
+138
+139
+140
+141
+142
+143</td><td class="line-coverage quiet"><span class="cline-any cline-yes">1×</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -228,6 +237,15 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -364,7 +382,16 @@
             }
         };
 &nbsp;
-<span class="cstat-no" title="statement not covered" >        vm.reset = <span class="fstat-no" title="function not covered" >function () {          </span></span>
+<span class="cstat-no" title="statement not covered" >        vm.checkDate = <span class="fstat-no" title="function not covered" >function (date) {</span></span>
+<span class="cstat-no" title="statement not covered" >            if (Registration.data.DtObsTime &amp;&amp; date) {</span>
+<span class="cstat-no" title="statement not covered" >                var isSame = moment(date).isSame(Registration.data.DtObsTime, 'day');</span>
+<span class="cstat-no" title="statement not covered" >                if (!isSame) {</span>
+<span class="cstat-no" title="statement not covered" >                    RegobsPopup.alert('WARNING', 'WARNING_TIME_TEXT');</span>
+                }
+            }
+        };
+&nbsp;
+<span class="cstat-no" title="statement not covered" >        vm.reset = <span class="fstat-no" title="function not covered" >function () {</span></span>
 <span class="cstat-no" title="statement not covered" >            Property.reset($state.current.data.registrationProp);</span>
         };
 &nbsp;
@@ -412,7 +439,7 @@
 <span class="cstat-no" title="statement not covered" >            if (vm.reg.WaterLevel2.WaterLevelMeasurement &amp;&amp; angular.isArray(vm.reg.WaterLevel2.WaterLevelMeasurement)) {</span>
 <span class="cstat-no" title="statement not covered" >                vm.reg.WaterLevel2.WaterLevelMeasurement.forEach(<span class="fstat-no" title="function not covered" >function (item) {</span></span>
 <span class="cstat-no" title="statement not covered" >                    var clone = angular.copy(item);</span>
-                    
+&nbsp;
 <span class="cstat-no" title="statement not covered" >                    if (clone.DtMeasurementTime &amp;&amp; typeof (clone.DtMeasurementTime) !== typeof (Date)) {</span>
 <span class="cstat-no" title="statement not covered" >                        clone.DtMeasurementTime = new Date(clone.DtMeasurementTime);</span>
                     }
@@ -422,7 +449,7 @@
 <span class="cstat-no" title="statement not covered" >            if (vm.WaterLevelMeasurement.length === 0) {</span>
 <span class="cstat-no" title="statement not covered" >                vm.WaterLevelMeasurement.push({});</span>
             }
-            
+&nbsp;
 <span class="cstat-no" title="statement not covered" >            Utility.getKdvArray('Water_MarkingReferenceKDV').then(<span class="fstat-no" title="function not covered" >function (result) {</span></span>
 <span class="cstat-no" title="statement not covered" >                vm.markingKdvArray = result;</span>
             });
@@ -448,7 +475,7 @@
 </div><!-- /wrapper -->
 <div class='footer quiet pad2 space-top1 center small'>
   Code coverage
-  generated by <a href="http://istanbul-js.org/" target="_blank">istanbul</a> at Tue Jun 13 2017 11:07:55 GMT+0200 (W. Europe Daylight Time)
+  generated by <a href="http://istanbul-js.org/" target="_blank">istanbul</a> at Mon Jun 26 2017 12:28:20 GMT+0200 (W. Europe Daylight Time)
 </div>
 </div>
 <script src="../../../../prettify.js"></script>

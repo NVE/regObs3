@@ -6,9 +6,9 @@
                 {{'SET_POSITION_IN_MAP'|translate}}
             </button>
         </div>
-        <form name="avalancheForm" novalidate>
+        <regobs-form name="avalancheForm">
             <ion-list>
-                <regobs-time reg-object="vm.reg.AvalancheObs" reg-prop="DtAvalancheTime"
+                <regobs-time reg-object="vm.reg.AvalancheObs" reg-prop="DtAvalancheTime" on-blur="vm.checkAvalancheTime()"
                              text="{{'TIME_WHEN_AVALANCHE'|translate}}"></regobs-time>
                 <label class="item item-input item-stacked-label item-select">
                     <span class="input-label">
@@ -68,7 +68,8 @@
                 <regobs-incident activity-influenced-kdv="Snow_ActivityInfluencedKDV"></regobs-incident>
             </ion-list>
             <regobs-image-list></regobs-image-list>
-        </form>
+            <div class="padding"><button type="submit" class="button button-block button-calm">{{"SAVE"|translate}}</button></div>
+        </regobs-form>
         <button type="button" ui-sref="dynamichelp({registrationProp:'AvalancheObs'})" class="button button-positive button-block button-clear">
             {{'HELP'|translate}}
         </button>

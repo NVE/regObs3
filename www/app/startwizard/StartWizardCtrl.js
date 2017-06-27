@@ -1,5 +1,5 @@
 angular.module('RegObs')
-    .controller('StartWizardCtrl', function ($scope, $state, $ionicHistory, AppSettings) {
+    .controller('StartWizardCtrl', function ($scope, $state, $ionicHistory, AppSettings, RegobsPopup) {
         var vm = this;
 
         vm.options = {
@@ -7,13 +7,24 @@ angular.module('RegObs')
         };
 
         vm.setAppMode = function (mode) {
-            AppSettings.setAppMode(mode);
-            $ionicHistory.clearHistory();
-            $ionicHistory.nextViewOptions({
-                disableBack: true,
-                historyRoot: true
-            });
-            $state.go('start');
+            var firstLoad = !AppSettings.hasSetAppMode();
+
+            var complete = function () {
+                AppSettings.setAppMode(mode);
+                $ionicHistory.clearHistory();
+                $ionicHistory.nextViewOptions({
+                    disableBack: true,
+                    historyRoot: true
+                });
+                $state.go('start');
+            };
+
+            if (firstLoad) {
+                RegobsPopup.showLegalInfo().then(complete);
+            } else {
+                complete();
+            }
+            
         };
 
         vm.nextInfoClick = function () {

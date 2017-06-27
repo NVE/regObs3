@@ -20,24 +20,24 @@
     </h1>
     <div class='clearfix'>
       <div class='fl pad1y space-right2'>
-        <span class="strong">5% </span>
+        <span class="strong">4% </span>
         <span class="quiet">Statements</span>
-        <span class='fraction'>1/20</span>
+        <span class='fraction'>1/25</span>
       </div>
       <div class='fl pad1y space-right2'>
         <span class="strong">0% </span>
         <span class="quiet">Branches</span>
-        <span class='fraction'>0/6</span>
+        <span class='fraction'>0/8</span>
       </div>
       <div class='fl pad1y space-right2'>
         <span class="strong">0% </span>
         <span class="quiet">Functions</span>
-        <span class='fraction'>0/7</span>
+        <span class='fraction'>0/8</span>
       </div>
       <div class='fl pad1y space-right2'>
-        <span class="strong">5% </span>
+        <span class="strong">4% </span>
         <span class="quiet">Lines</span>
-        <span class='fraction'>1/20</span>
+        <span class='fraction'>1/25</span>
       </div>
     </div>
   </div>
@@ -86,7 +86,18 @@
 41
 42
 43
-44</td><td class="line-coverage quiet"><span class="cline-any cline-yes">1×</span>
+44
+45
+46
+47
+48
+49
+50
+51
+52
+53
+54
+55</td><td class="line-coverage quiet"><span class="cline-any cline-yes">1×</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -96,12 +107,23 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -130,7 +152,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">angular.module('RegObs')
-    .controller('StartWizardCtrl', <span class="fstat-no" title="function not covered" >function ($scope, $state, $ionicHistory, AppSettings) {</span>
+    .controller('StartWizardCtrl', <span class="fstat-no" title="function not covered" >function ($scope, $state, $ionicHistory, AppSettings, RegobsPopup) {</span>
 <span class="cstat-no" title="statement not covered" >        var vm = this;</span>
 &nbsp;
 <span class="cstat-no" title="statement not covered" >        vm.options = {</span>
@@ -138,13 +160,24 @@
         };
 &nbsp;
 <span class="cstat-no" title="statement not covered" >        vm.setAppMode = <span class="fstat-no" title="function not covered" >function (mode) {</span></span>
-<span class="cstat-no" title="statement not covered" >            AppSettings.setAppMode(mode);</span>
-<span class="cstat-no" title="statement not covered" >            $ionicHistory.clearHistory();</span>
-<span class="cstat-no" title="statement not covered" >            $ionicHistory.nextViewOptions({</span>
-                disableBack: true,
-                historyRoot: true
-            });
-<span class="cstat-no" title="statement not covered" >            $state.go('start');</span>
+<span class="cstat-no" title="statement not covered" >            var firstLoad = !AppSettings.hasSetAppMode();</span>
+&nbsp;
+<span class="cstat-no" title="statement not covered" >            var complete = <span class="fstat-no" title="function not covered" >function () {</span></span>
+<span class="cstat-no" title="statement not covered" >                AppSettings.setAppMode(mode);</span>
+<span class="cstat-no" title="statement not covered" >                $ionicHistory.clearHistory();</span>
+<span class="cstat-no" title="statement not covered" >                $ionicHistory.nextViewOptions({</span>
+                    disableBack: true,
+                    historyRoot: true
+                });
+<span class="cstat-no" title="statement not covered" >                $state.go('start');</span>
+            };
+&nbsp;
+<span class="cstat-no" title="statement not covered" >            if (firstLoad) {</span>
+<span class="cstat-no" title="statement not covered" >                RegobsPopup.showLegalInfo().then(complete);</span>
+            } else {
+<span class="cstat-no" title="statement not covered" >                complete();</span>
+            }
+            
         };
 &nbsp;
 <span class="cstat-no" title="statement not covered" >        vm.nextInfoClick = <span class="fstat-no" title="function not covered" >function () {</span></span>
@@ -178,7 +211,7 @@
 </div><!-- /wrapper -->
 <div class='footer quiet pad2 space-top1 center small'>
   Code coverage
-  generated by <a href="http://istanbul-js.org/" target="_blank">istanbul</a> at Tue Jun 13 2017 11:07:55 GMT+0200 (W. Europe Daylight Time)
+  generated by <a href="http://istanbul-js.org/" target="_blank">istanbul</a> at Mon Jun 26 2017 12:28:20 GMT+0200 (W. Europe Daylight Time)
 </div>
 </div>
 <script src="../../prettify.js"></script>

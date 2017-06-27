@@ -1,0 +1,134 @@
+﻿
+.map-search {
+    position: absolute;
+    top: 50px;
+    right: 10px;
+    background-color: rgba(255,255,255,0.8);
+    z-index: 900;
+    border-radius: 5px;
+    width: 50px;
+}
+
+.platform-ios .map-search {
+    top: 72px;
+}
+
+.search-bar-popup .popup {
+    position: absolute;
+    top: 50px;
+    left: 0px;
+    background-color: rgba(255,255,255,0);
+    width: 100%;
+   
+}
+
+.search-bar-popup.popup-container.active .popup {
+    -webkit-animation-name: slideInRight;
+    animation-name: slideInRight;
+}
+
+.search-bar-popup .popup-body {
+    text-align: left !important;
+}
+
+.search-bar-popup .popup-head {
+    display: none;
+}
+
+.platform-ios .search-bar-popup .popup {
+    top: 72px;
+}
+
+.search-bar-popup .popup .map-search {
+    top: 0px;
+}
+
+.map-search-icon {
+    width: 50px;
+    height: 40px;
+    display: inline-block;
+    font-size: 26px;
+}
+
+.map-search-close {
+    position: absolute;
+    right: 0px;
+    top: 0px;
+    font-size: 18px;
+}
+
+.map-search .icon {
+    position: relative;
+    left: 16px;
+    top: 8px;
+}
+
+.map-search .map-search-close i {
+    left: 24px;
+    top: 11px;
+}
+
+
+.map-search .search-item {
+    margin-left: 5px;
+    margin-right: 5px;
+    padding-top: 12px;
+    padding-bottom: 12px;
+    border-top: 1px solid rgb(190,189,189);
+    font-size: 16px;
+    padding-left: 50px;
+}
+
+.map-search .search-item.loading-item {
+    padding-left: 0px;
+    border-top: none;
+}
+
+
+.map-search .search-item:active {
+    background-color: #fff;
+    text-decoration: underline;
+}
+
+.map-search .search-item-description {
+    font-size: 12px;
+}
+
+
+.map-search .search-item-first {
+    border-top: none;
+}
+
+.map-search .search-item-divider {
+    border-top: 1px solid #000;
+    margin-left: 5px;
+    margin-right: 5px;
+}
+
+.map-search.open {
+    left: 10px;
+    width: auto;
+}
+
+.map-search input {
+    display: inline;
+    width: 70%;
+    font-size: 16px;
+    background-color: rgba(255,255,255,0.0);
+    position: relative;
+    top: 2px;
+    height: 40px;
+    line-height: 20px;
+}
+
+.map-search input::placeholder {
+    font-style: italic;
+}
+
+.map-search input::-webkit-input-placeholder {
+    font-style: italic;
+}
+
+.map-search .map-search-results {
+    max-height: 250px;
+}

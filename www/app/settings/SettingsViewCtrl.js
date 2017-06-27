@@ -1,59 +1,33 @@
 angular
     .module('RegObs')
-    .controller('SettingsViewCtrl', function ($scope, $timeout, $rootScope, $http, $state, $cordovaInAppBrowser, $ionicLoading, AppSettings, LocalStorage, ObsLocation, Registration, User, Utility, HeaderColor, RegobsPopup, AppLogging, PresistentStorage, OfflineMap, Map, $ionicScrollDelegate, HelpTexts) {
+    .controller('SettingsViewCtrl', function ($scope, $timeout, $rootScope, $http, $state, $cordovaInAppBrowser, $ionicLoading, AppSettings, LocalStorage, ObsLocation, Registration, User, Utility, HeaderColor, RegobsPopup, AppLogging, PresistentStorage, OfflineMap, Map, $ionicScrollDelegate, HelpTexts, $ionicHistory) {
         var vm = this;
 
         vm.settings = AppSettings;
         vm.userService = User;
-        vm.showAdvancedSettings = false;
 
-        vm.toggleAdvancedSettings = function() {
-            vm.showAdvancedSettings = !vm.showAdvancedSettings;
-            $ionicScrollDelegate.resize();
-        };
-
-        vm.hasObserverGroups = function () {
-            var group = User.getUser().ObserverGroup;
-            return !Utility.isEmpty(group);
-        };
-
-        vm.kdvUpdated = kdvUpdatedTime(null, LocalStorage.get('kdvUpdated'));
+        
 
         Utility.getVersion().then(function (result) {
             vm.version = result;
         });
 
-        $scope.$on('kdvUpdated', kdvUpdatedTime);
+        
 
-        function kdvUpdatedTime(event, newDate) {
+        vm._setKdvUpdatedTime = function () {
             $timeout(function () {
-                if (newDate) {
-                    vm.kdvUpdated = moment(parseInt(newDate)).format('DD.MM, [kl.] HH:mm');
+                var storedTime = LocalStorage.get('kdvUpdated');
+                if (storedTime) {
+                    vm.kdvUpdated = moment(parseInt(LocalStorage.get('kdvUpdated'))).format('DD.MM, [kl.] HH:mm');
                 } else {
                     vm.kdvUpdated = '';
                 }
             });
-            AppLogging.log('KDV UPDATE', newDate);
-        }
-
-        vm.logIn = function () {
-            User.logIn(vm.username, vm.password).then(function () {
-                Utility.configureRaven();
-            });
         };
 
-        vm.logOut = function () {
-            vm.username = '';
-            vm.password = '';
-            User.logOut();    
-            Utility.configureRaven();
-            //vm.user = User.getUser();
-        };
+        vm._setKdvUpdatedTime();
 
-        vm.openUrl = function (relUrl) {
-            var base = AppSettings.getEndPoints().services;
-            $cordovaInAppBrowser.open(base + relUrl, '_system');
-        };
+        $scope.$on('kdvUpdated', vm._setKdvUpdatedTime);
 
         vm.clearAppStorage = function () {
             RegobsPopup.delete('Nullstill app?', 'Vil du slette lokalt lagret data og nullstille appen?', 'Nullstill').then(
@@ -82,10 +56,8 @@ angular
                             Registration.load();
                             HeaderColor.init();
                             ObsLocation.init();
-                            Map.refresh();
-                            vm.username = '';
-                            vm.password = '';
                             $ionicLoading.hide();
+                            $ionicHistory.clearCache();
                             $rootScope.$broadcast('$regObs:appReset');
                             $state.go('wizard');
                         });
@@ -106,14 +78,13 @@ angular
                 })
                 .finally(function () {
                     vm.refreshingKdv = false;
-                    vm.kdvUpdated = new Date(parseInt(LocalStorage.get('kdvUpdated')));
-                    AppLogging.log(vm.kdvUpdated);
+                    vm._setKdvUpdatedTime();
                 });
 
         };
 
         vm.envChanged = function () {
-            vm.logOut();
+            User.logOut();
             AppSettings.save();
             HeaderColor.init();
             Map.refresh();

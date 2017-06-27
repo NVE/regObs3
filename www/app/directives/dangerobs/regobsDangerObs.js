@@ -125,11 +125,15 @@ angular
             loadDangerSignKdvArray().then(loadModal);
 
             $scope.$on('$ionicView.beforeLeave', function () {
-                $scope.modal.hide();
+                if ($scope.modal) {
+                    $scope.modal.hide();
+                }
             });
 
             $scope.$on('$destroy', function () {
-                $scope.modal.remove();
+                if ($scope.modal) {
+                    $scope.modal.remove();
+                }
             });
         }
     });

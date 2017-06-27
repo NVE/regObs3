@@ -1,114 +1,36 @@
 <ion-view view-title="{{'SETTINGS'|translate}}">
     <ion-content>
-        <form ng-submit="vm.logIn()" ng-if="vm.userService.getUser().anonymous">
-            <div class="list">
-                <div ng-hide="vm.userService.loggingIn">
-                    <label class="item item-input">
-                        <i class="icon ion-email placeholder-icon"></i>
-                        <input type="email" placeholder="{{'EMAIL'|translate}}" ng-model="vm.username" />
-                    </label>
-                    <label class="item item-input">
-                        <i class="icon ion-key placeholder-icon"></i>
-                        <input type="password" name="password" placeholder="{{'PASSWORD'|translate}}" ng-model="vm.password" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" />
-                    </label>
-                    <div class="item">
-                        <button type="submit" class="button button-block button-calm">
-                            <span>{{'LOGIN'|translate}}</span>
-                        </button>
-                        <div class="row row-no-padding">
-                            <div class="col">
-                                <a href='' class="button button-small button-positive button-clear button-block"
-                                   ng-click="vm.openUrl('Account/PasswordRecovery?c=Home')">
-                                    {{'FORGOT_PASSWORD'|translate}}
-                                </a>
-
-                            </div>
-                            <div class="col">
-                                <a href='' class="button button-small button-positive button-clear button-block"
-                                   ng-click="vm.openUrl('Account/Register?c=Home')">
-                                    {{'REGISTER'|translate}}
-                                </a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="item text-center" ng-show="vm.userService.loggingIn">
-                    <ion-spinner class="spinner" ng-if="vm.userService.loggingIn"></ion-spinner>
-                    <p>{{'LOGGING_IN'|translate}}</p>
-                </div>
-            </div>
-
-        </form>
-        <form ng-submit="vm.logOut()" ng-if="!vm.userService.getUser().anonymous">
-            <div class="list">
-                <div class="item">
-                    {{'LOGGED_IN_AS'|translate}} {{vm.userService.getUser().email}}
-                </div>
-                <div class="item">
-                    <button type="submit" class="button button-block button-calm">
-                        {{'LOGOUT'|translate}}
-                    </button>
-                </div>
-            </div>
-        </form>
         <ion-list>
-            <label class="item item-input item-select" ng-show="!vm.userService.getUser().anonymous && vm.hasObserverGroups()">
-                <div class="input-label">
-                    {{'GROUP'|translate}}
-                </div>
-                <select ng-model="vm.userService.getUser().chosenObserverGroup" ng-change="vm.userService.save()"
-                        ng-options="key as value for (key , value) in vm.userService.getUser().ObserverGroup">
-                    <option value="">{{'CHOOSE_GROUP'|translate}}</option>
-                </select>
-            </label>
-            <ion-item ng-show="!vm.userService.getUser().anonymous && !vm.hasObserverGroups()">
-                {{'NO_GROUPS_INFO'|translate}}
-            </ion-item>
             <ion-toggle ng-model="vm.settings.data.emailReceipt"
                         ng-change="vm.settings.save()"
                         toggle-class="toggle-calm"
                         ng-hide="vm.userService.getUser().anonymous">
                 {{'SEND_EMAIL_RECIEPT'|translate}}
+            </ion-toggle>         
+            <ion-toggle ng-model="vm.settings.data.compass"
+                        ng-change="vm.settings.save()"
+                        toggle-class="toggle-calm">
+                {{'ACTIVATE_COMPASS'|translate}}
             </ion-toggle>
-            <ion-item>
-                <button type="button" class="button button-block button-clear button-positive icon-left ion-chevron-down" ng-class="{'ion-chevron-down':!vm.showAdvancedSettings, 'ion-chevron-up':vm.showAdvancedSettings}" ng-click="vm.toggleAdvancedSettings()"><span ng-hide="vm.showAdvancedSettings">{{'SHOW'|translate}}</span><span ng-show="vm.showAdvancedSettings">{{'HIDE'|translate}}</span> {{'ADVANCED_SETTINGS'|translate|lowercase}}</button>
+            <label class="item item-input item-select">
+                <span class="input-label">
+                    {{'APP_MODE'|translate}}
+                </span>
+                <select ng-model="vm.settings.data.env" ng-change="vm.envChanged()"
+                        ng-options="env for env in vm.settings.getEnvironments()"></select>
+            </label>
+
+            <ion-item class="text-center">
+                <button type="button" ng-click="vm.refreshKdvElements()" class="button button-block icon-left ion-refresh">
+                    {{'UPDATE_KDV_ELEMENTS'|translate}} <ion-spinner class="spinner spinner-fix" ng-if="vm.refreshingKdv"></ion-spinner>
+                </button>
+                <p ng-show="vm.kdvUpdated">{{'UPDATED'|translate}} {{vm.kdvUpdated}}</p>
             </ion-item>
-            <div ng-show="vm.showAdvancedSettings">
-                <ion-item class="item-divider">
-                    {{'ADVANCED_SETTINGS'|translate}}
-                </ion-item>
-                <ion-toggle ng-model="vm.settings.data.compass"
-                            ng-change="vm.settings.save()"
-                            toggle-class="toggle-calm">
-                    {{'ACTIVATE_COMPASS'|translate}}
-                </ion-toggle>
-
-                <label class="item item-input item-select">
-                    <div class="input-label">
-                        {{'APP_MODE'|translate}}
-                    </div>
-                    <select ng-model="vm.settings.data.env" ng-change="vm.envChanged()"
-                            ng-options="env for env in vm.settings.getEnvironments()"></select>
-                </label>
-
-                <!--<label class="item item-input item-stacked-label">
-                    <span class="input-label">Søkelengde på målesteder (M)</span>
-                    <input type="tel" placeholder="I meter"
-                           ng-model="vm.settings.data.searchRange" ng-change="vm.settings.save()" />
-                </label>-->
-
-                <ion-item class="text-center">
-                    <button type="button" ng-click="vm.refreshKdvElements()" class="button button-block icon-left ion-refresh">
-                        {{'UPDATE_KDV_ELEMENTS'|translate}} <ion-spinner class="spinner spinner-fix" ng-if="vm.refreshingKdv"></ion-spinner>
-                    </button>
-                    <p>{{'UPDATED'|translate}} {{vm.kdvUpdated}}</p>
-                </ion-item>
-                <ion-item class="item-borderless">
-                    <button type="button" ng-click="vm.clearAppStorage()" class="button button-block icon-left ion-medkit">
-                        {{'RESET_APP'|translate}}
-                    </button>
-                </ion-item>
-            </div>
+            <ion-item class="item-borderless">
+                <button type="button" ng-click="vm.clearAppStorage()" class="button button-block icon-left ion-medkit">
+                    {{'RESET_APP'|translate}}
+                </button>
+            </ion-item>
             <ion-item class="item-borderless">
                 <button type="button" ui-sref="help({page:'settings'})" class="button button-block button-clear button-positive">{{'HELP'|translate}}</button>
             </ion-item>

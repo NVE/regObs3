@@ -3,7 +3,7 @@
         <nav-saving-indicator></nav-saving-indicator>
     </ion-nav-buttons>
     <ion-content>
-        <regobs-form save-action="vm.save()" back-state="newregistration">
+        <regobs-form save-action="vm.save()">
             <ion-list>
                 <div class="item item-divider item-divider-calm">
                     {{'DAMAGE_VISIBLE_HEADER' | translate}}
@@ -75,7 +75,7 @@
                         &nbsp;
                     </div>
                     <div class="padding">
-                        <regobs-save-button save-action="vm.save()" go-back="true"></regobs-save-button>
+                        <button type="submit" class="button button-block button-calm">{{"SAVE"|translate}}</button>
                     </div>
                     <button type="button" ng-click="vm.reset()" class="button button-positive button-block button-clear ion-android-close">
                         {{'CLEAR'|translate}}

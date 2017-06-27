@@ -1,11 +1,14 @@
 <ion-view view-title="{{'DANGER_OBS_SNOW'|translate}}">
     <ion-content class="has-footer">
-        <regobs-danger-obs danger-sign-kdv="Snow_DangerSignKDV"
-                    area-array="vm.areaArray"></regobs-danger-obs>
-        <regobs-image-list></regobs-image-list>
-        <button type="button" ui-sref="dynamichelp({registrationProp:'DangerObs'})" class="button button-positive button-block button-clear">
-            {{'HELP'|translate}}
-        </button>
+        <regobs-form name="snowdangerobsform">
+            <regobs-danger-obs danger-sign-kdv="Snow_DangerSignKDV"
+                               area-array="vm.areaArray"></regobs-danger-obs>
+            <regobs-image-list></regobs-image-list>
+            <div class="padding"><button type="submit" class="button button-block button-calm">{{"SAVE"|translate}}</button></div>
+            <button type="button" ui-sref="dynamichelp({registrationProp:'DangerObs'})" class="button button-positive button-block button-clear">
+                {{'HELP'|translate}}
+            </button>
+        </regobs-form>
     </ion-content>
     <form-footer></form-footer>
 </ion-view>
