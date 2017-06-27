@@ -1,5 +1,5 @@
 ﻿angular.module('RegObs').component('navSavingIndicator', {
-    template: '<div class="save-indicator" ng-if="$ctrl.showSavedText"><ion-spinner icon="dots" class="save-indicator-spinner"></ion-spinner><span class="save-indicator-text">{{"SAVED"|translate}}</span> <i ng-click="$ctrl.openPopover($event)" class="icon ion-checkmark-circled save-indicator-icon"></i></div>',
+    template: '<div class="save-indicator" ng-if="$ctrl.showSavedText"><ion-spinner ng-if="$ctrl.showSpinner" icon="dots" class="save-indicator-spinner"></ion-spinner><span class="save-indicator-text">{{"SAVED"|translate}}</span> <i ng-click="$ctrl.openPopover($event)" class="icon ion-checkmark-circled save-indicator-icon"></i></div>',
     controller: function ($rootScope, $timeout, LocalStorage, $ionicPopover, moment, Utility, $translate) {
         var ctrl = this;
         ctrl.showSavedText = false;
@@ -21,8 +21,12 @@
             var isSaving = LocalStorage.getObject('triggerSave', false);
             if (isSaving) {
                 ctrl.showSavedText = true;
+                ctrl.showSpinner = true;
                 ctrl.lastSaved = Date.now();
                 LocalStorage.setObject('triggerSave', false);
+                $timeout(function () {
+                    ctrl.showSpinner = false;
+                }, 1000);
             }
         };
 

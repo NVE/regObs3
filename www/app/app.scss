@@ -887,11 +887,22 @@ regobs-comment textarea::-webkit-input-placeholder {
     font-size: 20px !important;
 }
 
-input, textarea { //ionic prevents user to copy/paste content with the disable-user-select class on ion-list
+
+//Some bug that makes the copy/paste not work for inputs
+input, textarea {
     -webkit-user-select: auto !important;
     -khtml-user-select: auto !important;
     -moz-user-select: auto !important;
     -ms-user-select: auto !important;
     -o-user-select: auto !important;
     user-select: auto !important;
+}
+.backdrop {
+    display: none;
+}
+.backdrop.visible {
+    display: block;
+}
+.loading-container:not(.visible) {
+    display: none;
 }
