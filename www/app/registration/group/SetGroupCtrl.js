@@ -6,19 +6,7 @@
         ctrl.reg = Registration.data;
 
         ctrl._init = function () {
-            var user = User.getUser();
-            ctrl.groups = [];
-            if (!user.anonymous) {
-                var groups = user.ObserverGroup;
-                if (angular.isArray(groups)) {
-                    ctrl.groups = groups;
-                } else {
-                    //API backward compatibility for ObserverGroup
-                    for (var g in groups) {
-                        ctrl.groups.push({ Id: g, Name: groups[g] });
-                    };
-                }
-            }
+            ctrl.groups = User.getObserverGroups();
         };
 
         ctrl.reset = function () {
