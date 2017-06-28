@@ -63,6 +63,22 @@ angular
             }
         };
 
+        service.getObserverGroups = function () {
+            var ret = [];
+            if (!user.anonymous) {
+                var groups = user.ObserverGroup;
+                if (angular.isArray(groups)) {
+                    ret = groups;
+                } else {
+                    //API backward compatibility for ObserverGroup
+                    for (var g in groups) {
+                        ret.push({ Id: g, Name: groups[g] });
+                    };
+                }
+            }
+            return ret;
+        };
+
         service.save = function () {
             LocalStorage.setObject(storageKey, user);
             $rootScope.$broadcast('$regObs:userInfoSaved');

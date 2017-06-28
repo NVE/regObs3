@@ -28,6 +28,16 @@
             scope.getText = function () {
                 return scope.text || '';
             };
+
+            scope.$watch('regObject', function (newVal) {
+                if (scope.regObject) {
+                    if (scope.regObject[scope.regProp]){
+                        scope.DtObsTime = new Date(scope.regObject[scope.regProp]);
+                    } else {
+                        scope.DtObsTime = undefined;
+                    }
+                }
+            });
         }
 
         return {
