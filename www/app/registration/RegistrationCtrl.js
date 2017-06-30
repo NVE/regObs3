@@ -34,8 +34,16 @@
         vm.getObserverGroupName = function () {
             if (!vm.reg.ObserverGroupID)
                 return '';
-            var groups = User.getUser().ObserverGroup;
-            return groups[vm.reg.ObserverGroupID] || '';
+
+            var group = vm.observerGroups.filter(function (item) {
+                return item.Id == vm.reg.ObserverGroupID;
+            });
+            if (group.length > 0) {
+                var name = group[0].Name;
+                return name;
+            } else {
+                return '';
+            }
         };
 
 
@@ -43,8 +51,8 @@
             Utility.setBackView('start');
             vm.reg = Registration.data;
 
-            var group = User.getUser().ObserverGroup;
-            vm.hasObserverGroups = !Utility.isEmpty(group);
+            vm.observerGroups = User.getObserverGroups();
+            vm.hasObserverGroups = vm.observerGroups.length > 0;
 
             vm.loaded = true;
         });

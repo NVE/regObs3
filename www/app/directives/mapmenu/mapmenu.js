@@ -10,7 +10,8 @@
 
             ctrl.onSettingsChanged = function () {
                 if (ctrl.daysBack >= 0 && ctrl.daysBack !== AppSettings.getObservationsDaysBack()) {
-                    AppSettings.setObservationsDaysBack(ctrl.daysBack)
+                    AppSettings.setObservationsDaysBack(ctrl.daysBack);
+                    $ionicSideMenuDelegate.toggleLeft();
                 }
                 AppSettings.save();
             };
